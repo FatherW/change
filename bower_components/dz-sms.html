@@ -1,0 +1,96 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
+<!-- <link rel="import" href="../vaadin-icons/vaadin-icons.html"> -->
+
+<link rel="import" href="../dz-file-management/css/style.html">
+
+<dom-module id="dz-sms">
+
+    <template>
+        <style>
+            .pad {
+                display: block;
+                padding: 10px;
+            }
+        </style>
+
+        <style include="main-styles"></style>
+        <style include="labs-styles"></style>
+        <style include="masonry-styles"></style>
+        <h1 class="mat-dialog-title" mat-dialog-title="" id="mat-dialog-title-1">
+            <mat-toolbar class="mat-toolbar mat-primary mat-toolbar-multiple-rows" color="primary">
+                <mat-toolbar-row class="mat-toolbar-row">
+                    <span>請輸入驗證碼</span>
+                    <span class="example-spacer"></span>
+                </mat-toolbar-row>
+            </mat-toolbar>
+        </h1>
+
+        <input type="text" name="" id="input" /><button>验证</button>
+        <div></div>
+
+
+         <div class="pad">
+            <vaadin-text-field label="請輸入驗證碼" theme="small"></vaadin-text-field>
+            <vaadin-button>
+                確認
+            </vaadin-button>
+            <vaadin-button>
+                取消
+            </vaadin-button>
+        </div> 
+
+    </template>
+
+</dom-module>
+
+<script>
+    (function () {
+        Polymer({
+            is: 'dz-sms',
+            properties: {
+            },
+            created: function () {
+
+            },
+            ready: function () {
+                let shadow = this.shadowRoot;
+                let that = this;
+                let arrs = [], i = 0, j = 0;
+                for (let i = 0; i < 18; i++) {
+                    arrs[i] = Math.floor(Math.random() * 9 + 1);//获取到随机数
+                }
+                i = 0;
+                for (i; i < arrs.length; i++) {
+                    for (j = i + 1; j < arrs.length; j++) {
+                        if (arrs[i] == arrs[j]) {
+                            arrs.splice(j, 1);
+                            j--;
+                        }
+                    }
+                }
+                let nums = [];
+                nums = arrs.slice(0, 4);
+                let div = shadow.querySelector('div');
+                div.innerText += nums;
+                let input = shadow.querySelector('#input');
+                let btn = shadow.querySelector('button');
+                btn.addEventListener('click', () => {
+                    let a = nums.join('');
+                    console.log(a);
+                    console.log(typeof (input.value), input.value);
+                    if (nums.join('') == input.value) {
+                        console.log('验证成功');
+                    } else {
+                        console.log('验证失败');
+                    }
+                })
+
+
+            },
+
+
+
+        });
+    })();
+</script>

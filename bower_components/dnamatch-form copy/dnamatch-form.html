@@ -1,0 +1,479 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="dnamatch-form">
+  <!-- <link rel="import" type="css" href="https://www.w3schools.com/w3css/4/w3.css"> -->
+  
+  <template strip-whitespace>
+    <style>
+    #full-image h1 {
+        position: absolute;
+        bottom: 100px;
+        text-align: center;
+        font-family: Arial;
+        color: white;
+        width: 100%;
+        margin: 0 auto;
+        display: inline-block;
+        font-size:30px;
+    }
+        #full-image {
+          position:relative;
+            background: url(files/highlight.png) no-repeat center center fixed;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+               background-attachment: scroll;
+            width: 100%;
+            height: 100%;
+            z-index:4;
+        }
+    </style>
+      <div id="form-panel">
+          
+          <div class="smart-grid-layout" id="element-122">
+              
+              <div class="row" id="element-123">
+                  <div class="col-2" id="element-124">
+                      姓名：
+                  </div>
+                  <div class="col-10" id="element-125">                      
+                      <smart-text-box class="smart-element smart-text-box smart-drop-down-box" drop-down-button-position="right" drop-down-open-mode="default" type="input" id="textBox738b" aria-owns="dropDown844a" role="combobox" aria-describedby="textBox738bHint" aria-expanded="false" aria-haspopup="listbox" aria-labelledby="textBox738bLabel" style="
+      width: 100%;;;"><div role="presentation" smart-id="container" class="smart-container" id="element-126">
+                          <span inner-h-t-m-l="" class="smart-label" smart-id="label" id="textBox738bLabel"></span>
+                          <div class="smart-content" role="presentation" smart-id="content" id="element-127">
+                              <input class="smart-input" type="text" name="" placeholder="" role="textbox" aria-label="" autocomplete="off" smart-id="input" aria-autocomplete="list" id="element-128">
+                              <div smart-id="autoCompleteString" id="element-129"></div>
+                              <div class="smart-drop-down smart-drop-down-container smart-visibility-hidden" role="presentation" smart-id="dropDownContainer" id="dropDown844a" resize-mode="none" style="width: 648px; height: 41px;" bottom="">
+                                  <smart-list-box data-source="null" unfocusable="true" display-member="" item-height="null" item-template="null" item-measure-mode="auto" filter-callback="null" filter-mode="startsWithIgnoreCase" loading-indicator-placeholder="Loading..." loading-indicator-position="center" placeholder="No Items" selection-mode="zeroOrOne" value-member="" smart-id="listBox" class="smart-element smart-list-box" type="list" id="listBox241e" role="listbox" aria-orientation="vertical" aria-multiselectable="false"><div class="smart-container" role="presentation" smart-id="container" id="element-130">
+                          <div class="smart-list-box-filter-input-container smart-hidden" role="presentation" smart-id="filterInputContainer" id="element-131"><input placeholder="" role="searchbox" aria-label="" smart-id="filterInput" disabled="" id="element-132"></div>
+                          <div class="smart-list-items-container" role="presentation" smart-id="itemsContainer" id="element-133">
+                              <div class="smart-placeholder" role="presentation" aria-hidden="true" smart-id="placeholder" id="element-134">No Items</div>
+                              <div class="smart-list-items-inner-container" role="presentation" smart-id="itemsInnerContainer" id="element-135"></div>
+                              <input type="text" class="smart-hidden" smart-id="editInput" id="element-136">
+                          </div>
+                          <smart-scroll-bar orientation="vertical" smart-id="verticalScrollBar" class="smart-element smart-scroll-bar smart-hidden smart-mobile" show-buttons="" aria-controls="listBox241e" id="scrollBar102e" role="scrollbar" aria-orientation="vertical" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0" max="0"><div class="smart-container" role="presentation" smart-id="container">
+                          <div class="smart-scroll-button smart-arrow-up" role="presentation" aria-hidden="true" smart-id="nearButton"></div>
+                          <div class="smart-track" role="presentation" smart-id="track">
+                              <div class="smart-thumb smart-hidden" role="presentation" smart-id="thumb" style="height: 10px;"></div>
+                          </div>
+                          <div class="smart-scroll-button smart-arrow-down" role="presentation" aria-hidden="true" smart-id="farButton"></div>
+                  <div class="smart-container" role="presentation" smart-id="container" id="element-137">
+                          <div class="smart-scroll-button smart-arrow-up" role="presentation" aria-hidden="true" smart-id="nearButton" id="element-138"></div>
+                          <div class="smart-track" role="presentation" smart-id="track" id="element-139">
+                              <div class="smart-thumb smart-hidden" role="presentation" smart-id="thumb" style="height: 10px; top: -10px;" id="element-140"></div>
+                          </div>
+                          <div class="smart-scroll-button smart-arrow-down" role="presentation" aria-hidden="true" smart-id="farButton" id="element-141"></div>
+                  </div></div><div class="smart-resize-trigger-container" aria-hidden="true"><div class="smart-resize-trigger-container"><div class="smart-resize-trigger" style="width: 100000px; height: 100000px;"></div></div><div class="smart-resize-trigger-container"><div class="smart-resize-trigger-shrink"></div></div></div></smart-scroll-bar>
+                          <smart-scroll-bar smart-id="horizontalScrollBar" class="smart-hidden smart-element smart-scroll-bar smart-mobile" show-buttons="" aria-controls="listBox241e" id="scrollBarc3a7" role="scrollbar" aria-orientation="horizontal" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0" max="0"><div class="smart-container" role="presentation" smart-id="container">
+                          <div class="smart-scroll-button smart-arrow-left" role="presentation" aria-hidden="true" smart-id="nearButton"></div>
+                          <div class="smart-track" role="presentation" smart-id="track">
+                              <div class="smart-thumb smart-hidden" role="presentation" smart-id="thumb" style="width: 10px;"></div>
+                          </div>
+                          <div class="smart-scroll-button smart-arrow-right" role="presentation" aria-hidden="true" smart-id="farButton"></div>
+                  <div class="smart-container" role="presentation" smart-id="container" id="element-142">
+                          <div class="smart-scroll-button smart-arrow-left" role="presentation" aria-hidden="true" smart-id="nearButton" id="element-143"></div>
+                          <div class="smart-track" role="presentation" smart-id="track" id="element-144">
+                              <div class="smart-thumb smart-hidden" role="presentation" smart-id="thumb" style="width: 10px; left: -10px;" id="element-145"></div>
+                          </div>
+                          <div class="smart-scroll-button smart-arrow-right" role="presentation" aria-hidden="true" smart-id="farButton" id="element-146"></div>
+                  </div></div><div class="smart-resize-trigger-container" aria-hidden="true"><div class="smart-resize-trigger-container"><div class="smart-resize-trigger" style="width: 100000px; height: 100000px;"></div></div><div class="smart-resize-trigger-container"><div class="smart-resize-trigger-shrink"></div></div></div></smart-scroll-bar>
+                          <div class="smart-loader-container smart-hidden" role="presentation" smart-id="loadingIndicatorContainer" id="element-147">
+                              <span class="smart-loader" role="img" aria-label="Loading..." smart-id="loadingIndicator" id="element-148"></span>
+                              <span class="smart-loader-label smart-hidden" smart-id="loadingIndicatorPlaceHolder" id="element-149">Loading...</span>
+                          </div>
+                          <input type="hidden" name="" smart-id="hiddenInput" id="element-150">
+                      </div><div class="smart-resize-trigger-container" aria-hidden="true" id="element-151"><div class="smart-resize-trigger-container" id="element-152"><div class="smart-resize-trigger" style="width: 100000px; height: 100000px;" id="element-153"></div></div><div class="smart-resize-trigger-container" id="element-154"><div class="smart-resize-trigger-shrink" id="element-155"></div></div></div></smart-list-box>
+                              </div>
+                          </div>
+                          <span class="smart-hint" smart-id="hint" id="textBox738bHint"></span>
+                      </div><div class="smart-resize-trigger-container" aria-hidden="true" id="element-156"><div class="smart-resize-trigger-container" id="element-157"><div class="smart-resize-trigger" style="width: 100000px; height: 100000px;" id="element-158"></div></div><div class="smart-resize-trigger-container" id="element-159"><div class="smart-resize-trigger-shrink" id="element-160"></div></div></div></smart-text-box>
+                  </div>
+              </div>
+          <div class="row" id="element-161">
+                  <div class="col-6" id="element-162">
+              <div class="row" id="element-163">
+                  <div class="col-4" style="
+          padding-left: 0px;
+      " id="element-164">
+                      性別：
+                  </div>
+                  <div class="col-8" id="element-165">
+                      <smart-text-box class="smart-element smart-text-box smart-drop-down-box" drop-down-button-position="right" drop-down-open-mode="default" type="input" id="textBox32ee" aria-owns="dropDownc7ab" role="combobox" aria-describedby="textBox32eeHint" aria-expanded="false" aria-haspopup="listbox" aria-labelledby="textBox32eeLabel"><div role="presentation" smart-id="container" class="smart-container" id="element-166">
+                          <span inner-h-t-m-l="" class="smart-label" smart-id="label" id="textBox32eeLabel"></span>
+                          <div class="smart-content" role="presentation" smart-id="content" id="element-167">
+                              <input class="smart-input" type="text" name="" placeholder="" role="textbox" aria-label="" autocomplete="off" smart-id="input" aria-autocomplete="list" id="element-168">
+                              <div smart-id="autoCompleteString" id="element-169"></div>
+                              <div class="smart-drop-down smart-drop-down-container smart-visibility-hidden" role="presentation" smart-id="dropDownContainer" id="dropDownc7ab" resize-mode="none" style="width: 215px; height: 41px;" bottom="">
+                                  <smart-list-box data-source="null" unfocusable="true" display-member="" item-height="null" item-template="null" item-measure-mode="auto" filter-callback="null" filter-mode="startsWithIgnoreCase" loading-indicator-placeholder="Loading..." loading-indicator-position="center" placeholder="No Items" selection-mode="zeroOrOne" value-member="" smart-id="listBox" class="smart-element smart-list-box" type="list" id="listBox3dad" role="listbox" aria-orientation="vertical" aria-multiselectable="false"><div class="smart-container" role="presentation" smart-id="container" id="element-170">
+                          <div class="smart-list-box-filter-input-container smart-hidden" role="presentation" smart-id="filterInputContainer" id="element-171"><input placeholder="" role="searchbox" aria-label="" smart-id="filterInput" disabled="" id="element-172"></div>
+                          <div class="smart-list-items-container" role="presentation" smart-id="itemsContainer" id="element-173">
+                              <div class="smart-placeholder" role="presentation" aria-hidden="true" smart-id="placeholder" id="element-174">No Items</div>
+                              <div class="smart-list-items-inner-container" role="presentation" smart-id="itemsInnerContainer" id="element-175"></div>
+                              <input type="text" class="smart-hidden" smart-id="editInput" id="element-176">
+                          </div>
+                          <smart-scroll-bar orientation="vertical" smart-id="verticalScrollBar" class="smart-element smart-scroll-bar smart-hidden smart-mobile" show-buttons="" aria-controls="listBox3dad" id="scrollBarb6a8" role="scrollbar" aria-orientation="vertical" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0" max="0"><div class="smart-container" role="presentation" smart-id="container">
+                          <div class="smart-scroll-button smart-arrow-up" role="presentation" aria-hidden="true" smart-id="nearButton"></div>
+                          <div class="smart-track" role="presentation" smart-id="track">
+                              <div class="smart-thumb smart-hidden" role="presentation" smart-id="thumb" style="height: 10px;"></div>
+                          </div>
+                          <div class="smart-scroll-button smart-arrow-down" role="presentation" aria-hidden="true" smart-id="farButton"></div>
+                  <div class="smart-container" role="presentation" smart-id="container" id="element-177">
+                          <div class="smart-scroll-button smart-arrow-up" role="presentation" aria-hidden="true" smart-id="nearButton" id="element-178"></div>
+                          <div class="smart-track" role="presentation" smart-id="track" id="element-179">
+                              <div class="smart-thumb smart-hidden" role="presentation" smart-id="thumb" style="height: 10px; top: -10px;" id="element-180"></div>
+                          </div>
+                          <div class="smart-scroll-button smart-arrow-down" role="presentation" aria-hidden="true" smart-id="farButton" id="element-181"></div>
+                  </div></div><div class="smart-resize-trigger-container" aria-hidden="true"><div class="smart-resize-trigger-container"><div class="smart-resize-trigger" style="width: 100000px; height: 100000px;"></div></div><div class="smart-resize-trigger-container"><div class="smart-resize-trigger-shrink"></div></div></div></smart-scroll-bar>
+                          <smart-scroll-bar smart-id="horizontalScrollBar" class="smart-hidden smart-element smart-scroll-bar smart-mobile" show-buttons="" aria-controls="listBox3dad" id="scrollBarefb9" role="scrollbar" aria-orientation="horizontal" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0" max="0"><div class="smart-container" role="presentation" smart-id="container">
+                          <div class="smart-scroll-button smart-arrow-left" role="presentation" aria-hidden="true" smart-id="nearButton"></div>
+                          <div class="smart-track" role="presentation" smart-id="track">
+                              <div class="smart-thumb smart-hidden" role="presentation" smart-id="thumb" style="width: 10px;"></div>
+                          </div>
+                          <div class="smart-scroll-button smart-arrow-right" role="presentation" aria-hidden="true" smart-id="farButton"></div>
+                  <div class="smart-container" role="presentation" smart-id="container" id="element-182">
+                          <div class="smart-scroll-button smart-arrow-left" role="presentation" aria-hidden="true" smart-id="nearButton" id="element-183"></div>
+                          <div class="smart-track" role="presentation" smart-id="track" id="element-184">
+                              <div class="smart-thumb smart-hidden" role="presentation" smart-id="thumb" style="width: 10px; left: -10px;" id="element-185"></div>
+                          </div>
+                          <div class="smart-scroll-button smart-arrow-right" role="presentation" aria-hidden="true" smart-id="farButton" id="element-186"></div>
+                  </div></div><div class="smart-resize-trigger-container" aria-hidden="true"><div class="smart-resize-trigger-container"><div class="smart-resize-trigger" style="width: 100000px; height: 100000px;"></div></div><div class="smart-resize-trigger-container"><div class="smart-resize-trigger-shrink"></div></div></div></smart-scroll-bar>
+                          <div class="smart-loader-container smart-hidden" role="presentation" smart-id="loadingIndicatorContainer" id="element-187">
+                              <span class="smart-loader" role="img" aria-label="Loading..." smart-id="loadingIndicator" id="element-188"></span>
+                              <span class="smart-loader-label smart-hidden" smart-id="loadingIndicatorPlaceHolder" id="element-189">Loading...</span>
+                          </div>
+                          <input type="hidden" name="" smart-id="hiddenInput" id="element-190">
+                      </div><div class="smart-resize-trigger-container" aria-hidden="true" id="element-191"><div class="smart-resize-trigger-container" id="element-192"><div class="smart-resize-trigger" style="width: 100000px; height: 100000px;" id="element-193"></div></div><div class="smart-resize-trigger-container" id="element-194"><div class="smart-resize-trigger-shrink" id="element-195"></div></div></div></smart-list-box>
+                              </div>
+                          </div>
+                          <span class="smart-hint" smart-id="hint" id="textBox32eeHint"></span>
+                      </div><div class="smart-resize-trigger-container" aria-hidden="true" id="element-196"><div class="smart-resize-trigger-container" id="element-197"><div class="smart-resize-trigger" style="width: 100000px; height: 100000px;" id="element-198"></div></div><div class="smart-resize-trigger-container" id="element-199"><div class="smart-resize-trigger-shrink" id="element-200"></div></div></div></smart-text-box>
+                  </div>
+              </div>
+      </div>
+                  
+              <div class="col-6" id="element-201">
+              <div class="row" id="element-202">
+                  <div class="col-4" id="element-203">年齡：
+                  </div>
+                  <div class="col-8" id="element-204">
+                      <smart-text-box class="smart-element smart-text-box smart-drop-down-box" drop-down-button-position="right" drop-down-open-mode="default" type="input" id="textBox32ee" aria-owns="dropDownc915" role="combobox" aria-describedby="textBox32eeHint" aria-expanded="false" aria-haspopup="listbox" aria-labelledby="textBox32eeLabel"><div role="presentation" smart-id="container" class="smart-container" id="element-205">
+                          <span inner-h-t-m-l="" class="smart-label" smart-id="label" id="textBox32eeLabel"></span>
+                          <div class="smart-content" role="presentation" smart-id="content" id="element-206">
+                              <input class="smart-input" type="text" name="" placeholder="" role="textbox" aria-label="" autocomplete="off" smart-id="input" aria-autocomplete="list" id="element-207">
+                              <div smart-id="autoCompleteString" id="element-208"></div>
+                              <div class="smart-drop-down smart-drop-down-container smart-visibility-hidden" role="presentation" smart-id="dropDownContainer" id="dropDownc915" resize-mode="none" style="width: 215px; height: 41px;" bottom="">
+                                  <smart-list-box data-source="null" unfocusable="true" display-member="" item-height="null" item-template="null" item-measure-mode="auto" filter-callback="null" filter-mode="startsWithIgnoreCase" loading-indicator-placeholder="Loading..." loading-indicator-position="center" placeholder="No Items" selection-mode="zeroOrOne" value-member="" smart-id="listBox" class="smart-element smart-list-box" type="list" id="listBox1f59" role="listbox" aria-orientation="vertical" aria-multiselectable="false"><div class="smart-container" role="presentation" smart-id="container" id="element-209">
+                          <div class="smart-list-box-filter-input-container smart-hidden" role="presentation" smart-id="filterInputContainer" id="element-210"><input placeholder="" role="searchbox" aria-label="" smart-id="filterInput" disabled="" id="element-211"></div>
+                          <div class="smart-list-items-container" role="presentation" smart-id="itemsContainer" id="element-212">
+                              <div class="smart-placeholder" role="presentation" aria-hidden="true" smart-id="placeholder" id="element-213">No Items</div>
+                              <div class="smart-list-items-inner-container" role="presentation" smart-id="itemsInnerContainer" id="element-214"></div>
+                              <input type="text" class="smart-hidden" smart-id="editInput" id="element-215">
+                          </div>
+                          <smart-scroll-bar orientation="vertical" smart-id="verticalScrollBar" class="smart-element smart-scroll-bar smart-hidden smart-mobile" show-buttons="" aria-controls="listBox1f59" id="scrollBarbfff" role="scrollbar" aria-orientation="vertical" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0" max="0"><div class="smart-container" role="presentation" smart-id="container">
+                          <div class="smart-scroll-button smart-arrow-up" role="presentation" aria-hidden="true" smart-id="nearButton"></div>
+                          <div class="smart-track" role="presentation" smart-id="track">
+                              <div class="smart-thumb smart-hidden" role="presentation" smart-id="thumb" style="height: 10px;"></div>
+                          </div>
+                          <div class="smart-scroll-button smart-arrow-down" role="presentation" aria-hidden="true" smart-id="farButton"></div>
+                  <div class="smart-container" role="presentation" smart-id="container" id="element-216">
+                          <div class="smart-scroll-button smart-arrow-up" role="presentation" aria-hidden="true" smart-id="nearButton" id="element-217"></div>
+                          <div class="smart-track" role="presentation" smart-id="track" id="element-218">
+                              <div class="smart-thumb smart-hidden" role="presentation" smart-id="thumb" style="height: 10px; top: -10px;" id="element-219"></div>
+                          </div>
+                          <div class="smart-scroll-button smart-arrow-down" role="presentation" aria-hidden="true" smart-id="farButton" id="element-220"></div>
+                  </div></div><div class="smart-resize-trigger-container" aria-hidden="true"><div class="smart-resize-trigger-container"><div class="smart-resize-trigger" style="width: 100000px; height: 100000px;"></div></div><div class="smart-resize-trigger-container"><div class="smart-resize-trigger-shrink"></div></div></div></smart-scroll-bar>
+                          <smart-scroll-bar smart-id="horizontalScrollBar" class="smart-hidden smart-element smart-scroll-bar smart-mobile" show-buttons="" aria-controls="listBox1f59" id="scrollBar41d5" role="scrollbar" aria-orientation="horizontal" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0" max="0"><div class="smart-container" role="presentation" smart-id="container">
+                          <div class="smart-scroll-button smart-arrow-left" role="presentation" aria-hidden="true" smart-id="nearButton"></div>
+                          <div class="smart-track" role="presentation" smart-id="track">
+                              <div class="smart-thumb smart-hidden" role="presentation" smart-id="thumb" style="width: 10px;"></div>
+                          </div>
+                          <div class="smart-scroll-button smart-arrow-right" role="presentation" aria-hidden="true" smart-id="farButton"></div>
+                  <div class="smart-container" role="presentation" smart-id="container" id="element-221">
+                          <div class="smart-scroll-button smart-arrow-left" role="presentation" aria-hidden="true" smart-id="nearButton" id="element-222"></div>
+                          <div class="smart-track" role="presentation" smart-id="track" id="element-223">
+                              <div class="smart-thumb smart-hidden" role="presentation" smart-id="thumb" style="width: 10px; left: -10px;" id="element-224"></div>
+                          </div>
+                          <div class="smart-scroll-button smart-arrow-right" role="presentation" aria-hidden="true" smart-id="farButton" id="element-225"></div>
+                  </div></div><div class="smart-resize-trigger-container" aria-hidden="true"><div class="smart-resize-trigger-container"><div class="smart-resize-trigger" style="width: 100000px; height: 100000px;"></div></div><div class="smart-resize-trigger-container"><div class="smart-resize-trigger-shrink"></div></div></div></smart-scroll-bar>
+                          <div class="smart-loader-container smart-hidden" role="presentation" smart-id="loadingIndicatorContainer" id="element-226">
+                              <span class="smart-loader" role="img" aria-label="Loading..." smart-id="loadingIndicator" id="element-227"></span>
+                              <span class="smart-loader-label smart-hidden" smart-id="loadingIndicatorPlaceHolder" id="element-228">Loading...</span>
+                          </div>
+                          <input type="hidden" name="" smart-id="hiddenInput" id="element-229">
+                      </div><div class="smart-resize-trigger-container" aria-hidden="true" id="element-230"><div class="smart-resize-trigger-container" id="element-231"><div class="smart-resize-trigger" style="width: 100000px; height: 100000px;" id="element-232"></div></div><div class="smart-resize-trigger-container" id="element-233"><div class="smart-resize-trigger-shrink" id="element-234"></div></div></div></smart-list-box>
+                              </div>
+                          </div>
+                          <span class="smart-hint" smart-id="hint" id="textBox32eeHint"></span>
+                      </div><div class="smart-resize-trigger-container" aria-hidden="true" id="element-235"><div class="smart-resize-trigger-container" id="element-236"><div class="smart-resize-trigger" style="width: 100000px; height: 100000px;" id="element-237"></div></div><div class="smart-resize-trigger-container" id="element-238"><div class="smart-resize-trigger-shrink" id="element-239"></div></div></div></smart-text-box>
+                  </div>
+              </div>
+      </div></div><div class="row" id="element-240">
+                  <div class="col-2" id="element-241">
+                      電話：
+                  </div>
+                  <div class="col-10" id="element-242">
+                      
+                      <smart-text-box class="smart-element smart-text-box smart-drop-down-box" drop-down-button-position="right" drop-down-open-mode="default" type="input" id="textBox738b" aria-owns="dropDown11ff" role="combobox" aria-describedby="textBox738bHint" aria-expanded="false" aria-haspopup="listbox" aria-labelledby="textBox738bLabel"><div role="presentation" smart-id="container" class="smart-container" id="element-243">
+                          <span inner-h-t-m-l="" class="smart-label" smart-id="label" id="textBox738bLabel"></span>
+                          <div class="smart-content" role="presentation" smart-id="content" id="element-244">
+                              <input class="smart-input" type="text" name="" placeholder="" role="textbox" aria-label="" autocomplete="off" smart-id="input" aria-autocomplete="list" id="element-245">
+                              <div smart-id="autoCompleteString" id="element-246"></div>
+                              <div class="smart-drop-down smart-drop-down-container smart-visibility-hidden" role="presentation" smart-id="dropDownContainer" id="dropDown11ff" resize-mode="none" style="width: 648px; height: 41px;" top="">
+                                  <smart-list-box data-source="null" unfocusable="true" display-member="" item-height="null" item-template="null" item-measure-mode="auto" filter-callback="null" filter-mode="startsWithIgnoreCase" loading-indicator-placeholder="Loading..." loading-indicator-position="center" placeholder="No Items" selection-mode="zeroOrOne" value-member="" smart-id="listBox" class="smart-element smart-list-box" type="list" id="listBox32a8" role="listbox" aria-orientation="vertical" aria-multiselectable="false"><div class="smart-container" role="presentation" smart-id="container" id="element-247">
+                          <div class="smart-list-box-filter-input-container smart-hidden" role="presentation" smart-id="filterInputContainer" id="element-248"><input placeholder="" role="searchbox" aria-label="" smart-id="filterInput" disabled="" id="element-249"></div>
+                          <div class="smart-list-items-container" role="presentation" smart-id="itemsContainer" id="element-250">
+                              <div class="smart-placeholder" role="presentation" aria-hidden="true" smart-id="placeholder" id="element-251">No Items</div>
+                              <div class="smart-list-items-inner-container" role="presentation" smart-id="itemsInnerContainer" id="element-252"></div>
+                              <input type="text" class="smart-hidden" smart-id="editInput" id="element-253">
+                          </div>
+                          <smart-scroll-bar orientation="vertical" smart-id="verticalScrollBar" class="smart-element smart-scroll-bar smart-hidden smart-mobile" show-buttons="" aria-controls="listBox32a8" id="scrollBarc528" role="scrollbar" aria-orientation="vertical" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0" max="0"><div class="smart-container" role="presentation" smart-id="container">
+                          <div class="smart-scroll-button smart-arrow-up" role="presentation" aria-hidden="true" smart-id="nearButton"></div>
+                          <div class="smart-track" role="presentation" smart-id="track">
+                              <div class="smart-thumb smart-hidden" role="presentation" smart-id="thumb" style="height: 10px;"></div>
+                          </div>
+                          <div class="smart-scroll-button smart-arrow-down" role="presentation" aria-hidden="true" smart-id="farButton"></div>
+                  <div class="smart-container" role="presentation" smart-id="container" id="element-254">
+                          <div class="smart-scroll-button smart-arrow-up" role="presentation" aria-hidden="true" smart-id="nearButton" id="element-255"></div>
+                          <div class="smart-track" role="presentation" smart-id="track" id="element-256">
+                              <div class="smart-thumb smart-hidden" role="presentation" smart-id="thumb" style="height: 10px; top: -10px;" id="element-257"></div>
+                          </div>
+                          <div class="smart-scroll-button smart-arrow-down" role="presentation" aria-hidden="true" smart-id="farButton" id="element-258"></div>
+                  </div></div><div class="smart-resize-trigger-container" aria-hidden="true"><div class="smart-resize-trigger-container"><div class="smart-resize-trigger" style="width: 100000px; height: 100000px;"></div></div><div class="smart-resize-trigger-container"><div class="smart-resize-trigger-shrink"></div></div></div></smart-scroll-bar>
+                          <smart-scroll-bar smart-id="horizontalScrollBar" class="smart-hidden smart-element smart-scroll-bar smart-mobile" show-buttons="" aria-controls="listBox32a8" id="scrollBar3ab1" role="scrollbar" aria-orientation="horizontal" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0" max="0"><div class="smart-container" role="presentation" smart-id="container">
+                          <div class="smart-scroll-button smart-arrow-left" role="presentation" aria-hidden="true" smart-id="nearButton"></div>
+                          <div class="smart-track" role="presentation" smart-id="track">
+                              <div class="smart-thumb smart-hidden" role="presentation" smart-id="thumb" style="width: 10px;"></div>
+                          </div>
+                          <div class="smart-scroll-button smart-arrow-right" role="presentation" aria-hidden="true" smart-id="farButton"></div>
+                  <div class="smart-container" role="presentation" smart-id="container" id="element-259">
+                          <div class="smart-scroll-button smart-arrow-left" role="presentation" aria-hidden="true" smart-id="nearButton" id="element-260"></div>
+                          <div class="smart-track" role="presentation" smart-id="track" id="element-261">
+                              <div class="smart-thumb smart-hidden" role="presentation" smart-id="thumb" style="width: 10px; left: -10px;" id="element-262"></div>
+                          </div>
+                          <div class="smart-scroll-button smart-arrow-right" role="presentation" aria-hidden="true" smart-id="farButton" id="element-263"></div>
+                  </div></div><div class="smart-resize-trigger-container" aria-hidden="true"><div class="smart-resize-trigger-container"><div class="smart-resize-trigger" style="width: 100000px; height: 100000px;"></div></div><div class="smart-resize-trigger-container"><div class="smart-resize-trigger-shrink"></div></div></div></smart-scroll-bar>
+                          <div class="smart-loader-container smart-hidden" role="presentation" smart-id="loadingIndicatorContainer" id="element-264">
+                              <span class="smart-loader" role="img" aria-label="Loading..." smart-id="loadingIndicator" id="element-265"></span>
+                              <span class="smart-loader-label smart-hidden" smart-id="loadingIndicatorPlaceHolder" id="element-266">Loading...</span>
+                          </div>
+                          <input type="hidden" name="" smart-id="hiddenInput" id="element-267">
+                      </div><div class="smart-resize-trigger-container" aria-hidden="true" id="element-268"><div class="smart-resize-trigger-container" id="element-269"><div class="smart-resize-trigger" style="width: 100000px; height: 100000px;" id="element-270"></div></div><div class="smart-resize-trigger-container" id="element-271"><div class="smart-resize-trigger-shrink" id="element-272"></div></div></div></smart-list-box>
+                              </div>
+                          </div>
+                          <span class="smart-hint" smart-id="hint" id="textBox738bHint"></span>
+                      </div><div class="smart-resize-trigger-container" aria-hidden="true" id="element-273"><div class="smart-resize-trigger-container" id="element-274"><div class="smart-resize-trigger" style="width: 100000px; height: 100000px;" id="element-275"></div></div><div class="smart-resize-trigger-container" id="element-276"><div class="smart-resize-trigger-shrink" id="element-277"></div></div></div></smart-text-box>
+                  </div>
+              </div><div class="row" id="element-278">
+                  <div class="col-2" id="element-279">電郵：
+                  </div>
+                  <div class="col-10" id="element-280">
+                      
+                      <smart-text-box class="smart-element smart-text-box smart-drop-down-box" drop-down-button-position="right" drop-down-open-mode="default" type="input" id="textBox738b" aria-owns="dropDowne76e" role="combobox" aria-describedby="textBox738bHint" aria-expanded="false" aria-haspopup="listbox" aria-labelledby="textBox738bLabel"><div role="presentation" smart-id="container" class="smart-container" id="element-281">
+                          <span inner-h-t-m-l="" class="smart-label" smart-id="label" id="textBox738bLabel"></span>
+                          <div class="smart-content" role="presentation" smart-id="content" id="element-282">
+                              <input class="smart-input" type="text" name="" placeholder="" role="textbox" aria-label="" autocomplete="off" smart-id="input" aria-autocomplete="list" id="element-283">
+                              <div smart-id="autoCompleteString" id="element-284"></div>
+                              <div class="smart-drop-down smart-drop-down-container smart-visibility-hidden" role="presentation" smart-id="dropDownContainer" id="dropDowne76e" resize-mode="none" style="width: 648px; height: 41px;" top="">
+                                  <smart-list-box data-source="null" unfocusable="true" display-member="" item-height="null" item-template="null" item-measure-mode="auto" filter-callback="null" filter-mode="startsWithIgnoreCase" loading-indicator-placeholder="Loading..." loading-indicator-position="center" placeholder="No Items" selection-mode="zeroOrOne" value-member="" smart-id="listBox" class="smart-element smart-list-box" type="list" id="listBox799b" role="listbox" aria-orientation="vertical" aria-multiselectable="false"><div class="smart-container" role="presentation" smart-id="container" id="element-285">
+                          <div class="smart-list-box-filter-input-container smart-hidden" role="presentation" smart-id="filterInputContainer" id="element-286"><input placeholder="" role="searchbox" aria-label="" smart-id="filterInput" disabled="" id="element-287"></div>
+                          <div class="smart-list-items-container" role="presentation" smart-id="itemsContainer" id="element-288">
+                              <div class="smart-placeholder" role="presentation" aria-hidden="true" smart-id="placeholder" id="element-289">No Items</div>
+                              <div class="smart-list-items-inner-container" role="presentation" smart-id="itemsInnerContainer" id="element-290"></div>
+                              <input type="text" class="smart-hidden" smart-id="editInput" id="element-291">
+                          </div>
+                          <smart-scroll-bar orientation="vertical" smart-id="verticalScrollBar" class="smart-element smart-scroll-bar smart-hidden smart-mobile" show-buttons="" aria-controls="listBox799b" id="scrollBar3a46" role="scrollbar" aria-orientation="vertical" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0" max="0"><div class="smart-container" role="presentation" smart-id="container">
+                          <div class="smart-scroll-button smart-arrow-up" role="presentation" aria-hidden="true" smart-id="nearButton"></div>
+                          <div class="smart-track" role="presentation" smart-id="track">
+                              <div class="smart-thumb smart-hidden" role="presentation" smart-id="thumb" style="height: 10px;"></div>
+                          </div>
+                          <div class="smart-scroll-button smart-arrow-down" role="presentation" aria-hidden="true" smart-id="farButton"></div>
+                  <div class="smart-container" role="presentation" smart-id="container" id="element-292">
+                          <div class="smart-scroll-button smart-arrow-up" role="presentation" aria-hidden="true" smart-id="nearButton" id="element-293"></div>
+                          <div class="smart-track" role="presentation" smart-id="track" id="element-294">
+                              <div class="smart-thumb smart-hidden" role="presentation" smart-id="thumb" style="height: 10px; top: -10px;" id="element-295"></div>
+                          </div>
+                          <div class="smart-scroll-button smart-arrow-down" role="presentation" aria-hidden="true" smart-id="farButton" id="element-296"></div>
+                  </div></div><div class="smart-resize-trigger-container" aria-hidden="true"><div class="smart-resize-trigger-container"><div class="smart-resize-trigger" style="width: 100000px; height: 100000px;"></div></div><div class="smart-resize-trigger-container"><div class="smart-resize-trigger-shrink"></div></div></div></smart-scroll-bar>
+                          <smart-scroll-bar smart-id="horizontalScrollBar" class="smart-hidden smart-element smart-scroll-bar smart-mobile" show-buttons="" aria-controls="listBox799b" id="scrollBar0c8c" role="scrollbar" aria-orientation="horizontal" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0" max="0"><div class="smart-container" role="presentation" smart-id="container">
+                          <div class="smart-scroll-button smart-arrow-left" role="presentation" aria-hidden="true" smart-id="nearButton"></div>
+                          <div class="smart-track" role="presentation" smart-id="track">
+                              <div class="smart-thumb smart-hidden" role="presentation" smart-id="thumb" style="width: 10px;"></div>
+                          </div>
+                          <div class="smart-scroll-button smart-arrow-right" role="presentation" aria-hidden="true" smart-id="farButton"></div>
+                  <div class="smart-container" role="presentation" smart-id="container" id="element-297">
+                          <div class="smart-scroll-button smart-arrow-left" role="presentation" aria-hidden="true" smart-id="nearButton" id="element-298"></div>
+                          <div class="smart-track" role="presentation" smart-id="track" id="element-299">
+                              <div class="smart-thumb smart-hidden" role="presentation" smart-id="thumb" style="width: 10px; left: -10px;" id="element-300"></div>
+                          </div>
+                          <div class="smart-scroll-button smart-arrow-right" role="presentation" aria-hidden="true" smart-id="farButton" id="element-301"></div>
+                  </div></div><div class="smart-resize-trigger-container" aria-hidden="true"><div class="smart-resize-trigger-container"><div class="smart-resize-trigger" style="width: 100000px; height: 100000px;"></div></div><div class="smart-resize-trigger-container"><div class="smart-resize-trigger-shrink"></div></div></div></smart-scroll-bar>
+                          <div class="smart-loader-container smart-hidden" role="presentation" smart-id="loadingIndicatorContainer" id="element-302">
+                              <span class="smart-loader" role="img" aria-label="Loading..." smart-id="loadingIndicator" id="element-303"></span>
+                              <span class="smart-loader-label smart-hidden" smart-id="loadingIndicatorPlaceHolder" id="element-304">Loading...</span>
+                          </div>
+                          <input type="hidden" name="" smart-id="hiddenInput" id="element-305">
+                      </div><div class="smart-resize-trigger-container" aria-hidden="true" id="element-306"><div class="smart-resize-trigger-container" id="element-307"><div class="smart-resize-trigger" style="width: 100000px; height: 100000px;" id="element-308"></div></div><div class="smart-resize-trigger-container" id="element-309"><div class="smart-resize-trigger-shrink" id="element-310"></div></div></div></smart-list-box>
+                              </div>
+                          </div>
+                          <span class="smart-hint" smart-id="hint" id="textBox738bHint"></span>
+                      </div><div class="smart-resize-trigger-container" aria-hidden="true" id="element-311"><div class="smart-resize-trigger-container" id="element-312"><div class="smart-resize-trigger" style="width: 100000px; height: 100000px;" id="element-313"></div></div><div class="smart-resize-trigger-container" id="element-314"><div class="smart-resize-trigger-shrink" id="element-315"></div></div></div></smart-text-box>
+                  </div>
+              </div><div class="row" id="element-316">
+                  <div class="col-6" id="element-317">
+              <div class="row" id="element-318">
+                  <div class="col-4" style="
+          padding-left: 0px;
+      " id="element-319">
+                      學歷：
+                  </div>
+                  <div class="col-8" id="element-320">
+                      <smart-text-box class="smart-element smart-text-box smart-drop-down-box" drop-down-button-position="right" drop-down-open-mode="default" type="input" id="textBox32ee" aria-owns="dropDown1bed" role="combobox" aria-describedby="textBox32eeHint" aria-expanded="false" aria-haspopup="listbox" aria-labelledby="textBox32eeLabel"><div role="presentation" smart-id="container" class="smart-container" id="element-321">
+                          <span inner-h-t-m-l="" class="smart-label" smart-id="label" id="textBox32eeLabel"></span>
+                          <div class="smart-content" role="presentation" smart-id="content" id="element-322">
+                              <input class="smart-input" type="text" name="" placeholder="" role="textbox" aria-label="" autocomplete="off" smart-id="input" aria-autocomplete="list" id="element-323">
+                              <div smart-id="autoCompleteString" id="element-324"></div>
+                              <div class="smart-drop-down smart-drop-down-container smart-visibility-hidden" role="presentation" smart-id="dropDownContainer" id="dropDown1bed" resize-mode="none" style="width: 215px; height: 41px;" top="">
+                                  <smart-list-box data-source="null" unfocusable="true" display-member="" item-height="null" item-template="null" item-measure-mode="auto" filter-callback="null" filter-mode="startsWithIgnoreCase" loading-indicator-placeholder="Loading..." loading-indicator-position="center" placeholder="No Items" selection-mode="zeroOrOne" value-member="" smart-id="listBox" class="smart-element smart-list-box" type="list" id="listBox68a9" role="listbox" aria-orientation="vertical" aria-multiselectable="false"><div class="smart-container" role="presentation" smart-id="container" id="element-325">
+                          <div class="smart-list-box-filter-input-container smart-hidden" role="presentation" smart-id="filterInputContainer" id="element-326"><input placeholder="" role="searchbox" aria-label="" smart-id="filterInput" disabled="" id="element-327"></div>
+                          <div class="smart-list-items-container" role="presentation" smart-id="itemsContainer" id="element-328">
+                              <div class="smart-placeholder" role="presentation" aria-hidden="true" smart-id="placeholder" id="element-329">No Items</div>
+                              <div class="smart-list-items-inner-container" role="presentation" smart-id="itemsInnerContainer" id="element-330"></div>
+                              <input type="text" class="smart-hidden" smart-id="editInput" id="element-331">
+                          </div>
+                          <smart-scroll-bar orientation="vertical" smart-id="verticalScrollBar" class="smart-element smart-scroll-bar smart-hidden smart-mobile" show-buttons="" aria-controls="listBox68a9" id="scrollBarc2f7" role="scrollbar" aria-orientation="vertical" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0" max="0"><div class="smart-container" role="presentation" smart-id="container">
+                          <div class="smart-scroll-button smart-arrow-up" role="presentation" aria-hidden="true" smart-id="nearButton"></div>
+                          <div class="smart-track" role="presentation" smart-id="track">
+                              <div class="smart-thumb smart-hidden" role="presentation" smart-id="thumb" style="height: 10px;"></div>
+                          </div>
+                          <div class="smart-scroll-button smart-arrow-down" role="presentation" aria-hidden="true" smart-id="farButton"></div>
+                  <div class="smart-container" role="presentation" smart-id="container" id="element-332">
+                          <div class="smart-scroll-button smart-arrow-up" role="presentation" aria-hidden="true" smart-id="nearButton" id="element-333"></div>
+                          <div class="smart-track" role="presentation" smart-id="track" id="element-334">
+                              <div class="smart-thumb smart-hidden" role="presentation" smart-id="thumb" style="height: 10px; top: -10px;" id="element-335"></div>
+                          </div>
+                          <div class="smart-scroll-button smart-arrow-down" role="presentation" aria-hidden="true" smart-id="farButton" id="element-336"></div>
+                  </div></div><div class="smart-resize-trigger-container" aria-hidden="true"><div class="smart-resize-trigger-container"><div class="smart-resize-trigger" style="width: 100000px; height: 100000px;"></div></div><div class="smart-resize-trigger-container"><div class="smart-resize-trigger-shrink"></div></div></div></smart-scroll-bar>
+                          <smart-scroll-bar smart-id="horizontalScrollBar" class="smart-hidden smart-element smart-scroll-bar smart-mobile" show-buttons="" aria-controls="listBox68a9" id="scrollBarc642" role="scrollbar" aria-orientation="horizontal" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0" max="0"><div class="smart-container" role="presentation" smart-id="container">
+                          <div class="smart-scroll-button smart-arrow-left" role="presentation" aria-hidden="true" smart-id="nearButton"></div>
+                          <div class="smart-track" role="presentation" smart-id="track">
+                              <div class="smart-thumb smart-hidden" role="presentation" smart-id="thumb" style="width: 10px;"></div>
+                          </div>
+                          <div class="smart-scroll-button smart-arrow-right" role="presentation" aria-hidden="true" smart-id="farButton"></div>
+                  <div class="smart-container" role="presentation" smart-id="container" id="element-337">
+                          <div class="smart-scroll-button smart-arrow-left" role="presentation" aria-hidden="true" smart-id="nearButton" id="element-338"></div>
+                          <div class="smart-track" role="presentation" smart-id="track" id="element-339">
+                              <div class="smart-thumb smart-hidden" role="presentation" smart-id="thumb" style="width: 10px; left: -10px;" id="element-340"></div>
+                          </div>
+                          <div class="smart-scroll-button smart-arrow-right" role="presentation" aria-hidden="true" smart-id="farButton" id="element-341"></div>
+                  </div></div><div class="smart-resize-trigger-container" aria-hidden="true"><div class="smart-resize-trigger-container"><div class="smart-resize-trigger" style="width: 100000px; height: 100000px;"></div></div><div class="smart-resize-trigger-container"><div class="smart-resize-trigger-shrink"></div></div></div></smart-scroll-bar>
+                          <div class="smart-loader-container smart-hidden" role="presentation" smart-id="loadingIndicatorContainer" id="element-342">
+                              <span class="smart-loader" role="img" aria-label="Loading..." smart-id="loadingIndicator" id="element-343"></span>
+                              <span class="smart-loader-label smart-hidden" smart-id="loadingIndicatorPlaceHolder" id="element-344">Loading...</span>
+                          </div>
+                          <input type="hidden" name="" smart-id="hiddenInput" id="element-345">
+                      </div><div class="smart-resize-trigger-container" aria-hidden="true" id="element-346"><div class="smart-resize-trigger-container" id="element-347"><div class="smart-resize-trigger" style="width: 100000px; height: 100000px;" id="element-348"></div></div><div class="smart-resize-trigger-container" id="element-349"><div class="smart-resize-trigger-shrink" id="element-350"></div></div></div></smart-list-box>
+                              </div>
+                          </div>
+                          <span class="smart-hint" smart-id="hint" id="textBox32eeHint"></span>
+                      </div><div class="smart-resize-trigger-container" aria-hidden="true" id="element-351"><div class="smart-resize-trigger-container" id="element-352"><div class="smart-resize-trigger" style="width: 100000px; height: 100000px;" id="element-353"></div></div><div class="smart-resize-trigger-container" id="element-354"><div class="smart-resize-trigger-shrink" id="element-355"></div></div></div></smart-text-box>
+                  </div>
+              </div>
+      </div>
+                  
+              <div class="col-6" id="element-356">
+              <div class="row" id="element-357">
+                  <div class="col-4" id="element-358">職業：
+                  </div>
+                  <div class="col-8" id="element-359">
+                      <smart-text-box class="smart-element smart-text-box smart-drop-down-box" drop-down-button-position="right" drop-down-open-mode="default" type="input" id="textBox32ee" aria-owns="dropDownf71d" role="combobox" aria-describedby="textBox32eeHint" aria-expanded="false" aria-haspopup="listbox" aria-labelledby="textBox32eeLabel"><div role="presentation" smart-id="container" class="smart-container" id="element-360">
+                          <span inner-h-t-m-l="" class="smart-label" smart-id="label" id="textBox32eeLabel"></span>
+                          <div class="smart-content" role="presentation" smart-id="content" id="element-361">
+                              <input class="smart-input" type="text" name="" placeholder="" role="textbox" aria-label="" autocomplete="off" smart-id="input" aria-autocomplete="list" id="element-362">
+                              <div smart-id="autoCompleteString" id="element-363"></div>
+                              <div class="smart-drop-down smart-drop-down-container smart-visibility-hidden" role="presentation" smart-id="dropDownContainer" id="dropDownf71d" resize-mode="none" style="width: 215px; height: 41px;" top="">
+                                  <smart-list-box data-source="null" unfocusable="true" display-member="" item-height="null" item-template="null" item-measure-mode="auto" filter-callback="null" filter-mode="startsWithIgnoreCase" loading-indicator-placeholder="Loading..." loading-indicator-position="center" placeholder="No Items" selection-mode="zeroOrOne" value-member="" smart-id="listBox" class="smart-element smart-list-box" type="list" id="listBoxdcc4" role="listbox" aria-orientation="vertical" aria-multiselectable="false"><div class="smart-container" role="presentation" smart-id="container" id="element-364">
+                          <div class="smart-list-box-filter-input-container smart-hidden" role="presentation" smart-id="filterInputContainer" id="element-365"><input placeholder="" role="searchbox" aria-label="" smart-id="filterInput" disabled="" id="element-366"></div>
+                          <div class="smart-list-items-container" role="presentation" smart-id="itemsContainer" id="element-367">
+                              <div class="smart-placeholder" role="presentation" aria-hidden="true" smart-id="placeholder" id="element-368">No Items</div>
+                              <div class="smart-list-items-inner-container" role="presentation" smart-id="itemsInnerContainer" id="element-369"></div>
+                              <input type="text" class="smart-hidden" smart-id="editInput" id="element-370">
+                          </div>
+                          <smart-scroll-bar orientation="vertical" smart-id="verticalScrollBar" class="smart-element smart-scroll-bar smart-hidden smart-mobile" show-buttons="" aria-controls="listBoxdcc4" id="scrollBare6e8" role="scrollbar" aria-orientation="vertical" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0" max="0"><div class="smart-container" role="presentation" smart-id="container">
+                          <div class="smart-scroll-button smart-arrow-up" role="presentation" aria-hidden="true" smart-id="nearButton"></div>
+                          <div class="smart-track" role="presentation" smart-id="track">
+                              <div class="smart-thumb smart-hidden" role="presentation" smart-id="thumb" style="height: 10px;"></div>
+                          </div>
+                          <div class="smart-scroll-button smart-arrow-down" role="presentation" aria-hidden="true" smart-id="farButton"></div>
+                  <div class="smart-container" role="presentation" smart-id="container" id="element-371">
+                          <div class="smart-scroll-button smart-arrow-up" role="presentation" aria-hidden="true" smart-id="nearButton" id="element-372"></div>
+                          <div class="smart-track" role="presentation" smart-id="track" id="element-373">
+                              <div class="smart-thumb smart-hidden" role="presentation" smart-id="thumb" style="height: 10px; top: -10px;" id="element-374"></div>
+                          </div>
+                          <div class="smart-scroll-button smart-arrow-down" role="presentation" aria-hidden="true" smart-id="farButton" id="element-375"></div>
+                  </div></div><div class="smart-resize-trigger-container" aria-hidden="true"><div class="smart-resize-trigger-container"><div class="smart-resize-trigger" style="width: 100000px; height: 100000px;"></div></div><div class="smart-resize-trigger-container"><div class="smart-resize-trigger-shrink"></div></div></div></smart-scroll-bar>
+                          <smart-scroll-bar smart-id="horizontalScrollBar" class="smart-hidden smart-element smart-scroll-bar smart-mobile" show-buttons="" aria-controls="listBoxdcc4" id="scrollBar49b2" role="scrollbar" aria-orientation="horizontal" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0" max="0"><div class="smart-container" role="presentation" smart-id="container">
+                          <div class="smart-scroll-button smart-arrow-left" role="presentation" aria-hidden="true" smart-id="nearButton"></div>
+                          <div class="smart-track" role="presentation" smart-id="track">
+                              <div class="smart-thumb smart-hidden" role="presentation" smart-id="thumb" style="width: 10px;"></div>
+                          </div>
+                          <div class="smart-scroll-button smart-arrow-right" role="presentation" aria-hidden="true" smart-id="farButton"></div>
+                  <div class="smart-container" role="presentation" smart-id="container" id="element-376">
+                          <div class="smart-scroll-button smart-arrow-left" role="presentation" aria-hidden="true" smart-id="nearButton" id="element-377"></div>
+                          <div class="smart-track" role="presentation" smart-id="track" id="element-378">
+                              <div class="smart-thumb smart-hidden" role="presentation" smart-id="thumb" style="width: 10px; left: -10px;" id="element-379"></div>
+                          </div>
+                          <div class="smart-scroll-button smart-arrow-right" role="presentation" aria-hidden="true" smart-id="farButton" id="element-380"></div>
+                  </div></div><div class="smart-resize-trigger-container" aria-hidden="true"><div class="smart-resize-trigger-container"><div class="smart-resize-trigger" style="width: 100000px; height: 100000px;"></div></div><div class="smart-resize-trigger-container"><div class="smart-resize-trigger-shrink"></div></div></div></smart-scroll-bar>
+                          <div class="smart-loader-container smart-hidden" role="presentation" smart-id="loadingIndicatorContainer" id="element-381">
+                              <span class="smart-loader" role="img" aria-label="Loading..." smart-id="loadingIndicator" id="element-382"></span>
+                              <span class="smart-loader-label smart-hidden" smart-id="loadingIndicatorPlaceHolder" id="element-383">Loading...</span>
+                          </div>
+                          <input type="hidden" name="" smart-id="hiddenInput" id="element-384">
+                      </div><div class="smart-resize-trigger-container" aria-hidden="true" id="element-385"><div class="smart-resize-trigger-container" id="element-386"><div class="smart-resize-trigger" style="width: 100000px; height: 100000px;" id="element-387"></div></div><div class="smart-resize-trigger-container" id="element-388"><div class="smart-resize-trigger-shrink" id="element-389"></div></div></div></smart-list-box>
+                              </div>
+                          </div>
+                          <span class="smart-hint" smart-id="hint" id="textBox32eeHint"></span>
+                      </div><div class="smart-resize-trigger-container" aria-hidden="true" id="element-390"><div class="smart-resize-trigger-container" id="element-391"><div class="smart-resize-trigger" style="width: 100000px; height: 100000px;" id="element-392"></div></div><div class="smart-resize-trigger-container" id="element-393"><div class="smart-resize-trigger-shrink" id="element-394"></div></div></div></smart-text-box>
+                  </div>
+              </div>
+      </div></div></div>
+      <button type="button" role="presentation" smart-id="button" tabindex="0" id="element-393" style="
+          text-align: center;
+          position: relative;
+          margin: 0 auto;
+          display: block;
+          width: 100px;
+          background: #EFABCD;
+          color: white;
+          font-size: 25px;
+          border: none;
+          border-radius: 10px;
+      ">確認</button>
+      </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'dnamatch-form',
+      properties: {
+      
+      },
+
+      click: function(e) {
+         
+      },
+
+    });
+  </script>
+</dom-module>

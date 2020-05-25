@@ -1,0 +1,110 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="css/style.html">
+
+<dom-module id="dz-file-item">
+
+	<template>
+        <style include="font-awesome"></style>
+        <style>
+            /* .grid-container {
+              display: grid;
+              grid-template-columns: repeat(6, 1fr);
+              background-color: #2196F3;
+              padding: 10px;
+            }
+            .grid-item {
+              background-color: rgba(255, 255, 255, 0.8);
+              border: 1px solid rgba(0, 0, 0, 0.8);
+              padding: 20px;
+              font-size: 30px;
+              text-align: center;
+            } */
+            #wrapper {
+                background-image: url(https://www.technipages.com/wp-content/uploads/2019/12/File-Header.jpg);
+                background-repeat:no-repeat;
+                background-size: 100%;
+                min-width:200px;
+                min-height:230px;
+                position:relative;
+                cursor:pointer;
+            }
+            #wrapper:hover{
+                border:1px solid black;
+            }
+            #wrapper h4 {
+                position:absolute;
+                bottom:0;
+                text-align:center;
+            }
+        </style>
+        <div id="wrapper">
+            <h4>{{src}}</h4>
+        </div>
+
+        <!-- <img src="https://www.technipages.com/wp-content/uploads/2019/12/File-Header.jpg" /> -->
+
+	</template>
+</dom-module>
+
+<script>
+
+(function() {
+
+
+
+	Polymer({
+		is: 'dz-file-item',
+		properties: {
+            src:{
+                type:String
+            }
+		},
+
+		created:function() {
+			this.fileManager = Polymer.fileManager;
+            
+		},
+        type(key){
+            if (key.indexOf('.')>-1)
+                ext = key.substr(key.lastIndexOf('.') + 1);
+            else
+                ext = '';
+            if (ext === 'css') {
+                return 'text/css';
+            } else if (ext === 'docx') {
+                return  'word';
+            } else if (ext === 'doc') {
+                return  'word';
+            } else if (ext === 'elsx') {
+                return  'excel';
+            } else if (ext === 'els') {
+                return  'excel';
+            } else if (ext === 'jpg') {
+                return  'jpg';
+            } else if (ext === 'png') {
+                return  'png';
+            } else if (ext === 'gif') {
+                return  'gif';
+            } else if (ext === 'html') {
+                return  'html';
+            } else if (ext === 'pdf') {
+                return  'pdf';
+            } else {
+                return 'other';
+            }
+        },
+        ready(){
+            let that = this;
+            // this.selectType = this.type(this.src);
+
+        },
+
+		select(src){
+            console.log('Src',src);
+			
+		}
+	});
+
+})();
+
+</script>

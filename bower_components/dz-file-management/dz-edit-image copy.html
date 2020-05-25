@@ -1,0 +1,379 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../dz-file-management/dz-image-editor.html">
+
+<link rel="import" href="../vaadin-text-field/vaadin-text-area.html">
+<link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
+<link rel="import" href="../vaadin-button/vaadin-button.html">
+<link rel="import" href="../vaadin-select/vaadin-select.html">
+<link rel="import" href="../vaadin-text-field/vaadin-number-field.html">
+<link rel="import" href="../vaadin-radio-button/vaadin-radio-group.html">
+<link rel="import" href="../vaadin-radio-button/vaadin-radio-button.html">
+<link rel="import" href="../dz-dropzone/dz-dropzone.html">
+<link rel="import" href="../vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../vaadin-list-box/vaadin-list-box.html">
+<link rel="import" href="../vaadin-item/vaadin-item.html">
+<link rel="import" href="css/style.html">
+<link rel="import" href="../vaadin-tabs/vaadin-tabs.html">
+<link rel="import" href="../iron-pages/iron-pages.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../paper-tags-input/paper-tags-input.html?id=sdfkjskldf">
+
+<link rel="import" href="../slate-font-awesome/slate-font-awesome.html">
+
+<link rel="stylesheet" href="https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/css/cropper.css">
+<script src="https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/js/cropper.js"></script>
+
+
+<!-- <link rel="import" href="../paper-tabs/paper-tabs.html">
+<link rel="import" href="../paper-tabs/paper-tab.html"> -->
+
+
+<!-- <script type="module">
+	import '@polymer/iron-lazy-pages/iron-lazy-pages.js';
+	import '@polymer/paper-tabs/paper-tabs.js';
+	import '@polymer/paper-tabs/paper-tab.js';
+  </script> -->
+
+
+<!-- <link rel="import" href="../valle-speed-dial/valle-speed-dial.html">
+<link rel="import" href="../paper-fab-speed-dial/paper-fab-speed-dial-action.html">
+<link rel="import" href="../iron-icons/iron-icons.html"> -->
+
+<custom-style>
+	<style include="slate-font-awesome">
+	</style>
+</custom-style>
+
+<dom-module id="dz-edit-image">
+
+	<template>
+		<style include="slate-font-awesome"></style>
+		<style is="custom-style">
+			.flex-horizontal-with-ratios {
+			@apply --layout-horizontal;
+			}
+			.flexchild {
+			@apply --layout-flex;
+			}
+			.flex2child {
+			@apply --layout-flex-2;
+			}
+			.flex3child {
+			@apply --layout-flex-3;
+			}
+			.flex6child {
+			@apply --layout-flex-6;
+			}
+			
+		  .flex-horizontal {
+			@apply --layout-horizontal;
+		  }
+		  .flexchild {
+			@apply --layout-flex;
+		  }
+		  .flex3child {
+			  padding:20px;
+		  }
+		  .flex3child img {
+			  width:100%;
+		  }
+		  [hide]{
+			  display:none;
+		  }
+		  #avatarPreview {
+			  width:80%;
+		  }
+		  #avatarPreview img{
+			  max-width:100%;
+		  }
+		  .right {
+			  float:right;
+		  }
+		</style>
+
+		<div class="container flex-horizontal-with-ratios">
+			<div class="flex3child">
+				<div id="preview" hide>
+					<img id="orgSrc" src="#">
+
+				</div>
+				<div id="dropzone">
+					<dz-dropzone></dz-dropzone>
+				</div>
+					
+			</div>
+			<div class="flex3child">
+
+				<vaadin-tabs selected="{{page}}">
+					<vaadin-tab>基本資料</vaadin-tab>
+					<vaadin-tab>截圖工具</vaadin-tab>
+					<vaadin-tab>標籤管理</vaadin-tab>
+					<vaadin-tab>版本管理</vaadin-tab>
+					<vaadin-tab>格式轉換及瀏覽</vaadin-tab>
+					<vaadin-tab>銷售狀況記錄</vaadin-tab>
+				</vaadin-tabs>
+				  <iron-pages selected="[[page]]">
+					<page>
+						<vaadin-text-area id="formDesc" style="width:100%" label="基本介紹" placeholder="請寫上 ..."></vaadin-text-area>
+						<vaadin-radio-group id="formType" label="設計類型" theme="vertical" on-change="_changeType">
+							<vaadin-radio-button value="Private" checked>私人</vaadin-radio-button>
+							<vaadin-radio-button value="Public">公開展示</vaadin-radio-button>
+							<vaadin-radio-button value="Sale">銷售</vaadin-radio-button>
+						  </vaadin-radio-group>
+						<vaadin-number-field id="formPrice" value=0 label="價錢" disabled></vaadin-number-field>
+						<vaadin-number-field id="formDownload" value=0 label="下載數" readonly></vaadin-number-field>
+						<vaadin-number-field id="formView" value=0 label="點擊數" readonly></vaadin-number-field>
+						  <hr>
+						<vaadin-button class="right" id="infoSave" on-click="_infoSave">儲存</vaadin-button>
+					</page>
+					<page>
+						<vaadin-button id="previewBtn">預覽截圖</vaadin-button>
+						<vaadin-button id="downloadBtn" on-click="_saveCrop">存入圖片庫</vaadin-button>
+
+						<hr>
+						<div id="avatarPreview" style="width:50%"><img src="https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg"></div>
+					</page>
+					<page>
+						<iron-icon icon="vaadin:vaadin-h"></iron-icon>
+						<vaadin-text-field id="inputTags" label="欲新增的標籤" on-keydown="_addTags"></vaadin-text-field>
+						<vaadin-button on-click="_addAutoTags">加入智能標籤</vaadin-button><vaadin-button>儲存標籤</vaadin-button>						
+						<paper-tags-input width="100%" id="myTags" label="設計標籤"></paper-tags-input>
+						<hr>
+						<vaadin-button class="right" id="tagsSave" on-click="_tagsSave">儲存</vaadin-button>
+					</page>
+					<page>
+						<vaadin-select label="版本清單">
+							<template>
+							  <vaadin-list-box>
+								<vaadin-item>12-09-2019</vaadin-item>
+								<vaadin-item>21-01-2020</vaadin-item>
+							  </vaadin-list-box>
+							</template>
+						  </vaadin-select>
+						  <vaadin-button>回復舊版本</vaadin-button>
+						  <h2>上載新版本</h2>
+						  <dz-dropzone></dz-dropzone>
+
+					</page>
+					<page>
+						<vaadin-button>原圖</vaadin-button>
+						<vaadin-button>平面設計用(300dpi)</vaadin-button>
+						<vaadin-button>網站設計用(100dpi)</vaadin-button>
+						<vaadin-button>縮圖(thumbnail)</vaadin-button>
+						<hr>
+						<vaadin-text-field style="width:80%;" label="普通版" readonly></vaadin-text-field>
+						<vaadin-button >複製</vaadin-button><vaadin-button >下載</vaadin-button>
+						<vaadin-text-field style="width:80%;" label="水印版" readonly></vaadin-text-field>
+						<vaadin-button >複製</vaadin-button><vaadin-button >下載</vaadin-button>
+					</page>
+					<page>
+						<vaadin-grid id="orderGrid">
+							<vaadin-grid-column width="20%" path="order_id" header="訂單ID"></vaadin-grid-column>
+							<vaadin-grid-column width="20%" path="date" header="購買日期"></vaadin-grid-column>
+							<vaadin-grid-column width="40%" path="contact" header="買家聯絡"></vaadin-grid-column>
+						  </vaadin-grid>
+
+					</page>
+				</iron-pages>
+				
+			</div>
+
+		  </div>
+				
+	</template>
+</dom-module>
+
+<script>
+
+(function() {
+
+
+
+	Polymer({
+		is: 'dz-edit-image',
+		properties: {
+			item:{
+				type: Object
+			},
+			gid:{
+				type:String
+			}
+		},
+
+		created:function() {
+			// this.user = store.get('user') || null;
+			this.fileManager = Polymer.fileManager;
+			console.log(Polymer.dataManager,this.gid);
+
+			// this.item = {
+			// 	'original_url':'https://www.google.com/url?sa=i&url=https%3A%2F%2Fzh.wikipedia.org%2Fwiki%2F%25E6%25A4%258D%25E7%2589%25A9%25E6%2580%25A7%25E9%25A3%25B2%25E9%25A3%259F&psig=AOvVaw2mPfXJ1zeSCWNSu193L-vb&ust=1587898896324000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCKj_3sS2g-kCFQAAAAAdAAAAABAD',
+			// 	'desc':'這圖主要介紹內地人的生活',
+			// 	'downloaded':25,
+			// 	'price':200,
+			// 	'tags': ['沙拉','亨利','分手'],
+			// 	'gid':"id1587724903082",
+			// 	'clickRate': 300,
+			// 	'status':'Private',
+			// 	'version':['id1587724903082-1','id1587724903082-2','id1587724903082-3']
+			// };
+			
+		},
+		ready:function() {
+			let that = this;
+			Polymer.dataManager.getGalleryRecord(this.gid).then(item=>{
+					console.log('Item',item,this.gid);
+					this.item = item;
+					this.renew();
+			});
+
+			// this.original_url = this.item['original_url'];
+			// console.log('Original',this.original_url);
+			// console.log('Item',this.item);
+
+			this.shadowRoot.querySelector('#myTags').tags = ["沙拉","亨利"];
+			customElements.whenDefined('vaadin-grid').then(function() {
+				// Assign an array of user objects as the grid's items
+				that.shadowRoot.querySelector('#orderGrid').items = [
+					{
+						"order_id":"Q31432344",
+						"date":"21/1/2020",
+						"contact":"henry@01power.net"
+					},
+					{
+						"order_id":"Q31434424",
+						"date":"22/2/2020",
+						"contact":"info@dnaperfectmatch.com"
+					},
+					{
+						"order_id":"Q3143234",
+						"date":"25/3/2020",
+						"contact":"info@curie.hk"
+					}
+
+				];
+			});
+
+
+			this.shadowRoot.querySelector('#previewBtn').addEventListener('click',e=>{
+				this.shadowRoot.querySelector('#preview').innerHTML = '';
+				let editor = document.createElement('dz-image-editor');
+				editor.original_url = that.item['original_url'];
+				this.shadowRoot.querySelector('#preview').appendChild(editor);
+
+				editor.addEventListener('change',e=>{
+						console.log('Preview',editor.avatar);
+						that.shadowRoot.querySelector('#avatarPreview img').setAttribute('src',editor.avatar);
+				});
+				
+
+			});
+			this.shadowRoot.querySelector('#downloadBtn').addEventListener('click',e=>{
+				this.shadowRoot.querySelector('#preview').innerHTML = '';
+				let img = document.createElement('img');
+				img.src = that.original_url;
+				this.shadowRoot.querySelector('#preview').appendChild(img);
+			});
+
+			
+			
+		},
+		renew(){
+			// Update all data
+			this.shadowRoot.querySelector('#orgSrc').setAttribute('src',this.item['original_url']);
+			this.shadowRoot.querySelector('#formDesc').value=this.item['desc'];
+			this.shadowRoot.querySelector('#formDownload').value=this.item['downloaded'];
+			this.shadowRoot.querySelector('#formView').value=this.item['clickRate'];
+			this.shadowRoot.querySelector('#formPrice').value=this.item['price'];
+			this.shadowRoot.querySelector('#myTags').tags=this.item['tags'];
+
+			
+			if (!this.item['type']) {
+				console.log('No Type');
+				this.shadowRoot.querySelector('#formType').value = "Private";
+				this.shadowRoot.querySelector('#formPrice').setAttribute('disabled','');
+			}
+
+		},
+		_addTags(e){
+			let myTags = this.shadowRoot.querySelector('#myTags');
+			let value = this.shadowRoot.querySelector('#inputTags').value;
+			console.log('Key Down',e);
+				if (e.code==="Enter") {
+					myTags._addTag(value);
+				}
+		},
+		_addAutoTags(e){
+			console.log('Add Auto Tags');
+			// let src = this.shadowRoot.querySelector('#orgSrc').getAttribute('src');
+			let src = this.item['original_url'];
+			let myTags = this.shadowRoot.querySelector('#myTags');
+			let url = "https://d8fz9pfue5.execute-api.ap-northeast-1.amazonaws.com/prod/imageProcessing";
+			let params = {
+				"action": "tags",
+				"url": src
+			}
+			Polymer.postData(url,params).then(result=>{
+				console.log('Result',result);
+				if (result.code>0){
+					myTags.tags =  [...myTags.tags, ...result.resolve];
+				}
+			},err=>{
+					console.log('Error');
+			});
+
+		},
+		_changeType(){
+			let value = this.shadowRoot.querySelector('#formType').value;
+			if (value !=="Sale")
+				this.shadowRoot.querySelector('#formPrice').setAttribute('disabled','');
+			 else 
+				this.shadowRoot.querySelector('#formPrice').removeAttribute('disabled');
+			
+		},
+		_saveCrop(){
+			let that = this;
+			let avatar = this.shadowRoot.querySelector('dz-image-editor').avatar;
+			
+		
+
+			Polymer.fileManager.saveMyImageByUrl(avatar).then(id=>{
+				console.log('ID',id);
+				Polymer.fileManager.saveImageTags(id,that.item['tags']);		
+				alert('已上載，請稍候查找');	
+
+			});
+
+			// Polymer.fileManager.saveMyImageByUrl(avatar).then(id=>{
+
+			// });
+
+		},
+		
+		postData(url, data) {
+			// Default options are marked with *
+			
+			return new Promise(function (resolve, reject) {
+			fetch(url, {
+				body: JSON.stringify(data), // must match 'Content-Type' header
+				cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+				credentials: 'same-origin', // include, same-origin, *omit
+				headers: {
+				'content-type': 'application/json'
+				},
+				method: 'POST', // *GET, POST, PUT, DELETE, etc.
+				mode: 'cors', // no-cors, cors, *same-origin
+				redirect: 'follow', // manual, *follow, error
+				referrer: 'no-referrer', // *client, no-referrer
+			})
+			.then(response => {
+				resolve(response.json());
+			}) // parses response to JSON
+			});
+			
+		}
+
+	});
+
+})();
+
+</script>

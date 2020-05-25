@@ -1,0 +1,39 @@
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+<polymer-element name="fa-icon" attributes="icon spin fixed-width size flip rotate stack">
+  <template>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <i id="icon" class="fa fa-{{icon}}"></i>
+  </template>
+  <script>
+    (function() {
+      var isDefined = function (attr) {
+        return attr === "" || attr;
+      };
+      
+      var addClass = function (className) {
+        this.$.icon.classList.add('fa-' + className);
+      };
+      
+      Polymer('fa-icon', {
+        ready: function() {
+          if (isDefined(this.spin)) addClass.bind(this)('spin');
+          if (isDefined(this['fixed-width'])) addClass.bind(this)('fw');
+          if (isDefined(this.size)) addClass.bind(this)(this.size);
+          if (isDefined(this.flip)) addClass.bind(this)("flip-" + this.flip);
+          if (isDefined(this.rotate)) addClass.bind(this)("rotate-" + this.rotate);
+          if (isDefined(this.stack)) addClass.bind(this)("stack-" + this.stack);
+        }
+      });
+    })();
+  </script>  
+</polymer-element>
+
+<polymer-element name="fa-stack" noscript>
+  <template>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <span class="fa-stack fa-lg">
+      <content></content>
+    </span>
+  </template>
+</polymer-element>

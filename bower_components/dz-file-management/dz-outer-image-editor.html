@@ -1,0 +1,179 @@
+<link rel="import" href="../polymer/polymer.html">
+<!-- <script src="https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/js/jquery-2.2.4.min.js"></script> -->
+<link rel="import" href="css/cropper.html">
+
+<link rel="stylesheet" href="https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/css/cropper.css">
+<script src="https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/js/cropper.js"></script>
+
+<dom-module id="dz-outer-image-editor">
+	
+	<template>
+        <!-- <img src$="{{original_url}}">
+		 -->
+		 <style include="cropper-styles"></style>
+		 <style>
+			.container {
+			  margin: 5px auto;
+			}
+		
+			img {
+			  max-width: 100%;
+			}
+
+		  </style>
+		   <div class="container">
+             
+				<!-- <slot></slot> -->
+                <img id="image" src$="{{original_url}}" >
+            	<!-- <div class="preview"></div> -->         	
+          </div>
+		  <img id="avatar" style="display:none" src="#">
+  
+	</template>
+</dom-module>
+
+<script>
+
+(function() {
+
+
+
+	Polymer({
+		is: 'dz-outer-image-editor',
+		properties: {
+			src:{
+				type:String
+			},
+			original_url:{
+				type: Object
+			}, 
+			avatar:{
+				type:String
+			}
+		},
+
+		created:function() {
+			// this.user = store.get('user') || null;
+			// this.fileManager = Polymer.fileManager;
+			console.log('Src',this.getAttribute('src'));
+
+			// this.original_url = "https://designerrrr-output.s3-ap-northeast-1.amazonaws.com/images/jitpo/original/id1587706857730.jpg";
+			this.original_url = this.getAttribute('src');
+		},
+		ready:function() {
+			let that = this;
+			// var image = this.shadowRoot.querySelector('#orgSrc');
+
+			// console.log('Cropper',image,window);
+			// var cropper = new Cropper(image, {
+			// 	movable: true,
+			// 	zoomable: true,
+			// 	rotatable: false,
+			// 	scalable: true
+			// });
+
+			this.addEventListener('keydown',e=>{
+					console.log('Key Up',e);
+			});
+
+
+			function each(arr, callback) {
+          var length = arr.length;
+          var i;
+    
+          for (i = 0; i < length; i++) {
+            callback.call(arr, arr[i], i, arr);
+          }
+    
+          return arr;
+        }
+    
+		let shadow = this.shadowRoot;
+        // window.addEventListener('DOMContentLoaded', function () {
+          var image = shadow.querySelector('#image');
+          var previews = shadow.querySelectorAll('.preview');
+		  let avatar = shadow.querySelector('#avatar');
+		console.log('Image',image);
+		  var cropper = new Cropper(image, {
+              ready: function () {
+                var clone = this.cloneNode();
+    
+                clone.className = '';
+                clone.style.cssText = (
+                  'display: block;' +
+                  'width: 100%;' +
+                  'min-width: 0;' +
+                  'min-height: 0;' +
+                  'max-width: none;' +
+                  'max-height: none;'
+                );
+    
+                each(previews, function (elem) {
+                  elem.appendChild(clone.cloneNode());
+                });
+              },
+    
+              crop: function (event) {
+                var data = event.detail;
+                var cropper = this.cropper;
+                var imageData = cropper.getImageData();
+				console.log('Image Data',imageData);
+
+				let canvas = cropper.getCroppedCanvas();
+				avatar.src =canvas.toDataURL();
+				that.avatar = canvas.toDataURL();
+				console.log('Canvas', canvas.toDataURL());
+
+                var previewAspectRatio = data.width / data.height;
+    
+                // each(previews, function (elem) {
+                //   var previewImage = elem.getElementsByTagName('img').item(0);
+                //   var previewWidth = elem.offsetWidth;
+                //   var previewHeight = previewWidth / previewAspectRatio;
+                //   var imageScaledRatio = data.width / previewWidth;
+    
+                //   elem.style.height = previewHeight + 'px';
+                //   previewImage.style.width = imageData.naturalWidth / imageScaledRatio + 'px';
+                //   previewImage.style.height = imageData.naturalHeight / imageScaledRatio + 'px';
+                //   previewImage.style.marginLeft = -data.x / imageScaledRatio + 'px';
+                //   previewImage.style.marginTop = -data.y / imageScaledRatio + 'px';
+                // });
+              },
+            });
+        // });
+
+			document.addEventListener('cropper-confirm',e=>{
+
+				console.log('Confirm');
+					src = avatar.getAttribute('src');	
+					Polymer._curElm.setAttribute('src',src);
+					this.outerHTML = Polymer._curElm.outerHTML;
+				
+
+			});
+
+		},
+		_confirm(e){
+			// let myTags = this.shadowRoot.querySelector('#myTags');
+			// let value = this.shadowRoot.querySelector('#inputTags').value;
+
+				// console.log('Preview',editor.avatar);
+				// that.shadowRoot.querySelector('#avatarPreview img').setAttribute('src',editor.avatar);
+
+		let shadow = this.shadowRoot;
+		var previews = shadow.querySelectorAll('.preview');
+		let avatar = shadow.querySelector('#avatar');
+		let src;
+			console.log('Key Down',e);
+				if (e.code==="Enter") {
+					src = avatar.getAttribute('src');	
+					Polymer._curElm.setAttribute('src',src);
+					this.outerHTML = this.innerHTML;
+				}
+		},
+
+	});
+
+})();
+
+</script>

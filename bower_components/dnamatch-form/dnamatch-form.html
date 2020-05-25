@@ -1,0 +1,190 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../vaadin-text-field/vaadin-number-field.html">
+<link rel="import" href="../vaadin-combo-box/vaadin-combo-box.html">
+<link rel="import" href="../vaadin-radio-button/vaadin-radio-button.html">
+<link rel="import" href="../vaadin-radio-button/vaadin-radio-group.html">
+
+<custom-style>
+  <style>
+    vaadin-number-field,vaadin-text-field,vaadin-combo-box {
+      width: 80%;
+    }
+    html {
+   
+      --lumo-primary-color: rgb(239, 171, 205);
+      --lumo-primary-color-50pct: rgba(239,171,205, 0.5);
+      --lumo-primary-color-10pct: rgba(239,171,205, 0.1);
+      --lumo-primary-text-color: var(--lumo-primary-color);
+      --lumo-primary-contrast-color: #FFF;
+    }
+  </style>
+</custom-style>
+
+<dom-module id="dnamatch-form">
+  <!-- <link rel="import" type="css" href="https://www.w3schools.com/w3css/4/w3.css"> -->
+  
+
+  <script>
+    Polymer({
+      is: 'dnamatch-form',
+      properties: {
+      
+      },
+      created(){
+        this.innerHTML = '';
+
+      },
+      ready:function() {
+        // super.ready();
+        let that = this;
+        this.getContent('template/dnamatch/_dz-block/form/css?id='+new Date().getTime()).then(css=>{
+              let elm = document.createRange().createContextualFragment(css);
+                elm.querySelectorAll('link').forEach(e=>{
+
+
+                  let href = e.getAttribute('href');
+                  let style = document.createElement('style');
+                  console.log('HREF',href);
+                  that.getContent(href).then(html=>{
+                        style.innerHTML = html; 
+                        that.appendChild(style);
+                  });
+                });
+
+                this.getContent('template/dnamatch/_dz-block/form/html?id='+new Date().getTime()).then(html=>{
+                    let wrapper = document.createElement('wrapper');
+                    wrapper.innerHTML = html;
+                    that.appendChild(wrapper);
+                    customElements.whenDefined('vaadin-combo-box').then(function() {
+                          const comboBox1 = that.querySelector('vaadin-combo-box[label="學歷"]');
+                          
+                          const comboBox2 = that.querySelector('vaadin-combo-box[label="年齡"]');
+                          console.log('Combo',that,comboBox1,comboBox2);
+                          comboBox1.items = ['小學', '中學','大專','大學','碩士','博士'];
+                          comboBox2.items = ['18-25歲','26-30歲','31-35歲','36-40歲','41-45歲','46-50歲','51-55歲','56-60歲','61歲或以上'];
+                    });
+                    that.querySelector('#submit').addEventListener('click',e=>{
+                      that._click();
+                    });
+                });
+            });
+
+
+
+
+
+      },
+      postData:function(url, data) {
+			// Default options are marked with *
+			return new Promise(function (resolve, reject) {
+				fetch(url, {
+					body: JSON.stringify(data), // must match 'Content-Type' header
+					cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+					credentials: 'same-origin', // include, same-origin, *omit
+					headers: {
+					'content-type': 'application/json'
+					},
+					method: 'POST', // *GET, POST, PUT, DELETE, etc.
+					mode: 'cors', // no-cors, cors, *same-origin
+					redirect: 'follow', // manual, *follow, error
+					referrer: 'no-referrer', // *client, no-referrer
+				})
+				.then(response => {
+					resolve(response.json());
+				}) // parses response to JSON
+			});
+			
+		},
+      emailToUser(email, subject,content) {
+        let api = "https://9hhtm40jpe.execute-api.ap-northeast-1.amazonaws.com/sendemail";
+        var jsonToAdmin = {};
+        jsonToAdmin['from'] = 'support@01power.net';
+        jsonToAdmin['to'] = email;
+        jsonToAdmin['subject'] = subject;
+        jsonToAdmin['html'] = content;
+
+        // info@dnaperfectmatch.com
+        this.postData(api,jsonToAdmin).then(res =>{
+            alert("提交成功");
+            location.reload();
+        });
+
+      },
+      
+      getContent:function(url){
+        console.log('Query Url',url);
+        let that = this;
+
+        return new Promise(function (resolve, reject) {
+    
+          // if (url.indexOf("//")>=0){
+          //   that.getExternalContent(url).then(res=>resolve(res));
+          // } else {
+              fetch(url,{
+                "Access-Control-Allow-Origin" : "*" ,
+                "mode":"no-cors" 
+              }).then(function(response) {
+                  // When the page is loaded convert it to text
+                  console.log('Response',response);
+                  if (!response.ok)
+                    resolve('');
+                  else
+                    resolve(response.text());
+              }).catch(function(err) {
+                console.log('Err',err);
+                reject();
+              });
+          // }
+
+        });
+
+      },
+
+      _click: function() {
+          
+        let academic = this.querySelector('vaadin-combo-box[label="學歷"]').value;
+        let age = this.querySelector('vaadin-combo-box[label="年齡"]').value;
+        let surname = this.querySelector('vaadin-text-field[label="姓氏"]').value;
+        let name = this.querySelector('vaadin-text-field[label="名字"]').value;
+        let gender = this.querySelector('vaadin-radio-group[label="性別"]').value;
+        let phone = this.querySelector('vaadin-number-field[label="電話"]').value;
+        let email = this.querySelector('vaadin-text-field[label="電郵"]').value;
+        let profession = this.querySelector('vaadin-text-field[label="職業"]').value;
+
+        if (email.indexOf("@")<0) {
+          alert('你的電郵格式有誤，請再輸入');
+          return;
+        }
+
+        let content = `
+          <h1>你有新的查詢</h1>
+          <p>
+              姓氏：`+surname+`<br>
+              名字：`+name+`<br>
+              性別：`+gender+`<br>
+              年齡：`+age+`<br>
+              電話：`+phone+`<br>
+              電郵：`+email+`<br>
+              學歷：`+academic+`<br>
+              職業：`+profession+`<br>
+          </p>
+
+        `;
+        this.emailToUser('info@dnaperfectmatch.com','DNA Perfect Match 查詢',content);
+          // console.log('Click',content);
+      },
+
+    });
+  </script>
+</dom-module>

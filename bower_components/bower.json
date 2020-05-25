@@ -1,0 +1,15 @@
+{
+    "name": "dazzle-bower-package",
+    "description": "Dazzle's bower example",
+    "keywords": [
+      "css",
+      "js",
+      "html",
+      "json"
+    ],
+    "license": "MIT",
+    "dependencies": {
+      "jquery": "1.9.1 - 3",
+      "bootstrap": "3.3.7"
+    }
+  }

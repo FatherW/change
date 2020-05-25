@@ -1,0 +1,173 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../valle-speed-dial/valle-speed-dial.html">
+<link rel="import" href="../paper-fab-speed-dial/paper-fab-speed-dial-action.html?id=sdfjsl">
+<link rel="import" href="../iron-icons/iron-icons.html">
+<!--
+A material design [Floating Action Button with Speed Dial](https://www.google.com/design/spec/components/buttons-floating-action-button.html#buttons-floating-action-button-transitions)
+
+### Styling
+
+Style                                                   | Description
+------------------------------------------------        | ------------
+--paper-fab-speed-dial-background                       | The background color of the Floating Action Button
+--paper-fab-speed-dial-keyboard-focus-background        | The background color of the Floating Action Button when focused
+--paper-fab-speed-dial-background-close                 | The background color of the Floating Action Button when opened
+--paper-fab-speed-dial-keyboard-focus-background-close  | The background color of the Floating Action Button when opened and focused
+--paper-fab-speed-dial-position                         | The type of positioning method used for the Floating Action Button (default: absolute)
+--paper-fab-speed-dial-right                            | Margin to the right of the screen (default: 16px)
+--paper-fab-speed-dial-bottom                           | Margin to the bottom of the screen (default: 16px)
+
+### Example
+
+```html
+<paper-fab-speed-dial>
+<paper-fab-speed-dial-action icon="icons:content-copy">Copy</paper-fab-speed-dial-action>
+<paper-fab-speed-dial-action icon="icons:print">Print</paper-fab-speed-dial-action>
+</paper-fab-speed-dial>
+```
+
+@demo demo/index.html
+-->
+<dom-module id="dz-fab-menu">
+
+	<template>
+
+		<style>
+
+			:host {
+				z-index: 10000;
+				position: fixed;
+				top: 0px;
+				right: 0px;
+				width: 100px;
+				height: 100px;
+			}
+
+		</style>
+
+	<valle-speed-dial direction="down" backdrop>
+		<paper-fab-speed-dial-action icon="icons:save" on-click="save">儲存及匯出</paper-fab-speed-dial-action>
+		<paper-fab-speed-dial-action icon="icons:settings" on-click="settings">頁面設定</paper-fab-speed-dial-action>
+		<paper-fab-speed-dial-action icon="icons:face" on-click="userSettings">用戶設定</paper-fab-speed-dial-action>
+		<paper-fab-speed-dial-action icon="icons:perm-media" on-click="mediaManage">媒體管理</paper-fab-speed-dial-action>
+		<paper-fab-speed-dial-action icon="icons:dns" on-click="dbManage">資料管理</paper-fab-speed-dial-action>
+		<paper-fab-speed-dial-action icon="icons:history" on-click="history">回復</paper-fab-speed-dial-action>
+		<paper-fab-speed-dial-action icon="icons:help" on-click="help">使用說明</paper-fab-speed-dial-action>
+		<paper-fab-speed-dial-action icon="icons:exit-to-app" on-click="logout">登出</paper-fab-speed-dial-action>
+            <!-- <valle-speed-dial-action
+              label="copy"
+              label-direction="right"
+              icon="icons:print"
+              class="unicorn">
+            </valle-speed-dial-action>
+
+            <valle-speed-dial-action
+              label="print"
+              label-direction="right"
+              icon="https://uploaddeimagens.com.br/images/001/071/867/full/iconmonstr-fast-food-3-32.png"
+              class="unicorn">
+            </valle-speed-dial-action> -->
+
+		</valle-speed-dial>
+
+		<!-- <paper-fab-speed-dial with-backdrop>
+			<paper-fab-speed-dial-action icon="icons:content-copy">Copy</paper-fab-speed-dial-action>
+			<paper-fab-speed-dial-action icon="icons:print">Print</paper-fab-speed-dial-action>
+		</paper-fab-speed-dial> -->
+
+	</template>
+</dom-module>
+
+<script>
+
+(function() {
+
+
+
+	Polymer({
+		is: 'dz-fab-menu',
+		properties: {
+			icon: {
+				type: String,
+				value: 'add'
+			},
+			opened: {
+				type: Boolean,
+				notify: true
+			},
+			disabled: {
+				type: Boolean,
+				value: false
+			},
+			withBackdrop: Boolean,
+		},
+
+		created:function() {
+			// super.ready();
+			let user = store.get('user') || null;
+			let editMode = store.get('editMode') || 'normal';
+			console.log('I am ready',user,editMode);
+			this.dzPage = document.querySelector('dz-page');
+		},
+		save:function(e,detail){
+				console.log('save');
+				document.dispatchEvent(new CustomEvent('save', { detail: {} }));
+		},
+		help:function(e,detail){
+				var url = prompt("請輸入匯入連結");
+				this.dzPage.import(url);
+		},
+		logout: function(e,detail){
+			store.clearAll();
+			document.dispatchEvent(new CustomEvent('logout', { detail: {} }));
+			location.href = this.dzPage.thisPage;
+
+			// let loginUrl = "https://37nolo3390.execute-api.ap-northeast-1.amazonaws.com/prod";
+			// let params = {
+			// 	"uid": "dnamatch",
+			// 	"password": "phy3math4",
+			// 	"type": "loginByUidPassword"
+			// };
+			// this.postData(loginUrl,params).then(res=>{
+			// 	console.log('Res',res);
+			// });
+
+		},
+		mediaManage:function(e,detail){
+			document.dispatchEvent(new CustomEvent('custom-popup', { detail: {'component':'dz-file-management','size':'big'} }));
+		},
+		// Public methods
+		open: function(e) {
+		
+		},
+		close: function(e) {
+		
+		},
+		postData:function(url, data) {
+			// Default options are marked with *
+			console.log('Post Data');
+			return new Promise(function (resolve, reject) {
+				fetch(url, {
+					body: JSON.stringify(data), // must match 'Content-Type' header
+					cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+					credentials: 'same-origin', // include, same-origin, *omit
+					headers: {
+					'user-agent': 'Mozilla/4.0 MDN Example',
+					'content-type': 'application/json'
+					},
+					method: 'POST', // *GET, POST, PUT, DELETE, etc.
+					mode: 'cors', // no-cors, cors, *same-origin
+					redirect: 'follow', // manual, *follow, error
+					referrer: 'no-referrer', // *client, no-referrer
+				})
+				.then(response => {
+					resolve(response.json());
+				}) // parses response to JSON
+			});
+			
+		}
+	});
+
+})();
+
+</script>

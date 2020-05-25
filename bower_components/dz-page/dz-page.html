@@ -1,0 +1,772 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-context-menu/vaadin-context-menu.html">
+<link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../dz-dazzle/dz-block.html">
+<link rel="import" href="../dz-dazzle/dz-editor.html">
+<link rel="import" href="../dz-dazzle/dz-aws.html">
+<!-- <link rel="import" href="../dz-fab-menu/dz-fab-menu.html"> -->
+<!-- <link rel="import" href="../dz-dazzle/dz-dazzle.html"> -->
+
+<script src="https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/js/store-2.0.12.min.js"></script>
+
+<link rel="stylesheet" href="https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/css/font-awesome-4.7.0.min.css">
+
+<!-- <link rel="import" href="../dz-menu/dz-menu.html">    -->
+
+
+<!-- <script src="https://d25k6mzsu7mq5l.cloudfront.net/component/dz-file-management.js"></script> -->
+
+<!-- <link rel="import" href="dz-editor.html"> -->
+
+<dom-module id="error-dialog-overlay-styles" theme-for="vaadin-dialog-overlay">
+	<template>
+	  <style>
+		:host([theme~="error"]) [part="content"] {
+			padding:0px;
+		}
+    :host([theme~="error"]) [part="overlay"]{
+    
+      display: flex;
+        animation: none !important;
+        min-width: 300px;
+        width:90%;
+
+    }
+
+    :host([theme~="login"]) [part="overlay"]{
+    
+      width:480px;
+
+    }
+    :host .hide{
+      visibility:hidden;
+    }
+
+	  </style>
+	</template>
+  </dom-module>
+
+<dom-module id="dz-page">
+  <!-- <link rel="import" type="css" href="https://www.w3schools.com/w3css/4/w3.css"> -->
+  
+  <template strip-whitespace>  
+
+    <style>
+       [dz-panel] {
+        outline: 2px solid #2196f3 !important;
+      }
+      [part="content"]{
+    
+        display: flex;
+          animation: none !important;
+          min-width: 300px;
+          padding:0px;
+
+      }
+
+      /* [part="overlay"] {
+        display: flex;
+        animation: none !important;
+        min-width: 300px;
+        width:90%;
+      } */
+
+    </style>
+    <vaadin-context-menu selector="[dz-panel]">
+        <wrapper></wrapper>
+    </vaadin-context-menu>
+    <vaadin-dialog aria-label="big" id="dialog"  theme="error"></vaadin-dialog>
+    <dz-aws></dz-aws>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'dz-page',
+      properties: {
+      
+      },
+      // listeners: {
+      //   'click': '_click',
+      //   'mouseover': '_mouseover'
+      // },
+
+      created:function() {
+
+          let editMode = store.get('editMode') || 'normal';
+          this.editMode =editMode;
+          let user = store.get('user') || null;
+          
+          let thisPage;
+          // if (editMode==="admin")
+          //   thisPage = store.get('thisPage') || 'index.html';
+          // else
+            thisPage = decodeURIComponent(location.pathname).substring(location.pathname.indexOf('/') + 1) || 'index.html';
+
+          console.log('Store',editMode,user,thisPage);
+          let elm;
+          // if (editMode==="admin"){
+              
+              let token = decodeURIComponent(location.hash).substring(location.hash.indexOf('#') + 1) || null;
+              console.log('Finish Created',token);
+              this.token = token;
+              this.edit = false;
+              this.level = 0;
+              this.previewMode = false;
+              this.user = store.get('user') || null;
+              this.thisPage = thisPage;
+
+              if (editMode==="admin") {
+                // this.loadScript("https://d25k6mzsu7mq5l.cloudfront.net/cdn7.2/js/dazzle.common.js");
+                // this.loadScript("https://d25k6mzsu7mq5l.cloudfront.net/cdn7.2/js/aws.common.js");
+                this.loadScript("https://d25k6mzsu7mq5l.cloudfront.net/cdn7.2/js/data.common.js");
+                // this.loadScript("https://d25k6mzsu7mq5l.cloudfront.net/component/dz-editor2.js");
+                // this.loadComponent("dz-dazzle","dz-aws");
+                
+              }
+        // this.getAllInfo();
+      },
+
+      loadScript(url){
+        const fileref=document.createElement('script');    
+        fileref.setAttribute("type","text/javascript");
+        fileref.setAttribute("src", url+"?id="+new Date().getTime());
+        document.getElementsByTagName("head")[0].appendChild(fileref);
+      },
+      loadStyle(url){
+        const fileref=document.createElement('link');    
+        fileref.setAttribute("rel","stylesheet");
+        fileref.setAttribute("href", url+"?id="+new Date().getTime());
+        document.getElementsByTagName("head")[0].appendChild(fileref);
+      },
+      ready:function() {
+        console.log('Ready');
+        let editMode = store.get('editMode') || 'normal';
+        this.editMode = editMode;
+        const shadow = this.shadowRoot;
+        this.fileManager = shadow.querySelector('dz-aws');
+        window['_shadow'] = shadow;
+
+        let that = this;
+        // let dataManager = new DataPackage("token");
+        // dataManager.getToken(this.token).then(data=>{
+
+
+          if (this.editMode ==="admin"){
+              this.tid = this.user['uid']; 
+              this.uid = this.user['uid'];
+              this.userBucket = this.user['userBucket'];
+              this.websiteUrl = '//'+this.userBucket+'/';
+              this.loadComponent('dz-fab-menu','dz-fab-menu');
+
+            } else{
+              this.tid = document.querySelector('meta[tid]').getAttribute('tid'); 
+              this.uid = document.querySelector('meta[uid]').getAttribute('uid');
+              // this.userBucket = this.user['userBucket'];
+              this.websiteUrl = location.hostname;
+              this.loadComponent('dz-dazzle','dz-dazzle');
+            }
+      
+        
+
+      
+          
+            document.addEventListener('save',e=>{
+                that.save();     
+            });
+        
+          
+           
+          this.initPage();
+
+
+
+      },
+      loadComponent(cat,id){
+        document.querySelector('head').appendChild(this.contentElm('<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/'+cat+'/'+id+'.html?id='+new Date().getTime()+'">'));
+        elm = document.createElement(id);
+        this.shadowRoot.appendChild(elm);
+      },
+      import(url){
+        let a = new URL(url);
+          // let pathname = a.pathname;
+          // console.log('Path Name',pathname);
+          let pathname = this.thisPage;
+          let that = this;
+          this.getContent(url).then(html=>{
+                console.log('HTML',html);
+                var elm= document.createElement('html');
+                let css='';
+                elm.innerHTML= html;
+
+                let head,body;
+                let bodyClass = elm.querySelector('body').getAttribute('class');
+                let bodyJs ='';
+                elm.querySelectorAll('link[rel="stylesheet"]').forEach(item=>{
+                    css += item.outerHTML+"\n";
+                    let url = item.getAttribute('href') || null;
+                    if (url)
+                      that.saveExternalContent(url);
+                    item.remove();
+                });
+                elm.querySelectorAll('style').forEach(item=>{
+                    css += item.outerHTML+"\n";
+                    item.remove();
+                });
+
+                elm.querySelectorAll('body script').forEach(item=>{
+                  let src = item.getAttribute('src') || null;
+                  if (src) {
+                    bodyJs += item.outerHTML+"\n";
+                    item.remove();
+                  }
+                    
+                });
+                head = elm.querySelector('head').innerHTML;
+                body = elm.querySelector('body').innerHTML;
+
+                this.fileManager.saveFile('template/'+this.tid+'/'+this.thisPage+'/head',head);
+                this.fileManager.saveFile('template/'+this.tid+'/'+this.thisPage+'/css',css);
+                this.fileManager.saveFile('template/'+this.tid+'/'+this.thisPage+'/body_js',bodyJs);
+                this.fileManager.saveFile('template/'+this.tid+'/'+this.thisPage+'/html',body);
+                this.fileManager.saveFile('template/'+this.tid+'/'+this.thisPage+'/body_class',bodyClass);
+
+                
+          });
+      },
+      saveExternalContent(url){
+        let that = this;
+
+        console.log('Save Url',url);
+        // if (url.indexOf("//")>=0)
+        //     this.getExternalContent(url).then(res=>{
+        //         that.fileManager.saveFile()
+                
+        //     });
+      },
+      contentElm(html){
+        return document.createRange().createContextualFragment(html);
+      },
+      export(){
+
+        let html = document.createElement('html');
+        let head = document.createElement('head');
+        let body = document.createElement('body');
+        let meta = document.createElement('meta');
+        // let dzPage = document.querySelector('dz-page');
+        let bodyJs = document.createRange().createContextualFragment(this.bodyJs);
+        let extraHead = `
+            <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/dz-page/dz-page.html">
+        `;
+        let script = document.createElement('script');
+        script.setAttribute('src',"https://d25k6mzsu7mq5l.cloudfront.net/bower_components/webcomponentsjs/webcomponents-lite.js");
+        extraHead += '<link rel="stylesheet" href="css/'+this.thisPage+'.css" />';
+        let eHead = document.createRange().createContextualFragment(extraHead);
+
+        const shadow = this.shadowRoot;
+
+        let content = shadow.querySelector('wrapper').innerHTML;
+        let css='';
+        head.appendChild(this.contentElm('<meta uid="'+this.uid+'">'));
+        head.appendChild(this.contentElm('<meta tid="'+this.tid+'">'));
+        head.appendChild(this.contentElm('<meta thisPage="'+this.thisPage+'">'));
+        head.appendChild(this.contentElm('<meta userBucket="'+this.userBucket+'">'));
+        
+        shadow.querySelectorAll('style').forEach(item=>{
+          css+=item.innerHTML;
+        });
+        // head.innerHTML = this.head;
+        head.appendChild(this.contentElm(this.head));
+        head.appendChild(script);
+        head.appendChild(this.contentElm(extraHead));
+        body.appendChild(this.contentElm("<dz-page></dz-page>"));  
+        // body.appendChild(this.contentElm("<dz-dazzle></dz-dazzle>"));             
+        // body.appendChild(this.contentElm(this.bodyJs));
+
+
+        html.appendChild(head);
+        html.appendChild(body);
+        
+        this.fileManager.saveFile('css/'+this.thisPage+'.css',css);  
+        this.fileManager.saveFile(this.thisPage,html.outerHTML);  
+
+      },
+      save(){
+        let that = this;
+        let basePath = 'template/'+this.tid+'/'+this.thisPage;
+        const shadow = this.shadowRoot;
+        let html = shadow.querySelector('wrapper').innerHTML;
+          // this.fileManager.getFile(basePath+'/html').then(html=>{
+        this.fileManager.saveFile(basePath+'/html',html).then(res=>{
+            alert('已成功儲存');
+            that.export();
+        });
+      },
+      contextRender(menu){
+        let that = this;
+        const shadow = this.shadowRoot;
+        const contextMenu = shadow.querySelector('vaadin-context-menu');
+        contextMenu.renderer = function(root) {
+          let listBox = root.firstElementChild;
+          // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
+          if (listBox) {
+            listBox.innerHTML = '';
+          } else {
+            listBox = window.document.createElement('vaadin-list-box');
+            root.appendChild(listBox);
+          }
+          console.log('Root',root);
+          menu.forEach(function(ele) {
+            const item = window.document.createElement('vaadin-item');
+            item.textContent = ele.label;
+            item.addEventListener('click',e=>{
+                console.log('Event',ele.event);
+                document.dispatchEvent(new CustomEvent(ele.event, { detail: {'size':'big'} }));
+            });
+            listBox.appendChild(item);
+          });
+        };
+
+      },
+      closeDialog(){
+        const shadow = this.shadowRoot;
+        const dialog = shadow.querySelector('vaadin-dialog');
+        dialog.opened = false;
+      },
+      popup(component){
+          const shadow = this.shadowRoot;
+          const dialog = shadow.querySelector('vaadin-dialog');
+          let link = document.createElement('link');
+          link.setAttribute('rel','import');
+          link.setAttribute('href','https://d25k6mzsu7mq5l.cloudfront.net/bower_components/'+component+'/'+component+'.html?id='+new Date().getTime());            
+
+          document.querySelector('head').appendChild(link);
+
+          customElements.whenDefined('vaadin-dialog').then(function() {
+            dialog.renderer = function(root, dialog) {
+              root.innerHTML = '<'+component+'></'+component+'>';
+            };
+            dialog.opened = true;		    
+          });
+
+    
+          
+      },
+      eventListener(){
+        console.log('Event Listen');
+        
+        const shadow = this.shadowRoot;
+        let that = this;
+        //  this.fileManager = new AwsPackage(this.user);
+      
+         customElements.whenDefined('vaadin-context-menu').then(function() {
+            console.log('Vaadin Context Menu');
+            let menu = [{
+                'label':'編輯',
+                'event':'img-edit'
+            },{
+              'label':'圖片庫',
+              'event':'img-stock'
+            }];
+          that.contextRender(menu);
+        });
+        shadow.addEventListener('mouseover',e=>{
+          console.log('Preview Mode',that.previewMode);
+            if (that.previewMode)
+              return;
+                  let elm = e.path[0];
+                  if (that.level==0 && !that.edit)
+                    elm.setAttribute('dz-panel','');
+                  that.baseElm = elm;
+                  that.path = e.path;
+                  that.curElm = elm;
+                  console.log('Mouse Over',elm);
+        });
+        shadow.addEventListener('mouseout',e=>{
+          if (that.previewMode)
+            return;
+            let elm = e.path[0];
+            that.baseElm = null;
+            that.path = [];
+            // if (elm===that.curElm)
+            if (that.level==0 && !that.edit)
+              elm.removeAttribute('dz-panel','');
+            console.log('Mouse Out',e);
+        });
+        shadow.addEventListener('click',e=>{
+          if (that.previewMode)
+              return;
+
+          that.baseElm = null;
+            that.path = [];
+            that.level = 0;
+            shadow.querySelector('[dz-panel]').removeAttribute('dz-panel');
+            console.log('Click',e);
+            e.preventDefault();
+            e.stopPropagation();
+        });
+              shadow.addEventListener('contextmenu',e=>{
+                  let tagName = that.curElm.tagName;
+                  console.log(tagName);
+                  switch(tagName){
+                      case 'IMG':
+                        let menu = [{
+                            'label':'編輯',
+                            'event':'img-edit'
+                        },{
+                          'label':'圖片庫',
+                          'event':'img-stock'
+                        }];
+
+                        that.contextRender(menu);
+                      break;
+
+                  }
+
+              });
+
+              document.addEventListener('keydown',e=>{
+                  console.log('Key Down',e);
+                  if (!that.edit) {
+                    switch (e.code){
+                        case 'Escape':
+                          that.previewMode = !that.previewMode;
+                          shadow.querySelector('[dz-panel]').removeAttribute('dz-panel');
+                          if (that.previewMode) 
+                              shadow.querySelector('dz-fab-menu').classList.addClass('hide');
+                          else  
+                              shadow.querySelector('dz-fab-menu').classList.removeClass('hide');
+                        break;
+
+
+                        case 'ArrowUp':
+                            that.level++;
+                            that.curElm.removeAttribute('dz-panel');
+                            that.curElm = that.path[that.level];
+                            that.curElm.setAttribute('dz-panel','');
+                            
+                            e.preventDefault();
+                            e.stopPropagation();
+                        break;
+                        case 'ArrowDown':
+                            that.level--;
+                            that.curElm.removeAttribute('dz-panel');
+                            that.curElm = that.path[that.level];
+                            that.curElm.setAttribute('dz-panel','');
+                            e.preventDefault();
+                            e.stopPropagation();
+                        break;  
+                        
+                        
+                        case 'Backspace':
+                        case 'Delete':
+                            that.curElm.remove();
+                        break;
+
+                    }
+
+                  }
+              });
+              shadow.addEventListener('dblclick',e=>{
+                  console.log('DB click',e);
+                  if (!that.edit) {
+                    let elm = that.curElm;
+
+                    let html = elm.outerHTML;
+                    let dzEditor = document.createElement('dz-editor');
+                    dzEditor.innerHTML = html;
+                    elm.outerHTML = dzEditor.outerHTML;
+                    that.edit = true;
+
+                  } else {
+                    that.edit = false;
+                    let elm = shadow.querySelector('dz-editor');
+                    elm.removeEditor();
+                    // elm.outerHTML = elm.innerHTML;
+                  }
+
+              });
+
+        document.addEventListener('img-stock',e=>{
+            // document.dispatchEvent(new CustomEvent('custom-popup', { detail: {'component':'dz-file-management','size':'big'} }));
+            
+            that.popup('dz-file-management');
+
+
+        });
+          
+
+
+
+
+        document.addEventListener('keypress',e=>{
+          let page = document.querySelector('dz-page');
+          if (e.ctrlKey){
+            switch(e.key){
+
+                case 'c':
+                  console.log('Copy');
+                  that.clipBoard = that.curElm;
+                  break;
+                
+                case 'u':
+                  console.log('Paste Up');
+
+                  let elm = that.curElm;
+                  clm = that.clipBoard.cloneNode(true);
+                  elm.parentElement.insertBefore(clm,elm);
+                  break;
+
+                case 'v':
+                  console.log('Paste Down',window['dz-clip']);
+
+                  clm = that.clipBoard.cloneNode(true);
+                  insertAfter(clm,that.curElm);
+                  break;
+
+                case 'e':
+                  // document.dispatchEvent(new CustomEvent('custom-popup', { detail: {'component':'code-editor', 'size':'big'} }));
+                break;
+            }
+          }
+      });
+
+
+
+
+
+      function insertAfter(newNode, referenceNode) {
+        referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+      }
+
+      },
+      initPage() {
+        let that = this;
+        if (this.editMode ==="admin"){
+          this.tid = this.user['uid']; 
+          this.uid = this.user['uid'];
+          this.userBucket = this.user['userBucket'];
+          this.websiteUrl = '//'+this.userBucket+'/';
+        } else{
+          this.tid = document.querySelector('meta[tid]').getAttribute('tid'); 
+          this.uid = document.querySelector('meta[uid]').getAttribute('uid');
+          this.thisPage = document.querySelector('meta[thispage]').getAttribute('thispage');
+          this.userBucket = document.querySelector('meta[userbucket]').getAttribute('userbucket');
+          // this.userBucket = this.user['userBucket'];
+          this.websiteUrl = location.hostname;
+
+
+        }
+        console.log('Init Page',this.tid,this.thisPage);
+
+        // window['_fileManager'] = this.fileManager;
+        // this.thisPage = data['thisPage'] || 'index.html'; 
+        let meta = document.createElement('meta');
+        elm = meta.cloneNode(true);
+        elm.setAttribute('tid',this.tid);
+        document.querySelector('head').appendChild(elm);
+
+        elm = meta.cloneNode(true);
+        elm.setAttribute('uid',this.uid);
+        document.querySelector('head').appendChild(elm);
+        // document.querySelector('base').setAttribute('href',this.websiteUrl);
+
+        let basePath = 'template/'+this.tid+'/'+this.thisPage;
+        console.log(basePath);
+        const shadow = this.shadowRoot;
+       
+        // let style = document.createElement('style');
+        //   shadow.appendChild(style);
+          let style = shadow.querySelector('style');
+          this.css = '';
+
+          // this.getContent(basePath+'/head').then(head=>{
+
+        Promise.all([this.getPageContent('head'),this.getPageContent('css'), this.getPageContent('html'),this.getPageContent('body_js'),this.getPageContent('body_class')]).then(function(results) {
+          console.log(results);
+          that.head = results[0];
+          that.css = results[1];
+          that.html = results[2];
+          that.bodyJs = results[3];
+          that.bodyClass = results[4];
+
+          // Head
+          let headElm = document.createRange().createContextualFragment(that.head);
+          document.querySelector('head').appendChild(headElm);    
+
+          // CSS
+          let elm = document.createRange().createContextualFragment(that.css);
+  //         <link rel="stylesheet" href="http://www.tmiltd.hk/css/bootstrap.min.css">
+  //  <link rel="stylesheet" href="http://www.tmiltd.hk/css/animate.css">
+  //  <link rel="stylesheet" href="http://www.tmiltd.hk/css/owl.carousel.min.css">
+  //  <link rel="stylesheet" href="http://www.tmiltd.hk/css/themify-icons.css">
+  //  <link rel="stylesheet" href="http://www.tmiltd.hk/css/flaticon.css">
+  //  <link rel="stylesheet" href="http://www.tmiltd.hk/css/magnific-popup.css">
+  //  <link rel="stylesheet" href="http://www.tmiltd.hk/fontawesome/css/all.min.css">
+  //  <link rel="stylesheet" href="http://www.tmiltd.hk/css/style.css">
+  //  <link rel="stylesheet" href="fontawesome/css/all.min.css">
+
+  // const sheet = new CSSStyleSheet();
+
+          let cssTxt='';
+          elm.querySelectorAll('link').forEach(e=>{
+
+
+                let href = e.getAttribute('href');
+                console.log('HREF',href);
+                that.getContent(href).then(html=>{
+                  console.log('HTML',href);
+                      cssTxt +=html;
+                      style.innerHTML += html; 
+
+                      // const newSheet = new CSSStyleSheet();
+                      // newSheet.replaceSync(html);
+                      // shadow.adoptedStyleSheets = [...document.adoptedStyleSheets, newSheet];
+
+
+                });
+          });
+
+          that.css = cssTxt;
+          // console.log('CSS',cssTxt);
+          // that.css = style.innerHTML;
+
+          // sheet.replaceSync(cssTxt);
+          // shadow.adoptedStyleSheets = [sheet];
+
+
+          // HTML
+          let wrapper = shadow.querySelector('wrapper');
+          wrapper.innerHTML=that.html;
+          console.log('Load Body');
+          
+          // Body JS
+          let bodyJs = document.createRange().createContextualFragment(that.bodyJs);
+          console.log('Body JS',that.bodyJs);
+          document.querySelector('body').appendChild(bodyJs);      
+          if (that.editMode==="admin")       
+            that.eventListener();
+        
+          // Body Class
+          wrapper.setAttribute('class',that.bodyClass);
+          that.computedStyle();
+
+        });
+
+
+      },
+      computedStyle(){
+          const shadow = this.shadowRoot;
+          // shadow.querySelectorAll('wrapper a').forEach(item=>{
+          //     let style = window.getComputedStyle(item);
+          //     console.log('Style',item,style);
+          // });
+          for (let i = 0; i < document.styleSheets.length; i++) {
+            let styleSheet = shadow.styleSheets[i];
+            console.log('Style Sheet',styleSheet);
+          }
+
+      },
+
+      getPageContent(type){
+        let that = this;
+        let basePath = 'template/'+this.tid+'/'+this.thisPage;
+        // this.basePath = '//'+this.userBucket+'/template/'+this.tid+'/'+this.thisPage;
+        this.basePath = basePath;
+
+        return new Promise(function (resolve, reject) {
+            // if (this.editMode==="normal") 
+                that.getContent(that.basePath+'/'+type+'?id='+new Date().getTime()).then(result=> { resolve(result)});
+            // else
+            //     that.fileManager.getFile(basePath+'/'+type+'?id='+new Date().getTime()).then(result=> { resolve(result)});            
+        });
+      },
+
+      getSelection(){
+          return this.shadowRoot.getSelection();
+      },
+      getContent:function(url){
+        console.log('Query Url',url);
+        let that = this;
+
+        return new Promise(function (resolve, reject) {
+    
+          // if (url.indexOf("//")>=0){
+          //   that.getExternalContent(url).then(res=>resolve(res));
+          // } else {
+              fetch(url).then(function(response) {
+                  // When the page is loaded convert it to text
+                  console.log('Response',response);
+                  if (!response.ok)
+                    resolve('');
+                  else
+                    resolve(response.text());
+              }).catch(function(err) {
+                console.log('Err',err);
+                reject();
+              });
+          // }
+
+        });
+
+      },
+
+      getExternalContent(url) {
+        let miscFcUrl ="https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/dazzleEditorMiscFunction";
+        let params = {
+            "url": url,
+            "action": "grabPage"
+        }
+        let that = this;
+        return new Promise(function (resolve, reject) {
+          that.postData(miscFcUrl,params).then(result=>{
+              resolve(result.resolve);
+          });
+        });
+
+      },
+      postData:function(url, data) {
+			// Default options are marked with *
+			console.log('Post Data');
+			return new Promise(function (resolve, reject) {
+				fetch(url, {
+					body: JSON.stringify(data), // must match 'Content-Type' header
+					cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+					credentials: 'same-origin', // include, same-origin, *omit
+					headers: {
+					'user-agent': 'Mozilla/4.0 MDN Example',
+					'content-type': 'application/json'
+					},
+					method: 'POST', // *GET, POST, PUT, DELETE, etc.
+					mode: 'cors', // no-cors, cors, *same-origin
+					redirect: 'follow', // manual, *follow, error
+					referrer: 'no-referrer', // *client, no-referrer
+				})
+				.then(response => {
+					resolve(response.json());
+				}) // parses response to JSON
+			});
+			
+		},
+      _click: function(e) {
+          console.log('Click');
+
+       
+      },
+      _mouseover: function(e) {
+        console.log('Mouse Over');     
+       
+      },
+    });
+  </script>
+</dom-module>

@@ -1,0 +1,263 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-button/vaadin-button.html">
+<link rel="import" href="../vaadin-tabs/vaadin-tabs.html">
+<link rel="import" href="../iron-pages/iron-pages.html">
+<link rel="import" href="../dz-dropzone/dz-dropzone.html">
+
+<link rel="import" href="css/style.html">
+<link rel="import" href="dz-image-toolbar.html">
+
+<!-- <link rel="import" href="../paper-tabs/paper-tabs.html">
+<link rel="import" href="../paper-tabs/paper-tab.html"> -->
+
+
+<!-- <script type="module">
+	import '@polymer/iron-lazy-pages/iron-lazy-pages.js';
+	import '@polymer/paper-tabs/paper-tabs.js';
+	import '@polymer/paper-tabs/paper-tab.js';
+  </script> -->
+
+
+<!-- <link rel="import" href="../valle-speed-dial/valle-speed-dial.html">
+<link rel="import" href="../paper-fab-speed-dial/paper-fab-speed-dial-action.html">
+<link rel="import" href="../iron-icons/iron-icons.html"> -->
+
+<dom-module id="dz-file-management">
+
+	<template>
+		<style include="main-styles"></style>
+		<style include="labs-styles"></style>
+		<style include="masonry-styles"></style>
+
+
+			<h1 class="mat-dialog-title" mat-dialog-title="" id="mat-dialog-title-1">
+				<mat-toolbar class="mat-toolbar mat-primary mat-toolbar-multiple-rows" color="primary">
+				<mat-toolbar-row class="mat-toolbar-row">
+					<span>檔案及媒體管理</span>
+					<span class="example-spacer"></span>
+					<vaadin-button class="primary raised" id="dz-upload">上載</vaadin-button>
+					<vaadin-button id="dz-buy">購買</vaadin-button>
+					<vaadin-button id="dz-refresh">更新</vaadin-button>
+					<button id="openNav" class="w3-button w3-teal w3-xlarge">編輯</button>
+				</mat-toolbar-row>
+			</mat-toolbar></h1>
+			
+			
+			  <content>
+			  <vaadin-tabs selected="{{page}}">
+				<vaadin-tab>上載</vaadin-tab>
+				<vaadin-tab>購買</vaadin-tab>
+				<vaadin-tab>圖片庫</vaadin-tab>
+				<vaadin-tab>檔案庫</vaadin-tab>
+			  </vaadin-tabs>
+			  <iron-pages selected="[[page]]">
+				<page>
+					
+					<dz-dropzone></dz-dropzone>
+				</page>
+				<page>
+					<div style="width:100%; height:600px; overflow:auto;">
+						<div  id="dz-imageList" class="masonry bordered">
+							<!-- <div class="brick">
+							  <img src="https://w3bits.com/files/img/cherry-plant.jpg" alt="Cherry plant" title="Cherry plant">
+							</div>
+							<div class="brick">
+							  <img src="https://w3bits.com/files/img/oranges-pomegranates.jpg" alt="Oranges and Pomegranates" title="Oranges and Pomegranates">
+							</div>
+							<div class="brick">
+							  <img src="https://w3bits.com/files/img/strawberry.jpg" alt="Strawberry" title="Strawberry">
+							</div>
+							<div class="brick">
+							  <img src="https://w3bits.com/files/img/blueberries.jpg" alt="Blueberries" title="Blueberries">
+							</div>
+							<div class="brick">
+							  <img src="https://w3bits.com/files/img/pears.jpg" alt="Pears" title="Pears">
+							</div>
+							<div class="brick">
+							  <img src="https://w3bits.com/files/img/easter-eggs.jpg" alt="Easter-eggs" title="Easter-eggs">
+							</div>
+								  <div class="brick">
+							  <img src="https://w3bits.com/files/img/lemons.jpg" alt="Lemons" title="Lemons">
+							</div>
+							<div class="brick">
+							  <img src="https://w3bits.com/files/img/cherries.jpg" alt="Cherries" title="Cherries">
+							</div>
+							<div class="brick">
+							  <img src="https://w3bits.com/files/img/grapes.jpg" alt="Grapes" title="Grapes">
+							</div> -->
+						  </div>
+					</div>
+
+
+				
+					<dz-buy-photo></dz-buy-photo></page>
+				<page>
+					<div>
+	
+					</div>
+				</page>
+				<page> 
+					<h3>檔案庫</h3>
+
+					<div id="fileList">
+										 
+				</div></page>
+			  </iron-pages>
+
+
+			
+						</content>
+			
+			
+
+	</template>
+</dom-module>
+
+<script>
+
+(function() {
+
+
+
+	Polymer({
+		is: 'dz-file-management',
+		properties: {
+			icon: {
+				type: String,
+				value: 'add'
+			},
+			opened: {
+				type: Boolean,
+				notify: true
+			},
+			disabled: {
+				type: Boolean,
+				value: false
+			},
+			withBackdrop: Boolean,
+		},
+
+		created:function() {
+			this.user = store.get('user') || null;
+			this.fileManager = document.querySelector('dz-page').fileManager;
+
+		},
+		ready:function() {
+			this.renew();
+		},
+		renew(){
+			let that = this;
+			let shadow = this.shadowRoot;
+			that.fileManager.listFile('files/').then(res=>{
+				console.log('Result',res);
+				let h3 = document.createElement('h3');
+				let img = document.createElement('img');
+				let div = document.createElement('div');
+				let elm,elm2;
+				let type;
+				let src;
+				let figure = document.createElement('div');
+				figure.setAttribute('class','brick');
+
+				shadow.querySelector('#dz-imageList').innerHTML ='';
+				shadow.querySelector('#fileList').innerHTML = '';
+				res.forEach(item=>{
+				type = that.fileType(item['Key']);
+				switch (type){
+					case 'file':
+						elm = h3.cloneNode(true);
+						elm.innerHTML = item['Key'];
+						elm.addEventListener('click',e=>{
+						console.log('Click',item['Key']);
+							that.select('http://'+that.user['userBucket']+'/'+item['Key']);
+						});
+						shadow.querySelector('#fileList').appendChild(elm);            
+					break;
+
+					case 'image':              
+						src = '/'+item['Key'];
+						elm = figure.cloneNode(true);
+						elm2 = img.cloneNode(true);
+						elm2.setAttribute('src',src);
+						elm2.addEventListener('click',e=>{
+							that.select('/'+item['Key']);
+						});
+						// let figcaption = document.createElement('figcaption');
+						let toolbar = document.createElement('dz-image-toolbar');
+						toolbar.key = item['Key'];
+						// figcaption.innerHTML = item['Key'];
+						elm.appendChild(elm2);     
+						elm.appendChild(toolbar);
+						// elm.appendChild(figcaption);
+						
+						console.log('Elm',elm);
+						shadow.querySelector('#dz-imageList').appendChild(elm);
+					
+					break;
+				}
+
+
+				});
+			});
+		},
+		fileType(Key){
+			let ext="file"; 
+			if (Key.indexOf('.')>-1)
+				ext = Key.substr(Key.lastIndexOf('.') + 1);
+
+				switch(ext){
+				case 'jpg':
+				case 'jpeg':
+				case 'png':
+				case 'gif':
+					return 'image';
+				break;
+
+				default:
+					return 'file';
+				break;
+				}
+
+			return 'file';
+	},
+    select(Key){
+      // console.log(window['curTarget']);
+      // this.dzEditor.changeImage(Key);
+      // this.dzEditor.show();
+    //   window['curTarget'].dispatchEvent(new CustomEvent('select-link', { detail: {'value':Key} }));
+    //   this.dispatchEvent(new CustomEvent('close',{}));
+	//   this.dispatchEvent(new CustomEvent('close-window',{}));
+	  let dzPage = document.querySelector('dz-page');
+		console.log(dzPage);
+
+	  dzPage.curElm.setAttribute('src',Key);
+		  dzPage.closeDialog();
+    },
+		postData:function(url, data) {
+			// Default options are marked with *
+			console.log('Post Data');
+			return new Promise(function (resolve, reject) {
+				fetch(url, {
+					body: JSON.stringify(data), // must match 'Content-Type' header
+					cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+					credentials: 'same-origin', // include, same-origin, *omit
+					headers: {
+					'user-agent': 'Mozilla/4.0 MDN Example',
+					'content-type': 'application/json'
+					},
+					method: 'POST', // *GET, POST, PUT, DELETE, etc.
+					mode: 'cors', // no-cors, cors, *same-origin
+					redirect: 'follow', // manual, *follow, error
+					referrer: 'no-referrer', // *client, no-referrer
+				})
+				.then(response => {
+					resolve(response.json());
+				}) // parses response to JSON
+			});
+			
+		}
+	});
+
+})();
+
+</script>

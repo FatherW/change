@@ -1,0 +1,80 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../vaadin-text-field/vaadin-number-field.html">
+<link rel="import" href="../dz-file-management/css/style.html">
+<link rel="import" href="dz-history.html">
+
+
+<dom-module id="dz-increment">
+
+    <template>
+        <style include="main-styles"></style>
+        <style include="labs-styles"></style>
+        <style include="masonry-styles"></style>
+        <style>
+            .pad {
+                display: block;
+                padding: 10px;
+            }
+        </style>
+        <page>
+            <h1 class="mat-dialog-title" mat-dialog-title="" id="mat-dialog-title-1">
+                <mat-toolbar class="mat-toolbar mat-primary mat-toolbar-multiple-rows" color="primary">
+                    <mat-toolbar-row class="mat-toolbar-row">
+                        <span id='dz-increment'>增值<span id="value"></span></span>
+                        <span class="example-spacer"></span>
+                    </mat-toolbar-row>
+                </mat-toolbar>
+            </h1>
+            <div class="pad">
+                <vaadin-number-field label="需是100的整數倍" step="100" min="100" max="2000" has-controls>
+                </vaadin-number-field>
+                <vaadin-button>
+                    <!-- <iron-icon icon="vaadin:check-square-o" slot="prefix"></iron-icon> -->
+                    確認
+                </vaadin-button>
+                <vaadin-button>
+                    <!-- <iron-icon icon="lumo:arrow-right" slot="suffix"></iron-icon> -->
+                    取消
+                </vaadin-button>
+            </div>
+        </page>
+    </template>
+</dom-module>
+
+<script>
+
+    (function () {
+
+
+
+        Polymer({
+            is: 'dz-increment',
+            properties: {
+                detail:{
+                    type:Object
+                },
+                ans:{
+                    type:Number
+                }
+            },
+
+            created: function () {
+                // this.ans = this.detail.ans;
+                // this.ans = Polymer._ans;
+
+            },
+            ready: function () {
+                console.log('Detail',this.ans);
+
+
+                 let value = this.shadowRoot.querySelector('#value');
+                 value.innerHTML = this.ans;
+            },
+           
+
+        });
+
+    })();
+
+</script>

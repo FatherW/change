@@ -1,0 +1,264 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-button/vaadin-button.html">
+<link rel="import" href="../vaadin-tabs/vaadin-tabs.html">
+<link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
+<link rel="import" href="../iron-pages/iron-pages.html">
+<link rel="import" href="../dz-dropzone/dz-dropzone-by-tags.html">
+<link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../paper-tags-input/paper-tags-input.html">
+<link rel="import" href="../dz-file-management/css/style.html">
+<link rel="import" href="../dz-file-management/dz-image-item.html">
+<link rel="import" href="../dz-file-management/dz-image-toolbar.html">
+
+<dom-module id="dz-link-manage">
+
+	<template>
+		<style include="main-styles"></style>
+		<style include="labs-styles"></style>
+		<style include="masonry-styles"></style>
+		<style>
+			paper-tags-input{
+				width:80%;
+			}
+			.selected{
+				outline:10px solid #293575;
+			}
+
+		</style>
+
+			<h1 class="mat-dialog-title" mat-dialog-title="" id="mat-dialog-title-1">
+				<mat-toolbar class="mat-toolbar mat-primary mat-toolbar-multiple-rows" color="primary">
+				<mat-toolbar-row class="mat-toolbar-row">
+					<span>連結設定</span>
+					<span class="example-spacer"></span>
+					<vaadin-button theme="success" on-click="_cancelLink">取消連結</vaadin-button>
+					<vaadin-button theme="contrast" on-click="_confirm">確定連結</vaadin-button>
+					<vaadin-button theme="primary" on-click="_cancel">取消</vaadin-button>
+				</mat-toolbar-row>
+			</mat-toolbar></h1>
+			
+			
+			  <content>
+			  <vaadin-tabs selected="{{page}}">
+				<vaadin-tab>設定連結</vaadin-tab>
+				<vaadin-tab>上載</vaadin-tab>
+				<vaadin-tab>文件庫</vaadin-tab>
+			  </vaadin-tabs>
+			  <iron-pages selected="[[page]]">
+                <page>
+                        <vaadin-text-field style="width:50%" label="輸入連結" id="myLink"></vaadin-text-field>
+                        <vaadin-button on-click="_selectFile">選擇檔案</vaadin-button>
+                        <vaadin-button on-click="select">確認連結</vaadin-button>
+                </page>
+                <page>
+					<dz-dropzone-by-tags></dz-dropzone-by-tags>
+                </page>
+                <page>
+					<div style="width:100%; height:600px; overflow:auto;">
+						<vaadin-text-field id="inputTags" label="請輸入欲搜尋的標籤" style="float:left;"></vaadin-text-field>
+						<paper-tags-input label="搜尋標籤"></paper-tags-input>
+						<div  id="dz-imageList" class="masonry bordered">
+
+						</div>
+					</div>
+			</page>
+
+			  </iron-pages>
+
+
+			
+						</content>
+			
+			
+            <vaadin-dialog aria-label="small" id="dialog"  theme="error"></vaadin-dialog>
+
+	</template>
+</dom-module>
+
+<script>
+
+(function() {
+
+
+
+	Polymer({
+		is: 'dz-link-manage',
+		properties: {
+			icon: {
+				type: String,
+				value: 'add'
+			},
+			opened: {
+				type: Boolean,
+				notify: true
+			},
+			disabled: {
+				type: Boolean,
+				value: false
+			},
+			withBackdrop: Boolean,
+		},
+
+		created:function() {
+			this.user = store.get('user') || null;
+			this.fileManager = Polymer.fileManager;
+			this.tags = [];
+            
+            document.addEventListener('select-file',e=>{
+                console.log('Select File',e);
+                let src = e.detail['selected'];
+                this.shadowRoot.querySelector('#myLink').value = src;
+                this.closeDialog();
+            });
+		},
+		searchTags(){
+			let that = this;
+			let tagInput = this.shadowRoot.querySelector('#inputTags');
+			let tags = this.shadowRoot.querySelector('paper-tags-input');
+			tagInput.addEventListener('keydown',e=>{
+				console.log('Key Down',e);
+				if (e.code==="Enter") {
+					tags._addTag(tagInput.value);
+					tagInput.value = '';
+					console.log('hello',tags._getTags());
+					that.tags = tags._getTags();
+					that.renew();
+				}
+
+			});
+			tags.addEventListener('tag-item-remove',e=>{
+				that.tags = tags._getTags();
+				that.renew();
+			});
+			
+
+
+		},
+		
+		ready() {
+			// this.searchTags();
+			// this.renew();
+            console.log('Shadow',this.shadowRoot.querySelector('#myLink'),Polymer._curElm);
+            this.shadowRoot.querySelector('#myLink').value = Polymer._curElm.getAttribute('href');
+            
+		},
+		renew(){
+			let that = this;
+			let shadow = this.shadowRoot;
+			shadow.querySelector('#dz-imageList').innerHTML = '';
+			let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/dazzleEditorMiscFunction";
+
+                                params = {
+                                        "action": "listMyGalleryByTags",
+										"uid": Polymer.uid,
+										"tags": this.tags                    
+									}                
+									console.log('params',params);
+								Polymer.fileManager.postData(url,params).then(res=>{
+									let images = res.resolve;
+									console.log('Images',images);
+									images.forEach(item =>{
+										that.buildItem(item);
+									});
+
+								});
+
+
+		},
+		buildItem(item){
+
+			let that = this;
+			let shadow = this.shadowRoot;
+			let elm = document.createElement('dz-image-item');
+			elm.gid = item['gid'];
+			console.log('Elm',elm.gid);
+			elm.addEventListener('click',e=>{
+				that.select(elm.gid);
+			});
+			shadow.querySelector('#dz-imageList').appendChild(elm);
+
+		},
+		fileType(Key){
+			let ext="file"; 
+			if (Key.indexOf('.')>-1)
+				ext = Key.substr(Key.lastIndexOf('.') + 1);
+
+				switch(ext){
+				case 'jpg':
+				case 'jpeg':
+				case 'png':
+				case 'gif':
+					return 'image';
+				break;
+
+				default:
+					return 'file';
+				break;
+				}
+
+			return 'file';
+	},
+    _selectFile(){
+        this.popup('dz-file-management','dz-file-list','90%','90%');
+    },
+    select(){
+		// Polymer._curElm.getAttribute('href')=this.shadowRoot.querySelector('#myLink').value;
+		let link = this.shadowRoot.querySelector('#myLink').value;
+		// Polymer._curElm.setAttribute('href',link);
+		let params = {
+			'selected':link
+		};
+		Polymer._curElm.dispatchEvent(new CustomEvent('link-selected', {'detail':params}));
+
+
+		
+    },
+        popup(folder,component,width,height){
+            const shadow = this.shadowRoot;
+            const dialog = shadow.querySelector('vaadin-dialog');
+
+            Polymer.loadComponent(folder,component);
+            customElements.whenDefined(component).then(function() {
+                dialog.renderer = function(root, dialog) {
+                root.innerHTML = '<'+component+'></'+component+'>';
+                };
+                dialog.resizable = true;
+                dialog.resize(width,height);
+                dialog.opened = true;		    
+            });
+        
+        },
+      closeDialog(){
+        const shadow = this.shadowRoot;
+        const dialog = shadow.querySelector('vaadin-dialog');
+        dialog.opened = false;
+      },
+
+		postData:function(url, data) {
+			// Default options are marked with *
+			console.log('Post Data');
+			return new Promise(function (resolve, reject) {
+				fetch(url, {
+					body: JSON.stringify(data), // must match 'Content-Type' header
+					cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+					credentials: 'same-origin', // include, same-origin, *omit
+					headers: {
+					'user-agent': 'Mozilla/4.0 MDN Example',
+					'content-type': 'application/json'
+					},
+					method: 'POST', // *GET, POST, PUT, DELETE, etc.
+					mode: 'cors', // no-cors, cors, *same-origin
+					redirect: 'follow', // manual, *follow, error
+					referrer: 'no-referrer', // *client, no-referrer
+				})
+				.then(response => {
+					resolve(response.json());
+				}) // parses response to JSON
+			});
+			
+		}
+	});
+
+})();
+
+</script>

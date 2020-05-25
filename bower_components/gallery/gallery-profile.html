@@ -1,0 +1,514 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="gallery-profile">
+
+	<template>
+
+        <style include="master-styles"></style>
+		<style include="master1-styles"></style>
+		<style include="master2-styles"></style>
+		<style include="master3-styles"></style>
+		<style include="master4-styles"></style>
+        <style include="master5-styles"></style>
+        <style>
+			.auth-content{
+				padding:20px;
+			}
+			#main {
+				width:100% !important;
+			}
+
+		</style>
+
+<div class="auth-content">
+  
+
+
+	<div class="group">
+	  
+	
+		  
+	  <div class="slat-header user account-slat-header">
+		<div class="slat-details">
+		  <h1><a class="url" rel="contact" href="/henry930"><picture>
+	  <source srcset="https://cdn.dribbble.com/users/5239963/avatars/normal/data?1588240131" media="(-webkit-min-device-pixel-ratio: 1.5), (min--moz-device-pixel-ratio: 1.5), (-o-min-device-pixel-ratio: 3/2), (min-device-pixel-ratio: 1.5), (min-resolution: 1.5dppx)">
+	  <source srcset="https://cdn.dribbble.com/users/5239963/avatars/small/data?1588240131">
+	  <img class="photo" alt="Kwok Hung Yeung" src="https://cdn.dribbble.com/users/5239963/avatars/small/data?1588240131">
+	</picture>
+	 <span class="display-name">天下無敵</span></a>
+			  <span class="sep">/</span> 編輯資料
+		  </h1>
+			<h2>設定你在多搜網的介紹與及需要的人才</h2>
+		</div>
+	  </div>
+	</div>
+		
+	  <div id="main">
+	
+		
+	<div id="avatar-preview" class="group">
+	  <form id="delete-avatar-form" disabled="disabled" class="edit_user" action="/account/avatar" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="✓"><input type="hidden" name="_method" value="delete"><input type="hidden" name="authenticity_token" value="KTkRIrfqt7NCLMyGwjt5SrTr/6hVCwhuobIFkbBr8BeRSJ8GtU2tP7//BJ6wI7znf4sRgF9A9TOTM48SGugJLA==">    <picture>
+	  <source srcset="https://cdn.dribbble.com/users/5239963/avatars/normal/data?1588240131" media="(-webkit-min-device-pixel-ratio: 1.5), (min--moz-device-pixel-ratio: 1.5), (-o-min-device-pixel-ratio: 3/2), (min-device-pixel-ratio: 1.5), (min-resolution: 1.5dppx)">
+	  <source srcset="https://cdn.dribbble.com/users/5239963/avatars/small/data?1588240131">
+	  <img class="photo" alt="Kwok Hung Yeung" src="https://cdn.dribbble.com/users/5239963/avatars/small/data?1588240131">
+	</picture>
+	
+	
+		<a id="edit-avatar-link" class="form-sub edit-avatar" href="#" style="display: inline-block;">上載頭像</a>
+		<input type="submit" name="commit" value="Delete" alt="Delete" class="form-btn delete-avatar" id="delete-avatar-button" data-disable-with="Delete" style="display: inline-block;">
+	</form>
+	  <form id="avatar-form" class="group hide" enctype="multipart/form-data" action="/account/avatar" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="✓"><input type="hidden" name="_method" value="put"><input type="hidden" name="authenticity_token" value="KTkRIrfqt7NCLMyGwjt5SrTr/6hVCwhuobIFkbBr8BeRSJ8GtU2tP7//BJ6wI7znf4sRgF9A9TOTM48SGugJLA==">
+		<fieldset id="upload">
+		  <input size="30" type="file" name="user[avatar]" id="user_avatar">
+		  <p class="info">JPG, GIF or PNG. Max size of 800K</p>
+		</fieldset>
+	
+		<div id="add-btn">
+		  <input type="submit" name="commit" value="Upload Now" class="form-sub" data-disable-with="Upload Now">
+		</div>
+	</form></div>
+	
+	<vaadin-tabs  selected="{{page}}">
+		<vaadin-tab  selected="">公司資料</vaadin-tab>
+		<vaadin-tab >帳號資料</vaadin-tab>
+		<vaadin-tab>密碼</vaadin-tab>
+		<vaadin-tab >社交媒體</vaadin-tab>
+		<vaadin-tab >電郵通知</vaadin-tab>
+		<vaadin-tab >資料匯出</vaadin-tab>
+	  </vaadin-tabs>
+	  <iron-pages selected="[[page]]">
+		<page>
+			<form class="gen-form with-messages profile-form specialty-widget-form" id="new_profile" data-change-handler="true" data-warn-unsaved="true" action="/account/profile" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="✓"><input type="hidden" name="_method" value="put"><input type="hidden" name="authenticity_token" value="KTkRIrfqt7NCLMyGwjt5SrTr/6hVCwhuobIFkbBr8BeRSJ8GtU2tP7//BJ6wI7znf4sRgF9A9TOTM48SGugJLA==">
+		  
+	
+			
+				<span class="ta-required">
+					<div class="form-field "><fieldset><label for="profile_name">公司/設計師名稱</label><input autocomplete="name" class="ta-label" type="text" value="Kwok Hung Yeung" name="profile[name]" id="profile_name"></fieldset><p class="message">公司/設計師名稱須經實名驗證，一經驗證，無法更改</p></div>
+				</span>
+				
+				<div class="form-field "><fieldset><label for="profile_location">地點</label><input autocomplete="address-level2" class="ta-label mb10" type="text" value="廣東省，香港" name="profile[location]" id="profile_location"></fieldset></div>
+				
+				<div id="bio">
+				  <div class="form-field "><fieldset><label for="profile_bio">簡介</label><span class="character-counter text-size-12 text-weight-700 text-medium absolute r-0 t-0">1024</span><textarea class="bio" name="profile[bio]" id="profile_bio" maxlength="1024"></textarea></fieldset><p class="message">不超過一千字的簡介</p></div>
+				</div>
+				
+				  <div class="relative mt50">
+					<h3 class="text-small-caps text-medium text-size-13 pb10 mb20 border-bottom-gray" id="online_presence">網上資料</h3>
+				
+					<div class="form-field "><fieldset><label for="profile_url">網站</label><input autocomplete="url" type="text" name="profile[url]" id="profile_url"></fieldset><p class="message">網站，粉絲專頁，博客，個人網站等等</p></div>
+				
+					<div class="flex flex-wrap items-center justify-between">
+					  <div class="w-50-ns w-100 pr10-ns">
+					  <div class="form-field "><fieldset><label for="profile_website_url">多搜網專頁連結</label><input autocomplete="url" type="text" name="profile[website_url]" id="profile_website_url"></fieldset><p class="message">可以分享給所有人</p></div>
+					</div>
+				
+					<div class="w-50-ns w-100 pl10-ns">
+					  <div class="form-field "><fieldset><label for="profile_portfolio_password">專頁密碼</label><input type="text" name="profile[portfolio_password]" id="profile_portfolio_password"></fieldset><p class="message">設定後，則只能用密碼登入</p></div>
+					  </div>
+					</div>
+				  </div>
+				
+				
+				
+					  <div class="form-btns">
+						<input type="submit" name="commit" value="儲存" class="form-sub form-sub mr10-ns mb10 mb0-ns d-inline-block-ns w-auto-ns d-block w-100" formnovalidate="formnovalidate" data-disable-with="Save Profile">
+				</div></form>
+		</page>
+		<page>
+			<form class="account gen-form with-messages mb20" id="edit_user_5239963" data-warn-unsaved="true" action="/account" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="✓"><input type="hidden" name="_method" value="patch"><input type="hidden" name="authenticity_token" value="aeMBogVlrjXmPEy0xAKwh1r47Sud3jy2wrjyOd4RxWzRko+GB8K0uRvvhKy2GnUqkZgDA5eVwevwOXi6dJI8Vw==">
+  
+
+  
+
+  
+
+				<div class="mb20">
+				  <div class="form-field">
+					
+			  <fieldset class="user_login"><label for="user_login">用戶名稱</label><input autocorrect="off" autocapitalize="off" autocomplete="username" type="text" value="henry930" name="user[login]" id="user_login"></fieldset>
+			  <p class="message">你的公司專頁為：http://dazzle.gallery/<strong><span id="username">henry930</span></strong>
+			  </p>
+			  
+				  </div>
+			  
+				  <div class="form-field">
+					<fieldset class="user_email"><label for="user_email">電郵</label><input autocomplete="email" type="email" value="henry@01power.net" name="user[email]" id="user_email"></fieldset>
+					
+				  </div>
+			  
+					
+				</div>
+			  
+				<h2 class="section"></h2>
+			  
+				  
+			  
+				  
+				  <div class="form-btns">
+					<input type="submit" name="commit" value="Save Changes" class="form-sub" data-disable-with="Save Changes">
+				  </div>
+			  </form>
+		</page>
+		<page>
+			<form class="gen-form with-messages flush" id="edit_user_5239963" action="/account/password" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="✓"><input type="hidden" name="_method" value="put"><input type="hidden" name="authenticity_token" value="LDVR1X4z7/BAdTFjyuFfS+WTAgSDPpD+QX/U4SrvdzSURN/xfJT1fL2m+Xu4+ZrmLvPsLIl1baNz/l5igGyODw==">
+
+  
+
+				<div class="form-field "><fieldset><label for="user_old_password">舊密碼</label><input type="password" name="user[old_password]" id="user_old_password"></fieldset></div>
+				<div class="form-field "><fieldset><label for="user_password">密碼</label><input autocomplete="new-password" type="password" name="user[password]" id="user_password"></fieldset><p class="message">最少6個字母或數字</p></div>
+			  
+				<div class="form-btns"><input type="submit" name="commit" value="Change" class="form-sub " data-disable-with="Change"></div></form>		
+		</page>
+		<page>
+			<form class="account gen-form flush with-messages" id="edit_user_5239963" action="/account/social_profiles" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="✓"><input type="hidden" name="_method" value="put"><input type="hidden" name="authenticity_token" value="V/fRh3/EAwOk+MMUd6XdO9EzdBdYXktqql7CZZhSNKPvhl+jfWMZj1krCwwFvRiWGlOaP1IVtjeY30jmMtHNmA==">
+        
+
+				
+		
+				<div class="form-field">
+				  <fieldset class="user_facebook_username"><label for="user_facebook_username">Facebook</label><input type="text" name="user[facebook_username]" id="user_facebook_username"></fieldset>
+		
+					<div class="connection group mt10">
+		
+					  
+		<a class="form-btn auth-facebook " rel="nofollow" title="Sign in with Facebook" data-method="post" href="/auth/facebook">
+		  <svg xmlns="http://www.w3.org/2000/svg" aria-labelledby="4hsiz0icb7dgslywxjfr9fc84tin2tr" role="img" viewBox="0 0 24 24" class="icon "><title id="4hsiz0icb7dgslywxjfr9fc84tin2tr">Facebook icon</title><path d="M22.676 0H1.324C.593 0 0 .593 0 1.324v21.352C0 23.408.593 24 1.324 24h11.494v-9.294H9.689v-3.621h3.129V8.41c0-3.099 1.894-4.785 4.659-4.785 1.325 0 2.464.097 2.796.141v3.24h-1.921c-1.5 0-1.792.721-1.792 1.771v2.311h3.584l-.465 3.63H16.56V24h6.115c.733 0 1.325-.592 1.325-1.324V1.324C24 .593 23.408 0 22.676 0"></path></svg>
+		
+		  Connect to Facebook
+		</a>
+		
+					  <p class="message">
+						One-click sign in
+					  </p>
+					</div>
+				</div>
+		
+				  <div class="form-field google-connection">
+					<h4>Google</h4>
+		
+					<div class="connection group mt10">
+						<p>
+		  <span class="auth-google form-btn auth-nonlink">
+			<a data-confirm="You are about to delete your connection to Google. Continue?" class="remove" rel="tipsy nofollow" data-method="delete" href="/account/authentications/3011763" original-title="Remove this connection"><img alt="Delete google connection" src="https://cdn.dribbble.com/assets/icon-x-6cca02633f2d7f06d82f7f891a9b6bb77bae3ff58e618ba163bde94fdccf0649.gif"></a>
+			Google
+		  </span>
+		</p>
+		
+		
+					  
+		
+					  <p class="message">
+						One-click sign in only (not shown on profile)
+					  </p>
+					</div>
+				  </div>
+		
+				  
+		
+				  <div class="form-field">
+					<fieldset class="user_instagram_username"><label for="user_instagram_username">Instagram</label><input type="text" name="user[instagram_username]" id="user_instagram_username"></fieldset>
+				  </div>
+				  <div class="form-field">
+					<fieldset class="user_github_username"><label for="user_github_username">微信</label><input type="text" name="user[github_username]" id="user_github_username"></fieldset>
+				  </div>
+				  <div class="form-field">
+					<fieldset class="user_creative_market_username"><label for="user_creative_market_username">小紅書</label><input type="text" name="user[creative_market_username]" id="user_creative_market_username"></fieldset>
+				  </div>
+				  <div class="form-field">
+					<fieldset class="user_codepen_username"><label for="user_codepen_username">淘寶</label><input type="text" name="user[codepen_username]" id="user_codepen_username"></fieldset>
+					  
+				  </div>
+				  <div class="form-field">
+					<fieldset class="user_medium_username"><label for="user_medium_username">QQ</label><input type="text" name="user[medium_username]" id="user_medium_username"></fieldset>
+					  
+				  </div>
+				  
+				  <div class="form-field">
+					<fieldset class="user_linkedin_username"><label for="user_linkedin_username">LinkedIn</label><input type="text" name="user[linkedin_username]" id="user_linkedin_username"></fieldset>
+					  
+				  </div>
+				  <div class="form-field">
+					<fieldset class="user_vimeo_username"><label for="user_vimeo_username">土豆</label><input type="text" name="user[vimeo_username]" id="user_vimeo_username"></fieldset>
+				  </div>
+		
+				<div class="form-btns">
+				  <input type="submit" name="commit" value="儲存" class="form-sub" data-disable-with="Update Social Profiles">
+				</div>
+		</form>
+		</page>
+		<page>
+			<form class="gen-form flush plain expiring-invitations-on" action="/account/notifications" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="✓"><input type="hidden" name="authenticity_token" value="hRJ/i6oZN08RDtF1IsDjsZ3WYrd3j3p8HheEHdUMhP49Y/GvqL4tw+zdGW1Q2CYcVraMn33EhyEslg6ef499xQ==">
+				<div class="group account-notifications">
+					<div class="form-field">
+					  <a href="#" class="toggle-all-anchor">Toggle all</a>
+					  <h2 class="section">Alerts &amp; Notifications</h2><p class="message">Send me:</p>
+		  
+					  <fieldset class="check-box-company-news">
+			<div class="notification-option-inner ">
+		  
+				<div class="flex-1">
+			  <label class="checkbox-radio-label">
+				<input type="checkbox" name="notifications[]" id="notification_company_news" value="company_news" checked="checked">
+				  Company News
+			  </label>
+		  
+				<p class="meta message">Get Dribbble news, announcements, and product updates</p>
+			</div>
+		  
+			</div>
+		  </fieldset>
+		  <fieldset class="check-box-account-activity">
+			<div class="notification-option-inner ">
+		  
+				<div class="flex-1">
+			  <label class="checkbox-radio-label">
+				<input type="checkbox" name="notifications[]" id="notification_account_activity" value="account_activity" checked="checked">
+				  Account Activity
+			  </label>
+		  
+				<p class="meta message">Get important notifications about you or activity you've missed</p>
+			</div>
+		  
+			</div>
+		  </fieldset>
+		  <fieldset class="check-box-meetup-nearby">
+			<div class="notification-option-inner ">
+		  
+				<div class="flex-1">
+			  <label class="checkbox-radio-label">
+				<input type="checkbox" name="notifications[]" id="notification_meetup_nearby" value="meetup_nearby" checked="checked">
+				  Meetups Near You
+			  </label>
+		  
+				<p class="meta message">Get an email when a Dribbble Meetup is posted close to my location</p>
+			</div>
+		  
+			</div>
+		  </fieldset>
+		  
+					</div>
+					<div class="form-field">
+					  <a href="#" class="toggle-all-anchor">Toggle all</a>
+					  <h2 class="section">Account Activity</h2><p class="message">Email me when:</p>
+		  
+					  <fieldset class="check-box-mention">
+			<div class="notification-option-inner ">
+		  
+				<div class="flex-1">
+			  <label class="checkbox-radio-label">
+				<input type="checkbox" name="notifications[]" id="notification_mention" value="mention" checked="checked">
+				  someone mentions me
+			  </label>
+		  
+			</div>
+		  
+			</div>
+		  </fieldset>
+		  <fieldset class="check-box-follow">
+			<div class="notification-option-inner ">
+		  
+				<div class="flex-1">
+			  <label class="checkbox-radio-label">
+				<input type="checkbox" name="notifications[]" id="notification_follow" value="follow" checked="checked">
+				  anyone follows me
+			  </label>
+		  
+			</div>
+		  
+			</div>
+		  </fieldset>
+		  <fieldset class="check-box-player-follow">
+			<div class="notification-option-inner ">
+		  
+				<div class="flex-1">
+			  <label class="checkbox-radio-label">
+				<input type="checkbox" name="notifications[]" id="notification_player_follow" value="player_follow" checked="checked">
+				  a player follows me
+			  </label>
+		  
+			</div>
+		  
+			</div>
+		  </fieldset>
+		  
+					</div>
+					<div class="form-field">
+					  <a href="#" class="toggle-all-anchor">Toggle all</a>
+					  <h2 class="section mt30">Weekly Newsletters</h2><p class="message">Subscribe me to:</p>
+		  
+					  <fieldset class="check-box-job-digest">
+			<div class="notification-option-inner ">
+		  
+				<div class="flex-1">
+			  <label class="checkbox-radio-label">
+				<input type="checkbox" name="notifications[]" id="notification_job_digest" value="job_digest" checked="checked">
+				  Jobs Digest
+			  </label>
+		  
+				<p class="meta message">Monday: New career opportunities</p>
+			</div>
+		  
+			</div>
+		  </fieldset>
+		  <fieldset class="check-box-courtside">
+			<div class="notification-option-inner ">
+		  
+				<div class="flex-1">
+			  <label class="checkbox-radio-label">
+				<input type="checkbox" name="notifications[]" id="notification_courtside" value="courtside" checked="checked">
+				  Courtside
+			  </label>
+		  
+				<p class="meta message">Tuesday: Latest design news &amp; community highlights</p>
+			</div>
+		  
+			</div>
+		  </fieldset>
+		  <fieldset class="check-box-overtime">
+			<div class="notification-option-inner ">
+		  
+				<div class="flex-1">
+			  <label class="checkbox-radio-label">
+				<input type="checkbox" name="notifications[]" id="notification_overtime" value="overtime" checked="checked">
+				  Overtime Podcast
+			  </label>
+		  
+				<p class="meta message">Wednesday: Witty, engaging, and educational, hosted by Meg Lewis</p>
+			</div>
+		  
+			</div>
+		  </fieldset>
+		  <fieldset class="check-box-replay">
+			<div class="notification-option-inner ">
+		  
+				<div class="flex-1">
+			  <label class="checkbox-radio-label">
+				<input type="checkbox" name="notifications[]" id="notification_replay" value="replay" checked="checked">
+				  Weekly Replay
+			  </label>
+		  
+				<p class="meta message">Thursday: Curated design inspiration straight to your inbox</p>
+			</div>
+		  
+			</div>
+		  </fieldset>
+		  <fieldset class="check-box-new-for-you">
+			<div class="notification-option-inner ">
+		  
+				<div class="flex-1">
+			  <label class="checkbox-radio-label">
+				<input type="checkbox" name="notifications[]" id="notification_new_for_you" value="new_for_you" checked="checked">
+				  New for You
+			  </label>
+		  
+				<p class="meta message">Friday: Can’t miss shots from designers you follow</p>
+			</div>
+		  
+			</div>
+		  </fieldset>
+		  
+					</div>
+				</div>
+		  
+				<div class="form-btns">
+				  <input type="submit" name="commit" value="Update Email Notifications" class="form-sub" data-disable-with="Update Email Notifications">
+				</div>
+		  </form>
+
+		</page>
+		<page>
+				<h2 class="section">Download your Dribbble data</h2>
+				<p>As part of our ongoing commitment to your privacy, you may request to download your data from Dribbble. This data will include your profile and shot information. Once you have requested your data, you will receive an email (at henry@01power.net) with a link to the archive.</p>
+				<a class="form-btn" rel="nofollow" data-method="POST" href="/account/export">Request data</a>
+			
+				  <div class="previous-exports mt30">
+					<h2 class="section">Previous Export</h2>
+					<p>Requested on May 2, 2020</p>
+					  <a class="form-sub" href="https://dribbble.s3.amazonaws.com/user_exports/25288/henry930-export.json">Download</a>
+				  </div>
+		</page>
+	  </iron-pages>
+
+
+
+	
+	  </div>
+	</div>
+
+	</template>
+</dom-module>
+
+<script>
+
+(function() {
+
+
+
+	Polymer({
+		is: 'gallery-profile',
+		properties: {
+			
+		},
+
+		created:function() {
+			this.thisPage = decodeURIComponent(window.location.pathname).substring(window.location.pathname.indexOf('/') + 1) || 'index.html';
+		},
+		_register(){
+				document.querySelector('gallery-user')._register();
+		},
+		_login:function(){
+			console.log('Login');
+			let shadow = this.shadowRoot;
+			let that = this;
+			let uid = shadow.querySelector('#uid').value;
+			let password = shadow.querySelector('#password').value;
+			// let fileManager = new DataPackage('token');
+
+
+            let loginUrl = "https://37nolo3390.execute-api.ap-northeast-1.amazonaws.com/prod";
+			let params = {
+				"uid": uid,
+				"password": password,
+				"type": "loginByUidPassword"
+			};
+			Polymer.postData(loginUrl,params).then(res=>{
+				if (res.code>0){
+					let uid = res.resolve['uid'];
+					let user = res.resolve;
+					user['thisPage'] = this.thisPage;
+					store.set('user',res.resolve);
+					store.set('editMode','admin');
+					store.set('thisPage',this.thisPage);
+					// let token = that.generatePassword();
+					// fileManager.saveToken(uid,token,user).then(data=>{
+					// 	console.log('Token',data);
+						location.reload();
+						// location.href = "/dz-admin/index.html#"+token;
+					// });
+
+				} else {
+					alert('登入錯誤');
+				}
+
+
+			});
+		},
+		handleResponse:function(response){
+				console.log('Response',response);
+		},
+		// generatePassword:function() {
+		// 	var length = 16,
+		// 		charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+		// 		retVal = "";
+		// 	for (var i = 0, n = charset.length; i < length; ++i) {
+		// 		retVal += charset.charAt(Math.floor(Math.random() * n));
+		// 	}
+		// 	return retVal;
+		// },
+
+	});
+
+})();
+
+
+</script>

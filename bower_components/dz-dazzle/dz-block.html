@@ -1,0 +1,58 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="dz-block">
+	<!-- <link rel="import" type="css" href="https://www.w3schools.com/w3css/4/w3.css"> -->
+	
+<script>
+
+(function() {
+
+
+
+	Polymer({
+		is: 'dz-block',
+		properties: {
+			block: String,
+		},
+
+		created:function() {
+			let that = this;
+			this.block = this.getAttribute('block') || '_default';
+
+			// Polymer.getPageContent('css').then(css=>{
+			// 	let elm = document.createRange().createContextualFragment(css);
+			// 	elm.querySelectorAll('link').forEach(item=>{
+			// 		let href = item.getAttribute('href');
+			// 		let style = document.createElement('style');
+			// 		Polymer.getContent(href).then(html=>{
+			// 			style.innerHTML = html;
+			// 			that.appendChild(style);
+			// 		});
+			// 	});
+
+			// });
+			// console.log('Start Create','template/'+Polymer.tid+'/_dz-block/'+this.block+'/html');
+
+			Polymer.getUserDataContent('template/'+Polymer.tid+'/_dz-block/'+this.block+'/html?id='+new Date().getTime()).then(html=>{
+				console.log('Start Create',html);
+
+				that.innerHTML = html;
+			});
+			if (Polymer.editMode === "admin")
+				this.save();
+		},
+		save:function(){
+			let that = this;
+			document.addEventListener('save',e=>{
+				console.log('Block Save');
+				let content = that.innerHTML;
+				Polymer.fileManager.saveUserData('template/'+Polymer.tid+'/_dz-block/'+this.block+'/html',content);
+			});
+		},
+	});
+
+})();
+
+
+</script>
+</dom-module>

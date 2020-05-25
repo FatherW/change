@@ -1,0 +1,84 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="css/style.html">
+<link rel="import" href="../dz-file-management/dz-file-item.html">
+<dom-module id="dz-file-list">
+
+	<template>
+        <style include="font-awesome"></style>
+        <style>
+            .grid-container {
+              display: grid;
+              grid-template-columns: repeat(6, 1fr);
+              padding: 10px;
+            }
+            .grid-item {
+              text-align: center;
+            }
+        </style>
+
+        <div class="grid-container">
+            <dz-file-item class="grid-item"></dz-file-item>
+            <!-- <div class="grid-item">1</div>
+            <div class="grid-item">2</div>
+            <div class="grid-item">3</div>  
+            <div class="grid-item">4</div>
+            <div class="grid-item">5</div>
+            <div class="grid-item">6</div>  
+            <div class="grid-item">7</div>
+            <div class="grid-item">8</div>
+            <div class="grid-item">9</div>   -->
+        </div>
+		<!-- <div class="brick" gid="{{gid}}" on-click="_select">
+			<img src$="{{src}}" gid="{{gid}}">
+			<dz-image-toolbar></dz-image-toolbar>
+		</div> -->
+	</template>
+</dom-module>
+
+<script>
+
+(function() {
+
+
+
+	Polymer({
+		is: 'dz-file-list',
+		properties: {
+
+		},
+
+		created:function() {
+			this.fileManager = Polymer.fileManager;
+
+		},
+        ready(){
+            let that = this;
+            this.fileList = this.fileManager.listFile('files/').then(files=>{
+                files.forEach(item=>{
+                    console.log('Item',item);
+                    // let key = item.Key; 
+                    let elm = document.createElement('dz-file-item');
+                    elm.src = item.Key;
+                    elm.addEventListener('click',e=>{
+                        that.select(elm.src);
+                    });
+                    that.shadowRoot.querySelector('.grid-container').appendChild(elm);
+                });
+            });
+        },
+
+		select(src){
+            console.log('Src',src);
+            let params = {
+                detail:{
+                    'selected':src
+                }
+            }
+            Polymer.dzFire('select-file',params);
+			// Polymer.activeDialog.opened = false; 
+		}
+	});
+
+})();
+
+</script>

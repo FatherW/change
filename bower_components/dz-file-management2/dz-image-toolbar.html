@@ -1,0 +1,105 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-button/vaadin-button.html">
+<link rel="import" href="../vaadin-tabs/vaadin-tabs.html">
+<link rel="import" href="../iron-pages/iron-pages.html">
+<link rel="import" href="../dz-dropzone/dz-dropzone.html">
+
+<link rel="import" href="css/style.html">
+<!-- <link rel="import" href="../paper-tabs/paper-tabs.html">
+<link rel="import" href="../paper-tabs/paper-tab.html"> -->
+
+
+<!-- <script type="module">
+	import '@polymer/iron-lazy-pages/iron-lazy-pages.js';
+	import '@polymer/paper-tabs/paper-tabs.js';
+	import '@polymer/paper-tabs/paper-tab.js';
+  </script> -->
+
+
+<!-- <link rel="import" href="../valle-speed-dial/valle-speed-dial.html">
+<link rel="import" href="../paper-fab-speed-dial/paper-fab-speed-dial-action.html">
+<link rel="import" href="../iron-icons/iron-icons.html"> -->
+
+<dom-module id="dz-image-toolbar">
+
+	<template>
+		<style include="font-awesome"></style>
+		<!-- <style include="main-styles"></style>
+		<style include="labs-styles"></style>
+		<style include="masonry-styles"></style> -->
+		<style>
+			
+			:host i {
+				 margin: 2px;
+				 cursor:pointer;
+			 }
+		 
+			 :host {
+				 position: absolute;
+				 top: 0px;
+				 right: 0px;
+				 width: auto;
+				 min-height: 20px;
+				 background: #293576;
+				 color: white;
+			 }
+			 :host i:hover {
+				 color:orange;
+			 }
+		 </style>   
+				<i class="fa fa-check-square-o" aria-hidden="true"></i>
+				<i id="dz-remove" class="fa fa-ban" aria-hidden="true"></i>
+				<i id="dz-edit" class="fa fa-pencil-square-o" aria-hidden="true"></i>
+
+	</template>
+</dom-module>
+
+<script>
+
+(function() {
+
+
+
+	Polymer({
+		is: 'dz-image-toolbar',
+		properties: {
+			
+		},
+
+		created:function() {
+			this.user = store.get('user') || null;
+			this.fileManager = document.querySelector('dz-page').fileManager;
+
+		},
+		ready:function() {
+			
+		},
+
+		postData:function(url, data) {
+			// Default options are marked with *
+			console.log('Post Data');
+			return new Promise(function (resolve, reject) {
+				fetch(url, {
+					body: JSON.stringify(data), // must match 'Content-Type' header
+					cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+					credentials: 'same-origin', // include, same-origin, *omit
+					headers: {
+					'user-agent': 'Mozilla/4.0 MDN Example',
+					'content-type': 'application/json'
+					},
+					method: 'POST', // *GET, POST, PUT, DELETE, etc.
+					mode: 'cors', // no-cors, cors, *same-origin
+					redirect: 'follow', // manual, *follow, error
+					referrer: 'no-referrer', // *client, no-referrer
+				})
+				.then(response => {
+					resolve(response.json());
+				}) // parses response to JSON
+			});
+			
+		}
+	});
+
+})();
+
+</script>

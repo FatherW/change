@@ -1,0 +1,247 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-button/vaadin-button.html">
+ <link rel="import" href="../vaadin-tabs/vaadin-tabs.html">
+<link rel="import" href="../vaadin-select/vaadin-select.html">
+<link rel="import" href="../iron-pages/iron-pages.html">
+<link rel="import" href="../gallery/gallery-image-item.html">
+<link rel="import" href="css/style.html">
+
+<dom-module id="gallery-image-manager">
+<template>
+	<style include="master-styles"></style>
+		<style include="master1-styles"></style>
+		<style include="master2-styles"></style>
+		<style include="master3-styles"></style>
+		<style include="master4-styles"></style>
+		<style include="master5-styles"></style>
+
+	<style>
+		[hide]{
+			display:none;
+		}
+
+	</style>
+	<vaadin-dialog aria-label="big" id="dialog"  theme="error"></vaadin-dialog>
+
+		<div class="filter-subnav container-fluid">
+			<div class="filter-subnav-inner flex flex-row items-center justify-between">
+			  <div class="filter-views js-shot-views">
+				<vaadin-select value="人氣推介">
+				  <template>
+					  <vaadin-list-box>
+					  <vaadin-item>人氣推介</vaadin-item>
+					  <vaadin-item>購買精選</vaadin-item>
+					  <vaadin-item>熱門之選</vaadin-item>
+					  </vaadin-list-box>
+				  </template>
+				  </vaadin-select>
+			  </div>
+		  
+				<div class="filter-categories js-filter-categories js-shot-categories">
+					  <vaadin-tabs  selected="{{page}}">
+						  <vaadin-tab  selected="">所有</vaadin-tab>
+						  <vaadin-tab >平面設計</vaadin-tab>
+						  <vaadin-tab >網頁設計</vaadin-tab>
+						  <vaadin-tab >插畫</vaadin-tab>
+						  <vaadin-tab >字型</vaadin-tab>
+						  <vaadin-tab >動畫</vaadin-tab>
+						  <vaadin-tab >品牌</vaadin-tab>
+						  <vaadin-tab >APP</vaadin-tab>
+						  <vaadin-tab >產品設計</vaadin-tab>
+						  <vaadin-tab >文案</vaadin-tab>
+						</vaadin-tabs>
+			  
+				  
+				</div>
+		  
+			  <div class="filter-settings js-shot-settings">
+					<vaadin-button hide id="manage">設計管理</vaadin-button>
+			  </div>
+			</div>
+		  
+			<div id="wrap-inner" class="flushed">
+			  <div id="content" role="main">
+		  
+		  <div id="main" class="main-full">
+			  
+			<iron-pages selected="[[page]]">
+						  <page>
+					<ol class="shots-grid group dribbbles container-fluid is-scrolled" id="imageList">
+						<gallery-image-item></gallery-image-item>
+						<gallery-image-item></gallery-image-item>
+						
+					  </ol>
+					  </page>
+						  <page>
+							  平面設計
+						  </page>
+						  
+						  <page>網頁設計</page>
+						  <page> 插畫 </page>
+						  <page> 字型 </page>
+						  <page> 動畫 </page>
+						  <page> 品牌 </page>
+						  <page> APP </page>
+					  <page> 產品設計 </page>
+					  <page> 文案 </page>
+		  
+		  
+						</iron-pages>
+		  
+		  
+		   
+		  
+			
+		  
+		  
+		  <div class="infinite shot-grid-width container-fluid infinite-login-actions">
+				<a class="form-sub sign-up-to-continue" data-signup-trigger="true" data-href="/signup/new" data-context="homepage-load-more" href="/signup/new">Sign up to continue</a>
+		  <a href="/session/new">or sign in</a>
+		  
+		  </div>
+		  
+		  <div class="loading-more">
+			<span class="processing">Loading more…</span>
+		  </div>
+		  
+		  <div class="back-to-top" style="">
+			<a href="#"><img title="Back to Top" src="https://cdn.dribbble.com/assets/icon-backtotop-1b04df73090f6b0f3192a3b71874ca3b3cc19dff16adc6cf365cd0c75897f6c0.png" alt="Icon backtotop"></a>
+		  </div>
+		  
+		  
+		  
+		  
+		  
+		  
+		  </div>
+		  
+		  
+		  
+		  
+		  
+			  </div>
+			</div>
+			
+			
+		  
+		  
+		  
+		  </div>
+		<wrapper></wrapper>
+</template>
+
+</dom-module>
+
+<script>
+
+(function() {
+
+
+
+	Polymer({
+		is: 'gallery-image-manager',
+		properties: {
+			
+		},
+		renew(){
+			let that = this;
+			let shadow = this.shadowRoot;
+			shadow.querySelector('#imageList').innerHTML = '';
+			let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/dazzleEditorMiscFunction";
+
+                                params = {
+                                        "action": "listMyGalleryByTags",
+										"uid": Polymer.uid,
+										"tags": this.tags                    
+									}                
+									console.log('params',params);
+								Polymer.postData(url,params).then(res=>{
+									let images = res.resolve;
+									console.log('Images',images);
+									images.forEach(item =>{
+										that.buildItem(item);
+									});
+
+								});
+
+
+		},
+		buildItem(item){
+		
+			let that = this;
+			let shadow = this.shadowRoot;
+			let elm = document.createElement('gallery-image-item');
+			elm.gid = item['gid'];
+			console.log('Elm',elm.gid);
+			elm.addEventListener('click',e=>{
+				this.popup('gallery','gallery-shot-item','840px','90%');
+
+			});
+			shadow.querySelector('#imageList').appendChild(elm);
+
+		},
+		created:function() {
+			this.menu = [{
+                            'label':'編輯連結',
+                            'event':'link-edit'
+                        },
+                        {
+                          'label':'取消連結',
+                          'event':'cancel-link'
+                        },
+                        {
+                          'label':'編輯內文',
+                          'event':'load-editor'
+                        }
+                        ];
+						this.tags = [];
+            
+		},
+		ready(){
+			let shadow = this.shadowRoot;
+			let manageButton = shadow.querySelector('#manage');
+            // Polymer.getUserDataContent('template/gallery/_gallery-image-manager/html').then(html=>{
+            //         shadow.querySelector('wrapper').innerHTML = html;
+			// });
+			this.renew();
+					if (Polymer.editMode==="admin"){
+						manageButton.removeAttribute('hide');
+						manageButton.addEventListener('click',e=>{
+							this.popup('gallery','gallery-dashboard','90%','90%');
+						});
+					}
+
+		},
+		popup(folder,component,width,height){
+          const shadow = this.shadowRoot;
+          const dialog = shadow.querySelector('vaadin-dialog');
+          // let link = document.createElement('link');
+          // link.setAttribute('rel','import');
+          // link.setAttribute('href','https://d25k6mzsu7mq5l.cloudfront.net/bower_components/'+folder+'/'+component+'.html?id='+new Date().getTime());            
+          // document.querySelector('head').appendChild(link);
+
+          Polymer.loadComponent(folder,component);
+
+          customElements.whenDefined('vaadin-dialog').then(function() {
+            dialog.renderer = function(root, dialog) {
+              root.innerHTML = '<'+component+'></'+component+'>';
+            };
+            dialog.resizable = true;
+            dialog.resize(width,height);
+            dialog.opened = true;		    
+          });
+
+    
+          
+		},
+		closeDialog(){
+			const shadow = this.shadowRoot;
+			const dialog = shadow.querySelector('vaadin-dialog');
+			dialog.opened = false;
+		}
+		
+	});
+
+})();
+
+</script>

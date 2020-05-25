@@ -1,0 +1,138 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="gallery-login">
+
+	<template>
+
+        <style include="master-styles"></style>
+		<style include="master1-styles"></style>
+		<style include="master2-styles"></style>
+		<style include="master3-styles"></style>
+		<style include="master4-styles"></style>
+        <style include="master5-styles"></style>
+        <style>
+			.auth-content{
+				padding:20px;
+			}
+
+		</style>
+        <div class="auth-content">
+            <h2>登入多搜網</h2>
+            <div class="auth-connections">
+              
+          <a class="form-btn auth-google auth-google-new" rel="nofollow" data-method="post" href="/auth/google">
+            <svg xmlns="http://www.w3.org/2000/svg" aria-labelledby="jxugmpqclx0cdt5818360ygy80nphe7" role="img" viewBox="0 0 24 24" class="icon "><title id="jxugmpqclx0cdt5818360ygy80nphe7">Google icon</title><path d="M12.24 10.285V14.4h6.806c-.275 1.765-2.056 5.174-6.806 5.174-4.095 0-7.439-3.389-7.439-7.574s3.345-7.574 7.439-7.574c2.33 0 3.891.989 4.785 1.849l3.254-3.138C18.189 1.186 15.479 0 12.24 0c-6.635 0-12 5.365-12 12s5.365 12 12 12c6.926 0 11.52-4.869 11.52-11.726 0-.788-.085-1.39-.189-1.989H12.24z"></path></svg>
+          
+            古狗登入
+          </a>
+          <a class="form-btn auth-facebook " rel="nofollow" title="Sign in with Facebook" data-method="post" href="/auth/facebook/callback">
+            <svg xmlns="http://www.w3.org/2000/svg" aria-labelledby="8013b6uxrak93bx6n633sijshzm3tsg" role="img" viewBox="0 0 24 24" class="icon "><title id="8013b6uxrak93bx6n633sijshzm3tsg">Facebook icon</title><path d="M22.676 0H1.324C.593 0 0 .593 0 1.324v21.352C0 23.408.593 24 1.324 24h11.494v-9.294H9.689v-3.621h3.129V8.41c0-3.099 1.894-4.785 4.659-4.785 1.325 0 2.464.097 2.796.141v3.24h-1.921c-1.5 0-1.792.721-1.792 1.771v2.311h3.584l-.465 3.63H16.56V24h6.115c.733 0 1.325-.592 1.325-1.324V1.324C24 .593 23.408 0 22.676 0"></path></svg>
+          
+            
+          </a>
+            </div>
+          
+            <hr class="divider">
+          
+            <div class="auth-form sign-in-form">
+              <div  accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="✓"><input type="hidden" name="authenticity_token" value="gUBDJDxmfYW8o2pCAV15qCAaFPWu5T9d3Jt/dArwaJ6iCJrhCZN3j+OaS4Z1fvmSQVLR5+rqe4ja2Z2c2hH9Rg==">
+                
+                
+                <div class="form-fields">
+                  <fieldset>
+                    <label for="login">用戶帳號</label>
+                    <input type="text" name="login" id="uid" tabindex="1" class="text-input" autocorrect="off" autocapitalize="off">
+                  </fieldset>
+          
+                  <fieldset>
+                    <label for="password" class="password">密碼<a href="/password_resets/new">忘記密碼</a></label>
+                    <input type="password" name="password" id="password" value="" tabindex="2" class="text-input">
+                  </fieldset>
+                </div>
+          
+                <input on-click="_login" class="button form-sub" type="submit" value="登入" tabindex="3">
+			</div>
+                <p class="auth-link-mobile">
+                  不是會員？ <a href="#" on-click="_register">註冊吧</a>
+                </p>
+            </div>
+          </div>
+
+
+	</template>
+</dom-module>
+
+<script>
+
+(function() {
+
+
+
+	Polymer({
+		is: 'gallery-login',
+		properties: {
+			
+		},
+
+		created:function() {
+			this.thisPage = decodeURIComponent(window.location.pathname).substring(window.location.pathname.indexOf('/') + 1) || 'index.html';
+		},
+		_register(){
+				document.querySelector('gallery-user')._register();
+		},
+		_login:function(){
+			console.log('Login');
+			let shadow = this.shadowRoot;
+			let that = this;
+			let uid = shadow.querySelector('#uid').value;
+			let password = shadow.querySelector('#password').value;
+			// let fileManager = new DataPackage('token');
+
+
+            let loginUrl = "https://37nolo3390.execute-api.ap-northeast-1.amazonaws.com/prod";
+			let params = {
+				"uid": uid,
+				"password": password,
+				"type": "loginByUidPassword"
+			};
+			Polymer.postData(loginUrl,params).then(res=>{
+				if (res.code>0){
+					let uid = res.resolve['uid'];
+					let user = res.resolve;
+					user['thisPage'] = this.thisPage;
+					store.set('user',res.resolve);
+					store.set('editMode','admin');
+					store.set('thisPage',this.thisPage);
+					// let token = that.generatePassword();
+					// fileManager.saveToken(uid,token,user).then(data=>{
+					// 	console.log('Token',data);
+						location.reload();
+						// location.href = "/dz-admin/index.html#"+token;
+					// });
+
+				} else {
+					alert('登入錯誤');
+				}
+
+
+			});
+		},
+		handleResponse:function(response){
+				console.log('Response',response);
+		},
+		// generatePassword:function() {
+		// 	var length = 16,
+		// 		charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+		// 		retVal = "";
+		// 	for (var i = 0, n = charset.length; i < length; ++i) {
+		// 		retVal += charset.charAt(Math.floor(Math.random() * n));
+		// 	}
+		// 	return retVal;
+		// },
+
+	});
+
+})();
+
+
+</script>

@@ -1,0 +1,188 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-button/vaadin-button.html">
+<link rel="import" href="../vaadin-select/vaadin-select.html">
+<dom-module id="gallery-register">
+
+	<template>
+
+        <style include="master-styles"></style>
+		<style include="master1-styles"></style>
+		<style include="master2-styles"></style>
+		<style include="master3-styles"></style>
+		<style include="master4-styles"></style>
+        <style include="master5-styles"></style>
+        <style>
+          .auth-content{
+            padding:20px;
+          }
+    
+        </style>
+        <div class="auth-content">
+            <h2>多搜網註冊</h2>
+              <div class="auth-connections">
+                  
+          <a class="form-btn auth-google auth-google-new" rel="nofollow" data-method="post" href="/auth/google_signup">
+            <svg xmlns="http://www.w3.org/2000/svg" aria-labelledby="h1yh86ef5k7v3o7bhv1x61izqaa9xbc" role="img" viewBox="0 0 24 24" class="icon "><title id="h1yh86ef5k7v3o7bhv1x61izqaa9xbc">Google icon</title><path d="M12.24 10.285V14.4h6.806c-.275 1.765-2.056 5.174-6.806 5.174-4.095 0-7.439-3.389-7.439-7.574s3.345-7.574 7.439-7.574c2.33 0 3.891.989 4.785 1.849l3.254-3.138C18.189 1.186 15.479 0 12.24 0c-6.635 0-12 5.365-12 12s5.365 12 12 12c6.926 0 11.52-4.869 11.52-11.726 0-.788-.085-1.39-.189-1.989H12.24z"></path></svg>
+          
+            Google 登入
+          </a>
+          <a class="form-btn auth-facebook " rel="nofollow" title="Sign in with Facebook" data-method="post" href="/auth/facebook/callback?signup=1">
+            <svg xmlns="http://www.w3.org/2000/svg" aria-labelledby="8gr7stgu8omstzfkfkbya50fem13sas" role="img" viewBox="0 0 24 24" class="icon "><title id="8gr7stgu8omstzfkfkbya50fem13sas">Facebook icon</title><path d="M22.676 0H1.324C.593 0 0 .593 0 1.324v21.352C0 23.408.593 24 1.324 24h11.494v-9.294H9.689v-3.621h3.129V8.41c0-3.099 1.894-4.785 4.659-4.785 1.325 0 2.464.097 2.796.141v3.24h-1.921c-1.5 0-1.792.721-1.792 1.771v2.311h3.584l-.465 3.63H16.56V24h6.115c.733 0 1.325-.592 1.325-1.324V1.324C24 .593 23.408 0 22.676 0"></path></svg>
+          </a>
+              </div>
+              <hr class="divider">
+          
+            <div class="auth-form signup-form">
+              <form class="hide-remove gen-form with-messages signup" id="new_user" action="https://dribbble.com/signup" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="✓"><input type="hidden" name="authenticity_token" value="qauMEa855PiKJeCZar8ydA5/aEhvDa9eGQB2BuxxOEiK41XUmszu8tUcwV0enLJObzetWisC64sfQpTuPJCtkA==">
+                <div class="form-field hide">
+            <fieldset>
+              <label for="contact_surname">姓</label>
+              <input type="text" name="surname" id="surname">
+            </fieldset>
+          </div>
+          
+          
+                <input type="hidden" name="product" id="product">
+                
+          
+                
+          
+                <input type="hidden" name="user[bio]" id="user_bio">
+                <input type="hidden" name="user[location]" id="user_location">
+          
+                
+          
+          
+                <div class="form-field-group">
+                  <div class="form-field">
+                    <fieldset class="user_name"><label for="user_name">姓名</label><input autocomplete="name" class="text-input" type="text" name="user[name]" id="user_name"></fieldset>
+                  </div>
+          
+                  <div class="form-field">
+                    <fieldset class="user_login"><label for="user_login">登入名稱</label><input autocorrect="off" autocapitalize="off" autocomplete="username" class="text-input" type="text" name="user[login]" id="user_login"></fieldset>
+                  </div>
+                </div>
+          
+                <div class="form-field">
+                  <fieldset class="user_email"><label for="user_email">電話</label>
+                    <vaadin-select value="+852" style="width:100px">
+                      <template>
+                        <vaadin-list-box>
+                        <vaadin-item value="+852">香港</vaadin-item>
+                        <vaadin-item value="+86">內地</vaadin-item>
+                        </vaadin-list-box>
+                      </template>
+                      </vaadin-select>
+                    <input class="text-input" type="text" name="user[email]" id="user_email" style="width:200px">
+                   
+                  </fieldset>
+                </div>
+                <div class="form-field">
+                  <fieldset class="user_password"><label for="user_password">驗證碼</label>
+                  <input class="text-input" placeholder="6+ characters" type="password" name="user[password]" id="user_password">
+                  <vaadin-button>發送驗證</vaadin-button>
+                  <vaadin-button>檢查驗證</vaadin-button>
+                </fieldset>
+                </div>
+                <div class="form-field">
+                  <fieldset class="user_password"><label for="user_password">電郵</label><input class="text-input" placeholder="6+ characters" type="password" name="user[password]" id="user_password"></fieldset>
+                </div>
+          
+                <div class="form-field check-wrap opt-in">
+                  <fieldset>
+                    <input type="checkbox" id="user_agree_to_terms" name="user[agree_to_terms]">
+                    <label for="user_agree_to_terms">
+          請確認以下的使用條款、私隱政策及通知細則。            </label>
+                  </fieldset>
+                </div>
+          
+                <div class="form-btns">
+                  <input type="submit" name="commit" value="製作帳號" class="button form-sub" data-disable-with="製作帳號">
+                </div>
+          
+                  <p class="auth-link-mobile">已經是會員<a href="/session/new">登入</a>
+                  </p>
+          
+                
+          
+          
+                
+          
+                
+          </form>  </div>
+          </div>
+
+	</template>
+</dom-module>
+
+<script>
+
+(function() {
+
+
+
+	Polymer({
+		is: 'gallery-register',
+		properties: {
+			
+		},
+
+		created:function() {
+			this.thisPage = decodeURIComponent(window.location.pathname).substring(window.location.pathname.indexOf('/') + 1) || 'index.html';
+		},
+		_login:function(){
+			console.log('Login');
+			let shadow = this.shadowRoot;
+			let that = this;
+			let uid = shadow.querySelector('#uid').value;
+			let password = shadow.querySelector('#password').value;
+			// let fileManager = new DataPackage('token');
+
+
+            let loginUrl = "https://37nolo3390.execute-api.ap-northeast-1.amazonaws.com/prod";
+			let params = {
+				"uid": uid,
+				"password": password,
+				"type": "loginByUidPassword"
+			};
+			Polymer.postData(loginUrl,params).then(res=>{
+				if (res.code>0){
+					let uid = res.resolve['uid'];
+					let user = res.resolve;
+					user['thisPage'] = this.thisPage;
+					store.set('user',res.resolve);
+					store.set('editMode','admin');
+					store.set('thisPage',this.thisPage);
+					// let token = that.generatePassword();
+					// fileManager.saveToken(uid,token,user).then(data=>{
+					// 	console.log('Token',data);
+						location.reload();
+						// location.href = "/dz-admin/index.html#"+token;
+					// });
+
+				} else {
+					alert('登入錯誤');
+				}
+
+
+			});
+		},
+		handleResponse:function(response){
+				console.log('Response',response);
+		},
+		// generatePassword:function() {
+		// 	var length = 16,
+		// 		charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+		// 		retVal = "";
+		// 	for (var i = 0, n = charset.length; i < length; ++i) {
+		// 		retVal += charset.charAt(Math.floor(Math.random() * n));
+		// 	}
+		// 	return retVal;
+		// },
+
+	});
+
+})();
+
+
+</script>

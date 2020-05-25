@@ -33,6 +33,7 @@
             #div4 {
                 display: inline-block;
                 width: 23%;
+                background-image: url(http://change.dazzle.website/img/item/1.jpg);
             }
 
             svg.new {
@@ -80,27 +81,44 @@
             .fullWidth {
                 width: 100%;
             }
-            #head{
+
+            #head {
                 background-image: url(http://change.dazzle.website/img/symbol/s5.png);
                 width: 60px;
                 height: 60px;
                 background-size: cover;
-                
+                grid-column-start: 1;
+                grid-column-end: 2;
+                grid-row-start: 1;
+                grid-row-end: 3;
+
             }
-            #username{
+
+            #username {
                 display: inline-block;
             }
-            .userinfo{
+
+            .userinfo {
                 display: grid;
                 grid-template-columns: 1fr 2fr;
                 grid-template-rows: 50% 50%;
+            }
+
+            .bigsize {
+                font-size: 25px;
+                background-image: url(http://change.dazzle.website/img/);
+            }
+
+            .bigPic {
+                padding: 25px;
+                background-image: url(http://change.dazzle.website/img/item/1.jpg);
             }
         </style>
         <style>
             /* 父元素，因为~符号只能匹配下面的兄弟节点，所以使用弹性盒的倒序改变五角星的排列方式 */
             .box {
-                width: 320px;
-                height: 60px;
+                width: 266px;
+                height: 27px;
                 margin: 0 auto;
                 display: flex;
                 flex-direction: row-reverse;
@@ -152,46 +170,46 @@
                     <span style="font-size: 23px;">储物架</span>
                 </div>
                 <div class="userinfo">
-                <div id="head"></div>
-                <div id="username">yyyds</div>
-                <div class="box">
-                    <input type="radio" id="one" name="check">
-                    <label for="one">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                            width="56.5px" height="53.5px">
-                            <path />
-                        </svg>
-                    </label>
-                    <input type="radio" id="two" name="check">
-                    <label for="two">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                            width="56.5px" height="53.5px">
-                            <path />
-                        </svg>
-                    </label>
-                    <input type="radio" id="three" name="check">
-                    <label for="three">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                            width="56.5px" height="53.5px">
-                            <path />
-                        </svg>
-                    </label>
-                    <input type="radio" id="four" name="check">
-                    <label for="four">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                            width="56.5px" height="53.5px">
-                            <path />
-                        </svg>
-                    </label>
-                    <input type="radio" id="five" name="check" checked>
-                    <label for="five">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                            width="56.5px" height="53.5px">
-                            <path />
-                        </svg>
-                    </label>
+                    <div id="head"></div>
+                    <div id="username">yyyds</div>
+                    <div class="box">
+                        <input type="radio" id="one" name="check">
+                        <label for="one">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                width="56.5px" height="53.5px">
+                                <path />
+                            </svg>
+                        </label>
+                        <input type="radio" id="two" name="check">
+                        <label for="two">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                width="56.5px" height="53.5px">
+                                <path />
+                            </svg>
+                        </label>
+                        <input type="radio" id="three" name="check">
+                        <label for="three">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                width="56.5px" height="53.5px">
+                                <path />
+                            </svg>
+                        </label>
+                        <input type="radio" id="four" name="check">
+                        <label for="four">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                width="56.5px" height="53.5px">
+                                <path />
+                            </svg>
+                        </label>
+                        <input type="radio" id="five" name="check" checked>
+                        <label for="five">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                width="56.5px" height="53.5px">
+                                <path />
+                            </svg>
+                        </label>
+                    </div>
                 </div>
-            </div>
                 <div>HKD$1105</div>
                 <div id="location"></div>香港 中區
 
@@ -202,17 +220,30 @@
                 <button id="buy">直接购买</button>
                 <button id="cart">加入购物车</button>
                 <div>小时前 刊登於家居生活</div>
-                <span>產品資料</span>
+                <br>
+                <span class="bigsize">產品資料:</span>
+                <br>
                 <span>產品名稱：儲物架</span>
-                <span>產品尺寸</span>
+                <br>
+                <span>產品尺寸 185x130x30(cm)</span>
+                <br>
                 <span>買家留言 可作書櫃 書架 置物櫃 置物架 儲物櫃 儲物架等用途</span>
+                <br>
                 <span> 標籤 ：標籤1可愛 標籤2日系</span>
-                <span>運輸：可有機或順豐快遞</span>
-                <span>賣家資料：
+                <br>
+                <span class="bigsize">運輸：</span><span>可有機或順豐快遞</span>
+                <br>
+
+                <span class="bigsize">賣家資料：</span>
+                <span>
+                    <br>
                     發布者：YYDS
                     評價 星星星星星
+                    <br>
                     查看賣家資料</span>
-                <button>对话</button>
+                <br>
+
+                <button on-click="_test">对话</button>
             </div>
 
         </div>
@@ -232,7 +263,38 @@
             },
             ready: function() {},
 
+            _test: function() {
+                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let params = {
+                    "action": "searchData",
+                    "index": "change",
+                    "type": "order",
+                    "body": {
+                        "query": {
+                            "match_all": {}
+                        }
 
+                    }
+                };
+                Polymer.postData(Url, params).then(res => {
+                    if (res.code > 0) {
+                        // "id": "5",
+                        let uid = res.resolve['id'];
+                        console.log("ID", uid)
+                            // let user = res.resolve;
+                            // user['thisPage'] = this.thisPage;
+                            // store.set('user', res.resolve);
+                            // store.set('editMode', 'admin');
+                            // store.set('thisPage', this.thisPage);
+                            // location.reload();
+                        console.log('success');
+                    } else {
+                        alert('fail');
+                    }
+                });
+
+
+            },
 
         });
     })();
