@@ -1,0 +1,239 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-text-field/vaadin-email-field.html">
+<link rel="import" href="../vaadin-text-field/vaadin-password-field.html">
+<link rel="import" href="../vaadin-checkbox/vaadin-checkbox.html">
+<link rel="import" href="../vaadin-text-field/vaadin-text-area.html">
+<link rel="import" href="../vaadin-text-field/vaadin-number-field.html">
+
+
+<dom-module id="change-new-product">
+
+    <template>
+        <style>
+            .change-new-product-container {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .left-pics {
+                width: 100%;
+                height: 50px;
+                background-color: lightcoral;
+            }
+
+            .right-product {
+                width: 100;
+                height: 500px;
+                background-color: lightblue;
+            }
+
+            #div1,
+            #div2,
+            #div3,
+            #div4 {
+                display: inline-block;
+                width: 23%;
+            }
+
+            svg.new {
+                margin: 5px;
+                height: 32px;
+                width: 80px;
+                border-radius: 2px;
+
+            }
+
+            #location {
+                width: 30px;
+                height: 30px;
+                background-image: url(http://change.dazzle.website/img/icon/location.png);
+                background-size: cover;
+            }
+
+            #delivery {
+                width: 30px;
+                height: 30px;
+                background-image: url(http://change.dazzle.website/img/icon/delivery.png);
+                background-size: cover;
+            }
+
+            #buy {
+                background-color: lightcoral;
+                width: 140px;
+                height: 45px;
+                border-radius: 3px;
+                color: white;
+                border: none;
+                font-size: large;
+            }
+
+            #cart {
+                background-color: lightcoral;
+                width: 140px;
+                height: 45px;
+                border-radius: 3px;
+                color: white;
+                border: none;
+                font-size: large;
+            }
+
+            .fullWidth {
+                width: 100%;
+            }
+            #head{
+                background-image: url(http://change.dazzle.website/img/symbol/s5.png);
+                width: 60px;
+                height: 60px;
+                background-size: cover;
+                
+            }
+            #username{
+                display: inline-block;
+            }
+            .userinfo{
+                display: grid;
+                grid-template-columns: 1fr 2fr;
+                grid-template-rows: 50% 50%;
+            }
+        </style>
+        <style>
+            /* 父元素，因为~符号只能匹配下面的兄弟节点，所以使用弹性盒的倒序改变五角星的排列方式 */
+            .box {
+                width: 320px;
+                height: 60px;
+                margin: 0 auto;
+                display: flex;
+                flex-direction: row-reverse;
+                justify-content: space-between;
+            }
+
+            /* 隐藏单选 */
+            input {
+                display: none;
+            }
+
+            /* 五角星默认样式 */
+            input[type="radio"]+label>svg>path {
+                d: path("M27.500,1.501 L36.069,16.899 L53.497,20.217 L41.365,33.051 L43.567,50.499 L27.500,43.032 L11.433,50.499 L13.635,33.051 L1.503,20.217 L18.931,16.899 L27.500,1.501 ");
+                stroke-width: 1px;
+                fill: none;
+                stroke: #333;
+            }
+
+            /* 移入，点击选中的元素和下面的元素变为实心 */
+            input[type="radio"]+label:hover>svg>path,
+            input[type="radio"]+label:hover~input[type="radio"]+label>svg>path,
+            input[type="radio"]:checked+label>svg>path,
+            input[type="radio"]:checked~input[type="radio"]+label>svg>path {
+                stroke-width: 0px;
+                fill: #f00;
+            }
+        </style>
+
+        <div class="change-new-product-container">
+            <div class="left-pics">
+                <!-- 这里放图片 -->
+                <div class="bigPic">大图</div>
+                <div>
+                    <div id="div1">图1</div>
+                    <div id="div2">图2</div>
+                    <div id="div3">图3</div>
+                    <div id="div4">图4</div>
+                </div>
+            </div>
+            <div class="right-product">
+                <!-- 这里放右边的产品资料 -->
+                <div class="fullWidth">
+                    <svg class="new">
+                        <polygon points="0,0 80,0 60,32 0,32" style="fill:#6AA64F;stroke:#6AA64F;stroke-width:0">
+                        </polygon>
+                        <text x="6" y="23" fill="white" style="font-size:20px;">全新</text>
+                    </svg>
+                    <span style="font-size: 23px;">储物架</span>
+                </div>
+                <div class="userinfo">
+                <div id="head"></div>
+                <div id="username">yyyds</div>
+                <div class="box">
+                    <input type="radio" id="one" name="check">
+                    <label for="one">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                            width="56.5px" height="53.5px">
+                            <path />
+                        </svg>
+                    </label>
+                    <input type="radio" id="two" name="check">
+                    <label for="two">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                            width="56.5px" height="53.5px">
+                            <path />
+                        </svg>
+                    </label>
+                    <input type="radio" id="three" name="check">
+                    <label for="three">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                            width="56.5px" height="53.5px">
+                            <path />
+                        </svg>
+                    </label>
+                    <input type="radio" id="four" name="check">
+                    <label for="four">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                            width="56.5px" height="53.5px">
+                            <path />
+                        </svg>
+                    </label>
+                    <input type="radio" id="five" name="check" checked>
+                    <label for="five">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                            width="56.5px" height="53.5px">
+                            <path />
+                        </svg>
+                    </label>
+                </div>
+            </div>
+                <div>HKD$1105</div>
+                <div id="location"></div>香港 中區
+
+                <div id="delivery"></div>邮寄
+                <div>数量</div>
+                <vaadin-number-field value="1" min="1" max="10" has-controls></vaadin-number-field>
+                <br>
+                <button id="buy">直接购买</button>
+                <button id="cart">加入购物车</button>
+                <div>小时前 刊登於家居生活</div>
+                <span>產品資料</span>
+                <span>產品名稱：儲物架</span>
+                <span>產品尺寸</span>
+                <span>買家留言 可作書櫃 書架 置物櫃 置物架 儲物櫃 儲物架等用途</span>
+                <span> 標籤 ：標籤1可愛 標籤2日系</span>
+                <span>運輸：可有機或順豐快遞</span>
+                <span>賣家資料：
+                    發布者：YYDS
+                    評價 星星星星星
+                    查看賣家資料</span>
+                <button>对话</button>
+            </div>
+
+        </div>
+
+    </template>
+
+</dom-module>
+
+<script>
+    (function() {
+        Polymer({
+            is: 'change-new-product',
+            properties: {},
+            created: function() {
+
+
+            },
+            ready: function() {},
+
+
+
+        });
+    })();
+</script>
