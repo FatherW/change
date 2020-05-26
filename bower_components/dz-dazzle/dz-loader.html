@@ -1960,7 +1960,8 @@
     (html) => {
       console.log("License", html);
       Polymer.dzLicense = JSON.parse(html);
-      Polymer.dzInit();
+      if (Polymer.dzLicense['init'])
+        Polymer.dzInit();
     },
     (err) => {
       Polymer.dzInit();
