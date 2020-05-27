@@ -1,0 +1,302 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="change-like.html">
+
+
+<dom-module id="change-in-item">
+    <template>
+        <style>
+
+            .container{
+                display: grid;
+                grid-template-columns: 22% 22% 22% 22%;
+                grid-template-rows: 31% 31% 31%;
+                padding:3%;
+                background-color: white;
+                align-items: center;
+            }
+
+            .itemsall{
+                padding:3px;
+                width: 150px;
+                height:150px;
+                background-repeat: no-repeat;
+
+            }
+            :host{
+                border:0.5px solid #808080;
+                padding:10px;
+            }
+
+            .profile-finger {
+				width: 100%;
+			}
+
+            change-like{
+                width: 15px;
+                height: 15px;
+            }
+
+			.profile-grid {
+				width: 84%;
+				padding-left: 8%;
+				padding-right: 8%;
+				display: grid;
+				grid-row-gap: 20px;
+				grid-column-gap: 15px;
+				grid-template-columns: 100%;
+				grid-template-rows: 1fr 2fr 4fr;
+				background-color: cornsilk;
+				padding-top: 20px;
+				padding-bottom: 20px;
+			}
+
+			.short-profile-grid {
+				display: grid;
+				grid-column-gap: 15px;
+				grid-template-columns: 59% 12% 12% 12%;
+				background-color: white;
+				border: 2px solid gainsboro;
+				padding: 30px;
+				padding-left: 4%;
+				padding-right: 4%;
+			}
+
+			.detail-profile-grid {
+				display: grid;
+				grid-row-gap: 10px;
+				grid-template-rows: 2fr 1fr 1fr 1fr 1fr;
+				background-color: white;
+				border: 2px solid gainsboro;
+				padding: 20px;
+				padding-left: 4%;
+				padding-right: 4%;
+			}
+
+			.things-profile {
+				background-color: white;
+				border: 2px solid gainsboro;
+			}
+
+
+            #a1,
+            #a2 {
+                display: inline-block;
+                font-size: 15px;
+            }
+
+            #a3 {
+                float: right;
+            }
+
+            .button {
+                margin-left: 4%;
+                margin-right: 4%;
+                margin-top: 41px;
+            }
+            .buttonGray {
+				width: 150px;
+				background-color: gray;
+				color: black;
+				border-radius: 2px;
+				height: 30px;
+				font-size: 16px;
+				margin-right: 10px;
+			}
+
+			#left1 {
+				float: left;
+			}
+
+			#left2 {
+				float: left;
+			}
+
+			#left3 {
+				float: left;
+			}
+
+			#right1 {
+				float: right;
+			}
+
+			#right2 {
+				float: right;
+				padding-top: 4px;
+			}
+
+			#right3 {
+				float: right;
+			}
+
+			#right4 {
+				float: right;
+				padding-top: 4px;
+			}
+
+
+            .things-grid {
+				display: grid;
+                width: 80%;
+                grid-row-gap: 15px;
+				padding-left: 3%;
+				padding-right: 4%;
+				padding-top: 3%;
+				padding-bottom:3% ;
+				grid-column-gap: 6px;
+				grid-template-columns: repeat(4, 1fr);
+
+			}
+            change-item {
+                width: 100%;
+                
+            }
+
+            svg.title_tags {
+                width: 100%;
+                height: 30px;
+            }
+
+            svg.s_title_tags {
+                margin: 5px;
+                height: 16px;
+                width: 40px;
+                border-radius: 2px;
+
+            }
+
+            change-things {
+                border: 1px solid gainsboro;
+                padding: 12px;
+                height:100%;
+                width:85%;
+            }
+
+            .img {
+                width: 98%;
+                height: 250px;
+                background-size: contain;
+                background-position:center center;
+                /* background-repeat: no-repeat; */
+                margin: 1%;
+                background-image: url(http://change.dazzle.website/img/channel_banner/1.jpg);
+                background-repeat:no-repeat;
+            }
+
+            .circle {
+                margin: 5px;
+                height: 20px;
+                width: 20px;
+
+
+            }
+        </style>
+
+<div class="things-grid">
+
+</div>
+    </template>
+
+</dom-module>
+
+<script>
+    (function() {
+
+
+
+        Polymer({
+            is: 'change-in-item',
+            properties: {
+                "data": {
+                    "type": Object
+                }
+            },
+
+            created: function() {
+
+            },
+            ready: function() {
+                let that = this;
+                let shadow = this.shadowRoot;
+
+                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let param = {
+                    "action": "searchData",
+                    "index": "change",
+                    "type": "product",
+                    "body": {
+                        "query": {
+                            "match_all": {}
+                        }
+
+                    }
+                };
+                Polymer.postData(Url, param).then(res => {
+                    if (res.code > 0) {
+                        console.log("Result", res);
+                        let prods = res.resolve;
+                        console.log("Price", prods[1]['price']);
+
+                        let current = shadow.querySelector('.things-grid').innerHTML;
+
+                        for (var i = 0; i < prods.length; i++) {
+                            current = current + "<change-things> <div><div id=\"a1\"><img id=\"pics" + i + " src=\"http://change.dazzle.website/img/user_profile.png\"></div><div id=\"a2\"><div class=\"name\">1234</div><div class=\"time\">兩分鐘前</div></div><div id=\"a3\"><svg class=\"circle\"><circle cx=\"10\" cy=\"10\" r=\"9\" stroke=\"orange\" stroke-width=\"2\" fill=\"orange\" /></svg></div></div><div class=\"img\"></div><svg class=\"s_title_tags\"><polygon points=\"0,0 40,0 30,16 0,16\" style=\"fill:#6AA64F;stroke:#6AA64F;stroke-width:0\"></polygon><text x=\"3\" y=\"12\" fill=\"white\" id=\"isNew" + i + " style=\"font-size:10px;\">全新</text></svg><h3 id=\"productname" + i + ">頸鏈 的士</h3><div id=\"price\" class=\"price" + i + ">140</div><change-item-tag><change-tag class=\"small\" id=\"description" + i + ">车舆地产</change-tag><div class=\"clear\"></div></change-item-tag><change-like id=\"islike" + i + "></change-like><div class=\"clear\"></div></change-things>";
+
+
+                            let a = prods[i]['price'];
+                            console.log("A", a);
+                            let b = prods[i]['pics'];
+                            let c = prods[i]['productname'];
+
+                            let e = prods[i]['isNew'];
+                            let f = prods[i]['islike'];
+
+
+                            let desci = prods[i]['description'];
+
+                            shadow.querySelector(".things-grid").innerHTML = current;
+
+
+
+
+                            shadow.querySelector('#productname' + i).id = "#productname" + i;
+                            shadow.querySelector('#productname' + i).innerHTML = c;
+
+                            shadow.querySelector('#price' + i).id = "#price" + i;
+                            shadow.querySelector('#price' + i).innerHTML = "HK$" + a;
+
+                            shadow.querySelector('#description' + i).id = "description" + i;
+                            shadow.querySelector('#description' + i).innerHTML = desci;
+
+                            shadow.querySelector('#isNew' + i).id = "isNew" + i;
+                            shadow.querySelector('#isNew' + i).innerHTML = e;
+
+                            shadow.querySelector('#islike' + i).id = "islike" + i;
+                            shadow.querySelector('#islike' + i).innerHTML = f;
+
+                            shadow.querySelector('#pics').id = "#pics" + i;
+                            shadow.querySelector('#pics' + i).src = b;
+
+
+                            if (i == 1) {
+                                console.log("Price,new=", prods[i]['price']);
+
+                            }
+
+
+
+                        }
+
+
+                    } else {
+                        alert("error");
+                    }
+                })
+            },
+
+
+
+
+        });
+
+    })();
+</script>

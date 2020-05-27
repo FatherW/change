@@ -4,7 +4,7 @@
 <link rel="import" href="../vaadin-checkbox/vaadin-checkbox.html">
 <link rel="import" href="../vaadin-text-field/vaadin-text-area.html">
 <link rel="import" href="../vaadin-text-field/vaadin-number-field.html">
-<link href="../dz-menu/css/style.html" rel="import"/>
+<link href="../dz-menu/css/style.html" rel="import" />
 
 
 <dom-module id="change-new-product">
@@ -13,8 +13,8 @@
         <style include="icon-styles"></style>
         <style>
             hr {
-                max-width: 100px; 
-                margin-left:0;
+                max-width: 100px;
+                margin-left: 0;
                 margin-bottom: 10px;
             }
 
@@ -24,11 +24,13 @@
             }
 
             .left-pics {
-                width: 80%;
-                height: 50px;
-                background-color: lightcoral;
-                margin-left: 60px;
+                width: 690px;
+                height: 450px;
+                background-color: white;
                 margin-top: 30px;
+                margin-left: 100px;
+                border-style: solid;
+                border-color: grey;
             }
 
             .right-product {
@@ -36,31 +38,66 @@
                 height: 1050px;
                 background-color: white;
                 margin-top: 30px;
-                margin-right: 60px;
+                margin-left: 100px;
             }
 
             .bigPic {
-                padding: 25px;
-                height: 377px;
-                background-image: url(http://change.dazzle.website/img/item/1.jpg);
+                height: 430px;
+                background-image: url(http://change.dazzle.website/Website%20Design/product%20page/img/product%20preview/001.jpg);
+                background-size: contain;
+                background-repeat: no-repeat;
+                margin-top: 10px;
+                margin-left: 120px;
+            }
+
+            .consmall {
+                float: left;
+                width: 150px;
+                height: 100px;
                 border-style: solid;
                 border-color: grey;
+                margin-top: 40px;
+                margin-left: 2px;
+                margin-right: 15px;
+
             }
 
             #div1,
             #div2,
             #div3,
             #div4 {
-                display: inline-block;
-                width: 22%;
+
+                width: 130px;
+                height: 96px;
                 background-image: url(http://change.dazzle.website/img/item/1.jpg);
-                margin-top: 20px;
-                margin-left: 7px;
-                height: 80px;
-                border-style: solid;
-                border-color: grey;
+                background-size: contain;
+                background-repeat: no-repeat;
+                margin-left: 25px;
+                margin-top: 2px;
+
             }
 
+            .fullWidth {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            #head {
+                background-image: url(http://change.dazzle.website/img/symbol/s5.png);
+                width: 60px;
+                height: 60px;
+                background-size: cover;
+                grid-column-start: 1;
+                grid-column-end: 2;
+                grid-row-start: 1;
+                grid-row-end: 3;
+
+            }
+
+            .yaqzaan {
+                float: left;
+            }
+            
             svg.new {
                 margin: 5px;
                 height: 32px;
@@ -74,7 +111,7 @@
                 display: inline-block;
                 padding-top: 10px;
             }
-            
+
             .checked {
                 color: orange;
             }
@@ -104,7 +141,7 @@
                 background-size: cover;
                 display: inline-block;
             }
-            
+
             .b2 {
                 display: inline-block;
                 margin-left: 10px;
@@ -164,45 +201,31 @@
             }
 
             .myButton {
-                        background:linear-gradient(to bottom, #ededed 5%, #dfdfdf 100%);
-                        background-color:#ededed;
-                        border-radius:28px;
-                        border:1px solid #dcdcdc;
-                        display:inline-block;
-                        cursor:pointer;
-                        color: black;
-                        font-family:Arial;
-                        font-size:17px;
-                        padding:0px 20px;
-                        text-decoration:none;
-                        text-shadow:0px 1px 0px #ffffff;
-                    }
+                background: linear-gradient(to bottom, #ededed 5%, #dfdfdf 100%);
+                background-color: #ededed;
+                border-radius: 28px;
+                border: 1px solid #dcdcdc;
+                display: inline-block;
+                cursor: pointer;
+                color: black;
+                font-family: Arial;
+                font-size: 17px;
+                padding: 0px 20px;
+                text-decoration: none;
+                text-shadow: 0px 1px 0px #ffffff;
+            }
 
             .myButton:hover {
-                background:linear-gradient(to bottom, #dfdfdf 5%, #ededed 100%);
-                background-color:#dfdfdf;
+                background: linear-gradient(to bottom, #dfdfdf 5%, #ededed 100%);
+                background-color: #dfdfdf;
             }
+
             .myButton:active {
-                position:relative;
-                top:1px;
+                position: relative;
+                top: 1px;
             }
 
-            .fullWidth {
-                width: 100%;
-                margin-bottom: 10px;
-            }
 
-            #head {
-                background-image: url(http://change.dazzle.website/img/symbol/s5.png);
-                width: 60px;
-                height: 60px;
-                background-size: cover;
-                grid-column-start: 1;
-                grid-column-end: 2;
-                grid-row-start: 1;
-                grid-row-end: 3;
-
-            }
 
             #username {
                 display: inline-block;
@@ -218,39 +241,35 @@
                 width: 100px;
                 height: 100px;
             }
-           
-           #t1 {
-                margin-left: 350px;
-           }
 
-           .myButton1 {
-                box-shadow:inset 0px 1px 0px 0px #f29c93;
-                background:linear-gradient(to bottom, #fe1a00 5%, #ce0100 100%);
-                background-color:#fe1a00;
-                border-radius:3px;
-                border:1px solid #d83526;
-                display:inline-block;
-                cursor:pointer;
-                color:#ffffff;
-                font-family:Arial;
-                font-size:13px;
-                padding:6px 24px;
-                text-decoration:none;
-                text-shadow:0px 1px 0px #b23e35;
+            #t1 {
+                margin-left: 350px;
+            }
+
+            .myButton1 {
+                box-shadow: inset 0px 1px 0px 0px #f29c93;
+                background: linear-gradient(to bottom, #fe1a00 5%, #ce0100 100%);
+                background-color: #fe1a00;
+                border-radius: 3px;
+                border: 1px solid #d83526;
+                display: inline-block;
+                cursor: pointer;
+                color: #ffffff;
+                font-family: Arial;
+                font-size: 13px;
+                padding: 6px 24px;
+                text-decoration: none;
+                text-shadow: 0px 1px 0px #b23e35;
             }
 
             .myButton1:hover {
-                background:linear-gradient(to bottom, #ce0100 5%, #fe1a00 100%);
-                background-color:#ce0100;
+                background: linear-gradient(to bottom, #ce0100 5%, #fe1a00 100%);
+                background-color: #ce0100;
             }
 
             .myButton1:active {
-                position:relative;
-                top:1px;
-            }
-
-            .yaqzaan{
-                float: left;
+                position: relative;
+                top: 1px;
             }
 
         </style>
@@ -292,11 +311,19 @@
             <div class="left-pics">
                 <!-- 这里放图片 -->
                 <div class="bigPic">大图</div>
-                <div>
-                    <div id="div1">图1</div>
-                    <div id="div2">图2</div>
-                    <div id="div3">图3</div>
-                    <div id="div4">图4</div>
+                <div style="height: 100px;">
+                    <div class="consmall">
+                        <div id="div1">图1</div>
+                    </div>
+                    <div class="consmall">
+                        <div id="div2">图2</div>
+                    </div>
+                    <div class="consmall">
+                        <div id="div3">图3</div>
+                    </div>
+                    <div class="consmall">
+                        <div id="div4">图4</div>
+                    </div>
                 </div>
             </div>
             <div class="right-product">
@@ -306,12 +333,12 @@
                         <svg class="new">
                             <polygon points="0,0 80,0 60,32 0,32" style="fill:#6AA64F;stroke:#6AA64F;stroke-width:0">
                             </polygon>
-                            <text x="6" y="23" fill="white" style="font-size:20px;">全新</text>
+                            <text class="n o" x="6" y="23" fill="white" style="font-size:20px;">全新</text>
                         </svg>
-                        
+
                     </div>
                     <div style="display: inline-block;">
-                        <span class="store">儲物架</span>
+                        <span id="pn" class="store">儲物架</span>
                     </div>
                 </div>
                 <div class="userinfo">
@@ -362,59 +389,60 @@
                         </label>
                     </div> -->
                 </div>
-                <div class="dollar">HKD$1105</div>
+                <div class="dollar" id="aaa">HKD$1105</div>
+
                 <hr>
 
                 <div>
-                    <div id="location"></div>   
-                    <p class="b1">香港 中區</p>
+                    <div id="location"></div>
+                    <p id="dis" class="b1">香港 中區</p>
                 </div>
-                
-                
+
+
                 <div>
                     <div id="delivery"></div>
-                    <p class="b2">邮寄</p> 
+                    <p class="b2">郵寄</p>
                 </div>
-                  
+
                 <hr>
 
                 <div>
-                    <div class="quan">数量</div>
+                    <div class="quan">數量</div>
                     <vaadin-number-field value="1" min="1" max="10" has-controls class="control"></vaadin-number-field>
                     <div class="storage">(存庫: 12)</div>
                 </div>
-                
+
                 <br>
                 <button id="buy">直接購買</button>
                 <button id="cart">加入購物車</button>
                 <div class="b3">1小时前 刊登於家居生活</div>
                 <br>
-                
+
                 <div class="bigsize">
                     <span>產品資料:</span>
                 </div>
                 <br>
                 <div class="unib">
-                    <span>產品名稱：儲物架</span>
+                    <span id="pn">產品名稱：儲物架</span>
                 </div>
                 <br>
 
                 <div class="unib">
                     <span>產品尺寸 185x130x30(cm)</span>
-                </div> 
+                </div>
                 <br>
 
                 <div>
                     <span>買家留言 可作書櫃 書架 置物櫃 置物架 儲物櫃 儲物架等用途</span>
                 </div>
                 <br>
-                
+
                 <div>
                     <div class="tag">
                         <span> 標籤： </span>
                     </div>
                     <div class="button">
-                        <a href="#" class="myButton">可愛</a>
+                        <a id="t" href="#" class="myButton">可愛</a>
                         <a href="#" class="myButton">日系</a>
                     </div>
                 </div>
@@ -424,11 +452,11 @@
                 <div>
                     <span class="bigsize">運輸：</span>
                     <p style="margin-bottom: 0px;"><span>可郵寄或順豐快遞</span></p>
-                    
+
                 </div>
                 <br>
                 <hr>
-                
+
                 <div>
                     <div>
                         <span class="bigsize">賣家資料：</span>
@@ -455,12 +483,12 @@
                         </div>
                         <div style="margin-left: 15px;">
                             <a href="#" class="myButton1">對話</a>
-                        </div>    
-                    </div>       
+                        </div>
+                    </div>
                 </div>
                 <br>
 
-                
+
             </div>
 
         </div>
@@ -470,24 +498,66 @@
 </dom-module>
 
 <script>
-    (function() {
+    (function () {
         Polymer({
             is: 'change-new-product',
-            properties: {},
-            created: function() {
-
+            properties: {
+                "id": {
+                    "type":String
+                }
+            },
+            created: function () {
 
             },
-            ready: function() {},
+            ready: function () {
+                let that = this;
+                let shadow = this.shadowRoot;
+                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let params = {
+                    "action": "getData",
+                    "index": "change",
+                    "type": "product",
+                    "id": "14"
+                }
+
+                Polymer.postData(Url, params).then(res => {
+                    console.log("Result", res);
+                    if (res.code > 0) {
+                        let a = res.resolve['price'];
+                        console.log("Price", a);
+                        shadow.querySelector('#aaa').innerHTML = "HKD$" + a;
+                        let b = res.resolve['pics'];
+                        console.log("Pics", b);
+                        shadow.querySelector('.bigPic').style.backgroundImage = 'url(' + b +')';
+                        let c = res.resolve['productname'];
+                        console.log("Productname", c);
+                        shadow.querySelector('#pn').innerHTML = c;
+                        let d = res.resolve['tags'];
+                        console.log("Tags", d);
+                        shadow.querySelector('#t').innerHTML = d;
+                        
+
+
+                        let f = res.resolve['isNew'];
+                        console.log("New", f)
+                        if(f == true){
+                            shadow.querySelector('.n').innerText = "全新";
+                        } else{
+                            shadow.querySelector('.o').innerHTML = "二手";
+                        }
+                        
+                        let g = res.resolve['district'];
+                        console.log("District", g);
+                        shadow.querySelector('#dis').innerHTML = g;
+                    } else {
+                        alert("fail")
+                    }
+                })
+
+            },
 
             // _test: function() {
-            //     let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-            //     let params = {
-            //         "action": "getData",
-            //         "index": "change",
-            //         "type": "product",
-            //         "id" : "8",
-            //     };
+
             //     Polymer.postData(Url, params).then(res => {
             //         if (res.code > 0) {
             //             console.log(res.resolve);
@@ -505,7 +575,7 @@
             //     });
 
 
-//            },
+            //            },
 
         });
     })();

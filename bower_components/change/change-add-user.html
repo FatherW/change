@@ -1,0 +1,85 @@
+<link href="../polymer/polymer.html" rel="import">
+<dom-module id="change-add-user">
+    <template>
+        <style>
+           
+        </style>
+        <div id="container">
+            <fieldset>
+                <legend>Add User</legend>
+                    <label>ID</label>
+                    <input type="text" id="id" placeholder="Enter ID" />
+                    <br />
+                    <label>Username</label>
+                    <input type="text" id="username" placeholder="Username" />
+                    <br />
+                    <label>Email</label>
+                    <input type="email" id="email" placeholder="abc@abc.com" />
+                    <br />
+                    <label>Password</label>
+                    <input type="password" id="password" placeholder="password" />
+                    <br />
+                    <label>Contact Number</label>
+                    <input type="number" id="number" placeholder="12345678" />
+                    <br />
+                    <label>Area</label>
+                    <select id="area">
+                        <option value="KLN">Kowloon</option>
+                        <option value="NT">New Territories</option>
+                        <option value="HK">Hong Kong Island</option>
+                    </select>
+                    <br />
+                    <button on-click="_postData">Submit</button>
+               
+            </fieldset>
+        </div>
+    </template>
+</dom-module>
+<script>
+    (function () {
+        Polymer({
+            is: 'change-add-user',
+            properties: {
+                
+            },
+            created: function () {
+                
+            },
+            ready: function () {
+
+            },
+            _postData: function () {
+                console.log("postdata");
+                let that = this;
+                let shadow = this.shadowRoot;
+                let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+
+                let params = {
+                    "action": "addData",
+                    "index": "change",
+                    "type": "_user",
+                    "id": shadow.querySelector('#id').value,
+                    "body": {
+                        "id": shadow.querySelector('#id').value,
+                        "email": shadow.querySelector('#email').value,
+                        "username": shadow.querySelector('#username').value,
+                        "password": shadow.querySelector('#password').value,
+                        "phone": shadow.querySelector('#number').value,
+                        "area": shadow.querySelector('#area').value,
+                    }
+                };
+//                console.log(shadow.querySelector('#id').value, shadow.querySelector('#email').value);
+                console.log("JSON", params);
+                Polymer.postData(url, params).then(res => {
+                    if (res.code > 0) {
+                        console.log('Success');
+                        console.log(params);
+                    }
+                    else {
+                        console.log(res);
+                    }
+                })
+            }
+        });
+    })();
+</script>

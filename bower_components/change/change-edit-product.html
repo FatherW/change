@@ -1,0 +1,545 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-text-field/vaadin-email-field.html">
+<link rel="import" href="../vaadin-text-field/vaadin-password-field.html">
+<link rel="import" href="../vaadin-checkbox/vaadin-checkbox.html">
+<link rel="import" href="../vaadin-text-field/vaadin-text-area.html">
+<link rel="import" href="../vaadin-text-field/vaadin-number-field.html">
+<link href="../dz-menu/css/style.html" rel="import" />
+
+
+<dom-module id="change-edit-product">
+
+    <template>
+        <style include="icon-styles"></style>
+        <style>
+            hr {
+                max-width: 100px;
+                margin-left: 0;
+                margin-bottom: 10px;
+            }
+
+            .change-new-product-container {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+            }
+
+            #tbar {
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .custom-select select {
+                width:120px;
+                padding: 3px;
+                
+            }
+
+            #first {
+                padding: 5px;
+                margin-right: 25px;
+            }
+
+            .checkbox {
+                
+            }
+
+            :host([theme~="custom"][checked]) [part="checkbox"] {
+            background-color: green;
+            
+            }
+
+            #firstlabel {
+                margin-right: 25px;
+            }
+
+            .buttons {
+                
+            }
+
+            .buttons button{
+                padding: 3px;
+            }
+
+            #save {
+                background-color: #FF6B66;
+                padding: 10px;
+                margin-right: 25px;
+            }
+
+            #post {
+                background-color: #ff8262;
+                padding: 10px;
+            }
+
+            .left-pics {
+                width: 690px;
+                height: 450px;
+                background-color: white;
+                margin-top: 30px;
+                margin-left: 10px;
+                border-style: solid;
+                border-color: grey;
+            }
+
+            .right-product {
+                width: 100;
+                height: 1050px;
+                background-color: white;
+                margin-top: 30px;
+                margin-left: 30px;
+            }
+
+            .bigPic {
+                height: 430px;
+                background-image: url(http://change.dazzle.website/Website%20Design/product%20page/img/product%20preview/001.jpg);
+                background-size: contain;
+                background-repeat: no-repeat;
+                margin-top: 10px;
+                margin-left: 120px;
+            }
+
+            .consmall {
+                float: left;
+                width: 150px;
+                height: 100px;
+                border-style: solid;
+                border-color: grey;
+                margin-top: 40px;
+                margin-left: 2px;
+                margin-right: 15px;
+
+            }
+
+            #div1,
+            #div2,
+            #div3,
+            #div4 {
+
+                width: 130px;
+                height: 96px;
+                background-image: url(http://change.dazzle.website/img/item/1.jpg);
+                background-size: contain;
+                background-repeat: no-repeat;
+                margin-left: 25px;
+                margin-top: 2px;
+
+            }
+
+            .fullWidth {
+                width: 100%;
+                margin-bottom: 10px;
+                display: flex;
+            }
+
+            input[type=text] {
+            width: 300%;
+            padding: 10px 20px;
+            margin-left: 15px;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            }
+
+            #price {
+                width: 63%;
+            }
+
+            #pdes {
+                margin-left: 0px;
+                width: 100%;
+                padding-bottom: 25%;
+            }
+
+            #trans {
+                width: 100%;
+                margin-left: 0px;
+                margin-bottom: 50px;
+                padding-bottom: 25%;
+            }
+
+            #head {
+                background-image: url(http://change.dazzle.website/img/symbol/s5.png);
+                width: 60px;
+                height: 60px;
+                background-size: cover;
+                grid-column-start: 1;
+                grid-column-end: 2;
+                grid-row-start: 1;
+                grid-row-end: 3;
+
+            }
+
+            #cs1 {
+                width: 60px;
+                height: 38px;
+                padding: 5px;
+                font-size: 13px;
+            }
+
+            #cs1 option {
+                font-size: 13px;
+            }
+
+            .checked {
+                color: orange;
+            }
+            
+            .userinfo {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 20px;
+            }
+
+            .hkd {
+                margin-top: 30px;
+                margin-bottom: 20px;
+            }
+
+            .loca {
+                margin: 20px 0 20px 0;
+            }
+
+            .del {
+                margin-bottom: 20px;
+            }
+
+            #r1 {
+                display: flex;
+            }
+
+            #r2 {
+                display: flex;
+            }
+
+            #edit {
+                width: 90px;
+                height: 35px;
+                margin-right: 5px;
+            }
+
+            #location {
+                width: 30px;
+                height: 30px;
+                background-image: url(http://change.dazzle.website/img/icon/location.png);
+                background-size: cover;
+                display: inline-block;
+            }
+
+            #delivery {
+                width: 30px;
+                height: 30px;
+                background-image: url(http://change.dazzle.website/img/icon/delivery.png);
+                background-size: cover;
+                display: inline-block;
+            }
+
+
+            .bigsize {
+                font-size: 25px;
+                background-image: url(http://change.dazzle.website/img/);
+                margin-top: 70px;
+            }
+
+            .tag {
+                display: inline-block;
+            }
+
+
+        </style>
+        <style>
+            /* 父元素，因为~符号只能匹配下面的兄弟节点，所以使用弹性盒的倒序改变五角星的排列方式 */
+            .box {
+                width: 266px;
+                height: 27px;
+                margin: 0 auto;
+                display: flex;
+                flex-direction: row-reverse;
+                justify-content: space-between;
+            }
+
+            /* 隐藏单选 */
+            input {
+                display: none;
+            }
+
+            /* 五角星默认样式 */
+            input[type="radio"]+label>svg>path {
+                d: path("M27.500,1.501 L36.069,16.899 L53.497,20.217 L41.365,33.051 L43.567,50.499 L27.500,43.032 L11.433,50.499 L13.635,33.051 L1.503,20.217 L18.931,16.899 L27.500,1.501 ");
+                stroke-width: 1px;
+                fill: none;
+                stroke: #333;
+            }
+
+            /* 移入，点击选中的元素和下面的元素变为实心 */
+            input[type="radio"]+label:hover>svg>path,
+            input[type="radio"]+label:hover~input[type="radio"]+label>svg>path,
+            input[type="radio"]:checked+label>svg>path,
+            input[type="radio"]:checked~input[type="radio"]+label>svg>path {
+                stroke-width: 0px;
+                fill: #f00;
+            }
+            
+        </style>
+
+        <header>
+            <div id="tbar">
+                <div style="display: flex;">
+                    <div class="custom-select" id="first">
+                        <select>
+                            <option value="0">選擇分類</option>
+                            <option value="1">A</option>
+                            <option value="2">B</option>
+                            <option value="3">C</option>
+                            <option value="4">D</option>
+                            <option value="5">E</option>
+                        </select>
+                    </div>
+                    <div class="checkbox" style="margin-top: 5px;">
+                        <!--check box, public-->
+                        <vaadin-checkbox-group label="Label" theme="vertical" id="firstlabel">
+                            <vaadin-checkbox checked theme="custom" value="1">是否公開(専頁用)</vaadin-checkbox>
+                        </vaadin-checkbox-group>
+                        <!--check box, free-->
+                        <vaadin-checkbox-group label="Label" theme="vertical">
+                            <vaadin-checkbox checked theme="custom" value="1">是否免費</vaadin-checkbox>
+                        </vaadin-checkbox-group>
+                    </div>
+                </div>
+                
+                <div class="buttons">
+                    <button id="save">儲存草稿</button>
+                    <button id="post">發佈上架</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="change-new-product-container">
+            <div class="left-pics">
+                <!-- 这里放图片 -->
+                <div class="bigPic">大图</div>
+                <div style="height: 100px;">
+                    <div class="consmall">
+                        <div id="div1">图1</div>
+                    </div>
+                    <div class="consmall">
+                        <div id="div2">图2</div>
+                    </div>
+                    <div class="consmall">
+                        <div id="div3">图3</div>
+                    </div>
+                    <div class="consmall">
+                        <div id="div4">图4</div>
+                    </div>
+                </div>
+            </div>
+            <div class="right-product">
+                <!-- 这里放右边的产品资料 -->
+                <div class="fullWidth">
+                    <div class="custom-select">
+                        <select id="cs1">
+                            <option value="0">全新</option>
+                            <option value="1">二手</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <!--input box-->
+                        <div class="inputbox">
+                            <input type="text" id="pname" name="firstname" placeholder="輸入商品標題...">
+                        </div>
+                    </div>
+                </div>
+                <div class="userinfo">
+                    <div id="r1">
+                        <div id="head"></div>
+                        <div>
+                            <div id="username">yyyds</div>
+                            <div id="ratings">
+                                <span class="fa fa-star checked"></span>
+                                <span class="fa fa-star checked"></span>
+                                <span class="fa fa-star checked"></span>
+                                <span class="fa fa-star"></span>
+                                <span class="fa fa-star"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="r2" class="buttons">
+                        <button id="edit">編輯</button>
+                    </div>
+
+                </div>
+                <div class="hkd" style="display: flex;">
+                    <div class="dollar" id="aaa"><b style="font-size: 30px;">HKD</b></div>
+                    <!--input box-->
+                    <div class="inputbox">
+                        <input type="text" id="price" name="priceHKD" placeholder="輸入商品價錢...">
+                    </div>
+                </div>
+                <hr>
+
+                <div class="loca" style="display: flex;">
+                    <div id="location"></div>
+                    <!--selecting box-->
+                    <div class="custom-select">
+                        <select style="margin-left: 10px;">
+                            <option value="0">選擇地區</option>
+                            <option value="1">A</option>
+                            <option value="2">B</option>
+                            <option value="3">C</option>
+                            <option value="4">D</option>
+                            <option value="5">E</option>
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="del" style="display: flex;">
+                    <div id="delivery"></div>
+                    <!--selecting box-->
+                    <div class="custom-select">
+                        <select style="margin-left: 10px;">
+                            <option value="0">選擇地區</option>
+                            <option value="1">A</option>
+                            <option value="2">B</option>
+                            <option value="3">C</option>
+                            <option value="4">D</option>
+                            <option value="5">E</option>
+                        </select>
+                    </div>
+                </div>
+
+                <hr>
+
+                
+
+                <div class="">
+                    <div style="margin-top: 20px; margin-bottom: 30px;"><span style="font-size: 20px;">產品描述:</span></div>
+                    <!--typing box-->
+                    <div class="inputbox">
+                        <input type="text" id="pdes" name="productdescription" placeholder="輸入商品描述...">
+                    </div>
+                </div>
+                
+              
+                
+
+                <div style="display: flex; margin-top: 45px;">
+                    <div class="tag">
+                        <div><span style="font-size: 20px;"> 標籤： </span></div>
+                    </div>
+                    <div class="button">
+                        <!--input box-->
+                        <div class="inputbox">
+                            <input type="text" id="tagdes" name="tagdescription" placeholder="輸入標籤...">
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <hr>
+
+                <div>
+                    <div style="margin-top: 20px; margin-bottom: 30px;"><span class="bigsize">運輸：</span></div>
+                    <!--input box-->
+                    <div class="inputbox">
+                        <input type="text" id="trans" name="transportation" placeholder="輸入物流資料...">
+                    </div>
+
+                </div>
+                <br>
+                
+
+                
+
+
+            </div>
+
+        </div>
+
+    </template>
+
+</dom-module>
+
+<script>
+    (function () {
+       Polymer({
+           is: 'change-edit-product',
+           properties: {
+               "id": {
+                   "type":String
+               }
+           },
+           created: function () {
+
+           },
+           ready: function () {}
+//                let that = this;
+//                let shadow = this.shadowRoot;
+//                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+//                let params = {
+//                    "action": "getData",
+//                    "index": "change",
+//                    "type": "product",
+//                    "id": "14"
+//                }
+
+//                Polymer.postData(Url, params).then(res => {
+//                    console.log("Result", res);
+//                    if (res.code > 0) {
+//                        let a = res.resolve['price'];
+//                        console.log("Price", a);
+//                        shadow.querySelector('#aaa').innerHTML = "HKD$" + a;
+//                        let b = res.resolve['pics'];
+//                        console.log("Pics", b);
+//                        shadow.querySelector('.bigPic').style.backgroundImage = 'url(' + b +')';
+//                        let c = res.resolve['productname'];
+//                        console.log("Productname", c);
+//                        shadow.querySelector('#pn').innerHTML = c;
+//                        let d = res.resolve['tags'];
+//                        console.log("Tags", d);
+//                        shadow.querySelector('#t').innerHTML = d;
+                        
+
+
+//                        let f = res.resolve['isNew'];
+//                        console.log("New", f)
+//                        if(f == true){
+//                            shadow.querySelector('.n').innerText = "全新";
+//                        } else{
+//                            shadow.querySelector('.o').innerHTML = "二手";
+//                        }
+                        
+//                        let g = res.resolve['district'];
+//                        console.log("District", g);
+//                        shadow.querySelector('#dis').innerHTML = g;
+//                    } else {
+//                        alert("fail")
+//                    }
+//                })
+
+//            },
+
+            // _test: function() {
+
+            //     Polymer.postData(Url, params).then(res => {
+            //         if (res.code > 0) {
+            //             console.log(res.resolve);
+            //             // "id": "5"
+            //                 // let user = res.resolve;
+            //                 // user['thisPage'] = this.thisPage;
+            //                 // store.set('user', res.resolve);
+            //                 // store.set('editMode', 'admin');
+            //                 // store.set('thisPage', this.thisPage);
+            //                 // location.reload();
+            //             console.log('success');
+            //         } else {
+            //             alert('fail');
+            //         }
+            //     });
+
+
+            //            },
+
+       });
+   })();
+</script>

@@ -1,193 +1,141 @@
-<link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../gallery/gallery-login.html?id=sadflsad">
-<link rel="import" href="../gallery/gallery-register.html?id=asldf">
-<link rel="import" href="../gallery/gallery-profile.html">
+<link href="../polymer/polymer.html" rel="import">
+<link rel="import" href="../vaadin-tabs/vaadin-tabs.html">
+<link rel="import" href="../iron-pages/iron-pages.html">
 
-<link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
+<dom-module id="change-user">
+    <template>
+        <style>
+            #left {
+                width: 60%;
+                float: left;
+            }
 
-<link rel="import" href="css/style.html">
+            #dp {
+                height: 50px;
+                width: 50px;
+            }
 
-<dom-module id="gallery-user">
+            #one, #two {
+                display: inline;
+                float: left;
+                width: 10%;
+            }
 
-	<template>
-    <style include="master-styles"></style>
-		<style include="master1-styles"></style>
-		<style include="master2-styles"></style>
-		<style include="master3-styles"></style>
-		<style include="master4-styles"></style>
-    <style include="master5-styles"></style>
-    
-    <style>
-        [hide]{
-          display:none;
-        }
-        :host  {
-          padding:10px;
-        }
-        .grid-container {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          padding: 5px;
-        }
+            #three {
+                display: inline;
+                float: left;
+                width: 10%;
+            }
+
+            #right {
+                width: 40%;
+                display: inline;
+            }
+
+            #top {
+                height: 220px;
+            }
+        </style>
+        <div id="container">
+            <div id="top">
+                <div id="left">
+                    <div id="profile">
+                        <img id="dp" src="img/symbol/s5.png" alt="DP" />
+                        <span id="Uname"></span>
+                    </div>
+                    <div id="info">
+                        <p>Name: <span id="name"></span></p>
+                        <p>Area: <span id="area"></span></p>
+                        <p>Email: <span id="email"></span></p>
+                        <p>Contact: <span id="contact"></span></p>
+                    </div>
+                </div>
+                <div id="right">
+                    <div id="one">
+                        <h6>Goods</h6>
+                        <span id="gNum"></span>
+                    </div>
+                    <div id="two">
+                        <h6>Bought</h6>
+                        <span id="buy"></span>
+                    </div>
+                    <div id="three">
+                        <h6>Rating</h6>
+                        <span id="rate"></span>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <vaadin-tabs  selected="{{page}}">
+                    <vaadin-tab>My Products</vaadin-tab>
+                    <vaadin-tab>Favorites</vaadin-tab>
+                    <vaadin-tab>Purchases</vaadin-tab>
+                </vaadin-tabs>
+                <iron-pages selected="[[page]]">
+                    <page>
+                        <change-list id="mp"></change-list>
+                    </page>
+                    <page>
+                        Favorites
+                    </page>
+                    <page>
+                        <change-list id="purch"></change-list>
+                    </page>
+                </iron-pages>
         
-    </style>
+                        
 
-
-    
-  <div class="not-login">
-    <div id="t-signin" class="tab-signin" data-top-level="signin" style="
-    padding: 9px 13px;
-    display: block;
-    float: left;
-    top: 20px;
-    position: relative;"  on-click="_login">
-      <a href="#">
-        <span>登入</span>
-      </a>          
-    </div>
-
-    <div id="t-signup" class="tab-signup" data-top-level="signup" style="
-padding: 0px 13px;
-display: block;
-float: left;
-position: relative;
-top: 20px;
-">
-        <a class="primary-btn" href="#" on-click="_register">
-          <span class="form-sub">註冊</span>
-        </a>
-    
-    </div>
-  </div>
- 
-<div class="logined" hide>
-  <li id="t-profile" class="tab-profile nav-tab-icon" data-top-level="profile">
-    <!-- <a class="has-sub" href="/henry930">
-      <img width="20" height="20" alt="Kwok Hung Yeung" src="https://cdn.dribbble.com/users/5239963/avatars/mini/data?1588240131">
-      <span class="profile-name">Kwok Hung Yeung</span>
-</a>            -->
-
-
-<div class="grid-container">
-    <div class="profile">
-      <span>{{owner_id}}</span>
-      <a class="has-sub primary-btn" href="#" on-click="_addCredit">      <span class="form-sub">
-        積分：{{credit}}
-        </span>
-      </a>     
-    </div>
- 
-
-      <vaadin-select value="用戶資料">
-        <template>
-          <vaadin-list-box>
-          <vaadin-item>用戶資料</vaadin-item>
-          <vaadin-item value="upload">   <a class="has-sub primary-btn" href="/upload">              <span class="form-sub">
-            上載設計
-          </span>
-      </a>          </vaadin-item>
-          <vaadin-item>我的作品</vaadin-item>
-          <vaadin-item>我的訂單</vaadin-item>
-          <vaadin-item>購買記錄</vaadin-item>
-          <vaadin-item on-click="_profile">更改個人資料</vaadin-item>
-          <vaadin-item>登出</vaadin-item>
-          </vaadin-list-box>
-        </template>
-        </vaadin-select>
-</div>
-
-  </li>
-
-
-  <li id="t-upld" class="tab-upld" data-top-level="upload">
-   
-    
-  </li>
-</div>
-
-
-
-
-<vaadin-dialog aria-label="big" id="dialog"  theme="error">
- 
-</vaadin-dialog>
-
-	</template>
+                        
+            </div>
+        </div>
+    </template>
 </dom-module>
-
 <script>
+    (function () {
+        Polymer({
+            is: 'change-user',
+            properties: {
 
-(function() {
+            },
+            created: function () {
 
-
-
-	Polymer({
-		is: 'gallery-user',
-		properties: {
-			
-		},
-
-		created:function() {
-
-		},
-    ready(){
-
-        if (Polymer.editMode ==="normal"){
-            this.shadowRoot.querySelector('.not-login').removeAttribute('hide');
-            this.shadowRoot.querySelector('.logined').setAttribute('hide','');
-        }  else {
-           this.shadowRoot.querySelector('.logined').removeAttribute('hide');
-            this.shadowRoot.querySelector('.not-login').setAttribute('hide','');
-            this.owner_id = "gallery";
-            this.credit=500;
-        }
-
-        let lgBtn = document.querySelector('#t-signin');
-        let rgBtn = document.querySelector('#t-signup');
-
-        lgBtn.addEventListener('click',e=>{
-            this._login();
+            },
+            ready: function () {
+                let shadow = this.shadowRoot;
+                let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let params = {
+                    "action": "getData",
+                    "index": "change",
+                    "type": "_user",
+                    "id": "97",
+                };
+                Polymer.postData(url, params).then(res => {
+                    console.log(res);
+                    if (res.code > 0) {
+                        shadow.querySelector('#Uname').innerText = res.resolve['username'];
+                        shadow.querySelector('#name').innerText = res.resolve['username'];
+                        shadow.querySelector('#area').innerText = res.resolve['area'];
+                        shadow.querySelector('#email').innerText = res.resolve['email'];
+                        shadow.querySelector('#contact').innerText = res.resolve['phone'];
+                        shadow.querySelector('#gNum').innerText = res.resolve['goodsNum'];
+                        shadow.querySelector('#buy').innerText = res.resolve['alreadyBuy'];
+                        shadow.querySelector('#rate').innerText = res.resolve['score'];
+                        console.log(res.resolve['likeProduct']);
+                    }
+                })
+                params = {
+                    "match": {
+                        "ownerId": "97"
+                    }
+                }
+                shadow.querySelector('#mp').query = params;
+                params = {
+                    "match": {
+                        "buyerId": "97"
+                    }
+                }
+                shadow.querySelector('#purch').query = params;
+            },
         });
-        rgBtn.addEventListener('click',e=>{
-            this._register();
-        });
-    },
-		_login:function(){
-                this.popup('gallery','gallery-login','420px','640px');
-		},
-		_register:function(){
-            this.popup('gallery','gallery-register','420px','800px');
-        },
-        _profile:function(){
-            this.popup('gallery','gallery-profile','878px','1024px');
-        },
-        popup(folder,component,width,height){
-          const shadow = this.shadowRoot;
-          const dialog = shadow.querySelector('vaadin-dialog');
-          // let link = document.createElement('link');
-          // link.setAttribute('rel','import');
-          // link.setAttribute('href','https://d25k6mzsu7mq5l.cloudfront.net/bower_components/'+folder+'/'+component+'.html?id='+new Date().getTime());            
-
-
-          //document.querySelector('head').appendChild(link);
-
-        //   Polymer.loadComponent(folder,component);
-        //   customElements.whenDefined(component).then(function() {
-            dialog.renderer = function(root, dialog) {
-              root.innerHTML = '<'+component+'></'+component+'>';
-            };
-            dialog.resizable = true;
-            dialog.resize(width,height);
-            dialog.opened = true;		 
-            Polymer.activeDialog = dialog;   
-
-        //   });
-      
-      },
-
-	});
-
-})();
-
-
+    })();
 </script>
