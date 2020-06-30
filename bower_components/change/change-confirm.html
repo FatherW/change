@@ -1,0 +1,143 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-text-field/vaadin-email-field.html">
+<link rel="import" href="../vaadin-text-field/vaadin-password-field.html">
+<link rel="import" href="../vaadin-checkbox/vaadin-checkbox.html">
+<link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
+<link rel="import" href="change-register.html">
+<link rel="import" href="change-things.html">
+
+
+<dom-module id="change-confirm">
+
+    <template>
+        <style>
+            .confirm-grid {
+                text-align: center;
+                display: grid;
+                grid-row-gap: 5px;
+                grid-column-gap: 1px;
+                grid-template-columns: 40% 40%;
+                /* grid-template-columns: repeat(2, 1fr); */
+                justify-content: center;
+                align-content: flex-end;
+            }
+
+            .text {
+                grid-column-start: 1;
+                grid-column-end: 3;
+                grid-row-start: 1;
+                grid-row-end: 2;
+                padding-top: 4%;
+                font-size: 200%;
+            }
+
+            .confirmyes {
+                height: 40px;
+                width: 100%;
+                background-color: #F0846C;
+                font-size: 130%;
+                color: white;
+                border: none;
+                border-radius: 3px;
+            }
+
+            .confirmno {
+                height: 40px;
+                width: 100%;
+                background-color: #F06C6C;
+                font-size: 130%;
+                color: white;
+                border-radius: 3px;
+                border: none;
+            }
+        </style>
+        <div class="confirm-grid">
+            <span class="text">是否確認刪除?</span>
+            <div>
+                <button class="confirmyes">確定</button>
+            </div>
+            <div>
+                <button class="confirmno">返回</button>
+            </div>
+        </div>
+
+    </template>
+
+</dom-module>
+<script>
+    (function () {
+        Polymer({
+            is: 'change-confirm',
+            properties: {
+                id: {
+                    "type": String
+                }
+            },
+            created: function () {
+
+
+            },
+
+            ready: function ( ) {
+                let that = this;
+                let shadow = this.shadowRoot;
+
+                // confirm btn
+                let cfcDialog = shadow.querySelector('.confirmyes');
+                cfcDialog.addEventListener("click", (e) => {
+                    console.log("confirm button is working");
+
+                    // deleting item
+                    var eventdel = new CustomEvent('delete-item', {});
+                    document.dispatchEvent(eventdel);
+
+                    // closing pop-up
+                    var event = new CustomEvent('close-item-dialog', {});
+                    document.dispatchEvent(event);
+                    
+                })
+
+                // closing btn
+                let cfmDialog = shadow.querySelector('.confirmno');
+                cfmDialog.addEventListener("click", (e) => {
+                    console.log("close button is working");
+
+                    // closing pop-up
+                    var event = new CustomEvent('close-item-dialog', {});
+                    document.dispatchEvent(event);
+                    
+                })
+            },
+            // confirmyes: function() {
+            //     let that = this;
+            //     let shadow = this.shadowRoot;
+
+            //     shadow.querySelector('change-things')._reallydelete();
+            //     let dialog = shadow.querySelector('vaadin-dialog');
+            //     dialog.opened = false;
+
+            // },
+            // confirmno: function() {
+            //     let that = this;
+            //     let shadow = this.shadowRoot;
+
+            //     let dialog = shadow.querySelector('vaadin-dialog');
+            //     dialog.opened = false;
+            // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        });
+    })();
+</script>

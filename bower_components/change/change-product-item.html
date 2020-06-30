@@ -4,6 +4,10 @@
 
     <template>
         <style>
+        	a{
+        		text-decoration: none;
+        	}
+
             :host{
                 border:0.5px solid #808080;
                 padding:10px;
@@ -63,14 +67,14 @@
 
             }
         </style>
-
+        	<a id="upage" href="#">
             <div>
                 <div id="a1">
                     <img src="http://change.dazzle.website/img/user_profile.png">
                 </div>
                 <div id="a2">
-                    <div class="name">1234</div>
-                    <div class="time">兩分鐘前</div>
+                    <div id="uname" class="name">1234</div>
+                    <div id="check" class="time">兩分鐘前</div>
                 </div>
                 <div id="a3">
                     <svg class="circle">
@@ -78,6 +82,8 @@
                     </svg>
                 </div>
             </div>
+        	</a>
+        	<a id="ppage" href="#">
             <div  id ="img" class="img">
             </div>
             <svg class="s_title_tags">
@@ -86,6 +92,7 @@
                 <text x="3" y="12" fill="white" style="font-size:10px;">全新</text>
             </svg>
             <h3 id="productname">{{this.data['productname']}}</h3>
+            </a>
             <div id="price" class="price"></div>
             <change-item-tag>
                 <change-tag class="small">车舆地产</change-tag>
@@ -111,17 +118,42 @@
             properties: {
                 "data": {
                     "type": Object
+                },
+                "user" : {
+                    "type": Object
                 }
             },
 
             created: function() {},
             ready: function() {
                 let shadow = this.shadowRoot;
+                console.log("Last Task User", this.user);
+                console.log("Last Task Product", this.data);
                 console.log('Data', this.data);
                 shadow.querySelector('#productname').innerHTML = this.data['productname'];
                 shadow.querySelector('#price').innerHTML = "HK$" + this.data['price'];
                 shadow.querySelector('#img').style.backgroundImage = "url(" + this.data['pics'] + ")";
-
+                console.log("Last Task", this.user['username']);
+                shadow.querySelector('#uname').innerText = this.user['username'];
+                let t = this.user['createTime'];
+                console.log("Last Task", Date.now());
+                let comparetime = (Date.now() - t) / 1000;
+                console.log("Last Task", comparetime);
+                if (comparetime < 60) {
+                    shadow.querySelector('#check').innerHTML = "剛剛";
+                } else if (comparetime / 60 < 60) {
+                    shadow.querySelector('#check').innerHTML = Math.floor(comparetime / 60) + "分鐘前";
+                } else if (comparetime / 60 / 60 < 24) {
+                    shadow.querySelector('#check').innerHTML = Math.floor(comparetime / 60 / 60) + "小時前";
+                } else if (comparetime / 60 / 60 / 24 < 7) {
+                    shadow.querySelector('#check').innerHTML = Math.floor(comparetime / 60 / 60 / 24) + "日前";
+                } else if (comparetime / 60 / 60 / 24 / 7 < 30) {
+                    shadow.querySelector('#check').innerHTML = Math.floor(comparetime / 60 / 60 / 24 / 7) + "星期前";
+                } else if (comparetime / 60 / 60 / 24 / 7 / 30 < 365) {
+                    shadow.querySelector('#check').innerHTML = Math.floor(comparetime / 60 / 60 / 24 / 7 / 30) + "月前";
+                }
+                shadow.querySelector('#upage').href = "/user.html?" + this.user['_id'];
+                shadow.querySelector('#ppage').href = "/product.html?" + this.data['_id'];
             },
 
 

@@ -1,0 +1,155 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-text-field/vaadin-email-field.html">
+<link rel="import" href="../vaadin-text-field/vaadin-password-field.html">
+<link rel="import" href="../vaadin-checkbox/vaadin-checkbox.html">
+
+<dom-module id="change-reset">
+
+    <template>
+
+        <style>
+            .reset-grid {
+                text-align: center;
+                display: grid;
+                grid-row-gap: 20px;
+                grid-column-gap: 15px;
+                grid-template-rows: repeat(4，1fr);
+                justify-content: center;
+                align-content: end;
+            }
+
+            .font-sizeh1 {
+                padding-top: 4%;
+                font-size: 200%;
+            }
+
+            button.logoFacebook {
+                grid-column-start: 1;
+                grid-column-end: 2;
+                grid-row-start: 2;
+                grid-row-end: 3;
+                height: 44px;
+                width: 100%;
+                background-color: #3B5998;
+                color: white;
+                border-radius: 3px;
+                font-size: 100%;
+            }
+
+            img.logoFacebook {
+                height: 25px;
+                width: auto;
+                background-color: #3B5998;
+            }
+
+            button.logoGoogle {
+                grid-column-start: 2;
+                grid-column-end: 3;
+                grid-row-start: 2;
+                grid-row-end: 3;
+                height: 44px;
+                width: 100%;
+                border-radius: 3px;
+                background-color: white;
+                color: black;
+                font-size: 100%;
+            }
+
+            img.logoGoogle {
+                height: 25px;
+                width: auto;
+                background-color: white;
+            }
+
+            .email {
+                padding: 1px;
+            }
+
+            #changeEmail1 {
+                width: 100%;
+            }
+
+
+
+
+
+
+
+            button.login-login {
+                height: 40px;
+                width: 100%;
+                background-color: #F0846C;
+                font-size: 130%;
+                color: white;
+                border: none;
+                border-radius: 3px;
+            }
+
+
+            #forgetPassword {
+                padding: 1px;
+            }
+        </style>
+
+        <div class="reset-grid">
+            <span class="font-sizeh1">重设密码</span>
+            <span id="forgetPassword">
+                輸入電郵地址來重設密碼
+            </span>
+
+            <div class="email">
+                <vaadin-email-field id="changeEmail1" placeholder="Email"" name=" email"
+                    error-message="Please enter a valid email address" required clear-button-visible>
+                </vaadin-email-field>
+            </div>
+            <div>
+                <button on-click="_reset" class="login-login">重設密碼</button>
+            </div>
+        </div>
+
+    </template>
+
+</dom-module>
+<script async defer src="../moment/moment.js"></script>
+<script>
+    (function() {
+
+
+        Polymer({
+
+            is: 'change-reset',
+
+            properties: {},
+
+            created: function() {},
+
+            ready: function() {},
+
+            _reset: function() {
+
+                let shadow = this.shadowRoot;
+                let that = this;
+                let email = shadow.querySelector('#changeEmail1').value;
+                if (email === "") {
+                    alert('Email不可以為空');
+                } else {
+                    let resetUrl = "https://d8fz9pfue5.execute-api.ap-northeast-1.amazonaws.com/prod/newMiscDazzleFunction";
+                    let params = {
+                        "action": "sendEmail",
+                        "email": email
+                    };
+                    console.log("Reset JSON", params);
+                    Polymer.postData(resetUrl, params).then(res => {
+                        if (res.code > 0) {
+                            alert('重置密碼電郵發送成功');
+                        } else {
+                            alert('此電郵未註冊過，重置失敗');
+                        }
+                    });
+                }
+
+            },
+
+        });
+    })();
+</script>

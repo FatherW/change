@@ -1,0 +1,237 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="change-orderlist-storage.html">
+
+<dom-module id="change-order-list">
+    <template>
+        <style>
+            * {
+                color: black;
+                font-family: sans-serif;
+            }
+
+            .holder {
+                margin-left: 2%;
+                margin-right: 2%;
+                border: 1px solid #ccc;
+                height: 90px;
+                background-color: #DCDCDC;
+                padding-top: 1%;
+                margin-bottom: 15px;
+                margin-top: 20px;
+            }
+
+            #a1 {
+                height: 50px;
+                width: 50px;
+            }
+
+            #a2 {
+                width: 54%;
+            }
+
+            .in {
+                display: inline;
+                float: left;
+                padding-left: 1.5%;
+                padding-right: 1.5%;
+            }
+
+            .buttons {
+                width: 9%;
+            }
+
+            button {
+                width: 90%;
+                margin-top: 20%;
+                border: 1px solid #ccc;
+                cursor: pointer;
+                height: 35px;
+            }
+
+            #info {
+                background-color: white;
+            }
+
+            #accept {
+                background-color: #32CD32;
+                color: white;
+            }
+
+            #reject {
+                background-color: red;
+                color: white;
+            }
+        </style>
+
+        <!-- INFO ON THE LEFT -->
+        <div class="holder" id="containall">
+
+            <div class="in">
+                <img id="a1" src="http://change.dazzle.website/img/user_profile.png" alt="buyer">
+            </div>
+            <div id="a2" class="in">
+                <div class="name">1234</div>
+                <div id="time"></div>
+                <div id="message"></div>
+            </div>
+
+
+            <!-- <div class="buttons right"> 
+                <button id="check">查看賣家資料</button>
+                <button id="accept">接受</button>
+                <button id="reject">拒絕</button>
+            </div>  -->
+
+            <!-- BUTTONS ON THE RIGHT -->
+            <div class="in buttons">
+                <button id="info" on-click="buyerinfo">查看賣家信息</button>
+            </div>
+            <div class="in buttons">
+                <button id="accept" on-click="accpet">接受</button>
+            </div>
+            <div class="in buttons">
+                <button id="reject" on-click="reject">拒絕</button>
+            </div>
+        </div>
+
+    </template>
+
+</dom-module>
+
+<script>
+    (function() {
+        Polymer({
+            is: 'change-order-list',
+            properties: {
+                "id": {
+                    "type": String
+                },
+                "buyerId": {
+                    "type": String
+                }
+            },
+            created: function() {
+
+            },
+
+            accept: function() {
+
+            },
+
+            buyerinfo: function() {
+                let theurl = '/user?' + this.buyerId;
+                location.href = theurl;
+
+            },
+
+            reject: function() {
+                this.id = this.getAttribute('id');
+                let that = this;
+                let shadow = this.shadowRoot;
+                let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let param = {
+                    "action": "deleteData",
+                    "index": "change",
+                    "type": "order",
+                    "id": this.id
+                }
+                Polymer.postData(url, param).then(res => {
+                    if (res.code > 0) {
+                        console.log("Deleted Successfully");
+                        shadow.querySelector('#containall').remove();
+                    } else {
+                        console.log("error inreject");
+                    }
+                })
+            },
+
+
+            ready: function() {
+                this.id = this.getAttribute('id');
+
+
+                // search for "order" data in postman
+                let that = this;
+                let shadow = this.shadowRoot;
+                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let params = {
+                    "action": "searchData",
+                    "index": "change",
+                    "type": "order",
+                    "body": {
+                        "query": {
+                            "match": {
+                                "_id": this.id
+                            }
+                        }
+                    }
+                }
+
+                Polymer.postData(Url, params).then(res => {
+                    if (res.code > 0) {
+                        //order Array
+                        let orderLen = res.resolve.length;
+                        console.log("arraySize", orderLen);
+                        this.buyerId = res.resolve[0]['buyerId'];
+                        console.log("now the buyerID is,", this.buyerId);
+                        console.log("now2 the buyer id is: ", this.buyerId);
+                        //INFO OF USERS INTERESTED TO ORDER//
+                        let params2 = {
+                            "action": "searchData",
+                            "index": "change",
+                            "type": "_user",
+                            "body": {
+                                "query": {
+                                    "match": {
+                                        "_id": this.buyerId
+                                    }
+                                }
+                            }
+                        };
+                        Polymer.postData(Url, params2).then(res => {
+                            console.log("the result of oaram :", res);
+                            if (res.code > 0) {
+
+                                shadow.querySelector('.name').innerText = res.resolve[0]['username'];
+                                if (res.resolve[0]['head'] == "") {
+                                    shadow.querySelector('#a1').innerHTML = '<img src=\"http://change.dazzle.website/img/head.svg\">';
+                                } else {
+                                    shadow.querySelector('#a1').innerHTML = '<img src="' + res.resolve[0]['head'] + '">"';
+                                }
+
+                            }
+                        });
+                        //TIME//
+                        //check time
+                        let _thetimenow = Date.now();
+                        for (i = 0; i < orderLen; i++) {
+                            var comparetime = (_thetimenow - res.resolve[i]['submitTime']) / 1000;
+                            if (comparetime < 60) {
+                                shadow.querySelector('#time').innerHTML = "剛剛"
+                            } else if (comparetime / 60 < 60) {
+                                shadow.querySelector('#time').innerHTML = Math.floor(comparetime / 60) + "分鐘前"
+                            } else if (comparetime / 60 / 60 < 24) {
+                                shadow.querySelector('#time').innerHTML = Math.floor(comparetime / 60 / 60) + "小時前"
+                            } else if (comparetime / 60 / 60 / 24 < 7) {
+                                shadow.querySelector('#time').innerHTML = Math.floor(comparetime / 60 / 60 / 24) + "日前"
+                            } else if (comparetime / 60 / 60 / 24 / 7 < 30) {
+                                shadow.querySelector('#time').innerHTML = Math.floor(comparetime / 60 / 60 / 24 / 7) + "星期前"
+                            } else if (comparetime / 60 / 60 / 24 / 7 / 30 < 365) {
+                                shadow.querySelector('#time').innerHTML = Math.floor(comparetime / 60 / 60 / 24 / 7 / 30) + "月前"
+                            }
+
+                        }
+
+                        //message//
+                        for (i = 0; i < orderLen; i++) {
+                            shadow.querySelector('#message').innerHTML = res.resolve[i]['msg'];
+                        }
+                    }
+                })
+
+
+            },
+
+        });
+    })();
+</script>

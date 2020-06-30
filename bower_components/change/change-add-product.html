@@ -10,15 +10,18 @@
 
 <link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
 
-<link rel="import" href="../change/change-dropzone-file.html">
+<link rel="import" href="change-dropzone-file.html">
+<link rel="import" href="change-gallery.html">
 
+<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/dz-file-management/change-photo-stock.html">
 
 
 <link rel="stylesheet" href="">
 <link href="../dz-menu/css/style.html" rel="import" />
+<link rel="import" href="change-categories-dropdown.html">
 
 
-<dom-module id="change-edit-product">
+<dom-module id="change-add-product">
 
     <template>
         <style include="icon-styles"></style>
@@ -27,6 +30,8 @@
                 color: black;
                 font-family: sans-serif;
             }
+
+            header {}
 
             hr {
                 max-width: 100px;
@@ -41,6 +46,10 @@
 
             li {
                 list-style: none;
+            }
+
+            #gand {
+                border-radius: 9999999999px;
             }
 
             .top-banner {
@@ -101,6 +110,7 @@
 
             #secondlabel {
                 margin-top: 22px;
+                margin-left: 25px;
             }
 
             button {
@@ -164,8 +174,8 @@
 
             .bigPic {
                 height: 45%;
-                background-image: url(http://change.dazzle.website/Website%20Design/product%20page/img/product%20preview/001.jpg);
-                background-size: contain;
+                background-image: url('http://change.dazzle.website/img/nopic.png');
+                background-size: 100%;
                 background-repeat: no-repeat;
                 background-position: center center;
                 border: 1px solid #ccc;
@@ -184,8 +194,8 @@
             #div3,
             #div4 {
                 height: 95%;
-                background-image: url(http://change.dazzle.website/img/item/1.jpg);
-                background-size: contain;
+                background-image: url('http://change.dazzle.website/img/nopic.png');
+                background-size: 100%;
                 background-repeat: no-repeat;
                 background-position: center center;
                 border-style: solid;
@@ -200,13 +210,31 @@
                 display: flex;
             }
 
-            input[type=text] {
+            .sellerMES {
+                margin-top: 20px; 
+                margin-bottom: 20px;
+            }
+
+            #sMes {
+                resize: none;
+                overflow: hidden;
+                width: 100%;
+            }
+
+            input[type=text],
+            input[type=number] {
                 padding: 10px 21px;
                 margin-left: 15px;
                 display: inline-block;
                 border: 1px solid #ccc;
                 border-radius: 4px;
                 box-sizing: border-box;
+            }
+
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
             }
 
             #pname {
@@ -219,16 +247,15 @@
             }
 
             #pdes {
-                margin-left: 0px;
+                resize: none;
+                overflow: hidden;
                 width: 100%;
-                padding-bottom: 25%;
             }
 
             #trans {
+                resize: none;
+                overflow: hidden;
                 width: 100%;
-                margin-left: 0px;
-                margin-bottom: 50px;
-                padding-bottom: 25%;
             }
 
             #usericon {
@@ -325,6 +352,10 @@
                 display: flex;
             }
 
+            /* [part="input-field"] {
+                background-color: white;
+            } */
+            
             @media only screen and (max-width: 768px) {
                 .change-new-product-container {
                     display: grid;
@@ -391,42 +422,63 @@
                     <div style="margin-top: 11px; margin-left: 12px;">
                         <vaadin-select id="vs1" placeholder="選擇分類"></vaadin-select>
                     </div>
+                    <!-- <change-categories-dropdown id="vs1" style="margin-top: 11px; margin-left: 12px;"></change-categories-dropdown> -->
 
+
+                    <div style="margin-top: 11px; margin-left: 25px;">
+                        <vaadin-select id="pro" placeholder="専頁"></vaadin-select>
+                    </div>
+                    
                     <!--check box, public-->
-                    <vaadin-checkbox-group label="Label" theme="vertical" id="firstlabel">
+                    <!-- <vaadin-checkbox-group label="Label" theme="vertical" id="firstlabel">
                         <vaadin-checkbox theme="custom" value="1" id="public">是否公開(専頁用)</vaadin-checkbox>
-                    </vaadin-checkbox-group>
+                    </vaadin-checkbox-group> -->
+
                     <!--check box, free-->
                     <vaadin-checkbox-group label="Label" theme="vertical" id="secondlabel">
-                        <vaadin-checkbox theme="custom" value="1" id="free">是否免費區</vaadin-checkbox>
+                        <vaadin-checkbox theme="custom" value="1" id="free">是否免費區
+                        </vaadin-checkbox>
                     </vaadin-checkbox-group>
 
                 </div>
 
                 <div class="buttons first">
-                    <button id="save" on-click="_saveData">儲存草稿</button>
-                    <button id="post">發佈上架</button>
+                    <button id="save" on-click="_saveData">發佈上架</button>
+                    <!-- <button id="post">發佈上架</button> -->
                 </div>
             </div>
         </header>
 
         <div class="change-new-product-container">
             <div class="left-pics">
-                <!-- 这里放图片 -->
-                <div class="bigPic"></div>
+                <!-- 5pics -->
+                <div id="div0" class="bigPic productImg" on-click="_uploadFile">
+                    <!-- <img src$="{{pics[0]}}" style="width:100%"/> -->
+                
+                </div>
                 <div style="height: 100px;">
 
                     <!-- GG get Array Pic from Database -->
                     <div class="consmall">
-                        <div id="div1"></div>
-                        <div id="div2"></div>
-                        <div id="div3"></div>
-                        <div id="div4"></div>
+                        <div id="div1"  class="productImg" on-click="_uploadFile"></div>
+                        <div id="div2" class="productImg"  on-click="_uploadFile"></div>
+                        <div id="div3"  class="productImg" on-click="_uploadFile"></div>
+                        <div id="div4" class="productImg"  on-click="_uploadFile"></div>
                     </div>
                     <div class="buttons u">
-                        <button id="upload" on-click="_uploadFile">上載圖片</button>
+                        <!-- <button id="upload" on-click="_uploadFile">上載圖片</button> -->
                     </div>
                     <vaadin-dialog></vaadin-dialog>
+                </div>
+
+                <div>
+                    <div class="sellerMES" id="aaa">
+                        <b style="font-size: 20px; color: black;">賣家訊息:</b>
+                    </div>
+                    <!-- TEXT AREA-->
+                    <div class="inputbox">
+                        <textarea id="sMes" name="sellermessage" rows="12" placeholder="輸入賣家訊息..."></textarea>
+                    </div>
                 </div>
             </div>
 
@@ -444,21 +496,18 @@
                     <div style="width: 100%;">
                         <!--input box-->
                         <div class="inputbox">
-                            <input type="text" id="pname" name="firstname" placeholder="輸入商品標題...">
+                            <input type="text" id="pname" name="firstname" placeholder="輸入商品標題..." maxlength="14">
                         </div>
                     </div>
                 </div>
                 <div class="userinfo">
                     <div id="usericon">
                         <div id="a1">
-                            <img src="http://change.dazzle.website/img/user_profile.png">
+                            <img id="gand" src="http://change.dazzle.website/img/user_profile.png">
                         </div>
                         <div id="a2">
                             <div class="name" id="owner">1234</div>
                         </div>
-                    </div>
-                    <div class="button">
-                        <button id="edit">編輯</button>
                     </div>
                 </div>
 
@@ -466,7 +515,7 @@
                     <div class="dollar" id="aaa"><b style="font-size: 30px; color: black;">HKD</b></div>
                     <!--input box-->
                     <div class="inputbox">
-                        <input type="text" id="price" name="priceHKD" placeholder="輸入商品價錢...">
+                        <input type="number" id="price" name="priceHKD" placeholder="輸入商品價錢...">
                     </div>
                 </div>
                 <hr>
@@ -497,7 +546,7 @@
                     </div>
                     <!--typing box-->
                     <div class="inputbox">
-                        <input type="text" id="pdes" name="productdescription" placeholder="輸入商品描述...">
+                        <textarea id="pdes" name="productdescription" rows="12" placeholder="輸入商品描述..."></textarea>
                     </div>
                 </div>
 
@@ -517,7 +566,7 @@
                     <div style="margin-top: 20px; margin-bottom: 30px;"><span class="bigsize">運輸：</span></div>
                     <!--input box-->
                     <div class="inputbox">
-                        <input type="text" id="trans" name="transportation" placeholder="輸入物流資料...">
+                        <textarea id="trans" name="transportation" rows="10" placeholder="輸入物流資料..."></textarea>
                     </div>
 
                 </div>
@@ -530,12 +579,10 @@
 </dom-module>
 
 <script>
-
-
     //function for database
-    (function () {
+    (function() {
         Polymer({
-            is: 'change-edit-product',
+            is: 'change-add-product',
             properties: {
                 "id": {
                     "type": String
@@ -543,13 +590,50 @@
 
                 "valueArray": {
                     "type": Array
+                },
+
+                next: {
+                    "type": Number
                 }
             },
-            created: function () {
+            created: function() {
+                let shadow = this.shadowRoot;
 
-
+                this.bigPic = "http://change.dazzle.website.s3.amazonaws.com/files/1/1591944377549.jpeg";
+                this.pics = [];
+                this.pics[0] = this.bigPic;
+                console.log("Created Add Product");
+                // document.addEventListener('upload-success', e => {
+                //     let src = e.detail['Key'];
+                //     // this.pics.push(src);
+                //     // this.bigPic = "http://change.dazzle.website/"+src;
+                //     this.curElm.setAttribute('src',src);
+                //     console.log('Detail', e, this.pics);
+                //     // this.reNewPic();
+                // });
+                document.addEventListener('select-image', e => {
+                    let Key = e.detail['Key'];
+                    // this.pics.push(Key);
+                    this.curElm.style.backgroundImage = 'url(' + Key + ')';
+                    console.log('Select Image', e, this.pics);
+                    this.getAllPics();
+                    this.closeDialog();
+                });
             },
+            reNewPic(src) {
+                let shadow = this.shadowRoot;
+                let noImage = 'http://change.dazzle.website/img/1200px-No_image_3x4.svg.png';
+                let i = 0;
+                this.pics.forEach(item => {
+                    shadow.querySelector('#div' + i).style.backgroundImage = 'url(' + this.pics[i] || noImage + ')';
+                    i++;
+                });
 
+                // shadow.querySelector('#div1').style.backgroundImage = url(this.pics[1] || noImage);
+                // shadow.querySelector('#div2').style.backgroundImage = url(this.pics[2] || noImage);
+                // shadow.querySelector('#div3').style.backgroundImage = url(this.pics[3] || noImage);
+                // shadow.querySelector('#div4').style.backgroundImage = url(this.pics[4] || noImage);
+            },
 
             //Henery added//
             _addTags(e) {
@@ -564,59 +648,207 @@
                 //console.log("arrayResult:", myTags.tags);
             },
 
-            ready: function () {
+            ready: function() {
+                console.log("Entered Ready");
+                let loginUrl = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let shadow = this.shadowRoot;
+                let loc = location.search;
+                let pid = "";
+                let posit = 0;
+                for (i = 1; i < loc.length; i++) {
+                    if (loc[i] == "u") {
+                        posit = i;
+                    };
+                };
+                for (a = 2; a < posit; a++) {
+                    pid += loc[a];
+                }
+                this.id = pid;
+                if (pid != "") {
+                    /*Edit Product Code*/
+                    let p = {
+                        "action": "searchData",
+                        "index": "change",
+                        "type": "product",
+                        "body": {
+                            "query": {
+                                "match": {
+                                    "id": pid
+                                }
+                            }
+                        }
+                    };
+                    console.log("RP", p);
+                    Polymer.postData(loginUrl, p).then(res => {
+                        console.log("RP", res);
+                        if (res.code > 0) {
+                            let res2 = res.resolve;
+                            shadow.querySelector('#vs1').value = res.resolve[0]['categories'];
+                            // shadow.querySelector('#public').checked = res.resolve[0]['isPublic'];
+                            shadow.querySelector('#free').checked = res.resolve[0]['isFree'];
+                            shadow.querySelector('#vs4').value = res.resolve[0]['isNew'];
+                            shadow.querySelector('#pname').value = res.resolve[0]['productname'];
+                            shadow.querySelector('#price').value = res.resolve[0]['price'];
+                            console.log("Matters", res.resolve[0]['price']);
+                            if (res.resolve[0]['price'] != "0") {
+
+                                shadow.querySelector('#free').checked = false;
+                            }
+                            shadow.querySelector('#vs2').value = res.resolve[0]['district'];
+                            shadow.querySelector('#vs3').value = res.resolve[0]['deliveryMethod'];
+                            shadow.querySelector('#pdes').value = res.resolve[0]['description'];
+                            shadow.querySelector('#myTags').tags = res.resolve[0]['tags'];
+                            shadow.querySelector('#trans').value = res.resolve[0]['deliveryDesc'];
+                            let lenpic = res2[0]['pics'].length;
+                            for (i3 = 0; i3 < lenpic; i3++) {
+                                shadow.querySelector('#div' + i3).style.backgroundImage = 'url(' + res2[0]["pics"][i3] + ')'
+                            };
+                        }
+                    })
+                    this.next = pid;
+                } else {
+                    /*Add Product Code*/
+                    let params = {
+                        "action": "searchData",
+                        "index": "change",
+                        "type": "product",
+                        "body": {
+                            "query": {
+                                "match_all": {}
+                            },
+                        }
+                    }
+                    Polymer.postData(loginUrl, params).then(res => {
+                        console.log(res);
+                        if (res.code > 0) {
+                            this.next = res.resolve.length;
+                        }
+                    });
+                }
 
                 this.valueArray = [""];
                 let that = this;
-                let shadow = this.shadowRoot;
-                customElements.whenDefined('vaadin-select').then(function () {
-                    const choice = [
-                        { id: '車與地產', name: '車與地產' },
-                        { id: '潮流生活', name: '潮流生活' },
-                        { id: '家居生活', name: '家居生活' },
-                        { id: '興趣與遊戲', name: '興趣與遊戲' },
-                        { id: '工作與服務', name: '工作與服務' },
-                        { id: '其他服務', name: '其他服務' }
-                    ];
-                    const district = [
-                        { id: '中西區', name: '中西區' },
-                        { id: '灣仔區', name: '灣仔區' },
-                        { id: '東區', name: '東區' },
-                        { id: '南區', name: '南區' },
-                        { id: '油尖旺區', name: '油尖旺區' },
-                        { id: '深水埗', name: '深水埗區' },
-                        { id: '九龍城區', name: '九龍城區' },
-                        { id: '黃大仙區', name: '黃大仙區' },
-                        { id: '觀塘區', name: '觀塘區' },
-                        { id: '葵青區', name: '葵青區' },
-                        { id: '荃灣區', name: '荃灣區' },
-                        { id: '屯門區', name: '屯門區' },
-                        { id: '元朗區', name: '元朗區' },
-                        { id: '離島區', name: '離島區' },
-                        { id: '北區', name: '北區' },
-                        { id: '大埔區', name: '大埔區' },
-                        { id: '沙田區', name: '沙田區' },
-                        { id: '西貢區', name: '西貢區' }
-                    ];
+                customElements.whenDefined('vaadin-select').then(function() {
+                    const choice = [{
+                        id: '車與地產',
+                        name: '車與地產'
+                    }, {
+                        id: '潮流生活',
+                        name: '潮流生活'
+                    }, {
+                        id: '家居生活',
+                        name: '家居生活'
+                    }, {
+                        id: '興趣與遊戲',
+                        name: '興趣與遊戲'
+                    }, {
+                        id: '工作與服務',
+                        name: '工作與服務'
+                    }, {
+                        id: '其他服務',
+                        name: '其他服務'
+                    }];
 
-                    const delmthod = [
-                        { id: '順豐', name: '順豐' },
-                        { id: '面交', name: '面交' },
-                    ]
+                    const propage = [{
+                        id: '専頁1',
+                        name: '専頁1'
+                    }, {
+                        id: '専頁2',
+                        name: '専頁2'
+                    }, {
+                        id: '専頁3',
+                        name: '専頁3'
+                    }, {
+                        id: '専頁4',
+                        name: '専頁4'
+                    }, {
+                        id: '専頁5',
+                        name: '専頁5'
+                    }, {
+                        id: '専頁6',
+                        name: '専頁6'
+                    }];
 
-                    const status = [
-                        { id: '全新', name: '全新' },
-                        { id: '二手', name: '二手' },
-                    ]
+                    const district = [{
+                        id: '中西區',
+                        name: '中西區'
+                    }, {
+                        id: '灣仔區',
+                        name: '灣仔區'
+                    }, {
+                        id: '東區',
+                        name: '東區'
+                    }, {
+                        id: '南區',
+                        name: '南區'
+                    }, {
+                        id: '油尖旺區',
+                        name: '油尖旺區'
+                    }, {
+                        id: '深水埗',
+                        name: '深水埗區'
+                    }, {
+                        id: '九龍城區',
+                        name: '九龍城區'
+                    }, {
+                        id: '黃大仙區',
+                        name: '黃大仙區'
+                    }, {
+                        id: '觀塘區',
+                        name: '觀塘區'
+                    }, {
+                        id: '葵青區',
+                        name: '葵青區'
+                    }, {
+                        id: '荃灣區',
+                        name: '荃灣區'
+                    }, {
+                        id: '屯門區',
+                        name: '屯門區'
+                    }, {
+                        id: '元朗區',
+                        name: '元朗區'
+                    }, {
+                        id: '離島區',
+                        name: '離島區'
+                    }, {
+                        id: '北區',
+                        name: '北區'
+                    }, {
+                        id: '大埔區',
+                        name: '大埔區'
+                    }, {
+                        id: '沙田區',
+                        name: '沙田區'
+                    }, {
+                        id: '西貢區',
+                        name: '西貢區'
+                    }];
 
-                    shadow.querySelector('#vs1').renderer = function (root) {
+                    const delmthod = [{
+                        id: '順豐',
+                        name: '順豐'
+                    }, {
+                        id: '面交',
+                        name: '面交'
+                    }, ]
+
+                    const status = [{
+                        id: '全新',
+                        name: '全新'
+                    }, {
+                        id: '二手',
+                        name: '二手'
+                    }, ]
+
+                    shadow.querySelector('#vs1').renderer = function(root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        choice.forEach(function (item) {
+                        choice.forEach(function(item) {
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
@@ -626,14 +858,14 @@
                         root.appendChild(listBox);
                     };
 
-                    shadow.querySelector('#vs2').renderer = function (root) {
+                    shadow.querySelector('#pro').renderer = function(root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        district.forEach(function (item) {
+                        propage.forEach(function(item) {
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
@@ -643,14 +875,14 @@
                         root.appendChild(listBox);
                     };
 
-                    shadow.querySelector('#vs3').renderer = function (root) {
+                    shadow.querySelector('#vs2').renderer = function(root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        delmthod.forEach(function (item) {
+                        district.forEach(function(item) {
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
@@ -660,14 +892,31 @@
                         root.appendChild(listBox);
                     };
 
-                    shadow.querySelector('#vs4').renderer = function (root) {
+                    shadow.querySelector('#vs3').renderer = function(root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        status.forEach(function (item) {
+                        delmthod.forEach(function(item) {
+                            const vaadinItem = document.createElement('vaadin-item');
+                            vaadinItem.textContent = item.name;
+                            listBox.appendChild(vaadinItem);
+                            vaadinItem.setAttribute('value', item.id);
+                        });
+                        // update the content
+                        root.appendChild(listBox);
+                    };
+
+                    shadow.querySelector('#vs4').renderer = function(root) {
+                        // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
+                        if (root.firstChild) {
+                            return;
+                        }
+                        // Create the <vaadin-list-box>
+                        const listBox = document.createElement('vaadin-list-box');
+                        status.forEach(function(item) {
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
@@ -679,32 +928,54 @@
                 });
 
 
+                let user = store.get('change-user');
+                console.log("User hoon main", user['_id']);
+                shadow.querySelector('#owner').innerHTML = user['username'];
 
-                //check the username                     
-                let findid = all['ownerId'];
-                let idparam = {
-                    "action": "searchData",
-                    "index": "change",
-                    "type": "_user",
-                    "body": {
-                        "query": {
-                            "match": {
-                                "_id": this.id
-                            }
-                        }
-                    }
+                if (user['head'] == "") {
+                    shadow.querySelector('#a1').innerHTML = '<img id="gand" src="http://change.dazzle.website/img/user_profile.png">';
+                } else {
+                    shadow.querySelector('#a1').innerHTML = '<img id="gand" src=' + user['head'] + '>';
                 };
-                Polymer.postData(Url, idparam).then(res => {
-                    if (res.code > 0) {
-                        if (res.resolve[0]['username']) {
-                            shadow.querySelector('#owner').innerHTML = res.resolve[0]['username'];
-                        }
+                console.log("SEE", shadow.querySelector('#gand').src);
+                //check the username     
+
+                shadow.querySelector('#free').addEventListener("click", (e) => {
+                    console.log("worked");
+                    if (shadow.querySelector('#free').checked == true) {
+                        console.log('Price will be disabled');
+                        shadow.querySelector('#price').disabled = true;
+                        shadow.querySelector('#price').value = "0";
+                    } else if (shadow.querySelector('#free').checked == false) {
+                        console.log('Price will be enabled');
+                        shadow.querySelector('#price').disabled = false;
                     }
-                });
+                })
+
 
             },
-            _saveData: function () {
+            getAllPics() {
+                let shadow = this.shadowRoot;
+                this.pics = [];
+                shadow.querySelectorAll('.productImg').forEach(item => {
+                    let src = item.style.backgroundImage;
+                    src = src.replace('url(', '').replace(')', '').replace(/\"/gi, "");
+                    console.log('Src', src);
+                    this.pics.push(src);
+                });
+            },
+            _saveData: function() {
                 let user = store.get("change-user") || null;
+                let temptime = Date.now();
+                let tempid = user['_id'];
+                if (location.search.length < 3) {
+                    var thenewid = "" + temptime.toString() + tempid;
+
+                } else {
+                    var thenewid = this.id;
+
+                }
+
                 if (user != null) {
                     console.log(user);
                     let that = this;
@@ -713,8 +984,8 @@
                     var myselect = shadow.querySelector("#vs1");
                     var categories = myselect.value;
                     console.log("Category:", categories);
-                    let public = shadow.querySelector('#public').checked;
-                    console.log("Public:", public);
+                    // let public = shadow.querySelector('#public').checked;
+                    // console.log("Public:", public);
                     let free = shadow.querySelector('#free').checked;
                     console.log("Free:", free);
                     let pname = shadow.querySelector('#pname').value;
@@ -741,6 +1012,8 @@
                     var myselect = shadow.querySelector("#vs4");
                     var newOld = myselect.value;
                     console.log("New/Old:", newOld);
+                    this.getAllPics();
+                    console.log('Photo', this.pics);
                     if (newOld == "二手") {
 
                         var no = Boolean(0);
@@ -749,48 +1022,46 @@
 
                         var no = Boolean(1);
                     }
-                    let p = {
-                        "action": "searchData",
-                        "index": "change",
-                        "type": "product",
-                        "body": {
-                            "query": {
-                                "match_all": {}
-                            },
-                        }
-                    }
                     let x = 0;
                     let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
 
-                    Polymer.postData(Url, p).then(res => {
-                        if (res.code > 0) {
-                            x = res.resolve.length;
-                        }
-                    })
-                    console.log("USer", user['id']);
-                    console.log("X", x);
-
+                    console.log("X", this.next);
+                    let loc = location.search;
+                    console.log("Path", loc);
+                    console.log("Length", loc.length);
+                    let id = "";
+                    for (var i = 1; i < loc.length; i++) {
+                        console.log("Working");
+                        id += loc[i];
+                    }
+                    console.log("ID", id);
+                    if (id == "") {
+                        this.next++;
+                    }
+                    let json = {
+                        "categories": categories,
+                        // "isPublic": public,
+                        "isFree": free,
+                        "productname": pname,
+                        "price": parseFloat(price),
+                        "district": district,
+                        "deliveryMethod": method,
+                        "description": pdes,
+                        "tags": tags,
+                        "deliveryDesc": deldes,
+                        "isNew": no,
+                        "ownerId": user['_id'],
+                        "id": thenewid,
+                        "createTime": Date.now(),
+                        "pics": this.pics,
+                        "like": 0
+                    }
                     let params = {
                         "action": "addData",
                         "index": "change",
                         "type": "product",
-
-
-                        "body": {
-                            "categories": categories,
-                            "isPublic": public,
-                            "isFree": free,
-                            "productname": pname,
-                            "price": price,
-                            "district": district,
-                            "deliveryMethod": method,
-                            "description": pdes,
-                            "tags": tags,
-                            "deliveryDesc": deldes,
-                            "isNew": no,
-                            "ownerId": user[0]['_id'],
-                            "id": ++x
-                        }
+                        "id": thenewid,
+                        "body": json
                     };
                     console.log("JSON", params);
                     Polymer.postData(Url, params).then(res => {
@@ -801,22 +1072,48 @@
                             alert("Failed");
                         }
                     })
-                }
-                else {
+
+                    // this.fileManager.saveFile('json/product-14.json',json);
+                } else {
                     alert("Please login first");
                 }
 
 
             },
 
-            _uploadFile: function () {
-                console.log('upload');
+            _uploadFile: function(e) {
+                console.log('upload', e);
                 let shadow = this.shadowRoot;
                 let that = this;
+                this.pics = [];
                 let dialog = shadow.querySelector('vaadin-dialog');
-                Polymer.popup(dialog, "change", "dropzone-file", "60%", "50%");
+                this.dialog = dialog;
+                this.curElm = e.path[0];
+
+                // Polymer.popup(dialog, "change", "change-dropzone-file", "60%", "50%");
+                Polymer.popup(dialog, 'change', 'change-gallery', '90%', '90%');
                 // console.log('saved', bucket)
+            },
+
+            closeDialog() {
+                // let dialog = shadow.querySelector('vaadin-dialog');
+                this.dialog.opened = false;
             }
+            // _disablePrice: function () {
+            //     console.log('free now');
+            //     let shadow = this.shadowRoot;
+            //     let that = this;
+            //     if (shadow.querySelector('#free').checked == true) {
+            //         console.log('Price disabled');
+            //         shadow.querySelector('#price').setEnabled(false);
+            //         shadow.querySelector('#price').value = "0";
+            //     } else if (shadow.querySelector('#free').checked == false) {
+            //         console.log('Price enabled');
+            //         shadow.querySelector('#price').setEnabled(true);
+            //     };
+            // }
+
+
         });
     })();
 </script>

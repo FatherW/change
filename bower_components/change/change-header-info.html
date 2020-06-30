@@ -1,0 +1,281 @@
+<link href="../polymer/polymer.html" rel="import">
+<link href="../dz-menu/css/style.html" rel="import" />
+<dom-module id="change-header-info">
+    <template>
+        <style>
+            
+        </style>
+        <button on-click="load">Submit Changes</button>
+        <button on-click="Adder">Add Heading</button>
+        <select id="list">
+            
+        </select>
+        <button on-click="Deler">Delete Heading</button>
+        <label>Select the Heading in which you have to add a sub heading.</label>
+        <select id="listt">
+            
+        </select>
+        <button on-click="subAdder">Add Subheading</button>
+        <span>To delete sub-heading, leave the relevant text-field blank.</span>
+        <div id="container">
+            
+        </div>
+    </template>
+</dom-module>
+<script>
+    (function () {
+        Polymer({
+            is: 'change-header-info',
+            properties: {
+                len : {
+                    "type" : Number
+                },
+
+                ixs : {
+                    "type" : Number
+                }
+            },
+            created: function () {
+                
+            },
+            ready: function () {
+                let shadow = this.shadowRoot;
+                let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let params = {
+                    "action": "searchData",
+                    "index": "change",
+                    "type": "categories",
+                    "body": {
+                        "query": {
+                            "match_all": {
+                               
+                            }
+                        }
+                    }
+                };
+                Polymer.postData(url, params).then(res => {
+                    if (res.code > 0){
+                        this.ixs = res.resolve.length;
+                    }
+                });
+                params = {
+                    "action": "searchData",
+                    "index": "change",
+                    "type": "categories",
+                    "body": {
+                        "sort": [
+                            {
+                                "_id": {
+                                    "order": "asc"
+                                }
+                            }
+                        ],
+                        "query": {
+                            "match": {
+                                "parent": "0"
+                            }
+                        }
+                    }
+                }
+                Polymer.postData(url, params).then(res => {
+                    if (res.code > 0){
+                        this.len = res.resolve.length;
+                        for(var i = 1; i <= this.len; i++){
+                            let put = '<div id="head' + i + '"> <label>Heading ' + i + '</label> <input name="' + res.resolve[i - 1]['_id'] + '" id="h' + i + '" type="text" value="' + res.resolve[i - 1]['name'] + '">';
+                            put += '</div>';
+                            shadow.querySelector('#container').innerHTML += put;
+                            shadow.querySelector('#list').innerHTML += '<option value="' + i + '">' + i + '</option>';
+                            shadow.querySelector('#listt').innerHTML += '<option value="' + i + '">' + i + '</option>';
+                        }
+                        this.subready();
+                    }
+                })
+            },
+
+            subready : function(){
+                let shadow = this.shadowRoot;
+                let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                console.log("Subready", this.len);
+                for (var i = 1; i <= this.len; i++){
+                    let para = {
+                        "action": "searchData",
+                        "index": "change",
+                        "type": "categories",
+                        "body": {
+                            "sort": [
+                                {
+                                    "_id": {
+                                        "order": "asc"
+                                    }
+                                }
+                            ],
+                            "query": {
+                                "match": {
+                                    "parent": i
+                                }
+                            }
+                        }
+                    }
+                    Polymer.postData(url, para).then(reso => {
+                        if (reso.code > 0){
+                            for (var a = 1; a <= reso.resolve.length; a++){
+                                let put = '<div><label>Sub Heading ' + reso.resolve[a - 1]['parent'] + '-' + a + '</label><input type="text" value="' + reso.resolve[a - 1]['name'] + '" name="' + reso.resolve[a - 1]['_id'] + '" id="s' + reso.resolve[a - 1]['parent'] + a + '"></div>';
+                                shadow.querySelector('#head' + reso.resolve[a - 1]['parent']).innerHTML += put;
+                            }
+                        }
+                    })
+                }
+            },
+
+            subAdder : function(){
+                console.log("Inside Sub Adder");
+                let shadow = this.shadowRoot;
+                //Find heading which needs extra sub heading
+                let val = shadow.querySelector('#listt').value;
+                let id = shadow.querySelector('#h' + val).name;
+                shadow.querySelector('#head' + val).innerHTML += '<div><label>Sub Heading ' + val + '-New' + '</label><input type="text" id="s' + val + 'new"></div>';
+                //Add sub-heading
+            },
+
+            Adder : function(){
+                console.log("Inside Adder");
+                let shadow = this.shadowRoot;
+                this.len++;
+                shadow.querySelector('#container').innerHTML += '<div> <label>Heading ' + this.len + '</label> <input name="new" id="h' + this.len + '" type="text">  </div>';
+                shadow.querySelector('#list').innerHTML += '<option value="' + this.len + '">' + this.len + '</option>';
+                shadow.querySelector('#listt').innerHTML += '<option value="' + this.len + '">' + this.len + '</option>';
+            },
+
+            Deler : function () {
+                let shadow = this.shadowRoot;
+                let val = shadow.querySelector('#list').value;
+                let id = shadow.querySelector('#h' + val).name;
+                let params = {
+                    "action" : "deleteData",
+                    "index" : "change",
+                    "type" : "categories",
+                    "id" : id
+                };
+                let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                Polymer.postData(url, params).then(res=>{
+
+                });
+                params = {
+                    "action" : "deleteData",
+                    "index" : "change",
+                    "type" : "categories",
+                    "parent" : id
+                }
+                Polymer.postData(url, params).then(res => {
+                    if (res.code > 0){
+                        location.reload();
+                    }
+                })
+            },
+
+            load : function() {
+                let shadow = this.shadowRoot;
+                let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                console.log("Inside Load");
+                for (var i = 0; i < this.len; i++){
+                    let j = i + 1;
+                    let head = shadow.querySelector('#h' + j).value;
+                    console.log(head);
+                    let id = shadow.querySelector('#h' + j).name;
+                    console.log(id);
+                    let params = {};
+                    if (id == "new"){
+                        this.ixs++;
+                        params = {
+                            "action" : "addData",
+                            "index" : "change",
+                            "type" : "categories",
+                            "id" : this.ixs,
+                            "body" : {
+                                "name" : head,
+                                "parent" : "0"
+                            }
+                        };
+                        this.updateSub(this.ixs);
+                    }
+                    else {
+                        params = {
+                            "action" : "addData",
+                            "index" : "change",
+                            "type" : "categories",
+                            "id" : id,
+                            "body" : {
+                                "name" : head
+                            }
+                        };
+                        this.updateSub(j);
+                    }
+                    console.log(params);
+                    Polymer.postData(url, params).then(res => {
+                        console.log(res.code);
+                    })
+                }
+            },
+
+            updateSub : function(a){
+                let shadow = this.shadowRoot;
+                let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let i = 1;
+                let val = shadow.querySelector('#s' + a + i);
+                while(val){
+                    let id = val.name;
+                    let head = val.value;
+                    let params = {}
+                    if (head == ""){
+                        params = {
+                            "action" : "deleteData",
+                            "index" : "change",
+                            "type" : "categories",
+                            "id" : id
+                        };
+                    }
+                    else {
+                        params = {
+                            "action" : "addData",
+                            "index" : "change",
+                            "type" : "categories",
+                            "id" : id,
+                            "body" : {
+                                "name" : head
+                            }
+                        }
+                    }
+                    Polymer.postData(url, params).then(res =>{
+
+                    })
+                    i++;
+                    val = shadow.querySelector('#s' + a + i);
+                }
+                val = shadow.querySelector('#s' + a + 'new');
+                console.log("Masla", val);
+                while (val){
+                    let head = val.value;
+                    if (head != ""){
+                        this.ixs++;
+                        let params = {
+                            "action" : "addData",
+                            "index" : "change",
+                            "type" : "categories",
+                            "id" : this.ixs,
+                            "body" : {
+                                "name" : head,
+                                "parent" : a
+                            }
+                        }
+                        Polymer.postData(url, params).then(res => {
+
+                        })
+                    }
+                    val.id = "s" + a + i;
+                    i++;
+                    val = shadow.querySelector('#s' + a + 'new');
+                }
+            },
+        });
+    })();
+</script>

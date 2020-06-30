@@ -1,0 +1,99 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="change-order-list.html">
+
+
+<dom-module id="change-orderlist-storage">
+    <template>
+        <style>
+            .orderContainter {
+                height: auto;
+                border: 1px solid #ccc;
+                margin: 0px 15px 20px;
+            }
+
+            .text {
+                margin-top: 20px;
+                margin-left: 30px;
+                font-size: 20px;
+                color: black;
+            }
+        </style>
+        <div class="orderContainter">
+            <div class="text"><b>處理訂單:</b></div>
+            <div id="ol"></div>
+        </div>
+
+
+        </div>
+    </template>
+</dom-module>
+
+<script>
+    (function () {
+        Polymer({
+            is: 'change-orderlist-storage',
+            properties: {
+                "id": {
+                    "type": String
+                },
+                "removeid": {
+                    "type": String
+                }
+            },
+            created: function () {
+
+            },
+
+
+
+            ready: function () {
+                console.log("inside orderlist-storage.html");
+                // html + ?xxxxxxxxxxxxxxxxx
+                let loc = location.search;
+                console.log("Path", loc);
+                console.log("Length", loc.length);
+                let id = "";
+                for (var i = 1; i < loc.length; i++) {
+                    console.log("Working");
+                    id += loc[i];
+                }
+                let that = this;
+                let shadow = this.shadowRoot;
+                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let params = {
+                    "action": "searchData",
+                    "index": "change",
+                    "type": "order",
+                    "body": {
+                        "query": {
+                            "match": {
+                                "productId": id
+                            }
+                        }
+                    }
+                };
+
+                Polymer.postData(Url, params).then(res => {
+                    console.log("RP", res);
+                    if (res.code > 0) {
+                        let a = [];
+                        for (i = 0; i < res.resolve.length; i++) {
+                            a.push(res.resolve[i]['id']);
+                        }
+                        var b = "";
+                        //stack the pending oder from <change-order-list>
+                        for (i = 0; i < res.resolve.length; i++) {
+                            b += '<change-order-list id="' + a[i] + '"></change-order-list>';
+                        }
+                        console.log("the thing should be display : ".b)
+                        shadow.querySelector('#ol').innerHTML = b;
+                    } else {
+                        console.log("error in orderlist-storage");
+                    }
+                })
+
+            },
+
+        });
+    })();
+</script>

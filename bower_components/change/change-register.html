@@ -1,6 +1,9 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../vaadin-text-field/vaadin-email-field.html">
 <link rel="import" href="../vaadin-checkbox/vaadin-checkbox.html">
+<link rel="import" href="../vaadin-select/vaadin-select.html">
+<link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
+<link rel="import" href="change-login.html">
 
 <dom-module id="change-register">
 
@@ -9,9 +12,9 @@
             .register-grid {
                 text-align: center;
                 display: grid;
-                grid-row-gap: 20px;
+                grid-row-gap: 5px;
                 grid-column-gap: 15px;
-                grid-template-columns: 50%;
+                grid-template-columns: 70%;
                 grid-template-rows: repeat(13，1fr);
                 justify-content: center;
                 align-content: end;
@@ -74,48 +77,60 @@
                 justify-self: start;
                 font-size: 82%;
             }
-            .padding-none{
-                padding-top:0px;
-                width:100%;
+
+            .padding-none {
+                padding-top: 0px;
+                width: 100%;
             }
         </style>
         <div class="register-grid">
             <span class="font-sizeh1">註冊</span>
             <span style="font-size: 80%;">———&nbsp使用第三方帳號註冊&nbsp———</span>
             <div>
-                <button class="logoFacebook"><img src="img/icon/Facebook.png"
-                        class="logoFacebook">&nbspFacetime</button>
+                <button class="logoFacebook">
+                    <img src="img/icon/Facebook.png"
+                         class="logoFacebook">&nbspFacebook
+                </button>
             </div>
             <div>
                 <button class="logoGoogle"><img src="img/icon/Google.png" class="logoGoogle">&nbspGoogle</button>
             </div>
             <hr style="border: grey 0.5px solid;width: 100%;">
             <div>
-                <vaadin-text-field id="changeId1" class="padding-none" label="使用名稱" ></vaadin-text-field>
+                <vaadin-text-field id="changeId1" class="padding-none" label="使用名稱"></vaadin-text-field>
             </div>
             <div>
-                <vaadin-text-field id="changeArea1" class="padding-none" label="地區" "></vaadin-text-field>
+                <vaadin-select id='changeArea1' class="padding-none" label='選擇地區'></vaadin-select>
             </div>
             <div class="email">
                 <vaadin-email-field id="changeEmail1" class="padding-none" label="電郵地址" name="email"
-                    error-message="Please enter a valid email address" required
-                    clear-button-visible>
+                                    error-message="Please enter a valid email address" required
+                                    clear-button-visible>
                 </vaadin-email-field>
             </div>
             <div>
-                <vaadin-text-field id="changePhone1" class="padding-none" label="電話"></vaadin-text-field>
-            </div>
-            <div class="privacy">
-                <vaadin-checkbox value="Option" checked>我同意接收來自Get Change及其合作夥伴的促銷和營銷信息</vaadin-checkbox>
+                <vaadin-password-field id="pass1" label="密碼" class="padding-none" name="pass" error-message="Please enter a valid password" required
+                                       clear-button-visible></vaadin-password-field>
             </div>
             <div>
-                <button on-click="_register"" class=" login-register">註冊</button>
+                <vaadin-password-field id="pass2" label="確認密碼" class="padding-none" name="confirmPass" error-message="Passwords do not match" required
+                                       clear-button-visible></vaadin-password-field>
+            </div>
+            <div>
+                <vaadin-number-field id="changePhone1" class="padding-none" label="電話"></vaadin-number-field>
+            </div>
+            <div class="privacy">
+                <vaadin-checkbox id="check" value="Option" checked>我同意接收來自Get Change及其合作夥伴的促銷和營銷信息</vaadin-checkbox>
+            </div>
+            <div>
+                <button on-click="_register" class=" login-register">註冊</button>
             </div>
             <div>
                 <span>已擁有帳戶？</span>
                 <a href="#">立即登入</a>
             </div>
             <span class="privacy">簽署即表示您同意Get Change 的服務條款和隱私權政策</span>
+            <vaadin-dialog></vaadin-dialog>
         </div>
 
     </template>
@@ -126,22 +141,32 @@
     (function() {
         Polymer({
             is: 'change-register',
-            properties: {},
+            properties: {
+                next: {
+                    "type": Number
+                }
+            },
             created: function() {
 
 
             },
+
+
+
             _register: function() {
-                console.log('ChangeRegister');
+                console.log('ChangeRegister', this.next);
 
                 let shadow = this.shadowRoot;
                 let that = this;
 
-                let id = shadow.querySelector('#changeId1').value; //使用名稱
+                let uid = shadow.querySelector('#changeId1').value; //使用名稱
                 let area = shadow.querySelector('#changeArea1').value; //地區
                 let email = shadow.querySelector('#changeEmail1').value; //電郵地址
                 let phone = shadow.querySelector('#changePhone1').value; //電話
-                if (id === "") {
+                let pass = shadow.querySelector('#pass1').value;
+                let cpass = shadow.querySelector('#pass2').value;
+                let check = shadow.querySelector('#check').checked;
+                if (uid === "") {
                     alert('使用名稱不可以為空');
                 } else {
                     if (area === "") {
@@ -153,41 +178,211 @@
                             if (phone === "") {
                                 alert('電話不可以為空');
                             } else {
-                                let loginUrl = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                                let params = {
-                                    "action": "addData",
-                                    "index": "change",
-                                    "type": "_user",
-                                    "id": email,
-                                    "body": {
-                                        "username": id,
-                                        "area": area,
-                                        "email": email,
-                                        "phone": phone
+                                if (pass === "") {
+                                    alert('Please enter a valid password');
+                                } else {
+                                    if (pass !== cpass) {
+                                        alert('Passwords do not match');
+                                    } else {
+                                        let loginUrl = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                                        let params = {
+                                            "action": "searchData",
+                                            "index": "change",
+                                            "type": "_user",
+                                            "body": {
+                                                "query": {
+                                                    "match": {
+                                                        "email": email
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        Polymer.postData(loginUrl, params).then(res => {
+                                            if (res.code > 0) {
+                                                if (res.resolve.length > 0) {
+                                                    alert("This email has already been used.");
+                                                } else {
+                                                    if (check) {
+                                                        this.next++;
+                                                        let t = Date.now();
+                                                        params = {
+                                                            "action": "addData",
+                                                            "index": "change",
+                                                            "type": "_user",
+                                                            "id": this.next,
+                                                            "body": {
+                                                                "username": uid,
+                                                                "numberRate": 0,
+                                                                "area": area,
+                                                                "email": email,
+                                                                "phone": phone,
+                                                                "goodsNum": 0,
+                                                                "head": "http://change.dazzle.website/img/head.svg",
+                                                                "likeProduct": [],
+                                                                "password": pass,
+                                                                "score": 5,
+                                                                "createTime": t,
+                                                                "history": []
+                                                            }
+                                                        }
+
+                                                        console.log("Register JSON", params);
+                                                        Polymer.postData(loginUrl, params).then(res => {
+                                                            if (res.code > 0) {
+                                                                // let uid = res.resolve['uid'];
+                                                                // let user = res.resolve;
+                                                                // user['thisPage'] = this.thisPage;
+                                                                // store.set('user', res.resolve);
+                                                                // store.set('editMode', 'admin');
+                                                                // store.set('thisPage', this.thisPage);
+                                                                // location.reload();
+                                                                alert('註冊成功');
+                                                                location.reload();
+                                                            } else {
+                                                                alert('註冊失敗');
+                                                                this.next--;
+                                                            }
+                                                        });
+                                                    } else {
+                                                        alert('Please agree to the terms and conditions');
+                                                    }
+                                                }
+                                            }
+                                        });
+
                                     }
                                 }
-
-                                console.log("Register JSON", params);
-                                Polymer.postData(loginUrl, params).then(res => {
-                                    if (res.code > 0) {
-                                        // let uid = res.resolve['uid'];
-                                        // let user = res.resolve;
-                                        // user['thisPage'] = this.thisPage;
-                                        // store.set('user', res.resolve);
-                                        // store.set('editMode', 'admin');
-                                        // store.set('thisPage', this.thisPage);
-                                        // location.reload();
-                                        console.log('註冊成功');
-                                    } else {
-                                        alert('註冊失敗');
-                                    }
-                                });
                             }
                         }
                     }
                 }
             },
-            ready: function() {},
+
+            login: function() {
+                console.log('login');
+                let shadow = this.shadowRoot;
+                let that = this;
+                // Polymer.popup = function (dialog, folder, component, width, height) {
+                //     customElements.whenDefined(component).then(function () {
+                //         dialog.renderer = function (root, dialog) {
+                //             root.innerHTML = '<' + component + '></' + component + '>';
+                //         };
+                //         dialog.resizable = true;
+                //         dialog.resize(width, height);
+                //         dialog.opened = true;
+                //         // Polymer.activeDialog = dialog;   
+                //     });
+                // }
+                let user = store.get('change-user');
+                if (user == null) {
+                    let dialog = shadow.querySelector('vaadin-dialog');
+                    Polymer.popup(dialog, "change", "change-login", "30%", "50%");
+                } else {
+                    console.log('asda');
+                    this.shadowRoot.querySelector('#before').innerHTML = '<button id="register" on-click="_register">/ 註冊</button>< button id = "login" on - click="_login" > / 登入</button >';
+                    store.set('change-user', null);
+                    location.reload();
+                }
+
+
+
+
+            },
+
+            ready: function() {
+                let loginUrl = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let params = {
+                    "action": "searchData",
+                    "index": "change",
+                    "type": "_user",
+                    "body": {
+                        "query": {
+                            "match_all": {}
+                        }
+                    }
+                }
+                Polymer.postData(loginUrl, params).then(res => {
+                    console.log(res);
+                    if (res.code > 0) {
+                        this.next = res.resolve.length;
+                    }
+                });
+                console.log("Entered");
+                let shadow = this.shadowRoot;
+                customElements.whenDefined('vaadin-select').then(function() {
+                    const district = [{
+                        id: '中西區',
+                        name: '中西區'
+                    }, {
+                        id: '灣仔區',
+                        name: '灣仔區'
+                    }, {
+                        id: '東區',
+                        name: '東區'
+                    }, {
+                        id: '南區',
+                        name: '南區'
+                    }, {
+                        id: '油尖旺區',
+                        name: '油尖旺區'
+                    }, {
+                        id: '深水埗',
+                        name: '深水埗區'
+                    }, {
+                        id: '九龍城區',
+                        name: '九龍城區'
+                    }, {
+                        id: '黃大仙區',
+                        name: '黃大仙區'
+                    }, {
+                        id: '觀塘區',
+                        name: '觀塘區'
+                    }, {
+                        id: '葵青區',
+                        name: '葵青區'
+                    }, {
+                        id: '荃灣區',
+                        name: '荃灣區'
+                    }, {
+                        id: '屯門區',
+                        name: '屯門區'
+                    }, {
+                        id: '元朗區',
+                        name: '元朗區'
+                    }, {
+                        id: '離島區',
+                        name: '離島區'
+                    }, {
+                        id: '北區',
+                        name: '北區'
+                    }, {
+                        id: '大埔區',
+                        name: '大埔區'
+                    }, {
+                        id: '沙田區',
+                        name: '沙田區'
+                    }, {
+                        id: '西貢區',
+                        name: '西貢區'
+                    }];
+                    shadow.querySelector('vaadin-select').renderer = function(root) {
+                        // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
+                        if (root.firstChild) {
+                            return;
+                        }
+                        // Create the <vaadin-list-box>
+                        const listBox = document.createElement('vaadin-list-box');
+                        district.forEach(function(item) {
+                            const vaadinItem = document.createElement('vaadin-item');
+                            vaadinItem.textContent = item.name;
+                            listBox.appendChild(vaadinItem);
+                            vaadinItem.setAttribute('value', item.id);
+                        });
+                        // update the content
+                        root.appendChild(listBox);
+                    };
+                });
+            },
 
 
 

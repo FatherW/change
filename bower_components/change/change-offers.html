@@ -1,0 +1,113 @@
+﻿<link href="../polymer/polymer.html" rel="import">
+<link href="../dz-menu/css/style.html" rel="import" />
+<dom-module id="change-offers">
+    <template>
+        <style>
+            #container {
+                font-family: 'Noto Sans TC', sans-serif;
+            }
+
+            .checked {
+                color: orange;
+            }
+
+            #offer{
+                margin-left: 2%;
+                margin-right: 2%;
+                border: 1px solid black;
+                height: 90px;
+                background-color: lightgray;
+                padding-top: 1%;
+            }
+            .in{
+                display:inline;
+                float:left;
+                padding-right: 2%;
+            }
+
+            #dp{
+                height: 50px;
+                width: 50px;
+            }
+
+            .data{
+                height: 15px;
+                width: 15px;
+            }
+
+            .buttons{
+                width: 9%;
+            }
+
+            #user{
+                width: 54%;
+            }
+            button{
+                width: 100%;  
+                margin-top: 23%;
+                border: 1px solid black;
+            }
+
+            #info{
+                background-color: white;
+            }
+
+            #accept{
+                background-color: lightgreen;
+            }
+
+            #reject{
+                background-color: red;
+            }
+        </style>
+        <style include="icon-styles"></style>
+        <div id="container">
+            <h4>優惠:</h4>
+            <div id="offer">
+                <div class="in">
+                    <img id="dp" src="img/symbol/s5.png" alt="DP" />
+                </div>
+                <div id="user" class="in">
+                    <span>用戶名</span>
+                    <span>時間流逝</span>
+                    <br />
+                    <span>評論</span>
+                    <br />
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    <span>(回應)</span>
+                    <br />
+                    <img class="data" src="/img/icon/buy.png" alt="Buy" />
+                    <span>獲取購買的東西</span>
+                    <img class="data" src="/img/icon/delivery.png" alt="Buy" />
+                    <span>提取投放數據</span>
+                </div>
+                <div class="in buttons">
+                    <button id="info">查看買家信息</button>
+                </div>
+                <div class="in buttons">
+                    <button id="accept">接受</button>
+                </div>
+                <div class="in buttons">
+                    <button id="reject">下降</button>
+                </div>
+            </div>
+        </div>
+    </template>
+</dom-module>
+<script>
+    (function () {
+        Polymer({
+            is: 'change-offers',
+            properties: {},
+            created: function () {
+
+
+            },
+            ready: function () {},
+        });
+    })();
+</script>

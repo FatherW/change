@@ -1,141 +1,181 @@
-<link href="../polymer/polymer.html" rel="import">
+﻿<link href="../polymer/polymer.html" rel="import">
+<link href="../dz-menu/css/style.html" rel="import" />
 <link rel="import" href="../vaadin-tabs/vaadin-tabs.html">
 <link rel="import" href="../iron-pages/iron-pages.html">
-
+<link rel="import" href="../change/change-list.html">
+<link rel="import" href="bower_components/change/change-addprod-butt.html">
 <dom-module id="change-user">
     <template>
+        <style include="icon-styles"></style>
         <style>
-            #left {
-                width: 60%;
+            #prods {
+                margin-left: 8%;
+                margin-right: 2%;
+                margin-top: 2%;
+                padding-top: 1%;
+                padding-left: 2%;
+                padding-right: 2%;
+                padding-bottom: 2%;
+                width:80%;
+                background-color: white;
+                display:inline-block;
                 float: left;
             }
-
-            #dp {
-                height: 50px;
-                width: 50px;
+            #add{
+                display: inline-block;
+                width: 6%;
+                position: relative;
+                padding-top: 14%;
             }
-
-            #one, #two {
-                display: inline;
+            #container{
                 float: left;
-                width: 10%;
-            }
-
-            #three {
-                display: inline;
-                float: left;
-                width: 10%;
-            }
-
-            #right {
-                width: 40%;
-                display: inline;
-            }
-
-            #top {
-                height: 220px;
+                background-color: #FFFBF2;
+                width: 100%;
+                padding-bottom: 30px;
             }
         </style>
         <div id="container">
-            <div id="top">
-                <div id="left">
-                    <div id="profile">
-                        <img id="dp" src="img/symbol/s5.png" alt="DP" />
-                        <span id="Uname"></span>
-                    </div>
-                    <div id="info">
-                        <p>Name: <span id="name"></span></p>
-                        <p>Area: <span id="area"></span></p>
-                        <p>Email: <span id="email"></span></p>
-                        <p>Contact: <span id="contact"></span></p>
-                    </div>
-                </div>
-                <div id="right">
-                    <div id="one">
-                        <h6>Goods</h6>
-                        <span id="gNum"></span>
-                    </div>
-                    <div id="two">
-                        <h6>Bought</h6>
-                        <span id="buy"></span>
-                    </div>
-                    <div id="three">
-                        <h6>Rating</h6>
-                        <span id="rate"></span>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <vaadin-tabs  selected="{{page}}">
-                    <vaadin-tab>My Products</vaadin-tab>
-                    <vaadin-tab>Favorites</vaadin-tab>
-                    <vaadin-tab>Purchases</vaadin-tab>
+            <div id="prods">
+                <vaadin-tabs selected="{{page}}">
+                    <vaadin-tab>我的貨物</vaadin-tab>
+                    <vaadin-tab>我的選購清單</vaadin-tab>
+                    <vaadin-tab>過去交易</vaadin-tab>
                 </vaadin-tabs>
                 <iron-pages selected="[[page]]">
-                    <page>
-                        <change-list id="mp"></change-list>
+                    <page id="page1">
+                        <change-list id="mp">該用戶還沒有任何產品喔</change-list>
                     </page>
-                    <page>
-                        Favorites
+                    <page id= "page2">
+                        <change-list id="fav">該用戶暫時沒有選購清單</change-list>
                     </page>
-                    <page>
-                        <change-list id="purch"></change-list>
+                    <page id="page3">
+                        <change-list id="purch">該用戶從來沒有交易過</change-list>
                     </page>
                 </iron-pages>
-        
-                        
-
-                        
+            </div>
+            <div id="add">
+                <change-addprod-butt></change-addprod-butt>
             </div>
         </div>
     </template>
 </dom-module>
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-user',
             properties: {
 
             },
-            created: function () {
+            created: function() {
 
             },
-            ready: function () {
-                let shadow = this.shadowRoot;
-                let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                let params = {
-                    "action": "getData",
-                    "index": "change",
-                    "type": "_user",
-                    "id": "97",
-                };
-                Polymer.postData(url, params).then(res => {
-                    console.log(res);
-                    if (res.code > 0) {
-                        shadow.querySelector('#Uname').innerText = res.resolve['username'];
-                        shadow.querySelector('#name').innerText = res.resolve['username'];
-                        shadow.querySelector('#area').innerText = res.resolve['area'];
-                        shadow.querySelector('#email').innerText = res.resolve['email'];
-                        shadow.querySelector('#contact').innerText = res.resolve['phone'];
-                        shadow.querySelector('#gNum').innerText = res.resolve['goodsNum'];
-                        shadow.querySelector('#buy').innerText = res.resolve['alreadyBuy'];
-                        shadow.querySelector('#rate').innerText = res.resolve['score'];
-                        console.log(res.resolve['likeProduct']);
+            ready: function() {
+                let loc = location.search;
+                console.log("Path", loc);
+                console.log("Length", loc.length);
+                let id = "";
+                for (var i = 1; i < loc.length; i++) {
+                    console.log("Working");
+                    id += loc[i];
+                }
+                console.log("Problem", id);
+                if (id != "") {
+                    let shadow = this.shadowRoot;
+                    params = {
+                        "match": {
+                            "ownerId": id
+                        }
                     }
-                })
-                params = {
-                    "match": {
-                        "ownerId": "97"
+                    console.log("Params for Mine", params);
+                    shadow.querySelector('#mp').query = params;
+                    shadow.querySelector('#mp')._showMyGoods();
+                    params = {
+                        "match": {
+                            "buyerId": id
+                        }
+                    }
+                    shadow.querySelector('#purch').query = params;
+                    let query = "";
+                    let p = {
+                        "action": "searchData",
+                        "index": "change",
+                        "type": "_user",
+                        "body": {
+                            "query": {
+                                "match": {
+                                    "_id": id
+                                }
+                            }
+                        }
+                    };
+                    let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                    let x = 0;
+                    let all;
+                    Polymer.postData(url, p).then(res => {
+                        if (res.code > 0) {
+                        	let send = res.resolve[0];
+                        	shadow.querySelector('#mp').user = send;
+                        	shadow.querySelector('#fav').user = send;
+                        	shadow.querySelector('#purch').user = send;
+                            all = res.resolve[0]['likeProducts'];
+                            x = all;
+                        }
+                    })
+
+                    for (var i = 0; i < x; i++) {
+                        query += '{"match": { "id": ' + all[i] + ' } }';
+                        if (i != (x - 1)) {
+                            query += ',';
+                        }
+                    }
+                    if (query != "") {
+                        params = '{"bool": {"should": [' + query + ']}}';
+                        shadow.querySelector('#fav').query = params;
+                        shadow.querySelector('#fav')._showMyGoods();
+                    }
+                    shadow.querySelector('#purch')._showMyGoods();
+                } else {
+                    let user = store.get('change-user') || null;
+                    if (user != null) {
+                        let shadow = this.shadowRoot;
+                        params = {
+                            "match": {
+                                "ownerId": user['_id']
+                            }
+                        }
+                        console.log("Params for Mine", params);
+                        shadow.querySelector('#mp').query = params;
+                        shadow.querySelector('#mp')._showMyGoods();
+                        params = {
+                            "match": {
+                                "buyerId": user['_id']
+                            }
+                        }
+                        shadow.querySelector('#purch').query = params;
+                        let query = "";
+                        let x = user['likeProducts'].length;
+                        for (var i = 0; i < x; i++) {
+                            query += '{"match": { "id": ' + user['likeProducts'][i] + ' } }';
+                            if (i != (x - 1)) {
+                                query += ',';
+                            }
+                        }
+                        if (query != "") {
+                            params = '{"bool": {"should": [' + query + ']}}';
+                            shadow.querySelector('#fav').query = params;
+                            shadow.querySelector('#fav')._showMyGoods();
+                        }
+                        shadow.querySelector('#purch')._showMyGoods();
                     }
                 }
-                shadow.querySelector('#mp').query = params;
-                params = {
-                    "match": {
-                        "buyerId": "97"
-                    }
-                }
-                shadow.querySelector('#purch').query = params;
+                this._checkEmpty();
             },
+
+            _checkEmpty: function() {
+                let shadow = this.shadowRoot;
+                console.log("Check Empty is running received");
+                shadow.querySelector('#fav')._showMyGoods();
+            }
         });
     })();
 </script>

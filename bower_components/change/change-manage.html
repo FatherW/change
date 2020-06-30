@@ -1,0 +1,40 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="change-pages-banner.html">
+<link rel="import" href="change-page-info.html">
+<link rel="import" href="change-slidelist.html">
+
+
+<dom-module id="change-manage">
+
+    <template>
+    
+        <style>
+     
+        </style>
+        
+        <change-pages-banner></change-pages-banner>
+        <change-page-info></change-page-info>
+        <change-slidelist></change-slidelist>
+    </template>
+
+</dom-module>
+
+<script>
+    (function() {
+        Polymer({
+            is: 'change-manage',
+            properties: {
+                "id": {
+                    "type": String
+                }
+            },
+            created: function() {
+
+            },
+            ready: function() {
+
+            },
+
+        });
+    })();
+</script>

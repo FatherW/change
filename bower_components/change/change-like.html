@@ -5,94 +5,273 @@
         <style>
             #toggle-heart{
                 position: absolute;
-                left: -100vw;
+                left: -100vw;}
+         
+            [for = toggle-heart] {
+               
+               
             }
 
-            [for = toggle-heart] {
-                color: lightskyblue;
-                font-size: 2em;
+            .like-img{
+                width:20px;
+                height:20px;
+                background-size: contain;                
+                background-repeat: no-repeat;
+                background-size: contain;
                 cursor: pointer;
+                border:none;
+                background-color: transparent;
+                color: transparent;
+                margin-top:10px;
+                margin-right:10px;
             }
 
             [id = "toggle-heart"]:checked + label{
-                color: red;
+               background-color: red;
             }
         </style>
         <style include="icon-styles"></style>
         <div id="container">
-            <input on-click="addCount" id="toggle-heart" type="checkbox" />
-            <label for="toggle-heart">❤</label>
-            <span id="likes">0</span> likes.
+            <input on-click="checklogin" id="toggle-heart" type="checkbox" />            
+            <label for="toggle-heart">
+                <img src="http://change.dazzle.website/img/symbol/like-outlined-110d8c524ae4580258130ea6f75ef84c.png" class="like-img">
+                <span id="likes">0</span> 
+            </label>
+            
         </div>
     </template>
 </dom-module>
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-like',
             properties: {
                 like: {
-                    "type" :Number
+                    "type": Number
                 },
                 id: {
-                    "type":String
+                    "type": Number
                 },
                 status: {
-                    "type":Boolean
+                    "type": Boolean
                 }
             },
-            created: function () {
-                console.log('Created');
-                // Check User like or not.and set the status
+
+            ready: function() {
+                this._changecontent();
+
             },
-            ready: function () { },
-        
-            addCount: function () {
+
+            _changecontent: function() {
+                this.id = this.getAttribute('id');
+                let that = this;
+                let shadow = this.shadowRoot;
+
+                let user = store.get('change-user') || null;
+                if (user != null) {
+                    let countlikeproduct = user['likeProduct'].length;
+                    var counti2 = 0;
+                    checked2 = false;
+                    console.log("the cookie store in user is,", user);
+                    for (i = 0; i < countlikeproduct; i++) {
+                        console.log("the user liked product is : ", user['likeProduct'][i], "and id now is,", this.id);
+                        if (user['likeProduct'][i] == parseInt(this.id)) {
+                            checked2 = true;
+                            console.log("found!!")
+                        } else {
+                            counti2++;
+
+                        }
+                    }
+
+                    if (checked2 == false) {
+                        this.status = false;
+
+                    } else {
+                        this.status = true;
+
+                    }
+                    shadow.querySelector('#toggle-heart').checked = this.status;
+
+
+                }
+
+
+
+
+
+
+                let URL = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+
+
+
+                let param = {
+                    "action": "getData",
+                    "index": "change",
+                    "type": "product",
+                    "id": this.id
+                };
+
+
+
+                Polymer.postData(URL, param).then(res => {
+                    if (res.code > 0) {
+                        shadow.querySelector('#likes').innerHTML = res.resolve['like'];
+                        this.like = res.resolve['like'];
+
+                    } else {
+                        console.log('error in change-like')
+                    }
+                });
+
+
+
+
+
+            },
+
+            checklogin: function() {
+                let user = store.get('change-user') || null;
+                if (user != null) {
+                    this.addCount();
+
+                } else {
+                    alert("請先登入");
+                    this.shadowRoot.querySelector('#toggle-heart').checked = false;
+                }
+            },
+
+
+
+            addCount: function() {
+                this.id = this.getAttribute('id');
                 let that = this;
                 let shadow = this.shadowRoot;
                 let URL = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                //let params = {
-                //    "action": "getData",
-                //    "index": "change",
-                //    "type": "order",
-                //    "id": "8",
-                //};
-                //let likes = 0;
-                //Polymer.postData(URL, params).then(res => {
-                //    console.log('Result', res);
-                //    if (res.code > 0) {
-                //        likes = parseInt(res.resolve['like']);
-                //        console.log(likes);
-                //        likes = likes + 1;
-                //        console.log(likes);
-                //        shadow.querySelector('#likes').innerText = likes;
-                //    }
-                //})
+                let user = store.get('change-user') || null;
 
-                if (this.status) {
-                    this.like--;
-                    this.status = false;
-                }
-                else {
-                    this.like++;
-                    this.status = true;
-                }
-                let parama = {
-                    "action": "addData",
+
+                let param = {
+                    "action": "updateData",
                     "index": "change",
-                    "type": "order",
+                    "type": "product",
                     "id": this.id,
                     "body": {
-                        "like": this.like ,
+                        "query": {
+                            "script": {
+                                "source": "ctx._source['like']+=1"
+                            }
+                        }
                     }
                 };
-                Polymer.postData(URL, parama).then(res => {
-                    if (res.code > 0) {
-                        console.log('Success');
-                        console.log(parama);
-                        shadow.querySelector('#likes').innerText = this.like;
+
+                let param2 = {
+                    "action": "updateData",
+                    "index": "change",
+                    "type": "product",
+                    "id": this.id,
+                    "body": {
+                        "query": {
+                            "script": {
+                                "source": "ctx._source['like']-=1"
+                            }
+                        }
                     }
-                })
+                };
+
+                if (this.status == shadow.querySelector('#toggle-heart').checked) {
+
+                } else {
+                    if (this.status == true) {
+
+                        Polymer.postData(URL, param2).then(res => {
+                            if (res.code > 0) {
+                                console.log("reduced")
+                            } else {
+                                alert("fail to reduce")
+                            }
+                        });
+
+                        let storelikedproduct = user['likeProduct'];
+                        let templikeproduct = [];
+                        for (i = 0; i < storelikedproduct.length; i++) {
+                            templikeproduct.push(storelikedproduct[i])
+                        }
+                        let storeposit = 0;
+
+                        for (i = 0; i < storelikedproduct.length; i++) {
+                            if (storelikedproduct[i] == this.id) {
+
+                                storeposit = i
+                            }
+                        }
+                        templikeproduct.splice(storeposit, 1);
+                        console.log(":the liked product is:", templikeproduct);
+                        let paramchange = {
+                            "action": "addData",
+                            "index": "change",
+                            "type": "_user",
+                            "id": user['_id'],
+                            "body": {
+                                "likeProduct": templikeproduct
+                            }
+                        };
+
+                        Polymer.postData(URL, paramchange).then(res => {
+                            if (res.code > 0) {
+                                user['likeProduct'] = templikeproduct;
+                                store.set('change-user', user);
+                                this._changecontent();
+                            } else {
+                                console.log("error in delete favorite")
+                            }
+                        });
+                        this._changecontent();
+
+                    } else {
+
+                        Polymer.postData(URL, param).then(res => {
+                            if (res.code > 0) {
+                                console.log("increase")
+                            } else {
+                                console.log("fail to increase");
+                            }
+                        });
+
+                        let storelikedproduct = user['likeProduct'];
+                        let templikeproduct = [];
+                        for (i = 0; i < storelikedproduct.length; i++) {
+                            templikeproduct.push(storelikedproduct[i])
+                        }
+
+                        templikeproduct.push(parseInt(this.id));
+                        let paramchange = {
+                            "action": "addData",
+                            "index": "change",
+                            "type": "_user",
+                            "id": user['_id'],
+                            "body": {
+                                "likeProduct": templikeproduct
+                            }
+                        };
+                        console.log('the praram like is: ', paramchange);
+                        Polymer.postData(URL, paramchange).then(res => {
+                            if (res.code > 0) {
+                                user['likeProduct'] = templikeproduct;
+                                store.set('change-user', user);
+                                this._changecontent();
+                            } else {
+                                console.log("error in add favorite")
+                            }
+                        });
+
+
+
+                    }
+                }
+
+
+
             },
         });
     })();

@@ -1,0 +1,77 @@
+<link href="../polymer/polymer.html" rel="import">
+<link href="../dz-menu/css/style.html" rel="import" />
+<link href="../dz-dazzle/dz-block.html" rel="import" />
+<dom-module id="change-ad">
+    <template>
+        <style>
+            @media only screen and (min-width: 768px){
+                #left {
+                    width: 54%;
+                    float: left;
+                }
+                #right {
+                    width: 36%;
+                    margin-left: 1%;
+                    margin-right: 4%;
+                    float: left;
+                }
+            }
+
+            #left {
+                margin-left: 4%;
+                margin-right: 1%;
+                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+                height: 500px;
+            }
+
+            #right {
+                margin-left: 4%;
+                margin-right: 1%;
+            }
+            
+            textarea{
+                margin: 2%;
+                border: 1px solid black;
+                width: 95%;
+                height: 450px;
+            }            
+            
+            img{
+                width: 100%;
+            }
+        </style>
+        <style include="icon-styles"></style>
+        <div id="container">
+            <div id="left">
+                <textarea placeholder="Content"></textarea>
+            </div>
+
+            <div id="right">
+                <dz-block block="ads">
+                    <div id="ad1" class="ad">
+                        <img src="img/ad.jpeg" alt="Alternate Text" />
+                    </div>
+                    <div id="ad2" class="ad">
+                        <img src="img/ad.jpeg" alt="Alternate Text" />
+                    </div>
+                    <div id="ad3" class="ad">
+                        <img src="img/ad.jpeg" alt="Alternate Text" />
+                    </div>
+                </dz-block>
+
+            </div>
+        </div>
+    </template>
+</dom-module>
+<script>
+    (function () {
+        Polymer({
+            is: 'change-ad',
+            properties: {},
+            created: function () {
+                console.log('Created');
+            },
+            ready: function () {},
+        });
+    })();
+</script>

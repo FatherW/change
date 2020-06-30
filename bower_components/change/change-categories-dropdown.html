@@ -1,0 +1,418 @@
+<link rel="import" href="../polymer/polymer.html">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> -->
+
+<dom-module id="change-categories-dropdown">
+
+    <template>
+        <style include="icon-styles"></style>
+        <style> 
+            * {
+                margin: 0;
+                border: 0;
+                padding: 0;
+                font-size: 100%;
+                /* padding: 2em; */
+                font: 14px Arial, sans-serif;
+                background: white;
+                color: black;
+            }
+
+            a {
+                color: black;
+                text-decoration: none;
+            }
+
+            a:hover,
+            a:focus {
+                color: #ccc;
+                text-decoration: none;
+                outline: 0;
+            }
+
+            /* p,
+    ul,
+    ol,
+    table {
+      margin: 0 0 20px;
+    }
+
+    ul,
+    ol {
+      margin: 0 0 20px 25px;
+    }
+
+    ul ul,
+    ul ol,
+    ol ol,
+    ol ul {
+      margin-bottom: 0;
+    }
+
+    table table {
+      margin-bottom: 0;
+    } */
+
+            nav {
+                margin: 0 0 20px;
+            }
+
+            nav:before,
+            nav:after {
+                content: " ";
+                display: table;
+            }
+
+            nav:after {
+                clear: both;
+            }
+
+            /* #container {
+      margin: 0 auto;
+      max-width: 940px;
+    } */
+
+            /***********/
+            /* nav */
+            .nav-menu,
+            .nav-menu ul,
+            .nav-menu li,
+            .nav-menu a {
+                margin: 0;
+                padding: 0;
+                line-height: normal;
+                list-style: none;
+                display: block;
+                position: relative;
+            }
+
+            .nav-menu ul {
+                opacity: 0;
+                position: absolute;
+                top: 100%;
+                left: -9999px;
+                z-index: 999;
+                -webkit-transition: opacity .3s;
+                transition: opacity .3s;
+            }
+
+            .nav-menu li:hover>ul {
+                left: 0;
+                opacity: 1;
+                z-index: 1000;
+            }
+
+            .nav-menu ul li:hover>ul {
+                top: 0;
+                left: 100%;
+            }
+
+            .nav-menu li {
+                cursor: default;
+                float: left;
+                white-space: nowrap;
+            }
+
+            .nav-menu ul li {
+                float: none;
+            }
+
+            /* sub width */
+            .nav-menu ul {
+                min-width: 12em;
+                -webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.25);
+                box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.25);
+            }
+
+            /* root */
+            .nav-menu a {
+                padding: 0 10px;
+                color: black;
+                font-weight: normal;
+                font-size: 16px;
+                line-height: 40px;
+                text-decoration: none;
+            }
+
+            /* root: active */
+            .nav-menu>li>.nav-active {
+                background-color: white;
+                border: solid 1px #ccc;
+                width: 147px;
+                border-radius: 4px;
+            }
+
+            /* root: hover/persistence */
+            .nav-menu a:hover,
+            .nav-menu a:focus {
+                background: white;
+                color: black;
+                border: solid 1px #ccc;
+            }
+
+            .nav-menu li:hover a {
+                background: white;
+                color: black;
+            }
+
+            /* 2 */
+            .nav-menu li li a,
+            .nav-menu li:hover li a {
+                padding: 8px 10px;
+                background: white;
+                color: black;
+                font-size: 12px;
+                line-height: normal;
+            }
+
+            /* 2: hover/persistence */
+            .nav-menu li:hover li a:hover,
+            .nav-menu li:hover li a:focus,
+            .nav-menu li:hover li:hover a {
+                background: white;
+            }
+
+            /* 3 */
+            .nav-menu li:hover li:hover li a {
+                background: white;
+            }
+
+            /* 3: hover/persistence */
+            .nav-menu li:hover li:hover li a:hover,
+            .nav-menu li:hover li:hover li a:focus,
+            .nav-menu li:hover li:hover li:hover a {
+                background: white;
+            }
+
+            /* 4 */
+            .nav-menu li:hover li:hover li:hover li a {
+                background: white;
+            }
+
+            /* 4: hover */
+            .nav-menu li:hover li:hover li:hover li a:hover,
+            .nav-menu li:hover li:hover li:hover li a:focus {
+                background: white;
+            }
+
+            /***********/
+            /* ARROW */
+            .arrow {
+                border: solid black;
+                border-width: 0 1.5px 1.5px 0;
+                display: inline-block;
+                padding: 3px;
+                margin-left: 70px;
+                margin-bottom: 3px;
+            }
+
+            .down {
+                transform: rotate(45deg);
+                -webkit-transform: rotate(45deg);
+            }
+        </style>
+        <div id="container">
+
+            <!-- <nav>
+                <ul class="nav-menu">
+
+                    <li> 
+                        <a href="#" class="nav-active">選擇分類<i class="arrow down"></i></a>
+                        <ul>
+                            <li><a href="#">1<i class="arrow down"></i></a>
+                                <ul>
+                                    <li><a href="#">車與地產subtitle1</a></li>
+                                    <li><a href="#">車與地產subtitle2</a></li>
+                                    <li><a href="#">車與地產subtitle3</a></li>
+                                    <li><a href="#">車與地產subtitle4</a></li>
+                                </ul>
+                            </li>
+
+                            <li><a href="#">2<i class="arrow down"></i></a>
+                                <ul>
+                                    <li><a href="#">潮流生活subtitle1</a></li>
+                                    <li><a href="#">潮流生活subtitle2</a></li>
+                                </ul>
+                            </li>
+
+                            <li><a href="#">3<i class="arrow down"></i></a>
+                                <ul>
+                                    <li><a href="#">New SubHead</a></li>
+                                </ul>
+                            </li>
+
+                            <li><a href="#">4<i class="arrow down"></i></a>
+                                <ul>
+                                </ul>
+                            </li>
+
+                            <li><a href="#">5<i class="arrow down"></i></a>
+                                <ul>
+                                    <li><a href="#">Jani</a></li>
+                                </ul>
+                            </li>
+
+                            <li><a href="#">6<i class="arrow down"></i></a>
+                                <ul>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </nav> -->
+
+
+        </div>
+
+    </template>
+
+</dom-module>
+
+<script>
+    //function for database
+    (function () {
+        Polymer({
+            is: 'change-categories-dropdown',
+            properties: {
+                "id": {
+                    "type": String
+                },
+
+                "valueArray": {
+                    "type": Array
+                },
+
+                next: {
+                    "type": Number
+                }
+            },
+            created: function () {
+
+            },
+
+            ready: function () {
+                //POSTMAN SEARCH DATA OF CAT.
+                let that = this;
+                let shadow = this.shadowRoot;
+                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let params = {
+                    "action": "searchData",
+                    "index": "change",
+                    "type": "categories",
+                    "body": {
+                        "sort": [
+                            {
+                                "_id": {
+                                    "order": "asc"
+                                }
+                            }
+                        ],
+                        "query": {
+                            "match": {
+                                "parent": "0"
+                            }
+                        }
+                    }
+                };
+                Polymer.postData(Url, params).then(res => {
+                    console.log("Data:", res);
+                    // console.log("Length:",res.resolve.length);
+                    if (res.code > 0) {
+                        let maincate = [];
+                        
+
+                        //SELECT CONTAINER
+                        let cont = shadow.querySelector('#container');
+
+                        //CREATE NAV ELEMENT AND SET THE ATTRIBUTES
+                        let nav = document.createElement('nav');
+                        cont.appendChild(nav);
+
+                        //CREATE NAV-MENU (ul) ELEMENT AND SET THE ATTRIBUTES
+                        let navMenuUl = document.createElement('ul')
+                        navMenuUl.setAttribute('class', 'nav-menu')
+                        nav.appendChild(navMenuUl);     //append navMenuUl to nav
+
+                        //CREATE OUTTER(li) ELEMENT AND SET THE ATTRIBUTES
+                        let outli = document.createElement('li');
+                        navMenuUl.appendChild(outli);
+
+                        //CREATE 選擇分類 ELEMENT AND SET THE ATTRIBUTES
+                        let choice = document.createElement('a');
+                        choice.setAttribute('href', '#');
+                        choice.setAttribute('class', 'nav-active');
+                        choice.append("選擇分類");
+                        outli.appendChild(choice);
+
+                        //CREATE ARROW ELEMENT AND SET THE ATTRIBUTES
+                        var arrow = document.createElement('i');
+                        arrow.setAttribute('class', 'arrow down');
+                        choice.appendChild(arrow);
+
+                        //CREATE 2ND (ul) ELEMENT AND SET THE ATTRIBUTES
+                        let ul2 = document.createElement('ul');
+                        outli.append(ul2);
+
+                        //'CAT' CREATE CATegories (li) ELEMENT AND SET THE ATTRIBUTES 
+                        for (i = 0; i < res.resolve.length; i++) {
+                            let catLi = document.createElement('li');
+                            let catA = document.createElement('a');
+                            var arrow2 = document.createElement('i');
+                            arrow2.setAttribute('class', 'arrow down');
+                            catA.setAttribute('href', '#');
+                            catLi.appendChild(catA);
+                            catA.append(res.resolve[i]['name']);
+                            catA.appendChild(arrow2);
+
+                            ul2.appendChild(catLi);
+                            let ul3 = document.createElement('ul');
+                            catLi.append(ul3);
+                            let x = i + 1;
+                            let p = {
+                                "action": "searchData",
+                                "index": "change",
+                                "type": "categories",
+                                "body": {
+                                    "sort": [
+                                        {
+                                            "_id": {
+                                                "order": "asc"
+                                            }
+                                        }
+                                    ],
+                                    "query": {
+                                        "match": {
+                                            "parent": x
+                                        }
+                                    }
+                                }
+                            };
+                            Polymer.postData(Url, p).then(res => {
+                                for (var w = 0; w < res.resolve.length; w++){
+                                    let catLiSub = document.createElement('li');
+                                    let catASub = document.createElement('a');
+                                    catASub.setAttribute('href', '#');
+                                    catLiSub.appendChild(catASub);
+                                    catASub.append(res.resolve[w]['name']);
+                                    
+                                    ul3.appendChild(catLiSub);
+                                }
+                            })
+                            
+                        }
+                        
+                    }
+                    else {
+                        console.log("FAILED")
+                    }
+                })
+            },
+
+        });
+    })();
+</script>

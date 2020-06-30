@@ -1,0 +1,213 @@
+<link href="../polymer/polymer.html" rel="import">
+<link href="../dz-menu/css/style.html" rel="import" />
+<dom-module id="change-user-banner">
+    <template>
+        <style include="icon-styles"></style>
+        <style>
+            .checked {
+                color: orange;
+            }
+            #check{
+                color:gray;
+            }
+            #offer {
+                margin-left: 8%;
+                margin-right: 8%;
+                margin-top: 2%;
+            }
+
+
+            #offer {
+                height: 90px;
+                background-color: white;
+            }
+
+            .in {
+                display: inline;
+                float: left;
+                padding-right: 1%;
+                height: inherit;
+                padding-left: 1%;
+            }
+
+            #dp {
+                width: 70px;
+                height: 70px;
+                border-radius: 9999999999999px;
+                margin: 18% 0%;
+            }
+
+            .buttons {
+                width: 9%;
+                text-align: center;
+
+            }
+
+            #user {
+                width: 54%;
+            }
+
+            .ret {
+                font-size: 3em;
+                text-align: center;
+                color: red;
+            }
+
+            h6 {
+                margin: 10% 0%;
+                font-size: 15px;
+            }
+
+            #user {
+                padding-top: 1%;
+            }
+
+            #Uname {
+                font-size: 1.5em;
+                font-weight: 800;
+                color:black
+            }
+
+            #mp{
+                padding-top: 17%;
+                background-size: cover;
+                background-position: center center;
+                background-repeat: no-repeat;
+                background-image: url('http://change.dazzle.website/Website Design/profile page/img/profile banner/company-profile-banner.png');
+            }
+           
+        </style>
+        <div id="container">
+            <div id="mp">
+            </div>
+            <div id="offer">
+                <div class="in">
+                    <img id="dp" src="img/symbol/s5.png" alt="DP" />
+                </div>
+                <div id="user" class="in">
+                    <span id="Uname"></span>
+                    <br />
+                   <span id="check"> 註冊日期:</span>
+                </div>
+                <div class="in buttons">
+                    <h6>上貨數</h6>
+                    <span class="ret" id="gNum"></span>
+                </div>
+                <div class="in buttons">
+                    <h6>購買數</h6>
+                    <span class="ret" id="buy"></span>
+                </div>
+                <div class="in buttons">
+                    <h6>平均評分</h6>
+                    <span class="ret" id="rate"></span>
+                </div>
+            </div>
+        </div>
+    </template>
+</dom-module>
+<script>
+    (function() {
+        Polymer({
+            is: 'change-user-banner',
+            properties: {
+
+            },
+            created: function() {
+
+            },
+            ready: function() {
+                let loc = location.search;
+                console.log("Path", loc);
+                console.log("Length", loc.length);
+                let id = "";
+                for (var i = 1; i < loc.length; i++) {
+                    console.log("Working");
+                    id += loc[i];
+                }
+                console.log("ID", id);
+                if (id != "") {
+                    console.log("Entered");
+                    let shadow = this.shadowRoot;
+                    let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                    let params = {
+                        "action": "searchData",
+                        "index": "change",
+                        "type": "_user",
+                        "body": {
+                            "query": {
+                                "match": {
+                                    "_id": id
+                                }
+                            }
+                        }
+                    };
+                    console.log("DYNAMIC", params);
+                    Polymer.postData(url, params).then(res => {
+                        console.log(res);
+                        if (res.code > 0) {
+                            if (res.resolve.length > 0) {
+                                shadow.querySelector('#Uname').innerText = res.resolve[0]['username'];
+                                let t = res.resolve[0]['createTime'];
+                                let _thetimenow = Date.now();
+                                console.log("Last Task from Banner", _thetimenow);
+                                let comparetime = (_thetimenow - t) / 1000;
+                                if (comparetime < 60) {
+                                    shadow.querySelector('#check').innerHTML += "剛剛"
+                                } else if (comparetime / 60 < 60) {
+                                    shadow.querySelector('#check').innerHTML += Math.floor(comparetime / 60) + "分鐘前"
+                                } else if (comparetime / 60 / 60 < 24) {
+                                    shadow.querySelector('#check').innerHTML += Math.floor(comparetime / 60 / 60) + "小時前"
+                                } else if (comparetime / 60 / 60 / 24 < 7) {
+                                    shadow.querySelector('#check').innerHTML += Math.floor(comparetime / 60 / 60 / 24) + "日前"
+                                } else if (comparetime / 60 / 60 / 24 / 7 < 30) {
+                                    shadow.querySelector('#check').innerHTML += Math.floor(comparetime / 60 / 60 / 24 / 7) + "星期前"
+                                } else if (comparetime / 60 / 60 / 24 / 7 / 30 < 365) {
+                                    shadow.querySelector('#check').innerHTML += Math.floor(comparetime / 60 / 60 / 24 / 7 / 30) + "月前"
+                                }
+                                shadow.querySelector('#gNum').innerText = res.resolve[0]['goodsNum'];
+                                shadow.querySelector('#buy').innerText = res.resolve[0]['history'].length;
+                                shadow.querySelector('#rate').innerText = res.resolve[0]['score'];
+                                if (res.resolve[0]['head'] == "") {
+                                    shadow.querySelector('#dp').src = "http://change.dazzle.website/img/head.svg";
+                                } else {
+                                    shadow.querySelector('#dp').src = res.resolve[0]['head'];
+                                }
+                            }
+                        }
+                    })
+                } else {
+                    let user = store.get("change-user") || null;
+                    console.log("Banner", user[0]);
+                    if (user != null) {
+                        let shadow = this.shadowRoot;
+                        shadow.querySelector('#Uname').innerText = user[0]['username'];
+                        let t = res.resolve[0]['createTime'];
+                        let _thetimenow = Date.now();
+                        let comparetime = (_thetimenow - t) / 1000;
+                        if (comparetime < 60) {
+                            shadow.querySelector('#check').innerHTML = "剛剛"
+                        } else if (comparetime / 60 < 60) {
+                            shadow.querySelector('#check').innerHTML = Math.floor(comparetime / 60) + "分鐘前"
+                        } else if (comparetime / 60 / 60 < 24) {
+                            shadow.querySelector('#check').innerHTML = Math.floor(comparetime / 60 / 60) + "小時前"
+                        } else if (comparetime / 60 / 60 / 24 < 7) {
+                            shadow.querySelector('#check').innerHTML = Math.floor(comparetime / 60 / 60 / 24) + "日前"
+                        } else if (comparetime / 60 / 60 / 24 / 7 < 30) {
+                            shadow.querySelector('#check').innerHTML = Math.floor(comparetime / 60 / 60 / 24 / 7) + "星期前"
+                        } else if (comparetime / 60 / 60 / 24 / 7 / 30 < 365) {
+                            shadow.querySelector('#check').innerHTML = Math.floor(comparetime / 60 / 60 / 24 / 7 / 30) + "月前"
+                        }
+                        shadow.querySelector('#gNum').innerText = user[0]['goodsNum'];
+                        shadow.querySelector('#buy').innerText = user[0]['alreadyBuy'];
+                        shadow.querySelector('#rate').innerText = user[0]['score'];
+                        shadow.querySelector('#dp').src = res.resolve[0]['head'];
+                    } else {
+                        alert('請先登入');
+                    }
+                }
+            },
+
+
+        });
+    })();
+</script>

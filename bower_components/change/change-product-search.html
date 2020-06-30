@@ -1,0 +1,94 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<link rel="import" href="../dz-dazzle/dz-block.html">
+
+<link rel="import" href="../change/change-slidelist.html">
+<link rel="import" href="../change/change-in-item.html">
+
+<dom-module id="change-product-search">
+
+    <template>
+        <div style="background-color: wheat">
+            篩選
+            <div style="float: left; width:200px;padding-left:40px; padding-top:30px;">
+                <change-slidelist></change-slidelist>
+                <!-- <button on-click="search">搜尋</button> -->
+            </div>
+            <div style="float:left; width:68%; border:'none'; margin-left: 2%;">
+                <change-in-item></change-in-item>
+            </div>
+        </div>
+    
+    </template>
+
+</dom-module>
+
+<script>
+    (function() {
+        Polymer({
+            is: 'change-product-search',
+            properties: {},
+            created: function() {
+
+
+            },
+            ready: function() {
+
+
+
+
+            },
+
+
+
+            search() {
+
+                let shadow = this.shadowRoot;
+                let that = this;
+                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+
+                let param = {
+                    "action": "searchData",
+                    "index": "change",
+                    "type": "categories",
+                    "body": {
+                        "query": {
+                            "match_all": {}
+                        }
+
+                    }
+                };
+                Polymer.postData(Url, param).then(res => {
+                    if (res.code > 0) {
+                        let cate = res.resolve;
+
+                        var allcat = [];
+                        for (i = 0; i < cate.length; i++) {
+                            allcat.push(cate[i]['name'])
+                        };
+                        console.log(allcat);
+
+                        let searchPanel = this.shadowRoot.querySelector('change-slidelist');
+
+                        if (shadow.querySelector('#' + allcat[i]).checked == true) {
+                            console.log("detected is checked")
+
+                        }
+                    }
+                })
+
+
+
+                let searchPanel = this.shadowRoot.querySelector('change-slidelist');
+
+                searchPanel.allcat[0];
+
+
+                if (shadow.querySelector('#' + allcat[i]).checked == true) {
+                    console.log("detected is checked")
+
+                }
+            }
+        });
+    })();
+</script>

@@ -1,0 +1,306 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-button/vaadin-button.html">
+<link rel="import" href="../vaadin-select/vaadin-select.html">
+<link rel="import" href="../vaadin-checkbox/vaadin-checkbox.html">
+
+<dom-module id="change-edit-bar">
+    <template>
+        <style>
+            * {
+                color: black;
+                font-family: sans-serif;
+            }
+
+            #tbar {
+                display: flex;
+                justify-content: space-between;
+                border: 1px solid #ccc;
+                padding-top: 15px;
+                padding-bottom: 25px;
+                background: #F0F0F0;
+                margin-left: 15px;
+                margin-right: 15px;
+            }
+
+            #edit {
+                width: 90px;
+                height: 35px;
+                border: 1px solid #ccc;
+                background-color: white;
+            }
+
+            button {
+                cursor: pointer;
+            }
+
+            .left {
+                margin-top: 11px;
+                margin-left: 30px;
+            }
+
+            .right {
+                margin-right: 30px;
+            }
+
+            .buttons button {
+                padding: 3px;
+                margin-top: 15px;
+            }
+
+            #copy {
+                background-color: grey;
+                padding: 10px 20px;
+                margin-right: 25px;
+                border: none;
+                color: white;
+            }
+
+            #delete {
+                background-color: grey;
+                padding: 10px 20px;
+                margin-right: 25px;
+                border: none;
+                color: white;
+            }
+
+            #save {
+                background-color: #FF6B66;
+                padding: 10px 20px;
+                border: none;
+                color: white;
+            }
+        </style>
+        <header>
+            <div id="tbar">
+                <div class="button left">
+                    <a id="edi" href="#"><button id="edit">編輯</button></a>
+                </div>
+
+                <div class="buttons right">
+                    <button id="copy" on-click="_copy">複製</button>
+                    <button id="delete" on-click="_delete">刪除</button>
+                    <!-- <button id="save">儲存</button> -->
+                </div>
+            </div>
+        </header>
+    </template>
+</dom-module>
+
+<script>
+
+
+    //function for database
+    (function () {
+        Polymer({
+            is: 'change-edit-bar',
+            properties: {
+                "id": {
+                    "type": String
+                },
+
+                "valueArray": {
+                    "type": Array
+                }
+            },
+
+            ready: function () {
+                let shadow = this.shadowRoot;
+                let that = this;
+                let loc = location.search;
+                let pid = "";
+                let posit = 0;
+                for (i = 1; i < loc.length; i++) {
+                    if (loc[i] == "u") {
+                        posit = i;
+                    };
+                };
+                for (a = 2; a < posit; a++) {
+                    pid += loc[a];
+                }
+                console.log("Edit Bar ID", pid);
+                this.id = pid;
+                let user = store.get('change-user') || null;
+                if (user == null) {
+                    // alert("Cannot access edit product if not logged in");
+                    // location.replace("http://change.dazzle.website");
+                    shadow.querySelector('#tbar').style.display = "none";
+                }
+                else {
+
+                    let params = {
+                        "action": "searchData",
+                        "index": "change",
+                        "type": "product",
+                        "body": {
+                            "query": {
+                                "match": {
+                                    "id": this.id
+                                }
+                            }
+                        }
+                    }
+                    let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                    Polymer.postData(url, params).then(res => {
+                        console.log("Matters", res.resolve);
+                        if (res.code > 0) {
+                            let o = res.resolve[0]['ownerId'];
+                            if (o != user['_id']) {
+                                // alert("Owner ID" + o + " User ID" + user['_id']);
+                                // location.replace("http://change.dazzle.website");
+                                shadow.querySelector('#tbar').style.display = "none";
+                            }
+                            else {
+                                this.shadowRoot.querySelector('#edi').href = "add-product.html?" + this.id;
+                                console.log("Complete Done");
+                            }
+                        }
+                    })
+                }
+
+
+            },
+
+
+
+            created: function () {
+
+
+            },
+
+            _delete: function () {
+                console.log("DELETE FUNCTION IS WORKING")
+                // GET THE ITEM ID FROM THE URL
+                let loc = location.search;
+                let pid = "";
+                let posit = 0;
+                for (i = 1; i < loc.length; i++) {
+                    if (loc[i] == "u") {
+                        posit = i;
+                    };
+                };
+                for (a = 2; a < posit; a++) {
+                    pid += loc[a];
+                }
+                //STORED PRODUCT ID
+                console.log("ID", pid);
+
+                //CALL DELETE FUNCTION AS IN POSTMAN
+                let that = this;
+                let shadow = this.shadowRoot;
+                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let params = {
+                    "action": "deleteData",
+                    "index": "change",
+                    "type": "product",
+                    "id": pid
+                }
+
+                //SEND THE ABOVE MESSAGE TO POSTMAN
+                Polymer.postData(Url, params).then(res => {
+                    console.log("check:", res.code);
+                    if (res.code > 0) {
+                        alert("STATUS: DELETE SUCCESSFUL");
+                    } else {
+                        alert("STATUS: DELETE UNSUCCESSFUL");
+                    }
+                })
+
+            },
+
+            _copy: function () {
+                console.log("COPY FUNCTION IS WORKING");
+
+                //GENERATE UNIQUE TIME AS PRODUCT ID
+                let a = Date.now();
+                console.log("Timestamp", a);
+
+                // GET THE ITEM ID FROM THE URL
+                let loc = location.search;
+                let pid = "";
+                let posit = 0;
+                for (i = 1; i < loc.length; i++) {
+                    if (loc[i] == "u") {
+                        posit = i;
+                    };
+                };
+                for (a = 2; a < posit; a++) {
+                    pid += loc[a];
+                }
+                //STORED PRODUCT ID
+                console.log("ID", pid);
+
+                //CALL GETDATA FUNCTION AS IN POSTMAN
+                let that = this;
+                let shadow = this.shadowRoot;
+                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let params = {
+                    "action": "getData",
+                    "index": "change",
+                    "type": "product",
+                    "id": pid
+                }
+                //SEND THE ABOVE MESSAGE TO POSTMAN
+                Polymer.postData(Url, params).then(res => {
+                    if (res.code > 0) {
+                        alert("STATUS: COPY SUCCESSFUL");
+                        console.log("RES.RESOLVE", res.resolve);
+                        // store.set("change-res", res.resolve);
+                        location.replace("./add-product.html");
+
+                        // //PUT COPIED DATA BACK TO ADD PRODUCT PAGE
+                        // shadow.querySelector('#vs1').value = res.resolve['categories'];
+                        // // shadow.querySelector('#public').checked = res.resolve['isPublic'];
+                        // shadow.querySelector('#free').checked = res.resolve['isFree'];
+                        // shadow.querySelector('#vs4').value = res.resolve['isNew'];
+                        // shadow.querySelector('#pname').value = res.resolve['productname'];
+                        // shadow.querySelector('#price').value = res.resolve['price'];
+                        // console.log("Matters", res.resolve[0]['price']);
+                        // if (res.resolve[0]['price'] != "0") {
+
+                        //     shadow.querySelector('#free').checked = false;
+                        // }
+                        // shadow.querySelector('#vs2').value = res.resolve['district'];
+                        // shadow.querySelector('#vs3').value = res.resolve['deliveryMethod'];
+                        // shadow.querySelector('#pdes').value = res.resolve['description'];
+                        // shadow.querySelector('#myTags').tags = res.resolve['tags'];
+                        // shadow.querySelector('#trans').value = res.resolve['deliveryDesc'];
+                        // let lenpic = res.resolve[0]['pics'].length;
+                        // for (i3 = 0; i3 < lenpic; i3++) {
+                        //     shadow.querySelector('#div' + i3).style.backgroundImage = 'url(' + res.resolve[0]["pics"][i3] + ')'
+                        // };
+                        // //***USE SAVEDATA IN ADD PRODUCT***//
+
+                        let time = Date.now();
+                        let json = {
+                            "action": "addData",
+                            "index": "change",
+                            "type": "product",
+                            "id": time,
+                            "body": {
+                                "id": time,
+                                "categories": res.resolve.categories,
+                                "createTime": time,
+                                "deliveryDesc": res.resolve.deliveryDesc,
+                                "deliveryMethod": res.resolve.deliveryMethod,
+                                "description": res.resolve.description,
+                                "district": res.resolve.district,
+                                "isFree": res.resolve.isFree,
+                                "isNew": res.resolve.isNew,
+                                "like": res.resolve.like,
+                                "ownerId": res.resolve.ownerId,
+                                "pics": res.resolve.pics,
+                                "price": res.resolve.price,
+                                "productname": res.resolve.productname,
+                                "tags": res.resolve.tags,
+                            }
+
+                        };
+                    } else {
+                        alert("STATUS: COPY UNSUCCESSFUL");
+                    }
+                })
+
+            }
+        });
+    })();
+</script>

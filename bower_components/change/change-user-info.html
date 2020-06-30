@@ -1,0 +1,301 @@
+﻿<link href="../polymer/polymer.html" rel="import">
+<link href="../dz-menu/css/style.html" rel="import" />
+<link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../vaadin-select/vaadin-select.html">
+<link rel="import" href="../vaadin-button/vaadin-button.html">
+<link rel="import" href="../vaadin-text-field/vaadin-email-field.html">
+<link rel="import" href="../vaadin-text-field/vaadin-number-field.html">
+<dom-module id="change-user-info">
+    <template>
+        <style include="icon-styles"></style>
+        <style>
+            #info{
+                padding: 8px;
+            }
+
+            #left {
+                width: 80%;
+                float: left;
+            }
+
+            .inf{
+                line-height: 2.5;
+                color: grey;
+            }
+
+            .infotext{
+                color: black;
+                
+            }
+
+            #right {
+                width: 10%;
+                display: inline-flex;
+                align-content:flex-end;
+            }
+
+            #top { 
+                margin-left: 8%;
+                margin-right: 8%;
+                margin-top: 2%;
+                padding-top: 2%;
+                padding-left: 2%;
+                background-color:white;
+                height: 270px;
+            }
+
+            h5{
+                margin:0px;
+                font-size: 1em;
+                color: black;
+            }
+            
+            #container{
+                float: left;
+                background-color: #FFFBF2;
+                width: 100%;
+                padding-bottom: 30px;
+                margin-bottom: 10px;
+            }
+        </style>
+        <div id="container">
+            <div id="top">
+                <div id="left">
+                    <div id="info">
+                        <h5>賣家資料</h5>
+                        <p class="inf">名稱: <span class="infotext" id="name"></span></p>
+                        <p class="inf">地區: <span class="infotext" id="area"></span></p>
+                        <p class="inf">電郵: <span class="infotext" id="email"></span></p>
+                        <p class="inf">電話: <span class="infotext" id="contact"></span></p>
+                    </div>
+                </div>
+                <div id="right">
+                	<a href="/add-product.html"><vaadin-button id="ap">新增貨品</vaadin-button></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <vaadin-button id="vb" on-click="toggle">編輯</vaadin-button>
+                </div>
+            </div>
+        </div>
+    </template>
+</dom-module>
+<script>
+    (function() {
+        Polymer({
+            is: 'change-user-info',
+            properties: {
+
+            },
+            created: function() {
+
+            },
+            ready: function() {
+                let loc = location.search;
+                let user = store.get('change-user') || null;
+                let shadow = this.shadowRoot;
+                console.log("Path", loc);
+                console.log("Length", loc.length);
+                let id = "";
+                for (var i = 1; i < loc.length; i++) {
+                    console.log("Working");
+                    id += loc[i];
+                }
+                console.log(user, "232323");
+
+                if (user == null || id != user['_id']) {
+                    shadow.querySelector('#right').style.display = 'none';
+                    console.log("not owner");
+                } else {
+                    console.log('is owner');
+                }
+                if (id != "") {
+                    console.log("Entered");
+                    let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                    let params = {
+                        "action": "searchData",
+                        "index": "change",
+                        "type": "_user",
+                        "body": {
+                            "query": {
+                                "match": {
+                                    "_id": id
+                                }
+                            }
+                        }
+                    };
+                    console.log("DYNAMIC", params);
+                    Polymer.postData(url, params).then(res => {
+                        console.log(res);
+                        if (res.code > 0) {
+                            if (res.resolve.length > 0) {
+                                shadow.querySelector('#name').innerText = res.resolve[0]['username'];
+                                shadow.querySelector('#area').innerText = res.resolve[0]['area'];
+                                shadow.querySelector('#email').innerText = res.resolve[0]['email'];
+                                shadow.querySelector('#contact').innerText = res.resolve[0]['phone'];
+                            }
+                        }
+                    })
+                } else {
+                    console.log("Info", user);
+                    if (user != null) {
+                        shadow.querySelector('#name').innerText = user['username'];
+                        shadow.querySelector('#area').innerText = user['area'];
+                        shadow.querySelector('#email').innerText = user['email'];
+                        shadow.querySelector('#contact').innerText = user['phone'];
+                    }
+                }
+            },
+            execute: function() {
+                console.log("Entered");
+                let shadow = this.shadowRoot;
+                customElements.whenDefined('vaadin-select').then(function() {
+                    const district = [{
+                        id: '中西區',
+                        name: '中西區'
+                    }, {
+                        id: '灣仔區',
+                        name: '灣仔區'
+                    }, {
+                        id: '東區',
+                        name: '東區'
+                    }, {
+                        id: '南區',
+                        name: '南區'
+                    }, {
+                        id: '油尖旺區',
+                        name: '油尖旺區'
+                    }, {
+                        id: '深水埗',
+                        name: '深水埗區'
+                    }, {
+                        id: '九龍城區',
+                        name: '九龍城區'
+                    }, {
+                        id: '黃大仙區',
+                        name: '黃大仙區'
+                    }, {
+                        id: '觀塘區',
+                        name: '觀塘區'
+                    }, {
+                        id: '葵青區',
+                        name: '葵青區'
+                    }, {
+                        id: '荃灣區',
+                        name: '荃灣區'
+                    }, {
+                        id: '屯門區',
+                        name: '屯門區'
+                    }, {
+                        id: '元朗區',
+                        name: '元朗區'
+                    }, {
+                        id: '離島區',
+                        name: '離島區'
+                    }, {
+                        id: '北區',
+                        name: '北區'
+                    }, {
+                        id: '大埔區',
+                        name: '大埔區'
+                    }, {
+                        id: '沙田區',
+                        name: '沙田區'
+                    }, {
+                        id: '西貢區',
+                        name: '西貢區'
+                    }];
+                    shadow.querySelector('vaadin-select').renderer = function(root) {
+                        // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
+                        if (root.firstChild) {
+                            return;
+                        }
+                        // Create the <vaadin-list-box>
+                        const listBox = document.createElement('vaadin-list-box');
+                        district.forEach(function(item) {
+                            const vaadinItem = document.createElement('vaadin-item');
+                            vaadinItem.textContent = item.name;
+                            listBox.appendChild(vaadinItem);
+                            vaadinItem.setAttribute('value', item.id);
+                        });
+                        // update the content
+                        root.appendChild(listBox);
+                    };
+                });
+            },
+            toggle: function() {
+                let user = store.get('change-user') || null;
+                let loc = location.search;
+                console.log("Path", loc);
+                console.log("Length", loc.length);
+                let id = "";
+                for (var i = 1; i < loc.length; i++) {
+                    console.log("Working");
+                    id += loc[i];
+                }
+                console.log("ID", id);
+                console.log("UserID", user['_id'])
+                if (id == "") {
+                    id = user['_id'];
+                }
+                if (id != user['_id']) {
+                    alert('Cannot edit this user. Not your account!');
+                } else {
+                    let shadow = this.shadowRoot;
+                    let text = shadow.querySelector('#vb');
+                    if (text.innerHTML == "編輯") {
+                        let name = shadow.querySelector('#name').innerText;
+                        let email = shadow.querySelector('#email').innerText;
+                        let num = shadow.querySelector('#contact').innerText;
+                        let area = shadow.querySelector('#area').innerText;
+                        console.log("Number", num);
+                        shadow.querySelector('#name').innerHTML = "<vaadin-text-field id='name1' value='" + name + "'></vaadin-text-field>";
+                        shadow.querySelector('#area').innerHTML = "<vaadin-select id='area1' value='" + area + "' label=''></vaadin-select>";
+                        this.execute();
+                        shadow.querySelector('#email').innerHTML = "<vaadin-email-field id='email1' value='" + email + "'disabled></vaadin-text-field>";
+                        shadow.querySelector('#contact').innerHTML = "<vaadin-number-field id='phone1' value='" + num + "'></vaadin-number-field>";
+                        text.innerHTML = "提交";
+                    } else {
+                        if (user != null) {
+                            let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                            let name = shadow.querySelector('#name1').value;
+                            let area = shadow.querySelector('#area1').value;
+                            let email = shadow.querySelector('#email1').value;
+                            let num = shadow.querySelector('#phone1').value;
+                            console.log("User", user);
+                            let params = {
+                                "action": "addData",
+                                "index": "change",
+                                "type": "_user",
+                                "id": user['_id'],
+                                "body": {
+                                    "email": email,
+                                    "username": name,
+                                    "phone": num,
+                                    "area": area
+                                }
+                            };
+                            Polymer.postData(url, params).then(res => {
+                                console.log(res);
+                                console.log(params);
+                                if (res.code > 0) {
+                                    shadow.querySelector('#name').innerHTML = name;
+                                    shadow.querySelector('#area').innerHTML = area;
+                                    shadow.querySelector('#email').innerHTML = email;
+                                    shadow.querySelector('#contact').innerHTML = num;
+                                    text.innerHTML = "編輯";
+                                    user['email'] = email;
+                                    user['area'] = area;
+                                    user['username'] = name;
+                                    user['phone'] = num;
+                                    store.set("change-user", user);
+                                }
+                            })
+
+                        } else {
+                            alert('Please login first');
+                        }
+                    }
+                }
+
+            },
+        });
+    })();
+</script>

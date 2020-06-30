@@ -1,10 +1,46 @@
 <link rel="import" href="../polymer/polymer.html">
-
+<link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
+<link rel="import" href="change-header-info.html">
 <dom-module id="change-header">
     <template>
         <style>
+			#gd{
+				position: absolute;
+                left: 31px;
+                top: 73px;
+			}
+
+            .hr1 {
+                border-top: #EFEFEF 1px;
+                margin-block-start: 0.1em;
+                margin-block-end: 0.1em;
+            }
+
+            .header {
+                height: 122px;
+            }
+
             section.topWrap {
+                margin-left: 10px;
+                margin-right: 10px;
+            }
+
+            section.topWrap2 {
                 border-bottom: #EFEFEF solid 1px;
+            }
+
+            section.menu {
+                border-bottom: #EFEFEF solid 1px;
+            }
+
+            button {
+                cursor: pointer;
+            }
+
+            .topWrap button {
+                background: none;
+                border: none;
+                height: 75px;
             }
 
             .index-grid {
@@ -13,7 +49,8 @@
                 display: grid;
                 grid-row-gap: 20px;
                 grid-column-gap: 15px;
-                grid-template-columns: 3fr 5fr 2fr 2fr;
+                grid-template-columns: 2fr 6fr 1fr 2fr;
+                height: 80px;
             }
 
             .input-group1 {
@@ -21,190 +58,404 @@
                 display: block;
                 border-collapse: collapse;
                 background: #efefef;
-                height: 40px;
+                height: 41px;
+                width: 104%;
                 margin-top: 16px;
+                border-style: none;
+                font-size: 15px;
+                padding: 0;
             }
 
-            .menu {
+            #input {
+                height: 80%;
                 width: 100%;
-                height: auto;
+                background: #efefef;
+            }
+
+
+            img.logo {
+                height: 74px;
+                width: auto;
+                float: left;
+                margin-left: 20px;
+            }
+
+            img.logo-md {
+                height: 74px;
+                width: auto;
+                padding-left: 120px;
+            }
+
+            img.logo1 {
+                height: 74px;
+                width: auto;
+            }
+
+            /*Configurações Globais*/
+            html,
+            body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            a {
+                text-decoration: none;
+            }
+
+            li {
+                list-style: none;
+            }
+
+            /*Início das configurações da header*/
+            header {
+                width: 100%;
+                height: 50px;
+                line-height: 50px;
+                text-align: center;
+                font-family: sans-serif;
+                background-color: white;
+            }
+
+            .brand {
+                width: auto;
+                height: 100%;
+                float: left;
+                margin: 0 0 0 5%;
+            }
+
+            /*Início das configurações da Navigation*/
+            .menu {
+                width: 60%;
+                height: 100%;
+                float: right;
             }
 
             .menu ul {
-                display: block;
-                max-height: 0;
-                overflow: hidden;
-                -webkit-transition: max-height 0.3s;
-                -moz-transition: max-height 0.3s;
-                -ms-transition: max-height 0.3s;
-                -o-transition: max-height 0.3s;
-                transition: max-height 0.3s;
+                width: 100%;
+                height: inherit;
+                margin: 0;
+                padding: 0;
+                display: -webkit-box;
+                /* OLD - iOS 6-, Safari 3.1-6 */
+                display: -moz-box;
+                /* OLD - Firefox 19- (buggy but mostly works) */
+                display: -ms-flexbox;
+                /* TWEENER - IE 10 */
+                display: -webkit-flex;
+                /* NEW - Chrome */
+                display: flex;
+                /* NEW, Spec - Opera 12.1, Firefox 20+ */
             }
 
             .menu ul a {
-                text-align: left;
-                width: 100%;
-                height: 50px;
-                background-color: #F0846C;
-                padding: 10px 0px 10px 5%;
-                color: white;
+                width: 20%;
+                height: inherit;
+                color: #222;
+                display: inline-block;
+            }
+
+            .menu ul a:hover {
+                background-color: #222;
+                color: #fff;
+            }
+
+            #menuToggle {
+                display: none;
             }
 
             .menu-icon {
-                width: 100px;
-                height: inherit;
-                display: block;
+                display: none;
+            }
+
+            .s {
+                height: 41px;
+                margin-top: 16px;
+                border-style: none;
+                background: #efefef;
+                font-size: 15px;
+                width: 65px;
+            }
+
+            /* test */
+            /* .box {
+                height: 40px;
+                border-style: none;
+                font-size: 15px;
+                margin-top: 16px;
+                background-color: #efefef;   
+            } */
+
+            .categories {
+                display: flex;
+                width: 65%;
+                padding-left: 18%;
+                padding-right: 15%;
+                margin-left: 10px;
+                margin-right: 10px;
+            }
+
+            .categories li {
+                width: 100%;
+                display: flex;
+            }
+
+            .categories a {
+                width: 15%;
+            }
+
+            .dropdown {
+                position: relative;
+                display: inline-block;
+            }
+
+            .dropdown-content {
+                display: none;
                 position: absolute;
-                top: 0;
-                right: 0;
-                line-height: 60px;
+                background-color: white;
+                min-width: 200px;
+                /* min-height: 200px; */
+                box-shadow: 0px 8px 16px 0px rgba(114, 109, 109, 0.2);
+                padding: 12px 16px;
+                z-index: 1;
+                margin-top: 40px;
+                /* left: 0px;
+                right: 0px; */
             }
 
-            #menuToggle:checked~ul {
-                max-height: 350px;
+            .dropdown-content0 {
+                display: none;
+                position: absolute;
+                background-color: white;
+                min-width: 200px;
+                /* min-height: 200px; */
+                box-shadow: 0px 8px 16px 0px rgba(114, 109, 109, 0.2);
+                padding: 12px 16px;
+                z-index: 1;
+                margin-top: 40px;
+                /* left: 0px;
+                right: 0px; */
             }
 
-            .menu-icon i {
-                font-size: 1.7em;
+            .dropdown:hover .dropdown-content {
+                display: block;
             }
 
-            @media (min-width: 992px) {
-                .index-grid-md {
-                    width: 100%;
-                    margin: 0 auto;
-                    display: grid;
-                    grid-row-gap: 20px;
-                    grid-column-gap: 15px;
-                    grid-template-columns: 3fr 5fr 2fr 2fr;
-                }
+            .dropdown:hover .dropdown-content0 {
+                display: block;
+            }
 
-                .menu {
-                    width: 788px;
-                    height: 100%;
-                    margin: 0 auto;
-                }
+            /* ul {
+                border-bottom: #EFEFEF solid 1px;
+            } */
 
-                .menu li {
-                    padding: 5px 10px;
-                }
+            .disappear {
+                display: flex;
+            }
 
-                .menu ul {
-                    width: 100%;
-                    height: inherit;
-                    margin: 0;
-                    padding: 0;
-                    display: -webkit-box;
-                    /* OLD - iOS 6-, Safari 3.1-6 */
-                    display: -moz-box;
-                    /* OLD - Firefox 19- (buggy but mostly works) */
-                    display: -ms-flexbox;
-                    /* TWEENER - IE 10 */
-                    display: -webkit-flex;
-                    /* NEW - Chrome */
-                    display: flex;
-                    /* NEW, Spec - Opera 12.1, Firefox 20+ */
-                }
+            .custom-select {
+                display: flex;
+                width: 65px;
+            }
 
-                .menu ul a {
-                    width: 20%;
-                    height: inherit;
-                    color: #222;
-                    display: inline-block;
-                }
+            .arrow {
+                width: 25px;
+            }
 
-                .menu ul a:hover {
-                    background-color: #F0846C;
-                    color: #fff;
-                }
+            .ar {
+                margin-top: 5px;
+            }
 
-                #menuToggle {
-                    display: none;
-                }
+            .l {
+                width: 1px;
+                height: 25px;
+                padding-right: 1px;
+                background-color: #c5c5c6;
+                border-top: 8px solid #efefef;
+                border-bottom: 8px solid #efefef;
+                margin-top: 16px;
 
-                .menu-icon {
+            }
+
+            @media (max-width: 992px) {
+                div.disappear {
                     display: none;
                 }
             }
         </style>
-        <section>
-            <div></div>
-            <section class="topWrap">
-                <div class="index-grid index-grid-md">
-                    <div>
-                        <a><img src="img/logo/Change.png" class="logo"></a>
-                    </div>
-                    <div>
-                        <div class="input-group1">
 
-
+        <header class="header">
+        	<vaadin-dialog></vaadin-dialog>
+            <section class="top" style="height: 65px;">
+                <div class="topLine"></div>
+                <section class="topWrap ">
+                    <div class="index-grid index-grid-md">
+                        <div>
+                            <a href="http://change.dazzle.website/"><img src="http://change.dazzle.website/img/logo/Change.png" class="logo"></a>
                         </div>
+
+                        <div class="disappear">
+                            <div class="custom-select">
+                                <select class="s">
+                                    <option value="0">物品</option>
+                                    <option value="1">用戶</option>
+                                </select>
+                                <div class="l"></div>
+                            </div>
+                            <input class="input-group1" type="text" placeholder="">
+                            <button style="margin-top: 16px; height: 41px; background: #efefef;" on-click="searchlist">
+                                <svg class="search" viewBox="0 0 24 24" style=" width: 25px; height: 15px;">
+                                    <title>Search Icon</title>
+                                    <path fill="#57585a"
+                                        d="M15.618 17.032a9 9 0 1 1 1.414-1.414l5.675 5.675a1 1 0 0 1-1.414 1.414l-5.675-5.675zm-.701-2.05a1.017 1.017 0 0 1 .065-.065 7 7 0 1 0-.066.066z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div class="disappear" style="width: 100px;">
+                            <a href="http://change.dazzle.website/"><button style="width: 100px;
+                                background-color: #F0846C;
+                                color: white;
+                                border-radius: 2px;
+                                height: 40px;
+                                margin-top: 16px;">收費區
+                            </button></a>
+                        </div>
+                        <change-user-panel>
+                            <div><button>/ 註冊</button><button>/ 登入</button></div>
+                        </change-user-panel>
                     </div>
-                    <div>
-
-                        <button style="width: 100px;
-background-color: #F0846C;
-color: white;
-border: none;
-border-radius: 3px;
-height: 40px;
-margin-top: 16px;">收费區
-                        </button>
-
-                    </div>
-
-                    <div><button>/ 註冊</button><button>/ 登入</button></div>
-                </div>
-
+                </section>
             </section>
-        </section>
-        <section class="menu">
-
-            <nav class="menu">
-                <input type="checkbox" id="menuToggle">
-                <label for="menuToggle" class="menu-icon"><i class="fa fa-bars"></i></label>
-                <ul>
-                    <a href="#">
-                        <li>愛多啲</li>
-                    </a>
-                    <a href="#">
-                        <li>識多啲</li>
-                    </a>
-                    <a href="#">
-                        <li>看多啲</li>
-                    </a>
-                    <a href="#">
-                        <li>靚多啲</li>
-                    </a>
-                    <a href="#">
-                        <li>知多啲</li>
-                    </a>
-
-                    <a href="#">
-                        <li>知多啲</li>
-                    </a>
-
-                    <a href="#">
-                        <li>知多啲</li>
-                    </a>
-                    <a href="#">
-                        <li>知多啲</li>
-                    </a>
-                </ul>
-            </nav>
-        </section>
+            <hr class="hr1">
+            <!-- <vaadin-button on-click="_editMenu" id="gd"></vaadin-button> -->
+            <div class="categories">
+            	
+            </div>
+            <hr class="hr1">
+        </header>
     </template>
 </dom-module>
 <script>
     (function() {
         Polymer({
             is: 'change-header',
-            properties: {},
+            properties: {
+                len: {
+                    "type": Number
+                }
+            },
             created: function() {
+                console.log("Header Created");
+            },
+            ready: function() {
+                let that = this;
+                let shadow = this.shadowRoot;
+                let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let params = {
+                    "action": "searchData",
+                    "index": "change",
+                    "type": "categories",
+                    "body": {
+                        "sort": [{
+                            "_id": {
+                                "order": "asc"
+                            }
+                        }],
+                        "query": {
+                            "match": {
+                                "parent": "0"
+                            }
+                        }
+                    }
 
+                }
+
+                Polymer.postData(url, params).then(res => {
+                    console.log("Result", res);
+                    if (res.code > 0) {
+                        //console.log("Name", res.resolve[0]['name']);
+                        //let a = res.resolve[0]['name'];
+                        this.len = res.resolve.length;
+                        for (i = 0; i < res.resolve.length; i++) {
+                            let name = res.resolve[i]['name'];
+
+                            console.log("Name", name);
+                            shadow.querySelector('.categories').innerHTML = shadow.querySelector('.categories').innerHTML + '<a href="#"><li class="dropdown" style="color: black;">' + name + '<div class="ar"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="arrow"><path fill="#2C2C2D" d="M10.146 7.146a.5.5 0 0 1 .708.708l-2.5 2.5a.5.5 0 0 1-.708 0l-2.5-2.5a.5.5 0 1 1 .708-.708L8 9.293l2.146-2.147z"></path></svg></div>' + '<div class="dropdown-content"><ul class="submen" id="item' + i + '"></ul></div>' + '</li></a>';
+                        }
+                        shadow.querySelector('.categories').innerHTML = shadow.querySelector('.categories').innerHTML + '<a href="#"><li class="dropdown" style="color: black;">' + '關於我們' + '<div class="ar"></div><p style="display: flex;"></p></li></a>';
+                        let e = store.get('editMode') || "normal";
+                        if (e != "normal") {
+                            console.log("Inside Edit Mode");
+                            shadow.querySelector('#gd').innerText = 'Edit';
+
+                        } else {
+                            console.log("Not Inside Edit Mode");
+
+                        }
+                        console.log("success");
+                    } else {
+                        alert("fail")
+                    }
+                    this._makeDrop();
+                });
 
             },
-            ready: function() {},
 
+            _editMenu: function() {
+                console.log("Inside Edit Menu");
+                let shadow = this.shadowRoot;
+                let dialog = shadow.querySelector('vaadin-dialog');
+                Polymer.popup(dialog, "change", "change-header-info", "85%", "85%");
+                console.log("Executed");
+            },
+
+            searchlist: function() {
+                location.href = "/list-product.html";
+            },
+
+            _makeDrop: function() {
+                let shadow = this.shadowRoot;
+                let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                for (var i = 1; i <= this.len; i++) {
+                    let params = {
+                        "action": "searchData",
+                        "index": "change",
+                        "type": "categories",
+                        "body": {
+                            "sort": [{
+                                "_id": {
+                                    "order": "asc"
+                                }
+                            }],
+                            "query": {
+                                "match": {
+                                    "parent": i
+                                }
+                            }
+                        }
+                    }
+
+                    Polymer.postData(url, params).then(res => {
+                        console.log("Parameter", params);
+                        console.log("Result", res);
+                        if (res.code > 0) {
+                            let x = "";
+                            let p = 0;
+                            for (var w = 0; w < res.resolve.length; w++) {
+                                x += '<li>' + res.resolve[w]['name'] + '</li>';
+                                console.log("Test Edit", x);
+                                p = res.resolve[w]['parent'];
+                            }
+                            p--;
+                            console.log("Looking for #item" + p);
+                            shadow.querySelector('#item' + p).innerHTML = x;
+                        }
+                    });
+                }
+            }
 
 
         });

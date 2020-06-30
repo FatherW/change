@@ -1,199 +1,60 @@
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="change-like.html">
+<link rel="import" href="change-like2.html">
+<link rel="import" href="change-things.html">
+
 
 
 <dom-module id="change-in-item">
     <template>
         <style>
-
-            .container{
-                display: grid;
-                grid-template-columns: 22% 22% 22% 22%;
-                grid-template-rows: 31% 31% 31%;
-                padding:3%;
-                background-color: white;
-                align-items: center;
+            
+            *{
+                font-family: sans-serif,微軟正黑體;
             }
-
-            .itemsall{
-                padding:3px;
-                width: 150px;
-                height:150px;
-                background-repeat: no-repeat;
-
-            }
-            :host{
-                border:0.5px solid #808080;
-                padding:10px;
-            }
-
-            .profile-finger {
-				width: 100%;
-			}
-
-            change-like{
-                width: 15px;
-                height: 15px;
-            }
-
-			.profile-grid {
-				width: 84%;
-				padding-left: 8%;
-				padding-right: 8%;
-				display: grid;
-				grid-row-gap: 20px;
-				grid-column-gap: 15px;
-				grid-template-columns: 100%;
-				grid-template-rows: 1fr 2fr 4fr;
-				background-color: cornsilk;
-				padding-top: 20px;
-				padding-bottom: 20px;
-			}
-
-			.short-profile-grid {
-				display: grid;
-				grid-column-gap: 15px;
-				grid-template-columns: 59% 12% 12% 12%;
-				background-color: white;
-				border: 2px solid gainsboro;
-				padding: 30px;
-				padding-left: 4%;
-				padding-right: 4%;
-			}
-
-			.detail-profile-grid {
-				display: grid;
-				grid-row-gap: 10px;
-				grid-template-rows: 2fr 1fr 1fr 1fr 1fr;
-				background-color: white;
-				border: 2px solid gainsboro;
-				padding: 20px;
-				padding-left: 4%;
-				padding-right: 4%;
-			}
-
-			.things-profile {
-				background-color: white;
-				border: 2px solid gainsboro;
-			}
-
-
-            #a1,
-            #a2 {
-                display: inline-block;
-                font-size: 15px;
-            }
-
-            #a3 {
-                float: right;
-            }
-
-            .button {
-                margin-left: 4%;
-                margin-right: 4%;
-                margin-top: 41px;
-            }
-            .buttonGray {
-				width: 150px;
-				background-color: gray;
-				color: black;
-				border-radius: 2px;
-				height: 30px;
-				font-size: 16px;
-				margin-right: 10px;
-			}
-
-			#left1 {
-				float: left;
-			}
-
-			#left2 {
-				float: left;
-			}
-
-			#left3 {
-				float: left;
-			}
-
-			#right1 {
-				float: right;
-			}
-
-			#right2 {
-				float: right;
-				padding-top: 4px;
-			}
-
-			#right3 {
-				float: right;
-			}
-
-			#right4 {
-				float: right;
-				padding-top: 4px;
-			}
-
-
             .things-grid {
 				display: grid;
-                width: 80%;
-                grid-row-gap: 15px;
-				padding-left: 3%;
-				padding-right: 4%;
-				padding-top: 3%;
-				padding-bottom:3% ;
-				grid-column-gap: 6px;
-				grid-template-columns: repeat(4, 1fr);
-
-			}
-            change-item {
-                width: 100%;
-                
-            }
-
-            svg.title_tags {
-                width: 100%;
-                height: 30px;
-            }
-
-            svg.s_title_tags {
-                margin: 5px;
-                height: 16px;
-                width: 40px;
-                border-radius: 2px;
-
-            }
-
-            change-things {
-                border: 1px solid gainsboro;
-                padding: 12px;
+                width: 97%;
                 height:100%;
-                width:85%;
+                grid-row-gap: 15px;
+				padding:50px;
+				grid-column-gap: 50px;
+                grid-row-gap: 40px;
+				grid-template-columns: repeat(4, 1fr);
+                background-color: white;
+                /* -webkit-box-shadow: 0px 0px 11px 1px rgba(50,49,56,1);
+                -moz-box-shadow: 0px 0px 11px 1px rgba(50,49,56,1);
+                box-shadow: 0px 0px 11px 1px rgba(50,49,56,1); */
+            }
+      
+
+            #morebutton:hover{
+                cursor: pointer;
+                color: gray;
+                text-decoration: underline;
             }
 
-            .img {
-                width: 98%;
-                height: 250px;
-                background-size: contain;
-                background-position:center center;
-                /* background-repeat: no-repeat; */
-                margin: 1%;
-                background-image: url(http://change.dazzle.website/img/channel_banner/1.jpg);
-                background-repeat:no-repeat;
-            }
-
-            .circle {
-                margin: 5px;
-                height: 20px;
-                width: 20px;
-
+            #morebutton{
+                align-items: center;
+                border: 1px;
+                width: 200px;
+                height: 50px;
+                font-size: 25px;
 
             }
+
+            .botbutton{
+                text-align: center;
+            }
+        
+
         </style>
 
-<div class="things-grid">
 
-</div>
+
+<!-- <div class="initemtitle" id="viewingcat">你正在瀏覽的分類  </div> -->
+<div class="things-grid" id="blank"></div>
+<div class="botbutton"><vaadin-button id="morebutton" on-click="_showmore">更多</vaadin-button></div>
+
     </template>
 
 </dom-module>
@@ -208,13 +69,246 @@
             properties: {
                 "data": {
                     "type": Object
+                },
+
+                "allquery": {
+                    "type": Array
+
+                },
+
+                "countitem": {
+                    "type": Number
+                },
+                "storeviewcate": {
+                    "type": Array
+                },
+
+                "storemust": {
+                    "type": Array
+                },
+                "storeshould": {
+                    "type": Array
+                },
+                "cateIdarray": {
+                    "type": Array
+                },
+                "allIdarray": {
+                    "type": Array
                 }
+
+
+
+
+
+
+
             },
 
             created: function() {
 
             },
+            // search:function(cats,tags,district,priceStart,priceEnd){
+            search(cats,tags,district,priceStart,priceEnd){
+
+                let that = this;
+                let shadow = this.shadowRoot;
+                let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                //////cate Id
+                // let tagsQuery = ['平價','沒有'];
+                let Query =[{'match_all':{}}];
+                if (cats.length>0){
+                    Query.push({
+                        'terms':{
+                            'categories':cats
+                        }
+                    });
+                }
+                if (tags.length>0){
+                    tags.forEach(item=>{
+                        Query.push({
+                            'term': {'tags':item}
+                        });
+                    });
+                }
+                
+                let paramcate = {
+                    "action": "searchData",
+                    "index": "change",
+                    "type": "product",
+                    "body": {
+                        "sort": [{
+                            "createTime": {
+                                "order": "desc"
+                            }
+                        }],
+                        "query": {
+                            "bool": {
+                                "must" : Query
+                            }
+                         }
+                    }
+                };
+                console.log('Query',Query,paramcate);
+
+                Polymer.postData(url, paramcate).then(res => {
+                        console.log('Result',res);
+                
+                });
+                
+            },
+            searchfunc: function() {
+                let that = this;
+                let shadow = this.shadowRoot;
+                let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                //////cate Id
+                let paramcate = {
+                    "action": "searchData",
+                    "index": "change",
+                    "type": "product",
+                    "body": {
+                        "sort": [{
+                            "createTime": {
+                                "order": "desc"
+                            }
+                        }],
+                        "query": {
+                            "bool": {
+                                "should": this.storeshould
+                            }
+                        }
+                    }
+                };
+
+                Polymer.postData(url, paramcate).then(res => {
+                    if (res.code > 0) {
+                        this.cateIdarray = [];
+                        for (a = 0; a < res.resolve.length; a++) {
+                            this.cateIdarray.push(res.resolve[a]['_id'])
+                        }
+                        ///////sear all Id
+                        let paramallId = {
+                            "action": "searchData",
+                            "index": "change",
+                            "type": "product",
+                            "body": {
+                                "sort": [{
+                                    "createTime": {
+                                        "order": "desc"
+                                    }
+                                }],
+                                "query": {
+                                    "bool": {
+                                        "must": this.storemust
+                                    }
+                                }
+                            }
+                        };
+                        Polymer.postData(url, paramallId).then(res => {
+                            if (res.code > 0) {
+                                this.allIdarray = [];
+                                for (ddb = 0; ddb < res.resolve.length; ddb++) {
+                                    this.allIdarray.push(res.resolve[ddb]['_id'])
+                                }
+                                console.log("the cate array is,:", this.cateIdarray);
+                                console.log("the all id array is ,:", this.allIdarray);
+
+                                var storeitemsId = [];
+
+
+                                for (q = 0; q < this.cateIdarray.length; q++) {
+                                    for (w = 0; w < this.allIdarray.length; w++) {
+
+                                        if (this.cateIdarray[q] == this.allIdarray[w]) {
+                                            storeitemsId.push(this.cateIdarray[q])
+                                        }
+                                    }
+                                }
+                                this.allquery = storeitemsId;
+                                this._querySelect();
+
+
+                            }
+                        })
+                    } else {
+                        console.log("error in store categories id");
+                    }
+
+                });
+
+
+
+
+
+
+            },
+
+
             ready: function() {
+                // console.log("qqqqqq", this.storeviewcate);
+                let that = this;
+                let shadow = this.shadowRoot;
+                console.log("the button chinese is: ", this.storeviewcate);
+
+
+                this.countitem = 0;
+                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let param = {
+                    "action": "searchData",
+                    "index": "change",
+                    "type": "product",
+                    "body": {
+                        "sort": [{
+                            "createTime": {
+                                "order": "desc"
+                            }
+                        }],
+                        "query": {
+                            "match_all": {}
+                        }
+
+                    }
+                };
+
+
+                Polymer.postData(Url, param).then(res => {
+                    if (res.code > 0) {
+                        let prods = res.resolve;
+
+                        var storeId = [];
+                        let check8 = 10;
+                        console.log("prodlength is:", prods.length, "countitem is:", this.countitem);
+                        if (prods.length - this.countitem < 10) {
+                            check8 = prods.length - this.countitem;
+                        }
+                        console.log("Result Query", prods);
+                        for (var i = 0; i < check8; i++) {
+                            let theidis = prods[i]['_id'];
+
+                            storeId.push(theidis)
+                        };
+
+
+                        if (prods.length - this.countitem < 10) {
+                            check8 = prods.length - this.countitem;
+                        }
+                        for (var i = 0; i < check8; i++) {
+                            let current = shadow.querySelector('.things-grid').innerHTML;
+                            current = current +
+                                "<change-things id=\"" + storeId[i] + "\"></change-things>";
+
+                            shadow.querySelector(".things-grid").innerHTML = current;
+                        }
+                        this.countitem = 10;
+
+                    } else {
+                        alert("error");
+                    }
+
+                })
+
+            },
+
+            _showmore: function() {
                 let that = this;
                 let shadow = this.shadowRoot;
 
@@ -224,79 +318,84 @@
                     "index": "change",
                     "type": "product",
                     "body": {
+                        "sort": [{
+                            "createTime": {
+                                "order": "desc"
+                            }
+                        }],
                         "query": {
                             "match_all": {}
                         }
 
                     }
                 };
+
                 Polymer.postData(Url, param).then(res => {
                     if (res.code > 0) {
-                        console.log("Result", res);
                         let prods = res.resolve;
-                        console.log("Price", prods[1]['price']);
 
-                        let current = shadow.querySelector('.things-grid').innerHTML;
+                        var storeId = [];
+                        let check8 = 8;
+                        if (prods.length - this.countitem < 8) {
+                            check8 = prods.length - this.countitem;
+                        }
+                        for (var i = this.countitem; i < this.countitem + check8; i++) {
+                            let theidis = prods[i]['_id'];
 
-                        for (var i = 0; i < prods.length; i++) {
-                            current = current + "<change-things> <div><div id=\"a1\"><img id=\"pics" + i + " src=\"http://change.dazzle.website/img/user_profile.png\"></div><div id=\"a2\"><div class=\"name\">1234</div><div class=\"time\">兩分鐘前</div></div><div id=\"a3\"><svg class=\"circle\"><circle cx=\"10\" cy=\"10\" r=\"9\" stroke=\"orange\" stroke-width=\"2\" fill=\"orange\" /></svg></div></div><div class=\"img\"></div><svg class=\"s_title_tags\"><polygon points=\"0,0 40,0 30,16 0,16\" style=\"fill:#6AA64F;stroke:#6AA64F;stroke-width:0\"></polygon><text x=\"3\" y=\"12\" fill=\"white\" id=\"isNew" + i + " style=\"font-size:10px;\">全新</text></svg><h3 id=\"productname" + i + ">頸鏈 的士</h3><div id=\"price\" class=\"price" + i + ">140</div><change-item-tag><change-tag class=\"small\" id=\"description" + i + ">车舆地产</change-tag><div class=\"clear\"></div></change-item-tag><change-like id=\"islike" + i + "></change-like><div class=\"clear\"></div></change-things>";
+                            storeId.push(theidis)
 
-
-                            let a = prods[i]['price'];
-                            console.log("A", a);
-                            let b = prods[i]['pics'];
-                            let c = prods[i]['productname'];
-
-                            let e = prods[i]['isNew'];
-                            let f = prods[i]['islike'];
+                        };
 
 
-                            let desci = prods[i]['description'];
+                        if (prods.length - this.countitem < 8) {
+                            check8 = prods.length - this.countitem;
+                        }
+                        for (var i = 0; i < check8; i++) {
+                            let current = shadow.querySelector('.things-grid').innerHTML;
+                            current = current +
+                                "<change-things id=\"" + storeId[i] + "\"></change-things>";
 
                             shadow.querySelector(".things-grid").innerHTML = current;
 
-
-
-
-                            shadow.querySelector('#productname' + i).id = "#productname" + i;
-                            shadow.querySelector('#productname' + i).innerHTML = c;
-
-                            shadow.querySelector('#price' + i).id = "#price" + i;
-                            shadow.querySelector('#price' + i).innerHTML = "HK$" + a;
-
-                            shadow.querySelector('#description' + i).id = "description" + i;
-                            shadow.querySelector('#description' + i).innerHTML = desci;
-
-                            shadow.querySelector('#isNew' + i).id = "isNew" + i;
-                            shadow.querySelector('#isNew' + i).innerHTML = e;
-
-                            shadow.querySelector('#islike' + i).id = "islike" + i;
-                            shadow.querySelector('#islike' + i).innerHTML = f;
-
-                            shadow.querySelector('#pics').id = "#pics" + i;
-                            shadow.querySelector('#pics' + i).src = b;
-
-
-                            if (i == 1) {
-                                console.log("Price,new=", prods[i]['price']);
-
-                            }
-
-
-
                         }
-
+                        this.countitem += 8;
 
                     } else {
                         alert("error");
                     }
+
                 })
+
+
+            },
+
+
+            _querySelect: function() {
+                console.log('inside _querySelect')
+                let that = this;
+                let shadow = this.shadowRoot;
+
+                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+
+                let current2 = "";
+                for (i = 0; i < this.allquery.length; i++) {
+                    current2 = current2 +
+                        "<change-things id=\"" + this.allquery[i] + "\"></change-things>";
+
+                }
+                console.log("current")
+                shadow.querySelector(".things-grid").innerHTML = current2;
+
             },
 
 
 
 
+
+
         });
+
+
 
     })();
 </script>

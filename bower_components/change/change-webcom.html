@@ -1,0 +1,228 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="change-webcom">
+
+
+    <template>
+
+        <style>
+            #pic {
+                position: absolute;
+                top: 7px;
+                left: 6px;
+                width: 50px;
+                height: 51px;
+            }
+
+
+            #heading2 {
+                position: absolute;
+                top: -59px;
+                left: 33px;
+                color: black;
+                padding: 40px;
+                text-align: center;
+            }
+
+            #heading4 {
+                color: black;
+                text-align: center;
+                position: absolute;
+                
+                top: 14px;
+                left: 71px;
+            }
+
+            #para {
+                color: black;
+                font-size: 1rem;
+                padding: 15px;
+                top: 63px;
+                left: 8px;
+                color: black;
+                position: absolute;
+            }
+
+            #review {
+                position: absolute;
+                top: 135px;
+                left: 14px;
+                width: 371px;
+            }
+
+            #click-button {
+                background-color: #4CAF50;
+                border: none;
+                color: white;
+                padding: 15px 32px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                cursor: pointer;
+                width: 371px;
+                position: absolute;
+
+                top: 198px;
+                left: 13px;
+            }
+  
+        </style>
+        <div style="float: right;"><button id="back">[返回]</button></div>
+        <img id="pic" src="http://change.dazzle.website/img/icon/profile-03.png" alt="img">
+        <h2 id="heading2">...</h2>
+        <h4 id="heading4">評分/人數:</h4>
+        <p id="para">Loading....</p>
+        <button id="click-button" on-click="_postRequest">送出</button>
+        <vaadin-text-field id="review" placeholder="留言給賣家"></vaadin-text-field>
+
+    </template>
+
+</dom-module>
+
+<script>
+    (function() {
+        Polymer({
+            is: 'change-webcom',
+            properties: {
+
+            },
+            created: function() {
+
+
+
+            },
+            //for adding link to the user name connecting wth the databse
+            ready: function() {
+                let that = this;
+                let loc = location.search;
+                let pid = "";
+                let uid = "";
+                let posit = 0;
+                for (i = 1; i < loc.length; i++) {
+                    if (loc[i] == "u") {
+                        posit = i;
+                    };
+                };
+                for (a = 2; a < posit; a++) {
+                    pid += loc[a];
+                }
+                for (b = posit + 1; b < loc.length; b++) {
+                    uid += loc[b];
+                }
+
+
+
+                let shadow = this.shadowRoot;
+                let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let param = {
+                    "action": "getData",
+                    "index": "change",
+                    "type": "_user",
+                    "id": uid
+                };
+                Polymer.postData(url, param).then(res => {
+                    if (res.code > 0) {
+                        if (res.resolve['head'] != "") {
+                            shadow.querySelector('#pic').src = res.resolve['heaed'];
+                        }
+                        shadow.querySelector('#heading2').innerHTML = res.resolve['username'];
+                        shadow.querySelector('#heading4').innerHTML += res.resolve['score'];
+                    }
+                })
+
+
+                shadow.querySelector('#review').addEventListener("keypress", function(e) {
+                    var key = e.which || e.keyCode || 0;
+                    if (key === 13) {
+                        that._postRequest();
+                    }
+
+                });
+
+                let cfmDialog = shadow.querySelector('#back');
+                cfmDialog.addEventListener("click", (e) => {
+                    console.log("close button is working");
+
+                    // closing pop-up
+                    var event = new CustomEvent('close-item-dialog', {});
+                    document.dispatchEvent(event);
+
+                });
+
+
+
+
+            },
+
+            _postRequest: function() {
+                let shadow = this.shadowRoot;
+                let loc = location.search;
+                let pid = "";
+                let posit = 0;
+                for (i = 1; i < loc.length; i++) {
+                    if (loc[i] == "u") {
+                        posit = i;
+                    };
+                };
+                for (a = 1; a < posit; a++) {
+                    pid += temp[a];
+                }
+                let msg = shadow.querySelector('#review').value;
+                let id = Date.now();
+                let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let paramname = {
+                    "action": "searchData",
+                    "index": "change",
+                    "type": "product",
+                    "_source": "productname",
+                    "body": {
+                        "query": {
+                            "match": {
+                                "id": pid
+                            }
+                        }
+                    }
+                };
+                Polymer.postData(url, paramname).then(res => {
+                    if (res.code > 0) {
+                        var productname = res.resolve[0]['productname']
+                    } else {
+                        alert("沒有產品")
+                    }
+                });
+
+                let buyer = store.get("change-user");
+                console.log("BUYERID", buyer);
+                let buyerId = buyer['_id'];
+                let ab = buyerId;
+                let cd = id.toString();
+                let finId = "" + ab + cd;
+                let p = {
+                    "action": "addData",
+                    "index": "change",
+                    "type": "order",
+                    "id": finId,
+                    "body": {
+                        "id": finId,
+                        "msg": msg,
+                        "productId": productId,
+                        "buyerId": buyerId,
+                        "submitTime": id,
+                    }
+                };
+                console.log("P", p);
+
+                Polymer.postData(url, p).then(res => {
+                    if (res.code > 0) {
+                        alert("您的請求已經順利創建，請等待賣家回應");
+                    } else {
+                        alert("錯誤的請求，查看一下哪裡輸錯了？");
+                    }
+                })
+            },
+
+        });
+    })();
+</script>

@@ -2,25 +2,27 @@
 <link rel="import" href="../vaadin-text-field/vaadin-email-field.html">
 <link rel="import" href="../vaadin-text-field/vaadin-password-field.html">
 <link rel="import" href="../vaadin-checkbox/vaadin-checkbox.html">
+<link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
+<link rel="import" href="change-register.html">
+<link rel="import" href="change-reset.html">
+
 
 <dom-module id="change-login">
 
     <template>
-
         <style>
             .login-grid {
                 text-align: center;
                 display: grid;
-                grid-row-gap: 20px;
-                grid-column-gap: 15px;
-                grid-template-columns: 25% 25%;
+                grid-row-gap: 5px;
+                grid-column-gap: 1px;
+                grid-template-columns: 40% 40%;
                 grid-template-rows: repeat(7，1fr);
                 justify-content: center;
-                align-content: end;
+                align-content: flex-end;
             }
 
             .font-sizeh1 {
-
                 grid-column-start: 1;
                 grid-column-end: 3;
                 grid-row-start: 1;
@@ -78,6 +80,26 @@
                 width: 100%;
             }
 
+            button#forgot {
+                height: 40px;
+                width: 100%;
+                background-color: white;
+                font-size: 12px;
+                color: black;
+                border: none;
+                border-radius: 3px;
+            }
+
+            button#forgot:hover {
+                text-decoration: underline;
+                cursor: pointer;
+            }
+
+            button#forgot:active {
+                text-decoration: underline;
+                border: none;
+            }
+
             .password {
                 grid-column-start: 1;
                 grid-column-end: 3;
@@ -87,15 +109,6 @@
 
             #changePassword1 {
                 width: 100%;
-            }
-
-            .rememberMe {
-                grid-column-start: 1;
-                grid-column-end: 3;
-                grid-row-start: 5;
-                grid-row-end: 6;
-                justify-self: start;
-
             }
 
             button.login-login {
@@ -125,55 +138,130 @@
                 grid-row-end: 8;
             }
         </style>
-
+        <style include="icon-styles"></style>
         <div class="login-grid">
             <span class="font-sizeh1">登入</span>
             <div>
-                <button class="logoFacebook"><img src="img/icon/Facebook.png"
-                        class="logoFacebook">&nbspFacetime</button>
+                <button on-click="log" class="logoFacebook">
+                    <img src="img/icon/Facebook.png" class="logoFacebook">&nbspFacebook
+                </button>
             </div>
             <div>
                 <button class="logoGoogle"><img src="img/icon/Google.png" class="logoGoogle">&nbspGoogle</button>
             </div>
             <div class="email">
-                <vaadin-email-field id="changeEmail1" placeholder="Email"" name=" email"
+                <vaadin-email-field id="changeEmail1" placeholder="Email" name=" email"
                     error-message="Please enter a valid email address" required clear-button-visible>
                 </vaadin-email-field>
             </div>
             <div class="password">
                 <vaadin-password-field id="changePassword1" placeholder="password" required>
                 </vaadin-password-field>
-
-            </div>
-            <div class="rememberMe">
-                <vaadin-checkbox value="Option" checked>記住我</vaadin-checkbox>
             </div>
             <div>
                 <button on-click="_login" class="login-login">登入</button>
             </div>
             <div>
-                <button class="login-register">註冊</button>
+                <button class="login-register" on-click="_register">註冊</button>
             </div>
             <span id="forgetPassword">
-                <a href="www.baidu.com" class="forgetPassword">
-                    忘记密码？
-                </a>
-            </span>
-        </div>
+                <button id="forgot" on-click="_forgot">忘記密碼?</button>
 
+            </span>
+            <vaadin-dialog></vaadin-dialog>
+        </div>
     </template>
 
 </dom-module>
-
+<script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
 <script>
     (function() {
         Polymer({
             is: 'change-login',
-            properties: {},
+            properties: {
+
+            },
             created: function() {
 
 
             },
+
+            _forgot: function() {
+                console.log('forgot password');
+                let shadow = this.shadowRoot;
+                let that = this;
+                let dialog = shadow.querySelector('vaadin-dialog');
+                Polymer.closeDialog(dialog)
+                Polymer.popup(dialog, "change", "change-reset", "30%", "50%");
+            },
+            ready: function() {
+                FB.init({
+                    appId: '253659735967180',
+                    autoLogAppEvents: true,
+                    xfbml: false,
+                    version: 'v7.0',
+                    status: true
+                });
+                this.status = false;
+            },
+
+            log: function() {
+                FB.login(function(response) {
+                    if (response.authResponse) {
+                        console.log('Welcome!  Fetching your information.... ');
+                        FB.api('/me', function(response) {
+                            console.log('Good to see you, ' + response.name + '.');
+                        });
+                    } else {
+                        console.log('User cancelled login or did not fully authorize.');
+                    }
+                });
+            },
+
+            checkLoginState: function() { // Called when a person is finished with the Login Button.
+                FB.getLoginStatus(function(response) { // See the onlogin handler
+                    statusChangeCallback(response);
+                });
+            },
+
+            statusChangeCallback: function(response) { // Called with the results from FB.getLoginStatus().
+                console.log('statusChangeCallback');
+                console.log(response); // The current login status of the person.
+                if (response.status === 'connected') { // Logged into your webpage and Facebook.
+                    testAPI();
+                } else { // Not logged into your webpage or we are unable to tell.
+
+                }
+            },
+
+            testAPI: function() { // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
+                console.log('Welcome!  Fetching your information.... ');
+                FB.api('/me', function(response) {
+                    console.log('Successful login for: ' + response.name);
+                });
+            },
+
+            _register: function() {
+                console.log('Register');
+                let shadow = this.shadowRoot;
+                let that = this;
+                // Polymer.popup = function (dialog, folder, component, width, height) {
+                //     customElements.whenDefined(component).then(function () {
+                //         dialog.renderer = function (root, dialog) {
+                //             root.innerHTML = '<' + component + '></' + component + '>';
+                //         };
+                //         dialog.resizable = true;
+                //         dialog.resize(width, height);
+                //         dialog.opened = true;
+                //         // Polymer.activeDialog = dialog;
+                //     });
+                // }
+                let dialog = shadow.querySelector('vaadin-dialog');
+
+                Polymer.popup(dialog, "change", "change-register", "40%", "90%");
+
+            },
+
             _login: function() {
                 console.log('ChangeLogin');
 
@@ -187,23 +275,26 @@
                     if (password === "") {
                         alert('密碼不可以為空');
                     } else {
-                        let loginUrl = "https://37nolo3390.execute-api.ap-northeast-1.amazonaws.com/prod";
+                        let loginUrl = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
                         let params = {
-                            "uid": uid,
-                            "password": password,
-                            "type": "loginByUidPassword"
+                            "action": "login",
+                            "login": uid,
+                            "password": password
                         };
                         console.log("Login JSON", params);
                         Polymer.postData(loginUrl, params).then(res => {
+                            console.log("Login", res);
                             if (res.code > 0) {
-                                // let uid = res.resolve['uid'];
-                                // let user = res.resolve;
-                                // user['thisPage'] = this.thisPage;
-                                // store.set('user', res.resolve);
-                                // store.set('editMode', 'admin');
-                                // store.set('thisPage', this.thisPage);
-                                // location.reload();
-                                console.log('登錄成功');
+                                console.log("Result1", res.resolve);
+                                console.log("Result2", res.resolve.length);
+                                if (res.resolve) {
+                                    let user = res.resolve;
+                                    store.set('change-user', user);
+                                    alert('登錄成功');
+                                    location.reload();
+                                } else {
+                                    alert("用戶不存在，請註冊後登入");
+                                }
                             } else {
                                 alert('登入失敗');
                             }
@@ -211,7 +302,7 @@
                     }
                 }
             },
-            ready: function() {},
+
 
 
 
