@@ -369,52 +369,10 @@
                 }
             }
         </style>
-        <style>
-            /* 父元素，因为~符号只能匹配下面的兄弟节点，所以使用弹性盒的倒序改变五角星的排列方式 */
-            .box {
-                width: 266px;
-                height: 27px;
-                margin: 0 auto;
-                display: flex;
-                flex-direction: row-reverse;
-                justify-content: space-between;
-            }
-
-            /* 隐藏单选 */
-            input {
-                display: none;
-            }
-
-            /* 五角星默认样式 */
-            input[type="radio"]+label>svg>path {
-                d: path("M27.500,1.501 L36.069,16.899 L53.497,20.217 L41.365,33.051 L43.567,50.499 L27.500,43.032 L11.433,50.499 L13.635,33.051 L1.503,20.217 L18.931,16.899 L27.500,1.501 ");
-                stroke-width: 1px;
-                fill: none;
-                stroke: #333;
-            }
-
-            /* 移入，点击选中的元素和下面的元素变为实心 */
-            input[type="radio"]+label:hover>svg>path,
-            input[type="radio"]+label:hover~input[type="radio"]+label>svg>path,
-            input[type="radio"]:checked+label>svg>path,
-            input[type="radio"]:checked~input[type="radio"]+label>svg>path {
-                stroke-width: 0px;
-                fill: #f00;
-            }
-        </style>
 
         <div class="top-banner">
             <img id="banner3" src="http://change.dazzle.website/img/WX20200513-110548@2x.png">
         </div>
-        <!-- 
-        <div>
-            <ul>
-                <li><span>主頁 / </span></li>
-                <li><span>家居生活 / </span></li>
-                <li><span>家居 / </span></li>
-                <li><span>儲物 / </span></li>
-            </ul>
-        </div> -->
 
         <header>
             <div id="tbar">
@@ -483,7 +441,7 @@
             </div>
 
             <div class="right-product">
-                <!-- 这里放右边的产品资料 -->
+                <!-- Right Product info -->
                 <div class="fullWidth">
                     <div class="custom-select">
                         <!-- <select id="cs1">
@@ -686,7 +644,13 @@
                             shadow.querySelector('#vs1').value = res.resolve[0]['categories'];
                             // shadow.querySelector('#public').checked = res.resolve[0]['isPublic'];
                             shadow.querySelector('#free').checked = res.resolve[0]['isFree'];
-                            shadow.querySelector('#vs4').value = res.resolve[0]['isNew'];
+                            if (res.resolve[0]['isNew'] == true) {
+                                shadow.querySelector('#vs4').value = "全新";
+
+                            } else {
+                                shadow.querySelector('#vs4').value = "二手";
+
+                            }
                             shadow.querySelector('#pname').value = res.resolve[0]['productname'];
                             shadow.querySelector('#price').value = res.resolve[0]['price'];
                             console.log("Matters", res.resolve[0]['price']);
@@ -697,7 +661,13 @@
                             shadow.querySelector('#vs2').value = res.resolve[0]['district'];
                             shadow.querySelector('#vs3').value = res.resolve[0]['deliveryMethod'];
                             shadow.querySelector('#pdes').value = res.resolve[0]['description'];
-                            shadow.querySelector('#myTags').tags = res.resolve[0]['tags'];
+                            if (typeof(res.resolve[0]['tags']) == "string") {
+                                shadow.querySelector('#myTags').tags = [res.resolve[0]['tags']];
+
+                            } else {
+                                shadow.querySelector('#myTags').tags = res.resolve[0]['tags'];
+
+                            }
                             shadow.querySelector('#trans').value = res.resolve[0]['deliveryDesc'];
                             let lenpic = res2[0]['pics'].length;
                             for (i3 = 0; i3 < lenpic; i3++) {
@@ -730,114 +700,80 @@
                 let that = this;
                 customElements.whenDefined('vaadin-select').then(function() {
                     const choice = [{
-                        id: '車與地產',
                         name: '車與地產'
                     }, {
-                        id: '潮流生活',
                         name: '潮流生活'
                     }, {
-                        id: '家居生活',
                         name: '家居生活'
                     }, {
-                        id: '興趣與遊戲',
                         name: '興趣與遊戲'
                     }, {
-                        id: '工作與服務',
                         name: '工作與服務'
                     }, {
-                        id: '其他服務',
                         name: '其他服務'
                     }];
 
                     const propage = [{
-                        id: '専頁1',
                         name: '専頁1'
                     }, {
-                        id: '専頁2',
                         name: '専頁2'
                     }, {
-                        id: '専頁3',
                         name: '専頁3'
                     }, {
-                        id: '専頁4',
                         name: '専頁4'
                     }, {
-                        id: '専頁5',
                         name: '専頁5'
                     }, {
-                        id: '専頁6',
                         name: '専頁6'
                     }];
 
                     const district = [{
-                        id: '中西區',
                         name: '中西區'
                     }, {
-                        id: '灣仔區',
                         name: '灣仔區'
                     }, {
-                        id: '東區',
                         name: '東區'
                     }, {
-                        id: '南區',
                         name: '南區'
                     }, {
-                        id: '油尖旺區',
                         name: '油尖旺區'
                     }, {
-                        id: '深水埗',
                         name: '深水埗區'
                     }, {
-                        id: '九龍城區',
                         name: '九龍城區'
                     }, {
-                        id: '黃大仙區',
                         name: '黃大仙區'
                     }, {
-                        id: '觀塘區',
                         name: '觀塘區'
                     }, {
-                        id: '葵青區',
                         name: '葵青區'
                     }, {
-                        id: '荃灣區',
                         name: '荃灣區'
                     }, {
-                        id: '屯門區',
                         name: '屯門區'
                     }, {
-                        id: '元朗區',
                         name: '元朗區'
                     }, {
-                        id: '離島區',
                         name: '離島區'
                     }, {
-                        id: '北區',
                         name: '北區'
                     }, {
-                        id: '大埔區',
                         name: '大埔區'
                     }, {
-                        id: '沙田區',
                         name: '沙田區'
                     }, {
-                        id: '西貢區',
                         name: '西貢區'
                     }];
 
                     const delmthod = [{
-                        id: '順豐',
                         name: '順豐'
                     }, {
-                        id: '面交',
                         name: '面交'
                     }, ]
 
                     const status = [{
-                        id: '全新',
                         name: '全新'
                     }, {
-                        id: '二手',
                         name: '二手'
                     }, ]
 
@@ -852,7 +788,7 @@
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
-                            vaadinItem.setAttribute('value', item.id);
+                            vaadinItem.setAttribute('value', item.name);
                         });
                         // update the content
                         root.appendChild(listBox);
@@ -869,7 +805,7 @@
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
-                            vaadinItem.setAttribute('value', item.id);
+                            vaadinItem.setAttribute('value', item.name);
                         });
                         // update the content
                         root.appendChild(listBox);
@@ -886,7 +822,7 @@
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
-                            vaadinItem.setAttribute('value', item.id);
+                            vaadinItem.setAttribute('value', item.name);
                         });
                         // update the content
                         root.appendChild(listBox);
@@ -903,7 +839,7 @@
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
-                            vaadinItem.setAttribute('value', item.id);
+                            vaadinItem.setAttribute('value', item.name);
                         });
                         // update the content
                         root.appendChild(listBox);
@@ -920,7 +856,7 @@
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
-                            vaadinItem.setAttribute('value', item.id);
+                            vaadinItem.setAttribute('value', item.name);
                         });
                         // update the content
                         root.appendChild(listBox);
@@ -928,6 +864,7 @@
                 });
 
 
+                //USER INFO COLUM
                 let user = store.get('change-user');
                 console.log("User hoon main", user['_id']);
                 shadow.querySelector('#owner').innerHTML = user['username'];
@@ -937,9 +874,11 @@
                 } else {
                     shadow.querySelector('#a1').innerHTML = '<img id="gand" src=' + user['head'] + '>';
                 };
+                //check the username 
                 console.log("SEE", shadow.querySelector('#gand').src);
-                //check the username     
+                    
 
+                //ENABLE & DISABLE PRICE
                 shadow.querySelector('#free').addEventListener("click", (e) => {
                     console.log("worked");
                     if (shadow.querySelector('#free').checked == true) {
@@ -1063,11 +1002,36 @@
                         "id": thenewid,
                         "body": json
                     };
+
                     console.log("JSON", params);
                     Polymer.postData(Url, params).then(res => {
                         console.log("Result", res);
                         if (res.code > 0) {
-                            alert("success!");
+
+                            let paramup = {
+                                "action": "updateData",
+                                "index": "change",
+                                "type": "_user",
+                                "id": user['_id'],
+                                "body": {
+                                    "query": {
+                                        "script": {
+                                            "source": "ctx._source['goodsNum']+=1"
+                                        }
+                                    }
+                                }
+                            };
+                            Polymer.postData(Url, paramup).then(res => {
+                                if (res.code > 0) {
+                                    alert("success!");
+
+                                }
+
+
+                            });
+
+
+
                         } else {
                             alert("Failed");
                         }

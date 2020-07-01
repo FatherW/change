@@ -251,6 +251,9 @@
             .bigsize {
                 font-size: 25px;
                 background-image: url('http://change.dazzle.website/img/');
+            }
+
+            .tagContainer{
                 margin-top: 110px;
             }
 
@@ -367,6 +370,10 @@
             .myButton1:active {
                 position: relative;
                 top: 1px;
+            }
+
+            .deliveryDesc {
+                margin-top: 20px;
             }
         </style>
         <style>
@@ -496,16 +503,16 @@
                 </div>
                 <br>
                 <div class="unib">
-                    <span id="pn">產品名稱：儲物架</span>
+                    <!-- <span id="pn">產品名稱：儲物架</span> -->
                 </div>
                 <br>
 
-                <div class="unib">
+                <!-- <div class="unib">
                     <span>產品尺寸 185x130x30(cm)</span>
                 </div>
+                <br> -->
                 <br>
-                <br>
-                <div>
+                <div class="tagContainer">
                     <div class="tag">
                         <span> 標籤： </span>
                     </div>
@@ -518,13 +525,16 @@
 
                 <div>
                     <span class="bigsize">運輸：</span>
-                    <p style="margin-bottom: 0px;"><span>可郵寄或順豐快遞</span></p>
+                    <div class="deliveryDesc">
+                        <p style="margin-bottom: 0px;"><span>可郵寄或順豐快遞</span></p>
+                    </div>
+                    
 
                 </div>
                 <br>
-                <hr>
+                <!-- <hr> -->
 
-                <div>
+                <!-- <div>
                     <div>
                         <span class="bigsize">賣家資料：</span>
                     </div>
@@ -545,7 +555,7 @@
                         </span>
                     </div>
               
-                </div>
+                </div> -->
                 <br>
 
 
@@ -619,11 +629,20 @@
                         let c = res.resolve['productname'];
                         shadow.querySelector('#pn').innerHTML = c;
 
+                        //get and pass tag data
                         let itemtag = "";
                         for (count = 0; count < res.resolve['tags'].length; count++) {
                             itemtag += '<button id=\"tagbutton\">' + '<a href="list-product.html#' + res.resolve['tags'][count] + '">' + res.resolve['tags'][count] + "</a></button> &nbsp;"
                         }
                         shadow.querySelector('#t').innerHTML = itemtag;
+
+                        //get and pass description data
+                        let description = res.resolve['description'];
+                        shadow.querySelector('.unib').innerHTML = description;
+
+                        //get and pass deliveryDesc data
+                        let deliveryDesc = res.resolve['deliveryDesc'];
+                        shadow.querySelector('.deliveryDesc').innerHTML = deliveryDesc;
 
                         let o = res.resolve['ownerId'];
                         let p = {

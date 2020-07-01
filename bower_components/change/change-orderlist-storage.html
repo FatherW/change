@@ -29,7 +29,7 @@
 </dom-module>
 
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-orderlist-storage',
             properties: {
@@ -40,22 +40,25 @@
                     "type": String
                 }
             },
-            created: function () {
+            created: function() {
 
             },
 
 
 
-            ready: function () {
+            ready: function() {
                 console.log("inside orderlist-storage.html");
                 // html + ?xxxxxxxxxxxxxxxxx
                 let loc = location.search;
-                console.log("Path", loc);
-                console.log("Length", loc.length);
-                let id = "";
-                for (var i = 1; i < loc.length; i++) {
-                    console.log("Working");
-                    id += loc[i];
+                let pid = "";
+                let posit = 0;
+                for (i = 1; i < loc.length; i++) {
+                    if (loc[i] == "u") {
+                        posit = i;
+                    };
+                };
+                for (a = 2; a < posit; a++) {
+                    pid += loc[a];
                 }
                 let that = this;
                 let shadow = this.shadowRoot;
@@ -67,7 +70,7 @@
                     "body": {
                         "query": {
                             "match": {
-                                "productId": id
+                                "productId": pid
                             }
                         }
                     }

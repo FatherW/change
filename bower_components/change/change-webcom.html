@@ -124,14 +124,23 @@
                 };
                 Polymer.postData(url, param).then(res => {
                     if (res.code > 0) {
-                        if (res.resolve['head'] != "") {
-                            shadow.querySelector('#pic').src = res.resolve['heaed'];
-                        }
+                        shadow.querySelector('#pic').src = res.resolve['head'];
                         shadow.querySelector('#heading2').innerHTML = res.resolve['username'];
-                        shadow.querySelector('#heading4').innerHTML += res.resolve['score'];
+                        shadow.querySelector('#heading4').innerHTML += res.resolve['score']; + '( ' + res.resolve['numberRate'] + ' )';
                     }
                 })
 
+                let param2 = {
+                    "action": "getData",
+                    "index": "change",
+                    "type": "product",
+                    "id": pid
+                };
+                Polymer.postData(url, param2).then(res => {
+                    if (res.code > 0) {
+                        shadow.querySelector('#para').innerHTML = res.resolve['description'];
+                    }
+                })
 
                 shadow.querySelector('#review').addEventListener("keypress", function(e) {
                     var key = e.which || e.keyCode || 0;
@@ -166,8 +175,8 @@
                         posit = i;
                     };
                 };
-                for (a = 1; a < posit; a++) {
-                    pid += temp[a];
+                for (a = 2; a < posit; a++) {
+                    pid += loc[a];
                 }
                 let msg = shadow.querySelector('#review').value;
                 let id = Date.now();
@@ -193,34 +202,38 @@
                     }
                 });
 
-                let buyer = store.get("change-user");
-                console.log("BUYERID", buyer);
-                let buyerId = buyer['_id'];
-                let ab = buyerId;
-                let cd = id.toString();
-                let finId = "" + ab + cd;
-                let p = {
-                    "action": "addData",
-                    "index": "change",
-                    "type": "order",
-                    "id": finId,
-                    "body": {
+                let buyer = store.get("change-user") || null;
+                if (buyer == null) {
+                    alert("請先登入");
+                } else {
+                    console.log("BUYERID", buyer);
+                    let buyerId = buyer['_id'];
+                    let ab = buyerId;
+                    let cd = id.toString();
+                    let finId = "" + ab + cd;
+                    let p = {
+                        "action": "addData",
+                        "index": "change",
+                        "type": "order",
                         "id": finId,
-                        "msg": msg,
-                        "productId": productId,
-                        "buyerId": buyerId,
-                        "submitTime": id,
-                    }
-                };
-                console.log("P", p);
+                        "body": {
+                            "id": finId,
+                            "msg": msg,
+                            "productId": pid,
+                            "buyerId": buyerId,
+                            "submitTime": id,
+                        }
+                    };
+                    console.log("P", p);
 
-                Polymer.postData(url, p).then(res => {
-                    if (res.code > 0) {
-                        alert("您的請求已經順利創建，請等待賣家回應");
-                    } else {
-                        alert("錯誤的請求，查看一下哪裡輸錯了？");
-                    }
-                })
+                    Polymer.postData(url, p).then(res => {
+                        if (res.code > 0) {
+                            alert("您的請求已經順利創建，請等待賣家回應");
+                        } else {
+                            alert("錯誤的請求，查看一下哪裡輸錯了？");
+                        }
+                    })
+                }
             },
 
         });

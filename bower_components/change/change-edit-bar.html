@@ -150,7 +150,7 @@
                                 shadow.querySelector('#tbar').style.display = "none";
                             }
                             else {
-                                this.shadowRoot.querySelector('#edi').href = "add-product.html?" + this.id;
+                                this.shadowRoot.querySelector('#edi').href = "add-product.html?p" + this.id + "u" + user['_id'];
                                 console.log("Complete Done");
                             }
                         }
@@ -245,7 +245,7 @@
                         alert("STATUS: COPY SUCCESSFUL");
                         console.log("RES.RESOLVE", res.resolve);
                         // store.set("change-res", res.resolve);
-                        location.replace("./add-product.html");
+
 
                         // //PUT COPIED DATA BACK TO ADD PRODUCT PAGE
                         // shadow.querySelector('#vs1').value = res.resolve['categories'];
@@ -270,31 +270,42 @@
                         // };
                         // //***USE SAVEDATA IN ADD PRODUCT***//
 
-                        let time = Date.now();
+                        let user = store.get("change-user") || null;
+                        let temptime = Date.now();
+                        let tempid = user['_id'];
+                        var thenewid = "" + temptime.toString() + tempid;
                         let json = {
                             "action": "addData",
                             "index": "change",
                             "type": "product",
-                            "id": time,
+                            "id": thenewid,
                             "body": {
-                                "id": time,
+                                "id": thenewid,
                                 "categories": res.resolve.categories,
-                                "createTime": time,
+                                "createTime": temptime,
                                 "deliveryDesc": res.resolve.deliveryDesc,
                                 "deliveryMethod": res.resolve.deliveryMethod,
                                 "description": res.resolve.description,
                                 "district": res.resolve.district,
                                 "isFree": res.resolve.isFree,
                                 "isNew": res.resolve.isNew,
-                                "like": res.resolve.like,
+                                "like": 0,
                                 "ownerId": res.resolve.ownerId,
                                 "pics": res.resolve.pics,
                                 "price": res.resolve.price,
                                 "productname": res.resolve.productname,
-                                "tags": res.resolve.tags,
+                                "tags": res.resolve.tags
                             }
-
                         };
+                        //SEND THE ABOVE MESSAGE TO POSTMAN
+                        Polymer.postData(Url, json).then(res => {
+                            if (res.code > 0) {
+                                alert("SUCCESS!");
+                                location.replace("./add-product.html?p"+ thenewid +"u" + user['_id']);
+                            } else {
+                                alert("FAILED!")
+                            }
+                        });
                     } else {
                         alert("STATUS: COPY UNSUCCESSFUL");
                     }

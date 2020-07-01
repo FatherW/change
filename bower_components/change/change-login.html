@@ -203,6 +203,14 @@
                     status: true
                 });
                 this.status = false;
+                let that = this;
+                this.shadowRoot.querySelector('#changePassword1').addEventListener("keypress", function(e) {
+                    var key = e.which || e.keyCode || 0;
+                    if (key === 13) {
+                        that._login();
+                    }
+
+                });
             },
 
             log: function() {

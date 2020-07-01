@@ -94,6 +94,9 @@
                 },
                 "allIdarray": {
                     "type": Array
+                },
+                "res": {
+                    "type": Array
                 }
 
 
@@ -108,29 +111,33 @@
 
             },
             // search:function(cats,tags,district,priceStart,priceEnd){
-            search(cats,tags,district,priceStart,priceEnd){
+            search(cats, tags, district, priceStart, priceEnd) {
 
                 let that = this;
                 let shadow = this.shadowRoot;
                 let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 //////cate Id
                 // let tagsQuery = ['平價','沒有'];
-                let Query =[{'match_all':{}}];
-                if (cats.length>0){
+                let Query = [{
+                    'match_all': {}
+                }];
+                if (cats.length > 0) {
                     Query.push({
-                        'terms':{
-                            'categories':cats
+                        'terms': {
+                            'categories': cats
                         }
                     });
                 }
-                if (tags.length>0){
-                    tags.forEach(item=>{
+                if (tags.length > 0) {
+                    tags.forEach(item => {
                         Query.push({
-                            'term': {'tags':item}
+                            'term': {
+                                'tags': item
+                            }
                         });
                     });
                 }
-                
+
                 let paramcate = {
                     "action": "searchData",
                     "index": "change",
@@ -143,18 +150,18 @@
                         }],
                         "query": {
                             "bool": {
-                                "must" : Query
+                                "must": Query
                             }
-                         }
+                        }
                     }
                 };
-                console.log('Query',Query,paramcate);
+                console.log('Query', Query, paramcate);
 
                 Polymer.postData(url, paramcate).then(res => {
-                        console.log('Result',res);
-                
+                    console.log('Result', res);
+
                 });
-                
+
             },
             searchfunc: function() {
                 let that = this;
@@ -273,7 +280,7 @@
                 Polymer.postData(Url, param).then(res => {
                     if (res.code > 0) {
                         let prods = res.resolve;
-
+                        this.res = res;
                         var storeId = [];
                         let check8 = 10;
                         console.log("prodlength is:", prods.length, "countitem is:", this.countitem);
@@ -292,11 +299,9 @@
                             check8 = prods.length - this.countitem;
                         }
                         for (var i = 0; i < check8; i++) {
-                            let current = shadow.querySelector('.things-grid').innerHTML;
-                            current = current +
-                                "<change-things id=\"" + storeId[i] + "\"></change-things>";
-
-                            shadow.querySelector(".things-grid").innerHTML = current;
+                            let addi = document.createElement('change-things');
+                            addi.setAttribute('id', storeId[i])
+                            shadow.querySelector(".things-grid").appendChild(addi);
                         }
                         this.countitem = 10;
 
@@ -304,7 +309,7 @@
                         alert("error");
                     }
 
-                })
+                });
 
             },
 
@@ -312,59 +317,40 @@
                 let that = this;
                 let shadow = this.shadowRoot;
 
-                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                let param = {
-                    "action": "searchData",
-                    "index": "change",
-                    "type": "product",
-                    "body": {
-                        "sort": [{
-                            "createTime": {
-                                "order": "desc"
-                            }
-                        }],
-                        "query": {
-                            "match_all": {}
-                        }
+
+                if (this.res.code > 0) {
+                    let prods = this.res.resolve;
+
+                    var storeId = [];
+                    let check8 = 8;
+                    if (prods.length - this.countitem < 8) {
+                        check8 = prods.length - this.countitem;
+                    }
+                    for (var i = this.countitem; i < this.countitem + check8; i++) {
+                        let theidis = prods[i]['_id'];
+
+                        storeId.push(theidis)
+
+                    };
+
+
+                    if (prods.length - this.countitem < 8) {
+                        check8 = prods.length - this.countitem;
+                    }
+                    for (var i = 0; i < check8; i++) {
+                        let addi = document.createElement('change-things');
+
+                        addi.setAttribute('id', storeId[i]);
+                        shadow.querySelector(".things-grid").appendChild(addi);
 
                     }
-                };
+                    this.countitem += 8;
 
-                Polymer.postData(Url, param).then(res => {
-                    if (res.code > 0) {
-                        let prods = res.resolve;
-
-                        var storeId = [];
-                        let check8 = 8;
-                        if (prods.length - this.countitem < 8) {
-                            check8 = prods.length - this.countitem;
-                        }
-                        for (var i = this.countitem; i < this.countitem + check8; i++) {
-                            let theidis = prods[i]['_id'];
-
-                            storeId.push(theidis)
-
-                        };
+                } else {
+                    alert("error");
+                }
 
 
-                        if (prods.length - this.countitem < 8) {
-                            check8 = prods.length - this.countitem;
-                        }
-                        for (var i = 0; i < check8; i++) {
-                            let current = shadow.querySelector('.things-grid').innerHTML;
-                            current = current +
-                                "<change-things id=\"" + storeId[i] + "\"></change-things>";
-
-                            shadow.querySelector(".things-grid").innerHTML = current;
-
-                        }
-                        this.countitem += 8;
-
-                    } else {
-                        alert("error");
-                    }
-
-                })
 
 
             },
@@ -374,17 +360,13 @@
                 console.log('inside _querySelect')
                 let that = this;
                 let shadow = this.shadowRoot;
-
-                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-
-                let current2 = "";
                 for (i = 0; i < this.allquery.length; i++) {
-                    current2 = current2 +
-                        "<change-things id=\"" + this.allquery[i] + "\"></change-things>";
+                    let addi = document.createElement('change-things');
+
+                    addi.setAttribute('id', this.allquery[i]);
+                    shadow.querySelector(".things-grid").appendChild(addi);
 
                 }
-                console.log("current")
-                shadow.querySelector(".things-grid").innerHTML = current2;
 
             },
 

@@ -372,7 +372,7 @@
         </change-item-tag>
 
         <div class="clear"></div>
-        <vaadin-dialog></vaadin-dialog>
+        <vaadin-dialog id="tempqqq"></vaadin-dialog>
 
         </div>
 
@@ -404,14 +404,25 @@
             created: function() {
                 // call close pop-up in change-confirm
                 document.addEventListener('close-item-dialog', e => {
-                    this.shadowRoot.querySelector('vaadin-dialog').opened = false;
-                    // console.log("(Btn) close successfully");
+                    if (this.shadowRoot.querySelector('#tempqqq' + this.id).opened == true) {
+
+                        this.shadowRoot.querySelector('#tempqqq' + this.id).opened = false;
+                        // console.log("(Btn) close successfully");
+                    }
                 });
 
                 // call delete item in change confirm
                 document.addEventListener('delete-item', e => {
-                    this._reallydelete();
+                    if (this.shadowRoot.querySelector('#tempqqq' + this.id).opened == true) {
+
+                        this.shadowRoot.querySelector('#tempqqq' + this.id).opened = false;
+                        this._reallydelete();
+
+                        // console.log("(Btn) close successfully");
+                    }
+
                 });
+
 
             },
             _reallydelete: function() {
@@ -443,7 +454,7 @@
                 let that = this;
                 let shadow = this.shadowRoot;
                 let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                let dialog = shadow.querySelector('vaadin-dialog');
+                let dialog = shadow.querySelector('#tempqqq' + this.id);
                 Polymer.popup(dialog, "change", "change-confirm", "30%", "50%");
 
 
@@ -460,7 +471,7 @@
                     "type": "product",
                     "id": this.id
                 };
-
+                shadow.querySelector('#tempqqq').id = 'tempqqq' + this.id;
                 Polymer.postData(Url, param).then(res => {
 
                     if (res.code > 0) {
@@ -526,75 +537,76 @@
                                 } else {
                                     shadow.querySelector('#owner').innerHTML = "我冇名";
                                 }
+
+
+
+                                //check product name    
+                                shadow.querySelector("#productname").innerHTML = all['productname'];
+                                //check price
+                                shadow.querySelector('#price').innerHTML = "HKD$" + all['price'];
+                                //check time
+                                let _thetimenow = Date.now();
+                                let comparetime = (_thetimenow - all['createTime']) / 1000;
+                                if (comparetime < 60) {
+                                    shadow.querySelector('#time').innerHTML = "剛剛"
+                                } else if (comparetime / 60 < 60) {
+                                    shadow.querySelector('#time').innerHTML = Math.floor(comparetime / 60) + "分鐘前"
+                                } else if (comparetime / 60 / 60 < 24) {
+                                    shadow.querySelector('#time').innerHTML = Math.floor(comparetime / 60 / 60) + "小時前"
+                                } else if (comparetime / 60 / 60 / 24 < 7) {
+                                    shadow.querySelector('#time').innerHTML = Math.floor(comparetime / 60 / 60 / 24) + "日前"
+                                } else if (comparetime / 60 / 60 / 24 / 7 < 30) {
+                                    shadow.querySelector('#time').innerHTML = Math.floor(comparetime / 60 / 60 / 24 / 7) + "星期前"
+                                } else if (comparetime / 60 / 60 / 24 / 7 / 30 < 365) {
+                                    shadow.querySelector('#time').innerHTML = Math.floor(comparetime / 60 / 60 / 24 / 7 / 30) + "月前"
+                                }
+                                //check production description
+                                let itemtag = "";
+                                if (!all['tags'].length == undefined || all['tags'].length == null) {
+                                    _counttag = 0
+                                } else {
+                                    for (count = 0; count < all['tags'].length; count++) {
+                                        itemtag += '<button id=\"tagbutton\">' + '<a href="list-product.html?tag' + all['tags'][count] + '">' + all['tags'][count] + "</a></button> &nbsp;"
+                                    }
+                                    shadow.querySelector('#description').innerHTML = itemtag;
+
+                                }
+
+
+                                //check is new
+                                let thenew = ""
+                                if (all['isNew'] == true) {
+                                    thenew = "<polygon points=\"0,0 40,0 30,16 0,16\" style=\"fill:#6AA64F;stroke:#6AA64F;stroke-width:0\"></polygon><text x=\"3\" y=\"12\" fill=\"white\" id=\"isNew\" >全新</text>"
+
+                                } else {
+                                    thenew = "<polygon points=\"0,0 40,0 30,16 0,16\" style=\"fill:#E84D4D;stroke:#E84D4D;stroke-width:0\"></polygon><text x=\"3\" y=\"12\" fill=\"white\" id=\"isNew\" >二手</text>"
+                                }
+                                shadow.querySelector('.s_title_tags').innerHTML = thenew;
+                                //check the pic link
+
+                                if (all['pics'][0] != "") {
+                                    if (typeof(all['pics']) === 'string') {
+                                        shadow.querySelector('#pics').style.backgroundImage = "url(" + all['pics'] + ")";
+
+                                    } else {
+                                        shadow.querySelector('#pics').style.backgroundImage = "url(" + all['pics'][0] + ")";
+
+                                    }
+                                } else {
+                                    shadow.querySelector('#pics').style.backgroundImage = "url('http://change.dazzle.website/img/nopic.png')";
+                                };
+
+                                //check the icon
+
+
+
+
+                                //check the like
+                                shadow.querySelector('#templike').innerHTML = '<change-like id="' + this.id + '"></change-like>'
+
+
                             } else {}
                         });
-
-
-                        //check product name    
-                        shadow.querySelector("#productname").innerHTML = all['productname'];
-                        //check price
-                        shadow.querySelector('#price').innerHTML = "HKD$" + all['price'];
-                        //check time
-                        let _thetimenow = Date.now();
-                        let comparetime = (_thetimenow - all['createTime']) / 1000;
-                        if (comparetime < 60) {
-                            shadow.querySelector('#time').innerHTML = "剛剛"
-                        } else if (comparetime / 60 < 60) {
-                            shadow.querySelector('#time').innerHTML = Math.floor(comparetime / 60) + "分鐘前"
-                        } else if (comparetime / 60 / 60 < 24) {
-                            shadow.querySelector('#time').innerHTML = Math.floor(comparetime / 60 / 60) + "小時前"
-                        } else if (comparetime / 60 / 60 / 24 < 7) {
-                            shadow.querySelector('#time').innerHTML = Math.floor(comparetime / 60 / 60 / 24) + "日前"
-                        } else if (comparetime / 60 / 60 / 24 / 7 < 30) {
-                            shadow.querySelector('#time').innerHTML = Math.floor(comparetime / 60 / 60 / 24 / 7) + "星期前"
-                        } else if (comparetime / 60 / 60 / 24 / 7 / 30 < 365) {
-                            shadow.querySelector('#time').innerHTML = Math.floor(comparetime / 60 / 60 / 24 / 7 / 30) + "月前"
-                        }
-                        //check production description
-                        let itemtag = "";
-                        if (!all['tags'].length == undefined || all['tags'].length == null) {
-                            _counttag = 0
-                        } else {
-                            for (count = 0; count < all['tags'].length; count++) {
-                                itemtag += '<button id=\"tagbutton\">' + '<a href="list-product.html?tag' + all['tags'][count] + '">' + all['tags'][count] + "</a></button> &nbsp;"
-                            }
-                            shadow.querySelector('#description').innerHTML = itemtag;
-
-                        }
-
-
-                        //check is new
-                        let thenew = ""
-                        if (all['isNew'] == true) {
-                            thenew = "<polygon points=\"0,0 40,0 30,16 0,16\" style=\"fill:#6AA64F;stroke:#6AA64F;stroke-width:0\"></polygon><text x=\"3\" y=\"12\" fill=\"white\" id=\"isNew\" >全新</text>"
-
-                        } else {
-                            thenew = "<polygon points=\"0,0 40,0 30,16 0,16\" style=\"fill:#E84D4D;stroke:#E84D4D;stroke-width:0\"></polygon><text x=\"3\" y=\"12\" fill=\"white\" id=\"isNew\" >二手</text>"
-                        }
-                        shadow.querySelector('.s_title_tags').innerHTML = thenew;
-                        //check the pic link
-
-                        if (all['pics'][0] != "") {
-                            if (typeof(all['pics']) === 'string') {
-                                shadow.querySelector('#pics').style.backgroundImage = "url(" + all['pics'] + ")";
-
-                            } else {
-                                shadow.querySelector('#pics').style.backgroundImage = "url(" + all['pics'][0] + ")";
-
-                            }
-                        } else {
-                            shadow.querySelector('#pics').style.backgroundImage = "url('http://change.dazzle.website/img/nopic.png')";
-                        };
-
-                        //check the icon
-
-
-
-
-                        //check the like
-                        shadow.querySelector('#templike').innerHTML = '<change-like id="' + this.id + '"></change-like>'
-
-                        //shadow.querySelector('change-like')._changecontent();
 
                     }
 
