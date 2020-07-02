@@ -62,7 +62,7 @@
                 border: 1px solid #ccc;
                 margin-left: 15px;
                 margin-right: 15px;
-                height: 1182px;
+                height: auto;
             }
 
             button {
@@ -99,7 +99,7 @@
 
             .right-product {
                 width: 100;
-                height: 1050px;
+                height: 1000px;
                 background-color: white;
                 margin-top: 30px;
                 margin-left: 30px;
@@ -137,6 +137,7 @@
                 margin-top: 2px;
 
             }
+
             .fullWidth {
                 width: 100%;
                 margin-bottom: 20px;
@@ -253,7 +254,11 @@
                 background-image: url('http://change.dazzle.website/img/');
             }
 
-            .tagContainer{
+            .sMes {
+                margin-top: 15px;
+            }
+
+            .tagContainer {
                 margin-top: 110px;
             }
 
@@ -270,7 +275,7 @@
                 border-radius: 15px;
 
             }
-            
+
             a:link,
             a:visited {
                 text-decoration: none;
@@ -281,6 +286,7 @@
                 text-decoration: none;
 
             }
+
             .buttontag {
                 display: inline-block;
             }
@@ -457,8 +463,7 @@
                 <div class="fullWidth">
                     <div class="yaqzaan" style="display: inline-block;">
                         <svg class="new">
-                            <polygon points="0,0 80,0 60,32 0,32" style="fill:#6AA64F;stroke:#6AA64F;stroke-width:0">
-                            </polygon>
+                            <polygon points="0,0 80,0 60,32 0,32" style="fill:#6AA64F;stroke:#6AA64F;stroke-width:0"></polygon>
                             <text class="n o" x="6" y="23" fill="white" style="font-size:20px;">全新</text>
                         </svg>
 
@@ -497,8 +502,6 @@
                 <br>
 
                 <div class="bigsize">
-
-
                     <span>產品資料:</span>
                 </div>
                 <br>
@@ -506,11 +509,13 @@
                     <!-- <span id="pn">產品名稱：儲物架</span> -->
                 </div>
                 <br>
-
-                <!-- <div class="unib">
-                    <span>產品尺寸 185x130x30(cm)</span>
-                </div>
+                <!-- <div class="unib"><span>產品尺寸 185x130x30(cm)</span></div>
                 <br> -->
+                <div class="sMesCon">
+                    <div class="sMesText"><span>賣家留言:</span></div>
+                    <div class="sMes"></div>
+                </div>
+
                 <br>
                 <div class="tagContainer">
                     <div class="tag">
@@ -528,7 +533,7 @@
                     <div class="deliveryDesc">
                         <p style="margin-bottom: 0px;"><span>可郵寄或順豐快遞</span></p>
                     </div>
-                    
+
 
                 </div>
                 <br>
@@ -569,7 +574,7 @@
 </dom-module>
 
 <script>
-    (function() {
+    (function () {
         Polymer({
             is: 'change-new-product',
             properties: {
@@ -577,7 +582,7 @@
                     "type": String
                 }
             },
-            created: function() {
+            created: function () {
                 // call close pop-up in change-confirm
                 document.addEventListener('close-item-dialog', e => {
                     this.shadowRoot.querySelector('vaadin-dialog').opened = false;
@@ -585,7 +590,7 @@
                 });
 
             },
-            ready: function() {
+            ready: function () {
                 let loc = location.search;
                 let pid = "";
                 let posit = 0;
@@ -640,6 +645,10 @@
                         let description = res.resolve['description'];
                         shadow.querySelector('.unib').innerHTML = description;
 
+                        //get and pass seller message data
+                        let sellerMsg = res.resolve['sellerMsg'];
+                        shadow.querySelector('.sMes').innerHTML = sellerMsg;
+
                         //get and pass deliveryDesc data
                         let deliveryDesc = res.resolve['deliveryDesc'];
                         shadow.querySelector('.deliveryDesc').innerHTML = deliveryDesc;
@@ -664,12 +673,20 @@
                             }
                         })
 
-                        let f = res.resolve['isNew'];
-                        if (f == true) {
-                            shadow.querySelector('.n').innerText = "全新";
+                        // let f = res.resolve['isNew'];
+                        // if (f == true) {
+                        //     shadow.querySelector('.n').innerText = "全新";
+                        // } else {
+                        //     shadow.querySelector('.o').innerHTML = "二手";
+                        // }
+                        let thenew = ""
+                        if (res.resolve['isNew'] == true) {
+                            thenew = "<polygon points=\"0,0 80,0 60,32 0,32\" style=\"fill:#DAA520;stroke:#DAA520;stroke-width:0\"></polygon><text x=\"6\" y=\"23\" fill=\"white\" id=\"isNew\" >全新</text>"
+
                         } else {
-                            shadow.querySelector('.o').innerHTML = "二手";
+                            thenew = "<polygon points=\"0,0 80,0 60,32 0,32\" style=\"fill:#20B2AA;stroke:#20B2AA;stroke-width:0\"></polygon><text x=\"6\" y=\"23\" fill=\"white\" id=\"isNew\" >二手</text>"
                         }
+                        shadow.querySelector('.new').innerHTML = thenew;
 
                         let g = res.resolve['district'];
                         shadow.querySelector('#dis').innerHTML = g;
@@ -683,7 +700,7 @@
 
             },
 
-            _findseller: function() {
+            _findseller: function () {
                 console.log('contacting seller');
                 let shadow = this.shadowRoot;
                 let that = this;

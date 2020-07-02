@@ -348,7 +348,7 @@
                 }
             },
             created: function() {
-                console.log("Header Created");
+
             },
             ready: function() {
                 let that = this;
@@ -374,15 +374,12 @@
                 }
 
                 Polymer.postData(url, params).then(res => {
-                    console.log("Result", res);
+
                     if (res.code > 0) {
-                        //console.log("Name", res.resolve[0]['name']);
-                        //let a = res.resolve[0]['name'];
+
                         this.len = res.resolve.length;
                         for (i = 0; i < res.resolve.length; i++) {
                             let name = res.resolve[i]['name'];
-
-                            console.log("Name", name);
                             shadow.querySelector('.categories').innerHTML = shadow.querySelector('.categories').innerHTML + '<a href="#"><li class="dropdown" style="color: black;">' + name + '<div class="ar"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="arrow"><path fill="#2C2C2D" d="M10.146 7.146a.5.5 0 0 1 .708.708l-2.5 2.5a.5.5 0 0 1-.708 0l-2.5-2.5a.5.5 0 1 1 .708-.708L8 9.293l2.146-2.147z"></path></svg></div>' + '<div class="dropdown-content"><ul class="submen" id="item' + i + '"></ul></div>' + '</li></a>';
                         }
                         shadow.querySelector('.categories').innerHTML = shadow.querySelector('.categories').innerHTML + '<a href="#"><li class="dropdown" style="color: black;">' + '關於我們' + '<div class="ar"></div><p style="display: flex;"></p></li></a>';
@@ -397,7 +394,7 @@
                         }
                         console.log("success");
                     } else {
-                        alert("fail")
+                        alert("header fail to gen")
                     }
                     this._makeDrop();
                 });
@@ -439,8 +436,6 @@
                     }
 
                     Polymer.postData(url, params).then(res => {
-                        console.log("Parameter", params);
-                        console.log("Result", res);
                         if (res.code > 0) {
                             let x = "";
                             let p = 0;
@@ -450,7 +445,6 @@
                                 p = res.resolve[w]['parent'];
                             }
                             p--;
-                            console.log("Looking for #item" + p);
                             shadow.querySelector('#item' + p).innerHTML = x;
                         }
                     });

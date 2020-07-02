@@ -166,7 +166,7 @@
 
             .right-product {
                 width: 100;
-                height: 1050px;
+                height: 1000px;
                 background-color: white;
                 margin-top: 30px;
                 margin-left: 30px;
@@ -211,7 +211,7 @@
             }
 
             .sellerMES {
-                margin-top: 20px; 
+                margin-top: 40px; 
                 margin-bottom: 20px;
             }
 
@@ -219,6 +219,8 @@
                 resize: none;
                 overflow: hidden;
                 width: 100%;
+                margin-top: 15px;
+                border: 1px #ccc solid;
             }
 
             input[type=text],
@@ -250,12 +252,14 @@
                 resize: none;
                 overflow: hidden;
                 width: 100%;
+                border: 1px #ccc solid;
             }
 
             #trans {
                 resize: none;
                 overflow: hidden;
                 width: 100%;
+                border: 1px #ccc solid;
             }
 
             #usericon {
@@ -508,7 +512,7 @@
                     </div>
                 </div>
 
-                <div style="display: flex; margin-top: 45px;">
+                <div style="display: flex; margin-top: 25px;">
                     <div class="tag">
                         <div><span style="font-size: 20px;"> 標籤： </span></div>
                     </div>
@@ -524,7 +528,7 @@
                     <div style="margin-top: 20px; margin-bottom: 30px;"><span class="bigsize">運輸：</span></div>
                     <!--input box-->
                     <div class="inputbox">
-                        <textarea id="trans" name="transportation" rows="10" placeholder="輸入物流資料..."></textarea>
+                        <textarea id="trans" name="transportation" rows="6" placeholder="輸入物流資料..."></textarea>
                     </div>
 
                 </div>
@@ -644,6 +648,7 @@
                             shadow.querySelector('#vs1').value = res.resolve[0]['categories'];
                             // shadow.querySelector('#public').checked = res.resolve[0]['isPublic'];
                             shadow.querySelector('#free').checked = res.resolve[0]['isFree'];
+                            shadow.querySelector('#sMes').value = res.resolve[0]['sellerMsg'];
                             if (res.resolve[0]['isNew'] == true) {
                                 shadow.querySelector('#vs4').value = "全新";
 
@@ -903,6 +908,7 @@
                     this.pics.push(src);
                 });
             },
+
             _saveData: function() {
                 let user = store.get("change-user") || null;
                 let temptime = Date.now();
@@ -925,12 +931,20 @@
                     console.log("Category:", categories);
                     // let public = shadow.querySelector('#public').checked;
                     // console.log("Public:", public);
+
+                    //Get value from seller message
+                    let sellerMsg = shadow.querySelector('#sMes').value;
+                    console.log("sellerMsg:", sellerMsg);
+
                     let free = shadow.querySelector('#free').checked;
                     console.log("Free:", free);
+
                     let pname = shadow.querySelector('#pname').value;
                     console.log("Productname:", pname);
+
                     let price = shadow.querySelector('#price').value;
                     console.log("Price:", price);
+
                     //Get value from select box district
                     var myselect = shadow.querySelector("#vs2");
                     var district = myselect.value;
@@ -961,6 +975,8 @@
 
                         var no = Boolean(1);
                     }
+
+                    
                     let x = 0;
                     let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
 
@@ -980,6 +996,7 @@
                     let json = {
                         "categories": categories,
                         // "isPublic": public,
+                        "sellerMsg": sellerMsg,
                         "isFree": free,
                         "productname": pname,
                         "price": parseFloat(price),

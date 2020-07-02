@@ -74,11 +74,13 @@
                     "type": "product",
                     "id": this.id
                 };
-                let paramuser = {
-                    "action": "getData",
-                    "index": "change",
-                    "type": "_user",
-                    "id": user['_id']
+                if (user != null) {
+                    var paramuser = {
+                        "action": "getData",
+                        "index": "change",
+                        "type": "_user",
+                        "id": user['_id']
+                    };
                 };
 
                 Polymer.postData(URL, param).then(res => {
@@ -92,15 +94,23 @@
                                 var counti2 = 0;
                                 checked2 = false;
                                 for (i = 0; i < countlikeproduct; i++) {
-                                    if (user['likeProduct'][i] == parseInt(this.id)) {
-                                        shadow.querySelector('#toggle-heart').checked = true;
+                                    if (res.resolve['likeProduct'][i] == this.id) {
+                                        checked2 = true;
                                         console.log("found!!");
-                                        break;
                                     } else {
                                         counti2++;
 
                                     }
                                 }
+
+                                if (checked2 == false) {} else {
+                                    this.status = true;
+
+                                }
+                                shadow.querySelector('#toggle-heart').checked = this.status;
+                                console.log("the statuts:", this.shadowRoot.querySelector('#toggle-heart').checked, this.id);
+
+
                             }
                         });
 
@@ -109,7 +119,6 @@
                     }
                 });
 
-                console.log("the statuts:", this.shadowRoot.querySelector('#toggle-heart').checked);
 
             },
 
@@ -213,27 +222,26 @@
 
                     Polymer.postData(URL, param).then(res => {
                         if (res.code > 0) {
-                            let storelikedproduct = this.liked;
-                            let templikeproduct = [];
-                            for (i = 0; i < storelikedproduct.length; i++) {
-                                templikeproduct.push(storelikedproduct[i])
-                            }
-                            templikeproduct.push(parseInt(this.id));
+
                             let paramchange2 = {
-                                "action": "addData",
+                                "action": "updateData",
                                 "index": "change",
                                 "type": "_user",
                                 "id": user['_id'],
                                 "body": {
-                                    "likeProduct": templikeproduct
+                                    "query": {
+                                        "script": {
+                                            "source": "ctx._source['likeProduct'].add('" + this.id + "')"
+                                        }
+                                    }
                                 }
                             };
+
                             console.log('the praram like is: ', paramchange2);
                             Polymer.postData(URL, paramchange2).then(res => {
                                 if (res.code > 0) {
-                                    user['likeProduct'] = templikeproduct;
-                                    store.set('change-user', user);
-                                    this.liked = templikeproduct;
+
+                                    this.liked.push(this.id);
                                 } else {
                                     console.log("error in add favorite")
                                 }
