@@ -2,9 +2,6 @@
 
 <link rel="import" href="../dz-dazzle/dz-block.html">
 <link rel="import" href="../change/change-in-item.html">
-<link rel="import" href="../change/change-category.html">
-<link rel="import" href="../change/change-district.html">
-
 <link rel="import" href="change-like2.html">
 <link rel="import" href="../vaadin-accordion/vaadin-accordion.html">
 <dom-module id="change-slidelist">
@@ -13,8 +10,8 @@
 
         <style>
             *{
-                font-family: sans-serif,微軟正黑體;
-                            }
+                font-family: Microsoft JhengHei;
+            }
             change-in-item{
                 -webkit-box-shadow: 1px 0px 8px 0px rgba(50, 49, 56, 0.2);
                 -moz-box-shadow: 1px 0px 8px 0px rgba(50, 49, 56, 0.2);
@@ -45,27 +42,8 @@
                 width:30px;
                 height:30px;
             }
-
-            /* .address td{
-                position:relative;
-            }
-            .address #miniimg{
-                position:absolute;
-                top:10px;
-            } */
-            .address{
-                display: grid;
-                width: 97%;
-                height:100%;
-                grid-row-gap: 0px;
-				padding:5px;
-				grid-column-gap: 0px;
-                grid-row-gap: 0px;
-				grid-template-columns: 2fr 8fr;
-                background-color: white;
-            }
             .shouldblock2{
-                display: inline;
+                display: inline-flex;
             }
             .leftele{
                 float: left;
@@ -86,7 +64,7 @@
                 float:right;
             }
             .shouldblock{
-                display: flow-root;
+                display: inline-flex;
             }
 
             #leftele{
@@ -192,18 +170,10 @@
             .box {
                 text-align: right;
                 padding-right: 7px;
-                height:40px;
+                height:30px;
             }
             
-            #loc {
-                height:50px;
-                width: 100px;
-                border: white;
-                text-align: right;
-                padding-right: 7px;
-                font-size: 13px;
-            }
-            
+       
             .mybutton {
                 box-shadow:inset 0px 0px 10px 1px #cf866c;
                 background-color:#d0451b;
@@ -258,12 +228,7 @@
                 text-align: center;
                 
             }
-            
-            .inlist {
-                font-size: 9px;
-                text-align: center;
-                margin:6px
-            }
+        
             
             .container {
                 width: 90%;
@@ -426,222 +391,148 @@ its values is > 50%. */
 
         </style>
 
-    <div id="toptitle">篩選</div>
-    <div class="panel_wrapper">
+    <div id="containall">
+        <div id="leftele">
+            <div id="toptitle">篩選</div>
 
-        <table class="table1">
+            <div>
 
-            <tbody><tr>
-                <th class="titlecolor" colspan="2">分類</th>
-            </tr>
-            <tr>
-                <td><change-category></change-category></td>
-            </tr>
-            
+                <table class="table1" id="categoriesall">
 
-
-
-        </tbody></table>
-
-    <table class="table1">
-
-            <tbody><tr>
-                <th class="titlecolor" colspan="2">配件標籤
-            </th></tr>
-            <tr>
-                <td style="
-                padding: 0px;
-            ">
-                    <div class="address">
-                        <img id="miniimg" src="http://change.dazzle.website/Website%20Design/listing%20page/img/symbol/listing_page-03.png">
-
-                        <vaadin-text-field id="inputTags" on-keydown="_addTags"></vaadin-text-field>
-                        <paper-tags-input width="100%" id="myTags" style="display:none;"></paper-tags-input>
-                    </div>
-                    
-                </td>
-                
-
-            </tr>
-
-        </tbody></table>
-        
-
-        <table class="table1">
-            <tbody><tr>
-                <th class="titlecolor">地點</th>
-            </tr>
-            <tr>
-                <td style="
-                padding: 0px;
-            ">
-                    <div class="address">
-                        <img id="miniimg" src="http://change.dazzle.website/Website%20Design/listing%20page/img/symbol/location.png">
-                        <change-district></change-district>
-                    </div>
-                    
-                </td>
-
-            </tr>
-        </tbody></table>
-        
-        <table class="table1">
-            <tbody><tr>
-                <th class="titlecolor" colspan="2">商品狀況</th>
-            </tr>
-            <tr>
-                <td>全新</td>
-                <td class="box"><input type="checkbox" name="stat" id="isnew1"></td>
-            </tr>
-            <tr>
-                <td>二手</td>
-                <td class="box"><input type="checkbox" name="stat" id="isnew2"></td>
-
-            </tr>
-
-        </tbody></table>
-        
-        <div>
-
-            <table class="table1">
-
-                <tr>
-                    <th class="titlecolor" colspan="2">價錢範圍</th>
-                </tr>
-                <tr>
-                    <td class="valuebar1">$<span id="slider-range-value1"></span></td>
+                    <tr>
+                        <th class="titlecolor" colspan="2">分類</th>
+                    </tr>
+                    <tr>
+                        <td>
+                        <vaadin-accordion></vaadin-accordion>
+                        </td>
+                    </tr>
 
 
-                    <td class="valuebar2">$<span id="slider-range-value2"></span></td>
-                </tr>
-                <tr>
 
-                    <td colspan="2" class="slidebar1">
-                        <div class="container">
-                            <input type="hidden" name="min-value" value="">
+                </table>
 
-                            <div id="slider-range"></div>
-                        </div>
-                    </td>
+            </div>
 
-                </tr>
-            </table>
 
+            <div>
+
+                <table class="table1">
+
+                    <tr>
+                        <th class="titlecolor" colspan="2">配件標籤</td>
+                    </tr>
+                    <tr>
+                        <td><img id="miniimg" src="http://change.dazzle.website/Website%20Design/listing%20page/img/symbol/listing_page-03.png"></td>
+                        <td><input type="text" class="tags" id="tagshold" placeholder="搜尋熱門配件..."></td>
+
+                    </tr>
+
+                </table>
+
+            </div>
+
+
+            <div>
+                <table class="table1">
+                    <tr>
+                        <th class="titlecolor" colspan="2">地點</th>
+                    </tr>
+                    <tr>
+                        <td><img id="miniimg" src="http://change.dazzle.website/Website%20Design/listing%20page/img/symbol/location.png"></td>
+                        <td>
+                            <div class="custom-select">
+                                <select id='loc'>
+                                  <option>所有地區</option>
+                                  <option>中西區</option>
+                                  <option>灣仔區</option>
+                                  <option>東區</option>
+                                  <option>南區</option>
+                                  <option>深水埗區</option>
+                                  <option>油尖旺區</option>
+                                  <option>九龍城區</option>
+                                  <option>九龍城區</option>
+                                  <option>黃大仙區</option>
+                                  <option>觀塘區</option>
+                                  <option>葵青區</option>
+                                  <option>荃灣區</option>
+                                  <option>屯門區</option>
+                                  <option>元郎區</option>
+                                  <option>北區</option>
+                                  <option>大埔區</option>
+                                  <option>沙田區</option>
+                                  <option>西貢區</option>
+                                  <option>離島區</option>                                  
+                                </select>
+                              </div>
+                        </td>
+
+                    </tr>
+                </table>
+
+            </div>
+
+
+            <div>
+
+                <table class="table1">
+                    <tr>
+                        <th class="titlecolor" colspan="2">商品狀況</th>
+                    </tr>
+                    <tr>
+                        <td>全新</td>
+                        <td class="box"><input type="checkbox" name="stat" id="isnew1"></td>
+                    </tr>
+                    <tr>
+                        <td>二手</td>
+                        <td class="box"><input type="checkbox" name="stat" id="isnew2"></td>
+
+                    </tr>
+
+                </table>
+
+            </div>
+
+
+
+            <div>
+
+                <table class="table1">
+
+                    <tr>
+                        <th class="titlecolor" colspan="2">價錢範圍</th>
+                    </tr>
+                    <tr>
+                        <td class="valuebar1">$<span id="slider-range-value1"></span></td>
+
+
+                        <td class="valuebar2">$<span id="slider-range-value2"></span></td>
+                    </tr>
+                    <tr>
+
+                        <td colspan="2" class="slidebar1">
+                            <div class="container">
+                                <input type="hidden" name="min-value" value="">
+
+                                <div id="slider-range"></div>
+                            </div>
+                        </td>
+
+                    </tr>
+                </table>
+
+
+            </div>
+            <button class="titlecolor" on-click="searchbutton">搜尋</button>
 
         </div>
-        <button class="titlecolor">搜尋</button></div>
+        <div id="rightele" style="float:left; margin-top:50px;border:'none'; ">
+            <div class="initemtitle" id="viewingcat">你正在瀏覽的分類  </div>
 
-    <!-- <div>
-
-        <table class="table1" id="categoriesall">
-
-            <tr>
-                <th class="titlecolor" colspan="2">分類</th>
-            </tr>
-            <tr>
-                <td>
-                <vaadin-accordion></vaadin-accordion>
-                </td>
-            </tr>
-
-
-
-        </table>
-
+            <change-in-item></change-in-item>
+        </div>
     </div>
 
-
-    <div>
-
-        <table class="table1">
-
-            <tr>
-                <th class="titlecolor" colspan="2">配件標籤</td>
-            </tr>
-            <tr>
-                <td><img id="miniimg" src="http://change.dazzle.website/Website%20Design/listing%20page/img/symbol/listing_page-03.png"></td>
-                <td><input type="text" class="tags" id="tagshold" placeholder="搜尋熱門配件..."></td>
-
-            </tr>
-
-        </table>
-
-    </div>
-
-
-    <div>
-        <table class="table1">
-            <tr>
-                <th class="titlecolor" colspan="2">地點</th>
-            </tr>
-            <tr>
-                <td><img id="miniimg" src="http://change.dazzle.website/Website%20Design/listing%20page/img/symbol/location.png"></td>
-                <td>
-                    <div class="inlist">
-                        <select name="loc" id="loc">
-                            "<option id = "loc2">所有地區</option>"
-                         
-                        </select>
-                    </div>
-                </td>
-
-            </tr>
-        </table>
-
-    </div>
-
-
-    <div>
-
-        <table class="table1">
-            <tr>
-                <th class="titlecolor" colspan="2">商品狀況</th>
-            </tr>
-            <tr>
-                <td>全新</td>
-                <td class="box"><input type="checkbox" name="stat" id="isnew1"></td>
-            </tr>
-            <tr>
-                <td>二手</td>
-                <td class="box"><input type="checkbox" name="stat" id="isnew2"></td>
-
-            </tr>
-
-        </table>
-
-    </div>
-
-
-
-    <div>
-
-        <table class="table1">
-
-            <tr>
-                <th class="titlecolor" colspan="2">價錢範圍</th>
-            </tr>
-            <tr>
-                <td class="valuebar1">$<span id="slider-range-value1"></span></td>
-
-
-                <td class="valuebar2">$<span id="slider-range-value2"></span></td>
-            </tr>
-            <tr>
-
-                <td colspan="2" class="slidebar1">
-                    <div class="container">
-                        <input type="hidden" name="min-value" value="">
-
-                        <div id="slider-range"></div>
-                    </div>
-                </td>
-
-            </tr>
-        </table>
-
-
-    </div>
-    <button class="titlecolor" on-click="searchbutton">搜尋</button> -->
 
     </template>
 
@@ -668,18 +559,7 @@ its values is > 50%. */
                 created: function() {
                     let that = this;
                 },
-                _addTags(e) {
-                    let myTags = this.shadowRoot.querySelector('#myTags');
-                    let val = this.shadowRoot.querySelector('#inputTags').value;
-                    console.log('Key Down', e);
 
-                    if (e.code === "Enter") {
-//                         myTags._addTag(val);
-                        Polymer.dzFire('query-tags',{'detail':{'tags':val}});    
-                        this.shadowRoot.querySelector('#inputTags').value = "";
-                    }
-                    //console.log("arrayResult:", myTags.tags);
-                },
                 ready: function() {
                     let that = this;
                     let shadow = this.shadowRoot;
@@ -703,40 +583,6 @@ its values is > 50%. */
                         shadow.querySelector('#tagshold').value = decodeURIComponent(thetags);
 
                     } else {};
-                    //district database
-                    let paramdistrict = {
-                        "action": "searchData",
-                        "index": "change",
-                        "type": "product",
-                        "_source": "district",
-                        "body": {
-                            "query": {
-                                "match_all": {
-
-                                }
-                            }
-                        }
-                    };
-
-                    Polymer.postData(Url, paramdistrict).then(res => {
-                        if (res.code > 0) {
-                            let dist = res.resolve;
-
-                            let current = shadow.querySelector('#loc').innerHTML;
-
-                            for (var i = 0; i < dist.length; i++) {
-                                current = current + '<option id = "loc2' + i + '">觀塘區</option>';
-                            }
-                            shadow.querySelector('#loc').innerHTML = current;
-
-                            for (var i = 0; i < dist.length; i++) {
-                                shadow.querySelector('#loc2' + i).innerHTML = dist[i]['district'];
-                            };
-
-
-
-                        }
-                    });
 
 
 
@@ -898,9 +744,6 @@ its values is > 50%. */
 
                         }
                     });
-
-
-
 
 
                 },
