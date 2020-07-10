@@ -1,28 +1,15 @@
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
-<link rel="import" href="change-header-info.html">
+
 <dom-module id="change-header">
     <template>
         <style>
-			#gd{
-				position: absolute;
-                left: 31px;
-                top: 73px;
-			}
-
-            .hr1 {
-                border-top: #EFEFEF 1px;
-                margin-block-start: 0.1em;
-                margin-block-end: 0.1em;
-            }
 
             .header {
-                height: 122px;
+                height: 140px;
             }
 
             section.topWrap {
-                margin-left: 10px;
-                margin-right: 10px;
+                border-bottom: #EFEFEF solid 1px;
             }
 
             section.topWrap2 {
@@ -49,7 +36,7 @@
                 display: grid;
                 grid-row-gap: 20px;
                 grid-column-gap: 15px;
-                grid-template-columns: 2fr 6fr 1fr 2fr;
+                grid-template-columns: 2fr 5fr 2fr;
                 height: 80px;
             }
 
@@ -59,7 +46,7 @@
                 border-collapse: collapse;
                 background: #efefef;
                 height: 41px;
-                width: 104%;
+                width: 106%;
                 margin-top: 16px;
                 border-style: none;
                 font-size: 15px;
@@ -76,8 +63,6 @@
             img.logo {
                 height: 74px;
                 width: auto;
-                float: left;
-                margin-left: 20px;
             }
 
             img.logo-md {
@@ -89,6 +74,7 @@
             img.logo1 {
                 height: 74px;
                 width: auto;
+                float: right;
             }
 
             /*Configurações Globais*/
@@ -168,14 +154,15 @@
             .menu-icon {
                 display: none;
             }
-
+            .submen{
+                width: 150px;
+            }
             .s {
                 height: 41px;
                 margin-top: 16px;
                 border-style: none;
                 background: #efefef;
                 font-size: 15px;
-                width: 65px;
             }
 
             /* test */
@@ -184,16 +171,14 @@
                 border-style: none;
                 font-size: 15px;
                 margin-top: 16px;
-                background-color: #efefef;   
+                background-color: #efefef;
             } */
 
             .categories {
                 display: flex;
-                width: 65%;
-                padding-left: 18%;
-                padding-right: 15%;
-                margin-left: 10px;
-                margin-right: 10px;
+                width: 86%;
+                padding-left: 7%;
+                padding-right: 7%;
             }
 
             .categories li {
@@ -202,7 +187,8 @@
             }
 
             .categories a {
-                width: 15%;
+                color: black;
+                width: 100px;
             }
 
             .dropdown {
@@ -214,30 +200,30 @@
                 display: none;
                 position: absolute;
                 background-color: white;
-                min-width: 200px;
-                /* min-height: 200px; */
-                box-shadow: 0px 8px 16px 0px rgba(114, 109, 109, 0.2);
-                padding: 12px 16px;
+                min-width: 150px;
+                min-height: 200px;
+                box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+                /* padding: 12px 16px; */
                 z-index: 1;
                 margin-top: 40px;
-                /* left: 0px;
-                right: 0px; */
             }
 
             .dropdown-content0 {
                 display: none;
                 position: absolute;
                 background-color: white;
-                min-width: 200px;
-                /* min-height: 200px; */
-                box-shadow: 0px 8px 16px 0px rgba(114, 109, 109, 0.2);
-                padding: 12px 16px;
+                /* min-width: 150px;
+                min-height: 200px; */
+                box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+                /* padding: 12px 16px; */
                 z-index: 1;
                 margin-top: 40px;
-                /* left: 0px;
-                right: 0px; */
-            }
+                right: 0;
 
+            }
+            .disappear {
+                display: flex;
+            }
             .dropdown:hover .dropdown-content {
                 display: block;
             }
@@ -246,55 +232,43 @@
                 display: block;
             }
 
-            /* ul {
+            ul {
                 border-bottom: #EFEFEF solid 1px;
-            } */
-
-            .disappear {
-                display: flex;
             }
 
-            .custom-select {
-                display: flex;
-                width: 65px;
-            }
-
-            .arrow {
-                width: 25px;
-            }
-
-            .ar {
+            .ar{
                 margin-top: 5px;
             }
-
-            .l {
-                width: 1px;
-                height: 25px;
-                padding-right: 1px;
-                background-color: #c5c5c6;
-                border-top: 8px solid #efefef;
-                border-bottom: 8px solid #efefef;
-                margin-top: 16px;
-
+            .arrow {
+                width: 25px;
             }
 
             @media (max-width: 992px) {
                 div.disappear {
                     display: none;
                 }
+                .categories a {
+                    color: black;
+                    width: 80px;
+                }
+            }
+            @media (max-width: 855px) {
+                .categories a {
+                    background-color: gray;
+
+                }
             }
         </style>
 
         <header class="header">
-        	<vaadin-dialog></vaadin-dialog>
             <section class="top" style="height: 65px;">
                 <div class="topLine"></div>
                 <section class="topWrap ">
                     <div class="index-grid index-grid-md">
                         <div>
-                            <a href="http://change.dazzle.website/getTv.html"><img src="http://change.dazzle.website/img/logo/Change.png" class="logo"></a>
+                            <a href="getTv.html"><img src="http://change.dazzle.website/img/logo/Change.png"
+                                    class="logo"></a>
                         </div>
-
                         <div class="disappear">
                             <div class="custom-select">
                                 <select class="s">
@@ -303,25 +277,16 @@
                                 </select>
                                 <div class="l"></div>
                             </div>
-                            <input class="input-group1" type="text" placeholder="">
+                            <input id="searchmain" class="input-group1" type="text" placeholder="試試輸入iPhone">
+<!--                            <button on-click="_editMenu">editeditedit</button>-->
                             <button style="margin-top: 16px; height: 41px; background: #efefef;" on-click="searchlist">
                                 <svg class="search" viewBox="0 0 24 24" style=" width: 25px; height: 15px;">
                                     <title>Search Icon</title>
                                     <path fill="#57585a"
-                                        d="M15.618 17.032a9 9 0 1 1 1.414-1.414l5.675 5.675a1 1 0 0 1-1.414 1.414l-5.675-5.675zm-.701-2.05a1.017 1.017 0 0 1 .065-.065 7 7 0 1 0-.066.066z">
+                                          d="M15.618 17.032a9 9 0 1 1 1.414-1.414l5.675 5.675a1 1 0 0 1-1.414 1.414l-5.675-5.675zm-.701-2.05a1.017 1.017 0 0 1 .065-.065 7 7 0 1 0-.066.066z">
                                     </path>
                                 </svg>
                             </button>
-                        </div>
-
-                        <div class="disappear" style="width: 100px;">
-                            <a href="http://change.dazzle.website/"><button style="width: 100px;
-                                background-color: #F0846C;
-                                color: white;
-                                border-radius: 2px;
-                                height: 40px;
-                                margin-top: 16px;">收費區
-                            </button></a>
                         </div>
                         <change-user-panel>
                             <div><button>/ 註冊</button><button>/ 登入</button></div>
@@ -329,12 +294,10 @@
                     </div>
                 </section>
             </section>
-            <hr class="hr1">
-            <!-- <vaadin-button on-click="_editMenu" id="gd"></vaadin-button> -->
-            <div class="categories">
-            	
-            </div>
-            <hr class="hr1">
+
+            <ul class="categories" id="diuniluomu">
+
+            </ul>
         </header>
     </template>
 </dom-module>
@@ -342,63 +305,108 @@
     (function() {
         Polymer({
             is: 'change-header',
-            properties: {
-                len: {
-                    "type": Number
-                }
-            },
+            properties: {},
             created: function() {
+
+
 
             },
             ready: function() {
-                let that = this;
                 let shadow = this.shadowRoot;
+                let that = this;
                 let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 let params = {
                     "action": "searchData",
                     "index": "change",
                     "type": "categories",
                     "body": {
-                        "sort": [{
-                            "_id": {
-                                "order": "asc"
+                        "sort": [
+                            {
+                                "parent": {
+                                    "order": "asc"
+                                },
+                                "id": {
+                                    "order": "asc"
+                                }
                             }
-                        }],
+                        ],
                         "query": {
-                            "match": {
-                                "parent": "0"
-                            }
+                            "match_all": {}
                         }
                     }
-
-                }
-
+                };
                 Polymer.postData(url, params).then(res => {
-
-                    if (res.code > 0) {
-
-                        this.len = res.resolve.length;
-                        for (i = 0; i < res.resolve.length; i++) {
-                            let name = res.resolve[i]['name'];
-                            shadow.querySelector('.categories').innerHTML = shadow.querySelector('.categories').innerHTML + '<a href="#"><li class="dropdown" style="color: black;">' + name + '<div class="ar"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="arrow"><path fill="#2C2C2D" d="M10.146 7.146a.5.5 0 0 1 .708.708l-2.5 2.5a.5.5 0 0 1-.708 0l-2.5-2.5a.5.5 0 1 1 .708-.708L8 9.293l2.146-2.147z"></path></svg></div>' + '<div class="dropdown-content"><ul class="submen" id="item' + i + '"></ul></div>' + '</li></a>';
-                        }
-                        shadow.querySelector('.categories').innerHTML = shadow.querySelector('.categories').innerHTML + '<a href="#"><li class="dropdown" style="color: black;">' + '關於我們' + '<div class="ar"></div><p style="display: flex;"></p></li></a>';
-                        let e = store.get('editMode') || "normal";
-                        if (e != "normal") {
-                            console.log("Inside Edit Mode");
-                            shadow.querySelector('#gd').innerText = 'Edit';
-
+                    let maincates = [];
+                    let subcates = [];
+                    for (i = 0; i < res.resolve.length; i++) {
+                        if (res.resolve[i]['parent'] == "0") {
+                            maincates.push(res.resolve[i]);
                         } else {
-                            console.log("Not Inside Edit Mode");
-
+                            subcates.push(res.resolve[i]);
                         }
-                        console.log("success");
-                    } else {
-                        alert("header fail to gen")
-                    }
-                    this._makeDrop();
-                });
+                    };
+                    let ul = shadow.querySelector('ul#diuniluomu');
+                    maincates.forEach(maincate => {
+                        let li = document.createElement('li');
+                        li.setAttribute('class', 'dropdown');
+                        li.setAttribute('style', 'display: flex;');
+                        let a = document.createElement('a');
+                        a.setAttribute('target', '_blank');
+                        a.setAttribute('href', maincate['link']);
+                        a.innerText = maincate['name'];
+                        let div = document.createElement('div');
+                        subcates.forEach(subcate => {
+                            if (subcate['parent'] == maincate['_id']) {
+                                div.setAttribute('class', 'dropdown-content');
+                                let ul1 = document.createElement('ul');
+                                ul1.setAttribute('class', 'submen');
+                                let a1 = document.createElement('a');
+                                a1.setAttribute('target', '_blank');
+                                a1.setAttribute('href', subcate['link']);
+                                let li1 = document.createElement('li');
+                                li1.innerText = subcate['name'];
+                                a1.appendChild(li1);
+                                ul1.appendChild(a1);
+                                div.appendChild(ul1);
+                            }
+                        });
+                        let div1 = document.createElement('div');
+                        div1.setAttribute('class','ar');
+                        div1.innerHTML += '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="arrow">\n' +
+                            '    <path fill="#2C2C2D"\n' +
+                            '        d="M10.146 7.146a.5.5 0 0 1 .708.708l-2.5 2.5a.5.5 0 0 1-.708 0l-2.5-2.5a.5.5 0 1 1 .708-.708L8 9.293l2.146-2.147z">\n' +
+                            '    </path>\n' +
+                            '</svg>';
+                        li.appendChild(a);
+                        li.appendChild(div1);
+                        li.appendChild(div);
+                        ul.appendChild(li);
 
+                    });
+                    let aboutUs = document.createElement('li');
+                    aboutUs.setAttribute('class','dropdown');
+                    aboutUs.setAttribute('style','color: black;');
+                    aboutUs.innerHTML = '關於我們<div class="ar"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="arrow"><path fill="#2C2C2D" d="M10.146 7.146a.5.5 0 0 1 .708.708l-2.5 2.5a.5.5 0 0 1-.708 0l-2.5-2.5a.5.5 0 1 1 .708-.708L8 9.293l2.146-2.147z"></path></svg></div><p style="display: flex;"></p><div class="dropdown-content"><ul class="submen"><a target="_blank" href="./question"><li>問題反映</li></a></ul><ul class="submen"><a target="_blank" href="./term"><li>使用條款</li></a></ul><ul class="submen"><a target="_blank" href="./private"><li>隱私政策</li></a></ul><ul class="submen"><a target="_blank" href="./news"><li>最新消息</li></a></ul><ul class="submen"><a target="_blank" href="./promotion"><li>推廣</li></a></ul><ul class="submen"><a target="_blank" href="./ChannelList"><li>頻道龍虎榜</li></a></ul><ul class="submen"><a target="_blank" href="./cooperation"><li>品牌合作</li></a></ul><ul class="submen"><a target="_blank" href="./contact"><li>聯絡我們</li></a></ul></div>';
+                    ul.appendChild(aboutUs);
+
+                    shadow.querySelector('#searchmain').addEventListener("keypress", function(e) {
+                        var key = e.which || e.keyCode || 0;
+                        if (key === 13) {
+                            that.searchlist();
+                        }
+
+                    });
+                })
+            },
+
+            searchlist: function() {
+                let shadow = this.shadowRoot;
+                if (shadow.querySelector('.s').value == "0") {
+                    var serchcat = '/list-product.html?tag' + shadow.querySelector('#searchmain').value;
+                } else {
+                    var serchcat = "/list-product.html?user" + shadow.querySelector('#searchmain').value;
+                }
+                location.href = serchcat;
             },
 
             _editMenu: function() {
@@ -408,49 +416,6 @@
                 Polymer.popup(dialog, "change", "change-header-info", "85%", "85%");
                 console.log("Executed");
             },
-
-            searchlist: function() {
-                location.href = "/list-product.html";
-            },
-
-            _makeDrop: function() {
-                let shadow = this.shadowRoot;
-                let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                for (var i = 1; i <= this.len; i++) {
-                    let params = {
-                        "action": "searchData",
-                        "index": "change",
-                        "type": "categories",
-                        "body": {
-                            "sort": [{
-                                "_id": {
-                                    "order": "asc"
-                                }
-                            }],
-                            "query": {
-                                "match": {
-                                    "parent": i
-                                }
-                            }
-                        }
-                    }
-
-                    Polymer.postData(url, params).then(res => {
-                        if (res.code > 0) {
-                            let x = "";
-                            let p = 0;
-                            for (var w = 0; w < res.resolve.length; w++) {
-                                x += '<li>' + res.resolve[w]['name'] + '</li>';
-                                console.log("Test Edit", x);
-                                p = res.resolve[w]['parent'];
-                            }
-                            p--;
-                            shadow.querySelector('#item' + p).innerHTML = x;
-                        }
-                    });
-                }
-            }
-
 
         });
     })();

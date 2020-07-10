@@ -2,13 +2,19 @@
 <link rel="import" href="../vaadin-button/vaadin-button.html">
 <link rel="import" href="../vaadin-select/vaadin-select.html">
 <link rel="import" href="../vaadin-checkbox/vaadin-checkbox.html">
+<link rel="import" href="change-status.html">
 
 <dom-module id="change-edit-bar">
     <template>
         <style>
             * {
                 color: black;
-                font-family: sans-serif;
+                font-family: sans-serif, Microsoft JhengHei;
+            }
+
+            header {
+                background-image: url(http://change.dazzle.website/img/background/3.jpg);
+                padding-top: 30px;
             }
 
             #tbar {
@@ -18,24 +24,29 @@
                 padding-top: 15px;
                 padding-bottom: 25px;
                 background: #F0F0F0;
-                margin-left: 15px;
-                margin-right: 15px;
+                width: 92.5%;
+                margin: 0 auto;
+                margin-right: 61px;
             }
 
             #edit {
-                width: 90px;
+                width: 100px;
                 height: 35px;
                 border: 1px solid #ccc;
                 background-color: white;
+                margin-right: 50px;
             }
 
             button {
                 cursor: pointer;
+                font-family: sans-serif, Microsoft JhengHei;
+                font-size: 15px;
             }
 
             .left {
                 margin-top: 11px;
                 margin-left: 30px;
+                display: inline-flex;
             }
 
             .right {
@@ -45,6 +56,8 @@
             .buttons button {
                 padding: 3px;
                 margin-top: 15px;
+                width: 100px;
+                font-family: sans-serif, Microsoft JhengHei;
             }
 
             #copy {
@@ -74,6 +87,7 @@
             <div id="tbar">
                 <div class="button left">
                     <a id="edi" href="#"><button id="edit">編輯</button></a>
+                    <change-status></change-status>
                 </div>
 
                 <div class="buttons right">
@@ -120,13 +134,14 @@
                 console.log("Edit Bar ID", pid);
                 this.id = pid;
                 let user = store.get('change-user') || null;
+                //Check whether login or not (not login -> hide)
                 if (user == null) {
                     // alert("Cannot access edit product if not logged in");
                     // location.replace("http://change.dazzle.website");
                     shadow.querySelector('#tbar').style.display = "none";
                 }
                 else {
-
+                    //Check whether login or not (already login -> show)
                     let params = {
                         "action": "searchData",
                         "index": "change",
@@ -138,7 +153,7 @@
                                 }
                             }
                         }
-                    }
+                    };
                     let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                     Polymer.postData(url, params).then(res => {
                         console.log("Matters", res.resolve);
@@ -154,7 +169,27 @@
                                 console.log("Complete Done");
                             }
                         }
-                    })
+                    });
+
+                    let params1 = {
+                        "action": "addData",
+                        "index": "change",
+                        "type": "product",
+                        "body": {
+                            "query": {
+                                "match": {
+                                    "id": this.id
+                                }
+                            }
+                        }
+                    };
+
+                    Polymer.postData(url, params1).then(res => {
+                        console.log("WORKING:", res.resolve);
+
+                    });
+
+
                 }
 
 
@@ -301,7 +336,7 @@
                         Polymer.postData(Url, json).then(res => {
                             if (res.code > 0) {
                                 alert("SUCCESS!");
-                                location.replace("./add-product.html?p"+ thenewid +"u" + user['_id']);
+                                location.replace("./add-product.html?p" + thenewid + "u" + user['_id']);
                             } else {
                                 alert("FAILED!")
                             }

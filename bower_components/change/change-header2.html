@@ -3,7 +3,10 @@
 <dom-module id="change-header2">
     <template>
         <style>
-
+            * {
+                font-family: sans-serif, Microsoft JhengHei;
+            }
+ 
             .header {
                 height: 140px;
             }
@@ -188,6 +191,7 @@
             .categories a {
                 color: black;
                 width: 60px;
+                font-weight: 350;
             }
 
             .dropdown {
@@ -233,20 +237,13 @@
                 border-bottom: #EFEFEF solid 1px;
             }
 
-            .disappear {
-                display: flex;
-            }
-
-            .arrow {
-                width: 25px;
-                margin-top: 10px;
-                height: 25px;
-            }
-
             .ar {
                 margin-top: 5px;
             }
 
+            .arrow {
+                width: 25px;
+            }
 
             @media (max-width: 992px) {
                 div.disappear {
@@ -261,11 +258,12 @@
                 <section class="topWrap ">
                     <div class="index-grid index-grid-md">
                         <div>
-                            <a><img src="http://change.dazzle.website/Website%20Design/get%20tv/GET%20TV%20photo/logo/GetTV%20logo_0430-03.png"
+                            <a href="./getTv.html"><img src="./Website%20Design/get%20tv/GET%20TV%20photo/logo/GetTV%20logo_0430-03.png"
                                     class="logo"></a>
                         </div>
                         <div>
-                            <a href="http://change.dazzle.website/getTv.html"><img src="http://change.dazzle.website/img/logo/Change.png" class="logo1"></a>
+                            <a href="./getTv.html"><img
+                                    src="./img/logo/Change.png" class="logo1"></a>
                         </div>
                         <change-user-panel>
                             <div><button>/ 註冊</button><button>/ 登入</button></div>
@@ -273,7 +271,8 @@
                     </div>
                 </section>
             </section>
-            <ul class="categories">
+
+            <ul class="categories" id="diuniluomu">
 
             </ul>
         </header>
@@ -286,7 +285,6 @@
             properties: {},
             created: function() {},
             ready: function() {
-                let that = this;
                 let shadow = this.shadowRoot;
                 let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 let params = {
@@ -295,78 +293,67 @@
                     "type": "gettv",
                     "body": {
                         "sort": [{
-                            "_id": {
+                            "parent": {
+                                "order": "asc"
+                            },
+                            "id": {
                                 "order": "asc"
                             }
                         }],
                         "query": {
-                            "match": {
-                                "parent": "0"
-                            }
+                            "match_all": {}
                         }
                     }
-                }
+                };
                 Polymer.postData(url, params).then(res => {
-                    console.log("RP", res);
-                    if (res.code > 0) {
-                        for (i = 0; i < res.resolve.length; i++) {
-                            let name = res.resolve[i]['name'];
-                            let link = res.resolve[i]['link'];
-                            console.log("RP Link", link);
-                            shadow.querySelector('.categories').innerHTML += '<li class="dropdown" style="display: flex;"> <a target="_blank" href="' + link + '">' + name + '</a> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="arrow"> <path fill="#2C2C2D" d="M10.146 7.146a.5.5 0 0 1 .708.708l-2.5 2.5a.5.5 0 0 1-.708 0l-2.5-2.5a.5.5 0 1 1 .708-.708L8 9.293l2.146-2.147z"> </path> </svg> <div class="dropdown-content"> <ul class="submen" id ="item' + i + '">Hello</ul> </div> </li>'
+                    let maincates = [];
+                    let subcates = [];
+                    for (i = 0; i < res.resolve.length; i++) {
+                        if (res.resolve[i]['parent'] == "0") {
+                            maincates.push(res.resolve[i]);
+                        } else {
+                            subcates.push(res.resolve[i]);
                         }
-                        shadow.querySelector('.categories').innerHTML += '<li class="dropdown" style="display: flex;">                    <a href="#">Get多啲</a>                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="arrow">                        <path fill="#2C2C2D" d="M10.146 7.146a.5.5 0 0 1 .708.708l-2.5 2.5a.5.5 0 0 1-.708 0l-2.5-2.5a.5.5 0 1 1 .708-.708L8 9.293l2.146-2.147z">                        </path>                    </svg>                    <div class="dropdown-content0">                        <p></p>                    </div>                </li>';
-                        console.log("RP can go to lunch");
-                        this._makeDrop();
-                    }
+                    };
+                    let ul = shadow.querySelector('ul#diuniluomu');
+                    maincates.forEach(maincate => {
+                        let li = document.createElement('li');
+                        li.setAttribute('class', 'dropdown');
+                        li.setAttribute('style', 'display: flex;');
+                        let a = document.createElement('a');
+                        a.setAttribute('target', '_blank');
+                        a.setAttribute('href', maincate['link']);
+                        a.innerText = maincate['name'];
+                        let div = document.createElement('div');
+                        subcates.forEach(subcate => {
+                            if (subcate['parent'] == maincate['_id']) {
+                                div.setAttribute('class', 'dropdown-content');
+                                let ul1 = document.createElement('ul');
+                                ul1.setAttribute('class', 'submen');
+                                let a1 = document.createElement('a');
+                                a1.setAttribute('target', '_blank');
+                                a1.setAttribute('href', subcate['link']);
+                                let li1 = document.createElement('li');
+                                li1.innerText = subcate['name'];
+                                a1.appendChild(li1);
+                                ul1.appendChild(a1);
+                                div.appendChild(ul1);
+                            }
+                        });
+                        let div1 = document.createElement('div');
+                        div1.setAttribute('class', 'ar');
+                        div1.innerHTML += '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="arrow">\n' +
+                            '    <path fill="#2C2C2D"\n' +
+                            '        d="M10.146 7.146a.5.5 0 0 1 .708.708l-2.5 2.5a.5.5 0 0 1-.708 0l-2.5-2.5a.5.5 0 1 1 .708-.708L8 9.293l2.146-2.147z">\n' +
+                            '    </path>\n' +
+                            '</svg>'
+                        li.appendChild(a);
+                        li.appendChild(div1);
+                        li.appendChild(div);
+                        ul.appendChild(li);
+                    });
                 })
             },
-            _makeDrop: function() {
-                let shadow = this.shadowRoot;
-                let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                for (var i = 1; i < 8; i++) {
-                    let params = {
-                        "action": "searchData",
-                        "index": "change",
-                        "type": "gettv",
-                        "body": {
-                            "sort": [{
-                                "_id": {
-                                    "order": "asc"
-                                }
-                            }],
-                            "query": {
-                                "match": {
-                                    "parent": i
-                                }
-                            }
-                        }
-                    }
-
-                    Polymer.postData(url, params).then(res => {
-                        console.log("Parameter", params);
-                        console.log("Result", res);
-                        if (res.code > 0) {
-                            let x = "";
-                            let p = 0;
-                            for (var w = 0; w < res.resolve.length; w++) {
-                                x += '<a target="_blank" href="' + res.resolve[w]['link'] + '"><li>' + res.resolve[w]['name'] + '</li></a>';
-                                console.log("Test Edit", x);
-                                p = res.resolve[w]['parent'];
-                            }
-                            p--;
-                            console.log("Looking for #item" + p);
-                            shadow.querySelector('#item' + p).innerHTML = x;
-                        }
-                    });
-                }
-            },
-
-            _toGetchange: function() {
-                console.log("Testing");
-                location.assign("http://change.dazzle.website");
-            }
-
 
         });
     })();

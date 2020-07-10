@@ -21,16 +21,16 @@
                 grid-row-gap: 40px;
 				grid-template-columns: repeat(4, 1fr);
                 background-color: white;
-                /* -webkit-box-shadow: 0px 0px 11px 1px rgba(50,49,56,1);
-                -moz-box-shadow: 0px 0px 11px 1px rgba(50,49,56,1);
-                box-shadow: 0px 0px 11px 1px rgba(50,49,56,1); */
+                -webkit-box-shadow: 1px 0px 8px 0px rgba(50, 49, 56, 0.2);
+                -moz-box-shadow: 1px 0px 8px 0px rgba(50, 49, 56, 0.2);
+                box-shadow: 1px 0px 8px 0px rgba(50, 49, 56, 0.2);
             }
       
 
             #morebutton:hover{
                 cursor: pointer;
                 color: gray;
-                text-decoration: underline;
+                /* text-decoration: underline; */
             }
 
             #morebutton{
@@ -52,8 +52,16 @@
 
 
 <!-- <div class="initemtitle" id="viewingcat">你正在瀏覽的分類  </div> -->
+<!-- <div class="things-grid" id="blank"></div>
+<div class="botbutton"><button id="morebutton" on-click="_showmore">//更多//</button>
+</div> -->
 <div class="things-grid" id="blank"></div>
-<div class="botbutton"><vaadin-button id="morebutton" on-click="_showmore">更多</vaadin-button></div>
+<div class="botbutton">
+    <div style="text-align: center;">
+        <vaadin-button id="morebutton" on-click="displaymore">更多</vaadin-button>
+    </div>
+</div>
+
 
     </template>
 
@@ -110,8 +118,9 @@
             created: function() {
 
             },
+
             // search:function(cats,tags,district,priceStart,priceEnd){
-            search(cats, tags, district, priceStart, priceEnd) {
+            search(cats, tags, district, isNew, priceStart, priceEnd) {
 
                 let that = this;
                 let shadow = this.shadowRoot;
@@ -121,23 +130,62 @@
                 let Query = [{
                     'match_all': {}
                 }];
-                if (cats.length > 0) {
-                    Query.push({
-                        'terms': {
-                            'categories': cats
-                        }
-                    });
-                }
-                if (tags.length > 0) {
-                    tags.forEach(item => {
-                        Query.push({
-                            'term': {
-                                'tags': item
+                ////search the categoriews
+                let cateid = [];
+                if (cats != undefined || cats != null) {
+                    if (cats.length > 0) {
+                        cateid.push({
+                            'terms': {
+                                'categories': cats
                             }
                         });
-                    });
-                }
+                    };
+                };
 
+                //////search the isNew
+                if (isNew != undefined || isNew != null) {
+                    let isnewid = [];
+                    if (isNew.length == 1) {
+                        Query.push({
+                            'terms': {
+                                'isNew': isNew
+                            }
+                        })
+                    } else {
+                        isnewid = [];
+                    };
+                };
+
+                /////search the tags
+                if (tags != undefined || tags != null) {
+                    if (tags.length > 0) {
+                        tags.forEach(item => {
+                            Query.push({
+                                'term': {
+                                    'tags': item
+                                }
+                            });
+                        });
+                    };
+                };
+
+                /////search the district
+                if (district != undefined || district != null) {
+                    if (district > 0) {
+                        Query.push({
+                            'terms': {
+                                'district': district
+                            }
+                        })
+                    };
+                };
+
+                /////search the price range
+
+
+
+
+                //// the cate query
                 let paramcate = {
                     "action": "searchData",
                     "index": "change",
@@ -150,170 +198,180 @@
                         }],
                         "query": {
                             "bool": {
+                                "should": cateid,
                                 "must": Query
                             }
                         }
                     }
                 };
-                console.log('Query', Query, paramcate);
-
-                Polymer.postData(url, paramcate).then(res => {
-                    console.log('Result', res);
-
-                });
-
-            },
-            searchfunc: function() {
-                let that = this;
-                let shadow = this.shadowRoot;
-                let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                //////cate Id
-                let paramcate = {
-                    "action": "searchData",
-                    "index": "change",
-                    "type": "product",
-                    "body": {
-                        "sort": [{
-                            "createTime": {
-                                "order": "desc"
-                            }
-                        }],
-                        "query": {
-                            "bool": {
-                                "should": this.storeshould
-                            }
-                        }
-                    }
-                };
-
+                let shop = document.querySelector('change-shop');
+                let list = shop.shadowRoot.querySelector('change-slidelist');
+                list.shadowRoot.querySelector('#renew').innerHTML = '<change-range></change-range>';
+                list.shadowRoot.querySelector('change-range').query = paramcate;
+                list.shadowRoot.querySelector('change-range').new();
+                console.log(JSON.stringify(paramcate));
                 Polymer.postData(url, paramcate).then(res => {
                     if (res.code > 0) {
-                        this.cateIdarray = [];
-                        for (a = 0; a < res.resolve.length; a++) {
-                            this.cateIdarray.push(res.resolve[a]['_id'])
-                        }
-                        ///////sear all Id
-                        let paramallId = {
-                            "action": "searchData",
-                            "index": "change",
-                            "type": "product",
-                            "body": {
-                                "sort": [{
-                                    "createTime": {
-                                        "order": "desc"
-                                    }
-                                }],
-                                "query": {
-                                    "bool": {
-                                        "must": this.storemust
-                                    }
-                                }
-                            }
-                        };
-                        Polymer.postData(url, paramallId).then(res => {
-                            if (res.code > 0) {
-                                this.allIdarray = [];
-                                for (ddb = 0; ddb < res.resolve.length; ddb++) {
-                                    this.allIdarray.push(res.resolve[ddb]['_id'])
-                                }
-                                console.log("the cate array is,:", this.cateIdarray);
-                                console.log("the all id array is ,:", this.allIdarray);
-
-                                var storeitemsId = [];
+                        this.res = res;
+                        let musts = res.resolve;
+                        shadow.querySelector('#blank').innerHTML = "";
+                        musts.forEach(must => {
+                            let put = shadow.querySelector('#blank');
+                            let add = document.createElement('change-things');
+                            add.setAttribute('id', must._id)
+                            put.appendChild(add);
+                        });
+                        // let max = 0;
+                        // for (i = 0; i < musts.length; i++) {
+                        //     if (musts[i] > max) {
+                        //         max = musts[i];
+                        //     } else {};
+                        // }
 
 
-                                for (q = 0; q < this.cateIdarray.length; q++) {
-                                    for (w = 0; w < this.allIdarray.length; w++) {
-
-                                        if (this.cateIdarray[q] == this.allIdarray[w]) {
-                                            storeitemsId.push(this.cateIdarray[q])
-                                        }
-                                    }
-                                }
-                                this.allquery = storeitemsId;
-                                this._querySelect();
 
 
-                            }
-                        })
-                    } else {
-                        console.log("error in store categories id");
+
                     }
 
                 });
 
-
-
-
-
-
             },
+            // searchfunc: function() {
+            //     let that = this;
+            //     let shadow = this.shadowRoot;
+            //     let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+            //     //////cate Id
+            //     let paramcate = {
+            //         "action": "searchData",
+            //         "index": "change",
+            //         "type": "product",
+            //         "body": {
+            //             "sort": [{
+            //                 "createTime": {
+            //                     "order": "desc"
+            //                 }
+            //             }],
+            //             "query": {
+            //                 "bool": {
+            //                     "should": this.storeshould
+            //                 }
+            //             }
+            //         }
+            //     };
+
+            //     Polymer.postData(url, paramcate).then(res => {
+            //         if (res.code > 0) {
+            //             this.cateIdarray = [];
+            //             for (a = 0; a < res.resolve.length; a++) {
+            //                 this.cateIdarray.push(res.resolve[a]['_id'])
+            //             }
+            //             ///////sear all Id
+            //             let paramallId = {
+            //                 "action": "searchData",
+            //                 "index": "change",
+            //                 "type": "product",
+            //                 "body": {
+            //                     "sort": [{
+            //                         "createTime": {
+            //                             "order": "desc"
+            //                         }
+            //                     }],
+            //                     "query": {
+            //                         "bool": {
+            //                             "must": this.storemust
+            //                         }
+            //                     }
+            //                 }
+            //             };
+            //             Polymer.postData(url, paramallId).then(res => {
+            //                 if (res.code > 0) {
+            //                     this.allIdarray = [];
+            //                     for (ddb = 0; ddb < res.resolve.length; ddb++) {
+            //                         this.allIdarray.push(res.resolve[ddb]['_id'])
+            //                     }
+            //                     console.log("the cate array is,:", this.cateIdarray);
+            //                     console.log("the all id array is ,:", this.allIdarray);
+
+            //                     var storeitemsId = [];
+
+
+            //                     for (q = 0; q < this.cateIdarray.length; q++) {
+            //                         for (w = 0; w < this.allIdarray.length; w++) {
+
+            //                             if (this.cateIdarray[q] == this.allIdarray[w]) {
+            //                                 storeitemsId.push(this.cateIdarray[q])
+            //                             }
+            //                         }
+            //                     }
+            //                     this.allquery = storeitemsId;
+            //                     this._querySelect();
+
+
+            //                 }
+            //             })
+            //         } else {
+            //             console.log("error in store categories id");
+            //         }
+
+            //     });
+
+
+
+
+
+
+            // },
 
 
             ready: function() {
-                // console.log("qqqqqq", this.storeviewcate);
-                let that = this;
-                let shadow = this.shadowRoot;
-                console.log("the button chinese is: ", this.storeviewcate);
-
-
-                this.countitem = 0;
-                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                let param = {
-                    "action": "searchData",
-                    "index": "change",
-                    "type": "product",
-                    "body": {
-                        "sort": [{
-                            "createTime": {
-                                "order": "desc"
-                            }
-                        }],
-                        "query": {
-                            "match_all": {}
-                        }
-
-                    }
-                };
-
-
-                Polymer.postData(Url, param).then(res => {
-                    if (res.code > 0) {
-                        let prods = res.resolve;
-                        this.res = res;
-                        var storeId = [];
-                        let check8 = 10;
-                        console.log("prodlength is:", prods.length, "countitem is:", this.countitem);
-                        if (prods.length - this.countitem < 10) {
-                            check8 = prods.length - this.countitem;
-                        }
-                        console.log("Result Query", prods);
-                        for (var i = 0; i < check8; i++) {
-                            let theidis = prods[i]['_id'];
-
-                            storeId.push(theidis)
-                        };
-
-
-                        if (prods.length - this.countitem < 10) {
-                            check8 = prods.length - this.countitem;
-                        }
-                        for (var i = 0; i < check8; i++) {
-                            let addi = document.createElement('change-things');
-                            addi.setAttribute('id', storeId[i])
-                            shadow.querySelector(".things-grid").appendChild(addi);
-                        }
-                        this.countitem = 10;
-
-                    } else {
-                        alert("error");
-                    }
-
-                });
+                this.search();
 
             },
 
-            _showmore: function() {
+            // _showmore: function() {
+            //     let that = this;
+            //     let shadow = this.shadowRoot;
+
+
+            //     if (this.res.code > 0) {
+            //         let prods = this.res.resolve;
+
+            //         var storeId = [];
+            //         let check8 = 8;
+            //         if (prods.length - this.countitem < 8) {
+            //             check8 = prods.length - this.countitem;
+            //         }
+            //         for (var i = this.countitem; i < this.countitem + check8; i++) {
+            //             let theidis = prods[i]['_id'];
+
+            //             storeId.push(theidis)
+
+            //         };
+
+
+            //         if (prods.length - this.countitem < 8) {
+            //             check8 = prods.length - this.countitem;
+            //         }
+            //         for (var i = 0; i < check8; i++) {
+            //             let addi = document.createElement('change-things');
+
+            //             addi.setAttribute('id', storeId[i]);
+            //             shadow.querySelector(".things-grid").appendChild(addi);
+
+            //         }
+            //         this.countitem += 8;
+
+            //     } else {
+            //         alert("error");
+            //     }
+
+
+
+
+            // },
+
+            displaymore: function() {
                 let that = this;
                 let shadow = this.shadowRoot;
 
@@ -337,10 +395,10 @@
                     if (prods.length - this.countitem < 8) {
                         check8 = prods.length - this.countitem;
                     }
+
                     for (var i = 0; i < check8; i++) {
                         let addi = document.createElement('change-things');
-
-                        addi.setAttribute('id', storeId[i]);
+                        addi.setAttribute('id', storeId[i])
                         shadow.querySelector(".things-grid").appendChild(addi);
 
                     }
@@ -354,7 +412,6 @@
 
 
             },
-
 
             _querySelect: function() {
                 console.log('inside _querySelect')

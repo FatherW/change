@@ -13,7 +13,8 @@
 <link rel="import" href="change-dropzone-file.html">
 <link rel="import" href="change-gallery.html">
 
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/dz-file-management/change-photo-stock.html">
+<link rel="import"
+    href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/dz-file-management/change-photo-stock.html">
 
 
 <link rel="stylesheet" href="">
@@ -28,7 +29,7 @@
         <style>
             * {
                 color: black;
-                font-family: sans-serif;
+                font-family: sans-serif, Microsoft JhengHei;
             }
 
             header {}
@@ -69,10 +70,15 @@
             .change-new-product-container {
                 display: grid;
                 grid-template-columns: 50% 48%;
-                margin-bottom: 50px;
                 border: 1px solid #ccc;
                 margin-left: 15px;
                 margin-right: 15px;
+                background-color: white;
+            }
+
+            header {
+                background-image: url(http://change.dazzle.website/img/background/3.jpg);
+                padding-top: 30px;
             }
 
             #tbar {
@@ -157,6 +163,13 @@
                 color: white;
             }
 
+            .outer {
+                margin: 0;
+                width: 100%;
+                background-image: url(http://change.dazzle.website/img/background/3.jpg);
+                padding-bottom: 50px;
+            }
+
             .left-pics {
                 width: 90%;
                 background-color: white;
@@ -166,7 +179,7 @@
 
             .right-product {
                 width: 100;
-                height: 1000px;
+                height: auto;
                 background-color: white;
                 margin-top: 30px;
                 margin-left: 30px;
@@ -211,7 +224,7 @@
             }
 
             .sellerMES {
-                margin-top: 40px; 
+                margin-top: 40px;
                 margin-bottom: 20px;
             }
 
@@ -260,6 +273,7 @@
                 overflow: hidden;
                 width: 100%;
                 border: 1px #ccc solid;
+                margin-bottom: 30px;
             }
 
             #usericon {
@@ -359,7 +373,13 @@
             /* [part="input-field"] {
                 background-color: white;
             } */
-            
+
+            .outer {
+                margin: 0;
+                width: 100%;
+                background-image: url(http://change.dazzle.website/img/background/3.jpg)
+            }
+
             @media only screen and (max-width: 768px) {
                 .change-new-product-container {
                     display: grid;
@@ -381,16 +401,17 @@
         <header>
             <div id="tbar">
                 <div style="display: flex; margin-left: 25px;">
-                    <div style="margin-top: 11px; margin-left: 12px;">
+                    <!-- <div style="margin-top: 11px; margin-left: 12px;">
                         <vaadin-select id="vs1" placeholder="選擇分類"></vaadin-select>
-                    </div>
-                    <!-- <change-categories-dropdown id="vs1" style="margin-top: 11px; margin-left: 12px;"></change-categories-dropdown> -->
+                    </div> -->
+                    <change-categories-dropdown id="vs1" style="margin-top: 11px; margin-left: 12px;">
+                    </change-categories-dropdown>
 
 
                     <div style="margin-top: 11px; margin-left: 25px;">
                         <vaadin-select id="pro" placeholder="専頁"></vaadin-select>
                     </div>
-                    
+
                     <!--check box, public-->
                     <!-- <vaadin-checkbox-group label="Label" theme="vertical" id="firstlabel">
                         <vaadin-checkbox theme="custom" value="1" id="public">是否公開(専頁用)</vaadin-checkbox>
@@ -411,138 +432,141 @@
             </div>
         </header>
 
-        <div class="change-new-product-container">
-            <div class="left-pics">
-                <!-- 5pics -->
-                <div id="div0" class="bigPic productImg" on-click="_uploadFile">
-                    <!-- <img src$="{{pics[0]}}" style="width:100%"/> -->
-                
+        <div class="outer">
+            <div class="change-new-product-container">
+                <div class="left-pics">
+                    <!-- 5pics -->
+                    <div id="div0" class="bigPic productImg" on-click="_uploadFile">
+                        <!-- <img src$="{{pics[0]}}" style="width:100%"/> -->
+
+                    </div>
+                    <div style="height: 100px;">
+
+                        <!-- GG get Array Pic from Database -->
+                        <div class="consmall">
+                            <div id="div1" class="productImg" on-click="_uploadFile"></div>
+                            <div id="div2" class="productImg" on-click="_uploadFile"></div>
+                            <div id="div3" class="productImg" on-click="_uploadFile"></div>
+                            <div id="div4" class="productImg" on-click="_uploadFile"></div>
+                        </div>
+                        <div class="buttons u">
+                            <!-- <button id="upload" on-click="_uploadFile">上載圖片</button> -->
+                        </div>
+                        <vaadin-dialog></vaadin-dialog>
+                    </div>
+
+                    <div>
+                        <div class="sellerMES" id="aaa">
+                            <b style="font-size: 20px; color: black;">賣家訊息:</b>
+                        </div>
+                        <!-- TEXT AREA-->
+                        <div class="inputbox">
+                            <textarea id="sMes" name="sellermessage" rows="12" placeholder="輸入賣家訊息..."></textarea>
+                        </div>
+                    </div>
                 </div>
-                <div style="height: 100px;">
 
-                    <!-- GG get Array Pic from Database -->
-                    <div class="consmall">
-                        <div id="div1"  class="productImg" on-click="_uploadFile"></div>
-                        <div id="div2" class="productImg"  on-click="_uploadFile"></div>
-                        <div id="div3"  class="productImg" on-click="_uploadFile"></div>
-                        <div id="div4" class="productImg"  on-click="_uploadFile"></div>
-                    </div>
-                    <div class="buttons u">
-                        <!-- <button id="upload" on-click="_uploadFile">上載圖片</button> -->
-                    </div>
-                    <vaadin-dialog></vaadin-dialog>
-                </div>
+                <div class="right-product">
+                    <!-- Right Product info -->
+                    <div class="fullWidth">
+                        <div class="custom-select">
+                            <!-- <select id="cs1">
+                                <option value="0">全新</option>
+                                <option value="1">二手</option>
+                            </select> -->
+                            <vaadin-select id="vs4" placeholder="全新" style="width: 90px;"></vaadin-select>
+                        </div>
 
-                <div>
-                    <div class="sellerMES" id="aaa">
-                        <b style="font-size: 20px; color: black;">賣家訊息:</b>
+                        <div style="width: 100%;">
+                            <!--input box-->
+                            <div class="inputbox">
+                                <input type="text" id="pname" name="firstname" placeholder="輸入商品標題..." maxlength="14">
+                            </div>
+                        </div>
                     </div>
-                    <!-- TEXT AREA-->
-                    <div class="inputbox">
-                        <textarea id="sMes" name="sellermessage" rows="12" placeholder="輸入賣家訊息..."></textarea>
-                    </div>
-                </div>
-            </div>
-
-            <div class="right-product">
-                <!-- Right Product info -->
-                <div class="fullWidth">
-                    <div class="custom-select">
-                        <!-- <select id="cs1">
-                            <option value="0">全新</option>
-                            <option value="1">二手</option>
-                        </select> -->
-                        <vaadin-select id="vs4" placeholder="全新" style="width: 90px;"></vaadin-select>
+                    <div class="userinfo">
+                        <div id="usericon">
+                            <div id="a1">
+                                <img id="gand" src="http://change.dazzle.website/img/user_profile.png">
+                            </div>
+                            <div id="a2">
+                                <div class="name" id="owner">1234</div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div style="width: 100%;">
+                    <div class="hkd" style="display: flex;">
+                        <div class="dollar" id="aaa"><b style="font-size: 30px; color: black;">HKD</b></div>
                         <!--input box-->
                         <div class="inputbox">
-                            <input type="text" id="pname" name="firstname" placeholder="輸入商品標題..." maxlength="14">
+                            <input type="number" id="price" name="priceHKD" placeholder="輸入商品價錢..." value="10">
                         </div>
                     </div>
-                </div>
-                <div class="userinfo">
-                    <div id="usericon">
-                        <div id="a1">
-                            <img id="gand" src="http://change.dazzle.website/img/user_profile.png">
+                    <hr>
+
+
+                    <div class="loca" style="display: flex;">
+                        <div id="location"></div>
+                        <div style="margin-top: 11px; margin-left: 12px;">
+                            <vaadin-select id="vs2" placeholder="選擇地區"></vaadin-select>
                         </div>
-                        <div id="a2">
-                            <div class="name" id="owner">1234</div>
+                    </div>
+
+
+
+                    <div class="del" style="display: flex;">
+                        <div id="delivery"></div>
+                        <div style="margin-top: 11px; margin-left: 12px;">
+                            <vaadin-select id="vs3" placeholder="選擇發送方法"></vaadin-select>
                         </div>
                     </div>
-                </div>
 
-                <div class="hkd" style="display: flex;">
-                    <div class="dollar" id="aaa"><b style="font-size: 30px; color: black;">HKD</b></div>
-                    <!--input box-->
-                    <div class="inputbox">
-                        <input type="number" id="price" name="priceHKD" placeholder="輸入商品價錢...">
-                    </div>
-                </div>
-                <hr>
-
-
-                <div class="loca" style="display: flex;">
-                    <div id="location"></div>
-                    <div style="margin-top: 11px; margin-left: 12px;">
-                        <vaadin-select id="vs2" placeholder="選擇地區"></vaadin-select>
-                    </div>
-                </div>
+                    <hr>
 
 
 
-                <div class="del" style="display: flex;">
-                    <div id="delivery"></div>
-                    <div style="margin-top: 11px; margin-left: 12px;">
-                        <vaadin-select id="vs3" placeholder="選擇發送方法"></vaadin-select>
-                    </div>
-                </div>
-
-                <hr>
-
-
-
-                <div class="">
-                    <div style="margin-top: 20px; margin-bottom: 30px;"><span style="font-size: 20px;">產品描述:</span>
-                    </div>
-                    <!--typing box-->
-                    <div class="inputbox">
-                        <textarea id="pdes" name="productdescription" rows="12" placeholder="輸入商品描述..."></textarea>
-                    </div>
-                </div>
-
-                <div style="display: flex; margin-top: 25px;">
-                    <div class="tag">
-                        <div><span style="font-size: 20px;"> 標籤： </span></div>
+                    <div class="">
+                        <div style="margin-top: 20px; margin-bottom: 30px;"><span style="font-size: 20px;">產品描述:</span>
+                        </div>
+                        <!--typing box-->
+                        <div class="inputbox">
+                            <textarea id="pdes" name="productdescription" rows="12" placeholder="輸入商品描述..."></textarea>
+                        </div>
                     </div>
 
-                    <!--Henry version-->
-                    <vaadin-text-field id="inputTags" on-keydown="_addTags"></vaadin-text-field>
-                    <paper-tags-input width="100%" id="myTags"></paper-tags-input>
+                    <div style="display: flex; margin-top: 25px;">
+                        <div class="tag">
+                            <div><span style="font-size: 20px;"> 標籤： </span></div>
+                        </div>
 
-                </div>
-                <hr>
+                        <!--Henry version-->
+                        <vaadin-text-field id="inputTags" on-keydown="_addTags"></vaadin-text-field>
+                        <paper-tags-input width="100%" id="myTags"></paper-tags-input>
 
-                <div>
-                    <div style="margin-top: 20px; margin-bottom: 30px;"><span class="bigsize">運輸：</span></div>
-                    <!--input box-->
-                    <div class="inputbox">
-                        <textarea id="trans" name="transportation" rows="6" placeholder="輸入物流資料..."></textarea>
                     </div>
+                    <hr>
 
+                    <div>
+                        <div style="margin-top: 20px; margin-bottom: 30px;"><span class="bigsize">運輸：</span></div>
+                        <!--input box-->
+                        <div class="inputbox">
+                            <textarea id="trans" name="transportation" rows="6" placeholder="輸入物流資料..."></textarea>
+                        </div>
+
+                    </div>
+                    <br>
                 </div>
-                <br>
+
             </div>
-
         </div>
+
     </template>
 
 </dom-module>
 
 <script>
     //function for database
-    (function() {
+    (function () {
         Polymer({
             is: 'change-add-product',
             properties: {
@@ -558,7 +582,7 @@
                     "type": Number
                 }
             },
-            created: function() {
+            created: function () {
                 let shadow = this.shadowRoot;
 
                 this.bigPic = "http://change.dazzle.website.s3.amazonaws.com/files/1/1591944377549.jpeg";
@@ -610,7 +634,7 @@
                 //console.log("arrayResult:", myTags.tags);
             },
 
-            ready: function() {
+            ready: function () {
                 console.log("Entered Ready");
                 let loginUrl = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 let shadow = this.shadowRoot;
@@ -666,7 +690,7 @@
                             shadow.querySelector('#vs2').value = res.resolve[0]['district'];
                             shadow.querySelector('#vs3').value = res.resolve[0]['deliveryMethod'];
                             shadow.querySelector('#pdes').value = res.resolve[0]['description'];
-                            if (typeof(res.resolve[0]['tags']) == "string") {
+                            if (typeof (res.resolve[0]['tags']) == "string") {
                                 shadow.querySelector('#myTags').tags = [res.resolve[0]['tags']];
 
                             } else {
@@ -703,7 +727,7 @@
 
                 this.valueArray = [""];
                 let that = this;
-                customElements.whenDefined('vaadin-select').then(function() {
+                customElements.whenDefined('vaadin-select').then(function () {
                     const choice = [{
                         name: '車與地產'
                     }, {
@@ -774,22 +798,24 @@
                         name: '順豐'
                     }, {
                         name: '面交'
-                    }, ]
+                    }, {
+                        name: '郵寄及運送'
+                    }]
 
                     const status = [{
                         name: '全新'
                     }, {
                         name: '二手'
-                    }, ]
+                    },]
 
-                    shadow.querySelector('#vs1').renderer = function(root) {
+                    shadow.querySelector('#vs1').renderer = function (root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        choice.forEach(function(item) {
+                        choice.forEach(function (item) {
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
@@ -799,14 +825,14 @@
                         root.appendChild(listBox);
                     };
 
-                    shadow.querySelector('#pro').renderer = function(root) {
+                    shadow.querySelector('#pro').renderer = function (root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        propage.forEach(function(item) {
+                        propage.forEach(function (item) {
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
@@ -816,14 +842,14 @@
                         root.appendChild(listBox);
                     };
 
-                    shadow.querySelector('#vs2').renderer = function(root) {
+                    shadow.querySelector('#vs2').renderer = function (root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        district.forEach(function(item) {
+                        district.forEach(function (item) {
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
@@ -833,14 +859,14 @@
                         root.appendChild(listBox);
                     };
 
-                    shadow.querySelector('#vs3').renderer = function(root) {
+                    shadow.querySelector('#vs3').renderer = function (root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        delmthod.forEach(function(item) {
+                        delmthod.forEach(function (item) {
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
@@ -850,14 +876,14 @@
                         root.appendChild(listBox);
                     };
 
-                    shadow.querySelector('#vs4').renderer = function(root) {
+                    shadow.querySelector('#vs4').renderer = function (root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        status.forEach(function(item) {
+                        status.forEach(function (item) {
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
@@ -881,7 +907,7 @@
                 };
                 //check the username 
                 console.log("SEE", shadow.querySelector('#gand').src);
-                    
+
 
                 //ENABLE & DISABLE PRICE
                 shadow.querySelector('#free').addEventListener("click", (e) => {
@@ -909,7 +935,7 @@
                 });
             },
 
-            _saveData: function() {
+            _saveData: function () {
                 let user = store.get("change-user") || null;
                 let temptime = Date.now();
                 let tempid = user['_id'];
@@ -976,7 +1002,7 @@
                         var no = Boolean(1);
                     }
 
-                    
+
                     let x = 0;
                     let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
 
@@ -1041,7 +1067,7 @@
                             Polymer.postData(Url, paramup).then(res => {
                                 if (res.code > 0) {
                                     alert("success!");
-
+                                    location.replace("./edit-product.html?p" + thenewid + "u" + user['_id']);
                                 }
 
 
@@ -1062,7 +1088,7 @@
 
             },
 
-            _uploadFile: function(e) {
+            _uploadFile: function (e) {
                 console.log('upload', e);
                 let shadow = this.shadowRoot;
                 let that = this;

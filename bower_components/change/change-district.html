@@ -5,24 +5,29 @@
 <dom-module id="change-district">
     <template>
         <style>
+               *{
+                font-family: sans-serif,微軟正黑體;
+            }
             :host{
                 --lumo-contrast-10pct: hsla(0, 0%, 100%, 0);
                 --lumo-body-text-color:#808080;
+                font-family: sans-serif,微軟正黑體;
+
             }
         </style>
-        <vaadin-select id="vs1" placeholder="選擇分類"></vaadin-select>
+        <vaadin-select id="vs1" placeholder="選擇地點"></vaadin-select>
     </template>
 </dom-module>
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-district',
             properties: {},
-            created: function () {
+            created: function() {
                 console.log('Created');
             },
             ready: function() {
-             
+
                 this.valueArray = [""];
                 let that = this;
                 let shadow = this.shadowRoot;
@@ -101,9 +106,13 @@
                         root.appendChild(listBox);
                     };
                     this.selection = shadow.querySelector('#vs1');
-                    this.selection.addEventListener('change',e=>{
-                            console.log('E',e,this.selection.value);
-                            Polymer.dzFire('select-district',{'detail':{'district':this.selection.value}});
+                    this.selection.addEventListener('change', e => {
+                        console.log('123131231E', shadow.querySelector('#vs1').value);
+                        Polymer.dzFire('select-district', {
+                            'detail': {
+                                'district': shadow.querySelector('#vs1').value
+                            }
+                        });
                     });
                 });
 

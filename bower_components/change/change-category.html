@@ -1,77 +1,165 @@
 <link href="../polymer/polymer.html" rel="import">
 <link href="../dz-menu/css/style.html" rel="import" />
 <link rel="import" href="../vaadin-select/vaadin-select.html">
+<link rel="import" href="../vaadin-select/vaadin-select.html">
+
 
 <dom-module id="change-category">
     <template>
         <style>
+             *{
+                font-family: sans-serif,微軟正黑體;
+            }
             :host{
                 --lumo-contrast-10pct: hsla(0, 0%, 100%, 0);
                 --lumo-body-text-color:#808080;
             }
         </style>
         <vaadin-select id="cat1" placeholder="選擇分類"></vaadin-select>
+        <div id="subcat"></div>
     </template>
 </dom-module>
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-category',
-            properties: {},
-            created: function () {
+            properties: {
+                "res": {
+                    "type": Array
+                },
+
+            },
+            created: function() {
                 console.log('Created');
             },
             ready: function() {
-             
-                this.valueArray = [""];
+
                 let that = this;
                 let shadow = this.shadowRoot;
-                customElements.whenDefined('vaadin-select').then(function() {
-                    const choice = [{
-                        id: '車與地產',
-                        name: '車與地產'
-                    }, {
-                        id: '潮流生活',
-                        name: '潮流生活'
-                    }, {
-                        id: '家居生活',
-                        name: '家居生活'
-                    }, {
-                        id: '興趣與遊戲',
-                        name: '興趣與遊戲'
-                    }, {
-                        id: '工作與服務',
-                        name: '工作與服務'
-                    }, {
-                        id: '其他服務',
-                        name: '其他服務'
-                    }];
+                var storetags = location.search;
+                var turntags = "";
+                if (storetags[1] == "c") {
+                    for (b = 5; b < storetags.length; b++) {
+                        turntags += storetags[b];
+                    }
 
+                } else {};
 
-                    shadow.querySelector('#cat1').renderer = function(root) {
-                        // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
-                        if (root.firstChild) {
-                            return;
+                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let param = {
+                    "action": "searchData",
+                    "index": "change",
+                    "type": "categories",
+                    "body": {
+                        "query": {
+                            "match_all": {}
                         }
-                        // Create the <vaadin-list-box>
-                        const listBox = document.createElement('vaadin-list-box');
-                        choice.forEach(function(item) {
-                            const vaadinItem = document.createElement('vaadin-item');
-                            vaadinItem.textContent = item.name;
-                            listBox.appendChild(vaadinItem);
-                            vaadinItem.setAttribute('value', item.id);
-                            vaadinItem.addEventListener('click',e=>{
-                                console.log('Cate E',e, shadow.querySelector('#cat1').value);
+                    }
+                };
+                Polymer.postData(Url, param).then(res => {
+                    if (res.code > 0) {
+                        this.res = res.resolve;
+                        var maincate = [];
+                        var subcate = [];
+                        for (i = 0; i < res.resolve.length; i++) {
+                            if (res.resolve[i]['parent'] == "0") {
+                                maincate.push({
+                                    id: res.resolve[i]['_id'],
+                                    name: res.resolve[i]['name']
+                                });
+                                if (res.resolve[i]['_id'] == turntags) {
+                                    shadow.querySelector('#cat1').value = res.resolve[i]['name'];
+                                }
+                            } else {
+                                subcate.push({
+                                    id: res.resolve[i]['_id'],
+                                    name: res.resolve[i]['name'],
+                                    parent: res.resolve[i]['parent']
+                                });
+                            }
+                        };
+                        let subcat = shadow.querySelector('#subcat');
+                        maincate.forEach(maincates => {
+                            let div = document.createElement('div');
+                            div.setAttribute('id', 'sub' + maincates.name);
+                            div.setAttribute('style', 'display:none');
+                            div.setAttribute('class', 'hidesub');
+                            subcat.appendChild(div);
+                            subcate.forEach(subcates => {
+                                if (subcates.parent == maincates.id) {
+                                    let div2 = document.createElement('div');
+                                    div.appendChild(div2);
+                                    let input1 = document.createElement('input');
+                                    input1.setAttribute('type', 'text');
+                                    input1.setAttribute('disabled', true);
+                                    input1.setAttribute('class', 'leftele');
+                                    input1.setAttribute('style', 'border:none;backgound-color:transparent')
+                                    input1.setAttribute('value', subcates.name);
+                                    div2.appendChild(input1);
+                                    let input = document.createElement('input');
+                                    input.setAttribute('type', 'checkbox');
+                                    if (subcates.id == turntags) {
+                                        input.setAttribute('checked', true);
+                                    }
+                                    input.addEventListener('click', e => {
+                                        if (input.checked == true) {
+                                            Polymer.dzFire('select-category', {
+                                                'detail': {
+                                                    'category': subcates.name
+                                                }
+                                            })
+                                        };
+
+
+                                    });
+                                    // input.setAttribute('style', 'float:right');
+                                    div2.appendChild(input);
+
+                                }
                             });
                         });
-                        // update the content
-                        root.appendChild(listBox);
-                    };
-                    this.selection = shadow.querySelector('#cat1');
-                    this.selection.addEventListener('change',e=>{
-                            let value = shadow.querySelector('#cat1').value;
-                            Polymer.dzFire('select-category',{'detail':{'category':value}});
-                    });
+
+
+                        customElements.whenDefined('vaadin-select').then(function() {
+                            const choice = maincate;
+                            shadow.querySelector('#cat1').renderer = function(root) {
+                                // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
+                                if (root.firstChild) {
+                                    return;
+                                }
+                                // Create the <vaadin-list-box>
+                                const listBox = document.createElement('vaadin-list-box');
+                                choice.forEach(function(item) {
+                                    const vaadinItem = document.createElement('vaadin-item');
+                                    vaadinItem.textContent = item.name;
+                                    listBox.appendChild(vaadinItem);
+                                    vaadinItem.setAttribute('value', item.name);
+                                    vaadinItem.addEventListener('click', e => {
+                                        console.log('Cate E', e, shadow.querySelector('#cat1').value);
+                                    });
+                                });
+                                // update the content 
+                                root.appendChild(listBox);
+                            };
+                            this.selection = shadow.querySelector('#cat1');
+                            this.selection.addEventListener('change', e => {
+                                let value = shadow.querySelector('#cat1').value;
+                                Polymer.dzFire('select-category', {
+                                    'detail': {
+                                        'category': value
+                                    }
+                                });
+                                // if (this.display != "") {
+                                //     console.log('the display store is:', this.display)
+                                //     shadow.querySelector('#' + this.display).style.display = none;
+                                // }
+                                shadow.querySelector('#sub' + value).style.display = 'block';
+
+                            });
+                        });
+
+
+                    }
                 });
 
 

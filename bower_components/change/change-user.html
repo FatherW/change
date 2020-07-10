@@ -8,6 +8,10 @@
     <template>
         <style include="icon-styles"></style>
         <style>
+            *{
+                font-family: sans-serif,Microsoft JhengHei;
+
+            }
             #prods {
                 margin-left: 8%;
                 margin-right: 2%;
@@ -71,14 +75,11 @@
             },
             ready: function() {
                 let loc = location.search;
-                console.log("Path", loc);
-                console.log("Length", loc.length);
                 let id = "";
                 for (var i = 1; i < loc.length; i++) {
                     console.log("Working");
                     id += loc[i];
                 }
-                console.log("Problem", id);
                 if (id != "") {
                     let shadow = this.shadowRoot;
                     params = {
@@ -95,7 +96,7 @@
                         }
                     }
                     shadow.querySelector('#purch').query = params;
-                    let query = "";
+                    let query = [];
                     let p = {
                         "action": "searchData",
                         "index": "change",
@@ -109,25 +110,27 @@
                         }
                     };
                     let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                    let x = 0;
-                    let all;
+
                     Polymer.postData(url, p).then(res => {
                         if (res.code > 0) {
-                        	let send = res.resolve[0];
-                        	shadow.querySelector('#mp').user = send;
-                        	shadow.querySelector('#fav').user = send;
-                        	shadow.querySelector('#purch').user = send;
-                            all = res.resolve[0]['likeProducts'];
-                            x = all;
+
+                            let all = res.resolve[0]['likeProduct'];
+                            for (i = 0; i < all.length; i++) {
+                                query.push({
+                                    "match": {
+                                        "id": all[i]
+                                    }
+                                });
+
+                            }
+                            shadow.querySelector('#fav').query = query;
+                            shadow.querySelector('#fav')._showMyGoods();
+
+
                         }
                     })
 
-                    for (var i = 0; i < x; i++) {
-                        query += '{"match": { "id": ' + all[i] + ' } }';
-                        if (i != (x - 1)) {
-                            query += ',';
-                        }
-                    }
+
                     if (query != "") {
                         params = '{"bool": {"should": [' + query + ']}}';
                         shadow.querySelector('#fav').query = params;

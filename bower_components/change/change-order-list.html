@@ -10,7 +10,6 @@
             }
 
             .holder {
-                margin-left: 2%;
                 margin-right: 2%;
                 border: 1px solid #ccc;
                 height: 90px;
@@ -46,6 +45,9 @@
                 border: 1px solid #ccc;
                 cursor: pointer;
                 height: 35px;
+                -webkit-box-shadow: 1px 0px 8px 0px rgba(50, 49, 56, 0.2);
+                -moz-box-shadow: 1px 0px 8px 0px rgba(50, 49, 56, 0.2);
+                box-shadow: 1px 0px 8px 0px rgba(50, 49, 56, 0.2)
             }
 
             #info {
@@ -99,7 +101,7 @@
 </dom-module>
 
 <script>
-    (function() {
+    (function () {
         Polymer({
             is: 'change-order-list',
             properties: {
@@ -110,11 +112,11 @@
                     "type": String
                 }
             },
-            created: function() {
+            created: function () {
 
             },
 
-            accept: function() {
+            accept: function () {
                 let loc = location.search;
                 let pid = "";
                 let uid = "";
@@ -149,13 +151,13 @@
                 this.shadowRoot.querySelector('#containall').innerHTML = "<H1>已聯絡賣家</H1>";
             },
 
-            buyerinfo: function() {
+            buyerinfo: function () {
                 let theurl = '/user?' + this.buyerId;
                 location.href = theurl;
 
             },
 
-            reject: function() {
+            reject: function () {
                 let that = this;
                 let shadow = this.shadowRoot;
                 let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
@@ -176,7 +178,7 @@
             },
 
 
-            ready: function() {
+            ready: function () {
                 this.id = this.getAttribute('id');
 
 

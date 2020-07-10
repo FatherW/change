@@ -7,20 +7,44 @@
         <style>
             .orderContainter {
                 height: auto;
-                border: 1px solid #ccc;
-                margin: 0px 15px 20px;
+                background-image: url(http://change.dazzle.website/img/background/3.jpg);
+                padding-bottom: 50px;
             }
 
-            .text {
+            .order {
                 margin-top: 20px;
                 margin-left: 30px;
                 font-size: 20px;
                 color: black;
+                padding-bottom: 50px;
+            }
+
+            .text {
+                padding-top: 45px;
+                padding-bottom: 45px;
+            }
+
+            * {
+                font-family: sans-serif, Microsoft JhengHei;
+
+            }
+
+            .bg {
+                background-color: white;
+                width: 92.5%;
+                margin: 0 auto;
+                margin-right: 61px;
+                border: 1px #ccc solid;
             }
         </style>
         <div class="orderContainter">
-            <div class="text"><b>處理訂單:</b></div>
-            <div id="ol"></div>
+            <div class="bg">
+                <div class="order">
+                    <div class="text"><b>處理訂單:</b></div>
+                    <div id="ol"></div>
+                </div>
+                <!-- <div id="ol"></div> -->
+            </div>
         </div>
 
 
@@ -29,7 +53,7 @@
 </dom-module>
 
 <script>
-    (function() {
+    (function () {
         Polymer({
             is: 'change-orderlist-storage',
             properties: {
@@ -40,13 +64,13 @@
                     "type": String
                 }
             },
-            created: function() {
+            created: function () {
 
             },
 
 
 
-            ready: function() {
+            ready: function () {
                 console.log("inside orderlist-storage.html");
                 // html + ?xxxxxxxxxxxxxxxxx
                 let loc = location.search;
@@ -68,6 +92,11 @@
                     "index": "change",
                     "type": "order",
                     "body": {
+                        "sort": [{
+                            "submitTime": {
+                                "order": "desc"
+                            }
+                        }],
                         "query": {
                             "match": {
                                 "productId": pid

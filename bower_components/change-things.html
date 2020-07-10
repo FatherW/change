@@ -1,0 +1,603 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="change-like.html">
+<link rel="import" href="change-confirm.html">
+<link rel="import" href="change-in-item.html">
+<link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
+
+
+
+<dom-module id="change-things">
+    <template>
+        <style>
+            a:link,
+            a:visited {
+                text-decoration: none;
+                color: black;
+            }
+
+            a:hover {
+                text-decoration: none;
+
+            }
+
+            #container {
+                padding-top: 10px;
+            }
+
+            .jumpeditproduct:hover{
+                border: none;
+                border-radius: 5px;
+                background-color: orangered;
+            }
+            .jumpeditproduct{
+                border: none;
+                border-radius: 5px;
+                background-color: orange;
+                
+            }
+            .jumpeditproduct2:hover{
+                border: none;
+                border-radius: 5px;
+                background-color: orangered;
+            }
+            .jumpeditproduct2{
+                border: none;
+                border-radius: 5px;
+                background-color: orange;
+                
+            }
+
+            .itemsall {
+                padding: 50px;
+                width: 150px;
+                height: 150px;
+                background-repeat: no-repeat;
+
+            }
+
+
+            .profile-finger {
+                width: 100%;
+            }
+
+            change-like {
+                width: 15px;
+                height: 15px;
+                text-align: right;
+            }
+
+            .profile-grid {
+                width: 84%;
+                padding-left: 8%;
+                padding-right: 8%;
+                display: grid;
+                grid-row-gap: 20px;
+                grid-column-gap: 15px;
+                grid-template-columns: 100%;
+                grid-template-rows: 1fr 2fr 4fr;
+                background-color: cornsilk;
+                padding-top: 20px;
+                padding-bottom: 20px;
+            }
+
+            #tagbutton {
+                background-color: #e9e9e9;
+                text-align: center;
+                padding-left: 13px;
+                padding-right: 13px;
+                border: none;
+                font-size:10px;
+                color:#c1c1c1;
+                border-radius: 15px;
+
+            }
+            #tagbutton a{
+                color:#808080;
+            }
+
+            .short-profile-grid {
+                display: grid;
+                grid-column-gap: 15px;
+                grid-template-columns: 59% 12% 12% 12%;
+                background-color: white;
+                border: 2px solid gainsboro;
+                padding: 30px;
+                padding-left: 4%;
+                padding-right: 4%;
+            }
+
+            .detail-profile-grid {
+                display: grid;
+                grid-row-gap: 10px;
+                grid-template-rows: 2fr 1fr 1fr 1fr 1fr;
+                background-color: white;
+                border: 2px solid gainsboro;
+                padding: 20px;
+                padding-left: 4%;
+                padding-right: 4%;
+            }
+
+            .things-profile {
+                background-color: white;
+                border: 2px solid gainsboro;
+            }
+
+            #time {
+                font-size:11px;
+                color:#808080;
+            }
+            #a1,
+            #a2 {
+                display: inline-block;
+                font-size: 15px;
+                margin-left: 5px;
+            }
+
+            #a3 {
+               
+                float: right;
+            }
+
+
+         
+
+
+            .button {
+                margin-left: 4%;
+                margin-right: 4%;
+                margin-top: 41px;
+            }
+
+            .buttonGray {
+                width: 150px;
+                background-color: gray;
+                color: black;
+                border-radius: 2px;
+                height: 30px;
+                font-size: 16px;
+                margin-right: 10px;
+            }
+
+            #left1 {
+                float: left;
+            }
+
+            #left2 {
+                float: left;
+            }
+
+            #left3 {
+                float: left;
+            }
+
+            #right1 {
+                float: right;
+            }
+
+            #right2 {
+                float: right;
+                padding-top: 4px;
+            }
+
+            #right3 {
+                float: right;
+            }
+
+            #right4 {
+                float: right;
+                padding-top: 4px;
+            }
+
+
+            .things-grid {
+                display: grid;
+                width: 100%;
+                height: 100%;
+                grid-row-gap: 15px;
+                padding: 50px;
+                grid-column-gap: 50px;
+                grid-row-gap: 40px;
+                grid-template-columns: repeat(4, 1fr);
+                background-color: white;
+                -webkit-box-shadow: 0px 0px 11px 1px rgba(50, 49, 56, 1);
+                -moz-box-shadow: 0px 0px 11px 1px rgba(50, 49, 56, 1);
+                box-shadow: 0px 0px 11px 1px rgba(50, 49, 56, 1);
+
+            }
+
+            change-item {
+                width: 100%;
+
+            }
+
+            svg.title_tags {
+                width: 100%;
+                height: 30px;
+                padding-top: 10px;
+
+            }
+
+            svg.s_title_tags {
+                margin: 5px;
+                height: 16px;
+                width: 60px;
+                border-radius: 2px;
+                padding-top: 10px;
+                font-size: 80%;
+
+            }
+
+            change-things {
+                border: 0px solid gainsboro;
+
+                height: 100%;
+                width: 100%;
+            }
+
+            #pics {
+                background-image: url('http://change.dazzle.website/img/loading.svg');
+                position: relative;
+                background-size: cover;
+                background-repeat: no-repeat;
+                width: 100%;
+                padding-top: 75%;
+                /* 4:3 Aspect Ratio */
+                background-position: center center;
+                
+            }
+
+            .img {
+                width: 270px;
+                height: 230px;
+                background-size: contain;
+                background-position: center center;
+                /* background-repeat: no-repeat; */
+                margin: 1%;
+                background-image: url(http://change.dazzle.website/img/channel_banner/1.jpg);
+                background-repeat: no-repeat;
+
+            }
+
+            .time {
+                font-size: 6px;
+            }
+
+            .circle {
+                margin: 5px;
+                height: 20px;
+                width: 20px;
+
+
+            }
+
+            .price {
+                font-size: 13px;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                color:#666666;
+            }
+
+            .name {
+                font-size: 13px;
+                color:#1a1a1a;
+            }
+
+            .small {
+                font-size: 15px;
+
+            }
+
+            #usericon {
+                height: 40px;
+                margin-bottom: 12px;
+                margin-top: 12px;
+                border-radius: 6px;
+                padding-top: 3px;
+                padding-bottom: 3px;
+            }
+
+            .initemtitle {
+
+                font-size: 25px;
+                margin-left: 10px;
+                font-weight: 900;
+            }
+
+            img#_changeicon {
+                width: 40px;
+                height: 40px;
+                border-radius: 9999999999999px;
+            }
+
+
+            .productname2 {
+                font-size: 15px;
+                font-weight: 600;
+                margin-top: 10px;
+                color:#505050;
+
+
+            }
+        </style>
+
+        
+        	<div id="usericon">
+            <a id="redu" href="#">
+            <div id="a1">
+                <img id="_changeicon" src="http://change.dazzle.website/img/head.svg">
+            </div>
+            <div id="a2">
+                <div class="name" id="owner"></div>
+                <div id="time">...</div>
+            </div>
+            </a>
+            
+            <div id="a3">
+                <div class="shouldhide" style="visibility: hidden;">
+                    <button class="jumpeditproduct2" on-click="_deleteproduct">刪除</button>
+                </div>
+                <div id="a32"></div>                       
+            </div>
+            
+           
+            
+            
+        </div>
+        
+              
+        <!-- <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="40px" height="40px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve"><path fill="#000" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z" transform="rotate(228.004 25 25)"><animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"></animateTransform></path></svg> -->
+
+        <a id="red" href="">
+        	<div id="pics">
+        	</div>
+        </a>
+        
+
+        <svg class="s_title_tags" style="float: left;">
+            <polygon points="0,0 40,0 30,16 0,16" style="fill:#6AA64F;stroke:#6AA64F;stroke-width:0"></polygon>
+            <text x="3" y="12" fill="white" id="isNew">全新</text>
+        </svg>
+        <div id="templike">
+        
+        </div>
+        <div on-click="red" class="productname2" id="productname">
+            <h2>loading...</h2>
+        </div>
+        <div id="price" class="price">
+            </div>
+        <change-item-tag>
+            <change-tag class="small" id="description"></change-tag>
+            <div class="clear"></div>
+        </change-item-tag>
+
+        <div class="clear"></div>
+        <vaadin-dialog></vaadin-dialog>
+
+
+
+
+
+
+
+    </template>
+</dom-module>
+<script>
+    (function() {
+        Polymer({
+            is: 'change-things',
+            properties: {
+                like: {
+                    "type": Object
+                },
+                id: {
+                    "type": String
+                },
+                status: {
+                    "type": Boolean
+                },
+                checkhide: {
+                    "type": String
+                }
+
+            },
+            created: function() {
+                // call close pop-up in change-confirm
+                document.addEventListener('close-item-dialog', e => {
+                    this.shadowRoot.querySelector('vaadin-dialog').opened = false;
+                    // console.log("(Btn) close successfully");
+                });
+
+                // call delete item in change confirm
+                document.addEventListener('delete-item', e => {
+                    this._reallydelete();
+                });
+
+            },
+            _reallydelete: function() {
+                this.id = this.getAttribute('id');
+                let that = this;
+                let shadow = this.shadowRoot;
+                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let param = {
+                    "action": "deleteData",
+                    "index": "change",
+                    "type": "product",
+                    "id": this.id
+                }
+
+                Polymer.postData(Url, param).then(res => {
+                    // console.log("id_Obtained:", this.id);
+                    // console.log("resCode:", res.code);
+                    if (res.code > 0) {
+                        console.log("Deleted Successfully");
+                    } else {
+                        console.log("error in reallydelete");
+                    }
+                })
+            },
+
+            _deleteproduct: function() {
+                // console.log("inside deleteproduct");
+                this.id = this.getAttribute('id');
+                let that = this;
+                let shadow = this.shadowRoot;
+                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let dialog = shadow.querySelector('vaadin-dialog');
+                Polymer.popup(dialog, "change", "change-confirm", "30%", "50%");
+
+
+            },
+
+            ready: function() {
+                this.id = this.getAttribute('id');
+                let that = this;
+                let shadow = this.shadowRoot;
+                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let param = {
+                    "action": "getData",
+                    "index": "change",
+                    "type": "product",
+                    "id": this.id
+                };
+
+                Polymer.postData(Url, param).then(res => {
+
+                    if (res.code > 0) {
+                        shadow.querySelector('#redu').href = "/user.html?" + res.resolve['ownerId'];
+                        let all = res.resolve;
+                        //check the username                     
+                        let findid = all['ownerId'];
+                        let idparam = {
+                            "action": "searchData",
+                            "index": "change",
+                            "type": "_user",
+                            "body": {
+                                "query": {
+                                    "match": {
+                                        "_id": findid
+                                    }
+                                }
+                            }
+                        };
+                        var checkhide2 = false;
+
+                        Polymer.postData(Url, idparam).then(res => {
+                            if (res.code > 0) {
+                                if (res.resolve[0]['head'].length > 0) {
+
+                                    shadow.querySelector('#_changeicon').src = res.resolve[0]['head'];
+                                }
+                                var user = store.get('change-user') || null;
+                                if (user != null) {
+                                    if (user['_id'] == findid) {
+                                        checkhide2 = true;
+                                        shadow.querySelector('#a32').innerHTML = '<a href="add-product.html?' + this.id + '"><button class="jumpeditproduct">編輯</button></a>';
+                                        shadow.querySelector('#red').href = "/edit-product.html?" + this.id;
+                                    } else {
+                                        checkhide2 = false;
+                                        shadow.querySelector('#red').href = "/product.html?" + this.id;
+
+                                    }
+
+                                } else {
+                                    checkhide2 = false;
+                                    shadow.querySelector('#red').href = "/product.html?" + this.id;
+
+
+                                    // user[0]['_id']
+                                }
+                                //check to display edit and delete
+                                if (checkhide2 == true) {
+                                    shadow.querySelector('.shouldhide').style.visibility = 'visible';
+
+                                } else {
+
+                                };
+
+
+                                if (res.resolve[0]['username']) {
+                                    shadow.querySelector('#owner').innerHTML = res.resolve[0]['username'];
+                                } else {
+                                    shadow.querySelector('#owner').innerHTML = "我冇名";
+                                }
+                            } else {}
+                        });
+
+
+                        //check product name    
+                        shadow.querySelector("#productname").innerHTML = all['productname'];
+                        //check price
+                        shadow.querySelector('#price').innerHTML = "HKD$" + all['price'];
+                        //check time
+                        let _thetimenow = Date.now();
+                        let comparetime = (_thetimenow - all['createTime']) / 1000;
+                        if (comparetime < 60) {
+                            shadow.querySelector('#time').innerHTML = "剛剛"
+                        } else if (comparetime / 60 < 60) {
+                            shadow.querySelector('#time').innerHTML = Math.floor(comparetime / 60) + "分鐘前"
+                        } else if (comparetime / 60 / 60 < 24) {
+                            shadow.querySelector('#time').innerHTML = Math.floor(comparetime / 60 / 60) + "小時前"
+                        } else if (comparetime / 60 / 60 / 24 < 7) {
+                            shadow.querySelector('#time').innerHTML = Math.floor(comparetime / 60 / 60 / 24) + "日前"
+                        } else if (comparetime / 60 / 60 / 24 / 7 < 30) {
+                            shadow.querySelector('#time').innerHTML = Math.floor(comparetime / 60 / 60 / 24 / 7) + "星期前"
+                        } else if (comparetime / 60 / 60 / 24 / 7 / 30 < 365) {
+                            shadow.querySelector('#time').innerHTML = Math.floor(comparetime / 60 / 60 / 24 / 7 / 30) + "月前"
+                        }
+                        //check production description
+                        let itemtag = "";
+                        if (!all['tags'].length == undefined || all['tags'].length == null) {
+                            _counttag = 0
+                        } else {
+                            for (count = 0; count < all['tags'].length; count++) {
+                                itemtag += '<button id=\"tagbutton\">' + '<a href="list-product.html?tag' + all['tags'][count] + '">' + all['tags'][count] + "</a></button> &nbsp;"
+                            }
+                            shadow.querySelector('#description').innerHTML = itemtag;
+
+                        }
+
+
+                        //check is new
+                        let thenew = ""
+                        if (all['isNew'] == true) {
+                            thenew = "<polygon points=\"0,0 40,0 30,16 0,16\" style=\"fill:#6AA64F;stroke:#6AA64F;stroke-width:0\"></polygon><text x=\"3\" y=\"12\" fill=\"white\" id=\"isNew\" >全新</text>"
+
+                        } else {
+                            thenew = "<polygon points=\"0,0 40,0 30,16 0,16\" style=\"fill:#E84D4D;stroke:#E84D4D;stroke-width:0\"></polygon><text x=\"3\" y=\"12\" fill=\"white\" id=\"isNew\" >二手</text>"
+                        }
+                        shadow.querySelector('.s_title_tags').innerHTML = thenew;
+                        //check the pic link
+
+                        if (all['pics'][0] != "") {
+                            if (typeof(all['pics']) === 'string') {
+                                shadow.querySelector('#pics').style.backgroundImage = "url(" + all['pics'] + ")";
+
+                            } else {
+                                shadow.querySelector('#pics').style.backgroundImage = "url(" + all['pics'][0] + ")";
+
+                            }
+                        } else {
+                            shadow.querySelector('#pics').style.backgroundImage = "url('http://change.dazzle.website/img/nopic.png')";
+                        };
+
+                        //check the icon
+
+
+
+
+                        //check the like
+                        shadow.querySelector('#templike').innerHTML = '<change-like id="' + this.id + '"></change-like>'
+
+                        //shadow.querySelector('change-like')._changecontent();
+
+                    }
+
+
+                })
+
+
+
+            }
+        });
+    })();
+</script>

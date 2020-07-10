@@ -23,7 +23,12 @@
         <style>
             * {
                 color: black;
-                font-family: sans-serif;
+                font-family: sans-serif, Microsoft JhengHei;
+            }
+
+            vaadin-dialog[part="content"] {
+                padding: 0px;
+                overflow: hidden;
             }
 
             hr {
@@ -57,12 +62,15 @@
 
             .change-new-product-container {
                 display: grid;
-                grid-template-columns: 50% 48%;
+                grid-template-columns: 50% 50%;
                 margin-bottom: 50px;
-                border: 1px solid #ccc;
+                border-bottom: none;
                 margin-left: 15px;
                 margin-right: 15px;
                 height: auto;
+                background-image: url(http://change.dazzle.website/img/background/3.jpg);
+                margin: 0;
+                padding-bottom: 50px;
             }
 
             button {
@@ -90,24 +98,39 @@
                 margin-right: 0;
             }
 
+            .outer {
+                margin: 0;
+                width: 100%;
+                background-image: url(http://change.dazzle.website/img/background/3.jpg);
+                padding-bottom: 50px;
+            }
+            
             .left-pics {
-                width: 90%;
+                width: 85%;
                 background-color: white;
-                margin-top: 30px;
-                margin-left: 35px;
+                margin-left: 50px;
+                padding-left: 55px;
+                padding-right: 100px;
+                border: solid 1px #ccc;
+                border-right: none;
+                padding-top: 50px;
+                height: auto;
             }
 
             .right-product {
-                width: 100;
-                height: 1000px;
+                width: 80%;
                 background-color: white;
-                margin-top: 30px;
-                margin-left: 30px;
+                margin-left: 92px;
+                border: solid 1px #ccc;
+                border-left: none;
+                padding-top: 50px;
+                height: auto;
+                padding-bottom: 50px;
             }
 
             .bigPic,
             #div0 {
-                height: 45%;
+                height: 450px;
                 background-image: url("http://change.dazzle.website/img/nopic.png");
                 background-size: contain;
                 background-repeat: no-repeat;
@@ -144,7 +167,7 @@
                 display: flex;
             }
 
-            #head {
+            /* #head {
                 background-image: url('http://change.dazzle.website/img/symbol/s5.png');
                 width: 60px;
                 height: 60px;
@@ -154,7 +177,7 @@
                 grid-row-start: 1;
                 grid-row-end: 3;
 
-            }
+            } */
 
             .yaqzaan {
                 float: left;
@@ -172,10 +195,6 @@
                 font-size: 23px;
                 display: inline-block;
                 padding-top: 10px;
-            }
-
-            .checked {
-                color: orange;
             }
 
             .dollar {
@@ -243,6 +262,7 @@
                 color: white;
                 border: none;
                 font-size: large;
+                margin-top: 52px;
             }
 
             .b3 {
@@ -252,15 +272,14 @@
             .bigsize {
                 font-size: 25px;
                 background-image: url('http://change.dazzle.website/img/');
+                margin-top: 110px;
             }
 
             .sMes {
                 margin-top: 15px;
             }
 
-            .tagContainer {
-                margin-top: 110px;
-            }
+            .tagContainer {}
 
             .tag {
                 display: inline-block;
@@ -343,10 +362,10 @@
                 height: 40px;
             }
 
-            .user {
+            /* .user {
                 width: 100px;
                 height: 100px;
-            }
+            } */
 
             #t1 {
                 margin-left: 350px;
@@ -382,40 +401,6 @@
                 margin-top: 20px;
             }
         </style>
-        <style>
-            /* 父元素，因为~符号只能匹配下面的兄弟节点，所以使用弹性盒的倒序改变五角星的排列方式 */
-            .box {
-                width: 266px;
-                height: 27px;
-                margin: 0 auto;
-                display: flex;
-                flex-direction: row-reverse;
-                justify-content: space-between;
-            }
-
-            /* 隐藏单选 */
-            input {
-                display: none;
-            }
-
-            /* 五角星默认样式 */
-            input[type="radio"]+label>svg>path {
-                d: path("M27.500,1.501 L36.069,16.899 L53.497,20.217 L41.365,33.051 L43.567,50.499 L27.500,43.032 L11.433,50.499 L13.635,33.051 L1.503,20.217 L18.931,16.899 L27.500,1.501 ");
-                stroke-width: 1px;
-                fill: none;
-                stroke: #333;
-            }
-
-            /* 移入，点击选中的元素和下面的元素变为实心 */
-            input[type="radio"]+label:hover>svg>path,
-            input[type="radio"]+label:hover~input[type="radio"]+label>svg>path,
-            input[type="radio"]:checked+label>svg>path,
-            input[type="radio"]:checked~input[type="radio"]+label>svg>path {
-                stroke-width: 0px;
-                fill: #f00;
-            }
-        </style>
-
 
         <div class="top-banner">
             <img id="banner3" src="http://change.dazzle.website/img/WX20200513-110548@2x.png">
@@ -431,142 +416,146 @@
         </div> -->
 
         <change-edit-bar></change-edit-bar>
-        <div class="change-new-product-container">
-            <div class="left-pics">
-                <!-- 这里放图片 -->
-                <div class="bigPic" id="div0"></div>
-                <div style="height: 100px;">
-
-                    <!-- GG get Array Pic from Database -->
-                    <div class="consmall">
-                        <div>
-                            <div id="div1"></div>
-                        </div>
-                        <div>
-                            <div id="div2"></div>
-                        </div>
-                        <div>
-                            <div id="div3"></div>
-                        </div>
-                        <div>
-                            <div id="div4"></div>
-                        </div>
-                    </div>
-                    <!-- <div class="buttons u">
-                        <button id="upload" on-click="_uploadFile">上載圖片</button>
-                    </div>
-                    <vaadin-dialog></vaadin-dialog> -->
-                </div>
-            </div>
-
-            <div class="right-product">
-                <div class="fullWidth">
-                    <div class="yaqzaan" style="display: inline-block;">
-                        <svg class="new">
-                            <polygon points="0,0 80,0 60,32 0,32" style="fill:#6AA64F;stroke:#6AA64F;stroke-width:0"></polygon>
-                            <text class="n o" x="6" y="23" fill="white" style="font-size:20px;">全新</text>
-                        </svg>
-
-                    </div>
-                    <div style="display: inline-block;">
-                        <span id="pn" class="store">儲物架</span>
-                    </div>
-                </div>
-                <div class="userinfo">
-                    <div id="usericon">
-                        <div id="a1">
-                            <img src="http://change.dazzle.website/img/user_profile.png">
-                        </div>
-                        <div id="a2">
-                            <div class="name" id="owner">1234</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="dollar" id="aaa">HKD$1105</div>
-
-                <hr>
-
-                <div>
-                    <div id="location"></div>
-                    <p id="dis" class="b1">香港 中區</p>
-                </div>
-                <div>
-                    <div id="delivery"></div>
-                    <p id="dm" class="b2">郵寄</p>
-                </div>
-                <hr>
-                <br>
-                <button id="contact" on-click="_findseller">聯絡賣家</button>
-                <div class="b3">刊登於 1小时前</div>
-                <br>
-
-                <div class="bigsize">
-                    <span>產品資料:</span>
-                </div>
-                <br>
-                <div class="unib">
-                    <!-- <span id="pn">產品名稱：儲物架</span> -->
-                </div>
-                <br>
-                <!-- <div class="unib"><span>產品尺寸 185x130x30(cm)</span></div>
-                <br> -->
-                <div class="sMesCon">
-                    <div class="sMesText"><span>賣家留言:</span></div>
-                    <div class="sMes"></div>
-                </div>
-
-                <br>
-                <div class="tagContainer">
-                    <div class="tag">
-                        <span> 標籤： </span>
-                    </div>
-                    <div class="buttontag">
-                        <div id="t"></div>
-                    </div>
-                </div>
-                <br>
-                <hr>
-
-                <div>
-                    <span class="bigsize">運輸：</span>
-                    <div class="deliveryDesc">
-                        <p style="margin-bottom: 0px;"><span>可郵寄或順豐快遞</span></p>
-                    </div>
-
-
-                </div>
-                <br>
-                <!-- <hr> -->
-
-                <!-- <div>
-                    <div>
-                        <span class="bigsize">賣家資料：</span>
-                    </div>
-                    <div style="display: inline-block;">
-                        <span>
-                            <p>發布者：YYDS</p>
+        <div class="outer">
+            <div class="change-new-product-container">
+                <div class="left-pics">
+                    <!-- 这里放图片 -->
+                    <div class="bigPic" id="div0"></div>
+                    <div style="height: 100px;">
+    
+                        <!-- GG get Array Pic from Database -->
+                        <div class="consmall">
                             <div>
-                                <p style="display: inline-block">評價: </p>
-                                <div id="ratings" style="display: inline-block">
-                                    <span class="fa fa-star checked"></span>
-                                    <span class="fa fa-star checked"></span>
-                                    <span class="fa fa-star checked"></span>
-                                    <span class="fa fa-star"></span>
-                                    <span class="fa fa-star"></span>
-                                </div>
+                                <div id="div1"></div>
                             </div>
-                            <p>查看賣家資料</p>
-                        </span>
+                            <div>
+                                <div id="div2"></div>
+                            </div>
+                            <div>
+                                <div id="div3"></div>
+                            </div>
+                            <div>
+                                <div id="div4"></div>
+                            </div>
+                        </div>
+                        <!-- <div class="buttons u">
+                            <button id="upload" on-click="_uploadFile">上載圖片</button>
+                        </div>
+                        <vaadin-dialog></vaadin-dialog> -->
                     </div>
-              
-                </div> -->
-                <br>
-
-
+                </div>
+    
+                <div class="right-product">
+                    <div class="fullWidth">
+                        <div class="yaqzaan" style="display: inline-block;">
+                            <svg class="new">
+                                <polygon points="0,0 80,0 60,32 0,32" style="fill:#6AA64F;stroke:#6AA64F;stroke-width:0">
+                                </polygon>
+                                <text class="n o" x="6" y="23" fill="white" style="font-size:20px;">全新</text>
+                            </svg>
+    
+                        </div>
+                        <div style="display: inline-block;">
+                            <span id="pn" class="store">儲物架</span>
+                        </div>
+                    </div>
+                    <div class="userinfo">
+                        <div id="usericon">
+                            <div id="a1">
+                                <img src="http://change.dazzle.website/img/user_profile.png">
+                            </div>
+                            <div id="a2">
+                                <div class="name" id="owner">1234</div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="dollar" id="aaa">HKD$1105</div>
+    
+                    <hr>
+    
+                    <div>
+                        <div id="location"></div>
+                        <p id="dis" class="b1">香港 中區</p>
+                    </div>
+                    <div>
+                        <div id="delivery"></div>
+                        <p id="dm" class="b2">郵寄</p>
+                    </div>
+                    <hr>
+                    <br>
+                    <button id="contact" on-click="_findseller">聯絡賣家</button>
+                    <div class="b3">刊登於 1小时前</div>
+                    <br>
+    
+                    <div class="bigsize">
+                        <span>產品資料:</span>
+                    </div>
+                    <br>
+                    <div class="unib">
+                        <!-- <span id="pn">產品名稱：儲物架</span> -->
+                    </div>
+                    <br>
+                    <!-- <div class="unib"><span>產品尺寸 185x130x30(cm)</span></div>
+                    <br> -->
+                    <div class="sMesCon">
+                        <div class="sMesText"><span>賣家留言:</span></div>
+                        <div class="sMes"></div>
+                    </div>
+    
+                    <br>
+                    <div class="tagContainer">
+                        <div class="tag">
+                            <span> 標籤： </span>
+                        </div>
+                        <div class="buttontag">
+                            <div id="t"></div>
+                        </div>
+                    </div>
+                    <br>
+                    <hr>
+    
+                    <div>
+                        <span class="bigsize">運輸：</span>
+                        <div class="deliveryDesc">
+                            <p style="margin-bottom: 0px;"><span>可郵寄或順豐快遞</span></p>
+                        </div>
+    
+    
+                    </div>
+                    <br>
+                    <!-- <hr> -->
+    
+                    <!-- <div>
+                        <div>
+                            <span class="bigsize">賣家資料：</span>
+                        </div>
+                        <div style="display: inline-block;">
+                            <span>
+                                <p>發布者：YYDS</p>
+                                <div>
+                                    <p style="display: inline-block">評價: </p>
+                                    <div id="ratings" style="display: inline-block">
+                                        <span class="fa fa-star checked"></span>
+                                        <span class="fa fa-star checked"></span>
+                                        <span class="fa fa-star checked"></span>
+                                        <span class="fa fa-star"></span>
+                                        <span class="fa fa-star"></span>
+                                    </div>
+                                </div>
+                                <p>查看賣家資料</p>
+                            </span>
+                        </div>
+                  
+                    </div> -->
+                    <br>
+    
+    
+                </div>
+    
             </div>
-
         </div>
+
         <vaadin-dialog></vaadin-dialog>
 
     </template>
@@ -574,7 +563,7 @@
 </dom-module>
 
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-new-product',
             properties: {
@@ -582,15 +571,18 @@
                     "type": String
                 }
             },
-            created: function () {
+            created: function() {
                 // call close pop-up in change-confirm
                 document.addEventListener('close-item-dialog', e => {
                     this.shadowRoot.querySelector('vaadin-dialog').opened = false;
                     // console.log("(Btn) close successfully");
                 });
 
+                let user = store.get('change-user');
+                this.fileManager = new AwsPackage(user);
+
             },
-            ready: function () {
+            ready: function() {
                 let loc = location.search;
                 let pid = "";
                 let posit = 0;
@@ -612,6 +604,7 @@
                     "type": "product",
                     "id": pid
                 }
+
 
                 Polymer.postData(Url, params).then(res => {
                     console.log("Result", res);
@@ -681,10 +674,10 @@
                         // }
                         let thenew = ""
                         if (res.resolve['isNew'] == true) {
-                            thenew = "<polygon points=\"0,0 80,0 60,32 0,32\" style=\"fill:#DAA520;stroke:#DAA520;stroke-width:0\"></polygon><text x=\"6\" y=\"23\" fill=\"white\" id=\"isNew\" >全新</text>"
+                            thenew = "<polygon points=\"0,0 80,0 60,32 0,32\" style=\"fill:#ebbd35;stroke:#ebbd35;stroke-width:0\"></polygon><text x=\"6\" y=\"23\" fill=\"white\" id=\"isNew\" >全新</text>"
 
                         } else {
-                            thenew = "<polygon points=\"0,0 80,0 60,32 0,32\" style=\"fill:#20B2AA;stroke:#20B2AA;stroke-width:0\"></polygon><text x=\"6\" y=\"23\" fill=\"white\" id=\"isNew\" >二手</text>"
+                            thenew = "<polygon points=\"0,0 80,0 60,32 0,32\" style=\"fill:#7cd3da;stroke:#7cd3da;stroke-width:0\"></polygon><text x=\"6\" y=\"23\" fill=\"white\" id=\"isNew\" >二手</text>"
                         }
                         shadow.querySelector('.new').innerHTML = thenew;
 
@@ -699,13 +692,18 @@
                 })
 
             },
+            loadProduct(pid) {
+                this.fileManager.getFile('json/product-' + pid + '.json').then(res => {
+                    let json = JSON.parse(res);
 
-            _findseller: function () {
+                });
+            },
+            _findseller: function() {
                 console.log('contacting seller');
                 let shadow = this.shadowRoot;
                 let that = this;
                 let dialog = shadow.querySelector('vaadin-dialog');
-                Polymer.popup(dialog, "change", "change-webcom", "50%", "50%");
+                Polymer.popup(dialog, "change", "change-webcom", "40%", "60%");
                 console.log("end process in contact seller");
             },
         });

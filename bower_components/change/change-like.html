@@ -56,7 +56,7 @@
                     "type": Boolean
                 },
                 "liked": {
-                    "type": Array
+                    "type": Number
                 }
             },
 
@@ -89,14 +89,13 @@
                         this.like = res.resolve['like'];
                         Polymer.postData(URL, paramuser).then(res => {
                             if (res.code > 0) {
-                                this.liked = res.resolve['likeProduct'];
                                 let countlikeproduct = res.resolve['likeProduct'].length;
                                 var counti2 = 0;
                                 checked2 = false;
                                 for (i = 0; i < countlikeproduct; i++) {
                                     if (res.resolve['likeProduct'][i] == this.id) {
+                                        this.liked = i
                                         checked2 = true;
-                                        console.log("found!!");
                                     } else {
                                         counti2++;
 
@@ -108,7 +107,6 @@
 
                                 }
                                 shadow.querySelector('#toggle-heart').checked = this.status;
-                                console.log("the statuts:", this.shadowRoot.querySelector('#toggle-heart').checked, this.id);
 
 
                             }
@@ -176,40 +174,28 @@
                     shadow.querySelector('#likes').innerHTML = parseInt(shadow.querySelector('#likes').innerHTML) - 1;
                     Polymer.postData(URL, param2).then(res => {
                         if (res.code > 0) {
-                            let storelikedproduct = this.liked;
-                            let templikeproduct = [];
-                            for (i = 0; i < storelikedproduct.length; i++) {
-                                templikeproduct.push(storelikedproduct[i])
-                            }
-                            let storeposit = 0;
 
-                            for (i = 0; i < storelikedproduct.length; i++) {
-                                if (storelikedproduct[i] == this.id) {
-
-                                    storeposit = i
-                                }
-                            }
-                            templikeproduct.splice(storeposit, 1);
                             let paramchange = {
-                                "action": "addData",
+                                "action": "updateData",
                                 "index": "change",
                                 "type": "_user",
                                 "id": user['_id'],
                                 "body": {
-                                    "likeProduct": templikeproduct
+                                    "query": {
+                                        "script": {
+                                            "source": "ctx._source['likeProduct'].remove(" + this.liked + ")"
+                                        }
+                                    }
                                 }
                             };
 
                             Polymer.postData(URL, paramchange).then(res => {
                                 if (res.code > 0) {
-                                    user['likeProduct'] = templikeproduct;
-                                    store.set('change-user', user);
-                                    this.liked = templikeproduct;
+                                    console.log("reduced")
                                 } else {
                                     console.log("error in delete favorite")
                                 }
                             });
-                            console.log("reduced")
                         } else {
                             alert("fail to reduce")
                         }
@@ -237,16 +223,14 @@
                                 }
                             };
 
-                            console.log('the praram like is: ', paramchange2);
                             Polymer.postData(URL, paramchange2).then(res => {
                                 if (res.code > 0) {
+                                    console.log("increase")
 
-                                    this.liked.push(this.id);
                                 } else {
                                     console.log("error in add favorite")
                                 }
                             });
-                            console.log("increase")
                         } else {
                             console.log("fail to increase");
                         }

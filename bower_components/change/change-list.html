@@ -1,7 +1,5 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../change/change-product-item.html">
-<link rel="import" href="./change-things.html">
-
 <dom-module id="change-list">
 
     <template>
@@ -162,7 +160,7 @@
             <div class="button">
 
                 <div id="np" class="things-grid">
-                    <change-things id="159349294287826"></change-things><change-things id="159349294287826"></change-things><change-things id="159349294287826"></change-things><change-things id="159349294287826"></change-things>
+
 
                 </div>
             </div>
@@ -173,7 +171,7 @@
 </dom-module>
 
 <script>
-    (function() {
+    (function () {
 
 
 
@@ -181,7 +179,7 @@
             is: 'change-list',
             properties: {
                 "query": {
-                    "type": Object
+                    "type": Array
                 },
                 "user": {
                     "type": Object
@@ -191,21 +189,18 @@
                 }
             },
 
-            created: function() {
+            created: function () {
 
 
 
             },
-            ready: function() {
+            ready: function () {
 
             },
-            _showMyGoods: function() {
-                console.log('Show My Goods');
+            _showMyGoods: function () {
                 let shadow = this.shadowRoot;
                 let that = this;
-                console.log("Query Received", this.query);
                 if (!this.query) {
-                    console.log("Empty Query");
                     shadow.querySelector('#np').innerHTML = "No products";
                 } else {
                     let goodsUrl = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
@@ -219,11 +214,15 @@
                                     "order": "desc"
                                 }
                             }],
-                            "query": this.query
+                            "query": {
+                                "bool": {
+                                    "should": this.query
+                                }
+                            }
                         }
                     };
+                    // console.log("JSON", this.query);
                     Polymer.postData(goodsUrl, params).then(res => {
-                        console.log(params);
                         if (res.code > 0) {
                             this.myProducts = res.resolve;
                             let wrapper = that.shadowRoot.querySelector('.things-grid');
@@ -237,20 +236,33 @@
                                 that.myProducts.forEach(item => {
                                     let productItem = document.createElement('change-things');
                                     productItem.setAttribute("id", item['_id']);
+
+                                    // console.log("FUCK2", item['_id']);
+
+                                    // for (i = 0; i < x; i++) {
+                                    //     console.log("working!!")
+                                    //     //ADD BLUR EFFECT IF IT'S OFF STOCK
+                                    //     if (res.resolve.postStatus == false) {
+                                    //         console.log("FUCK1", res.resolve.postStatus);
+
+                                    //         shadow.querySelector('_id').style.filter = "blur(3px)";
+                                    //     };
+                                    // };
                                     wrapper.appendChild(productItem);
                                 });
                             }
                         } else {
-                            console.log(res);
                             shadow.querySelector('#np').innerHTML = "No products";
                             alert('服務器故障 Server error');
                         }
+
+
                     });
                 }
 
 
             },
-            handleResponse: function(response) {
+            handleResponse: function (response) {
                 console.log('Response', response);
             },
 

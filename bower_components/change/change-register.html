@@ -9,6 +9,11 @@
 
     <template>
         <style>
+            * {
+                font-family: sans-serif, Microsoft JhengHei;
+
+            }
+
             .register-grid {
                 text-align: center;
                 display: grid;
@@ -31,11 +36,12 @@
                 grid-row-start: 2;
                 grid-row-end: 3;
                 height: 44px;
-                width: 100%;
+                width: 99%;
                 background-color: #3B5998;
                 color: white;
                 border-radius: 3px;
                 font-size: 100%;
+                margin-right: 2px;
             }
 
             img.logoFacebook {
@@ -50,7 +56,7 @@
                 grid-row-start: 2;
                 grid-row-end: 3;
                 height: 44px;
-                width: 100%;
+                width: 99%;
                 border-radius: 3px;
                 background-color: white;
                 color: black;
@@ -86,15 +92,15 @@
         <div class="register-grid">
             <span class="font-sizeh1">註冊</span>
             <span style="font-size: 80%;">———&nbsp使用第三方帳號註冊&nbsp———</span>
-            <div>
+            <div style="display: inline-flex;">
                 <button class="logoFacebook">
-                    <img src="img/icon/Facebook.png"
-                         class="logoFacebook">&nbspFacebook
+                    <img src="img/icon/Facebook.png" class="logoFacebook">&nbspFacebook
                 </button>
-            </div>
-            <div>
                 <button class="logoGoogle"><img src="img/icon/Google.png" class="logoGoogle">&nbspGoogle</button>
             </div>
+            <!-- <div>
+                <button class="logoGoogle"><img src="img/icon/Google.png" class="logoGoogle">&nbspGoogle</button>
+            </div> -->
             <hr style="border: grey 0.5px solid;width: 100%;">
             <div>
                 <vaadin-text-field id="changeId1" class="padding-none" label="使用名稱"></vaadin-text-field>
@@ -104,23 +110,25 @@
             </div>
             <div class="email">
                 <vaadin-email-field id="changeEmail1" class="padding-none" label="電郵地址" name="email"
-                                    error-message="Please enter a valid email address" required
-                                    clear-button-visible>
+                    error-message="Please enter a valid email address" required clear-button-visible>
                 </vaadin-email-field>
             </div>
             <div>
-                <vaadin-password-field id="pass1" label="密碼" class="padding-none" name="pass" error-message="Please enter a valid password" required
-                                       clear-button-visible></vaadin-password-field>
+                <vaadin-password-field id="pass1" label="密碼" class="padding-none" name="pass"
+                    error-message="Please enter a valid password" required clear-button-visible></vaadin-password-field>
             </div>
             <div>
-                <vaadin-password-field id="pass2" label="確認密碼" class="padding-none" name="confirmPass" error-message="Passwords do not match" required
-                                       clear-button-visible></vaadin-password-field>
+                <vaadin-password-field id="pass2" label="確認密碼" class="padding-none" name="confirmPass"
+                    error-message="Passwords do not match" required clear-button-visible></vaadin-password-field>
             </div>
             <div>
                 <vaadin-number-field id="changePhone1" class="padding-none" label="電話"></vaadin-number-field>
             </div>
             <div class="privacy">
-                <vaadin-checkbox id="check" value="Option" checked>我同意接收來自Get Change及其合作夥伴的促銷和營銷信息</vaadin-checkbox>
+                <vaadin-checkbox id="optional" value="Option" checked>我同意接收來自Get Change及其合作夥伴的促銷和營銷信息</vaadin-checkbox>
+            </div>
+            <div class="privacy">
+                <vaadin-checkbox id="check" value="Option" checked>簽署即表示您同意Get Change 的服務條款和隱私權政策</vaadin-checkbox>
             </div>
             <div>
                 <button on-click="_register" class=" login-register">註冊</button>
@@ -129,7 +137,7 @@
                 <span>已擁有帳戶？</span>
                 <a href="#">立即登入</a>
             </div>
-            <span class="privacy">簽署即表示您同意Get Change 的服務條款和隱私權政策</span>
+            <!-- <span class="privacy">簽署即表示您同意Get Change 的服務條款和隱私權政策</span> -->
             <vaadin-dialog></vaadin-dialog>
         </div>
 
@@ -138,7 +146,7 @@
 </dom-module>
 
 <script>
-    (function() {
+    (function () {
         Polymer({
             is: 'change-register',
             properties: {
@@ -146,14 +154,14 @@
                     "type": Number
                 }
             },
-            created: function() {
+            created: function () {
 
 
             },
 
 
 
-            _register: function() {
+            _register: function () {
                 console.log('ChangeRegister', this.next);
 
                 let shadow = this.shadowRoot;
@@ -217,7 +225,7 @@
                                                                 "email": email,
                                                                 "phone": phone,
                                                                 "goodsNum": 0,
-                                                                "head": "http://change.dazzle.website/img/head.svg",
+                                                                "head": "http://change.dazzle.website/img/user_profile.png",
                                                                 "likeProduct": [],
                                                                 "password": pass,
                                                                 "score": 5,
@@ -258,7 +266,7 @@
                 }
             },
 
-            login: function() {
+            login: function () {
                 console.log('login');
                 let shadow = this.shadowRoot;
                 let that = this;
@@ -289,7 +297,7 @@
 
             },
 
-            ready: function() {
+            ready: function () {
                 let loginUrl = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 let params = {
                     "action": "searchData",
@@ -309,7 +317,7 @@
                 });
                 console.log("Entered");
                 let shadow = this.shadowRoot;
-                customElements.whenDefined('vaadin-select').then(function() {
+                customElements.whenDefined('vaadin-select').then(function () {
                     const district = [{
                         id: '中西區',
                         name: '中西區'
@@ -365,14 +373,14 @@
                         id: '西貢區',
                         name: '西貢區'
                     }];
-                    shadow.querySelector('vaadin-select').renderer = function(root) {
+                    shadow.querySelector('vaadin-select').renderer = function (root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        district.forEach(function(item) {
+                        district.forEach(function (item) {
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);

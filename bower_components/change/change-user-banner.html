@@ -4,12 +4,19 @@
     <template>
         <style include="icon-styles"></style>
         <style>
+            * {
+                font-family: sans-serif, Microsoft JhengHei;
+
+            }
+
             .checked {
                 color: orange;
             }
-            #check{
-                color:gray;
+
+            #check {
+                color: gray;
             }
+
             #offer {
                 margin-left: 8%;
                 margin-right: 8%;
@@ -37,14 +44,15 @@
                 margin: 18% 0%;
             }
 
-            .buttons {
-                width: 9%;
-                text-align: center;
 
+
+            .buttons {
+                width: 80px;
+                text-align: center;
             }
 
             #user {
-                width: 54%;
+                width: 50%;
             }
 
             .ret {
@@ -65,17 +73,77 @@
             #Uname {
                 font-size: 1.5em;
                 font-weight: 800;
-                color:black
+                color: black
             }
 
-            #mp{
+            #mp {
                 padding-top: 17%;
                 background-size: cover;
                 background-position: center center;
                 background-repeat: no-repeat;
                 background-image: url('http://change.dazzle.website/Website Design/profile page/img/profile banner/company-profile-banner.png');
             }
-           
+
+            @media only screen and (max-width: 940px) {
+                #dp {
+                    width: 37px;
+                    height: 45px;
+                    margin: 15% 0%
+                }
+
+                #Uname {
+                    font-size: 1.15em;
+                }
+
+                h6 {
+                    font-size: 9px;
+                    /*or 55-57%*/
+                }
+
+                .ret {
+                    font-size: 2em;
+                }
+
+                #threeWords h6 {
+                    font-size: 9px;
+                    padding-top: 2%;
+                }
+
+                .buttons {
+                    width: 40px;
+                    text-align: center;
+                }
+            }
+            @media only screen and (max-width: 500px) {
+                #dp {
+                    width: 30px;
+                    height: 35px;
+                    margin: 10% 0%
+                }
+
+                #Uname {
+                    font-size: 0.80em;
+                }
+
+                h6 {
+                    font-size: 8px;
+                    /*or 55-57%*/
+                }
+
+                .ret {
+                    font-size: 1.8em;
+                }
+
+                #threeWords h6 {
+                    font-size: 7px;
+                    padding-top: 4%;
+                }
+
+                .buttons {
+                    width: 30px;
+                    text-align: center;
+                }
+            }
         </style>
         <div id="container">
             <div id="mp">
@@ -87,35 +155,38 @@
                 <div id="user" class="in">
                     <span id="Uname"></span>
                     <br />
-                   <span id="check"> 註冊日期:</span>
+                    <span id="check"> 註冊日期:</span>
                 </div>
-                <div class="in buttons">
-                    <h6>上貨數</h6>
-                    <span class="ret" id="gNum"></span>
+                <div id="buttonM">
+                    <div class="in buttons">
+                        <h6>上貨數</h6>
+                        <span class="ret" id="gNum"></span>
+                    </div>
+                    <div class="in buttons">
+                        <h6>購買數</h6>
+                        <span class="ret" id="buy"></span>
+                    </div>
+                    <div class="in buttons" id="threeWords">
+                        <h6>平均評分</h6>
+                        <span class="ret" id="rate"></span>
+                    </div>
                 </div>
-                <div class="in buttons">
-                    <h6>購買數</h6>
-                    <span class="ret" id="buy"></span>
-                </div>
-                <div class="in buttons">
-                    <h6>平均評分</h6>
-                    <span class="ret" id="rate"></span>
-                </div>
+
             </div>
         </div>
     </template>
 </dom-module>
 <script>
-    (function() {
+    (function () {
         Polymer({
             is: 'change-user-banner',
             properties: {
 
             },
-            created: function() {
+            created: function () {
 
             },
-            ready: function() {
+            ready: function () {
                 let loc = location.search;
                 console.log("Path", loc);
                 console.log("Length", loc.length);

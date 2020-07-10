@@ -1,0 +1,131 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="change-product-item">
+
+    <template>
+        <style>
+            :host{
+                border:0.5px solid #808080;
+                padding:10px;
+            }
+            #a1,
+            #a2 {
+                display: inline-block;
+            }
+
+            #a3 {
+                float: right;
+            }
+
+            .button {
+                margin-left: 4%;
+                margin-right: 4%;
+                margin-top: 41px;
+            }
+            change-item {
+                width: 100%;
+            }
+
+            svg.title_tags {
+                width: 100%;
+                height: 30px;
+            }
+
+            svg.s_title_tags {
+                margin: 5px;
+                height: 16px;
+                width: 40px;
+                border-radius: 2px;
+
+            }
+
+            change-things {
+                border: 1px solid gainsboro;
+                padding: 12px;
+            }
+
+            .img {
+                width: 98%;
+                height: 160px;
+                background-size: cover;
+                background-position:center center;
+                /* background-repeat: no-repeat; */
+                margin: 1%;
+                background-image: url(http://change.dazzle.website/img/channel_banner/1.jpg);
+                background-repeat:no-repeat;
+            }
+
+            .circle {
+                margin: 5px;
+                height: 20px;
+                width: 20px;
+
+
+            }
+        </style>
+
+            <div>
+                <div id="a1">
+                    <img src="http://change.dazzle.website/img/user_profile.png">
+                </div>
+                <div id="a2">
+                    <div class="name">1234</div>
+                    <div class="time">兩分鐘前</div>
+                </div>
+                <div id="a3">
+                    <svg class="circle">
+                        <circle cx="10" cy="10" r="9" stroke="orange" stroke-width="2" fill="orange" />
+                    </svg>
+                </div>
+            </div>
+            <div  id ="img" class="img">
+            </div>
+            <svg class="s_title_tags">
+                <polygon points="0,0 40,0 30,16 0,16" style="fill:#6AA64F;stroke:#6AA64F;stroke-width:0">
+                </polygon>
+                <text x="3" y="12" fill="white" style="font-size:10px;">全新</text>
+            </svg>
+            <h3 id="productname">{{this.data['productname']}}</h3>
+            <div id="price" class="price"></div>
+            <change-item-tag>
+                <change-tag class="small">车舆地产</change-tag>
+                <div class="clear"></div>
+            </change-item-tag>
+
+            <change-like>
+                <span class="glyphicon glyphicon-heart"></span>
+            </change-like>
+            <div class="clear"></div>
+
+    </template>
+
+</dom-module>
+
+<script>
+    (function() {
+
+
+
+        Polymer({
+            is: 'change-product-item',
+            properties: {
+                "data": {
+                    "type": Object
+                }
+            },
+
+            created: function() {},
+            ready: function() {
+                let shadow = this.shadowRoot;
+                console.log('Data', this.data);
+                shadow.querySelector('#productname').innerHTML = this.data['productname'];
+                shadow.querySelector('#price').innerHTML = "HK$" + this.data['price'];
+                shadow.querySelector('#img').style.backgroundImage = "url(" + this.data['pics'] + ")";
+
+            },
+
+
+        });
+
+    })();
+</script>

@@ -1,0 +1,73 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-text-field/vaadin-email-field.html">
+<link rel="import" href="../vaadin-select/vaadin-select.html">
+<link rel="import" href="../vaadin-text-field/vaadin-text-area.html">
+<link rel="import" href="../vaadin-button/vaadin-button.html">
+
+
+<dom-module id="change-question">
+    <template>
+        <div>
+
+            <vaadin-email-field label="Email" name="email" error-message="Please enter a valid email address"
+                clear-button-visible></vaadin-email-field>
+        </div>
+        <div>
+            <vaadin-select placeholder="您的問題類型">
+                <template>
+                    <vaadin-list-box>
+                        <vaadin-item>購物問題</vaadin-item>
+                        <vaadin-item>短片問題</vaadin-item>
+                        <vaadin-item>網站問題</vaadin-item>
+                        <vaadin-item>廣告問題</vaadin-item>
+                    </vaadin-list-box>
+                </template>
+    </vaadin-select>
+    </div>
+    <div>
+        <vaadin-text-area label="描述你遇到的問題" placeholder="描述你遇到的問題"></vaadin-text-area>
+    </div>
+    <div>
+        <vaadin-button on-click="postData">提交</vaadin-button>
+    </div>
+
+
+    </template>
+</dom-module>
+<script>
+    (function() {
+        Polymer({
+            is: 'change-question',
+            properties: {},
+            created: function() {},
+            postData: function() {
+                let a = Date.now();
+                console.log("A", a);
+                let shadow = this.shadowRoot;
+                let email = shadow.querySelector('vaadin-email-field').value;
+                console.log("Email Value", email);
+                let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let p = {
+                    "action": "addData",
+                    "index": "change",
+                    "type": "question",
+                    "id": 3000,
+                    "body": {
+                        "id": 3000,
+                        "email": email,
+                        "questionType": "購物問題",
+                        "question": "qqqqqqqqq"
+                    }
+                };
+                Polymer.postData(url, p).then(res => {
+                    if (res.code > 0) {
+                        alert("success!");
+                    }
+                });
+
+            }
+
+
+        });
+    })();
+</script>

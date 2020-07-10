@@ -435,38 +435,76 @@ its values is > 50%. */
                     'category': {
                         "type": Array
                     },
-                    'searchTags':{
-                        "type":Array
+                    'searchTags': {
+                        "type": Array
                     },
-                    'priceStart':{
-                        "type":Number
+                    'priceStart': {
+                        "type": Number
                     },
-                    'priceStop':{
-                        'type':Number
+                    'priceStop': {
+                        'type': Number
                     }
                 },
                 created: function() {
                     let that = this;
                     this.categories = [];
-                    this.tags =[];
+                    this.tags = [];
                     this.priceStart = 0;
                     this.priceStop = 1000000;
                     this.district = null;
+                    this.isNew = [];
                 },
                 addTags(val) {
-                    console.log('Value',val);
+                    console.log('Value', val);
                     let myTags = this.shadowRoot.querySelector('#myTags');
                     // let val = this.shadowRoot.querySelector('#inputTags').value;
                     myTags._addTag(val);
-             
+
                 },
-                search(){
+                search() {
                     // search(cats,tags,district,priceStart,priceEnd){
-                    this.shadowRoot.querySelector('change-in-item').search(this.categories,this.tags,[],0,1000000);
+                    this.shadowRoot.querySelector('change-in-item').search(this.categories, this.tags, [], 0, 1000000);
+                },
+                back(value) {
+                    console.log('value =', value);
+                    let posit = 99999;
+                    ////categories
+                    for (i = 0; i < this.categories.length; i++) {
+                        if (this.categories[i] == value) {
+                            posit = i;
+                            this.categories.splice(posit, 1);
+                            break
+                        }
+                    }
+                    ////tags
+                    for (i = 0; i < this.tags.length; i++) {
+                        if (this.tags[i] == value) {
+                            posit = i;
+                            this.tags.splice(posit, 1);
+                            break
+                        }
+                    }
+
+
+                    ////isNew
+                    for (i = 0; i < this.isNew.length; i++) {
+                        if (this.isNew[i] == value) {
+                            posit = i;
+                            this.isNew.splice(posit, 1);
+                            break
+                        }
+                    }
+                    ////district
+                    if (this.district == value) {
+                        this.district = null;
+                    }
+                    this.search();
+
+
                 },
                 ready: function() {
                     let value;
-                    document.addEventListener('query-tags',e=>{
+                    document.addEventListener('query-tags', e => {
                         // console.log('Category',e);
                         value = e.detail.tags;
                         this.addTags(value);
@@ -474,14 +512,29 @@ its values is > 50%. */
                         this.search();
 
                     });
-                    document.addEventListener('select-category',e=>{
+                    document.addEventListener('query-isNew', e => {
+                        // console.log('Category',e);
+                        let isNew = e.detail.isNew;
+                        console.log("the is new storeing is:", isNew);
+                        if (isNew == "全新") {
+                            isnew = true;
+
+                        } else {
+                            isnew = false;
+                        }
+                        this.addTags(isNew);
+                        this.isNew.push(isNew);
+                        this.search();
+
+                    });
+                    document.addEventListener('select-category', e => {
                         // console.log('Category',e);
                         let category = e.detail.category;
                         this.addTags(category);
                         this.categories.push(category);
                         this.search();
                     });
-                    document.addEventListener('select-district',e=>{
+                    document.addEventListener('select-district', e => {
                         // console.log('District',e);
                         // let category = e.detail.category;
                         this.addTags(e.detail.district);

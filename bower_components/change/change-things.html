@@ -138,7 +138,10 @@
                 float: right;
             }
 
+            *{
+                font-family: sans-serif,Microsoft JhengHei;
 
+            }
          
 
 
@@ -325,7 +328,7 @@
         	<div id="usericon">
             <a id="redu" href="#">
             <div id="a1">
-                <img id="_changeicon" src="http://change.dazzle.website/img/head.svg">
+                <img id="_changeicon" src="http://change.dazzle.website/img/user_profile.png">
             </div>
             <div id="a2">
                 <div class="name" id="owner"></div>
@@ -355,15 +358,18 @@
         
 
         <svg class="s_title_tags" style="float: left;">
-            <polygon points="0,0 40,0 30,16 0,16" style="fill:#6AA64F;stroke:#6AA64F;stroke-width:0"></polygon>
-            <text x="3" y="12" fill="white" id="isNew">全新</text>
+          
         </svg>
         <div id="templike">
         
         </div>
-        <div on-click="red" class="productname2" id="productname">
+        <a id="red" href="">
+        <div class="productname2" id="productname">
+         
             <h2>loading...</h2>
+            
         </div>
+        </a>
         <div id="price" class="price">
             </div>
         <change-item-tag>
@@ -442,7 +448,7 @@
                     if (res.code > 0) {
                         console.log("Deleted Successfully");
                         console.log("now delete this id:", this.id);
-                        shadow.querySelector('#deleteall').remove();
+                        location.reload();
                     } else {
                         console.log("error in reallydelete");
                     }
@@ -543,7 +549,7 @@
                                 //check product name    
                                 shadow.querySelector("#productname").innerHTML = all['productname'];
                                 //check price
-                                shadow.querySelector('#price').innerHTML = "HKD$" + all['price'];
+                                shadow.querySelector('#price').innerHTML = "$" + all['price'];
                                 //check time
                                 let _thetimenow = Date.now();
                                 let comparetime = (_thetimenow - all['createTime']) / 1000;
@@ -576,10 +582,10 @@
                                 //check is new
                                 let thenew = ""
                                 if (all['isNew'] == true) {
-                                    thenew = "<polygon points=\"0,0 40,0 30,16 0,16\" style=\"fill:#DAA520;stroke:#DAA520;stroke-width:0\"></polygon><text x=\"3\" y=\"12\" fill=\"white\" id=\"isNew\" >全新</text>"
+                                    thenew = "<polygon points=\"0,0 40,0 30,16 0,16\" style=\"fill:#ebbd35;stroke:#ebbd35;stroke-width:0\"></polygon><text x=\"3\" y=\"12\" fill=\"white\" id=\"isNew\" >全新</text>"
 
                                 } else {
-                                    thenew = "<polygon points=\"0,0 40,0 30,16 0,16\" style=\"fill:#20B2AA;stroke:#20B2AA;stroke-width:0\"></polygon><text x=\"3\" y=\"12\" fill=\"white\" id=\"isNew\" >二手</text>"
+                                    thenew = "<polygon points=\"0,0 40,0 30,16 0,16\" style=\"fill:#7cd3da;stroke:#7cd3da;stroke-width:0\"></polygon><text x=\"3\" y=\"12\" fill=\"white\" id=\"isNew\" >二手</text>"
                                 }
                                 shadow.querySelector('.s_title_tags').innerHTML = thenew;
                                 //check the pic link
@@ -604,6 +610,40 @@
                                 //check the like
                                 shadow.querySelector('#templike').innerHTML = '<change-like id="' + this.id + '"></change-like>'
 
+                                //check the status
+                                // let paramorder = {
+                                //     "action": "searchData",
+                                //     "index": "change",
+                                //     "type": "order",
+                                //     "body": {
+                                //         "query": {
+                                //             "bool": {
+                                //                 "must": [{
+                                //                     "match": {
+                                //                         "productId": this.id
+                                //                     }
+                                //                 }, {
+                                //                     "match": {
+                                //                         "status": "已提交訂單"
+                                //                     }
+                                //                 }]
+                                //             }
+                                //         }
+                                //     }
+                                // };
+
+                                // Polymer.postData(Url, paramorder).then(res => {
+                                //     if (res.code > 0) {
+                                //         if (res.resolve.length > 0) {
+                                //             shadow.querySelector('.shouldhide').innerHTML += '圖1( ' + res.resolve.length + ' )';
+                                //         } else {
+                                //             shadow.querySelector('.shouldhide').innerHTML += '圖2(0)';
+
+                                //         }
+                                //     } else {
+                                //         alert("error order")
+                                //     }
+                                // });
 
                             } else {}
                         });

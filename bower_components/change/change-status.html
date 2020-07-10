@@ -1,0 +1,224 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="change-status">
+    <template>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            .status-container {
+                color: white;
+                font-family: sans-serif, Microsoft JhengHei;
+                margin: 0;
+            }
+
+            .switch {
+                position: relative;
+                display: inline-block;
+                width: 100px;
+                height: 35px;
+            }
+
+            .switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+            .slider {
+                position: absolute;
+                cursor: pointer;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: #ccc;
+                -webkit-transition: .4s;
+                transition: .4s;
+                padding-top: 4px;
+                padding-left: 10px;
+                border: solid 1px #ccc;
+            }
+
+            .slider span {
+                color: white;
+            }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 26px;
+                width: 48px;
+                left: 2px;
+                bottom: 4px;
+                background-color: white;
+                -webkit-transition: .4s;
+                transition: .4s;
+            }
+
+            input:checked+.slider {
+                background-color: green;
+            }
+
+            input:focus+.slider {
+                box-shadow: 0 0 1px green;
+            }
+
+            input:checked+.slider:before {
+                -webkit-transform: translateX(45px);
+                -ms-transform: translateX(45px);
+                transform: translateX(45px);
+            }
+
+            /* Rounded sliders */
+            .slider.round {
+                border-radius: 34px;
+            }
+
+            .slider.round:before {
+                border-radius: 50%;
+            }
+        </style>
+
+        <div class="status-container">
+            <label class="switch">
+                <input class="status" type="checkbox" checked>
+                <span class="slider">上架 | 下架</span>
+            </label>
+        </div>
+
+    </template>
+</dom-module>
+
+<script>
+    (function () {
+        Polymer({
+            is: 'change-status',
+            properties: {
+                "id": {
+                    "type": String
+                },
+                "removeid": {
+                    "type": String
+                }
+            },
+            created: function () {
+
+            },
+
+
+
+            ready: function () {
+                let that = this;
+                let shadow = this.shadowRoot;
+
+                //Eventlistener for the switch button
+                let cStatus = shadow.querySelector('.status')
+                cStatus.addEventListener('click', e => {
+                    that.upStock();
+                });
+
+                //Get back status for switch button from Postman
+                let loc = location.search;
+                let pid = "";
+                let posit = 0;
+                for (i = 1; i < loc.length; i++) {
+                    if (loc[i] == "u") {
+                        posit = i;
+                    };
+                };
+                for (a = 2; a < posit; a++) {
+                    pid += loc[a];
+                }
+                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let params = {
+                    "action": "getData",
+                    "index": "change",
+                    "type": "product",
+                    "id": pid,
+                };
+
+                Polymer.postData(Url, params).then(res => {
+                    console.log(res);
+                    if (res.code > 0) {
+                        //CHECK WHETHER THERE IS POSTSTATUS SCHEMA INSIDE PRODUCT
+                        if (typeof (res.resolve.postStatus) == "undefined") {
+                            let Url1 = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                            let p1 = {
+                                "action": "addData",
+                                "index": "change",
+                                "type": "product",
+                                "id": pid,
+                                "body": {
+                                    "postStatus": true
+                                }
+                            };
+                            //ADD POSTSTATUS TO PRODUCT
+                            Polymer.postData(Url1, p1).then(res => {
+                                if (res.code > 0) {
+                                    console.log("added postStatus!");
+                                }
+
+                            });
+                            //TURN SWITCH TO TRUE ALSO
+                            shadow.querySelector('.status').checked = true;
+
+                        } else {
+                            //THERE IS POSTSTATUS SCHEMA, PASS VALUE TO SWITCH BUTTON
+                            shadow.querySelector('.status').checked = res.resolve.postStatus;
+                            console.log("STATUS:", shadow.querySelector('.status').checked);
+                        }
+                    }
+                });
+            },
+
+            //UP & DOWN FUNCTION
+            upStock: function () {
+                let shadow = this.shadowRoot;
+                let check = shadow.querySelector('.status').checked;
+                let loc = location.search;
+                let pid = "";
+                let posit = 0;
+                for (i = 1; i < loc.length; i++) {
+                    if (loc[i] == "u") {
+                        posit = i;
+                    };
+                };
+                for (a = 2; a < posit; a++) {
+                    pid += loc[a];
+                }
+                let loginUrl = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let p = {
+                    "action": "addData",
+                    "index": "change",
+                    "type": "product",
+                    "id": pid,
+                    "body": {
+                        "postStatus": check
+                    }
+                };
+
+                Polymer.postData(loginUrl, p).then(res => {
+                    console.log(res);
+                    if (res.code > 0) {
+                        //PASS TRUE VALUE TO POSTSTATUS IN POSTMAN
+                        if (check == true) {
+                            alert("up");
+                            console.log("postStatus", check);
+                        } else {
+                            //PASS FALSE VALUE TO POSTSTATUS IN POSTMAN
+                            alert("down");
+                            console.log("postStatus", check);
+                        };
+
+                    }
+                    else {
+                        alert(" fail!");
+                    };
+                });
+            },
+
+
+
+
+        });
+    })();
+</script>
