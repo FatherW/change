@@ -520,96 +520,107 @@ its values is > 50%. */
 
 
         </div>
-        <button class="titlecolor">搜尋</button></div>
+        <button class="titlecolor" id="searchbutt">搜尋</button></div>
     </template>
+</dom-module>
 
 
-    <script>
-        (function() {
-            Polymer({
-                is: 'change-slidelist',
-                properties: {
-                    'countcate': {
-                        "type": Number
-                    },
-                    'cateIdarray': {
-                        "type": Array
-                    },
-                    'allIdarray': {
-                        "type": Array
-                    },
-                    'storeingcate': {
-                        "type": Array
-                    }
-
+<script>
+    (function() {
+        Polymer({
+            is: 'change-slidelist',
+            properties: {
+                'countcate': {
+                    "type": Number
                 },
-                created: function() {
-                    let that = this;
+                'cateIdarray': {
+                    "type": Array
                 },
-                _addTags(e) {
-                    let myTags = this.shadowRoot.querySelector('#myTags');
-                    let val = this.shadowRoot.querySelector('#inputTags').value;
-
-                    if (e.code === "Enter") {
-                        //myTags._addTag(val);
-                        Polymer.dzFire('query-tags', {
-                            'detail': {
-                                'tags': val
-                            }
-                        });
-                        this.shadowRoot.querySelector('#inputTags').value = "";
-                    }
+                'allIdarray': {
+                    "type": Array
                 },
-                ready: function() {
-                    let that = this;
-                    let shadow = this.shadowRoot;
-                    let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                'storeingcate': {
+                    "type": Array
+                }
 
-                    var storetags = location.search;
-                    turntags = []
-                    for (b = 0; b < storetags.length; b++) {
-                        turntags.push(storetags[b])
-                    }
-                    if (turntags[1] == "c") {
-                        turntags.splice(0, 5);
-                        var thecate = turntags.join("").toString();
+            },
+            created: function() {
+                let that = this;
+            },
+            _addTags(e) {
+                let myTags = this.shadowRoot.querySelector('#myTags');
+                let val = this.shadowRoot.querySelector('#inputTags').value;
 
-                    } else if (turntags[1] == "t") {
+                if (e.code === "Enter") {
+                    //myTags._addTag(val);
+                    Polymer.dzFire('query-tags', {
+                        'detail': {
+                            'tags': val
+                        }
+                    });
+                    this.shadowRoot.querySelector('#inputTags').value = "";
+                }
+            },
 
-                        turntags.splice(0, 4);
-                        var thetags = turntags.join("").toString();
-                        var dec = unescape(thetags);
+            ready: function() {
+                let that = this;
+                let shadow = this.shadowRoot;
+                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+
+                var storetags = location.search;
+                turntags = []
+                for (b = 0; b < storetags.length; b++) {
+                    turntags.push(storetags[b])
+                }
+                if (turntags[1] == "c") {
+                    turntags.splice(0, 5);
+                    var thecate = turntags.join("").toString();
+
+                } else if (turntags[1] == "t") {
+
+                    turntags.splice(0, 4);
+                    var thetags = turntags.join("").toString();
+                    var dec = unescape(thetags);
 
 
 
 
-                    } else {};
+                } else {};
 
 
+                shadow.querySelector('#searchbutt').addEventListener('click', e => {
+                    Polymer.dzFire('select-range', {
+                        'detail': {
+                            'start': shadow.querySelector('change-range').shadowRoot.querySelector('#slider-range-value1').innerHTML,
+                            'end': shadow.querySelector('change-range').shadowRoot.querySelector('#slider-range-value2').innerHTML
+                        }
+                    })
+                })
 
-
-                    shadow.querySelector('#isnew1').addEventListener('click', e => {
+                shadow.querySelector('#isnew1').addEventListener('click', e => {
+                    if (shadow.querySelector('#isnew1').checked == true) {
                         Polymer.dzFire('query-isNew', {
                             'detail': {
                                 'isNew': "全新"
                             }
                         })
-                        console.log('isNew is checked');
-                    });
-                    shadow.querySelector('#isnew2').addEventListener('click', e => {
+                    }
+                });
+                shadow.querySelector('#isnew2').addEventListener('click', e => {
+                    if (shadow.querySelector('#isnew2').checked == true) {
                         Polymer.dzFire('query-isNew', {
                             'detail': {
                                 'isNew': "二手"
                             }
                         })
-                    });
-                    shadow.querySelector('change-range').new();
+                    }
+                });
+                shadow.querySelector('change-range').new();
 
 
-                },
+            },
 
 
-            });
-        })();
-    </script>
-</dom-module>
+        });
+    })();
+</script>

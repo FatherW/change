@@ -443,6 +443,9 @@ its values is > 50%. */
                     },
                     'priceStop': {
                         'type': Number
+                    },
+                    'initprice': {
+                        'type': Number
                     }
                 },
                 created: function() {
@@ -453,20 +456,18 @@ its values is > 50%. */
                     this.priceStop = 1000000;
                     this.district = null;
                     this.isNew = [];
+                    this.initprice = 0;
                 },
                 addTags(val) {
-                    console.log('Value', val);
                     let myTags = this.shadowRoot.querySelector('#myTags');
                     // let val = this.shadowRoot.querySelector('#inputTags').value;
                     myTags._addTag(val);
-
                 },
                 search() {
                     // search(cats,tags,district,priceStart,priceEnd){
-                    this.shadowRoot.querySelector('change-in-item').search(this.categories, this.tags, [], 0, 1000000);
+                    this.shadowRoot.querySelector('change-in-item').search(this.categories, this.tags, this.district, this.isNew, this.priceStart, this.priceStop);
                 },
                 back(value) {
-                    console.log('value =', value);
                     let posit = 99999;
                     ////categories
                     for (i = 0; i < this.categories.length; i++) {
@@ -491,6 +492,21 @@ its values is > 50%. */
                         if (this.isNew[i] == value) {
                             posit = i;
                             this.isNew.splice(posit, 1);
+                            var statnew1 = this.shadowRoot.querySelector('change-slidelist').shadowRoot.querySelector('#isnew1').checked;
+                            var statnew2 = this.shadowRoot.querySelector('change-slidelist').shadowRoot.querySelector('#isnew2').checked;
+
+                            if (value = "全新") {
+
+                                if (statnew1 == true) {
+
+                                    statnew1 = boolean(false);
+
+                                }
+                            } else {
+                                if (statnew2 == true) {
+                                    statnew2 = boolean(false);
+                                }
+                            }
                             break
                         }
                     }
@@ -499,13 +515,18 @@ its values is > 50%. */
                         this.district = null;
                     }
                     this.search();
+                    ///range
+                    let msgrange = "$" + this.priceStart + " - $" + this.priceStop;
+                    if (msgrange == value) {
+                        this.priceStart = 0;
+                        this.priceStop = this.initprice;
+                    }
 
 
                 },
                 ready: function() {
                     let value;
                     document.addEventListener('query-tags', e => {
-                        // console.log('Category',e);
                         value = e.detail.tags;
                         this.addTags(value);
                         this.tags.push(value);
@@ -513,9 +534,7 @@ its values is > 50%. */
 
                     });
                     document.addEventListener('query-isNew', e => {
-                        // console.log('Category',e);
                         let isNew = e.detail.isNew;
-                        console.log("the is new storeing is:", isNew);
                         if (isNew == "全新") {
                             isnew = true;
 
@@ -528,20 +547,46 @@ its values is > 50%. */
 
                     });
                     document.addEventListener('select-category', e => {
-                        // console.log('Category',e);
                         let category = e.detail.category;
                         this.addTags(category);
                         this.categories.push(category);
                         this.search();
                     });
                     document.addEventListener('select-district', e => {
-                        // console.log('District',e);
                         // let category = e.detail.category;
                         this.addTags(e.detail.district);
                         // this.tags.push(e.detail.district);
                         this.district = e.detail.district;
                         this.search();
                     });
+                    document.addEventListener('select-range', e => {
+                        let minprice = e.detail.start;
+                        let maxprice = e.detail.end;
+                        var storeminprice = [];
+                        var storemaxprice = [];
+                        var storeminposit = [];
+                        var storemaxposit = [];
+                        ////from($xx,xxx) to ($xxxxx)
+                        for (countminprice = 0; countminprice < minprice.length; countminprice++) {
+                            if (minprice[countminprice] != ',') {
+                                storeminprice.push(minprice[countminprice]);
+                            }
+
+                        }
+                        for (countmaxprice = 0; countmaxprice < maxprice.length; countmaxprice++) {
+                            if (maxprice[countmaxprice] != ",") {
+                                storemaxprice.push(maxprice[countmaxprice]);
+                            }
+                        }
+
+                        this.priceStart = parseInt(storeminprice.join("").toString());
+                        this.priceStop = parseInt(storemaxprice.join("").toString());
+                        let msgrange = "$" + this.priceStart + " - $" + this.priceStop;
+                        this.addTags(msgrange);
+                        this.search();
+
+
+                    })
                 }
             })
         }());

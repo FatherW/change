@@ -146,7 +146,7 @@
 </dom-module>
 
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-register',
             properties: {
@@ -154,14 +154,14 @@
                     "type": Number
                 }
             },
-            created: function () {
+            created: function() {
 
 
             },
 
 
 
-            _register: function () {
+            _register: function() {
                 console.log('ChangeRegister', this.next);
 
                 let shadow = this.shadowRoot;
@@ -173,12 +173,13 @@
                 let phone = shadow.querySelector('#changePhone1').value; //電話
                 let pass = shadow.querySelector('#pass1').value;
                 let cpass = shadow.querySelector('#pass2').value;
+                let promotion = shadow.querySelector('#optional').checked
                 let check = shadow.querySelector('#check').checked;
                 if (uid === "") {
                     alert('使用名稱不可以為空');
                 } else {
                     if (area === "") {
-                        alert('密碼不可以為空');
+                        alert('地區不可以為空');
                     } else {
                         if (email === "") {
                             alert('電郵地址不可以為空');
@@ -187,76 +188,32 @@
                                 alert('電話不可以為空');
                             } else {
                                 if (pass === "") {
-                                    alert('Please enter a valid password');
+                                    alert('請輸入密碼');
                                 } else {
                                     if (pass !== cpass) {
-                                        alert('Passwords do not match');
+                                        alert('兩個密碼不一樣');
                                     } else {
-                                        let loginUrl = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                                        let params = {
-                                            "action": "searchData",
-                                            "index": "change",
-                                            "type": "_user",
-                                            "body": {
-                                                "query": {
-                                                    "match": {
-                                                        "email": email
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        Polymer.postData(loginUrl, params).then(res => {
-                                            if (res.code > 0) {
-                                                if (res.resolve.length > 0) {
-                                                    alert("This email has already been used.");
-                                                } else {
-                                                    if (check) {
-                                                        this.next++;
-                                                        let t = Date.now();
-                                                        params = {
-                                                            "action": "addData",
-                                                            "index": "change",
-                                                            "type": "_user",
-                                                            "id": this.next,
-                                                            "body": {
-                                                                "username": uid,
-                                                                "numberRate": 0,
-                                                                "area": area,
-                                                                "email": email,
-                                                                "phone": phone,
-                                                                "goodsNum": 0,
-                                                                "head": "http://change.dazzle.website/img/user_profile.png",
-                                                                "likeProduct": [],
-                                                                "password": pass,
-                                                                "score": 5,
-                                                                "createTime": t,
-                                                                "history": []
-                                                            }
-                                                        }
+                                        if (check !== true) {
+                                            alert('請同意私隱條款');
+                                        } else {
+                                            let registerUrl = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
+                                            let params = {
+                                                "action": "changeregister",
+                                                "username": uid,
+                                                "area": area,
+                                                "email": email,
+                                                "password": pass,
+                                                "phone": phone,
+                                                "isPromotionMsg": promotion
+                                            };
+                                            console.log("Params", params);
+                                            Polymer.postData(registerUrl, params).then(res => {
+                                                console.log("running");
+                                                alert(res.text);
+                                            });
 
-                                                        console.log("Register JSON", params);
-                                                        Polymer.postData(loginUrl, params).then(res => {
-                                                            if (res.code > 0) {
-                                                                // let uid = res.resolve['uid'];
-                                                                // let user = res.resolve;
-                                                                // user['thisPage'] = this.thisPage;
-                                                                // store.set('user', res.resolve);
-                                                                // store.set('editMode', 'admin');
-                                                                // store.set('thisPage', this.thisPage);
-                                                                // location.reload();
-                                                                alert('註冊成功');
-                                                                location.reload();
-                                                            } else {
-                                                                alert('註冊失敗');
-                                                                this.next--;
-                                                            }
-                                                        });
-                                                    } else {
-                                                        alert('Please agree to the terms and conditions');
-                                                    }
-                                                }
-                                            }
-                                        });
+                                        }
+
 
                                     }
                                 }
@@ -266,7 +223,7 @@
                 }
             },
 
-            login: function () {
+            login: function() {
                 console.log('login');
                 let shadow = this.shadowRoot;
                 let that = this;
@@ -297,7 +254,7 @@
 
             },
 
-            ready: function () {
+            ready: function() {
                 let loginUrl = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 let params = {
                     "action": "searchData",
@@ -317,7 +274,7 @@
                 });
                 console.log("Entered");
                 let shadow = this.shadowRoot;
-                customElements.whenDefined('vaadin-select').then(function () {
+                customElements.whenDefined('vaadin-select').then(function() {
                     const district = [{
                         id: '中西區',
                         name: '中西區'
@@ -373,14 +330,14 @@
                         id: '西貢區',
                         name: '西貢區'
                     }];
-                    shadow.querySelector('vaadin-select').renderer = function (root) {
+                    shadow.querySelector('vaadin-select').renderer = function(root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        district.forEach(function (item) {
+                        district.forEach(function(item) {
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);

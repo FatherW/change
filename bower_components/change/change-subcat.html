@@ -21,7 +21,7 @@
 <link rel="import" href="change-subcat.html">
 
 
-<dom-module id="change-add-product">
+<dom-module id="change-subcat">
 
     <template>
         <style include="icon-styles"></style>
@@ -213,7 +213,7 @@
             }
 
             .bigPic {
-                height: 470px;
+                height: 45%;
                 background-image: url('http://change.dazzle.website/img/nopic.png');
                 background-size: 100%;
                 background-repeat: no-repeat;
@@ -530,7 +530,7 @@
                     </div>
 
                     <div class="hkd" style="display: flex;">
-                        <div class="dollar" id="aaa"><b style="font-size: 30px; color: black;">$</b></div>
+                        <div class="dollar" id="aaa"><b style="font-size: 30px; color: black;">HKD</b></div>
                         <!--input box-->
                         <div class="inputbox">
                             <input type="number" id="price" name="priceHKD" placeholder="輸入商品價錢..." value="10">
@@ -602,7 +602,7 @@
     //function for database
     (function() {
         Polymer({
-            is: 'change-add-product',
+            is: 'change-subcat',
             properties: {
                 "id": {
                     "type": String
@@ -896,6 +896,22 @@
                 this.valueArray = [""];
                 // let that = this;
                 customElements.whenDefined('vaadin-select').then(function() {
+                    //**HARDCODE CATE
+
+                    // const choice = [{
+                    //     name: '車與地產'
+                    // }, {
+                    //     name: '潮流生活'
+                    // }, {
+                    //     name: '家居生活'
+                    // }, {
+                    //     name: '興趣與遊戲'
+                    // }, {
+                    //     name: '工作與服務'
+                    // }, {
+                    //     name: '其他服務'
+                    // }];
+
                     const propage = [{
                         name: '専頁1'
                     }, {
@@ -949,18 +965,20 @@
                     }];
 
                     const delmthod = [{
-                        name: '郵寄'
+                        name: '順豐'
                     }, {
-                        name: '運送'
+                        name: '面交'
                     }, {
                         name: '郵寄或運送'
-                    }];
+                    }, {
+                        name: 'test'
+                    }]
 
                     const status = [{
                         name: '全新'
                     }, {
                         name: '二手'
-                    }];
+                    }, ]
 
 
                     //**HARDCODE CATE
@@ -1107,7 +1125,6 @@
 
                 }
 
-                
                 if (user != null) {
                     this.fileManager = new AwsPackage(user);
                     console.log(user);
@@ -1209,7 +1226,6 @@
                     };
 
                     console.log("JSON", params);
-                    console.log("UID", thenewid)
                     Polymer.postData(Url, params).then(res => {
                         console.log("Result", res);
                         if (res.code > 0) {

@@ -5,9 +5,10 @@
     <template>
 
         <style>
-            li{
+            li {
                 display: block;
             }
+
             .footer {
                 background-color: #F0846C;
                 color: white;
@@ -25,7 +26,7 @@
                 display: grid;
                 grid-row-gap: 20px;
                 grid-column-gap: 15px;
-                grid-template-columns: 33% 33% 33%;
+                grid-template-columns: 28% 28% 28%;
                 grid-template-rows: 50% 50%;
             }
 
@@ -33,7 +34,7 @@
                 color: white;
                 text-decoration: none;
                 font-size: 12px;
-                line-height:30px;
+                line-height: 30px;
             }
 
             @media (min-width: 992px) {
@@ -49,8 +50,10 @@
                     grid-row-gap: 20px;
                     grid-column-gap: 15px;
                     grid-template-columns: repeat(4, 24%);
+                    text-align: center;
                 }
-                #social{
+
+                #social {
                     margin: 0 auto;
                     text-align: center;
                     align-items: center;
@@ -63,57 +66,73 @@
         </style>
 
         <footer class="footer">
-            <div>
+            <div style="width: 90%; margin: 0 auto;">
                 <div class="fpanel1 fpanel1-md">
-<!--                    <div>-->
-<!--                        <ul>-->
-<!--                            <li><a href="#" class="test" style="font-size: large;">關於我們</a></li>-->
-<!--                            <li><a href="https://www.youtube.com/channel/UCCd5rMzWWFZEfb-yjj63O2w" class="test">Youtube</a></li>-->
-<!--                            <li><a href="https://www.facebook.com/gettvhk/" class="test">Facebook</a></li>-->
-<!--                            <li><a href="https://www.instagram.com/hkgettv/" class="test">Instagram</a></li>-->
-<!--                        </ul>-->
-<!--                    </div>-->
+                    <!--                    <div>-->
+                    <!--                        <ul>-->
+                    <!--                            <li><a href="#" class="test" style="font-size: large;">關於我們</a></li>-->
+                    <!--                            <li><a href="https://www.youtube.com/channel/UCCd5rMzWWFZEfb-yjj63O2w" class="test">Youtube</a></li>-->
+                    <!--                            <li><a href="https://www.facebook.com/gettvhk/" class="test">Facebook</a></li>-->
+                    <!--                            <li><a href="https://www.instagram.com/hkgettv/" class="test">Instagram</a></li>-->
+                    <!--                        </ul>-->
+                    <!--                    </div>-->
                     <div>
                         <ul>
                             <li><a href="#" class="test" style="font-size: large;">幫助中心</a></li>
-                            <li><a href="#" class="test">問題反映</a></li>
-                            <li><a href="#" class="test">使用條款</a></li>
-                            <li><a href="#" class="test">隱私政策</a></li>
+                            <li><a href="./question" class="test">問題反映</a></li>
+                            <li><a href="./term" class="test">使用條款</a></li>
+                            <li><a href="./private" class="test">隱私政策</a></li>
                         </ul>
                     </div>
                     <div>
                         <ul>
                             <li><a href="#" class="test" style="font-size: large;">最新消息</a></li>
-                            <li><a href="#" class="test">活動</a></li>
-                            <li><a href="#" class="test">推廣</a></li>
-                            <li><a href="#" class="test">頻道龍虎榜</a></li>
-                            <li><a href="#" class="test">品牌合作</a></li>
+                            <li><a href="./activity" class="test">活動</a></li>
+                            <li><a href="./promotion" class="test">推廣</a></li>
+                            <li><a href="./dragon" class="test">頻道龍虎榜</a></li>
+                            <li><a href="./cooperation" class="test">品牌合作</a></li>
                         </ul>
                     </div>
                     <div>
                         <ul>
                             <li><a href="#" class="test" style="font-size: large;">頻道</a></li>
-                            <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrywYfDOzAjc0rA89VGqpa5" class="test">玩多啲</a></li>
-                            <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpNTw4BXAyEyyMMkhl5XcR2" class="test">睇多啲</a></li>
-                            <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqykeagwZRZwfEyOuTCYF7a" class="test">知多啲</a></li>
-                            <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpzSn5NOnJiIiGwWvIwR3jj" class="test">食多啲</a></li>
+                            <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrywYfDOzAjc0rA89VGqpa5"
+                                    class="test">玩多啲</a></li>
+                            <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpNTw4BXAyEyyMMkhl5XcR2"
+                                    class="test">睇多啲</a></li>
+                            <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqykeagwZRZwfEyOuTCYF7a"
+                                    class="test">知多啲</a></li>
+                            <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpzSn5NOnJiIiGwWvIwR3jj"
+                                    class="test">食多啲</a></li>
                         </ul>
                     </div>
                     <div>
-                        <ul>
-                            <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqC1OITdb_QGz18JPmmj8a5" class="test">識多啲</a></li>
-                            <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHon14MDeHFMa9qXMo7zW92T" class="test">靚多啲</a></li>
-                            <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrhER3oQUYbz8wnmCv1VUBw" class="test">愛多啲</a></li>
+                        <ul style="margin-top: 45px;">
+                            <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqC1OITdb_QGz18JPmmj8a5"
+                                    class="test">識多啲</a></li>
+                            <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHon14MDeHFMa9qXMo7zW92T"
+                                    class="test">靚多啲</a></li>
+                            <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrhER3oQUYbz8wnmCv1VUBw"
+                                    class="test">愛多啲</a></li>
                             <li><a href="#" class="test">Get Change</a></li>
                         </ul>
                     </div>
                     <div id="social">
                         <a href="https://www.instagram.com/hkgettv/">
-                        <div style="background-image: url('http://change.dazzle.website/img/ins.png');background-position: center center;background-size: contain;width: 50px;height: 50px; margin-right: 20px;"></div></a>
+                            <div
+                                style="background-image: url('http://change.dazzle.website/img/ins.png');background-position: center center;background-size: contain;width: 50px;height: 50px; margin-right: 20px;">
+                            </div>
+                        </a>
                         <a href="https://www.facebook.com/gettvhk/">
-                            <div style="background-image: url('http://change.dazzle.website/img/face.png');background-position: center center;background-size: contain;width: 50px;height: 50px; margin-right: 20px;"></div></a>
-                            <a href="https://www.youtube.com/channel/UCCd5rMzWWFZEfb-yjj63O2w">
-                                <div style="background-image: url('http://change.dazzle.website/img/you.png');background-position: center center;background-size: contain;width: 50px;height: 50px;"></div></a>
+                            <div
+                                style="background-image: url('http://change.dazzle.website/img/face.png');background-position: center center;background-size: contain;width: 50px;height: 50px; margin-right: 20px;">
+                            </div>
+                        </a>
+                        <a href="https://www.youtube.com/channel/UCCd5rMzWWFZEfb-yjj63O2w">
+                            <div
+                                style="background-image: url('http://gettv.hk/you.png');background-position: center center;background-size: contain;width: 50px;height: 50px; border-radius: 50%;">
+                            </div>
+                        </a>
                     </div>
                 </div>
 

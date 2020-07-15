@@ -6,6 +6,11 @@
     <template>
 
         <style>
+            * {
+                color: black;
+                font-family: sans-serif, Microsoft JhengHei;
+            }
+
             body {
                 overflow: hidden;
             }
@@ -17,6 +22,7 @@
                 padding-right: 10%;
                 font-family: sans-serif;
                 font-family: Microsoft JhengHei;
+                overflow: hidden;
             }
 
             #_changeicon {
@@ -92,6 +98,8 @@
                 <button id="back" style="
             border: none;
             background-color: white;
+            margin-top: 10px;
+            cursor: pointer;
         ">X</button>
             </div>
             <div id="usericon">
@@ -114,21 +122,21 @@
 </dom-module>
 
 <script>
-    (function() {
+    (function () {
         Polymer({
             is: 'change-webcom',
             properties: {
 
             },
-            created: function() {
+            created: function () {
 
 
 
             },
             //for adding link to the user name connecting wth the databse
-            ready: function() {
+            ready: function () {
                 let that = this;
-                let loc = "?p159367270567129u29";
+                let loc = location.search;
                 let pid = "";
                 let uid = "";
                 let posit = 0;
@@ -172,7 +180,7 @@
                     }
                 })
 
-                shadow.querySelector('#review').addEventListener("keypress", function(e) {
+                shadow.querySelector('#review').addEventListener("keypress", function (e) {
                     var key = e.which || e.keyCode || 0;
                     if (key === 13) {
                         that._postRequest();
@@ -195,7 +203,7 @@
 
             },
 
-            _postRequest: function() {
+            _postRequest: function () {
                 let shadow = this.shadowRoot;
                 let loc = location.search;
                 let pid = "";
@@ -241,28 +249,33 @@
                     let ab = buyerId;
                     let cd = id.toString();
                     let finId = "" + ab + cd;
+                    let emailurl = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
                     let p = {
-                        "action": "addData",
-                        "index": "change",
-                        "type": "order",
-                        "id": finId,
-                        "body": {
-                            "id": finId,
-                            "msg": msg,
-                            "productId": pid,
-                            "buyerId": buyerId,
-                            "submitTime": id,
-                            "status": "已提交訂單"
-                        }
+                        "action": "sendContactEmail",
+                        "uid": "28",
+                        "pid": pid,
+                        "oid": "23456789",
+                        "contactinfo": msg
                     };
-                    console.log("P", p);
 
-                    Polymer.postData(url, p).then(res => {
-                        if (res.code > 0) {
-                            alert("您的請求已經順利創建，請等待賣家回應");
-                        } else {
-                            alert("錯誤的請求，查看一下哪裡輸錯了？");
-                        }
+                    // {
+                    //     "action": "addData",
+                    //         "index": "change",
+                    //             "type": "order",
+                    //                 "id": finId,
+                    //                     "body": {
+                    //         "id": finId,
+                    //             "msg": msg,
+                    //                 "productId": pid,
+                    //                     "buyerId": buyerId,
+                    //                         "submitTime": id,
+                    //                             "status": "已提交訂單"
+                    //     };
+                    
+                    // console.log("P", p);
+
+                    Polymer.postData(emailurl, p).then(res => {
+                        alert("Please wait for seller response!");
                     })
                 }
             },

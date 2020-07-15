@@ -39,7 +39,7 @@
                 width: 200px;
                 height: 50px;
                 font-size: 25px;
-
+                display: block;
             }
 
             .botbutton{
@@ -116,7 +116,10 @@
             },
 
             created: function() {
-
+                this.countitem = 0;
+            },
+            ready: function() {
+                this.search();
             },
 
             // search:function(cats,tags,district,priceStart,priceEnd){
@@ -127,28 +130,34 @@
                 let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 //////cate Id
                 // let tagsQuery = ['平價','沒有'];
-                let Query = [{
-                    'match_all': {}
-                }];
+                let Query = [];
                 ////search the categoriews
                 let cateid = [];
                 if (cats != undefined || cats != null) {
                     if (cats.length > 0) {
-                        cateid.push({
-                            'terms': {
-                                'categories': cats
-                            }
+                        cats.forEach(item => {
+                            cateid.push({
+                                'term': {
+                                    'categories': item
+                                }
+                            });
                         });
                     };
                 };
 
                 //////search the isNew
                 if (isNew != undefined || isNew != null) {
-                    let isnewid = [];
+
+
                     if (isNew.length == 1) {
+                        if (isNew == '全新') {
+                            var isNewstat = true;
+                        } else {
+                            var isNewstat = false;
+                        }
                         Query.push({
-                            'terms': {
-                                'isNew': isNew
+                            'term': {
+                                'isNew': isNewstat
                             }
                         })
                     } else {
@@ -173,7 +182,7 @@
                 if (district != undefined || district != null) {
                     if (district > 0) {
                         Query.push({
-                            'terms': {
+                            'term': {
                                 'district': district
                             }
                         })
@@ -181,6 +190,39 @@
                 };
 
                 /////search the price range
+                if (priceEnd == undefined || priceEnd == null) {
+                    var fromprice = 0;
+                    var toprice = document.querySelector('change-shop').initprice;
+                } else {
+                    var fromprice = priceStart;
+                    var toprice = priceEnd;
+                };
+                var rangeparam = {
+                    "action": "searchData",
+                    "index": "change",
+                    "type": "product",
+                    "body": {
+                        "sort": [{
+                            "createTime": {
+                                "order": "desc"
+                            }
+                        }],
+                        "query": {
+                            "bool": {
+                                "should": {
+                                    "range": {
+                                        "price": {
+                                            "gte": fromprice,
+                                            "lte": toprice,
+                                            "boost": 1.0
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                };
 
 
 
@@ -198,234 +240,129 @@
                         }],
                         "query": {
                             "bool": {
-                                "should": cateid,
-                                "must": Query
+                                "should": cateid
                             }
                         }
                     }
                 };
-                let shop = document.querySelector('change-shop');
-                let list = shop.shadowRoot.querySelector('change-slidelist');
-                list.shadowRoot.querySelector('#renew').innerHTML = '<change-range></change-range>';
-                list.shadowRoot.querySelector('change-range').query = paramcate;
-                list.shadowRoot.querySelector('change-range').new();
-                console.log(JSON.stringify(paramcate));
+                let parammust = {
+                    "action": "searchData",
+                    "index": "change",
+                    "type": "product",
+                    "body": {
+                        "sort": [{
+                            "createTime": {
+                                "order": "desc"
+                            }
+                        }],
+                        "query": {
+                            "bool": {
+                                "must": Query,
+                                "must_not": {
+                                    'match': {
+                                        "postStatus": false
+                                    }
+                                }
+                            }
+                        }
+                    }
+                };
+
                 Polymer.postData(url, paramcate).then(res => {
                     if (res.code > 0) {
-                        this.res = res;
-                        let musts = res.resolve;
-                        shadow.querySelector('#blank').innerHTML = "";
-                        musts.forEach(must => {
-                            let put = shadow.querySelector('#blank');
-                            let add = document.createElement('change-things');
-                            add.setAttribute('id', must._id)
-                            put.appendChild(add);
+                        let shouldid = [];
+                        let cates = res.resolve;
+                        cates.forEach(cate => {
+                            shouldid.push(cate);
                         });
-                        // let max = 0;
-                        // for (i = 0; i < musts.length; i++) {
-                        //     if (musts[i] > max) {
-                        //         max = musts[i];
-                        //     } else {};
-                        // }
+
+                        Polymer.postData(url, parammust).then(res => {
+                            if (res.code > 0) {
+
+                                let mustid = [];
+                                let others = res.resolve;
+                                others.forEach(other => {
+                                    mustid.push(other);
+                                });
 
 
+                                let theans = [];
+                                for (x = 0; x < shouldid.length; x++) {
+                                    for (y = 0; y < mustid.length; y++) {
+                                        if (shouldid[x]['_id'] == mustid[y]['_id']) {
+                                            theans.push(shouldid[x]);
+                                        }
+                                    }
+                                };
+                                this.res = theans;
+                                let shop = document.querySelector('change-shop');
+                                let list = shop.shadowRoot.querySelector('change-slidelist');
+                                list.shadowRoot.querySelector('#renew').innerHTML = '<change-range></change-range>';
+                                list.shadowRoot.querySelector('change-range').query = theans;
+                                list.shadowRoot.querySelector('change-range').data1 = fromprice;
+                                list.shadowRoot.querySelector('change-range').data2 = toprice;
+                                list.shadowRoot.querySelector('change-range').new();
+
+                                Polymer.postData(url, rangeparam).then(res => {
+                                    if (res.code > 0) {
+                                        let check8 = 8;
+                                        if (theans.length < 8) {
+                                            check8 = theans.length;
+                                            shadow.querySelector('#morebutton').style.display = 'none';
+                                        } else {
+                                            shadow.querySelector('#morebutton').style.display = 'block';
+                                        }
+                                        shadow.querySelector('#blank').innerHTML = "";
+                                        for (i = 0; i < check8; i++) {
+                                            let addi = document.createElement('change-things');
+                                            addi.setAttribute('id', theans[i]['id']);
+                                            shadow.querySelector('#blank').appendChild(addi);
+                                        }
+                                        this.countitem += 8;
 
 
+                                    } else {
+                                        console.log('error23')
+                                    }
+                                })
 
+                            }
+                        })
+
+
+                    } else {
+                        console.log('error')
                     }
-
-                });
-
-            },
-            // searchfunc: function() {
-            //     let that = this;
-            //     let shadow = this.shadowRoot;
-            //     let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-            //     //////cate Id
-            //     let paramcate = {
-            //         "action": "searchData",
-            //         "index": "change",
-            //         "type": "product",
-            //         "body": {
-            //             "sort": [{
-            //                 "createTime": {
-            //                     "order": "desc"
-            //                 }
-            //             }],
-            //             "query": {
-            //                 "bool": {
-            //                     "should": this.storeshould
-            //                 }
-            //             }
-            //         }
-            //     };
-
-            //     Polymer.postData(url, paramcate).then(res => {
-            //         if (res.code > 0) {
-            //             this.cateIdarray = [];
-            //             for (a = 0; a < res.resolve.length; a++) {
-            //                 this.cateIdarray.push(res.resolve[a]['_id'])
-            //             }
-            //             ///////sear all Id
-            //             let paramallId = {
-            //                 "action": "searchData",
-            //                 "index": "change",
-            //                 "type": "product",
-            //                 "body": {
-            //                     "sort": [{
-            //                         "createTime": {
-            //                             "order": "desc"
-            //                         }
-            //                     }],
-            //                     "query": {
-            //                         "bool": {
-            //                             "must": this.storemust
-            //                         }
-            //                     }
-            //                 }
-            //             };
-            //             Polymer.postData(url, paramallId).then(res => {
-            //                 if (res.code > 0) {
-            //                     this.allIdarray = [];
-            //                     for (ddb = 0; ddb < res.resolve.length; ddb++) {
-            //                         this.allIdarray.push(res.resolve[ddb]['_id'])
-            //                     }
-            //                     console.log("the cate array is,:", this.cateIdarray);
-            //                     console.log("the all id array is ,:", this.allIdarray);
-
-            //                     var storeitemsId = [];
-
-
-            //                     for (q = 0; q < this.cateIdarray.length; q++) {
-            //                         for (w = 0; w < this.allIdarray.length; w++) {
-
-            //                             if (this.cateIdarray[q] == this.allIdarray[w]) {
-            //                                 storeitemsId.push(this.cateIdarray[q])
-            //                             }
-            //                         }
-            //                     }
-            //                     this.allquery = storeitemsId;
-            //                     this._querySelect();
-
-
-            //                 }
-            //             })
-            //         } else {
-            //             console.log("error in store categories id");
-            //         }
-
-            //     });
-
-
-
-
-
-
-            // },
-
-
-            ready: function() {
-                this.search();
+                })
 
             },
-
-            // _showmore: function() {
-            //     let that = this;
-            //     let shadow = this.shadowRoot;
-
-
-            //     if (this.res.code > 0) {
-            //         let prods = this.res.resolve;
-
-            //         var storeId = [];
-            //         let check8 = 8;
-            //         if (prods.length - this.countitem < 8) {
-            //             check8 = prods.length - this.countitem;
-            //         }
-            //         for (var i = this.countitem; i < this.countitem + check8; i++) {
-            //             let theidis = prods[i]['_id'];
-
-            //             storeId.push(theidis)
-
-            //         };
-
-
-            //         if (prods.length - this.countitem < 8) {
-            //             check8 = prods.length - this.countitem;
-            //         }
-            //         for (var i = 0; i < check8; i++) {
-            //             let addi = document.createElement('change-things');
-
-            //             addi.setAttribute('id', storeId[i]);
-            //             shadow.querySelector(".things-grid").appendChild(addi);
-
-            //         }
-            //         this.countitem += 8;
-
-            //     } else {
-            //         alert("error");
-            //     }
-
-
-
-
-            // },
 
             displaymore: function() {
                 let that = this;
                 let shadow = this.shadowRoot;
+                let prods = this.res;
 
-
-                if (this.res.code > 0) {
-                    let prods = this.res.resolve;
-
-                    var storeId = [];
-                    let check8 = 8;
-                    if (prods.length - this.countitem < 8) {
-                        check8 = prods.length - this.countitem;
-                    }
-                    for (var i = this.countitem; i < this.countitem + check8; i++) {
-                        let theidis = prods[i]['_id'];
-
-                        storeId.push(theidis)
-
-                    };
-
-
-                    if (prods.length - this.countitem < 8) {
-                        check8 = prods.length - this.countitem;
-                    }
-
-                    for (var i = 0; i < check8; i++) {
-                        let addi = document.createElement('change-things');
-                        addi.setAttribute('id', storeId[i])
-                        shadow.querySelector(".things-grid").appendChild(addi);
-
-                    }
-                    this.countitem += 8;
-
-                } else {
-                    alert("error");
+                var storeId = [];
+                let check8 = 8;
+                if (prods.length - this.countitem < 8) {
+                    check8 = prods.length - this.countitem;
                 }
-
-
-
-
-            },
-
-            _querySelect: function() {
-                console.log('inside _querySelect')
-                let that = this;
-                let shadow = this.shadowRoot;
-                for (i = 0; i < this.allquery.length; i++) {
+                for (var i = this.countitem; i < this.countitem + check8; i++) {
+                    storeId.push(prods[i]['_id'])
+                };
+                storeId.forEach(id => {
                     let addi = document.createElement('change-things');
-
-                    addi.setAttribute('id', this.allquery[i]);
+                    addi.setAttribute('id', id)
                     shadow.querySelector(".things-grid").appendChild(addi);
+                })
 
-                }
+                this.countitem += 8;
+
+
 
             },
+
+
 
 
 

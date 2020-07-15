@@ -1,7 +1,7 @@
 <link href="../polymer/polymer.html" rel="import">
 <link href="../dz-menu/css/style.html" rel="import" />
 <link rel="import" href="../vaadin-select/vaadin-select.html">
-<link rel="import" href="../vaadin-select/vaadin-select.html">
+<link rel="import" href="../vaadin-menu-bar/vaadin-menu-bar.html">
 
 
 <dom-module id="change-category">
@@ -14,9 +14,18 @@
                 --lumo-contrast-10pct: hsla(0, 0%, 100%, 0);
                 --lumo-body-text-color:#808080;
             }
+            .container {
+                display: flex;
+            }
         </style>
-        <vaadin-select id="cat1" placeholder="選擇分類"></vaadin-select>
-        <div id="subcat"></div>
+        <div class="container">
+            <vaadin-menu-bar class="cat"></vaadin-menu-bar>
+            <div style="margin-top: 12px; display: inline-flex;">
+                <p class="result"> : </p>
+                <span></span>
+            </div>
+
+        </div>
     </template>
 </dom-module>
 <script>
@@ -30,142 +39,115 @@
 
             },
             created: function() {
-                console.log('Created');
+                // console.log('Created');
             },
             ready: function() {
-
+                //SUBCAT//
                 let that = this;
                 let shadow = this.shadowRoot;
-                var storetags = location.search;
-                var turntags = "";
-                if (storetags[1] == "c") {
-                    for (b = 5; b < storetags.length; b++) {
-                        turntags += storetags[b];
-                    }
 
-                } else {};
-
-                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                let param = {
-                    "action": "searchData",
-                    "index": "change",
-                    "type": "categories",
-                    "body": {
-                        "query": {
-                            "match_all": {}
-                        }
-                    }
-                };
-                Polymer.postData(Url, param).then(res => {
-                    if (res.code > 0) {
-                        this.res = res.resolve;
-                        var maincate = [];
-                        var subcate = [];
-                        for (i = 0; i < res.resolve.length; i++) {
-                            if (res.resolve[i]['parent'] == "0") {
-                                maincate.push({
-                                    id: res.resolve[i]['_id'],
-                                    name: res.resolve[i]['name']
-                                });
-                                if (res.resolve[i]['_id'] == turntags) {
-                                    shadow.querySelector('#cat1').value = res.resolve[i]['name'];
-                                }
-                            } else {
-                                subcate.push({
-                                    id: res.resolve[i]['_id'],
-                                    name: res.resolve[i]['name'],
-                                    parent: res.resolve[i]['parent']
-                                });
+                customElements.whenDefined('vaadin-menu-bar').then(function() {
+                    const menu = shadow.querySelector('vaadin-menu-bar');
+                    menu.addEventListener('item-selected', function(e) {
+                        //Get ele value
+                        // shadow.querySelector('span').textContent = JSON.stringify(e.detail.value.text);
+                        shadow.querySelector('span').textContent = e.detail.value.text;
+                        Polymer.dzFire('select-category', {
+                            'detail': {
+                                'category': e.detail.value.text
                             }
-                        };
-                        let subcat = shadow.querySelector('#subcat');
-                        maincate.forEach(maincates => {
-                            let div = document.createElement('div');
-                            div.setAttribute('id', 'sub' + maincates.name);
-                            div.setAttribute('style', 'display:none');
-                            div.setAttribute('class', 'hidesub');
-                            subcat.appendChild(div);
-                            subcate.forEach(subcates => {
-                                if (subcates.parent == maincates.id) {
-                                    let div2 = document.createElement('div');
-                                    div.appendChild(div2);
-                                    let input1 = document.createElement('input');
-                                    input1.setAttribute('type', 'text');
-                                    input1.setAttribute('disabled', true);
-                                    input1.setAttribute('class', 'leftele');
-                                    input1.setAttribute('style', 'border:none;backgound-color:transparent')
-                                    input1.setAttribute('value', subcates.name);
-                                    div2.appendChild(input1);
-                                    let input = document.createElement('input');
-                                    input.setAttribute('type', 'checkbox');
-                                    if (subcates.id == turntags) {
-                                        input.setAttribute('checked', true);
-                                    }
-                                    input.addEventListener('click', e => {
-                                        if (input.checked == true) {
-                                            Polymer.dzFire('select-category', {
-                                                'detail': {
-                                                    'category': subcates.name
-                                                }
-                                            })
-                                        };
-
-
-                                    });
-                                    // input.setAttribute('style', 'float:right');
-                                    div2.appendChild(input);
-
-                                }
-                            });
                         });
 
 
-                        customElements.whenDefined('vaadin-select').then(function() {
-                            const choice = maincate;
-                            shadow.querySelector('#cat1').renderer = function(root) {
-                                // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
-                                if (root.firstChild) {
-                                    return;
+                    });
+
+                    let c = {};
+                    let arr = [];
+                    let g = [];
+                    let childarr = [];
+                    let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                    let params = {
+                        "action": "searchData",
+                        "index": "change",
+                        "type": "categories",
+                        "body": {
+                            "sort": [{
+                                "_id": {
+                                    "order": "asc"
                                 }
-                                // Create the <vaadin-list-box>
-                                const listBox = document.createElement('vaadin-list-box');
-                                choice.forEach(function(item) {
-                                    const vaadinItem = document.createElement('vaadin-item');
-                                    vaadinItem.textContent = item.name;
-                                    listBox.appendChild(vaadinItem);
-                                    vaadinItem.setAttribute('value', item.name);
-                                    vaadinItem.addEventListener('click', e => {
-                                        console.log('Cate E', e, shadow.querySelector('#cat1').value);
-                                    });
-                                });
-                                // update the content 
-                                root.appendChild(listBox);
+                            }],
+                            "query": {
+                                "match_all": {}
+                            }
+                        }
+                    };
+                    Polymer.postData(url, params).then(res => {
+                        if (res.code > 0) {
+                            let a = res.resolve;
+                            let arrchild = [];
+
+                            for (i = 0; i < a.length; i++) {
+                                if (a[i].parent == 0) {
+                                    let b = a[i].name;
+                                    // generate childarr
+                                    for (x = 0; x < a.length; x++) {
+                                        if (a[i].id == a[x].parent) {
+                                            let j = a[x].name;
+                                            let k = {
+                                                "text": j
+                                            };
+                                            childarr.push(k);
+                                        }
+                                    }
+                                    let c = {
+                                        "text": b,
+                                        "children": childarr
+                                    };
+                                    arr.push(c);
+                                    childarr = [];
+
+
+                                    let id = a[i].id;
+                                }
+
+                            }
+                            let h = {
+
+                                text: 'Project',
+                                children: [{
+                                    text: 'Users',
+                                    children: [{
+                                        text: 'List'
+                                    }, {
+                                        text: 'Add'
+                                    }]
+                                }, {
+                                    text: 'Billing',
+                                    children: [{
+                                        text: 'Invoices'
+                                    }, {
+                                        text: 'Balance Events'
+                                    }]
+                                }, ]
                             };
-                            this.selection = shadow.querySelector('#cat1');
-                            this.selection.addEventListener('change', e => {
-                                let value = shadow.querySelector('#cat1').value;
-                                Polymer.dzFire('select-category', {
-                                    'detail': {
-                                        'category': value
-                                    }
-                                });
-                                // if (this.display != "") {
-                                //     console.log('the display store is:', this.display)
-                                //     shadow.querySelector('#' + this.display).style.display = none;
-                                // }
-                                shadow.querySelector('#sub' + value).style.display = 'block';
 
-                            });
-                        });
+                            g.push(h);
+                            //g 就是我们要的答案
 
+                        }
 
-                    }
+                    });
+                    let i = [];
+                    let h = {
+                        text: '請選擇分類',
+                        children: arr
+                    };
+
+                    menu.items = [h];
+
                 });
-
-
-
-
             },
+
         });
     })();
 </script>

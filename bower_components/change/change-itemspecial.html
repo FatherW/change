@@ -7,104 +7,107 @@
 <dom-module id="change-itemspecial">
     <template>
         <style>
-            *{
-                font-family: sans-serif,Microsoft JhengHei;
+            * {
+                font-family: sans-serif, Microsoft JhengHei;
 
             }
-            hr.moremore{
-                width:70%;
+
+            hr.moremore {
+                width: 70%;
                 align-items: center;
             }
-            a:link{
-                text-decoration:none;
-                color:black;
-            }                  
+
+            a:link {
+                text-decoration: none;
+                color: black;
+            }
 
 
-            .titlebutton{                
+            .titlebutton {
                 border-spacing: 50px;
             }
-           
-            .catbutton{
+
+            .catbutton {
                 background-color: #f9f9f9;
                 text-align: center;
-                padding-left:13px;
-                padding-right:13px;
-                border:none;
-                width:110px;
-                height:30px;
+                padding-left: 13px;
+                padding-right: 13px;
+                border: none;
+                width: 110px;
+                height: 30px;
                 border-radius: 15px;
 
             }
-            .catbutton:hover{
-                background-color:#d9d9d9;
+
+            .catbutton:hover {
+                background-color: #d9d9d9;
 
             }
 
 
-            #container{
+            #container {
                 padding-top: 10px;
             }
 
-            .itemsall{
-                padding:50px;
+            .itemsall {
+                padding: 50px;
                 width: 150px;
-                height:150px;
+                height: 150px;
                 background-repeat: no-repeat;
 
             }
-          
-           
+
+
 
             .profile-finger {
-				width: 100%;
-			}
+                width: 100%;
+            }
 
-            change-like{
+            change-like {
                 width: 15px;
                 height: 15px;
             }
 
-			.profile-grid {
-				width: 84%;
-				padding-left: 8%;
-				padding-right: 8%;
-				display: grid;
-				grid-row-gap: 20px;
-				grid-column-gap: 15px;
-				grid-template-columns: 100%;
-				grid-template-rows: 1fr 2fr 4fr;
-				background-color: cornsilk;
-				padding-top: 20px;
-				padding-bottom: 20px;
-			}
+            .profile-grid {
+                width: 84%;
+                padding-left: 8%;
+                padding-right: 8%;
+                display: grid;
+                grid-row-gap: 20px;
+                grid-column-gap: 15px;
+                grid-template-columns: 100%;
+                grid-template-rows: 1fr 2fr 4fr;
+                background-color: cornsilk;
+                padding-top: 20px;
+                padding-bottom: 20px;
+            }
 
-			.short-profile-grid {
-				display: grid;
-				grid-column-gap: 15px;
-				grid-template-columns: 59% 12% 12% 12%;
-				background-color: white;
-				border: 2px solid gainsboro;
-				padding: 30px;
-				padding-left: 4%;
-				padding-right: 4%;
-			}
+            .short-profile-grid {
+                display: grid;
+                grid-column-gap: 15px;
+                grid-template-columns: 59% 12% 12% 12%;
+                background-color: white;
+                border: 2px solid gainsboro;
+                padding: 30px;
+                padding-left: 4%;
+                padding-right: 4%;
+            }
 
-			.detail-profile-grid {
-				display: grid;
-				grid-row-gap: 10px;
-				grid-template-rows: 2fr 1fr 1fr 1fr 1fr;
-				background-color: white;
-				border: 2px solid gainsboro;
-				padding: 20px;
-				padding-left: 4%;
-				padding-right: 4%;
-			}
+            .detail-profile-grid {
+                display: grid;
+                grid-row-gap: 10px;
+                grid-template-rows: 2fr 1fr 1fr 1fr 1fr;
+                background-color: white;
+                border: 2px solid gainsboro;
+                padding: 20px;
+                padding-left: 4%;
+                padding-right: 4%;
+            }
 
-			.things-profile {
-				background-color: white;
-				border: 2px solid gainsboro;
-			}
+            .things-profile {
+                background-color: white;
+                border: 2px solid gainsboro;
+            }
 
 
             #a1,
@@ -122,45 +125,46 @@
                 margin-right: 4%;
                 margin-top: 41px;
             }
+
             .buttonGray {
-				width: 150px;
-				background-color: gray;
-				color: black;
-				border-radius: 2px;
-				height: 30px;
-				font-size: 16px;
-				margin-right: 10px;
-			}
+                width: 150px;
+                background-color: gray;
+                color: black;
+                border-radius: 2px;
+                height: 30px;
+                font-size: 16px;
+                margin-right: 10px;
+            }
 
-			#left1 {
-				float: left;
-			}
+            #left1 {
+                float: left;
+            }
 
-			#left2 {
-				float: left;
-			}
+            #left2 {
+                float: left;
+            }
 
-			#left3 {
-				float: left;
-			}
+            #left3 {
+                float: left;
+            }
 
-			#right1 {
-				float: right;
-			}
+            #right1 {
+                float: right;
+            }
 
-			#right2 {
-				float: right;
-				padding-top: 4px;
-			}
+            #right2 {
+                float: right;
+                padding-top: 4px;
+            }
 
-			#right3 {
-				float: right;
-			}
+            #right3 {
+                float: right;
+            }
 
-			#right4 {
-				float: right;
-				padding-top: 4px;
-			}
+            #right4 {
+                float: right;
+                padding-top: 4px;
+            }
 
 
 
@@ -175,11 +179,12 @@
                 width: 100%;
                 height: 100%;
                 grid-row-gap: 15px;
-                padding-bottom:50px;
+                padding-bottom: 50px;
                 grid-column-gap: 30px;
                 grid-row-gap: 40px;
                 grid-template-columns: repeat(4, 1fr);
-                background-color: white;}
+                background-color: white;
+            }
 
             change-item {
                 width: 100%;
@@ -189,7 +194,7 @@
             svg.title_tags {
                 width: 100%;
                 height: 30px;
-                padding-top:10px;
+                padding-top: 10px;
 
             }
 
@@ -198,16 +203,16 @@
                 height: 15px;
                 width: 80px;
                 border-radius: 2px;
-                padding-top:10px;
-           
+                padding-top: 10px;
+
 
             }
 
             change-things {
                 border: 0px solid gainsboro;
                 /* padding: 16px; */
-                height:100%;
-                width:100%;
+                height: 100%;
+                width: 100%;
             }
 
             /* .itemspic{
@@ -226,15 +231,15 @@
                 width: 270px;
                 height: 230px;
                 background-size: contain;
-                background-position:center center;
+                background-position: center center;
                 /* background-repeat: no-repeat; */
                 margin: 1%;
                 background-image: url(http://change.dazzle.website/img/channel_banner/1.jpg);
-                background-repeat:no-repeat;
+                background-repeat: no-repeat;
 
             }
 
-            .time{
+            .time {
                 font-size: 6px;
             }
 
@@ -246,81 +251,110 @@
 
             }
 
-            #cat_all{
+            #cat_all {
                 background-color: #efefef;
                 text-align: center;
-                padding-left:13px;
-                padding-right:13px;
-                border:none;
-                width:110px;
-                height:30px;
+                padding-left: 13px;
+                padding-right: 13px;
+                border: none;
+                width: 110px;
+                height: 30px;
                 border-radius: 15px;
             }
 
-            #cat_all:hover{
-                background-color:#999999;
+            #cat_all:hover {
+                background-color: #999999;
             }
 
-            .price{
-                font-size:13px;
+            .price {
+                font-size: 13px;
                 padding-top: 10px;
-                padding-bottom:10px;
+                padding-bottom: 10px;
 
             }
 
-            .name{
+            .name {
                 font-size: 13px;
             }
 
-            .small{
+            .small {
                 font-size: 15px;
 
             }
 
-            #usericon{
-                height:40px;
+            #usericon {
+                height: 40px;
             }
-            .initemtitle{          
-                
+
+            .initemtitle {
+
                 font-size: 25px;
                 margin-left: 10px;
                 font-weight: 900;
             }
 
-            .productname2{
+            .productname2 {
                 font-size: 15px;
                 font-weight: 600;
-                margin-top:10px;
+                margin-top: 10px;
 
             }
 
-            .addmoreitems:hover{
+            .addmoreitems:hover {
                 text-decoration: underline;
                 cursor: pointer;
             }
 
-            .addmoreitems{
+            .addmoreitems {
                 align-items: center;
-                border:none;
+                border: none;
                 background-color: transparent;
                 font-size: 25px;
+            }
+
+            @media (max-width: 992px) {
+                .things-grid-middle-mobile {
+                    display: grid;
+                    width: 100%;
+                    height: 100%;
+                    grid-row-gap: 15px;
+                    padding-bottom: 50px;
+                    grid-column-gap: 30px;
+                    grid-row-gap: 40px;
+                    grid-template-columns: repeat(3, 1fr);
+                    background-color: white;
+                }
+                
+            }
+            @media (max-width: 640px) {
+                .things-grid-small-mobile {
+                    display: grid;
+                    width: 100%;
+                    height: 100%;
+                    grid-row-gap: 15px;
+                    padding-bottom: 50px;
+                    grid-column-gap: 30px;
+                    grid-row-gap: 40px;
+                    grid-template-columns: repeat(2, 1fr);
+                    background-color: white;
+                }
             }
         </style>
 
 
 
-<div class="titlebutton"></div>
-<svg class="title_tags">
-    <polygon points="0,0 90,0 70,25 0,25" style="fill:#E84D4D;stroke:#E84D4D;stroke-width:0">
-    </polygon>
-    <text x="5" y="17" fill="white">最新商店</text>
-</svg>
+        <div class="titlebutton"></div>
+        <svg class="title_tags">
+            <polygon points="0,0 90,0 70,25 0,25" style="fill:#E84D4D;stroke:#E84D4D;stroke-width:0">
+            </polygon>
+            <text x="5" y="17" fill="white">最新商店</text>
+        </svg>
 
-<div class="things-grid" id="blank"></div>
+        <div class="things-grid things-grid-small-mobile things-grid-middle-mobile" id="blank"></div>
 
-<div style="text-align: center;">
-    <vaadin-button on-click="displaymore">更多</vaadin-button>
-</div>
+        <div style="text-align: center;">
+            <vaadin-button on-click="displaymore">更多</vaadin-button>
+        </div>
 
     </template>
 
@@ -377,11 +411,17 @@
                             }
                         }],
                         "query": {
-                            "match_all": {}
+                            "bool": {
+                                "must_not": {
+                                    'match': {
+                                        "postStatus": false
+                                    }
+                                }
+                            }
                         }
-
                     }
                 };
+
 
                 let paramdistrict = {
                     "action": "searchData",

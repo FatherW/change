@@ -104,7 +104,7 @@
                 background-image: url(http://change.dazzle.website/img/background/3.jpg);
                 padding-bottom: 50px;
             }
-            
+
             .left-pics {
                 width: 85%;
                 background-color: white;
@@ -120,7 +120,7 @@
             .right-product {
                 width: 80%;
                 background-color: white;
-                margin-left: 92px;
+                padding-left: 92px;
                 border: solid 1px #ccc;
                 border-left: none;
                 padding-top: 50px;
@@ -422,7 +422,7 @@
                     <!-- 这里放图片 -->
                     <div class="bigPic" id="div0"></div>
                     <div style="height: 100px;">
-    
+
                         <!-- GG get Array Pic from Database -->
                         <div class="consmall">
                             <div>
@@ -444,16 +444,17 @@
                         <vaadin-dialog></vaadin-dialog> -->
                     </div>
                 </div>
-    
+
                 <div class="right-product">
                     <div class="fullWidth">
                         <div class="yaqzaan" style="display: inline-block;">
                             <svg class="new">
-                                <polygon points="0,0 80,0 60,32 0,32" style="fill:#6AA64F;stroke:#6AA64F;stroke-width:0">
+                                <polygon points="0,0 80,0 60,32 0,32"
+                                    style="fill:#6AA64F;stroke:#6AA64F;stroke-width:0">
                                 </polygon>
                                 <text class="n o" x="6" y="23" fill="white" style="font-size:20px;">全新</text>
                             </svg>
-    
+
                         </div>
                         <div style="display: inline-block;">
                             <span id="pn" class="store">儲物架</span>
@@ -469,11 +470,11 @@
                             </div>
                         </div>
                     </div>
-    
-                    <div class="dollar" id="aaa">HKD$1105</div>
-    
+
+                    <div class="dollar" id="aaa">$1105</div>
+
                     <hr>
-    
+
                     <div>
                         <div id="location"></div>
                         <p id="dis" class="b1">香港 中區</p>
@@ -487,7 +488,7 @@
                     <button id="contact" on-click="_findseller">聯絡賣家</button>
                     <div class="b3">刊登於 1小时前</div>
                     <br>
-    
+
                     <div class="bigsize">
                         <span>產品資料:</span>
                     </div>
@@ -502,7 +503,7 @@
                         <div class="sMesText"><span>賣家留言:</span></div>
                         <div class="sMes"></div>
                     </div>
-    
+
                     <br>
                     <div class="tagContainer">
                         <div class="tag">
@@ -514,18 +515,18 @@
                     </div>
                     <br>
                     <hr>
-    
+
                     <div>
                         <span class="bigsize">運輸：</span>
                         <div class="deliveryDesc">
                             <p style="margin-bottom: 0px;"><span>可郵寄或順豐快遞</span></p>
                         </div>
-    
-    
+
+
                     </div>
                     <br>
                     <!-- <hr> -->
-    
+
                     <!-- <div>
                         <div>
                             <span class="bigsize">賣家資料：</span>
@@ -549,10 +550,10 @@
                   
                     </div> -->
                     <br>
-    
-    
+
+
                 </div>
-    
+
             </div>
         </div>
 
@@ -563,7 +564,7 @@
 </dom-module>
 
 <script>
-    (function() {
+    (function () {
         Polymer({
             is: 'change-new-product',
             properties: {
@@ -571,18 +572,19 @@
                     "type": String
                 }
             },
-            created: function() {
+            created: function () {
                 // call close pop-up in change-confirm
                 document.addEventListener('close-item-dialog', e => {
                     this.shadowRoot.querySelector('vaadin-dialog').opened = false;
                     // console.log("(Btn) close successfully");
                 });
 
-                let user = store.get('change-user');
-                this.fileManager = new AwsPackage(user);
+                let user = store.get('change-user') || null;
+                if (user)
+                    this.fileManager = new AwsPackage(user);
 
             },
-            ready: function() {
+            ready: function () {
                 let loc = location.search;
                 let pid = "";
                 let posit = 0;
@@ -610,7 +612,7 @@
                     console.log("Result", res);
                     if (res.code > 0) {
                         let a = res.resolve['price'];
-                        shadow.querySelector('#aaa').innerHTML = "HKD$" + a;
+                        shadow.querySelector('#aaa').innerHTML = "$" + a;
                         let b = res.resolve['pics'];
                         let imglen = [];
                         for (qwe = 0; qwe < b.length; qwe++) {
@@ -698,7 +700,7 @@
 
                 });
             },
-            _findseller: function() {
+            _findseller: function () {
                 console.log('contacting seller');
                 let shadow = this.shadowRoot;
                 let that = this;

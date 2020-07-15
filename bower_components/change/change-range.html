@@ -178,8 +178,8 @@ its values is > 50%. */
 
         </style>
         <div id="container">
-            <div class="min">$from<span id="slider-range-value1"></span></div>
-            <div class="max">$to<span id="slider-range-value2"></span></div>
+            <div class="min">$<span id="slider-range-value1"></span></div>
+            <div class="max">$<span id="slider-range-value2"></span></div>
             <div class="ranger">
                 <div class="container">
                     <input type="hidden" name="min-value" value="">
@@ -201,6 +201,12 @@ its values is > 50%. */
                 },
                 "query": {
                     "type": Array
+                },
+                "data1": {
+                    "type": Number
+                },
+                "data2": {
+                    "type": Number
                 }
             },
             created: function() {
@@ -226,57 +232,52 @@ its values is > 50%. */
             new: function() {
                 let that = this;
                 let shadow = this.shadowRoot;
-                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
 
-                let paramrange = this.query;
-
-                Polymer.postData(Url, paramrange).then(res => {
-                    if (res.code > 0) {
-                        let therange = res.resolve;
-                        let countlength = therange.length;
-                        var initprice = 0;
-                        for (a = 0; a < countlength; a++) {
-                            if (parseInt(therange[a]['price']) > initprice) {
-                                initprice = therange[a]['price'];
-                            }
-                        }
-                        console.log("inside range", initprice);
-                        if (initprice == 0) {
-                            initprice = 1
-                        }
-                        var rangeSlider = shadow.querySelector('#slider-range');
-                        var moneyFormat = wNumb({
-                            decimals: 0,
-                            thousand: ',',
-                            prefix: ''
-                        });
-
-                        noUiSlider.create(rangeSlider, {
-                            start: [0, initprice],
-                            step: 1,
-                            range: {
-                                'min': [0],
-                                'max': [initprice]
-                            },
-                            format: moneyFormat,
-                            connect: true
-                        });
-
-
-
-
-                        // Set visual min and max values and also update value hidden form inputs
-                        rangeSlider.noUiSlider.on('update', function(values, handle) {
-                            shadow.querySelector('#slider-range-value1').innerHTML = values[0];
-                            shadow.querySelector('#slider-range-value2').innerHTML = values[1];
-
-                        });
-
-
-                    } else {
-                        console.log("error code");
+                let all = this.query;
+                let initprice = 0;
+                for (i = 0; i < all.length; i++) {
+                    if (all[i]['price'] > initprice) {
+                        initprice = all[i]['price']
                     }
+                };
+                if (initprice == 0) {
+                    initprice = 1
+                }
+                document.querySelector('change-shop').initprice = initprice;
+                var rangeSlider = shadow.querySelector('#slider-range');
+                var moneyFormat = wNumb({
+                    decimals: 0,
+                    thousand: ',',
+                    prefix: ''
                 });
+
+                if (this.data2 == null || this.data2 == undefined || this.data2 == 1) {
+                    this.data1 = 0;
+                    this.data2 = initprice;
+                }
+                noUiSlider.create(rangeSlider, {
+                    start: [this.data1, this.data2],
+                    step: 1,
+                    range: {
+                        'min': [0],
+                        'max': [initprice]
+                    },
+                    format: moneyFormat,
+                    connect: true
+                });
+
+
+
+
+                // Set visual min and max values and also update value hidden form inputs
+                rangeSlider.noUiSlider.on('update', function(values, handle) {
+                    shadow.querySelector('#slider-range-value1').innerHTML = values[0];
+                    shadow.querySelector('#slider-range-value2').innerHTML = values[1];
+
+                });
+
+
+
 
             },
 

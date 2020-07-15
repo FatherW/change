@@ -44,6 +44,7 @@
                     <vaadin-tab>我的貨物</vaadin-tab>
                     <vaadin-tab>我的選購清單</vaadin-tab>
                     <vaadin-tab>過去交易</vaadin-tab>
+                    <vaadin-tab>已下架貨品</vaadin-tab>
                 </vaadin-tabs>
                 <iron-pages selected="[[page]]">
                     <page id="page1">
@@ -54,6 +55,9 @@
                     </page>
                     <page id="page3">
                         <change-list id="purch">該用戶從來沒有交易過</change-list>
+                    </page>
+                    <page id="page4">
+                        <change-list id="down">該用戶從來貨過</change-list>
                     </page>
                 </iron-pages>
             </div>
@@ -82,11 +86,15 @@
                 }
                 if (id != "") {
                     let shadow = this.shadowRoot;
-                    params = {
+                    params = [{
                         "match": {
                             "ownerId": id
                         }
-                    }
+                    }, {
+                        "match": {
+                            "postStatus": true
+                        }
+                    }];
                     console.log("Params for Mine", params);
                     shadow.querySelector('#mp').query = params;
                     shadow.querySelector('#mp')._showMyGoods();
@@ -129,6 +137,14 @@
 
                         }
                     })
+                    let downparam = {
+                        "match": {
+                            "postStatus": false
+                        }
+                    }
+                    shadow.querySelector('#down').query = downparam;
+                    shadow.querySelector('#down')._showMyGoods();
+
 
 
                     if (query != "") {

@@ -171,7 +171,7 @@
 </dom-module>
 
 <script>
-    (function () {
+    (function() {
 
 
 
@@ -189,15 +189,15 @@
                 }
             },
 
-            created: function () {
+            created: function() {
 
 
 
             },
-            ready: function () {
+            ready: function() {
 
             },
-            _showMyGoods: function () {
+            _showMyGoods: function() {
                 let shadow = this.shadowRoot;
                 let that = this;
                 if (!this.query) {
@@ -231,7 +231,7 @@
                             console.log("Check Me", x);
                             if (!x) {
                                 console.log("Check inside if");
-                                shadow.querySelector('#np').innerHTML = "No products";
+                                shadow.querySelector('#np').innerHTML = "沒有貨品";
                             } else {
                                 that.myProducts.forEach(item => {
                                     let productItem = document.createElement('change-things');
@@ -262,7 +262,7 @@
 
 
             },
-            handleResponse: function (response) {
+            handleResponse: function(response) {
                 console.log('Response', response);
             },
 

@@ -9,8 +9,21 @@
     <template>
         <style include="icon-styles"></style>
         <style>
+            *,
+            p,
+            h5 {
+                color: black;
+                font-family: sans-serif, Microsoft JhengHei;
+            }
+
+            a {
+                text-decoration: none;
+
+            }
+
             #info {
                 padding: 8px;
+                margin-left: 100px;
             }
 
             #left {
@@ -29,12 +42,12 @@
             }
 
             #right {
-                width: 75%;
+                /* width: 75%; */
                 display: inline-flex;
                 align-content: flex-end;
             }
 
-            #top {
+            /* #top {
                 margin-left: 8%;
                 margin-right: 8%;
                 margin-top: 2%;
@@ -42,10 +55,17 @@
                 padding-left: 2%;
                 background-color: white;
                 height: auto;
+            } */
+
+            .grid-container {
+                display: grid;
+                grid-template-columns: 2.5fr 1fr;
+                background-color: white;
+                width: 84%;
+                margin: 0 auto;
             }
 
             h5 {
-                margin: 0px;
                 font-size: 1em;
                 color: black;
             }
@@ -54,12 +74,19 @@
                 float: left;
                 background-color: #FFFBF2;
                 width: 100%;
+                padding-top: 30px;
                 padding-bottom: 30px;
                 margin-bottom: 10px;
             }
- 
+
+            .buttons {
+                margin-block-start: 1.67em;
+                margin-block-end: 1.67em;
+                margin-right: 100px;
+            }
+
             @media only screen and (min-width: 640px) {
-                #ap {
+                /* #ap {
                     float: right;
                     top: -280px;
                     
@@ -68,11 +95,11 @@
                     float: right;
                     top: -280px;
                     left: 200px;
-                }
+                } */
             }
         </style>
         <div id="container">
-            <div id="top">
+            <div class="grid-container">
                 <div id="left">
                     <div id="info">
                         <h5>賣家資料</h5>
@@ -83,26 +110,30 @@
                     </div>
                 </div>
                 <div id="right">
-                    <a href="/add-product.html">
-                        <vaadin-button id="ap">新增貨品</vaadin-button>
-                    </a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <vaadin-button id="vb" on-click="toggle">編輯</vaadin-button>
+                    <div class="buttons">
+                        <a href="/add-product.html">
+                            <vaadin-button id="ap" style="margin-right: 10px;">新增貨品</vaadin-button>
+                        </a>
+
+                        <vaadin-button id="vb" on-click="toggle">編輯</vaadin-button>
+
+                    </div>
                 </div>
             </div>
         </div>
     </template>
 </dom-module>
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-user-info',
             properties: {
 
             },
-            created: function () {
+            created: function() {
 
             },
-            ready: function () {
+            ready: function() {
                 let loc = location.search;
                 let user = store.get('change-user') || null;
                 let shadow = this.shadowRoot;
@@ -144,7 +175,6 @@
                                 shadow.querySelector('#name').innerText = res.resolve[0]['username'];
                                 shadow.querySelector('#area').innerText = res.resolve[0]['area'];
                                 shadow.querySelector('#email').innerText = res.resolve[0]['email'];
-                                shadow.querySelector('#contact').innerText = res.resolve[0]['phone'];
                             }
                         }
                     })
@@ -154,14 +184,13 @@
                         shadow.querySelector('#name').innerText = user['username'];
                         shadow.querySelector('#area').innerText = user['area'];
                         shadow.querySelector('#email').innerText = user['email'];
-                        shadow.querySelector('#contact').innerText = user['phone'];
                     }
                 }
             },
-            execute: function () {
+            execute: function() {
                 console.log("Entered");
                 let shadow = this.shadowRoot;
-                customElements.whenDefined('vaadin-select').then(function () {
+                customElements.whenDefined('vaadin-select').then(function() {
                     const district = [{
                         id: '中西區',
                         name: '中西區'
@@ -217,14 +246,14 @@
                         id: '西貢區',
                         name: '西貢區'
                     }];
-                    shadow.querySelector('vaadin-select').renderer = function (root) {
+                    shadow.querySelector('vaadin-select').renderer = function(root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        district.forEach(function (item) {
+                        district.forEach(function(item) {
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
@@ -235,7 +264,7 @@
                     };
                 });
             },
-            toggle: function () {
+            toggle: function() {
                 let user = store.get('change-user') || null;
                 let loc = location.search;
                 console.log("Path", loc);
@@ -258,14 +287,11 @@
                     if (text.innerHTML == "編輯") {
                         let name = shadow.querySelector('#name').innerText;
                         let email = shadow.querySelector('#email').innerText;
-                        let num = shadow.querySelector('#contact').innerText;
                         let area = shadow.querySelector('#area').innerText;
-                        console.log("Number", num);
                         shadow.querySelector('#name').innerHTML = "<vaadin-text-field id='name1' value='" + name + "'></vaadin-text-field>";
                         shadow.querySelector('#area').innerHTML = "<vaadin-select id='area1' value='" + area + "' label=''></vaadin-select>";
                         this.execute();
                         shadow.querySelector('#email').innerHTML = "<vaadin-email-field id='email1' value='" + email + "'disabled></vaadin-text-field>";
-                        shadow.querySelector('#contact').innerHTML = "<vaadin-number-field id='phone1' value='" + num + "'></vaadin-number-field>";
                         text.innerHTML = "提交";
                     } else {
                         if (user != null) {
@@ -273,7 +299,6 @@
                             let name = shadow.querySelector('#name1').value;
                             let area = shadow.querySelector('#area1').value;
                             let email = shadow.querySelector('#email1').value;
-                            let num = shadow.querySelector('#phone1').value;
                             console.log("User", user);
                             let params = {
                                 "action": "addData",
@@ -283,7 +308,6 @@
                                 "body": {
                                     "email": email,
                                     "username": name,
-                                    "phone": num,
                                     "area": area
                                 }
                             };
@@ -294,12 +318,10 @@
                                     shadow.querySelector('#name').innerHTML = name;
                                     shadow.querySelector('#area').innerHTML = area;
                                     shadow.querySelector('#email').innerHTML = email;
-                                    shadow.querySelector('#contact').innerHTML = num;
                                     text.innerHTML = "編輯";
                                     user['email'] = email;
                                     user['area'] = area;
                                     user['username'] = name;
-                                    user['phone'] = num;
                                     store.set("change-user", user);
                                 }
                             })
