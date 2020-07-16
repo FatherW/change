@@ -160,6 +160,7 @@
                     "type": "_user",
                     "id": uid
                 };
+
                 Polymer.postData(url, param).then(res => {
                     if (res.code > 0) {
                         shadow.querySelector('#_changeicon').src = res.resolve['head'];
@@ -207,6 +208,7 @@
                 let shadow = this.shadowRoot;
                 let loc = location.search;
                 let pid = "";
+                let sellerid = "";
                 let posit = 0;
                 for (i = 1; i < loc.length; i++) {
                     if (loc[i] == "u") {
@@ -215,7 +217,10 @@
                 };
                 for (a = 2; a < posit; a++) {
                     pid += loc[a];
-                }
+                };
+                for (b = posit + 1; b < loc.length; b++) {
+                    sellerid += loc[b];
+                };
                 let msg = shadow.querySelector('#review').value;
                 let id = Date.now();
                 let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
@@ -248,13 +253,13 @@
                     let buyerId = buyer['_id'];
                     let ab = buyerId;
                     let cd = id.toString();
-                    let finId = "" + ab + cd;
+                    let orderId = "" + ab + cd;
                     let emailurl = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
                     let p = {
                         "action": "sendContactEmail",
-                        "uid": "28",
+                        "uid": sellerid,
                         "pid": pid,
-                        "oid": "23456789",
+                        "oid": orderId,
                         "contactinfo": msg
                     };
 
@@ -272,7 +277,7 @@
                     //                             "status": "已提交訂單"
                     //     };
                     
-                    // console.log("P", p);
+                    console.log("P", p);
 
                     Polymer.postData(emailurl, p).then(res => {
                         alert("Please wait for seller response!");

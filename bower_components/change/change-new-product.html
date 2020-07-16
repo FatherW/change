@@ -21,6 +21,9 @@
     <template>
         <style include="icon-styles"></style>
         <style>
+
+           
+
             * {
                 color: black;
                 font-family: sans-serif, Microsoft JhengHei;
@@ -400,6 +403,26 @@
             .deliveryDesc {
                 margin-top: 20px;
             }
+
+            @media only screen and (max-width: 768px) {
+                    .change-new-product-container{
+                        grid-template-columns: 100%;
+                    }
+
+                    .left-pics{
+                        width:100%;
+                        margin-left:0px;
+                        margin-right:0px;
+                        padding-left:0px;
+                        padding-right:0px;
+                    }
+                    .right-product{
+                        width:90%;
+                        padding:20px;
+                    }
+            }
+
+
         </style>
 
         <div class="top-banner">
