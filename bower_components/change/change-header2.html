@@ -1,12 +1,17 @@
 <link rel="import" href="../polymer/polymer.html">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="import" href="./change-header-nav2.html">
+<link rel="import" href="./change-header-top2.html">
 
 <dom-module id="change-header2">
     <template>
-        <style>
+        <style scope="change-header2">
             * {
                 font-family: sans-serif, Microsoft JhengHei;
             }
- 
+
             .header {
                 height: 140px;
             }
@@ -38,8 +43,8 @@
                 margin: 0 auto;
                 display: grid;
                 grid-row-gap: 20px;
-                grid-column-gap: 15px;
-                grid-template-columns: 3fr 5fr 2fr;
+                grid-column-gap: 10px;
+                grid-template-columns: 3fr 5fr 1fr;
                 height: 80px;
             }
 
@@ -62,7 +67,6 @@
                 background: #efefef;
             }
 
-
             img.logo {
                 height: 74px;
                 width: auto;
@@ -74,13 +78,15 @@
                 padding-left: 120px;
             }
 
-            img.logo1 {
-                height: 74px;
-                width: auto;
-                float: right;
+            @media (min-width:640px) {
+                img.logo1 {
+                    height: 74px;
+                    width: auto;
+                    float: right;
+                }
             }
 
-            /*Configurações Globais*/
+
             html,
             body {
                 width: 100%;
@@ -97,7 +103,6 @@
                 list-style: none;
             }
 
-            /*Início das configurações da header*/
             header {
                 width: 100%;
                 height: 50px;
@@ -114,7 +119,6 @@
                 margin: 0 0 0 5%;
             }
 
-            /*Início das configurações da Navigation*/
             .menu {
                 width: 60%;
                 height: 100%;
@@ -127,15 +131,14 @@
                 margin: 0;
                 padding: 0;
                 display: -webkit-box;
-                /* OLD - iOS 6-, Safari 3.1-6 */
+
                 display: -moz-box;
-                /* OLD - Firefox 19- (buggy but mostly works) */
+
                 display: -ms-flexbox;
-                /* TWEENER - IE 10 */
+
                 display: -webkit-flex;
-                /* NEW - Chrome */
+
                 display: flex;
-                /* NEW, Spec - Opera 12.1, Firefox 20+ */
             }
 
             .menu ul a {
@@ -165,15 +168,6 @@
                 background: #efefef;
                 font-size: 15px;
             }
-
-            /* test */
-            /* .box {
-                height: 40px;
-                border-style: none;
-                font-size: 15px;
-                margin-top: 16px;
-                background-color: #efefef;   
-            } */
 
             .categories {
                 display: flex;
@@ -206,7 +200,7 @@
                 min-width: 150px;
                 min-height: 200px;
                 box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-                /* padding: 12px 16px; */
+
                 z-index: 1;
                 margin-top: 40px;
             }
@@ -215,14 +209,12 @@
                 display: none;
                 position: absolute;
                 background-color: white;
-                /* min-width: 150px;
-                min-height: 200px; */
+
                 box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-                /* padding: 12px 16px; */
+
                 z-index: 1;
                 margin-top: 40px;
                 right: 0;
-
             }
 
             .dropdown:hover .dropdown-content {
@@ -249,110 +241,70 @@
                 div.disappear {
                     display: none;
                 }
-            }
-        </style>
 
+            }
+
+            @media (max-width:640px) {
+                .logo1 {
+                    float: left;
+                    height: 50px;
+                }
+
+                button {
+                    font-size: 10px;
+                }
+            }
+            
+        </style>
         <header class="header">
             <section class="top" style="height: 65px;">
                 <div class="topLine"></div>
                 <section class="topWrap ">
                     <div class="index-grid index-grid-md">
                         <div>
-                            <a href="./getTv.html"><img src="./Website%20Design/get%20tv/GET%20TV%20photo/logo/GetTV%20logo_0430-03.png"
+                            <a href="./getTv.html"><img
+                                    src="./Website%20Design/get%20tv/GET%20TV%20photo/logo/GetTV%20logo_0430-03.png"
                                     class="logo"></a>
                         </div>
                         <div>
-                            <a href="./getTv.html"><img
-                                    src="./img/logo/Change.png" class="logo1"></a>
+                            <a href="./getTv.html"><img src="./img/logo/Change.png" class="logo1"></a>
+                            <change-user-panel>
+                                <div><button>/ 註冊</button><button>/ 登入</button></div>
+                            </change-user-panel>
                         </div>
-                        <change-user-panel>
-                            <div><button>/ 註冊</button><button>/ 登入</button></div>
-                        </change-user-panel>
+
                     </div>
                 </section>
             </section>
 
-            <ul class="categories" id="diuniluomu">
+            <change-header-nav2></change-header-nav2>
 
-            </ul>
+
         </header>
     </template>
 </dom-module>
 <script>
-    (function() {
+    (function () {
         Polymer({
             is: 'change-header2',
             properties: {},
-            created: function() {},
-            ready: function() {
+
+            searchlist: function () {
                 let shadow = this.shadowRoot;
-                let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                let params = {
-                    "action": "searchData",
-                    "index": "change",
-                    "type": "gettv",
-                    "body": {
-                        "sort": [{
-                            "parent": {
-                                "order": "asc"
-                            },
-                            "id": {
-                                "order": "asc"
-                            }
-                        }],
-                        "query": {
-                            "match_all": {}
-                        }
-                    }
-                };
-                Polymer.postData(url, params).then(res => {
-                    let maincates = [];
-                    let subcates = [];
-                    for (i = 0; i < res.resolve.length; i++) {
-                        if (res.resolve[i]['parent'] == "0") {
-                            maincates.push(res.resolve[i]);
-                        } else {
-                            subcates.push(res.resolve[i]);
-                        }
-                    };
-                    let ul = shadow.querySelector('ul#diuniluomu');
-                    maincates.forEach(maincate => {
-                        let li = document.createElement('li');
-                        li.setAttribute('class', 'dropdown');
-                        li.setAttribute('style', 'display: flex;');
-                        let a = document.createElement('a');
-                        a.setAttribute('target', '_blank');
-                        a.setAttribute('href', maincate['link']);
-                        a.innerText = maincate['name'];
-                        let div = document.createElement('div');
-                        subcates.forEach(subcate => {
-                            if (subcate['parent'] == maincate['_id']) {
-                                div.setAttribute('class', 'dropdown-content');
-                                let ul1 = document.createElement('ul');
-                                ul1.setAttribute('class', 'submen');
-                                let a1 = document.createElement('a');
-                                a1.setAttribute('target', '_blank');
-                                a1.setAttribute('href', subcate['link']);
-                                let li1 = document.createElement('li');
-                                li1.innerText = subcate['name'];
-                                a1.appendChild(li1);
-                                ul1.appendChild(a1);
-                                div.appendChild(ul1);
-                            }
-                        });
-                        let div1 = document.createElement('div');
-                        div1.setAttribute('class', 'ar');
-                        div1.innerHTML += '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="arrow">\n' +
-                            '    <path fill="#2C2C2D"\n' +
-                            '        d="M10.146 7.146a.5.5 0 0 1 .708.708l-2.5 2.5a.5.5 0 0 1-.708 0l-2.5-2.5a.5.5 0 1 1 .708-.708L8 9.293l2.146-2.147z">\n' +
-                            '    </path>\n' +
-                            '</svg>'
-                        li.appendChild(a);
-                        li.appendChild(div1);
-                        li.appendChild(div);
-                        ul.appendChild(li);
-                    });
-                })
+                if (shadow.querySelector('.s').value == "0") {
+                    var serchcat = '/list-product.html?tag' + shadow.querySelector('#searchmain').value;
+                } else {
+                    var serchcat = "/list-product.html?user" + shadow.querySelector('#searchmain').value;
+                }
+                location.href = serchcat;
+            },
+
+            _editMenu: function () {
+                console.log("Inside Edit Menu");
+                let shadow = this.shadowRoot;
+                let dialog = shadow.querySelector('vaadin-dialog');
+                Polymer.popup(dialog, "change", "change-header-info", "85%", "85%");
+                console.log("Executed");
             },
 
         });
