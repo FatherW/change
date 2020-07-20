@@ -36,6 +36,7 @@
             /* SUBCAT */
             .container {
                 display: flex;
+                margin-top: 13px;
             }
 
             span {
@@ -96,11 +97,12 @@
 
             .change-new-product-container {
                 display: grid;
-                grid-template-columns: 50% 48%;
-                border: 1px solid #ccc;
-                margin-left: 15px;
-                margin-right: 15px;
-                background-color: white;
+                grid-template-columns: 1fr 0.8fr;
+                height: auto;
+                margin: 0 auto;
+                background: white;
+                width: 92.5%;
+                border: solid 1px #ccc;
             }
 
             header {
@@ -115,8 +117,8 @@
                 padding-top: 15px;
                 padding-bottom: 20px;
                 background: #F0F0F0;
-                margin-left: 15px;
-                margin-right: 15px;
+                margin: 0 auto;
+                width: 92.5%;
             }
 
             .custom-select select {
@@ -198,28 +200,27 @@
             }
 
             .left-pics {
-                width: 90%;
-                background-color: white;
-                margin-top: 30px;
-                margin-left: 35px;
+                border-right: none;
+                padding: 50px 100px 0 100px;
+                height: auto;
             }
 
             .right-product {
-                width: 100;
+                padding-top: 50px;
                 height: auto;
-                background-color: white;
-                margin-top: 30px;
-                margin-left: 30px;
+                padding-bottom: 50px;
             }
 
-            .bigPic {
-                height: 470px;
-                background-image: url('http://change.dazzle.website/img/nopic.png');
-                background-size: 100%;
+            .bigPic,
+            #div0 {
+                height: 450px;
+                background-image: url(http://change.dazzle.website/img/nopic.png);
+                background-size: contain;
                 background-repeat: no-repeat;
                 background-position: center center;
                 border: 1px solid #ccc;
             }
+
 
             .consmall {
                 display: grid;
@@ -258,7 +259,7 @@
             #sMes {
                 resize: none;
                 overflow: hidden;
-                width: 100%;
+                width: 99%;
                 margin-top: 15px;
                 border: 1px #ccc solid;
             }
@@ -281,7 +282,7 @@
 
             #pname {
                 margin-top: 4px;
-                width: 97.5%;
+                width: 80%;
             }
 
             #price {
@@ -291,14 +292,14 @@
             #pdes {
                 resize: none;
                 overflow: hidden;
-                width: 100%;
+                width: 83.5%;
                 border: 1px #ccc solid;
             }
 
             #trans {
                 resize: none;
                 overflow: hidden;
-                width: 100%;
+                width: 83.5%;
                 border: 1px #ccc solid;
                 margin-bottom: 30px;
             }
@@ -404,7 +405,8 @@
             .outer {
                 margin: 0;
                 width: 100%;
-                background-image: url(http://change.dazzle.website/img/background/3.jpg)
+                background-image: url(http://change.dazzle.website/img/background/3.jpg);
+                padding-bottom: 50px;
             }
 
             @media only screen and (max-width: 768px) {
@@ -429,11 +431,11 @@
             <div id="tbar">
                 <div style="display: flex; margin-left: 25px;">
                     <!-- V1 -->
-                        <!-- <div style="margin-top: 11px; margin-left: 12px;">
+                    <!-- <div style="margin-top: 11px; margin-left: 12px;">
                                 <vaadin-select id="vs1" placeholder="選擇分類"></vaadin-select>
                             </div> -->
                     <!-- V2 -->
-                        <!-- <change-subcat id="vs1" style="margin-top: 13px; margin-left: 12px;">
+                    <!-- <change-subcat id="vs1" style="margin-top: 13px; margin-left: 12px;">
                             </change-subcat> -->
 
                     <div class="container">
@@ -675,6 +677,7 @@
 
             ready: function() {
                 console.log("Entered Ready");
+                let user = store.get("change-user") || null;
 
                 //SUBCAT//
                 let that = this;
@@ -893,22 +896,59 @@
                     });
                 }
 
+
+                let parampage = {
+                    "action": "searchData",
+                    "index": "change",
+                    "type": "pages",
+                    "_source": "name",
+                    "body": {
+                        "query": {
+                            "match": {
+                                "adminId": user['_id']
+
+                            }
+                        }
+                    }
+                };
+                Polymer.postData(loginUrl, parampage).then(res => {
+                    let pagename = [];
+                    if (res.code > 0) {
+                        res.resolve.forEach(item => {
+                            pagename.push({
+                                name: item['name']
+                            })
+                        })
+                        if (pagename.length == 0) {
+                            pagename.push({
+                                name: "你沒有專頁噢"
+                            })
+                        }
+                        customElements.whenDefined('vaadin-select').then(function() {
+                            const propage = pagename;
+                            shadow.querySelector('#pro').renderer = function(root) {
+                                // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
+                                if (root.firstChild) {
+                                    return;
+                                }
+                                // Create the <vaadin-list-box>
+                                const listBox = document.createElement('vaadin-list-box');
+                                propage.forEach(function(item) {
+                                    const vaadinItem = document.createElement('vaadin-item');
+                                    vaadinItem.textContent = item.name;
+                                    listBox.appendChild(vaadinItem);
+                                    vaadinItem.setAttribute('value', item.name);
+                                });
+                                // update the content
+                                root.appendChild(listBox);
+                            };
+                        });
+
+                    }
+                })
                 this.valueArray = [""];
                 // let that = this;
                 customElements.whenDefined('vaadin-select').then(function() {
-                    const propage = [{
-                        name: '専頁1'
-                    }, {
-                        name: '専頁2'
-                    }, {
-                        name: '専頁3'
-                    }, {
-                        name: '専頁4'
-                    }, {
-                        name: '専頁5'
-                    }, {
-                        name: '専頁6'
-                    }];
 
                     const district = [{
                         name: '中西區'
@@ -982,22 +1022,7 @@
                     //     root.appendChild(listBox);
                     // };
 
-                    shadow.querySelector('#pro').renderer = function(root) {
-                        // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
-                        if (root.firstChild) {
-                            return;
-                        }
-                        // Create the <vaadin-list-box>
-                        const listBox = document.createElement('vaadin-list-box');
-                        propage.forEach(function(item) {
-                            const vaadinItem = document.createElement('vaadin-item');
-                            vaadinItem.textContent = item.name;
-                            listBox.appendChild(vaadinItem);
-                            vaadinItem.setAttribute('value', item.name);
-                        });
-                        // update the content
-                        root.appendChild(listBox);
-                    };
+
 
                     shadow.querySelector('#vs2').renderer = function(root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
@@ -1053,7 +1078,6 @@
 
 
                 //USER INFO COLUM
-                let user = store.get('change-user');
                 console.log("User hoon main", user['_id']);
                 shadow.querySelector('#owner').innerHTML = user['username'];
 
@@ -1097,17 +1121,16 @@
 
                 let user = store.get("change-user") || null;
 
-                let temptime = Date.now();
-                let tempid = user['_id'];
+                let temptime = user['_id'];
+                let tempid = user['goodsNum'].toString() + Math.floor(Math.random() * 10);
                 if (location.search.length < 3) {
                     var thenewid = "" + temptime.toString() + tempid;
-
                 } else {
                     var thenewid = this.id;
 
                 }
 
-                
+
                 if (user != null) {
                     this.fileManager = new AwsPackage(user);
                     console.log(user);
@@ -1233,7 +1256,7 @@
                                     alert("成功！");
                                     console.log("JSON", json);
                                     this.fileManager.saveFile('json/product-' + thenewid + '.json', JSON.stringify(json));
-                                    //location.replace("./edit-product.html?p" + thenewid + "u" + user['_id']);
+                                    location.replace("./edit-product.html?p" + thenewid + "u" + user['_id']);
                                 }
 
 

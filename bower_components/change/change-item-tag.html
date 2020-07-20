@@ -344,7 +344,7 @@
         Polymer({
             is: 'change-item-tag',
             properties: {
-                
+
 
             },
             created: function() {
@@ -355,28 +355,28 @@
 
 
             ready: function() {
-            
+
             },
-            loadTags(tags){
+            loadTags(tags) {
                 let shadow = this.shadowRoot;
-                if (tags.length == undefined || tags.length == null) {} else {
-                            shadow.querySelector('#description').innerHTML = "";
+                if (tags.length == undefined || tags.length == null || tags.length == 0) {} else {
+                    shadow.querySelector('#description').innerHTML = "";
 
-                            tags.forEach(item => {
-                                let buttontag = document.createElement('button');
-                                buttontag.setAttribute('id', 'tagbutton');
-                                buttontag.innerHTML = item;
-                                buttontag.addEventListener('click', e => {
-                                    Polymer.dzFire('query-tags', {
-                                        'detail': {
-                                            'tags': item
-                                        }
-                                    });
-                                })
-                                shadow.querySelector('#description').appendChild(buttontag);
-
+                    tags.forEach(item => {
+                        let buttontag = document.createElement('button');
+                        buttontag.setAttribute('id', 'tagbutton');
+                        buttontag.innerHTML = item;
+                        buttontag.addEventListener('click', e => {
+                            Polymer.dzFire('query-tags', {
+                                'detail': {
+                                    'tags': item
+                                }
                             });
-                        }
+                        })
+                        shadow.querySelector('#description').appendChild(buttontag);
+
+                    });
+                }
 
 
             }

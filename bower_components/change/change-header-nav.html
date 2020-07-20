@@ -223,7 +223,6 @@
                                 a.setAttribute('href', subcate['link']);
                                 a.innerText = subcate['name'];
                                 div2.appendChild(a);
-                                console.log("a", a);
                             }
                         });
                         div1.appendChild(button);
@@ -250,17 +249,13 @@
             },
 
             _editMenu: function() {
-                console.log("Inside Edit Menu");
                 let shadow = this.shadowRoot;
                 let dialog = shadow.querySelector('vaadin-dialog');
                 Polymer.popup(dialog, "change", "change-header-info", "85%", "85%");
-                console.log("Executed");
             },
             myFunction: function() {
-                console.log("diu");
                 let shadow = this.shadowRoot;
                 var x = shadow.querySelector("#myTopnav");
-                console.log("X Class Name", x.className);
                 if (x.className === "topnav") {
                     x.className += " responsive";
                 } else {

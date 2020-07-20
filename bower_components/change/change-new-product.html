@@ -21,9 +21,6 @@
     <template>
         <style include="icon-styles"></style>
         <style>
-
-           
-
             * {
                 color: black;
                 font-family: sans-serif, Microsoft JhengHei;
@@ -65,15 +62,12 @@
 
             .change-new-product-container {
                 display: grid;
-                grid-template-columns: 50% 50%;
-                margin-bottom: 50px;
-                border-bottom: none;
-                margin-left: 15px;
-                margin-right: 15px;
+                grid-template-columns: 1fr 0.8fr;
                 height: auto;
-                background-image: url(http://change.dazzle.website/img/background/3.jpg);
-                margin: 0;
-                padding-bottom: 50px;
+                margin: 0 auto;
+                background: white;
+                width: 92.5%;
+                border: solid 1px #ccc;
             }
 
             button {
@@ -109,23 +103,12 @@
             }
 
             .left-pics {
-                width: 85%;
-                background-color: white;
-                margin-left: 50px;
-                padding-left: 55px;
-                padding-right: 100px;
-                border: solid 1px #ccc;
                 border-right: none;
-                padding-top: 50px;
+                padding: 50px 100px 0 100px;
                 height: auto;
             }
 
             .right-product {
-                width: 80%;
-                background-color: white;
-                padding-left: 92px;
-                border: solid 1px #ccc;
-                border-left: none;
                 padding-top: 50px;
                 height: auto;
                 padding-bottom: 50px;
@@ -134,7 +117,7 @@
             .bigPic,
             #div0 {
                 height: 450px;
-                background-image: url("http://change.dazzle.website/img/nopic.png");
+                background-image: url(http://change.dazzle.website/img/nopic.png);
                 background-size: contain;
                 background-repeat: no-repeat;
                 background-position: center center;
@@ -405,24 +388,23 @@
             }
 
             @media only screen and (max-width: 768px) {
-                    .change-new-product-container{
-                        grid-template-columns: 100%;
-                    }
+                .change-new-product-container {
+                    grid-template-columns: 100%;
+                }
 
-                    .left-pics{
-                        width:100%;
-                        margin-left:0px;
-                        margin-right:0px;
-                        padding-left:0px;
-                        padding-right:0px;
-                    }
-                    .right-product{
-                        width:90%;
-                        padding:20px;
-                    }
+                .left-pics {
+                    width: 100%;
+                    margin-left: 0px;
+                    margin-right: 0px;
+                    padding-left: 0px;
+                    padding-right: 0px;
+                }
+
+                .right-product {
+                    width: 90%;
+                    padding: 20px;
+                }
             }
-
-
         </style>
 
         <div class="top-banner">
@@ -439,12 +421,13 @@
         </div> -->
 
         <change-edit-bar></change-edit-bar>
+
         <div class="outer">
             <div class="change-new-product-container">
                 <div class="left-pics">
                     <!-- 这里放图片 -->
                     <div class="bigPic" id="div0"></div>
-                    <div style="height: 100px;">
+                    <div>
 
                         <!-- GG get Array Pic from Database -->
                         <div class="consmall">
@@ -462,9 +445,9 @@
                             </div>
                         </div>
                         <!-- <div class="buttons u">
-                            <button id="upload" on-click="_uploadFile">上載圖片</button>
-                        </div>
-                        <vaadin-dialog></vaadin-dialog> -->
+                                <button id="upload" on-click="_uploadFile">上載圖片</button>
+                            </div>
+                            <vaadin-dialog></vaadin-dialog> -->
                     </div>
                 </div>
 
@@ -521,7 +504,7 @@
                     </div>
                     <br>
                     <!-- <div class="unib"><span>產品尺寸 185x130x30(cm)</span></div>
-                    <br> -->
+                        <br> -->
                     <div class="sMesCon">
                         <div class="sMesText"><span>賣家留言:</span></div>
                         <div class="sMes"></div>
@@ -551,27 +534,27 @@
                     <!-- <hr> -->
 
                     <!-- <div>
-                        <div>
-                            <span class="bigsize">賣家資料：</span>
-                        </div>
-                        <div style="display: inline-block;">
-                            <span>
-                                <p>發布者：YYDS</p>
-                                <div>
-                                    <p style="display: inline-block">評價: </p>
-                                    <div id="ratings" style="display: inline-block">
-                                        <span class="fa fa-star checked"></span>
-                                        <span class="fa fa-star checked"></span>
-                                        <span class="fa fa-star checked"></span>
-                                        <span class="fa fa-star"></span>
-                                        <span class="fa fa-star"></span>
+                            <div>
+                                <span class="bigsize">賣家資料：</span>
+                            </div>
+                            <div style="display: inline-block;">
+                                <span>
+                                    <p>發布者：YYDS</p>
+                                    <div>
+                                        <p style="display: inline-block">評價: </p>
+                                        <div id="ratings" style="display: inline-block">
+                                            <span class="fa fa-star checked"></span>
+                                            <span class="fa fa-star checked"></span>
+                                            <span class="fa fa-star checked"></span>
+                                            <span class="fa fa-star"></span>
+                                            <span class="fa fa-star"></span>
+                                        </div>
                                     </div>
-                                </div>
-                                <p>查看賣家資料</p>
-                            </span>
-                        </div>
-                  
-                    </div> -->
+                                    <p>查看賣家資料</p>
+                                </span>
+                            </div>
+                      
+                        </div> -->
                     <br>
 
 
@@ -579,6 +562,9 @@
 
             </div>
         </div>
+
+
+
 
         <vaadin-dialog></vaadin-dialog>
 

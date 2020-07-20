@@ -1,0 +1,124 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-text-field/vaadin-number-field.html">
+<dom-module id="change-control-pannel">
+
+    <template>
+
+        <style>
+            * {
+                color: black;
+                font-family: sans-serif, Microsoft JhengHei;
+            }
+
+            .container {
+                /* background-image: url(http://change.dazzle.website/img/background/3.jpg); */
+
+            }
+
+            #controlbar {
+                padding-top: 15px;
+                padding-bottom: 25px;
+                background: white;
+                width: 84%;
+                margin: 0 auto;
+                margin-top: 25px;
+            }
+
+            .cp {
+                text-align: center;
+            }
+
+            .miscount {
+                text-align: center;
+                margin: 35px 0 50px 0;
+            }
+
+            button {
+                cursor: pointer;
+                font-family: sans-serif, Microsoft JhengHei;
+                font-size: 15px;
+                width: 17%;
+                border-radius: 3px;
+            }
+
+            .buttons {
+                margin: 0 auto;
+                text-align: center;
+            }
+
+            .buttons button {
+                height: 50px;
+                font-family: sans-serif, Microsoft JhengHei;
+                margin-right: 30px;
+                border: 1px solid #ccc;
+                color: white;
+            }
+
+            #add {
+                background-color: orange;
+            }
+
+            #dq {
+                background-color: red;
+            }
+
+            #recover {
+                background-color: green;
+            }
+
+            #manage {
+                background-color: blue;
+            }
+        </style>
+
+        <div class="container">
+
+            <div id="controlbar">
+                <div class="cp">
+                    <span>!管理面板!</span>
+                </div>
+                <div class="miscount">
+                    <span>專頁犯錯次數:</span>
+                    <vaadin-number-field has-controls></vaadin-number-field>
+                </div>
+
+                <div class="buttons">
+                    <button id="add" on-click="_addFanPage">新增專頁</button>
+                    <button id="dq" on-click="_disqualify">取消資格</button>
+                    <button id="recover" on-click="_recovery">回復資格</button>
+                    <button id="manage" on-click="_manageFanPage">管理專頁</button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+</dom-module>
+
+<script>
+    (function () {
+        Polymer({
+            is: 'change-control-pannel',
+            properties: {},
+
+            ready: function () { },
+
+            created: function () { },
+
+            _addFanPage: function () {
+                console.log("addFanPage is working!")
+            },
+
+            _disqualify: function () {
+                console.log("disqualify is working!")
+            },
+
+            _recovery: function () {
+                console.log("recovery is working!")
+            },
+
+            _manageFanPage: function () {
+                console.log("manageFanPage is working!")
+            },
+        });
+    })();
+</script>

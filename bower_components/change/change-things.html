@@ -11,10 +11,11 @@
 <dom-module id="change-things">
     <template>
         <style>
-            #tagbutton{
+            #tagbutton {
                 cursor: pointer;
-                margin:6px;
+                margin: 6px;
             }
+
             a:link,
             a:visited {
                 text-decoration: none;
@@ -30,27 +31,34 @@
                 padding-top: 10px;
             }
 
-            .jumpeditproduct:hover{
+            .jumpeditproduct:hover {
                 border: none;
                 border-radius: 5px;
                 background-color: orangered;
             }
-            .jumpeditproduct{
+
+            .jumpeditproduct {
                 border: none;
                 border-radius: 5px;
                 background-color: orange;
-                
+
             }
-            .jumpeditproduct2:hover{
+
+            .jumpeditproduct2:hover {
                 border: none;
                 border-radius: 5px;
-                background-color: orangered;
+                cursor: pointer;
             }
-            .jumpeditproduct2{
+
+            .jumpeditproduct2 {
                 border: none;
                 border-radius: 5px;
-                background-color: orange;
-                
+                background-image: url(http://change.dazzle.website/img/delete.png);
+                background-size: contain;
+                height: 25px;
+                width: 25px;
+                background-repeat: no-repeat;
+
             }
 
             .itemsall {
@@ -92,13 +100,14 @@
                 padding-left: 13px;
                 padding-right: 13px;
                 border: none;
-                font-size:10px;
-                color:#c1c1c1;
+                font-size: 10px;
+                color: #c1c1c1;
                 border-radius: 15px;
 
             }
-            #tagbutton a{
-                color:#808080;
+
+            #tagbutton a {
+                color: #808080;
             }
 
             .short-profile-grid {
@@ -129,9 +138,10 @@
             }
 
             #time {
-                font-size:11px;
-                color:#808080;
+                font-size: 11px;
+                color: #808080;
             }
+
             #a1,
             #a2 {
                 display: inline-block;
@@ -140,15 +150,15 @@
             }
 
             #a3 {
-               
+
                 float: right;
             }
 
-            *{
-                font-family: sans-serif,Microsoft JhengHei;
+            * {
+                font-family: sans-serif, Microsoft JhengHei;
 
             }
-         
+
 
 
             .button {
@@ -242,17 +252,19 @@
                 height: 100%;
                 width: 100%;
             }
-            .svg{
+
+            .svg {
                 background-image: url('http://change.dazzle.website/img/loading.svg');
                 position: relative;
                 background-size: 30px;
                 background-position: center center;
                 background-repeat: no-repeat;
                 width: 100%;
-                
+
             }
+
             #pics {
-               
+
                 position: relative;
                 background-size: cover;
                 background-position: center center;
@@ -260,7 +272,7 @@
                 width: 100%;
                 padding-top: 75%;
                 /* 4:3 Aspect Ratio */
-                
+
             }
 
             .img {
@@ -291,12 +303,12 @@
                 font-size: 13px;
                 padding-top: 10px;
                 padding-bottom: 10px;
-                color:#666666;
+                color: #666666;
             }
 
             .name {
                 font-size: 13px;
-                color:#1a1a1a;
+                color: #1a1a1a;
             }
 
             .small {
@@ -331,7 +343,7 @@
                 font-size: 15px;
                 font-weight: 600;
                 margin-top: 10px;
-                color:#505050;
+                color: #505050;
 
 
             }
@@ -341,73 +353,43 @@
             } */
         </style>
 
-    <div id="deleteall">        
-
-        <!-- <div id="usericon">
-            <a id="redu">
-            <div id="a1">
-                <img id="_changeicon" src="http://change.dazzle.website/img/user_profile.png">
-            </div>
-            <div id="a2">
-                <div class="name" id="owner"></div>
-                <div id="time">...</div>
-            </div>
+        <div id="deleteall" style="display: block;">
+            <div style="display: flex;">
+            <a style="width: 90%;" href$="{{userUrl}}">
+                <change-user-tag></change-user-tag>
             </a>
-            
-            <div id="a3">
-                <div class="shouldhide" style="visibility: hidden;">
-                    <button class="jumpeditproduct2" on-click="_deleteproduct">刪除</button>
+            <div class="shouldhide" style="visibility: hidden;align-self: center;">
+                <button class="jumpeditproduct2" on-click="_deleteproduct"></button>
+            </div>
+            </div>
+            <a href$="{{detailUrl}}">
+                <div class="svg">
+                    <div id="pics" style="background-image:url({{pics}})">
+                    </div>
                 </div>
-                <div id="a32"></div>                       
+            </a>
+            <svg class="s_title_tags" style="float: left;">
+            </svg>
+            <div id="templike">
+                <change-like id$="{{id}}"></change-like>
             </div>
-            
-           
-            
-            
-        </div> -->
-        <a href$="{{userUrl}}">
-            <change-user-tag></change-user-tag>
-        </a>
-        <!-- <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="40px" height="40px" viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve"><path fill="#000" d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z" transform="rotate(228.004 25 25)"><animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.6s" repeatCount="indefinite"></animateTransform></path></svg> -->
+            <a href$="{{detailUrl}}">
+                <div class="productname2" id="productname">
+                    {{productname}}
 
-    <a href$="{{detailUrl}}">
+                </div>
+                <div id="price" class="price"> {{price}}
+                </div>
 
-        <div class="svg">
-            <div id="pics" style="background-image:url({{pics}})">
-                
-            </div>
+            </a>
+            <change-item-tag>
+                <change-tag class="small" id="description"></change-tag>
+                <div class="clear"></div>
+            </change-item-tag>
+
+            <div class="clear"></div>
+            <vaadin-dialog id="tempqqq"></vaadin-dialog>
         </div>
-    
-    </a>
-    <svg class="s_title_tags" style="float: left;">
-      
-    </svg>
-    <div id="templike">
-        <change-like id$="{{id}}"></change-like>
-    </div>
-    <a href$="{{detailUrl}}">
-    <div class="productname2" id="productname">
-        {{productname}}
-        
-    </div>
-    <div id="price" class="price"> {{price}}
-        </div>
-
-    </a>
-    <change-item-tag>
-        <change-tag class="small" id="description"></change-tag>
-        <div class="clear"></div>
-    </change-item-tag>
-
-    <div class="clear"></div>
-    <vaadin-dialog id="tempqqq"></vaadin-dialog>
-
-
-
-
-</div>
-
-
 
     </template>
 </dom-module>
@@ -438,7 +420,6 @@
             },
             created: function() {
 
-                // call close pop-up in change-confirm
                 document.addEventListener('close-item-dialog', e => {
                     if (this.shadowRoot.querySelector('#tempqqq' + this.id).opened == true) {
 
@@ -447,14 +428,10 @@
                     }
                 });
 
-                // call delete item in change confirm
                 document.addEventListener('delete-item', e => {
                     if (this.shadowRoot.querySelector('#tempqqq' + this.id).opened == true) {
-
                         this.shadowRoot.querySelector('#tempqqq' + this.id).opened = false;
                         this._reallydelete();
-
-                        // console.log("(Btn) close successfully");
                     }
 
                 });
@@ -470,16 +447,11 @@
                     "index": "change",
                     "type": "product",
                     "id": this.id
-                }
-
+                };
                 Polymer.postData(Url, param).then(res => {
-                    // console.log("id_Obtained:", this.id);
-                    // console.log("resCode:", res.code);
                     if (res.code > 0) {
-                        console.log("Deleted Successfully");
-                        console.log("now delete this id:", this.id);
                         // location.reload();
-                        shadow.querySelector('#deleteall').remove();
+                        shadow.querySelector('#deleteall').style.display = "none";
                     } else {
                         console.log("error in reallydelete");
                     }
@@ -493,247 +465,55 @@
                 let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 let dialog = shadow.querySelector('#tempqqq' + this.id);
                 Polymer.popup(dialog, "change", "change-confirm", "30%", "50%");
-
-
             },
             ready: function() {
                 this.id = this.getAttribute('id');
                 this.shadowRoot.querySelector('#tempqqq').id = 'tempqqq' + this.id;
                 let that = this;
                 var json;
-                var httpRequest = new XMLHttpRequest();
-                // var url = "http://change.dazzle.website/json/product-" + this.id + ".json";
                 let url = "/json/product-" + this.id + ".json";
-
-                let Url2 = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-
-                Polymer.getContent(url).then(str=>{
-                    // let str = httpRequest.responseText;
+                Polymer.getContent(url).then(str => {
                     json = JSON.parse(str);
-                    this.res = json;
                     that.userdata(json);
-
-
-                    console.log("this id", that.id,json);
                 });
-
-
-                // httpRequest.open('GET', url, true);
-                // httpRequest.send();
-                // httpRequest.onreadystatechange = function() {
-                //     if (httpRequest.readyState == 4 && httpRequest.status == 200) {
-                //         let str = httpRequest.responseText;
-                //         json = JSON.parse(str);
-                //         this.res = json;
-                //         that.userdata(json);
-                //         console.log("this id", that.id);
-
-                //     } else {
-                //         that.basedata();
-                //     }
-                // };
 
             },
 
             userdata(all) {
+                var user = store.get('change-user') || null;
                 let shadow = this.shadowRoot;
                 this.all = all;
-                console.log('Item',all);
+                console.log('Item', all);
                 this.id = this.getAttribute('id');
                 if (Array.isArray(all['pics']))
                     this.pics = all['pics'][0];
                 else
                     this.pics = all['pics'];
-                
+
                 if (!this.pics)
                     this.pics = 'http://change.dazzle.website/img/nopic.png';
-                
+
                 this.productname = all['productname'];
                 this.price = "$" + all['price'];
                 this.ownerId = all['ownerId'];
-                this.detailUrl = '/product.html?p' + all['id'] + 'u' + all['ownerId'];
-                this.userUrl = "/user.html?"+this.ownerId;
-                console.log('Link',this.detailUrl,this.userUrl);
-                if (all['isNew'] == true) 
+                this.detailUrl = '/edit-product.html?p' + all['id'] + 'u' + all['ownerId'];
+                this.userUrl = "/user.html?" + this.ownerId;
+                console.log('Link', this.detailUrl, this.userUrl);
+                if (all['isNew'] == true)
                     shadow.querySelector('.s_title_tags').innerHTML = "<polygon points=\"0,0 40,0 30,16 0,16\" style=\"fill:#ebbd35;stroke:#ebbd35;stroke-width:0\"></polygon><text x=\"3\" y=\"12\" fill=\"white\" id=\"isNew\" >全新</text>"
-                else 
+                else
                     shadow.querySelector('.s_title_tags').innerHTML = "<polygon points=\"0,0 40,0 30,16 0,16\" style=\"fill:#7cd3da;stroke:#7cd3da;stroke-width:0\"></polygon><text x=\"3\" y=\"12\" fill=\"white\" id=\"isNew\" >二手</text>"
-                
 
-                this.shadowRoot.querySelector('change-user-tag').loadData(all['ownerId'],all['createTime']);
+                this.shadowRoot.querySelector('change-user-tag').loadData(all['ownerId'], all['createTime']);
                 this.shadowRoot.querySelector('change-item-tag').loadTags(all['tags']);
-                
+                if (user['_id'] == 1) {
 
-
-
-//                 let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-//                 let idparam = {
-//                     "action": "getData",
-//                     "index": "change",
-//                     "type": "_user",
-//                     "id": all['ownerId']
-//                 };
-//                 var checkhide2 = false;
-//                 let findid = all['ownerId'];
-                
-//                 shadow.querySelector('#redu').setAttribute('href', '/user.html?' + all['ownerId']);
-
-//                 Polymer.postData(Url, idparam).then(res => {
-//                     if (res.code > 0) {
-//                         if (res.resolve['head'].length > 0) {
-//                             shadow.querySelector('#_changeicon').src = res.resolve['head'];
-//                         }
-//                         var user = store.get('change-user') || null;
-//                         if (user != null) {
-//                             if (user['_id'] == "1") {
-//                                 checkhide2 = true
-//                             } else if (user['_id'] == all['ownerId']) {
-//                                 checkhide2 = true;
-
-//                                 let editbutt = document.createElement('button');
-//                                 editbutt.setAttribute('class', "jumpeditproduct");
-//                                 editbutt.innerHTML = "編輯";
-
-//                                 let link = document.createElement('a');
-//                                 link.setAttribute('href', 'add-product.html?p' + this.id + 'u' + findid);
-//                                 link.appendChild(editbutt);
-//                                 shadow.querySelector('#a32').appendChild(link);
-
-//                                 shadow.querySelector('#red').setAttribute('href', '/edit-product.html?p' + this.id + 'u' + findid)
-
-//                                 shadow.querySelector('#reed').setAttribute('href', '/edit-product.html?p' + this.id + 'u' + findid)
-
-
-//                             } else {
-//                                 checkhide2 = false;
-//                                 shadow.querySelector('#red').setAttribute('href', '/product.html?p' + this.id + 'u' + findid)
-//                                 shadow.querySelector('#reed').setAttribute('href', '/product.html?p' + this.id + 'u' + findid)
-
-
-//                             }
-
-//                         } else {
-//                             checkhide2 = false;
-//                             shadow.querySelector('#red').setAttribute('href', '/product.html?p' + this.id + 'u' + findid)
-//                             shadow.querySelector('#reed').setAttribute('href', '/product.html?p' + this.id + 'u' + findid)
-
-//                         }
-//                         //check to display edit and delete
-//                         if (checkhide2 == true) {
-//                             shadow.querySelector('.shouldhide').style.visibility = 'visible';
-
-//                         } else {
-
-//                         };
-
-
-//                         if (res.resolve['username']) {
-//                             shadow.querySelector('#owner').innerHTML = res.resolve['username'];
-//                         }
-
-
-
-//                         //check product name    
-//                         // shadow.querySelector("#productname").innerHTML = all['productname'];
-                      
-
-//                         //check price
-                       
-//                         //check time
-//                         let _thetimenow = Date.now();
-//                         let comparetime = (_thetimenow - all['createTime']) / 1000;
-//                         if (comparetime < 60) {
-//                             shadow.querySelector('#time').innerHTML = "剛剛"
-//                         } else if (comparetime / 60 < 60) {
-//                             shadow.querySelector('#time').innerHTML = Math.floor(comparetime / 60) + "分鐘前"
-//                         } else if (comparetime / 60 / 60 < 24) {
-//                             shadow.querySelector('#time').innerHTML = Math.floor(comparetime / 60 / 60) + "小時前"
-//                         } else if (comparetime / 60 / 60 / 24 < 7) {
-//                             shadow.querySelector('#time').innerHTML = Math.floor(comparetime / 60 / 60 / 24) + "日前"
-//                         } else if (comparetime / 60 / 60 / 24 / 7 < 30) {
-//                             shadow.querySelector('#time').innerHTML = Math.floor(comparetime / 60 / 60 / 24 / 7) + "星期前"
-//                         } else if (comparetime / 60 / 60 / 24 / 7 / 30 < 365) {
-//                             shadow.querySelector('#time').innerHTML = Math.floor(comparetime / 60 / 60 / 24 / 7 / 30) + "月前"
-//                         }
-//                         //check production description
-//                         // if (all['tags'].length == undefined || all['tags'].length == null) {} else {
-//                         //     shadow.querySelector('#description').innerHTML = "";
-
-//                         //     all['tags'].forEach(item => {
-//                         //         let buttontag = document.createElement('button');
-//                         //         buttontag.setAttribute('id', 'tagbutton');
-//                         //         buttontag.innerHTML = item
-//                         //         buttontag.addEventListener('click', e => {
-//                         //             Polymer.dzFire('query-tags', {
-//                         //                 'detail': {
-//                         //                     'tags': item
-//                         //                 }
-//                         //             });
-//                         //         })
-//                         //         shadow.querySelector('#description').appendChild(buttontag);
-
-//                         //     });
-//                         // }
-
-
-//                         //check is new
-//                         if (all['isNew'] == true) {
-//                             shadow.querySelector('.s_title_tags').innerHTML = "<polygon points=\"0,0 40,0 30,16 0,16\" style=\"fill:#ebbd35;stroke:#ebbd35;stroke-width:0\"></polygon><text x=\"3\" y=\"12\" fill=\"white\" id=\"isNew\" >全新</text>"
-
-//                         } else {
-//                             shadow.querySelector('.s_title_tags').innerHTML = "<polygon points=\"0,0 40,0 30,16 0,16\" style=\"fill:#7cd3da;stroke:#7cd3da;stroke-width:0\"></polygon><text x=\"3\" y=\"12\" fill=\"white\" id=\"isNew\" >二手</text>"
-//                         }
-//                         //check the pic link
-
-// //                        console.log('My Data',all['productname'],all['pics']);
-
-
-//                         // if (all['pics'][0] != "") {
-//                         //     if (typeof(all['pics']) === 'string') {
-//                         //         shadow.querySelector('#pics').style.backgroundImage = "url(" + all['pics'] + ")";
-
-//                         //     } else {
-//                         //         shadow.querySelector('#pics').style.backgroundImage = "url(" + all['pics'][0] + ")";
-
-//                         //     }
-//                         // } else {
-//                         //     shadow.querySelector('#pics').style.backgroundImage = "url('http://change.dazzle.website/img/nopic.png')";
-//                         // };
-
-//                         //check the icon
-
-//                         //check the like
-//                         // shadow.querySelector('#templike').innerHTML = '<change-like id="' + this.id + '"></change-like>'
-
-
-
-//                     } else {}
-//                 });
-            },
-            basedata: function() {
-                this.id = this.getAttribute('id');
-                let that = this;
-                let shadow = this.shadowRoot;
-
-                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                let param = {
-                    "action": "getData",
-                    "index": "change",
-                    "type": "product",
-                    "id": this.id
-                };
-                Polymer.postData(Url, param).then(res => {
-                    if (res.code > 0) {
-                        this.userdata(res.resolve);
-
-                    }
-
-
-                })
-
+                    shadow.querySelector('.shouldhide').style.visibility = 'visible';
+                }
 
 
             }
+
         });
     })();
 </script>

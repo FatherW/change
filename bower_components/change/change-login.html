@@ -297,8 +297,15 @@
                                 console.log("Result2", res.resolve.length);
                                 if (res.resolve) {
                                     let user = res.resolve;
-                                    store.set('change-user', user);
-                                    location.reload();
+                                    if (user.token == "" || user.token == null || user.token == undefined) {
+                                        store.set('change-user', user);
+                                        location.reload();
+                                    } else {
+
+                                        alert("請先進行電郵驗證")
+
+                                    }
+
                                 } else {
                                     alert("用戶不存在，請註冊後登入");
                                 }

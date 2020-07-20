@@ -212,18 +212,10 @@ its values is > 50%. */
             created: function() {
                 // console.log('Created');
                 // Check User like or not.and set the status
-                this.query = {
-                    "action": "searchData",
-                    "index": "change",
-                    "type": "product",
-                    "body": {
-                        "query": {
-                            "match_all": {}
-                        }
-                    }
+                this.query = [];
 
 
-                };
+
             },
             test: function() {
                 console.log("great");

@@ -416,8 +416,8 @@ its values is > 50%. */
         </div>
       
         <div id="rightele" style="float:left; margin-top:50px;border:'none'; ">
-            <div class="initemtitle" id="viewingcat">你正在瀏覽的分類  </div>
-            <paper-tags-input width="100%" id="myTags"></paper-tags-input>
+            <div class="initemtitle" id="viewingcat">你正在瀏覽的分類 <paper-tags-input width="100%" id="myTags"></paper-tags-input>
+            </div>
             <change-in-item></change-in-item>
         </div>
     </div>
@@ -446,6 +446,9 @@ its values is > 50%. */
                     },
                     'initprice': {
                         'type': Number
+                    },
+                    'pagetag': {
+                        'type': String
                     }
                 },
                 created: function() {
@@ -499,12 +502,12 @@ its values is > 50%. */
 
                                 if (statnew1 == true) {
 
-                                    statnew1 = boolean(false);
+                                    statnew1 = Boolean(false);
 
                                 }
                             } else {
                                 if (statnew2 == true) {
-                                    statnew2 = boolean(false);
+                                    statnew2 = Boolean(false);
                                 }
                             }
                             break
@@ -524,7 +527,17 @@ its values is > 50%. */
 
 
                 },
+                pagetag(tag) {
+                    console.log("the pagetag is", tag);
+                    this.tags.push(tag);
+                    this.addTags(tag);
+                    this.search();
+
+                },
                 ready: function() {
+
+                    console.log("location.search", decodeURIComponent(location.search))
+
                     let value;
                     document.addEventListener('query-tags', e => {
                         value = e.detail.tags;
@@ -587,6 +600,20 @@ its values is > 50%. */
 
 
                     })
+
+                    let loc = decodeURIComponent(location.search);
+
+                    // let loc = '';
+                    if (loc[1] == 't' && loc[2] == 'a' && loc[3] == 'g') {
+                        let headsearch = "";
+                        for (i = 5; i < loc.length; i++) {
+                            headsearch += loc[i];
+                        }
+                        this.addTags(headsearch);
+                        this.tags.push(headsearch);
+                        this.search();
+                    }
+
                 }
             })
         }());

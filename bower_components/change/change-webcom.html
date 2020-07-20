@@ -249,6 +249,8 @@
                 if (buyer == null) {
                     alert("請先登入");
                 } else {
+
+                    //POSTDATA TO CLOUD
                     console.log("BUYERID", buyer);
                     let buyerId = buyer['_id'];
                     let ab = buyerId;
@@ -263,25 +265,32 @@
                         "contactinfo": msg
                     };
 
-                    // {
-                    //     "action": "addData",
-                    //         "index": "change",
-                    //             "type": "order",
-                    //                 "id": finId,
-                    //                     "body": {
-                    //         "id": finId,
-                    //             "msg": msg,
-                    //                 "productId": pid,
-                    //                     "buyerId": buyerId,
-                    //                         "submitTime": id,
-                    //                             "status": "已提交訂單"
-                    //     };
-                    
                     console.log("P", p);
 
                     Polymer.postData(emailurl, p).then(res => {
                         alert("Please wait for seller response!");
-                    })
+                    });
+
+                    //POSTDATA TO POSTMAN
+                    let params = {
+                        "action": "addData",
+                        "index": "change",
+                        "type": "order",
+                        "id": orderId,
+                        "body": {
+                            "id": orderId,
+                            "msg": msg,
+                            "productId": pid,
+                            "buyerId": buyerId,
+                            "submitTime": id,
+                            "status": "已提交訂單"
+                        }
+                    };
+
+                    console.log("Params", params)
+                    Polymer.postData(url, params).then(res => {
+                        console.log("postdata to postman successfully!")
+                    });
                 }
             },
 

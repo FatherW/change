@@ -162,7 +162,7 @@
                             shadow.querySelector('#area').innerText = all['district'];
                             shadow.querySelector('#email').innerText = all['email'];
                             shadow.querySelector('#contact').innerText = all['tags'];
-
+                            document.querySelector('change-shop').pagetag(all['tags']);
                             let storeadmin = all['adminId'];
                             let write = "";
                             for (a = 0; a < storeadmin.length; a++) {

@@ -1,0 +1,89 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="confirm-regis">
+
+
+    <template>
+
+        <style>
+            * {
+                color: black;
+                font-family: sans-serif, Microsoft JhengHei;
+            }
+
+            body {
+                overflow: hidden;
+            }
+
+        </style>
+   <div id="content">
+    <h1>恭喜你!你已成功註冊!</h1>
+    
+   </div>
+    </template>
+
+</dom-module>
+
+<script>
+    (function() {
+        Polymer({
+            is: 'confirm-regis',
+            properties: {
+
+            },
+            created: function() {
+
+
+
+            },
+            //for adding link to the user name connecting wth the databse
+            ready: function() {
+                let loc = location.search;
+                // let loc = "?token=1594953468686178216261";
+                let token = "";
+                for (i = 7; i < loc.length; i++) {
+                    token += loc[i]
+                }
+                let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let param = {
+                    "action": "searchData",
+                    "index": "change",
+                    "type": "_user",
+                    "_source": "_id",
+                    "body": {
+                        "query": {
+                            "match": {
+                                "token": token
+                            }
+                        }
+                    }
+                };
+                Polymer.postData(link, param).then(res => {
+                    if (res.code > 0) {
+                        let userid = res.resolve[0]['_id'];
+                        let paramtake = {
+                            "action": "addData",
+                            "index": "change",
+                            "type": "_user",
+                            "id": userid,
+                            "body": {
+                                "token": ""
+                            }
+                        };
+                        Polymer.postData(link, paramtake).then(res => {
+                            if (res.code > 0) {
+                                console.log("add success");
+                            }
+                        })
+
+
+                    }
+                })
+
+            },
+
+
+
+        });
+    })();
+</script>

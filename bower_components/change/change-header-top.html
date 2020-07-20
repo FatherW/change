@@ -89,7 +89,7 @@
               
                 .index-grid-md {
                     display: grid;
-                    grid-template-columns: 50px auto 50px 100px 95px;
+                    grid-template-columns: 50px auto 50px 100px 50px;
                     grid-template-rows: 74px;
                     grid-auto-rows: 50px;
                     height: 62px;
@@ -203,9 +203,10 @@
                 console.log("diunilaomu");
                 let shadow = this.shadowRoot;
                 if (shadow.querySelector('.s').value == "0") {
-                    var serchcat = '/list-product.html?tag' + shadow.querySelector('#searchmain').value;
+                    var serchcat = '/list-product.html?tag=' + encodeURIComponent(shadow.querySelector('#searchmain').value);
                 } else {
-                    var serchcat = "/list-product.html?user" + shadow.querySelector('#searchmain').value;
+                    let test = encodeURIComponent("試試");
+                    var serchcat = "/list-product.html?user=" + test;
                 }
                 location.href = serchcat;
             },

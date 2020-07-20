@@ -355,7 +355,7 @@
         Polymer({
             is: 'change-user-tag',
             properties: {
-                
+
 
             },
             created: function() {
@@ -366,25 +366,23 @@
 
 
             ready: function() {
-            
+
             },
-            loadData(id,time) {
+            loadData(id, time) {
                 let that = this;
                 this.id = id;
                 let url = "/json/user-" + this.id + ".json";
                 this.timeStr = this.loadUpdate(time);
-                console.log('this id',this.timeStr,time);
-                Polymer.getContent(url).then(str=>{
+                Polymer.getContent(url).then(str => {
                     // let str = httpRequest.responseText;
                     json = JSON.parse(str);
                     that.res = json;
-                    console.log("this id", that.id,json,that.timeStr);
-                    
+
                 });
 
                 // console.log('User Tag',id);
             },
-            loadUpdate(time){
+            loadUpdate(time) {
                 let _thetimenow = Date.now();
                 let comparetime = (_thetimenow - time) / 1000;
                 if (comparetime < 60) {

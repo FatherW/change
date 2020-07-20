@@ -20,13 +20,12 @@
             #tbar {
                 display: flex;
                 justify-content: space-between;
-                border: 1px solid #ccc;
                 padding-top: 15px;
                 padding-bottom: 25px;
                 background: #F0F0F0;
                 width: 92.5%;
                 margin: 0 auto;
-                margin-right: 61px;
+                border: 1px solid #ccc;
             }
 
             #edit {
@@ -45,24 +44,24 @@
 
             .left {
                 margin-top: 11px;
-                margin-left: 30px;
+                margin-left: 100px;
                 display: inline-flex;
             }
 
             .right {
-                margin-right: 30px;
+                margin-top: 11px;
+                margin-right: 100px;
+                display: inline-flex;
             }
 
             .buttons button {
-                padding: 3px;
-                margin-top: 15px;
                 width: 100px;
+                height: 35px;
                 font-family: sans-serif, Microsoft JhengHei;
             }
 
             #copy {
                 background-color: grey;
-                padding: 10px 20px;
                 margin-right: 25px;
                 border: none;
                 color: white;
@@ -70,18 +69,16 @@
 
             #delete {
                 background-color: grey;
-                padding: 10px 20px;
                 margin-right: 25px;
                 border: none;
                 color: white;
             }
 
-            #save {
+            /* #save {
                 background-color: #FF6B66;
-                padding: 10px 20px;
                 border: none;
                 color: white;
-            }
+            } */
         </style>
         <header>
             <div id="tbar">
@@ -219,6 +216,10 @@
                 //STORED PRODUCT ID
                 console.log("ID", pid);
 
+                //GET USER ID
+                let user = store.get("change-user") || null;
+                let tempid = user['_id'];
+
                 //CALL DELETE FUNCTION AS IN POSTMAN
                 let that = this;
                 let shadow = this.shadowRoot;
@@ -235,6 +236,7 @@
                     console.log("check:", res.code);
                     if (res.code > 0) {
                         alert("STATUS: DELETE SUCCESSFUL");
+                        location.replace("./user.html?" + user['_id']);
                     } else {
                         alert("STATUS: DELETE UNSUCCESSFUL");
                     }

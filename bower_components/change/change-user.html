@@ -104,7 +104,6 @@
                         }
                     }
                     shadow.querySelector('#purch').query = params;
-                    let query = [];
                     let p = {
                         "action": "searchData",
                         "index": "change",
@@ -118,11 +117,10 @@
                         }
                     };
                     let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-
                     Polymer.postData(url, p).then(res => {
                         if (res.code > 0) {
-
                             let all = res.resolve[0]['likeProduct'];
+                            let query = [];
                             for (i = 0; i < all.length; i++) {
                                 query.push({
                                     "match": {
@@ -137,11 +135,15 @@
 
                         }
                     })
-                    let downparam = {
+                    let downparam = [{
                         "match": {
                             "postStatus": false
                         }
-                    }
+                    }, {
+                        "match": {
+                            "ownerId": id
+                        }
+                    }];
                     shadow.querySelector('#down').query = downparam;
                     shadow.querySelector('#down')._showMyGoods();
 

@@ -10,18 +10,21 @@
             }
 
             .holder {
+                width: 98%;
                 margin-right: 2%;
                 border: 1px solid #ccc;
                 height: 90px;
-                background-color: #DCDCDC;
+                background-color: #F5F5F5;
                 padding-top: 1%;
                 margin-bottom: 15px;
                 margin-top: 20px;
+                display: inline-flex;
             }
 
             #a1 {
                 height: 50px;
                 width: 50px;
+                border-radius: 50%;
             }
 
             #a2 {
@@ -33,6 +36,11 @@
                 float: left;
                 padding-left: 1.5%;
                 padding-right: 1.5%;
+            }
+
+            .in img {
+                width: 60px;
+                margin-left: 20px;
             }
 
             .buttons {
@@ -69,10 +77,10 @@
         <div class="holder" id="containall">
 
             <div class="in">
-                <img id="a1" src="http://change.dazzle.website/img/user_profile.png" alt="buyer">
+                <img id="a1" src="" alt="">
             </div>
             <div id="a2" class="in">
-                <div class="name">1234</div>
+                <div class="name"></div>
                 <div id="time"></div>
                 <div id="message"></div>
             </div>
@@ -130,9 +138,23 @@
                     pid += loc[a];
                 }
 
+                //POSTDATA TO POSTMAN
+                let param = {
+                    "action": "addData",
+                    "index": "change",
+                    "type": "order",
+                    "id": this.id,
+                    "body": {
+                        "status": "處理中"
+                    }
+                };
+                let urlP = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                console.log("Param", param)
+                Polymer.postData(urlP, param).then(res => {
+                    console.log("postdata to postman successfully!")
+                });
 
-
-
+                //POSTDATA TO LAMBDA
                 let json = {
                     "action": "sendOrderEmail",
                     "uid": this.buyerId,
@@ -140,12 +162,16 @@
                     "oid": this.id
                 };
 
-                let url = 'https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc';
-                Polymer.postData(url, json).then(res => {
+                let urlL = 'https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc';
+                Polymer.postData(urlL, json).then(res => {
                     if (res.code > 0) {
-                        console.log("傳到email了")
+                        Polymer.postData(url, param).then(res => {
+                            if (res.code > 0) {
+                                console.log("傳到email了")
+                            }
+                        })
                     } else {
-                        console.og("發送失敗")
+                        console.log("發送失敗")
                     }
                 })
                 this.shadowRoot.querySelector('#containall').innerHTML = "<H1>已聯絡賣家</H1>";
@@ -218,12 +244,13 @@
                             }
                         };
                         Polymer.postData(Url, params2).then(res => {
+                            //HEAD 
                             if (res.code > 0) {
                                 shadow.querySelector('.name').innerText = res.resolve[0]['username'];
                                 if (res.resolve[0]['head'] == "") {
-                                    shadow.querySelector('#a1').innerHTML = '<img src=\"http://change.dazzle.website/img/head.svg\">';
+                                    shadow.querySelector('#a1').src = "http://change.dazzle.website/img/head.svg";
                                 } else {
-                                    shadow.querySelector('#a1').innerHTML = '<img src="' + res.resolve[0]['head'] + '">"';
+                                    shadow.querySelector('#a1').src = res.resolve[0]['head'];
                                 }
 
                             }

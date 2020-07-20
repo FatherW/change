@@ -9,6 +9,7 @@
                 height: auto;
                 background-image: url(http://change.dazzle.website/img/background/3.jpg);
                 padding-bottom: 50px;
+                margin: 0 auto;
             }
 
             .order {
@@ -33,7 +34,6 @@
                 background-color: white;
                 width: 92.5%;
                 margin: 0 auto;
-                margin-right: 61px;
                 border: 1px #ccc solid;
             }
         </style>
@@ -98,13 +98,22 @@
                             }
                         }],
                         "query": {
-                            "match": {
-                                "productId": pid
-                            }
+                            "bool": {
+                                    "must": [{
+                                        "match":{
+                                            "productId":pid
+                                        }
+                                    },
+                                    {
+                                        "match":{
+                                            "status": "已提交訂單"
+                                        }
+                                    }]
+                                }
                         }
                     }
                 };
-
+                console.log("the param of order ,", JSON.stringify(params));
                 Polymer.postData(Url, params).then(res => {
                     console.log("RP", res);
                     if (res.code > 0) {
@@ -117,7 +126,7 @@
                         for (i = 0; i < res.resolve.length; i++) {
                             b += '<change-order-list id="' + a[i] + '"></change-order-list>';
                         }
-                        console.log("the thing should be display : ".b)
+                        console.log("the thing should be display : ", b)
                         shadow.querySelector('#ol').innerHTML = b;
                     } else {
                         console.log("error in orderlist-storage");

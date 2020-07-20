@@ -57,7 +57,7 @@
 </div> -->
 <div class="things-grid" id="blank"></div>
 <div class="botbutton">
-    <div style="text-align: center;">
+    <div style="display:inline-flex;">
         <vaadin-button id="morebutton" on-click="displaymore">更多</vaadin-button>
     </div>
 </div>
@@ -83,7 +83,6 @@
                     "type": Array
 
                 },
-
                 "countitem": {
                     "type": Number
                 },
@@ -91,19 +90,10 @@
                     "type": Array
                 },
 
-                "storemust": {
-                    "type": Array
-                },
-                "storeshould": {
-                    "type": Array
-                },
-                "cateIdarray": {
-                    "type": Array
-                },
-                "allIdarray": {
-                    "type": Array
-                },
                 "res": {
+                    "type": Array
+                },
+                "res2": {
                     "type": Array
                 }
 
@@ -201,6 +191,7 @@
                     "action": "searchData",
                     "index": "change",
                     "type": "product",
+                    "_source": "_id",
                     "body": {
                         "sort": [{
                             "createTime": {
@@ -232,6 +223,7 @@
                     "action": "searchData",
                     "index": "change",
                     "type": "product",
+                    "_source": "price",
                     "body": {
                         "sort": [{
                             "createTime": {
@@ -249,6 +241,7 @@
                     "action": "searchData",
                     "index": "change",
                     "type": "product",
+                    "_source": "price",
                     "body": {
                         "sort": [{
                             "createTime": {
@@ -267,7 +260,6 @@
                         }
                     }
                 };
-
                 Polymer.postData(url, paramcate).then(res => {
                     if (res.code > 0) {
                         let shouldid = [];
@@ -303,28 +295,58 @@
                                 list.shadowRoot.querySelector('change-range').data2 = toprice;
                                 list.shadowRoot.querySelector('change-range').new();
 
-                                Polymer.postData(url, rangeparam).then(res => {
-                                    if (res.code > 0) {
-                                        let check8 = 8;
-                                        if (theans.length < 8) {
-                                            check8 = theans.length;
-                                            shadow.querySelector('#morebutton').style.display = 'none';
+
+                                if (toprice > 1) {
+                                    Polymer.postData(url, rangeparam).then(res => {
+                                        if (res.code > 0) {
+                                            var theans2 = [];
+                                            for (q = 0; q < res.resolve.length; q++) {
+                                                for (v = 0; v < theans.length; v++) {
+                                                    if (res.resolve[q]['_id'] == theans[v]['_id']) {
+                                                        theans2.push(res.resolve[q]['_id'])
+                                                    }
+                                                }
+                                            }
+
+                                            this.res2 = theans2
+                                            this.res = [];
+                                            let check8 = 8;
+                                            if (theans2.length < 8) {
+                                                check8 = theans2.length;
+                                                shadow.querySelector('#morebutton').style.display = 'none';
+                                            } else {
+                                                shadow.querySelector('#morebutton').style.display = 'block';
+                                            }
+                                            shadow.querySelector('#blank').innerHTML = "";
+                                            for (i = 0; i < check8; i++) {
+                                                let addi = document.createElement('change-things');
+                                                addi.setAttribute('id', theans2[i]);
+                                                shadow.querySelector('#blank').appendChild(addi);
+                                            }
+                                            this.countitem += 8;
+
+
                                         } else {
-                                            shadow.querySelector('#morebutton').style.display = 'block';
+                                            console.log('error23')
                                         }
-                                        shadow.querySelector('#blank').innerHTML = "";
-                                        for (i = 0; i < check8; i++) {
-                                            let addi = document.createElement('change-things');
-                                            addi.setAttribute('id', theans[i]['id']);
-                                            shadow.querySelector('#blank').appendChild(addi);
-                                        }
-                                        this.countitem += 8;
-
-
+                                    })
+                                } else {
+                                    this.res2 = theans
+                                    let check8 = 8;
+                                    if (theans.length < 8) {
+                                        check8 = theans2.length;
+                                        shadow.querySelector('#morebutton').style.display = 'none';
                                     } else {
-                                        console.log('error23')
+                                        shadow.querySelector('#morebutton').style.display = 'block';
                                     }
-                                })
+                                    shadow.querySelector('#blank').innerHTML = "";
+                                    for (i = 0; i < check8; i++) {
+                                        let addi = document.createElement('change-things');
+                                        addi.setAttribute('id', theans[i]['_id']);
+                                        shadow.querySelector('#blank').appendChild(addi);
+                                    }
+                                    this.countitem += 8;
+                                }
 
                             }
                         })
@@ -340,25 +362,46 @@
             displaymore: function() {
                 let that = this;
                 let shadow = this.shadowRoot;
-                let prods = this.res;
+                let prods = this.res2;
+                if (this.res > 0) {
+                    prods = this.res;
 
-                var storeId = [];
-                let check8 = 8;
-                if (prods.length - this.countitem < 8) {
-                    check8 = prods.length - this.countitem;
                 }
-                for (var i = this.countitem; i < this.countitem + check8; i++) {
-                    storeId.push(prods[i]['_id'])
-                };
-                storeId.forEach(id => {
-                    let addi = document.createElement('change-things');
-                    addi.setAttribute('id', id)
-                    shadow.querySelector(".things-grid").appendChild(addi);
-                })
+                if (this.res.length > 0) {
+                    var storeId = [];
+                    let check8 = 8;
+                    if (prods.length - this.countitem < 8) {
+                        check8 = prods.length - this.countitem;
+                    }
+                    for (var i = this.countitem; i < this.countitem + check8; i++) {
+                        storeId.push(prods[i]['_id'])
+                    };
+                    storeId.forEach(id => {
+                        let addi = document.createElement('change-things');
+                        addi.setAttribute('id', id)
+                        shadow.querySelector(".things-grid").appendChild(addi);
+                    })
 
-                this.countitem += 8;
+                    this.countitem += 8;
+                } else {
 
+                    var storeId = [];
+                    let check8 = 8;
+                    if (prods.length - this.countitem < 8) {
+                        check8 = prods.length - this.countitem;
+                    }
+                    for (var i = this.countitem; i < this.countitem + check8; i++) {
+                        storeId.push(prods[i])
+                    };
+                    storeId.forEach(id => {
+                        let addi = document.createElement('change-things');
+                        addi.setAttribute('id', id)
+                        shadow.querySelector(".things-grid").appendChild(addi);
+                    })
 
+                    this.countitem += 8;
+
+                }
 
             },
 
