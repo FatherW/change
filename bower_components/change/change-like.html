@@ -109,15 +109,8 @@
                 let that = this;
                 let shadow = this.shadowRoot;
 
-                let user = store.get('change-user') || null;
-                this.user = user;
-                // let URL = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                // let param = {
-                //     "action": "getData",
-                //     "index": "change",
-                //     "type": "product",
-                //     "id": this.id
-                // };
+                let user2 = store.get('change-user') || null;
+
 
 
                 Polymer.getContent('/json/product-' + this.id + '.json').then(str => {
@@ -125,7 +118,14 @@
 
                     shadow.querySelector('#likes').innerHTML = json['like'];
                     this.like = json['like'];
-                    if (user) {
+                    if (user2) {
+                        let url = "/json/user-" + user['_id'] + ".json";
+                        Polymer.getContent(url).then(str => {
+                            json = JSON.parse(str);
+                            that.user = json;
+
+                        });
+
 
                         this.checkLike(user);
 
