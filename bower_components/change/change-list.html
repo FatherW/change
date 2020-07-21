@@ -228,7 +228,6 @@
                             let wrapper = that.shadowRoot.querySelector('.things-grid');
                             wrapper.innerHTML = '';
                             let x = that.myProducts.length;
-                            console.log("Check Me", x);
                             if (!x) {
                                 console.log("Check inside if");
                                 shadow.querySelector('#np').innerHTML = "沒有貨品";
@@ -237,17 +236,6 @@
                                     let productItem = document.createElement('change-things');
                                     productItem.setAttribute("id", item['_id']);
 
-                                    // console.log("FUCK2", item['_id']);
-
-                                    // for (i = 0; i < x; i++) {
-                                    //     console.log("working!!")
-                                    //     //ADD BLUR EFFECT IF IT'S OFF STOCK
-                                    //     if (res.resolve.postStatus == false) {
-                                    //         console.log("FUCK1", res.resolve.postStatus);
-
-                                    //         shadow.querySelector('_id').style.filter = "blur(3px)";
-                                    //     };
-                                    // };
                                     wrapper.appendChild(productItem);
                                 });
                             }
@@ -260,6 +248,26 @@
                     });
                 }
 
+
+            },
+
+            displayitem(x) {
+                let shadow = this.shadowRoot;
+                console.log("inside list", x, x.length);
+                let that = this;
+                let wrapper = that.shadowRoot.querySelector('.things-grid');
+                wrapper.innerHTML = '';
+                let lenx = x.length;
+                if (lenx == 0 || lenx == undefined || lenx == null) {
+                    shadow.querySelector('#np').innerHTML = "沒有貨品";
+                } else {
+                    x.forEach(item => {
+                        let productItem = document.createElement('change-things');
+                        productItem.setAttribute("id", x);
+
+                        wrapper.appendChild(productItem);
+                    });
+                }
 
             },
             handleResponse: function(response) {

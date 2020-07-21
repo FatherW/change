@@ -129,277 +129,12 @@
                 height: 70px;
             }
             
-            .table1 {
-                width: 100%;
-                min-width: 200px;
-                box-sizing: 1px 10px;
-                background-color: white;
-                box-shadow: gray;
-                margin-bottom: 30px;
-                -webkit-box-shadow: 1px 0px 8px 0px rgba(50, 49, 56, 0.2);
-                -moz-box-shadow: 1px 0px 8px 0px rgba(50, 49, 56, 0.2);
-                box-shadow: 1px 0px 8px 0px rgba(50, 49, 56, 0.2);
 
-            }
-            
-            td {
-                padding-left: 25px;
-                font-size: 13px;
-            }
-            
-            .titlecolor {
-                background-color: #F0846C;
-                color: white;
-                text-align: center;
-                width: 100%;
-                min-width: 200px;
-                font-size: 12px;
-                height:50px;
-                border: none;
-            }
-            
-            .tags {
-                width: 100px;
-                border: none;
-                padding: 5px;
-                font-size: 9px;
-                height:50px;
-            }
-
-            #isnew1,
-            #isnew2{
-                height:40px;
-            }
-
-            
-            
-            .box {
-                text-align: right;
-                padding-right: 7px;
-                height:40px;
-            }
-            
-            #loc {
-                height:50px;
-                width: 100px;
-                border: white;
-                text-align: right;
-                padding-right: 7px;
-                font-size: 13px;
-            }
-            
-            .mybutton {
-                box-shadow:inset 0px 0px 10px 1px #cf866c;
-                background-color:#d0451b;
-                border-radius:16px;
-                border:2px solid #942911;
-                display:inline-block;
-                align-items: center;
-                cursor:pointer;
-                color:#ffffff;
-                font-family:Arial;
-                margin-left: 100px;
-                font-size:12px;
-                padding:7px 30px;
-                margin-top: 5px;
-                text-decoration:none;
-                text-shadow:0px 0px 0px #854629;
-            }
-            .mybutton:hover {
-                background-color:#bc3315;
-            }
-            .mybutton:active {
-                position:relative;
-                top:1px;
-                border: white;
-            }
-
-            .hidetb{
-                float:right;
-                background-image: url("http://change.dazzle.website/img/button_bg.svg");
-                width:30px;
-                height:30px;
-                border: none;
-                background-color: transparent;
-            }
-
-
-
-            .hidetb:active{
-               outline: none;
-            }
-
-            .showtb{
-                display: block;
-            }
-            
-            /* .hiddentb{
-                display: none;
-            } */
-           
-            #loc2 {
-                padding: 5px;
-                text-align: center;
-                
-            }
-            
-            .inlist {
-                font-size: 9px;
-                text-align: center;
-                margin:6px
-            }
-            
-            .container {
-                width: 90%;
-            }
             
             .slider-labels {
                 margin-top: 10px;
             }
             
-            .noUi-target,
-            .noUi-target * {
-                -webkit-touch-callout: none;
-                -webkit-user-select: none;
-                -ms-touch-action: none;
-                touch-action: none;
-                -ms-user-select: none;
-                -moz-user-select: none;
-                user-select: none;
-                -moz-box-sizing: border-box;
-                box-sizing: border-box;
-            }
-            
-            .noUi-target {
-                position: relative;
-                direction: ltr;
-            }
-            
-            .noUi-base {
-                width: 100%;
-                height: 100%;
-                position: relative;
-                z-index: 1;
-                /* Fix 401 */
-            }
-            
-            .noUi-origin {
-                position: absolute;
-                right: 0;
-                top: 0;
-                left: 0;
-                bottom: 0;
-            }
-            
-            .noUi-handle {
-                position: relative;
-                z-index: 1;
-            }
-            
-            .noUi-stacking .noUi-handle {
-                /* This class is applied to the lower origin when
-its values is > 50%. */
-                z-index: 10;
-            }
-            
-            .noUi-state-tap .noUi-origin {
-                -webkit-transition: left 0.3s, top .3s;
-                transition: left 0.3s, top .3s;
-            }
-            
-            .noUi-state-drag * {
-                cursor: inherit !important;
-            }
-            /* Painting and performance;
-* Browsers can paint handles in their own layer.
-*/
-            
-            .noUi-base,
-            .noUi-handle {
-                -webkit-transform: translate3d(0, 0, 0);
-                transform: translate3d(0, 0, 0);
-            }
-            /* Slider size and handle placement;
-*/
-            
-            .noUi-horizontal {
-                height: 4px;
-            }
-            
-            .noUi-horizontal .noUi-handle {
-                width: 13px;
-                height: 13px;
-                border-radius: 50%;
-                left: -7px;
-                top: -4px;
-                background-color: #F0846C;
-            }
-            /* Styling;
-*/
-            
-            .noUi-background {
-                background: #D6D7D9;
-            }
-            
-            .noUi-connect {
-                background: #F0846C;
-                -webkit-transition: background 450ms;
-                transition: background 450ms;
-            }
-            
-            .noUi-origin {
-                border-radius: 2px;
-            }
-            
-            .noUi-target {
-                border-radius: 2px;
-            }
-            
-            /* .noUi-target.noUi-connect {}
-            /* Handles and cursors;
-*/
-             */
-            .noUi-draggable {
-                cursor: w-resize;
-            }
-            
-            .noUi-vertical .noUi-draggable {
-                cursor: n-resize;
-            }
-            
-            .noUi-handle {
-                cursor: default;
-                -webkit-box-sizing: content-box !important;
-                -moz-box-sizing: content-box !important;
-                box-sizing: content-box !important;
-            }
-            
-            .noUi-handle:active {
-                border: 8px solid #F0846C;
-                border: 3px solid grey;
-                -webkit-background-clip: padding-box;
-                background-clip: padding-box;
-                left: -9px;
-                top: -7px;
-            }
-            /* Disabled state;
-*/
-            
-            [disabled].noUi-connect,
-            [disabled] .noUi-connect {
-                background: #B8B8B8;
-            }
-            
-            [disabled].noUi-origin,
-            [disabled] .noUi-handle {
-                cursor: not-allowed;
-            }
-
-            #toptitle{
-                font-size:25px;
-                /* margin-left: 10px; */
-                font-weight:900;
-            }
 
             body{
                 margin:none;
@@ -449,6 +184,9 @@ its values is > 50%. */
                     },
                     'pagetag': {
                         'type': String
+                    },
+                    'isFree': {
+                        'type': Boolean
                     }
                 },
                 created: function() {
@@ -460,6 +198,7 @@ its values is > 50%. */
                     this.district = null;
                     this.isNew = [];
                     this.initprice = 0;
+                    this.isFree = false;
                 },
                 addTags(val) {
                     let myTags = this.shadowRoot.querySelector('#myTags');
@@ -468,9 +207,10 @@ its values is > 50%. */
                 },
                 search() {
                     // search(cats,tags,district,priceStart,priceEnd){
-                    this.shadowRoot.querySelector('change-in-item').search(this.categories, this.tags, this.district, this.isNew, this.priceStart, this.priceStop);
+                    this.shadowRoot.querySelector('change-in-item').search(this.categories, this.tags, this.district, this.isNew, this.priceStart, this.priceStop, this.isFree);
                 },
                 back(value) {
+
                     let posit = 99999;
                     ////categories
                     for (i = 0; i < this.categories.length; i++) {
@@ -536,7 +276,10 @@ its values is > 50%. */
                 },
                 ready: function() {
 
-                    console.log("location.search", decodeURIComponent(location.search))
+                    document.addEventListener('areachange', e => {
+                        this.isFree = e.detail.isFree;
+                        this.search()
+                    })
 
                     let value;
                     document.addEventListener('query-tags', e => {

@@ -122,19 +122,19 @@
 </dom-module>
 
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-webcom',
             properties: {
 
             },
-            created: function () {
+            created: function() {
 
 
 
             },
             //for adding link to the user name connecting wth the databse
-            ready: function () {
+            ready: function() {
                 let that = this;
                 let loc = location.search;
                 let pid = "";
@@ -181,7 +181,7 @@
                     }
                 })
 
-                shadow.querySelector('#review').addEventListener("keypress", function (e) {
+                shadow.querySelector('#review').addEventListener("keypress", function(e) {
                     var key = e.which || e.keyCode || 0;
                     if (key === 13) {
                         that._postRequest();
@@ -204,7 +204,7 @@
 
             },
 
-            _postRequest: function () {
+            _postRequest: function() {
                 let shadow = this.shadowRoot;
                 let loc = location.search;
                 let pid = "";
@@ -254,8 +254,8 @@
                     console.log("BUYERID", buyer);
                     let buyerId = buyer['_id'];
                     let ab = buyerId;
-                    let cd = id.toString();
-                    let orderId = "" + ab + cd;
+                    let cd = pid.toString() + Math.floor((Math.random() * 10));
+                    let orderId = "" + ab + cd.toString();
                     let emailurl = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
                     let p = {
                         "action": "sendContactEmail",

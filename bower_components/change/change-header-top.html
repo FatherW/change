@@ -165,7 +165,7 @@
                     </button>
                 </div>
                 <div>
-                    <button class="paid">收費區</button>
+                    <button class="paid" id="areachange">收費區</button>
                 </div>
                 <change-user-panel>
                     <div><button class="topWrap">/ 註冊</button><button class="topWrap">/ 登入</button></div>
@@ -191,6 +191,7 @@
             ready: function() {
                 let that = this;
                 let shadow = this.shadowRoot;
+
                 shadow.querySelector('#searchmain').addEventListener("keypress", function(e) {
                     var key = e.which || e.keyCode || 0;
                     if (key === 13) {
@@ -198,6 +199,34 @@
                     }
 
                 });
+
+                var isFree = false;
+                shadow.querySelector('#areachange').addEventListener("click", e => {
+                    if (isFree == false) {
+                        Polymer.dzFire('areachange', {
+                            'detail': {
+                                "isFree": true
+                            }
+                        });
+                        isFree = true;
+                        shadow.querySelector('.paid').style.backgroundColor = "#4CAF50";
+                        shadow.querySelector('#areachange').innerText = "免費區";
+                        document.querySelector('#banner2').src = "img/banner.jpeg"
+                    } else {
+                        Polymer.dzFire('areachange', {
+                            'detail': {
+                                "isFree": false
+                            }
+                        });
+                        isFree = false;
+                        shadow.querySelector('.paid').style.backgroundColor = "#F0846C";
+                        shadow.querySelector('#areachange').innerText = "收費區";
+                        document.querySelector('#banner2').src = "img/WX20200513-112437@2x.png"
+
+
+                    }
+
+                })
             },
             searchlist: function() {
                 console.log("diunilaomu");

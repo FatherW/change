@@ -425,7 +425,9 @@ its values is > 50%. */
             }
 
       
-
+            #pricerange{
+                display:block
+            }
 
         </style>
 
@@ -458,7 +460,7 @@ its values is > 50%. */
                     <div class="address">
                         <img id="miniimg" src="http://change.dazzle.website/Website%20Design/listing%20page/img/symbol/listing_page-03.png">
 
-                        <vaadin-text-field id="inputTags" on-keydown="_addTags" placeholder="請輸入標籤"></vaadin-text-field>
+                        <vaadin-text-field id="inputTags" on-keydown="_addTags" placeholder="請輸入標籤" style="width: 90%;"></vaadin-text-field>
                         <paper-tags-input width="100%" id="myTags" style="display:none;"></paper-tags-input>
                     </div>
                     
@@ -504,7 +506,7 @@ its values is > 50%. */
 
         </tbody></table>
         
-        <div>
+        <div id="pricerange">
 
             <table class="table1">
 
@@ -617,7 +619,23 @@ its values is > 50%. */
                 });
                 shadow.querySelector('change-range').new();
 
+                document.addEventListener('areachange', e => {
+                    let free = e.detail.isFree;
+                    if (free == true) {
+                        shadow.querySelector('#pricerange').style.display = "none";
+                        let freecss = shadow.querySelectorAll('.titlecolor')
+                        for (i = 0; i < freecss.length; i++) {
+                            freecss[i].style.backgroundColor = "#4CAF50";
+                        }
+                    } else {
+                        let freecss = shadow.querySelectorAll('.titlecolor')
+                        for (i = 0; i < freecss.length; i++) {
+                            freecss[i].style.backgroundColor = "#F0846C";
+                        }
+                        shadow.querySelector('#pricerange').style.display = "block";
 
+                    }
+                })
             },
 
 

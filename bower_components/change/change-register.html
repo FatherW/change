@@ -135,10 +135,10 @@
             </div>
             <div>
                 <span>已擁有帳戶？</span>
-                <a href="#">立即登入</a>
+                <button on-click="_login">立即登入</button>
             </div>
             <!-- <span class="privacy">簽署即表示您同意Get Change 的服務條款和隱私權政策</span> -->
-            <vaadin-dialog></vaadin-dialog>
+            <vaadin-dialog id="login"></vaadin-dialog>
         </div>
 
     </template>
@@ -154,16 +154,7 @@
                     "type": Number
                 }
             },
-            created: function() {
-
-
-            },
-
-
-
             _register: function() {
-                console.log('ChangeRegister', this.next);
-
                 let shadow = this.shadowRoot;
                 let that = this;
 
@@ -208,13 +199,14 @@
                                             };
                                             console.log("Params", params);
                                             Polymer.postData(registerUrl, params).then(res => {
-                                                console.log("running");
                                                 alert(res.text);
+                                                if (res.code > 0) {
+                                                    this.fileManager = new AwsPackage(res.resolve);
+                                                    this.fileManager.saveFile('json/user-' + res.resole.id + '.json', JSON.stringify(res.resolve));
+
+                                                }
                                             });
-
                                         }
-
-
                                     }
                                 }
                             }
@@ -224,37 +216,33 @@
             },
 
             login: function() {
-                console.log('login');
                 let shadow = this.shadowRoot;
                 let that = this;
-                // Polymer.popup = function (dialog, folder, component, width, height) {
-                //     customElements.whenDefined(component).then(function () {
-                //         dialog.renderer = function (root, dialog) {
-                //             root.innerHTML = '<' + component + '></' + component + '>';
-                //         };
-                //         dialog.resizable = true;
-                //         dialog.resize(width, height);
-                //         dialog.opened = true;
-                //         // Polymer.activeDialog = dialog;   
-                //     });
-                // }
                 let user = store.get('change-user');
                 if (user == null) {
-                    let dialog = shadow.querySelector('vaadin-dialog');
+                    let dialog = shadow.querySelector('vaadin-dialog#login');
                     Polymer.popup(dialog, "change", "change-login", "30%", "50%");
                 } else {
-                    console.log('asda');
                     this.shadowRoot.querySelector('#before').innerHTML = '<button id="register" on-click="_register">/ 註冊</button>< button id = "login" on - click="_login" > / 登入</button >';
                     store.set('change-user', null);
                     location.reload();
                 }
+            },
 
-
-
-
+            _login: function() {
+                let shadow = this.shadowRoot;
+                let that = this;
+                let user = store.get('change-user') || null;
+                if (user == null) {
+                    Polymer.dzFire('close-myself', {});
+                } else {
+                    alert('已經登陸');
+                    location.reload();
+                }
             },
 
             ready: function() {
+
                 let loginUrl = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 let params = {
                     "action": "searchData",
@@ -267,12 +255,10 @@
                     }
                 }
                 Polymer.postData(loginUrl, params).then(res => {
-                    console.log(res);
                     if (res.code > 0) {
                         this.next = res.resolve.length;
                     }
                 });
-                console.log("Entered");
                 let shadow = this.shadowRoot;
                 customElements.whenDefined('vaadin-select').then(function() {
                     const district = [{

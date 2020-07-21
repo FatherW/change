@@ -59,21 +59,22 @@
                     "type": Number
                 }
             },
-            created(){
+            created() {
                 this.like = 0;
                 this.user = store.get('change-user') || null;
                 if (this.user) {
                     this.fileManager = new AwsPackage(this.user);
                     this.dataManager = new DataPackage('_user');
+                    this.prodManager = new DataPackage('product');
+
                 }
-                    
+
             },
-            attributeChangedCallback(){
-                console.log('My ID',this.getAttribute('id'));
+            attributeChangedCallback() {
+                console.log('My ID', this.getAttribute('id'));
             },
-            connectedCallback() {
-            },
-            checkLike(user){
+            connectedCallback() {},
+            checkLike(user) {
                 let shadow = this.shadowRoot;
                 let countlikeproduct = user['likeProduct'].length;
                 var counti2 = 0;
@@ -94,13 +95,13 @@
                 }
 
                 shadow.querySelector('#toggle-heart').checked = this.status;
-            
+
 
                 if (shadow.querySelector('#toggle-heart').checked)
-                    shadow.querySelector('.like-img').setAttribute('src','/img/symbol/like-outlined-selected.png');
+                    shadow.querySelector('.like-img').setAttribute('src', '/img/symbol/like-outlined-selected.png');
                 else
-                    shadow.querySelector('.like-img').setAttribute('src','/img/symbol/like-outlined.png');
-                        
+                    shadow.querySelector('.like-img').setAttribute('src', '/img/symbol/like-outlined.png');
+
 
             },
             ready: function() {
@@ -117,18 +118,18 @@
                 //     "type": "product",
                 //     "id": this.id
                 // };
-                
 
-                Polymer.getContent('/json/product-'+this.id+'.json').then(str=>{
+
+                Polymer.getContent('/json/product-' + this.id + '.json').then(str => {
                     let json = JSON.parse(str);
 
-                        shadow.querySelector('#likes').innerHTML = json['like'];
-                        this.like = json['like'];
-                        if (user){
-                           
-                            this.checkLike(user);
+                    shadow.querySelector('#likes').innerHTML = json['like'];
+                    this.like = json['like'];
+                    if (user) {
 
-                        }
+                        this.checkLike(user);
+
+                    }
                 });
 
                 // Polymer.postData(URL, param).then(res => {
@@ -236,12 +237,18 @@
                                     }
                                 }
                             };
-
+                            console.log(this.liked, "qqqqqqq", JSON.stringify(paramchange));
                             Polymer.postData(URL, paramchange).then(res => {
                                 if (res.code > 0) {
-                                    this.dataManager.loadData(user['_id']).then(res=>{
-                                        this.fileManager.saveFile('/json/user-'+user['_id']+'.json',JSON.stringify(res));
+                                    this.dataManager.loadData(user['_id']).then(res => {
+                                        this.fileManager.saveFile('json/user-' + user['_id'] + '.json', JSON.stringify(res));
                                     });
+
+                                    this.prodManager.loadData(this.id).then(res => {
+                                        this.fileManager.saveFile('json/product-' + this.id + '.json', JSON.stringify(res));
+                                    });
+
+
                                     console.log("reduced");
                                 } else {
                                     console.log("error in delete favorite")
@@ -253,7 +260,7 @@
                     });
 
 
-                    shadow.querySelector('.like-img').setAttribute('src','/img/symbol/like-outlined.png');
+                    shadow.querySelector('.like-img').setAttribute('src', '/img/symbol/like-outlined.png');
                 } else {
                     shadow.querySelector('#likes').innerHTML = parseInt(shadow.querySelector('#likes').innerHTML) + 1;
 
@@ -276,12 +283,15 @@
 
                             Polymer.postData(URL, paramchange2).then(res => {
                                 if (res.code > 0) {
-                                    console.log("increase");
-                                    this.dataManager.loadData(user['_id']).then(res=>{
-                                        console.log('Res',res);
-                                        this.fileManager.saveFile('/json/user-'+user['_id']+'.json',JSON.stringify(res));
+                                    this.dataManager.loadData(user['_id']).then(res => {
+                                        this.liked = res.likeProduct.length;
+                                        this.fileManager.saveFile('json/user-' + user['_id'] + '.json', JSON.stringify(res));
                                     });
 
+
+                                    this.prodManager.loadData(this.id).then(res => {
+                                        this.fileManager.saveFile('json/product-' + this.id + '.json', JSON.stringify(res));
+                                    });
                                 } else {
                                     console.log("error in add favorite")
                                 }
@@ -291,9 +301,9 @@
                         }
                     });
 
-                        shadow.querySelector('.like-img').setAttribute('src','/img/symbol/like-outlined-selected.png');
+                    shadow.querySelector('.like-img').setAttribute('src', '/img/symbol/like-outlined-selected.png');
 
-                        
+
 
 
                 }

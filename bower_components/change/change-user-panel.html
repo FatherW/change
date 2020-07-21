@@ -42,8 +42,9 @@
             <button id="register" on-click="_register">/ 註冊</button>
             <button id="login" on-click="_login">/ 登入</button>
         </div>
-        <vaadin-dialog></vaadin-dialog>
+        <vaadin-dialog id="register"></vaadin-dialog>
     </template>
+
 
 </dom-module>
 
@@ -56,7 +57,6 @@
 
             },
             _login: function() {
-                console.log('login');
                 let shadow = this.shadowRoot;
                 let that = this;
                 let user = store.get('change-user');
@@ -64,37 +64,36 @@
                     let dialog = shadow.querySelector('vaadin-dialog');
                     Polymer.popup(dialog, "change", "change-login", "30%", "50%");
                 }
-
             },
 
             _register: function() {
-                console.log('Register');
                 let shadow = this.shadowRoot;
                 let that = this;
                 let user = store.get('change-user');
                 if (user == null) {
-                    let dialog = shadow.querySelector('vaadin-dialog');
+                    let dialog = shadow.querySelector('vaadin-dialog#register');
                     Polymer.popup(dialog, "change", "change-register", "40%", "90%");
                 } else {
                     store.set('change-user', null);
                     location.reload();
                 }
-
             },
-
-
 
             ready: function() {
                 let user = store.get('change-user') || null;
-                console.log(user);
                 if (user != null) {
-                    console.log('entered');
                     this.shadowRoot.querySelector('#register').innerHTML = ' / 登出';
                     if (user['head'] == "") {
                         user['head'] = "http://change.dazzle.website/img/head.svg";
                     }
                     this.shadowRoot.querySelector('#login').innerHTML = '<a href="/user.html?' + user['_id'] + '"><img src="' + user['head'] + '"></a>';
                 }
+                let s = this.shadowRoot;
+                document.addEventListener('close-myself', e => {
+                    s.querySelector('vaadin-dialog#register').opened = false;
+                    let dialog = s.querySelector('vaadin-dialog#register');
+                    Polymer.popup(dialog, "change", "change-login", "40%", "90%");
+                });
             }
 
         });
