@@ -1,0 +1,62 @@
+<link href="../polymer/polymer.html" rel="import">
+<link rel="import" href="./change-user-panel.html">
+
+<dom-module id="change-announcement">
+    <template>
+        <style>
+            #wrap {
+                display: flex;
+                justify-content: space-around;
+                background:rgb(242, 242, 242);
+                padding: 0px;
+                margin: 0px;
+            }
+
+            .svg-circleplus {
+                height: 60px;
+                stroke: #F0846C;
+            }
+
+            change-announcement {
+                position: fixed;
+                bottom: 0px;
+                width: 100%;
+                background:rgb(242, 242, 242);
+                color: #808080;
+                padding: 0px;
+            }
+            #big{
+                width: 75px;
+                background-image: url("../../img/big.png");
+                background-position: center center;
+                background-size: contain;
+                background-repeat: no-repeat;
+            }
+            #add{
+                width: 75px;
+                background-image: url("../../img/add.png");
+                background-position: center center;
+                background-size: contain;
+                background-repeat: no-repeat;
+            }
+        </style>
+        <div id="wrap">
+            <div id="big"></div>
+            <div id="add">
+                
+            </div>
+            <div>
+                <change-user-panel></change-user-panel>
+            </div>
+        </div>
+    </template>
+</dom-module>
+<script>
+    (function() {
+        Polymer({
+            is: 'change-announcement',
+            properties: {},
+            ready: function() {},
+        });
+    })();
+</script>
