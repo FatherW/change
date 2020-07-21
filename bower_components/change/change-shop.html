@@ -3,6 +3,7 @@
 <link rel="import" href="../dz-dazzle/dz-block.html">
 <link rel="import" href="../change/change-in-item.html?sd3234">
 <link rel="import" href="change-like2.html">
+<link rel="import" href="change-mobileslide.html">
 <link rel="import" href="../change/change-slidelist.html?sdkflsa">
 <link rel="import" href="../vaadin-accordion/vaadin-accordion.html">
 <link rel="import" href="../paper-tags-input/paper-tags-input.html">
@@ -148,28 +149,31 @@
             }
 
 
+            #viewingcat{
+                    display:block;
+                }
             body {
                 margin: none;
             }
 
+            change-mobileslide{
+                display:none;
+            }
             @media only screen and (max-width: 768px) {
                 #rightele {
                     width: 100%;
                 }
-
-                things-grid {
-                    display: grid;
-                    width: 100%;
-                    height: 100%;
-                    /* grid-row-gap: 15px; */
-                    /* padding: 50px; */
-                    /* grid-column-gap: 50px; */
-                    /* grid-row-gap: 40px; */
-                    grid-template-columns: repeat(2, 1fr);
-                    background-color: white;
-                    -webkit-box-shadow: 0px -4px 8px 0px rgba(50, 49, 56, 0.2);
-                    -moz-box-shadow: 0px -4px 8px 0px rgba(50, 49, 56, 0.2);
-                    box-shadow: 0px -4px 8px 0px rgba(50, 49, 56, 0.2);
+                change-slidelist{
+                    display: none;
+                }
+                change-mobileslide{
+                    display:block;
+                }
+                #viewingcat{
+                    display:none;
+                }
+                #rightele{
+                    margin-top: 5px;
                 }
             }
         </style>
@@ -177,6 +181,7 @@
         <div id="containall">
             <div id="leftele">
                 <change-slidelist></change-slidelist>
+                <change-mobileslide></change-mobileslide>
             </div>
 
             <div id="rightele" style="float:left; margin-top:50px;border:'none'; ">

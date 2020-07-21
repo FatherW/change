@@ -1,0 +1,156 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<link rel="import" href="../dz-dazzle/dz-block.html">
+<link rel="import" href="../change/change-in-item.html">
+<link rel="import" href="../change/change-category.html">
+<link rel="import" href="../change/change-district.html">
+<link rel="import" href="../change/change-range.html">
+
+<link rel="import" href="change-like2.html">
+<link rel="import" href="../vaadin-accordion/vaadin-accordion.html">
+<dom-module id="change-mobileslide">
+
+    <template>
+
+        <style>
+            *{
+                font-family: sans-serif,微軟正黑體;
+            }
+         
+            #button1{
+                background-color: white;
+                border: solid;
+                border-color: lightgrey;
+                border-radius: 5px;
+                padding: 5px 11px;
+                font-size: 13px;
+                letter-spacing: 1px;
+                outline: none;
+            }
+            #button1:active{
+                border: hidden;
+            }
+            #button1:hover{
+                cursor:pointer;
+            }
+        </style>
+
+        <!-- <div >
+            
+            <div class="topnav" id="myTopnav">
+
+
+                <a href="javascript:void(0);" style="font-size:15px;" class="icon" on-click="myFunction">篩選</a>
+            </div>
+        </div> -->
+
+
+        <div><button id="button1">(img) 篩選</button></div>
+        
+
+
+    </template>
+</dom-module>
+
+
+<script>
+    (function() {
+        Polymer({
+            is: 'change-mobileslide',
+            properties: {
+                'countcate': {
+                    "type": Number
+                },
+                'cateIdarray': {
+                    "type": Array
+                },
+                'allIdarray': {
+                    "type": Array
+                },
+                'storeingcate': {
+                    "type": Array
+                }
+
+            },
+            created: function() {
+                let that = this;
+            },
+
+            ready: function() {
+                // let shadow = this.shadowRoot;
+                // let that = this;
+                // let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                // let params = {
+                //     "action": "searchData",
+                //     "index": "change",
+                //     "type": "categories",
+                //     "body": {
+                //         "sort": [{
+                //             "parent": {
+                //                 "order": "asc"
+                //             },
+                //             "id": {
+                //                 "order": "asc"
+                //             }
+                //         }],
+                //         "query": {
+                //             "match_all": {}
+                //         }
+                //     }
+                // };
+                // Polymer.postData(url, params).then(res => {
+                //     let maincates = [];
+                //     let subcates = [];
+                //     for (i = 0; i < res.resolve.length; i++) {
+                //         if (res.resolve[i]['parent'] == "0") {
+                //             maincates.push(res.resolve[i]);
+                //         } else {
+                //             subcates.push(res.resolve[i]);
+                //         }
+                //     };
+                //     let div = shadow.querySelector('div#myTopnav');
+                //     maincates.forEach(maincate => {
+                //         let div1 = document.createElement('div');
+                //         div1.setAttribute('class', 'dropdown');
+                //         // div1 包住所有的东西
+                //         let button = document.createElement('button')
+                //         button.setAttribute('class', 'dropbtn');
+                //         button.innerText = maincate['name'];
+                //         let div2 = document.createElement('div');
+                //         div2.setAttribute('class', 'dropdown-content');
+                //         subcates.forEach(subcate => {
+                //             if (subcate['parent'] == maincate['_id']) {
+                //                 let a = document.createElement('a');
+                //                 a.setAttribute('href', subcate['link']);
+                //                 a.innerText = subcate['name'];
+                //                 div2.appendChild(a);
+                //                 console.log("a", a);
+                //             }
+                //         });
+                //         div1.appendChild(button);
+                //         div1.appendChild(div2);
+                //         div.appendChild(div1);
+
+                //     });
+                //     let aboutUs = document.createElement('li');
+                //     aboutUs.setAttribute('class', 'dropdown');
+                //     aboutUs.setAttribute('style', 'color: black;');
+                //     aboutUs.innerHTML = ''
+
+                // })
+            },
+            // myFunction: function() {
+            //     console.log("diu");
+            //     let shadow = this.shadowRoot;
+            //     var x = shadow.querySelector("#myTopnav");
+            //     console.log("X Class Name", x.className);
+            //     if (x.className === "topnav") {
+            //         x.className += " responsive";
+            //     } else {
+            //         x.className = "topnav";
+            //     }
+            // },
+
+        });
+    })();
+</script>
