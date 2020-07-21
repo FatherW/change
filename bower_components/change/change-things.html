@@ -483,7 +483,6 @@
                 var user = store.get('change-user') || null;
                 let shadow = this.shadowRoot;
                 this.all = all;
-                console.log('Item', all);
                 this.id = this.getAttribute('id');
                 if (Array.isArray(all['pics']))
                     this.pics = all['pics'][0];
@@ -498,7 +497,7 @@
                 this.ownerId = all['ownerId'];
                 this.detailUrl = '/edit-product.html?p' + all['id'] + 'u' + all['ownerId'];
                 this.userUrl = "/user.html?" + this.ownerId;
-                console.log('Link', this.detailUrl, this.userUrl);
+                // console.log('Link', this.detailUrl, this.userUrl);
                 if (all['isNew'] == true)
                     shadow.querySelector('.s_title_tags').innerHTML = "<polygon points=\"0,0 40,0 30,16 0,16\" style=\"fill:#ebbd35;stroke:#ebbd35;stroke-width:0\"></polygon><text x=\"3\" y=\"12\" fill=\"white\" id=\"isNew\" >全新</text>"
                 else

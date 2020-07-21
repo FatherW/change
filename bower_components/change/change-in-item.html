@@ -131,7 +131,6 @@
                         "isFree": isfree2
                     }
                 }];
-                console.log("good", Query);
                 ////search the categoriews
                 let cateid = [];
                 if (cats != undefined || cats != null) {
@@ -318,7 +317,7 @@
                                             price2.push(item['_id'])
                                         }
                                     });
-                                    console.log("price1n2", price1, price2, "from and to", fromprice, toprice);
+                                    // console.log("price1n2", price1, price2, "from and to", fromprice, toprice);
                                     for (x = 0; x < price1.length; x++) {
                                         for (y = 0; y < price2.length; y++) {
                                             if (price1[x] == price2[y]) {
@@ -341,7 +340,7 @@
                                         addi.setAttribute('id', theans2[i]);
                                         shadow.querySelector('#blank').appendChild(addi);
                                     }
-                                    console.log("theans1", theans, "theans2", theans2);
+                                    // console.log("theans1", theans, "theans2", theans2);
                                     this.countitem += 8;
 
 
