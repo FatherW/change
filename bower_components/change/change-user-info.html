@@ -86,6 +86,7 @@
             }
 
             @media only screen and (min-width: 640px) {
+
                 /* #ap {
                     float: right;
                     top: -280px;
@@ -96,6 +97,10 @@
                     top: -280px;
                     left: 200px;
                 } */
+                .grid-container {
+                    display: grid;
+                    grid-template-columns: 1fr;
+                }
             }
         </style>
         <div id="container">
@@ -124,16 +129,16 @@
     </template>
 </dom-module>
 <script>
-    (function() {
+    (function () {
         Polymer({
             is: 'change-user-info',
             properties: {
 
             },
-            created: function() {
+            created: function () {
 
             },
-            ready: function() {
+            ready: function () {
                 let loc = location.search;
                 let user = store.get('change-user') || null;
                 let shadow = this.shadowRoot;
@@ -187,10 +192,10 @@
                     }
                 }
             },
-            execute: function() {
+            execute: function () {
                 console.log("Entered");
                 let shadow = this.shadowRoot;
-                customElements.whenDefined('vaadin-select').then(function() {
+                customElements.whenDefined('vaadin-select').then(function () {
                     const district = [{
                         id: '中西區',
                         name: '中西區'
@@ -246,14 +251,14 @@
                         id: '西貢區',
                         name: '西貢區'
                     }];
-                    shadow.querySelector('vaadin-select').renderer = function(root) {
+                    shadow.querySelector('vaadin-select').renderer = function (root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        district.forEach(function(item) {
+                        district.forEach(function (item) {
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
@@ -264,7 +269,7 @@
                     };
                 });
             },
-            toggle: function() {
+            toggle: function () {
                 let user = store.get('change-user') || null;
                 let loc = location.search;
                 console.log("Path", loc);
