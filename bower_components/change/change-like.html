@@ -79,9 +79,11 @@
                 let countlikeproduct = user['likeProduct'].length;
                 var counti2 = 0;
                 checked2 = false;
+                console.log("user liked", user);
                 for (i = 0; i < countlikeproduct; i++) {
                     if (user['likeProduct'][i] == this.id) {
-                        this.liked = i
+                        this.liked = i;
+                        console.log('checked');
                         checked2 = true;
                     } else {
                         counti2++;
@@ -119,16 +121,20 @@
                     shadow.querySelector('#likes').innerHTML = json['like'];
                     this.like = json['like'];
                     if (user2) {
-                        let url = "/json/user-" + user['_id'] + ".json";
+                        let url = "/json/user-" + user2['_id'] + ".json";
+                        console.log("th user url", url);
+
                         Polymer.getContent(url).then(str => {
                             json = JSON.parse(str);
                             that.user = json;
+                            this.checkLike(json);
 
                         });
 
 
-                        this.checkLike(user);
 
+                    } else {
+                        console.log("not login");
                     }
                 });
 
