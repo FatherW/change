@@ -397,11 +397,14 @@
             .clearfix {
                 display: flex;
             }
-
-            /* [part="input-field"] {
-                background-color: white;
-            } */
-
+            .fanpage{
+                margin-top: 11px;
+                margin-left: 25px;
+            }
+            .tbar{
+                display: flex;
+                margin-left: 25px;
+            }
             .outer {
                 margin: 0;
                 width: 100%;
@@ -414,9 +417,23 @@
                     display: grid;
                     grid-template-columns: 100%;
                     margin-bottom: 100px;
-                    margin-left: 50px;
-                }
 
+                }
+                .left-pics {
+                    border-right: none;
+                    padding: 5px 10px 0 10px;
+                    height: auto;
+                }
+                .tbar{
+                    display:block;
+                    margin-left: 25px;
+                }
+                .right-product {
+                    padding-top: 50px;
+                    height: auto;
+                    padding-left: 13px;
+                    padding-bottom: 50px;
+                }
                 .bigPic {
                     height: 300px;
                 }
@@ -429,14 +446,7 @@
 
         <header>
             <div id="tbar">
-                <div style="display: flex; margin-left: 25px;">
-                    <!-- V1 -->
-                    <!-- <div style="margin-top: 11px; margin-left: 12px;">
-                                <vaadin-select id="vs1" placeholder="選擇分類"></vaadin-select>
-                            </div> -->
-                    <!-- V2 -->
-                    <!-- <change-subcat id="vs1" style="margin-top: 13px; margin-left: 12px;">
-                            </change-subcat> -->
+                <div class="tbar">
 
                     <div class="container">
                         <vaadin-menu-bar class="cat"></vaadin-menu-bar>
@@ -444,16 +454,10 @@
                         <span></span>
                     </div>
 
-                    <div style="margin-top: 11px; margin-left: 25px;">
+                    <div class="fanpage">
                         <vaadin-select id="pro" placeholder="専頁"></vaadin-select>
                     </div>
 
-                    <!--check box, public-->
-                    <!-- <vaadin-checkbox-group label="Label" theme="vertical" id="firstlabel">
-                        <vaadin-checkbox theme="custom" value="1" id="public">是否公開(専頁用)</vaadin-checkbox>
-                    </vaadin-checkbox-group> -->
-
-                    <!--check box, free-->
                     <vaadin-checkbox-group label="Label" theme="vertical" id="secondlabel">
                         <vaadin-checkbox theme="custom" value="1" id="free">是否免費區
                         </vaadin-checkbox>
@@ -1086,7 +1090,7 @@
                 } else {
                     shadow.querySelector('#a1').innerHTML = '<img id="gand" src=' + user['head'] + '>';
                 };
-                //check the username 
+                //check the username
                 console.log("SEE", shadow.querySelector('#gand').src);
 
 
