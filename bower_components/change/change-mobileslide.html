@@ -1,10 +1,10 @@
 <link rel="import" href="../polymer/polymer.html">
-
+<link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
 <link rel="import" href="../dz-dazzle/dz-block.html">
 <link rel="import" href="../change/change-in-item.html">
 <link rel="import" href="../change/change-category.html">
 <link rel="import" href="../change/change-district.html">
-<link rel="import" href="../change/change-range.html">
+<link rel="import" href="../change/change-slidelist.html">
 
 <link rel="import" href="change-like2.html">
 <link rel="import" href="../vaadin-accordion/vaadin-accordion.html">
@@ -45,7 +45,9 @@
         </div> -->
 
 
-        <div><button id="button1">(img) 篩選</button></div>
+        <div><button id="button1" on-click="openselect">(img) 篩選</button></div>
+        <vaadin-dialog id="select"></vaadin-dialog>
+        
         
 
 
@@ -75,7 +77,10 @@
             created: function() {
                 let that = this;
             },
-
+            openselect() {
+                let dialog = this..shadowRoot.querySelector('vaadin-dialog#select');
+                Polymer.popup(dialog, "change", "change-slidelist", "350px", "6000px");
+            },
             ready: function() {
                 // let shadow = this.shadowRoot;
                 // let that = this;
