@@ -78,7 +78,8 @@
                 let that = this;
             },
             openselect() {
-                let dialog = this..shadowRoot.querySelector('vaadin-dialog#select');
+                console.log("good");
+                let dialog = this.shadowRoot.querySelector('vaadin-dialog#select');
                 Polymer.popup(dialog, "change", "change-slidelist", "350px", "6000px");
             },
             ready: function() {
