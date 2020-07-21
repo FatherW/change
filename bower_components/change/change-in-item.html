@@ -7,33 +7,33 @@
 <dom-module id="change-in-item">
     <template>
         <style>
-                     
-                     *{
-                font-family: sans-serif,微軟正黑體;
+            * {
+                font-family: sans-serif, 微軟正黑體;
             }
+
             .things-grid {
-				display: grid;
-                width: 97%; 
-                height:100%;
+                display: grid;
+                width: 97%;
+                height: 100%;
                 grid-row-gap: 15px;
-				padding:50px;
-				grid-column-gap: 50px;
+                padding: 50px;
+                grid-column-gap: 50px;
                 grid-row-gap: 40px;
-				grid-template-columns: repeat(4, 1fr);
+                grid-template-columns: repeat(4, 1fr);
                 background-color: white;
                 -webkit-box-shadow: 0px -4px 8px 0px rgba(50, 49, 56, 0.2);
-                -moz-box-shadow:0px -4px 8px 0px rgba(50, 49, 56, 0.2);
-                box-shadow:0px -4px 8px 0px rgba(50, 49, 56, 0.2);
+                -moz-box-shadow: 0px -4px 8px 0px rgba(50, 49, 56, 0.2);
+                box-shadow: 0px -4px 8px 0px rgba(50, 49, 56, 0.2);
             }
-      
 
-            #morebutton:hover{
+
+            #morebutton:hover {
                 cursor: pointer;
                 color: gray;
                 /* text-decoration: underline; */
             }
 
-            #morebutton{
+            #morebutton {
                 align-items: center;
                 border: 1px;
                 width: 200px;
@@ -42,7 +42,7 @@
                 display: block;
             }
 
-            .botbutton{
+            .botbutton {
                 text-align: center;
                 display: grid;
                 width: 97%;
@@ -55,10 +55,10 @@
                 -moz-box-shadow: 0px 4px 8px -1px rgba(50, 49, 56, 0.2);
                 box-shadow: 0px 4px 8px -1px rgba(50, 49, 56, 0.2);
             }
-            
 
 
-            
+
+
             @media (max-width: 1292px) {
                 .things-grid-middle-mobile {
                     display: grid;
@@ -71,11 +71,13 @@
                     grid-template-columns: repeat(3, 1fr);
                     background-color: white;
                 }
-                change-things{
-                    width:80%;
-                    height:80%
+
+                change-things {
+                    width: 80%;
+                    height: 80%
                 }
             }
+
             @media (max-width: 940px) {
                 .things-grid-small-mobile {
                     display: grid;
@@ -88,7 +90,9 @@
                     grid-template-columns: repeat(2, 1fr);
                     background-color: white;
                 }
-            }  @media (max-width: 740px) {
+            }
+
+            @media (max-width: 740px) {
                 .things-grid-small-mobile {
                     display: grid;
                     width: 100%;
@@ -100,17 +104,48 @@
                     grid-template-columns: repeat(1, 1fr);
                     background-color: white;
                 }
+
+                .things-grid {
+                    display: grid;
+                    width: 95%;
+                    /* padding-left: 15px; */
+                    height: 100%;
+                    grid-row-gap: 15px;
+                    padding: 1px;
+                    padding-left: 15px;
+                    grid-column-gap: 0px;
+                    grid-row-gap: 10px;
+                    grid-template-columns: repeat(2, 1fr);
+                    background-color: white;
+                    -webkit-box-shadow: 0px -4px 8px 0px rgba(50, 49, 56, 0.2);
+                    -moz-box-shadow: 0px -4px 8px 0px rgba(50, 49, 56, 0.2);
+                    box-shadow: 0px -4px 8px 0px rgba(50, 49, 56, 0.2);
+                }
+
+                .botbutton {
+                    text-align: center;
+                    display: block;
+                    width: 71%;
+                    margin-right: 0%;
+                    background-color: white;
+                    /* grid-template-columns: repeat(3, 1fr); */
+                    /* grid-column-gap: 75px; */
+                    /* padding: 0px 50px 0px 50px; */
+                    margin-bottom: 46px;
+                    -webkit-box-shadow: 0px 4px 8px -1px rgba(50, 49, 56, 0.2);
+                    -moz-box-shadow: 0px 4px 8px -1px rgba(50, 49, 56, 0.2);
+                    box-shadow: 0px 4px 8px -1px rgba(50, 49, 56, 0.2);
+                }
             }
-
-
         </style>
 
 
 
-<!-- <div class="initemtitle" id="viewingcat">你正在瀏覽的分類  </div> -->
-<!-- <div class="things-grid" id="blank"></div>
+        <!-- <div class="initemtitle" id="viewingcat">你正在瀏覽的分類  </div> -->
+        <!-- <div class="things-grid" id="blank"></div>
 <div class="botbutton"><button id="morebutton" on-click="_showmore">//更多//</button>
 </div> -->
+<<<<<<< HEAD
 <div class="things-grid" id="blank"></div>
 <div class="blank"></div>
 <div class="botbutton">
@@ -118,6 +153,14 @@
         <vaadin-button id="morebutton" on-click="displaymore">更多</vaadin-button>
     </div>
 </div>
+=======
+        <div class="things-grid" id="blank"></div>
+        <div class="botbutton">
+            <div style="display:inline-flex;">
+                <vaadin-button id="morebutton" on-click="displaymore">更多</vaadin-button>
+            </div>
+        </div>
+>>>>>>> a285594d85fa35bb14990a39b23a55159e47cf7c
 
 
 
