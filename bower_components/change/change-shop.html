@@ -242,12 +242,11 @@
 
                                 if (statnew1 == true) {
 
-                                    statnew1 = Boolean(false);
-
+                                    this.shadowRoot.querySelector('change-slidelist').shadowRoot.querySelector('#isnew1').checked = Boolean(false);
                                 }
                             } else {
                                 if (statnew2 == true) {
-                                    statnew2 = Boolean(false);
+                                    this.shadowRoot.querySelector('change-slidelist').shadowRoot.querySelector('#isnew2').checked = Boolean(false);
                                 }
                             }
                             break
