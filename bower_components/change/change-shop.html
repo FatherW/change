@@ -95,7 +95,9 @@
 
             #rightele {
                 width: 70%;
-
+                float:left; 
+                margin-top:50px;
+                border:'none';
             }
 
 
@@ -162,6 +164,7 @@
             @media only screen and (max-width: 768px) {
                 #rightele {
                     width: 100%;
+                    margin-top: 5px;
                 }
                 change-slidelist{
                     display: none;
@@ -172,9 +175,7 @@
                 #viewingcat{
                     display:none;
                 }
-                #rightele{
-                    margin-top: 5px;
-                }
+               
             }
         </style>
 
@@ -184,7 +185,7 @@
                 <change-mobileslide></change-mobileslide>
             </div>
 
-            <div id="rightele" style="float:left; margin-top:50px;border:'none'; ">
+            <div id="rightele" >
                 <div class="initemtitle" id="viewingcat">你正在瀏覽的分類 <paper-tags-input width="100%" id="myTags">
                     </paper-tags-input>
                 </div>
