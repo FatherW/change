@@ -15,29 +15,44 @@
                 overflow: hidden;
             }
 
+            #content {
+                width: 40%;
+                margin: 0 auto;
+            }
+
+            h1 {
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
         </style>
-   <div id="content">
-    <h1>恭喜你!你已成功註冊!</h1>
-    
-   </div>
+        <div id="content">
+            <h1>註冊成功:</h1>
+            <h3>恭喜！你已成功註冊帳戶，一起減廢，為環保出一分力。</h3>
+            <br>
+            <h3>以後只需透過電腦或手機瀏覽，即可上載物品平台，讓全港看見！</h3>
+            <a href="http://change.dazzle.website/">change.dazzle.website</a>
+            <br>
+            <h3>Get TV 讓你生活Get 多啲</h3>
+
+        </div>
     </template>
 
 </dom-module>
 
 <script>
-    (function() {
+    (function () {
         Polymer({
             is: 'confirm-regis',
             properties: {
 
             },
-            created: function() {
+            created: function () {
 
 
 
             },
             //for adding link to the user name connecting wth the databse
-            ready: function() {
+            ready: function () {
                 let loc = location.search;
                 // let loc = "?token=1594953468686178216261";
                 let token = "";

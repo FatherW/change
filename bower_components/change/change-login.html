@@ -5,6 +5,8 @@
 <link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
 <link rel="import" href="change-register.html">
 <link rel="import" href="change-reset.html">
+<!-- <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com"> -->
+
 
 
 <dom-module id="change-login">
@@ -139,6 +141,7 @@
             }
         </style>
         <style include="icon-styles"></style>
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
         <div class="login-grid">
             <span class="font-sizeh1">登入</span>
             <div>
@@ -174,15 +177,12 @@
 
 </dom-module>
 <script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
+<script async defer src="https://apis.google.com/js/platform.js"></script>
 <script>
     (function() {
         Polymer({
             is: 'change-login',
             properties: {
-
-            },
-            created: function() {
-
 
             },
 
@@ -202,6 +202,10 @@
                     version: 'v7.0',
                     status: true
                 });
+
+
+
+
                 this.status = false;
                 let that = this;
                 this.shadowRoot.querySelector('#changePassword1').addEventListener("keypress", function(e) {
@@ -211,6 +215,11 @@
                     }
 
                 });
+
+
+
+
+
             },
 
             log: function() {
@@ -253,26 +262,11 @@
                 console.log('Register');
                 let shadow = this.shadowRoot;
                 let that = this;
-                // Polymer.popup = function (dialog, folder, component, width, height) {
-                //     customElements.whenDefined(component).then(function () {
-                //         dialog.renderer = function (root, dialog) {
-                //             root.innerHTML = '<' + component + '></' + component + '>';
-                //         };
-                //         dialog.resizable = true;
-                //         dialog.resize(width, height);
-                //         dialog.opened = true;
-                //         // Polymer.activeDialog = dialog;
-                //     });
-                // }
                 let dialog = shadow.querySelector('vaadin-dialog');
-
                 Polymer.popup(dialog, "change", "change-register", "40%", "90%");
-
             },
 
             _login: function() {
-                console.log('ChangeLogin');
-
                 let shadow = this.shadowRoot;
                 let that = this;
                 let uid = shadow.querySelector('#changeEmail1').value;
@@ -302,7 +296,7 @@
                                         location.reload();
                                     } else {
 
-                                        alert("請先進行電郵驗證")
+                                        alert("請先進行電郵驗證");
 
                                     }
 

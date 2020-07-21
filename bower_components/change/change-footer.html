@@ -152,7 +152,17 @@
             is: 'change-footer',
             properties: {},
             created: function() {},
-            ready: function() {},
+            ready: function() {
+                document.addEventListener('areachange', e => {
+                    if (e.detail.isFree == true) {
+                        this.shadowRoot.querySelector('.footer').style.backgroundColor = "#4CAF50";
+
+                    } else {
+                        this.shadowRoot.querySelector('.footer').style.backgroundColor = "#F0846C";
+
+                    }
+                })
+            },
 
 
 

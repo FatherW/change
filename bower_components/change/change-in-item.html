@@ -27,20 +27,20 @@
             }
       
 
-            #morebutton:hover{
+            /* #morebutton:hover{
                 cursor: pointer;
                 color: gray;
-                /* text-decoration: underline; */
-            }
+                *** text-decoration: underline; ****
+            } */
 
-            #morebutton{
+            /* #morebutton{
                 align-items: center;
                 border: 1px;
                 width: 200px;
                 height: 50px;
                 font-size: 25px;
                 display: block;
-            }
+            } */
 
             .botbutton{
                 text-align: center;
@@ -61,6 +61,7 @@
         <vaadin-button id="morebutton" on-click="displaymore">更多</vaadin-button>
     </div>
 </div>
+
 
 
     </template>
@@ -113,14 +114,24 @@
             },
 
             // search:function(cats,tags,district,priceStart,priceEnd){
-            search(cats, tags, district, isNew, priceStart, priceEnd) {
+            search(cats, tags, district, isNew, priceStart, priceEnd, isFree) {
 
                 let that = this;
                 let shadow = this.shadowRoot;
                 let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 //////cate Id
                 // let tagsQuery = ['平價','沒有'];
-                let Query = [];
+                if (isFree == undefined || isFree == null || isFree == false) {
+                    var isfree2 = false;
+                } else {
+                    var isfree2 = true;
+                }
+                let Query = [{
+                    "match": {
+                        "isFree": isfree2
+                    }
+                }];
+                console.log("good", Query);
                 ////search the categoriews
                 let cateid = [];
                 if (cats != undefined || cats != null) {
@@ -134,7 +145,6 @@
                         });
                     };
                 };
-
                 //////search the isNew
                 if (isNew != undefined || isNew != null) {
 
@@ -296,40 +306,79 @@
                                 list.shadowRoot.querySelector('change-range').new();
 
 
-                                if (toprice > 1) {
-                                    Polymer.postData(url, rangeparam).then(res => {
-                                        if (res.code > 0) {
-                                            var theans2 = [];
-                                            for (q = 0; q < res.resolve.length; q++) {
-                                                for (v = 0; v < theans.length; v++) {
-                                                    if (res.resolve[q]['_id'] == theans[v]['_id']) {
-                                                        theans2.push(res.resolve[q]['_id'])
-                                                    }
-                                                }
-                                            }
-
-                                            this.res2 = theans2
-                                            this.res = [];
-                                            let check8 = 8;
-                                            if (theans2.length < 8) {
-                                                check8 = theans2.length;
-                                                shadow.querySelector('#morebutton').style.display = 'none';
-                                            } else {
-                                                shadow.querySelector('#morebutton').style.display = 'block';
-                                            }
-                                            shadow.querySelector('#blank').innerHTML = "";
-                                            for (i = 0; i < check8; i++) {
-                                                let addi = document.createElement('change-things');
-                                                addi.setAttribute('id', theans2[i]);
-                                                shadow.querySelector('#blank').appendChild(addi);
-                                            }
-                                            this.countitem += 8;
-
-
-                                        } else {
-                                            console.log('error23')
+                                if (toprice > 1 && isfree2 == false) {
+                                    var price1 = [];
+                                    var price2 = [];
+                                    var theans2 = [];
+                                    theans.forEach(item => {
+                                        if (item['price'] > fromprice) {
+                                            price1.push(item['_id']);
                                         }
-                                    })
+                                        if (item['price'] < toprice) {
+                                            price2.push(item['_id'])
+                                        }
+                                    });
+                                    console.log("price1n2", price1, price2, "from and to", fromprice, toprice);
+                                    for (x = 0; x < price1.length; x++) {
+                                        for (y = 0; y < price2.length; y++) {
+                                            if (price1[x] == price2[y]) {
+                                                theans2.push(price1[x])
+                                            }
+                                        }
+                                    };
+                                    this.res2 = theans2;
+                                    this.res = [];
+                                    let check8 = 8;
+                                    if (theans2.length < 8) {
+                                        check8 = theans2.length;
+                                        shadow.querySelector('#morebutton').style.display = 'none';
+                                    } else {
+                                        shadow.querySelector('#morebutton').style.display = 'block';
+                                    }
+                                    shadow.querySelector('#blank').innerHTML = "";
+                                    for (i = 0; i < check8; i++) {
+                                        let addi = document.createElement('change-things');
+                                        addi.setAttribute('id', theans2[i]);
+                                        shadow.querySelector('#blank').appendChild(addi);
+                                    }
+                                    console.log("theans1", theans, "theans2", theans2);
+                                    this.countitem += 8;
+
+
+
+                                    // Polymer.postData(url, rangeparam).then(res => {
+                                    //     if (res.code > 0) {
+                                    //         var theans2 = [];
+                                    //         for (q = 0; q < res.resolve.length; q++) {
+                                    //             for (v = 0; v < theans.length; v++) {
+                                    //                 if (res.resolve[q]['_id'] == theans[v]['_id']) {
+                                    //                     theans2.push(res.resolve[q]['_id'])
+                                    //                 }
+                                    //             }
+                                    //         }
+
+                                    //         this.res2 = theans2
+                                    //         this.res = [];
+                                    //         let check8 = 8;
+                                    //         if (theans2.length < 8) {
+                                    //             check8 = theans2.length;
+                                    //             shadow.querySelector('#morebutton').style.display = 'none';
+                                    //         } else {
+                                    //             shadow.querySelector('#morebutton').style.display = 'block';
+                                    //         }
+                                    //         shadow.querySelector('#blank').innerHTML = "";
+                                    //         for (i = 0; i < check8; i++) {
+                                    //             let addi = document.createElement('change-things');
+                                    //             addi.setAttribute('id', theans2[i]);
+                                    //             shadow.querySelector('#blank').appendChild(addi);
+                                    //         }
+                                    //         this.countitem += 8;
+
+
+                                    //     } else {
+                                    //         console.log('error23')
+                                    //     }
+                                    // })
                                 } else {
                                     this.res2 = theans
                                     let check8 = 8;

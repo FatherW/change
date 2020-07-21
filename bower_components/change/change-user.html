@@ -42,7 +42,7 @@
             <div id="prods">
                 <vaadin-tabs selected="{{page}}">
                     <vaadin-tab>我的貨物</vaadin-tab>
-                    <vaadin-tab>我的選購清單</vaadin-tab>
+                    <vaadin-tab>我的喜愛清單</vaadin-tab>
                     <vaadin-tab>過去交易</vaadin-tab>
                     <vaadin-tab>已下架貨品</vaadin-tab>
                 </vaadin-tabs>
@@ -80,12 +80,16 @@
             ready: function() {
                 let loc = location.search;
                 let id = "";
+                let shadow = this.shadowRoot;
+                let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+
                 for (var i = 1; i < loc.length; i++) {
                     console.log("Working");
                     id += loc[i];
                 }
+                let param = [];
                 if (id != "") {
-                    let shadow = this.shadowRoot;
+                    /////search my product
                     params = [{
                         "match": {
                             "ownerId": id
@@ -95,46 +99,62 @@
                             "postStatus": true
                         }
                     }];
-                    console.log("Params for Mine", params);
                     shadow.querySelector('#mp').query = params;
                     shadow.querySelector('#mp')._showMyGoods();
-                    params = {
-                        "match": {
-                            "buyerId": id
-                        }
-                    }
-                    shadow.querySelector('#purch').query = params;
+
+                    ///search fav product
                     let p = {
-                        "action": "searchData",
+                        "action": "getData",
                         "index": "change",
                         "type": "_user",
+                        "_id": id
+
+                    };
+                    let userurl = "/json/user-" + id + ".json";
+                    Polymer.getContent(userurl).then(str => {
+                        console.log("the liked product", str.likeProduct);
+                        shadow.querySelector('#fav').displayitem(str.likeProduct);
+                    })
+
+
+                    ////search my buyed product
+                    let paramorder = {
+                        "action": "searchData",
+                        "index": "change",
+                        "type": "order",
+                        "_source": "productId",
                         "body": {
                             "query": {
-                                "match": {
-                                    "_id": id
+                                "bool": {
+                                    "must": [{
+                                        "match": {
+                                            "buyerId": id
+                                        }
+                                    }, {
+                                        "match": {
+                                            "status": "已完成"
+                                        }
+                                    }]
                                 }
                             }
                         }
-                    };
-                    let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                    Polymer.postData(url, p).then(res => {
+                    }
+                    Polymer.postData(url, paramorder).then(res => {
                         if (res.code > 0) {
-                            let all = res.resolve[0]['likeProduct'];
-                            let query = [];
-                            for (i = 0; i < all.length; i++) {
-                                query.push({
-                                    "match": {
-                                        "id": all[i]
-                                    }
-                                });
-
+                            let order = [];
+                            for (i = 0; i < res.resolve.length; i++) {
+                                order.push(res.resolve[i]['productId'])
                             }
-                            shadow.querySelector('#fav').query = query;
-                            shadow.querySelector('#fav')._showMyGoods();
+
+                            shadow.querySelector('#purch').displayitem(order);
 
 
                         }
-                    })
+                    });
+
+
+
+
                     let downparam = [{
                         "match": {
                             "postStatus": false
@@ -148,13 +168,6 @@
                     shadow.querySelector('#down')._showMyGoods();
 
 
-
-                    if (query != "") {
-                        params = '{"bool": {"should": [' + query + ']}}';
-                        shadow.querySelector('#fav').query = params;
-                        shadow.querySelector('#fav')._showMyGoods();
-                    }
-                    shadow.querySelector('#purch')._showMyGoods();
                 } else {
                     let user = store.get('change-user') || null;
                     if (user != null) {
