@@ -193,17 +193,18 @@
     </template>
 </dom-module>
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-user-banner',
             properties: {
 
             },
-            created: function () {
+            created: function() {
 
             },
-            ready: function () {
+            ready: function() {
                 let loc = location.search;
+                if
                 console.log("Path", loc);
                 console.log("Length", loc.length);
                 let id = "";
@@ -267,7 +268,7 @@
                     console.log("Banner", user[0]);
                     if (user != null) {
                         let shadow = this.shadowRoot;
-                        shadow.querySelector('#Uname').innerText = user[0]['username'];
+                        shadow.querySelector('#Uname').innerText = user['username'];
                         let t = res.resolve[0]['createTime'];
                         let _thetimenow = Date.now();
                         let comparetime = (_thetimenow - t) / 1000;
@@ -284,12 +285,12 @@
                         } else if (comparetime / 60 / 60 / 24 / 7 / 30 < 365) {
                             shadow.querySelector('#check').innerHTML = Math.floor(comparetime / 60 / 60 / 24 / 7 / 30) + "月前"
                         }
-                        shadow.querySelector('#gNum').innerText = user[0]['goodsNum'];
-                        shadow.querySelector('#buy').innerText = user[0]['alreadyBuy'];
-                        shadow.querySelector('#rate').innerText = user[0]['score'];
-                        shadow.querySelector('#dp').src = res.resolve[0]['head'];
+                        shadow.querySelector('#gNum').innerText = user['goodsNum'];
+                        shadow.querySelector('#buy').innerText = user['alreadyBuy'];
+                        shadow.querySelector('#rate').innerText = user['score'];
+                        shadow.querySelector('#dp').src = res.resolve['head'];
                     } else {
-                        alert('請先登入');
+                        alert('沒有此用戶 請先登入');
                     }
                 }
             },
