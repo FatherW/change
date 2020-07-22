@@ -129,15 +129,25 @@
                 .in {
                     margin-left: 1px;
                 }
+
+                
                 /**/
                 #dp {
-                    width: 30px;
+                    width: 35px;
                     height: 35px;
                     margin: 10% 0%
                 }
 
                 #Uname {
                     font-size: 0.80em;
+                }
+
+                #user {
+                    width: 130px;
+                }
+
+                #check {
+                    font-size: 13px;
                 }
 
                 h6 {
@@ -150,12 +160,11 @@
                 }
 
                 #threeWords h6 {
-                    font-size: 7px;
-                    padding-top: 4%;
+                    font-size: 8px;
                 }
 
                 .buttons {
-                    width: 30px;
+                    width: 35px;
                     text-align: center;
                 }
             }
@@ -204,17 +213,11 @@
             },
             ready: function() {
                 let loc = location.search;
-                if
-                console.log("Path", loc);
-                console.log("Length", loc.length);
                 let id = "";
                 for (var i = 1; i < loc.length; i++) {
-                    console.log("Working");
                     id += loc[i];
                 }
-                console.log("ID", id);
                 if (id != "") {
-                    console.log("Entered");
                     let shadow = this.shadowRoot;
                     let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                     let params = {
@@ -229,15 +232,12 @@
                             }
                         }
                     };
-                    console.log("DYNAMIC", params);
                     Polymer.postData(url, params).then(res => {
-                        console.log(res);
                         if (res.code > 0) {
                             if (res.resolve.length > 0) {
                                 shadow.querySelector('#Uname').innerText = res.resolve[0]['username'];
                                 let t = res.resolve[0]['createTime'];
                                 let _thetimenow = Date.now();
-                                console.log("Last Task from Banner", _thetimenow);
                                 let comparetime = (_thetimenow - t) / 1000;
                                 if (comparetime < 60) {
                                     shadow.querySelector('#check').innerHTML += "剛剛"
@@ -265,7 +265,6 @@
                     })
                 } else {
                     let user = store.get("change-user") || null;
-                    console.log("Banner", user[0]);
                     if (user != null) {
                         let shadow = this.shadowRoot;
                         shadow.querySelector('#Uname').innerText = user['username'];
