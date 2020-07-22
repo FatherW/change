@@ -187,7 +187,7 @@
                         }
                         shadow.querySelector('#purch').query = params;
                         let query = "";
-                        let x = user['likeProducts'].length;
+                        let x = user['likeProduct'].length;
                         for (var i = 0; i < x; i++) {
                             query += '{"match": { "id": ' + user['likeProducts'][i] + ' } }';
                             if (i != (x - 1)) {
@@ -200,6 +200,10 @@
                             shadow.querySelector('#fav')._showMyGoods();
                         }
                         shadow.querySelector('#purch')._showMyGoods();
+                    } else {
+                        //put no user things here
+
+
                     }
                 }
                 this._checkEmpty();
