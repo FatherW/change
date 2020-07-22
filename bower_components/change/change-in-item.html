@@ -426,10 +426,15 @@
                                         shadow.querySelector('#morebutton').style.display = 'block';
                                     }
                                     shadow.querySelector('#blank').innerHTML = "";
-                                    for (i = 0; i < check8; i++) {
-                                        let addi = document.createElement('change-things');
-                                        addi.setAttribute('id', theans2[i]);
-                                        shadow.querySelector('#blank').appendChild(addi);
+
+                                    if (theans2.length == 0) {
+                                        shadow.querySelector('#blank').innerHTML = "查無貨品";
+                                    } else {
+                                        for (i = 0; i < check8; i++) {
+                                            let addi = document.createElement('change-things');
+                                            addi.setAttribute('id', theans2[i]);
+                                            shadow.querySelector('#blank').appendChild(addi);
+                                        }
                                     }
                                     // console.log("theans1", theans, "theans2", theans2);
                                     this.countitem += 8;
@@ -473,7 +478,7 @@
                                     this.res2 = theans
                                     let check8 = 8;
                                     if (theans.length < 8) {
-                                        check8 = theans2.length;
+                                        check8 = theans.length;
                                         shadow.querySelector('#morebutton').style.display = 'none';
                                     } else {
                                         shadow.querySelector('#morebutton').style.display = 'block';
