@@ -17,9 +17,15 @@
                 align-items: center;
             }
 
-            a:link {
+            a:link,
+            a:visited {
                 text-decoration: none;
                 color: black;
+            }
+
+            a:hover {
+                text-decoration: none;
+
             }
 
 
@@ -467,7 +473,7 @@
                             current = current + "<button class=\"catbutton\" id=\"cat_" + i + "\" on-click=\"jumppage()\">車與地產</button> &nbsp; &nbsp; &nbsp;"
 
                         }
-                        current += "<button  id=\"cat_all\" on-click=\"jumppage()\"><a href=\"change.dazzle.website/list-product.html\">所有類別<a></button> &nbsp; &nbsp; &nbsp;";
+                        current += "<button  id=\"cat_all\" on-click=\"jumppage()\"><a href=\"list-product.html\">所有類別<a></button> &nbsp; &nbsp; &nbsp;";
 
                         shadow.querySelector('.titlebutton').innerHTML = current;
 
