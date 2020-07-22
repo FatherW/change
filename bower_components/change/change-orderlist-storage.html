@@ -74,6 +74,8 @@
             ready: function () {
                 console.log("inside orderlist-storage.html");
                 // html + ?xxxxxxxxxxxxxxxxx
+                let that = this;
+                let shadow = this.shadowRoot;
                 let loc = location.search;
                 let pid = "";
                 let uid = "";
@@ -94,8 +96,7 @@
                 if(user['_id']==uid){
                     shadow.querySelector('.orderContainter').style.display = 'block';
                 }
-                let that = this;
-                let shadow = this.shadowRoot;
+                
                 let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 let params = {
                     "action": "searchData",
