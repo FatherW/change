@@ -937,6 +937,10 @@ a.test {
     font-family: sans-serif, Microsoft JhengHei;
 }
 
+change-announcement {
+    display: none;
+}
+
 @media screen and (max-width: 1110px) {
     .channelpics {
         height: 127px;
@@ -965,7 +969,10 @@ a.test {
     }
 }
 
-@media screen and (max-width: 640px) {
+@media screen and (max-width: 768px) {
+    change-announcement {
+        display: block;
+    }
     .channelpics {
         height: 180px;
         background-size: cover;
