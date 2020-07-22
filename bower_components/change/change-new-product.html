@@ -710,12 +710,17 @@
                 });
             },
             _findseller: function () {
-                console.log('contacting seller');
-                let shadow = this.shadowRoot;
-                let that = this;
-                let dialog = shadow.querySelector('vaadin-dialog');
-                Polymer.popup(dialog, "change", "change-webcom", "40%", "60%");
-                console.log("end process in contact seller");
+                let user = store.get('change-user')||null;
+                if (user == null) {
+                    alert("Please login first");
+                } else {
+                    console.log('contacting seller');
+                    let shadow = this.shadowRoot;
+                    let that = this;
+                    let dialog = shadow.querySelector('vaadin-dialog');
+                    Polymer.popup(dialog, "change", "change-webcom", "40%", "60%");
+                    console.log("end process in contact seller");
+                }
             },
         });
     })();
