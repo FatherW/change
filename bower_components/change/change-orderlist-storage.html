@@ -87,12 +87,12 @@
                 for (a = 2; a < posit; a++) {
                     pid += loc[a];
                 };
-                for ( i = posit+2;i<loc.length;i++){
+                for ( i = posit+1;i<loc.length;i++){
                     uid+=loc[i];
                 }
                 let user = store.get('change-user')||null;
                 if(user['_id']==uid){
-                    shadow.querySelector('#orderContainter').style.display = 'block';
+                    shadow.querySelector('.orderContainter').style.display = 'block';
                 }
                 let that = this;
                 let shadow = this.shadowRoot;
