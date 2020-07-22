@@ -308,9 +308,15 @@
                         // //***USE SAVEDATA IN ADD PRODUCT***//
 
                         let user = store.get("change-user") || null;
-                        let temptime = Date.now();
-                        let tempid = user['_id'];
-                        var thenewid = "" + temptime.toString() + tempid;
+                        let temptime = user['_id'];
+                        let tempid = user['goodsNum'].toString() + Math.floor(Math.random() * 10);
+                        if (location.search.length < 3) {
+                            var thenewid = "" + temptime.toString() + tempid;
+                        } else {
+                            var thenewid = this.id;
+
+                        }
+
                         let json = {
                             "action": "addData",
                             "index": "change",
@@ -331,16 +337,17 @@
                                 "pics": res.resolve.pics,
                                 "price": res.resolve.price,
                                 "productname": res.resolve.productname,
-                                "tags": res.resolve.tags
+                                "tags": res.resolve.tags,
+                                "sellerMsg": res.resolve.sellerMsg
                             }
                         };
                         //SEND THE ABOVE MESSAGE TO POSTMAN
                         Polymer.postData(Url, json).then(res => {
                             if (res.code > 0) {
-                                alert("SUCCESS!");
+                                console.log("POST TO POSTMAN SUCCESS!");
                                 location.replace("./add-product.html?p" + thenewid + "u" + user['_id']);
                             } else {
-                                alert("FAILED!")
+                                console.log("POST TO POSTMAN  FAILED!")
                             }
                         });
                     } else {
