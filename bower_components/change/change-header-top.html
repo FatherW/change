@@ -229,12 +229,7 @@
             searchlist: function() {
                 console.log("diunilaomu");
                 let shadow = this.shadowRoot;
-                if (shadow.querySelector('.s').value == "0") {
-                    var serchcat = '/list-product.html?tag=' + encodeURIComponent(shadow.querySelector('#searchmain').value);
-                } else {
-                    let test = encodeURIComponent("試試");
-                    var serchcat = "/list-product.html?user=" + test;
-                }
+                var serchcat = '/list-product.html?tag=' + encodeURIComponent(shadow.querySelector('#searchmain').value);
                 location.href = serchcat;
             },
 
