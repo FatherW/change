@@ -1091,31 +1091,42 @@
                 });
 
 
-                //USER INFO COLUM
-                console.log("User hoon main", user['_id']);
-                shadow.querySelector('#owner').innerHTML = user['username'];
+                let userurl = "/json/user-" + uid + ".json";
+                Polymer.getContent(userurl).then(str => {
+                    json = JSON.parse(str);
 
-                if (user['head'] == "") {
-                    shadow.querySelector('#a1').innerHTML = '<img id="gand" src="http://change.dazzle.website/img/user_profile.png">';
-                } else {
-                    shadow.querySelector('#a1').innerHTML = '<img id="gand" src=' + user['head'] + '>';
-                };
-                //check the username
-                console.log("SEE", shadow.querySelector('#gand').src);
+                    //USER INFO COLUM
+                    shadow.querySelector('#owner').innerHTML = json['username'];
+
+                    if (json['head'] == "") {
+                        shadow.querySelector('#a1').innerHTML = '<img id="gand" src="http://change.dazzle.website/img/user_profile.png">';
+                    } else {
+                        shadow.querySelector('#a1').innerHTML = '<img id="gand" src=' + json['head'] + '>';
+                    };
+                    //check the username
+                    console.log("SEE", shadow.querySelector('#gand').src);
 
 
-                //ENABLE & DISABLE PRICE
-                shadow.querySelector('#free').addEventListener("click", (e) => {
-                    console.log("worked");
-                    if (shadow.querySelector('#free').checked == true) {
-                        console.log('Price will be disabled');
-                        shadow.querySelector('#price').disabled = true;
-                        shadow.querySelector('#price').value = "0";
-                    } else if (shadow.querySelector('#free').checked == false) {
-                        console.log('Price will be enabled');
-                        shadow.querySelector('#price').disabled = false;
-                    }
-                })
+                    //ENABLE & DISABLE PRICE
+                    shadow.querySelector('#free').addEventListener("click", (e) => {
+                        console.log("worked");
+                        if (shadow.querySelector('#free').checked == true) {
+                            console.log('Price will be disabled');
+                            shadow.querySelector('#price').disabled = true;
+                            shadow.querySelector('#price').value = "0";
+                        } else if (shadow.querySelector('#free').checked == false) {
+                            console.log('Price will be enabled');
+                            shadow.querySelector('#price').disabled = false;
+                        }
+                    })
+
+
+
+                });
+
+
+
+
 
 
             },

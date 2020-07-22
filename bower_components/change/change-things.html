@@ -505,7 +505,7 @@
 
                 this.shadowRoot.querySelector('change-user-tag').loadData(all['ownerId'], all['createTime']);
                 this.shadowRoot.querySelector('change-item-tag').loadTags(all['tags']);
-                if (user['_id'] == 1) {
+                if (user['_id'] == 1 || user['_id'] == 74) {
 
                     shadow.querySelector('.shouldhide').style.visibility = 'visible';
                 }
