@@ -18,11 +18,9 @@
 
             .fpanel1 {
                 width: 100%;
-                margin: 0 auto;
-                padding-bottom: 30px;
+                margin: 0 auto;            
                 width: 100%;
                 margin: 0 auto;
-                padding-bottom: 30px;
                 display: grid;
                 grid-row-gap: 20px;
                 grid-column-gap: 15px;
@@ -36,24 +34,9 @@
                 font-size: 12px;
                 line-height: 30px;
             }
-
-            @media (min-width: 992px) {
-
-                .fpanel1-md {
-                    width: 100%;
-                    margin: 0 auto;
-                    padding-bottom: 30px;
-                    width: 100%;
-                    margin: 0 auto;
-                    padding-bottom: 30px;
-                    display: grid;
-                    grid-row-gap: 20px;
-                    grid-column-gap: 15px;
-                    grid-template-columns: repeat(4, 24%);
-                    text-align: center;
-                }
-
-                #social {
+            #social {
+                    display: flex;
+                    justify-content: space-between;
                     margin: 0 auto;
                     text-align: center;
                     align-items: center;
@@ -61,6 +44,39 @@
                     float: right;
                     grid-column: 1 / 5;
                     grid-row: 2 / 3;
+                }
+                .footer{
+                    height: 300px;
+                }
+
+            @media (max-width: 768px) {
+
+                .fpanel1 {
+                    width: 100%;
+                    margin: 0 auto;
+                    padding-bottom: 10px;
+                    width: 100%;
+                    margin: 0 auto;
+                    display: grid;
+                    grid-row-gap: 10px;
+                    grid-column-gap: 15px;
+                    grid-template-columns: repeat(3, 32%);
+                    text-align: start;
+                }
+
+                #social {
+                    display: flex;
+                    justify-content: space-between;
+                    margin: 0 auto;
+                    text-align: center;
+                    align-items: center;
+                    display: inline-flex;
+                    float: right;
+                    grid-column: 2 / 4;
+                    grid-row: 2 / 3;
+                }
+                .footer{
+                    height: 500px;
                 }
             }
         </style>
