@@ -98,17 +98,10 @@
                 float:left; 
                 margin-top:50px;
                 border:'none';
-                position: absolute;
-                right:50px;
-            }
-
-
-            body {
-                background-color: wheat;
+               
             }
 
             #containall {
-                background-color: wheat;
                 width: 100%;
             }
 
@@ -167,18 +160,12 @@
                 #rightele {
                     width: 100%;
                     margin-top: 5px;
-                    position:  absolute;
-                    right:0px;
-                    left: 311px;
                 }
             }
             @media only screen and (max-width: 768px) {
                 #rightele {
                     width: 100%;
                     margin-top: 5px;
-                    position:  relative;
-                    left:0px;
-                    right:0px;
                 }
                 change-slidelist{
                     display: none;
@@ -258,6 +245,14 @@
                     this.shadowRoot.querySelector('change-in-item').search(this.categories, this.tags, this.district, this.isNew, this.priceStart, this.priceStop, this.isFree);
                 },
                 back(value) {
+
+                    ///cookie
+                    let cate = store.get('change-cate') || null;
+                    if (cate) {
+                        if (value == cate.main) {
+                            this.categories.splice(0, cate.sub.length);
+                        }
+                    }
 
                     let posit = 99999;
                     ////categories
@@ -411,12 +406,20 @@
                         this.categories.push(headsearch);
                         this.search();
                     }
-                    this.search();
-                    // let cate = store.get('change-cate')||null;
-                    // if (cate){
-                    //     this.addTags(cate.main);
-
-                    // }
+                    ///data from gettv button
+                    let cate = store.get('change-cate') || null;
+                    if (cate) {
+                        this.addTags(cate.main);
+                        let subcat = cate.sub;
+                        subcat.forEach(item => {
+                            this.categories.push(item);
+                        });
+                        this.search();
+                        console.log("787878787878", cate);
+                        console.log(this.categories);
+                    } else {
+                        this.search();
+                    }
                 }
             })
         }());

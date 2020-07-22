@@ -842,6 +842,7 @@
                 let loc = location.search;
                 let pid = "";
                 let posit = 0;
+                let uid = "";
                 for (i = 1; i < loc.length; i++) {
                     if (loc[i] == "u") {
                         posit = i;
@@ -849,6 +850,9 @@
                 };
                 for (a = 2; a < posit; a++) {
                     pid += loc[a];
+                }
+                for (c = posit + 1; c < loc.length; c++) {
+                    uid += loc[c];
                 }
                 this.id = pid;
                 if (pid != "") {
@@ -935,7 +939,7 @@
                     "body": {
                         "query": {
                             "match": {
-                                "adminId": user['_id']
+                                "adminId": uid
 
                             }
                         }

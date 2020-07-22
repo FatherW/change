@@ -47,7 +47,7 @@
 
             .catbutton:hover {
                 background-color: #d9d9d9;
-
+                cursor: pointer;
             }
 
 
@@ -267,6 +267,9 @@
                 height: 30px;
                 border-radius: 15px;
             }
+            #cat_all:hover{
+                cursor: pointer;
+            }
 
             #cat_all:hover {
                 background-color: #999999;
@@ -457,8 +460,8 @@
                             }
                         }],
                         "query": {
-                            "match": {
-                                "parent": "0"
+                            "match_all": {
+
                             }
                         }
                     }
@@ -467,19 +470,48 @@
                 Polymer.postData(Url, paramdistrict).then(res => {
                     if (res.code > 0) {
                         let cat = res.resolve;
-                        let current = "";
+                        let maincates = [];
+                        let temsubcates = [];
+                        cat.forEach(item => {
+                            if (item.parent == "0") {
+                                maincates.push(item);
+                            } else {
+                                temsubcates.push(item);
+                            }
+                        });
+                        console.log("maincat", maincates);
+                        let div = shadow.querySelector('.titlebutton');
+                        maincates.forEach(main => {
+                            let subcate = [];
+                            temsubcates.forEach(sub => {
+                                if (sub.parent == main._id) {
+                                    subcate.push(sub.name);
+                                }
+                            });
 
-                        for (var i = 0; i < cat.length; i++) {
-                            current = current + "<button class=\"catbutton\" id=\"cat_" + i + "\" on-click=\"jumppage()\">車與地產</button> &nbsp; &nbsp; &nbsp;"
+                            let button = document.createElement('button');
+                            button.setAttribute('class', 'catbutton');
+                            button.innerHTML = main.name;
+                            button.addEventListener('click', e => {
+                                let cate2list = {
+                                    "main": main.name,
+                                    "sub": subcate
+                                };
+                                store.set('change-cate', cate2list);
+                                location.href = '/list-product.html';
+                            });
+                            div.appendChild(button);
 
-                        }
-                        current += "<button  id=\"cat_all\" on-click=\"jumppage()\"><a href=\"list-product.html\">所有類別<a></button> &nbsp; &nbsp; &nbsp;";
+                        })
+                        let button = document.createElement('button');
+                        button.setAttribute('id', 'cat_all');
+                        button.innerHTML = "所有類別";
+                        button.addEventListener('click', e => {
+                            store.set('change-cate', null);
+                            location.href = '/list-product.html';
+                        })
+                        div.appendChild(button);
 
-                        shadow.querySelector('.titlebutton').innerHTML = current;
-
-                        for (var i = 0; i < cat.length; i++) {
-                            shadow.querySelector('#cat_' + i).innerHTML = '<a href="list-product.html?cate' + cat[i]['id'] + '">' + cat[i]['name'] + '</a>';
-                        }
                     };
 
                 });

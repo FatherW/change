@@ -340,6 +340,7 @@
                         }
                     }
                 };
+                console.log("qqqqqqqqqqqqqqqq", JSON.stringify(paramcate));
                 let parammust = {
                     "action": "searchData",
                     "index": "change",
@@ -443,40 +444,6 @@
                                     this.countitem += 8;
 
 
-
-                                    // Polymer.postData(url, rangeparam).then(res => {
-                                    //     if (res.code > 0) {
-                                    //         var theans2 = [];
-                                    //         for (q = 0; q < res.resolve.length; q++) {
-                                    //             for (v = 0; v < theans.length; v++) {
-                                    //                 if (res.resolve[q]['_id'] == theans[v]['_id']) {
-                                    //                     theans2.push(res.resolve[q]['_id'])
-                                    //                 }
-                                    //             }
-                                    //         }
-
-                                    //         this.res2 = theans2
-                                    //         this.res = [];
-                                    //         let check8 = 8;
-                                    //         if (theans2.length < 8) {
-                                    //             check8 = theans2.length;
-                                    //             shadow.querySelector('#morebutton').style.display = 'none';
-                                    //         } else {
-                                    //             shadow.querySelector('#morebutton').style.display = 'block';
-                                    //         }
-                                    //         shadow.querySelector('#blank').innerHTML = "";
-                                    //         for (i = 0; i < check8; i++) {
-                                    //             let addi = document.createElement('change-things');
-                                    //             addi.setAttribute('id', theans2[i]);
-                                    //             shadow.querySelector('#blank').appendChild(addi);
-                                    //         }
-                                    //         this.countitem += 8;
-
-
-                                    //     } else {
-                                    //         console.log('error23')
-                                    //     }
-                                    // })
                                 } else {
                                     this.res2 = theans
                                     let check8 = 8;
