@@ -98,6 +98,8 @@
                 float:left; 
                 margin-top:50px;
                 border:'none';
+                position: absolute;
+                right:50px;
             }
 
 
@@ -161,10 +163,22 @@
             change-mobileslide{
                 display:none;
             }
+            @media only screen and (max-width: 1110px) {
+                #rightele {
+                    width: 100%;
+                    margin-top: 5px;
+                    position:  absolute;
+                    right:0px;
+                    left: 311px;
+                }
+            }
             @media only screen and (max-width: 768px) {
                 #rightele {
                     width: 100%;
                     margin-top: 5px;
+                    position:  relative;
+                    left:0px;
+                    right:0px;
                 }
                 change-slidelist{
                     display: none;
