@@ -388,6 +388,14 @@
                         this.addTags(headsearch);
                         this.tags.push(headsearch);
                         this.search();
+                    } else if (loc[1] == "c" && loc[2] == "a" && loc[3] == "t" && loc[4] == "e") {
+                        let headsearch = "";
+                        for (i = 6; i < loc.length; i++) {
+                            headsearch += loc[i];
+                        }
+                        this.addTags(headsearch);
+                        this.categories.push(headsearch);
+                        this.search();
                     }
 
                 }

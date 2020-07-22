@@ -220,7 +220,7 @@
                         subcates.forEach(subcate => {
                             if (subcate['parent'] == maincate['_id']) {
                                 let a = document.createElement('a');
-                                a.setAttribute('href', subcate['link']);
+                                a.setAttribute('href', "list-product.html?cate=" + encodeURIComponent(subcate['name']));
                                 a.innerText = subcate['name'];
                                 div2.appendChild(a);
                             }
