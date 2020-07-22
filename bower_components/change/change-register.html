@@ -202,7 +202,7 @@
                                                 alert(res.text);
                                                 if (res.code > 0) {
                                                     this.fileManager = new AwsPackage(res.resolve);
-                                                    this.fileManager.saveFile('json/user-' + res.resole.id + '.json', JSON.stringify(res.resolve));
+                                                    this.fileManager.saveFile('json/user-' + res.resolve.id + '.json', JSON.stringify(res.resolve));
 
                                                 }
                                             });

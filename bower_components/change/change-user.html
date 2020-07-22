@@ -112,8 +112,8 @@
                     };
                     let userurl = "/json/user-" + id + ".json";
                     Polymer.getContent(userurl).then(str => {
-                        console.log("the liked product", str.likeProduct);
-                        shadow.querySelector('#fav').displayitem(str.likeProduct);
+                        let jsonlike = JSON.parse(str)
+                        shadow.querySelector('#fav').displayitem(jsonlike['likeProduct']);
                     })
 
 
@@ -206,7 +206,7 @@
 
                     }
                 }
-                this._checkEmpty();
+                // this._checkEmpty();
             },
 
             _checkEmpty: function() {

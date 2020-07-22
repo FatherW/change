@@ -615,22 +615,18 @@
                 shadow.querySelector('#blank').innerHTML = "";
                 let that = this;
                 let wrapper = that.shadowRoot.querySelector('.things-grid');
-                console.log("the length", x);
-                if (x == undefined) {} else {
-                    console.log("rurururu");
-                    if (x.length == 0 || lenx == undefined || lenx == null) {
-                        console.log("tutututu");
-                        wrapper.innerHTML = "沒有貨品";
-                        console.log(shadow.querySelector('#blank').innerHTML);
-                    } else {
-                        x.forEach(item => {
-                            let productItem = document.createElement('change-things');
-                            productItem.setAttribute("id", x);
 
-                            wrapper.appendChild(productItem);
-                        });
-                    }
+                if (x.length == 0 || x.length == undefined || x.length == null) {
+                    wrapper.innerHTML = "沒有貨品";
+                } else {
+                    x.forEach(item => {
+                        let productItem = document.createElement('change-things');
+                        productItem.setAttribute("id", item);
+
+                        wrapper.appendChild(productItem);
+                    });
                 }
+
 
             },
 
