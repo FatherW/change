@@ -261,9 +261,9 @@
                 margin-top: 110px;
             }
 
-            .sMes {
+            /* .sMes {
                 margin-top: 15px;
-            }
+            } */
 
             .tagContainer {}
 
@@ -492,7 +492,7 @@
                     <hr>
                     <br>
                     <button id="contact" on-click="_findseller">聯絡賣家</button>
-                    <div class="b3">刊登於 1小时前</div>
+                    <div class="b3">刊登於 1小時前</div>
                     <br>
 
                     <div class="bigsize">
@@ -505,10 +505,10 @@
                     <br>
                     <!-- <div class="unib"><span>產品尺寸 185x130x30(cm)</span></div>
                         <br> -->
-                    <div class="sMesCon">
+                    <!-- <div class="sMesCon">
                         <div class="sMesText"><span>賣家留言:</span></div>
                         <div class="sMes"></div>
-                    </div>
+                    </div> -->
 
                     <br>
                     <div class="tagContainer">
@@ -650,8 +650,8 @@
                         shadow.querySelector('.unib').innerHTML = description;
 
                         //get and pass seller message data
-                        let sellerMsg = res.resolve['sellerMsg'];
-                        shadow.querySelector('.sMes').innerHTML = sellerMsg;
+                        // let sellerMsg = res.resolve['sellerMsg'];
+                        // shadow.querySelector('.sMes').innerHTML = sellerMsg;
 
                         //get and pass deliveryDesc data
                         let deliveryDesc = res.resolve['deliveryDesc'];
