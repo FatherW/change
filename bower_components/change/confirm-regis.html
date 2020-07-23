@@ -79,6 +79,13 @@
                 };
                 Polymer.postData(link, param).then(res => {
                     if (res.code > 0) {
+                        if (res.resolve) {
+                            let user = res.resolve[0];
+                            if (user.token = token) {
+                                store.set('change-user', user);
+                            }
+                        };
+
                         let userid = res.resolve[0]['_id'];
                         let paramtake = {
                             "action": "addData",
@@ -94,6 +101,16 @@
                                 console.log("add success");
                             }
                         });
+
+                        let user = store.get('change-user') || null;
+                        if (user['_id'] == userid) {
+                            console.log("success user id token", user);
+                            console.log("success user id", userid);
+                        } else {
+                            console.log("fail user id token", user);
+                            console.log("fail user id", userid);
+                        }
+
                     }
                 })
 
