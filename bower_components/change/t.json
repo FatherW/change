@@ -1,0 +1,1 @@
+{ "action": "searchData", "index": "change", "type": "product", "_source": "price", "body": { "sort": [{ "createTime": { "order": "desc" } }], "query": { "bool": { "must": [{ "match": { "isFree": false } }, { "term": { "tags": "apple" } }], "must_not": { "match": { "postStatus": false } } } } } }
