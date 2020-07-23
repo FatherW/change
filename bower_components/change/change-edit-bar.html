@@ -162,7 +162,7 @@
                 let user = store.get('change-user') || null;
                 //Check whether login or not (not login -> hide)
 
-                if (user['_id'] == uid || user['_id'] == 1 || user['_id'] == 74) {
+                if (user['_id'] == uid || user.isAdmin == true) {
                     shadow.querySelector('#tbar').style.display = "flex";
                     this.shadowRoot.querySelector('#edi').href = "add-product.html?p" + this.id + "u" + uid;
                 }
