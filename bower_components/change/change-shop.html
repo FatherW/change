@@ -15,6 +15,7 @@
         <style>
             * {
                 font-family: sans-serif, 微軟正黑體;
+                overflow: hidden;
             }
 
             .clear {
@@ -158,22 +159,24 @@
             }
             @media (max-width: 1292px) {
                 #rightele {
-                    width: 70%;
-                    margin-top: 5px;
+                    width: 68%;
+                    margin-top: 50px;
                     margin-left:50px;
                 }
             }
 
             @media only screen and (max-width: 1110px) {
                 #rightele {
-                    width: 100%;
-                    margin-top: 5px;
+                    width: 65%;
+                    margin-top: 50px;
+                    margin-left: 85px ;
                 }
             }
-            @media only screen and (max-width: 768px) {
+            @media only screen and (max-width: 940px) {
                 #rightele {
-                    width: 100%;
+                    width: 91%;
                     margin-top: 5px;
+                    margin-left: 2%;
                 }
                 change-slidelist{
                     display: none;
@@ -322,7 +325,7 @@
 
                 },
                 ready: function() {
-
+                    console.log("now shop");
                     document.addEventListener('areachange', e => {
                         this.isFree = e.detail.isFree;
                         this.search()
@@ -392,9 +395,8 @@
                     })
 
                     let loc = decodeURIComponent(location.search);
-
                     // let loc = '';
-                    if (loc[1] == 't' && loc[2] == 'a' && loc[3] == 'g') {
+                    if (loc[1] == 't' && loc[2] == 'a' && loc[3] == 'g' && loc.length > 5) {
                         let headsearch = "";
                         for (i = 5; i < loc.length; i++) {
                             headsearch += loc[i];
@@ -402,7 +404,7 @@
                         this.addTags(headsearch);
                         this.tags.push(headsearch);
                         this.search();
-                    } else if (loc[1] == "c" && loc[2] == "a" && loc[3] == "t" && loc[4] == "e") {
+                    } else if (loc[1] == "c" && loc[2] == "a" && loc[3] == "t" && loc[4] == "e" && loc.length > 6) {
                         let headsearch = "";
                         for (i = 6; i < loc.length; i++) {
                             headsearch += loc[i];
@@ -414,6 +416,7 @@
                     ///data from gettv button
                     let cate = store.get('change-cate') || null;
                     if (cate) {
+                        console.log("ttttttttt");
                         this.addTags(cate.main);
                         let subcat = cate.sub;
                         subcat.forEach(item => {
@@ -421,8 +424,6 @@
                         });
                         this.search();
                         store.set('change-cate', null);
-                        console.log("787878787878", cate);
-                        console.log(this.categories);
                     } else {
                         this.search();
                     }
