@@ -220,12 +220,18 @@ its values is > 50%. */
             test: function() {
                 console.log("great");
             },
-            ready: function() {},
+            ready: function() {
+
+            },
             new: function() {
                 let that = this;
                 let shadow = this.shadowRoot;
-
-                let all = this.query;
+                let range = store.get('change-range') || null;
+                if (range) {
+                    this.data2 = range.to;
+                    this.data1 = range.from;
+                    var all = range.query;
+                }
                 let initprice = 0;
                 for (i = 0; i < all.length; i++) {
                     if (all[i]['price'] > initprice) {
@@ -243,10 +249,15 @@ its values is > 50%. */
                     prefix: ''
                 });
 
+
                 if (this.data2 == null || this.data2 == undefined || this.data2 == 1) {
                     this.data1 = 0;
                     this.data2 = initprice;
                 }
+                let range_cookie = {
+                    "from": this.data1,
+                    "to": this.data2
+                };
                 noUiSlider.create(rangeSlider, {
                     start: [this.data1, this.data2],
                     step: 1,
@@ -257,7 +268,6 @@ its values is > 50%. */
                     format: moneyFormat,
                     connect: true
                 });
-
 
 
 

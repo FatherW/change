@@ -380,9 +380,12 @@
                                 let shop = document.querySelector('change-shop');
                                 let list = shop.shadowRoot.querySelector('change-slidelist');
                                 list.shadowRoot.querySelector('#renew').innerHTML = '<change-range></change-range>';
-                                list.shadowRoot.querySelector('change-range').query = theans;
-                                list.shadowRoot.querySelector('change-range').data1 = fromprice;
-                                list.shadowRoot.querySelector('change-range').data2 = toprice;
+                                let range_cookie = {
+                                    "query": theans,
+                                    "from": fromprice,
+                                    "to": toprice
+                                };
+                                store.set('change-range', range_cookie);
                                 list.shadowRoot.querySelector('change-range').new();
 
 

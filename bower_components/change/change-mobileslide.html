@@ -76,7 +76,16 @@
 
             },
             created: function() {
-                let that = this;
+                document.addEventListener('close-item-dialog', e => {
+                    if (this.shadowRoot.querySelector('#select').opened == true) {
+
+                        this.shadowRoot.querySelector('#select').opened = false;
+                        // console.log("(Btn) close successfully");
+                    }
+                });
+
+
+
             },
             openselect() {
                 console.log("good");
