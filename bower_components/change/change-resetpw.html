@@ -32,6 +32,16 @@
             a {
                 color: blue;
             }
+            
+            button.login-register {
+                height: 40px;
+                width: 100%;
+                background-color: #F06C6C;
+                font-size: 130%;
+                color: white;
+                border-radius: 3px;
+                border: none;
+            }
         </style>
         <div id="content">
             <div>
@@ -65,7 +75,7 @@
             },
             //for adding link to the user name connecting wth the databse
             ready: function() {
-
+                console.log("done");
             },
             _register() {
                 let shadow = this.shadowRoot;
@@ -77,13 +87,13 @@
                     if (pass != cpass) {
                         alert('密碼不一樣 請重新輸入');
                     } else {
-                        this.reset(cpss);
+                        this.reset(cpass);
                     }
                 }
             },
             reset(password) {
-                http: //change.dazzle.website/forget-password.html?token=24093129016
-                    let loc = location.search;
+                //change.dazzle.website/forget-password.html?token=24093129016
+                let loc = location.search;
                 let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 let token = "";
                 for (i = 7; i < loc.length; i++) {
@@ -96,8 +106,7 @@
                 };
                 Polymer.postData(url, pram).then(res => {
                     if (res.code > 0) {
-                        console.log("我做完嗡");
-                        alert(res.resolve);
+                        alert("密碼已被成功更改");
                     }
                 })
             },
