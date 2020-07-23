@@ -457,6 +457,8 @@
                             'end': shadow.querySelector('change-range').shadowRoot.querySelector('#slider-range-value2').innerHTML
                         }
                     })
+                    var event = new CustomEvent('close-item-dialog', {});
+                    document.dispatchEvent(event);
                 })
 
                 shadow.querySelector('#isnew1').addEventListener('click', e => {
