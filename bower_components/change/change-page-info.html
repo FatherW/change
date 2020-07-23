@@ -140,12 +140,8 @@
                 let shadow = this.shadowRoot;
                 let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
 
-                let loc = "?1";
+                let id = document.querySelector('www').getAttribute('id');
 
-                let id = "";
-                for (var i = 1; i < loc.length; i++) {
-                    id += loc[i];
-                }
                 if (id != "") {
 
                     let params = {

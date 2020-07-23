@@ -109,12 +109,9 @@
 
             },
             ready: function() {
-                let loc = location.search;
 
-                let id = "";
-                for (var i = 1; i < loc.length; i++) {
-                    id += loc[i];
-                }
+
+                let id = document.querySelector('www').getAttribute('id');
 
                 if (id != "") {
                     let shadow = this.shadowRoot;
