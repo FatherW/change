@@ -51,12 +51,6 @@
 
             },
             created: function () {
-
-
-
-            },
-            //for adding link to the user name connecting wth the databse
-            ready: function () {
                 let loc = location.search;
                 // let loc = "?token=1594953468686178216261";
                 let token = "";
@@ -68,7 +62,6 @@
                     "action": "searchData",
                     "index": "change",
                     "type": "_user",
-                    "_source": "_id",
                     "body": {
                         "query": {
                             "match": {
@@ -83,6 +76,7 @@
                             let user = res.resolve[0];
                             if (user.token = token) {
                                 store.set('change-user', user);
+
                             }
                         };
 
@@ -99,6 +93,7 @@
                         Polymer.postData(link, paramtake).then(res => {
                             if (res.code > 0) {
                                 console.log("add success");
+                                // location.reload();
                             }
                         });
 
@@ -106,13 +101,27 @@
                         if (user['_id'] == userid) {
                             console.log("success user id token", user);
                             console.log("success user id", userid);
+
                         } else {
                             console.log("fail user id token", user);
                             console.log("fail user id", userid);
-                        }
-
+                        };
+                        let header = document.querySelector('change-header');
+                        let tophead = header.shadowRoot.querySelector('change-header-top');
+                        let userpanel = tophead.shadowRoot.querySelector('change-user-panel');
+                        let shadow = userpanel.shadowRoot;
+                        
+                        shadow.querySelector('#register').innerHTML = ' / 登出';
+                        shadow.querySelector('#login').innerHTML = '<a href="/user.html?' + user['_id'] + '"><img src="' + user['head'] + '"></a>';
+                        // document.querySelector('change-header').shadowRoot.querySelector('header').shadowRoot.querySelector('change-header-top').shadowRoot.querySelector('change-user-panel')
                     }
                 })
+
+
+            },
+            //for adding link to the user name connecting wth the databse
+            ready: function () {
+
 
             },
 

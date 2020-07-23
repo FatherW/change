@@ -7,13 +7,15 @@
                 margin: 0;
                 font-family: Arial;
             }
-
+            eee{
+                    display: none;
+                }
             .topnav {
                 overflow: hidden;
                 background-color: white;
                 justify-content: center;
                 display: flex;
-
+                
             }
 
             .topnav a {
@@ -40,9 +42,7 @@
                 float: left;
                 overflow: hidden;
             }
-            eee{
-                    display: none;
-                }
+
             .dropdown .dropbtn {
                 font-size: 17px;
                 border: none;
@@ -87,14 +87,14 @@
                 display: block;
             }
 
-            @media screen and (max-width: 650px) {
-                a.icon{
-                    position:fixed;
-                    top:15px;
-                    right:15px;
-                }
+            @media screen and (max-width: 768px) {
                 eee{
                     display: contents;
+                }
+                a.icon{
+                    position: absolute;;
+                    top:15px;
+                    right:15px;
                 }
                 .topnav a:not(:first-child),
                 .dropdown .dropbtn {
@@ -168,8 +168,7 @@
 
 
 </dom-module>
-<script>
-</script>
+
 <script>
     (function() {
         Polymer({
