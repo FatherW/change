@@ -236,7 +236,9 @@
             .arrow {
                 width: 25px;
             }
-
+            change-user-panel{
+                    display: block;
+                }
             @media (max-width: 992px) {
                 div.disappear {
                     display: none;
@@ -249,9 +251,15 @@
                     float: left;
                     height: 50px;
                 }
-
+                change-user-panel{
+                    display: none;
+                }
                 button {
                     font-size: 10px;
+                }
+                .logo1{
+                    float: left;
+                    height: 68px;
                 }
             }
 
@@ -268,10 +276,11 @@
                         </div>
                         <div>
                             <a href="./getTv.html"><img src="./img/logo/Change.png" class="logo1"></a>
-                            <change-user-panel>
-                                <div><button>/ 註冊</button><button>/ 登入</button></div>
-                            </change-user-panel>
+                            
                         </div>
+                        <change-user-panel>
+                            <div><button>/ 註冊</button><button>/ 登入</button></div>
+                        </change-user-panel>
 
                     </div>
                 </section>
@@ -284,12 +293,12 @@
     </template>
 </dom-module>
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-header2',
             properties: {},
 
-            searchlist: function () {
+            searchlist: function() {
                 let shadow = this.shadowRoot;
                 if (shadow.querySelector('.s').value == "0") {
                     var serchcat = '/list-product.html?tag' + shadow.querySelector('#searchmain').value;
@@ -299,7 +308,7 @@
                 location.href = serchcat;
             },
 
-            _editMenu: function () {
+            _editMenu: function() {
                 console.log("Inside Edit Menu");
                 let shadow = this.shadowRoot;
                 let dialog = shadow.querySelector('vaadin-dialog');
