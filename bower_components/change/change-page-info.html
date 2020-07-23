@@ -11,90 +11,104 @@
 
 <dom-module id="change-page-info">
     <template>
-        <style include="icon-styles"></style>
-        <style>
-
-            #vs1{
-                width:80%;
-                border: none;
+      <style>
+           *,
+            p,
+            h5 {
                 color: black;
-                background-color: lightgray;
-                text-align: center;
-                font-family: 微軟正黑體;
-                height:30px;
-                font-size: 15px;
+                font-family: sans-serif, Microsoft JhengHei;
             }
 
-            #vb{
-                border: none;
-                color: black;
-                background-color: lightgray;
-                text-align: center;
-                font-family: 微軟正黑體;
-                height: 30px;
-                font-size: 15px;
-                padding-left: 20px;
-                padding-right: 20px;
+            a {
+                text-decoration: none;
+
             }
 
-            #leftele{
-                float: left;
-                width:70%;
-                
+            #info {
+                padding: 8px;
+                margin-left: 100px;
             }
 
-            #rightele{
-                float: right;
-                padding-right: 20px;
-            }
-
-            #shouldhide{
-                display: none;
-            }
-
-            change-icon{
-                float: left;
-                width:80%
-            }
             #left {
-                width: 70%;
+                width: 80%;
                 float: left;
             }
 
-            .inf{
+            .inf {
                 line-height: 2.5;
+                color: grey;
+            }
+
+            .infotext {
+                color: black;
+
             }
 
             #right {
-                float:left;
-                width: 25%;
-                display: inline;
-                align-content:flex-end;
+                /* width: 75%; */
+                display: inline-flex;
+                align-content: flex-end;
             }
 
-            #top {
+            /* #top {
                 margin-left: 8%;
                 margin-right: 8%;
                 margin-top: 2%;
                 padding-top: 2%;
                 padding-left: 2%;
-                background-color:white;
-                height: 270px;
+                background-color: white;
+                height: auto;
+            } */
+
+            .grid-container {
+                display: grid;
+                grid-template-columns: 2.5fr 1fr;
+                background-color: white;
+                width: 84%;
+                margin: 0 auto;
             }
 
-            h5{
-                margin:0px;
+            h5 {
                 font-size: 1em;
+                color: black;
             }
-            
-            #container{
+
+            #container {
                 float: left;
                 background-color: #FFFBF2;
                 width: 100%;
+                padding-top: 30px;
                 padding-bottom: 30px;
                 margin-bottom: 10px;
             }
-        </style>
+
+            .buttons {
+                margin-block-start: 1.67em;
+                margin-block-end: 1.67em;
+                margin-right: 100px;
+            }
+
+            @media (max-width: 640px) {
+                .grid-container {
+                    display: block;
+                    height: 250px;
+                }
+
+                #container {
+                    padding-top: 0;
+                    padding-bottom: 0;
+                    margin-bottom: 0;
+                }
+
+                #info {
+                    margin-left: 0;
+                }
+
+                .buttons {
+                    display: none;
+                }
+            }
+      </style>
         <div id="container">
             <div id="top">
                 <div id="left">

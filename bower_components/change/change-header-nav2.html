@@ -40,7 +40,9 @@
                 float: left;
                 overflow: hidden;
             }
-
+            eee{
+                    display: none;
+                }
             .dropdown .dropbtn {
                 font-size: 17px;
                 border: none;
@@ -90,6 +92,9 @@
                     position:fixed;
                     top:15px;
                     right:15px;
+                }
+                eee{
+                    display: contents;
                 }
                 .topnav a:not(:first-child),
                 .dropdown .dropbtn {
@@ -214,7 +219,7 @@
                         // div1 包住所有的东西
                         let button = document.createElement('button')
                         button.setAttribute('class', 'dropbtn');
-                        button.innerText = maincate['name'];
+                        button.innerHTML = "<eee>+ </eee>" + maincate['name'];
                         let div2 = document.createElement('div');
                         div2.setAttribute('class', 'dropdown-content');
                         subcates.forEach(subcate => {
