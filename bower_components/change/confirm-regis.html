@@ -92,12 +92,22 @@
                         Polymer.postData(link, paramtake).then(res => {
                             if (res.code > 0) {
                                 console.log("add success");
+                            };
+                            let user = store.get('change-user') || null;
+                            if (user['_id'] == userid) {
+                                console.log("success user id token", user);
+                                console.log("success user id", userid);
+                            }else {
+                                console.log("fail user id token", user);
+                                console.log("fail user id", userid);
                             }
                         })
 
 
                     }
-                })
+                });
+
+
 
             },
 
