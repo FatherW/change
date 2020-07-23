@@ -7,7 +7,9 @@
                 margin: 0;
                 font-family: Arial;
             }
-
+            eee{
+                    display: none;
+                }
             .topnav {
                 overflow: hidden;
                 background-color: white;
@@ -86,6 +88,9 @@
             }
 
             @media screen and (max-width: 768px) {
+                eee{
+                    display: contents;
+                }
                 a.icon{
                     position: absolute;;
                     top:15px;
@@ -213,8 +218,9 @@
                         div1.setAttribute('class', 'dropdown');
                         // div1 包住所有的东西
                         let button = document.createElement('button')
+
                         button.setAttribute('class', 'dropbtn');
-                        button.innerText = maincate['name'];
+                        button.innerHTML = "<eee>+ </eee>" + maincate['name'];
                         let div2 = document.createElement('div');
                         div2.setAttribute('class', 'dropdown-content');
                         subcates.forEach(subcate => {
