@@ -144,6 +144,7 @@
                 border-style: solid;
                 border: 1px solid #ccc;
                 margin-top: 2px;
+                visibility: visible;
 
             }
 
@@ -249,6 +250,8 @@
                 border: none;
                 font-size: large;
                 margin-top: 52px;
+                visibility: hidden;
+
             }
 
             .b3 {
@@ -546,7 +549,7 @@
 </dom-module>
 
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-new-product',
             properties: {
@@ -554,7 +557,7 @@
                     "type": String
                 }
             },
-            created: function () {
+            created: function() {
                 // call close pop-up in change-confirm
                 document.addEventListener('close-item-dialog', e => {
                     this.shadowRoot.querySelector('vaadin-dialog').opened = false;
@@ -566,7 +569,7 @@
                     this.fileManager = new AwsPackage(user);
 
             },
-            ready: function () {
+            ready: function() {
                 let loc = location.search;
                 let pid = "";
                 let posit = 0;
@@ -588,7 +591,11 @@
                     "type": "product",
                     "id": pid
                 }
+                let user = store.get('change-user') || null;
+                if (user) {
+                    shadow.querySelector('contact').style.visibility = "visible";
 
+                }
 
                 Polymer.postData(Url, params).then(res => {
                     console.log("Result", res);
@@ -599,6 +606,7 @@
                         let imglen = [];
                         for (qwe = 0; qwe < b.length; qwe++) {
                             if (b[qwe] == "") {
+                                shadow.querySelector('#div' + qwe).style.visibility = "hidden";
 
                             } else {
                                 imglen.push(b[qwe])
@@ -607,7 +615,8 @@
                         let lenb = imglen.length;
                         for (q22 = 0; q22 < lenb; q22++) {
                             shadow.querySelector('#div' + q22).style.backgroundImage = 'url(' + imglen[q22] + ')';
-                        }
+                        };
+
                         let c = res.resolve['productname'];
                         shadow.querySelector('#pn').innerHTML = c;
 
@@ -682,8 +691,8 @@
 
                 });
             },
-            _findseller: function () {
-                let user = store.get('change-user')||null;
+            _findseller: function() {
+                let user = store.get('change-user') || null;
                 if (user == null) {
                     alert("請先登入!");
                 } else {
@@ -691,7 +700,7 @@
                     let shadow = this.shadowRoot;
                     let that = this;
                     let dialog = shadow.querySelector('vaadin-dialog');
-                    Polymer.popup(dialog, "change", "change-webcom", "40%", "60%");
+                    Polymer.popup(dialog, "change", "change-webcom", "325px", "600px");
                     console.log("end process in contact seller");
                 }
             },

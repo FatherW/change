@@ -231,6 +231,9 @@ its values is > 50%. */
                     this.data2 = range.to;
                     this.data1 = range.from;
                     var all = range.query;
+                } else {
+                    var all = this.query;
+
                 }
                 let initprice = 0;
                 for (i = 0; i < all.length; i++) {
