@@ -1,0 +1,111 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-text-field/vaadin-email-field.html">
+<link rel="import" href="../vaadin-checkbox/vaadin-checkbox.html">
+<link rel="import" href="../vaadin-select/vaadin-select.html">
+<link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
+<link rel="import" href="change-login.html">
+<dom-module id="change-resetpw">
+
+
+    <template>
+
+        <style>
+            * {
+                color: black;
+                font-family: sans-serif, Microsoft JhengHei;
+            }
+
+            body {
+                overflow: hidden;
+            }
+
+            #content {
+                width: 40%;
+                margin: 0 auto;
+            }
+
+            h1 {
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
+
+            a {
+                color: blue;
+            }
+        </style>
+        <div id="content">
+            <div>
+                新密碼:<vaadin-password-field id="pass1" label="密碼" class="padding-none" name="pass"
+                    error-message="Please enter a valid password" required clear-button-visible></vaadin-password-field>
+            </div>
+            <div>
+                確認密碼:<vaadin-password-field id="pass2" label="確認密碼" class="padding-none" name="confirmPass"
+                    error-message="Passwords do not match" required clear-button-visible></vaadin-password-field>
+            </div>
+            <div>
+                <button on-click="_register" class=" login-register">更新密碼</button>
+            </div>
+
+        </div>
+    </template>
+
+</dom-module>
+
+<script>
+    (function() {
+        Polymer({
+            is: 'change-resetpw',
+            properties: {
+
+            },
+            created: function() {
+
+
+
+            },
+            //for adding link to the user name connecting wth the databse
+            ready: function() {
+
+            },
+            _register() {
+                let shadow = this.shadowRoot;
+                let pass = shadow.querySelector('#pass1').value;
+                let cpass = shadow.querySelector('#pass2').value;
+                if (pass == "") {
+                    alert {
+                        "請輸入密碼"
+                    };
+                } else {
+                    if (pass != cpass) {
+                        alert('密碼不一樣 請重新輸入');
+                    } else {
+                        this.reset(cpss);
+                    }
+                }
+            },
+            reset(password) {
+                http: //change.dazzle.website/forget-password.html?token=24093129016
+                    let loc = location.search;
+                let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let token = "";
+                for (i = 7; i < loc.length; i++) {
+                    token += loc[i];
+                }
+                let pram = {
+                    "action": "changeresetpassword",
+                    "token": token,
+                    "password": password
+                };
+                Polymer.postData(url, pram).then(res => {
+                    if (res.code > 0) {
+                        console.log("我做完嗡");
+                        alert(res.resolve);
+                    }
+                })
+            },
+
+
+
+        });
+    })();
+</script>
