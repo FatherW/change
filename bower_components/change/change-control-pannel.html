@@ -81,7 +81,7 @@
 
         <div class="container">
 
-            <div id="controlbar">
+            <div id="controlbar" style="display: none;">
                 <div class="cp">
                     <span>!管理面板!</span>
                 </div>
@@ -135,13 +135,14 @@
                 Polymer.postData(link, param).then(res => {
                     if (res.code > 0) {
                         // console.log("CHECK",res.code);
-                        let adminStatus = res.resolve.isAdmin || false;
-                        if (adminStatus) {
+                        let adminStatus = res.resolve[0].isAdmin;
+                        if (Boolean(adminStatus) == true) {
                             console.log("This user is ADMIN!");
+                            console.log("status", adminStatus);
+                            shadow.querySelector("#controlbar").style.display = "block";
 
                         } else {
                             console.log("This user is NOT ADMIN!");
-                            shadow.querySelector("#controlbar").style.display = "none";
                         }
                     } else {
                         alert("CANNOT SEARCH USER!");
