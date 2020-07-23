@@ -70,8 +70,7 @@
                 background-color: blue;
             }
 
-            @media only screen and (max-width: 992px) {
-            }
+            @media only screen and (max-width: 992px) {}
 
             @media only screen and (max-width: 640px) {
                 #controlbar {
@@ -109,9 +108,46 @@
             is: 'change-control-pannel',
             properties: {},
 
-            ready: function () { },
 
             created: function () { },
+
+            ready: function () {
+                let shadow = this.shadowRoot;
+                let that = this;
+
+                let usercookies = store.get('change-user');
+                let userID = usercookies['id'];
+
+                // console.log("cookie", userID);
+                let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let param = {
+                    "action": "searchData",
+                    "index": "change",
+                    "type": "_user",
+                    "body": {
+                        "query": {
+                            "match": {
+                                "id": userID
+                            }
+                        }
+                    }
+                };
+                Polymer.postData(link, param).then(res => {
+                    if (res.code > 0) {
+                        // console.log("CHECK",res.code);
+                        let adminStatus = res.resolve.isAdmin || false;
+                        if (adminStatus) {
+                            console.log("This user is ADMIN!");
+
+                        } else {
+                            console.log("This user is NOT ADMIN!");
+                            shadow.querySelector("#controlbar").style.display = "none";
+                        }
+                    } else {
+                        alert("CANNOT SEARCH USER!");
+                    }
+                })
+            },
 
             _addFanPage: function () {
                 console.log("addFanPage is working!")

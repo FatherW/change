@@ -212,7 +212,7 @@
                 Polymer.postData(Url, params).then(res => {
                     console.log("check:", res.code);
                     if (res.code > 0) {
-                        alert("STATUS: DELETE SUCCESSFUL");
+                        //alert("STATUS: DELETE SUCCESSFUL");
                         location.replace("./user.html?" + user['_id']);
                     } else {
                         alert("STATUS: DELETE UNSUCCESSFUL");
