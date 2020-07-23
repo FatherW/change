@@ -30,7 +30,7 @@
             }
 
             #left {
-                width: 80%;
+                width: 440px;
                 float: left;
             }
 
@@ -48,6 +48,9 @@
                 /* width: 75%; */
                 display: inline-flex;
                 align-content: flex-end;
+                
+    float: right;
+    padding-right: 4%;
             }
 
             /* #top {
@@ -87,6 +90,9 @@
                 margin-block-end: 1.67em;
                 margin-right: 100px;
             }
+            #leftele{
+                margin: 0px 5px;
+            }
 
             @media (max-width: 640px) {
                 .grid-container {
@@ -122,13 +128,14 @@
                 </div>
                 <div id="right">
                     <div id="leftele">
-                        <button id="vs1" on-click="deleteadmin">指派專頁管理員</button>
+                        <vaadin-button id="vs1" on-click="deleteadmin">指派專頁管理員</vaadin-button>
                         <div id="shouldhide">
                             
                         </div>
                     </div>
+
                     <div id="rightele">
-                        <button id="vb" on-click="toggle">編輯</button>
+                        <vaadin-button id="vb" on-click="toggle">編輯</vaadin-button>
                     </div>                    
 
                 </div>
