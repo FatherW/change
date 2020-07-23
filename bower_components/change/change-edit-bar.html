@@ -256,7 +256,7 @@
                     //SEND THE ABOVE MESSAGE TO POSTMAN
                 Polymer.postData(Url, params).then(res => {
                     if (res.code > 0) {
-                        alert("STATUS: COPY SUCCESSFUL");
+                        // alert("STATUS: COPY SUCCESSFUL");
                         console.log("RES.RESOLVE", res.resolve);
                         // store.set("change-res", res.resolve);
 
@@ -287,12 +287,7 @@
                         let user = store.get("change-user") || null;
                         let temptime = user['_id'];
                         let tempid = user['goodsNum'].toString() + Math.floor(Math.random() * 10);
-                        if (location.search.length < 3) {
-                            var thenewid = "" + temptime.toString() + tempid;
-                        } else {
-                            var thenewid = this.id;
-
-                        }
+                        var thenewid = "" + temptime.toString() + tempid;
 
                         let json = {
                             "action": "addData",

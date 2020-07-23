@@ -1278,7 +1278,7 @@
                             };
                             Polymer.postData(Url, paramup).then(res => {
                                 if (res.code > 0) {
-                                    alert("成功！");
+                                    // alert("成功！");
                                     console.log("JSON", json);
                                     this.fileManager.saveFile('json/product-' + thenewid + '.json', JSON.stringify(json));
                                     location.replace("./edit-product.html?p" + thenewid + "u" + user['_id']);
