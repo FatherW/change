@@ -516,6 +516,8 @@
                     // console.log("JSON", this.query);
                     Polymer.postData(goodsUrl, params).then(res => {
                         if (res.code > 0) {
+
+                            ////display change-in-item
                             this.myProducts = res.resolve;
                             let wrapper = that.shadowRoot.querySelector('.things-grid');
                             wrapper.innerHTML = '';
@@ -531,6 +533,20 @@
                                     wrapper.appendChild(productItem);
                                 });
                             }
+
+                            ///display no reply
+                            if (this.getAttribute('id') == "mp") {
+                                res.resolve.forEach(item => {
+                                    let counti = 0;
+                                    if (item.orderId > 0) {
+                                        counti++
+                                    };
+                                    let change_user = document.querySelector('change-user').shadowRoot;
+                                    change_user.querySelector('#reply').innerHTML = "待回覆(" + counti + ")";
+                                })
+                            }
+
+
                         } else {
                             shadow.querySelector('#np').innerHTML = "No products";
                             alert('服務器故障 Server error');

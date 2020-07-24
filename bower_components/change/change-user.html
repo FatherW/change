@@ -12,6 +12,12 @@
                 font-family: sans-serif,Microsoft JhengHei;
 
             }
+            #status{
+                width: 15px;
+                height: 15px;
+                background-color: rgb(242,253,55);
+                border-radius: 100%;
+            }
             #prods {
                 margin-left: 8%;
                 margin-right: 2%;
@@ -48,6 +54,7 @@
                 </vaadin-tabs>
                 <iron-pages selected="[[page]]">
                     <page id="page1">
+                        <div style="display: flex;" id="reply">待回覆<div id="status"></div>
                         <change-in-item id="mp">該用戶還沒有任何產品喔</change-in-item>
                     </page>
                     <page id= "page2">
@@ -132,7 +139,7 @@
                                         }
                                     }, {
                                         "match": {
-                                            "status": "已完成"
+                                            "status": "已提交訂單"
                                         }
                                     }]
                                 }
