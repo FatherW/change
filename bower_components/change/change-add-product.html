@@ -941,6 +941,7 @@
                         "type": "_user",
                         "id": usertokenId
                     };
+                    // console.log("TEST2", usertokenId);
                     Polymer.postData(loginUrl, defaultLocation).then(res => {
                         if (res.code > 0) {
                             // console.log("default", res.resolve['area']);
@@ -952,7 +953,8 @@
                     })
                 };
 
-
+                
+                let usertokenId = user['_id'];
                 let parampage = {
                     "action": "searchData",
                     "index": "change",
@@ -961,12 +963,14 @@
                     "body": {
                         "query": {
                             "match": {
-                                "adminId": uid
+                                "adminId": usertokenId
 
                             }
                         }
                     }
                 };
+
+                
                 Polymer.postData(loginUrl, parampage).then(res => {
                     let pagename = [];
                     if (res.code > 0) {
@@ -1112,11 +1116,11 @@
                     };
                 });
 
-
-                let userurl = "/json/user-" + uid + ".json";
+                
+                let userurl = "/json/user-" + usertokenId + ".json";
                 Polymer.getContent(userurl).then(str => {
                     json = JSON.parse(str);
-
+                    console.log("TEST", json);
                     //USER INFO COLUM
                     shadow.querySelector('#owner').innerHTML = json['username'];
 
@@ -1269,7 +1273,11 @@
                     };
                     let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
                     Polymer.postData(link, params).then(res => {
-                        var newproductid = res.resolve.id;
+
+                        //FIXING HERE//
+                        console.log("TEST4",res);
+                        console.log("TEST3",res.resolve);
+                        var newproductid = res.resolve._id;
                         this.dataManager.loadDate(newproductid).then(res => {
                             this.fileManager.saveFile('json/product-' + newproductid + '.json', JSON.stringify(res.resolve));
 
