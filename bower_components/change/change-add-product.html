@@ -659,6 +659,8 @@
                 this.pics = [];
                 this.pics[0] = this.bigPic;
                 console.log("Created Add Product");
+                this.dataManager = new DataPackage('product');
+                this.fileManager = new AwsPackage(user);
 
                 // document.addEventListener('upload-success', e => {
                 //     let src = e.detail['Key'];
@@ -1176,7 +1178,6 @@
 
 
                 if (user != null) {
-                    this.fileManager = new AwsPackage(user);
                     console.log(user);
                     let that = this;
                     let shadow = this.shadowRoot;
@@ -1271,6 +1272,12 @@
 
                         console.log("the json", JSON.stringify(params));
                         console.log("the res", res);
+                        var newproductid = res.resolve.id;
+                        this.dataManager.loadDate(newproductid).then(res => {
+                            this.fileManager.saveFile('json/product-' + newproductid + '.json', JSON.stringify(res.resolve));
+
+                        })
+
                         if (res.code > 0) {
 
                             let paramup = {
@@ -1289,8 +1296,7 @@
                             Polymer.postData(Url, paramup).then(res => {
                                 if (res.code > 0) {
                                     // alert("成功！");
-                                    this.fileManager.saveFile('json/product-' + thenewid + '.json', JSON.stringify(res.resolve));
-                                    // location.replace("./edit-product.html?p" + thenewid + "u" + user['_id']);
+                                    location.replace("./edit-product.html?p" + thenewid + "u" + user['_id']);
                                 } else {
                                     alert("update fail");
                                 }
