@@ -8,10 +8,18 @@
     <template>
         <style include="icon-styles"></style>
         <style>
-            *{
-                font-family: sans-serif,Microsoft JhengHei;
+            * {
+                font-family: sans-serif, Microsoft JhengHei;
 
             }
+
+            #status {
+                width: 15px;
+                height: 15px;
+                background-color: rgb(242, 253, 55);
+                border-radius: 100%;
+            }
+
          
             #prods {
                 margin-left: 8%;
@@ -21,27 +29,42 @@
                 padding-left: 2%;
                 padding-right: 2%;
                 padding-bottom: 2%;
-                width:80%;
+                width: 80%;
                 background-color: white;
-                display:inline-block;
+                display: inline-block;
                 float: left;
             }
-            #add{
+
+            #add {
                 display: inline-block;
                 width: 6%;
                 position: relative;
                 padding-top: 14%;
             }
-            #container{
+
+            #container {
                 float: left;
                 background-color: #FFFBF2;
                 width: 100%;
                 padding-bottom: 30px;
             }
+
+            @media (max-width: 640px) {
+                #prods {
+                    margin-left: 0%;
+                    margin-right: 0%;
+                    margin-top: 0%;
+                    padding: 0%;
+                    width: 100%;
+                    background-color: white;
+                    display: inline-block;
+                    float: left;
+                }
+            }
         </style>
         <div id="container">
             <div id="prods">
-                <vaadin-tabs selected="{{page}}">
+                <vaadin-tabs selected="{{page}}" style="width: 100%; margin: 0 auto;">
                     <vaadin-tab>我的貨物</vaadin-tab>
                     <vaadin-tab>我的喜愛清單</vaadin-tab>
                     <vaadin-tab>過去交易</vaadin-tab>
@@ -52,7 +75,7 @@
                         <!-- <div style="display: flex;" id="reply">待回覆<div id="status"></div> -->
                         <change-in-item id="mp">該用戶還沒有任何產品喔</change-in-item>
                     </page>
-                    <page id= "page2">
+                    <page id="page2">
                         <change-in-item id="fav">該用戶暫時沒有選購清單</change-in-item>
                     </page>
                     <page id="page3">
@@ -63,9 +86,9 @@
                     </page>
                 </iron-pages>
             </div>
-            <div id="add">
+            <!-- <div id="add">
                 <change-addprod-butt></change-addprod-butt>
-            </div>
+            </div> -->
         </div>
     </template>
 </dom-module>

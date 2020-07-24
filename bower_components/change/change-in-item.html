@@ -10,15 +10,14 @@
             * {
                 font-family: sans-serif, 微軟正黑體;
             }
-            #status{
-                width: 15px;
-                height: 15px;
-                background-color: rgb(241,151,55);
-                border-radius: 100%;
+
+            .container {
+                width: 100%;
+                margin: 0 auto;
             }
+
             .things-grid {
                 display: grid;
-                width: 97%;
                 height: 100%;
                 grid-row-gap: 15px;
                 padding: 50px;
@@ -39,18 +38,17 @@
             }
 
             #morebutton {
-                align-items: center;
+                /* align-items: center;
                 border: 1px;
                 width: 200px;
                 height: 50px;
                 font-size: 25px;
-                display: block;
+                display: block; */
             }
 
             .botbutton {
                 text-align: center;
-                display: grid;
-                width: 97%;
+                margin-bottom: 10px;
                 background-color: white;
                 grid-template-columns: repeat(3, 1fr);
                 grid-column-gap: 75px;
@@ -61,15 +59,9 @@
                 box-shadow: 0px 4px 8px -1px rgba(50, 49, 56, 0.2);
             }
 
-            .blank{
-                display:block;
-            }
-
-
-            @media (max-width: 1292px) {
+            /* @media (max-width: 1292px) {
                 .things-grid-middle-mobile {
                     display: grid;
-                    width: 95%;
                     height: 100%;
                     grid-row-gap: 15px;
                     padding-bottom: 50px;
@@ -83,43 +75,66 @@
                     width: 80%;
                     height: 80%
                 }
-            }
+            } */
 
             @media (max-width: 940px) {
                 .things-grid-small-mobile {
                     display: grid;
-                    width: 95%;
-                    /* padding-left: 15px; */
                     height: 100%;
                     grid-row-gap: 15px;
-                    padding: 1px;
-                    padding-left: 15px;
-                    grid-column-gap: 0px;
-                    grid-row-gap: 10px;
+                    padding: 50px 10px 50px 10px;
+                    grid-column-gap: 30px;
+                    grid-row-gap: 40px;
+                    grid-template-columns: repeat(3, 1fr);
+                    background-color: white;
+                    -webkit-box-shadow: 0px -4px 8px 0px rgba(50, 49, 56, 0.2);
+                    -moz-box-shadow: 0px -4px 8px 0px rgba(50, 49, 56, 0.2);
+                    box-shadow: 0px -4px 8px 0px rgba(50, 49, 56, 0.2);
+                }
+
+                .botbutton {
+                    display: block;
+                    padding-bottom: 10px;
+                    margin: 0;
+                }
+            }
+
+            @media only screen and (max-width: 768px) {
+                .things-grid-small-mobile {
+                    display: grid;
+                    height: 100%;
+                    grid-row-gap: 15px;
+                    padding-bottom: 50px;
+                    grid-column-gap: 30px;
+                    grid-row-gap: 40px;
                     grid-template-columns: repeat(2, 1fr);
                     background-color: white;
                     -webkit-box-shadow: 0px -4px 8px 0px rgba(50, 49, 56, 0.2);
                     -moz-box-shadow: 0px -4px 8px 0px rgba(50, 49, 56, 0.2);
                     box-shadow: 0px -4px 8px 0px rgba(50, 49, 56, 0.2);
                 }
-                .blank{
-                    display:none;
+
+                .botbutton {
+                    display: block;
+                    padding-bottom: 10px;
+                    margin: 0;
                 }
             }
-
-            
         </style>
 
 
 
-      <div id="change-user" style="display: flex;"></div>  
-<div class="things-grid things-grid-small-mobile things-grid-middle-mobile" id="blank"></div>
-<div class="botbutton">
-    <div class="blank"></div>
-    <div style="display:inline-flex;">
-        <vaadin-button id="morebutton" on-click="displaymore">更多</vaadin-button>
-    </div>
-</div>
+        <div class="container">
+            <div class="test" style="background-color: white;">
+                <div class="things-grid things-grid-small-mobile things-grid-middle-mobile" id="blank"></div>
+            </div>
+            <div class="botbutton">
+                <div style="display:inline-flex;">
+                    <vaadin-button id="morebutton" on-click="displaymore">更多</vaadin-button>
+                </div>
+            </div>
+        </div>
+
 
 
 
@@ -128,7 +143,7 @@
 </dom-module>
 
 <script>
-    (function() {
+    (function () {
 
 
 
@@ -168,10 +183,10 @@
 
             },
 
-            created: function() {
+            created: function () {
                 this.countitem = 0;
             },
-            ready: function() {
+            ready: function () {
                 // this.search();
             },
 
@@ -444,7 +459,7 @@
 
             },
 
-            displaymore: function() {
+            displaymore: function () {
                 let that = this;
                 let shadow = this.shadowRoot;
                 let prods = this.res2;
@@ -493,7 +508,7 @@
 
 
 
-            _showMyGoods: function() {
+            _showMyGoods: function () {
                 let shadow = this.shadowRoot;
                 shadow.querySelector('#blank').innerHTML = "";
                 let that = this;
