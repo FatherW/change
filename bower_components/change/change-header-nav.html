@@ -7,15 +7,17 @@
                 margin: 0;
                 font-family: Arial;
             }
-            eee{
-                    display: none;
-                }
+
+            eee {
+                display: none;
+            }
+
             .topnav {
                 overflow: hidden;
                 background-color: white;
                 justify-content: center;
                 display: flex;
-                
+
             }
 
             .topnav a {
@@ -88,14 +90,17 @@
             }
 
             @media screen and (max-width: 768px) {
-                eee{
+                eee {
                     display: contents;
                 }
-                a.icon{
-                    position: absolute;;
-                    top:15px;
-                    right:15px;
+
+                a.icon {
+                    position: absolute;
+                    ;
+                    top: 15px;
+                    right: 15px;
                 }
+
                 .topnav a:not(:first-child),
                 .dropdown .dropbtn {
                     display: none;
@@ -111,9 +116,9 @@
                 }
 
                 .topnav.responsive .icon {
-                    position:fixed;
-                    top:15px;
-                    right:15px;
+                    position: fixed;
+                    top: 15px;
+                    right: 15px;
                 }
 
                 .topnav.responsive a {
@@ -144,7 +149,7 @@
                 .topnav {
                     overflow: hidden;
                     background-color: white;
-                    justify-content:none;
+                    justify-content: none;
                     display: block;
                 }
 
@@ -152,7 +157,7 @@
         </style>
 
 
-        <div style="width: 90%;">
+        <div style="width: 84%; margin: 0 auto;">
 
 
             <div class="topnav" id="myTopnav">
@@ -171,16 +176,16 @@
 <script>
 </script>
 <script>
-    (function() {
+    (function () {
         Polymer({
             is: 'change-header-nav',
             properties: {},
-            created: function() {
+            created: function () {
 
 
 
             },
-            ready: function() {
+            ready: function () {
                 let shadow = this.shadowRoot;
                 let that = this;
                 let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
@@ -244,7 +249,7 @@
                 })
             },
 
-            searchlist: function() {
+            searchlist: function () {
                 let shadow = this.shadowRoot;
                 if (shadow.querySelector('.s').value == "0") {
                     var serchcat = '/list-product.html?tag' + shadow.querySelector('#searchmain').value;
@@ -254,12 +259,12 @@
                 location.href = serchcat;
             },
 
-            _editMenu: function() {
+            _editMenu: function () {
                 let shadow = this.shadowRoot;
                 let dialog = shadow.querySelector('vaadin-dialog');
                 Polymer.popup(dialog, "change", "change-header-info", "85%", "85%");
             },
-            myFunction: function() {
+            myFunction: function () {
                 let shadow = this.shadowRoot;
                 var x = shadow.querySelector("#myTopnav");
                 if (x.className === "topnav") {
