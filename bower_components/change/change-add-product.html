@@ -1268,6 +1268,9 @@
                     let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
                     Polymer.postData(link, params).then(res => {
                         console.log("Result", res);
+
+                        console.log("the json", JSON.stringify(params));
+                        console.log("the res", res);
                         if (res.code > 0) {
 
                             let paramup = {
@@ -1287,7 +1290,9 @@
                                 if (res.code > 0) {
                                     // alert("成功！");
                                     this.fileManager.saveFile('json/product-' + thenewid + '.json', JSON.stringify(res.resolve));
-                                    location.replace("./edit-product.html?p" + thenewid + "u" + user['_id']);
+                                    // location.replace("./edit-product.html?p" + thenewid + "u" + user['_id']);
+                                } else {
+                                    alert("update fail");
                                 }
 
 
@@ -1296,7 +1301,7 @@
 
 
                         } else {
-                            alert("Failed");
+                            alert(res.text);
                         }
                     })
 
