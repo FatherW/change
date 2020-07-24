@@ -191,6 +191,7 @@
             #left2 {
                 float: left;
             }
+           
 
             #left3 {
                 float: left;
@@ -361,7 +362,7 @@
         </style>
 
         <div id="deleteall" style="display: block;">
-            <div style="display: flex;">
+            <div style="display: flex;width: max-content;">
             <a style="width: 90%;" href$="{{userUrl}}">
                 <change-user-tag></change-user-tag>
             </a>
@@ -521,8 +522,11 @@
                 shadow.querySelectot
                 this.shadowRoot.querySelector('change-user-tag').loadData(all['ownerId'], all['createTime']);
                 this.shadowRoot.querySelector('change-item-tag').loadTags(all['tags']);
-                let boolean = user.isAdmin;
-                if (Boolean(boolean) || user['_id'] == all['ownerId']) {
+                console.log("fdasbhiufadbsufdbiufdb", Boolean(null));
+                let diu = user.isAdmin || null;
+
+                let boolean = Boolean(diu);
+                if (boolean || user['_id'] == all['ownerId']) {
                     shadow.querySelector('.shouldhide').style.visibility = 'visible';
                 }
 
