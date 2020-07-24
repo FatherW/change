@@ -929,7 +929,26 @@
                             this.next = res.resolve.length;
                         }
                     });
-                }
+
+                    //get currect user token
+                    let user = store.get('change-user') || null;
+                    let usertokenId = user['_id'];
+                    let defaultLocation = {
+                        "action": "getData",
+                        "index": "change",
+                        "type": "_user",
+                        "id": usertokenId 
+                    };
+                    Polymer.postData(loginUrl, defaultLocation).then(res => {
+                        if (res.code > 0) {
+                            // console.log("default", res.resolve['area']);
+                            shadow.querySelector('#vs2').value = res.resolve['area'];
+
+                        } else {
+                            console.log("get default FAIL!");
+                        }
+                    })
+                };
 
 
                 let parampage = {
@@ -1249,6 +1268,7 @@
                         "pics": this.pics,
                         "like": 0,
                         "postStatus": true,
+                        "replyArray":[]
                     }
                     let params = {
                         "action": "addData",

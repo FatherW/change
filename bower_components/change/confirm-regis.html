@@ -97,6 +97,7 @@
                             }
                         });
 
+                        //get currect user token
                         let user = store.get('change-user') || null;
                         if (user['_id'] == userid) {
                             console.log("success user id token", user);
