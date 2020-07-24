@@ -674,7 +674,7 @@
                     let Key = e.detail['Key'];
                     // this.pics.push(Key);
                     this.curElm.style.backgroundImage = 'url(' + Key + ')';
-                    console.log('Select Image', e, this.pics);
+                    // console.log('Select Image', e, this.pics);
                     this.getAllPics();
                     this.closeDialog();
                 });
@@ -698,7 +698,7 @@
             _addTags(e) {
                 let myTags = this.shadowRoot.querySelector('#myTags');
                 let val = this.shadowRoot.querySelector('#inputTags').value;
-                console.log('Key Down', e);
+                // console.log('Key Down', e);
 
                 if (e.code === "Enter") {
                     myTags._addTag(val);
@@ -708,7 +708,7 @@
             },
 
             ready: function() {
-                console.log("Entered Ready");
+                // console.log("Entered Ready");
                 let user = store.get("change-user") || null;
 
                 //SUBCAT//
@@ -722,11 +722,11 @@
                         // shadow.querySelector('span').textContent = JSON.stringify(e.detail.value.text);
                         shadow.querySelector('span').textContent = e.detail.value.text;
                         this.CATE = e.detail.value.text;
-                        console.log("this cate", this.CATE);
-                        console.log("e", e.detail.value.text);
+                        // console.log("this cate", this.CATE);
+                        // console.log("e", e.detail.value.text);
                     });
 
-                    console.log("ready");
+                    // console.log("ready");
                     let c = {};
                     let arr = [];
                     let g = [];
@@ -771,12 +771,12 @@
                                         "children": childarr
                                     };
                                     arr.push(c);
-                                    console.log("ChildArr:", childarr);
+                                    // console.log("ChildArr:", childarr);
                                     childarr = [];
 
 
                                     let id = a[i].id;
-                                    console.log("C:", c);
+                                    // console.log("C:", c);
 
 
                                     // for (x = 0; x < a.length; x++) {
@@ -799,7 +799,7 @@
                                 }
 
                             }
-                            console.log("ARR_RESULT:", arr);
+                            // console.log("ARR_RESULT:", arr);
                             let h = {
 
                                 text: 'Project',
@@ -822,9 +822,9 @@
 
                             g.push(h);
                             //g 就是我们要的答案
-                            console.log("g", g);
-                            console.log("CHECK:", c);
-                            console.log("arrchild", arrchild);
+                            // console.log("g", g);
+                            // console.log("CHECK:", c);
+                            // console.log("arrchild", arrchild);
                         }
 
                     });
@@ -871,9 +871,9 @@
                             }
                         }
                     };
-                    console.log("RP", p);
+                    // console.log("RP", p);
                     Polymer.postData(loginUrl, p).then(res => {
-                        console.log("RP", res);
+                        // console.log("RP", res);
                         if (res.code > 0) {
                             let res2 = res.resolve;
                             this.CATE = res.resolve[0]['categories'];
@@ -889,7 +889,7 @@
                             }
                             shadow.querySelector('#pname').value = res.resolve[0]['productname'];
                             shadow.querySelector('#price').value = res.resolve[0]['price'];
-                            console.log("Matters", res.resolve[0]['price']);
+                            // console.log("Matters", res.resolve[0]['price']);
                             if (res.resolve[0]['price'] != "0") {
 
                                 shadow.querySelector('#free').checked = false;
@@ -925,7 +925,7 @@
                         }
                     }
                     Polymer.postData(loginUrl, params).then(res => {
-                        console.log(res);
+                        // console.log(res);
                         if (res.code > 0) {
                             this.next = res.resolve.length;
                         }
@@ -1125,18 +1125,18 @@
                         shadow.querySelector('#a1').innerHTML = '<img id="gand" src=' + json['head'] + '>';
                     };
                     //check the username
-                    console.log("SEE", shadow.querySelector('#gand').src);
+                    // console.log("SEE", shadow.querySelector('#gand').src);
 
 
                     //ENABLE & DISABLE PRICE
                     shadow.querySelector('#free').addEventListener("click", (e) => {
-                        console.log("worked");
+                        // console.log("worked");
                         if (shadow.querySelector('#free').checked == true) {
-                            console.log('Price will be disabled');
+                            // console.log('Price will be disabled');
                             shadow.querySelector('#price').disabled = true;
                             shadow.querySelector('#price').value = "0";
                         } else if (shadow.querySelector('#free').checked == false) {
-                            console.log('Price will be enabled');
+                            // console.log('Price will be enabled');
                             shadow.querySelector('#price').disabled = false;
                         }
                     })
@@ -1268,10 +1268,6 @@
                     };
                     let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
                     Polymer.postData(link, params).then(res => {
-                        console.log("Result", res);
-
-                        console.log("the json", JSON.stringify(params));
-                        console.log("the res", res);
                         var newproductid = res.resolve.id;
                         this.dataManager.loadDate(newproductid).then(res => {
                             this.fileManager.saveFile('json/product-' + newproductid + '.json', JSON.stringify(res.resolve));
@@ -1320,7 +1316,6 @@
             },
 
             _uploadFile: function(e) {
-                console.log('upload', e);
                 let shadow = this.shadowRoot;
                 let that = this;
                 this.pics = [];
