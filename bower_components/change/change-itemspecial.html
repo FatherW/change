@@ -267,7 +267,8 @@
                 height: 30px;
                 border-radius: 15px;
             }
-            #cat_all:hover{
+
+            #cat_all:hover {
                 cursor: pointer;
             }
 
@@ -333,8 +334,9 @@
                     grid-template-columns: repeat(3, 1fr);
                     background-color: white;
                 }
-                
+
             }
+
             @media (max-width: 640px) {
                 .things-grid-small-mobile {
                     display: grid;
@@ -361,7 +363,7 @@
 
         <div class="things-grid things-grid-small-mobile things-grid-middle-mobile" id="blank"></div>
 
-        <div style="text-align: center; margin-bottom: 10px;">
+        <div style="text-align: center; padding-bottom: 10px;">
             <vaadin-button on-click="displaymore">更多</vaadin-button>
         </div>
 
@@ -370,7 +372,7 @@
 </dom-module>
 <script async defer src="../moment/moment.js"></script>
 <script>
-    (function() {
+    (function () {
 
 
 
@@ -397,7 +399,7 @@
 
             },
 
-            created: function() {
+            created: function () {
                 let a = moment().format();
                 let b = moment();
 
@@ -414,7 +416,7 @@
                 // });
 
             },
-            ready: function() {
+            ready: function () {
                 let that = this;
                 let shadow = this.shadowRoot;
                 this.countitem = 0;
@@ -627,7 +629,7 @@
 
 
             },
-            displaymore: function() {
+            displaymore: function () {
                 let that = this;
                 let shadow = this.shadowRoot;
 

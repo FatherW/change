@@ -18,6 +18,10 @@
                 overflow: hidden;
             }
 
+            #containall {
+                display: flex;
+            }
+
             .clear {
                 clear: both;
             }
@@ -94,13 +98,12 @@
             }
 
             #rightele {
-                width: 70%;
-                float:left; 
-                margin-top:50px;
-                border:'none';
+                width: 100%;
+                float: left;
+                margin-top: 50px;
+                border: 'none';
                 margin-left: 50px;
-                padding-right: 60px;
-               
+
             }
 
             #containall {
@@ -148,46 +151,47 @@
             }
 
 
-            #viewingcat{
-                    display:block;
-                }
+            #viewingcat {
+                display: block;
+            }
+
             body {
                 margin: none;
             }
-           
-            change-mobileslide{
-                display:none;
+
+            change-mobileslide {
+                display: none;
             }
+
+
             @media (max-width: 1292px) {
-                #rightele {
-                    width: 68%;
-                    margin-top: 50px;
-                    margin-left:50px;
+                .things-grid-middle-mobile {
+                    grid-template-columns: repeat(2, 1fr);
                 }
             }
 
-            @media only screen and (max-width: 1110px) {
-                #rightele {
-                    width: 65%;
-                    margin-top: 50px;
-                    margin-left: 50px ;
+            @media only screen and (max-width: 940px) {}
+
+            @media only screen and (max-width: 768px) {
+                #containall {
+                    display: block;
                 }
-            }
-            @media only screen and (max-width: 940px) {
+
                 #rightele {
-                    width: 91%;
-                    margin-top: 5px;
-                    margin-left: 2%;
+                    margin-top: 0;
+                    border: 'none';
+                    margin-left: 0;
                 }
-                
-                change-slidelist{
+
+                change-slidelist {
                     display: none;
                 }
-                change-mobileslide{
-                    display:block;
+
+                change-mobileslide {
+                    display: block;
                 }
-                
-               
+
+
             }
         </style>
 
@@ -197,7 +201,7 @@
                 <change-mobileslide></change-mobileslide>
             </div>
 
-            <div id="rightele" >
+            <div id="rightele">
                 <div class="initemtitle" id="viewingcat">你正在瀏覽的分類 <paper-tags-input width="100%" id="myTags">
                     </paper-tags-input>
                 </div>
@@ -211,7 +215,7 @@
 
 
     <script>
-        (function() {
+        (function () {
             Polymer({
                 is: 'change-shop',
                 properties: {
@@ -237,7 +241,7 @@
                         'type': Boolean
                     }
                 },
-                created: function() {
+                created: function () {
                     let that = this;
                     this.categories = [];
                     this.tags = [];
@@ -326,7 +330,7 @@
                     this.search();
 
                 },
-                ready: function() {
+                ready: function () {
                     console.log("now shop");
                     document.addEventListener('areachange', e => {
                         this.isFree = e.detail.isFree;
