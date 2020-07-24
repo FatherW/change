@@ -13,7 +13,6 @@
 
             .things-grid {
                 display: grid;
-                /* width: 97%; */
                 height: 100%;
                 grid-row-gap: 15px;
                 padding: 50px;
@@ -45,7 +44,6 @@
             .botbutton {
                 text-align: center;
                 margin-bottom: 10px;
-                /* width: 97%; */
                 background-color: white;
                 grid-template-columns: repeat(3, 1fr);
                 grid-column-gap: 75px;
@@ -55,11 +53,6 @@
                 -moz-box-shadow: 0px 4px 8px -1px rgba(50, 49, 56, 0.2);
                 box-shadow: 0px 4px 8px -1px rgba(50, 49, 56, 0.2);
             }
-
-            .blank {
-                display: block;
-            }
-
 
             /* @media (max-width: 1292px) {
                 .things-grid-middle-mobile {
@@ -94,14 +87,10 @@
                     box-shadow: 0px -4px 8px 0px rgba(50, 49, 56, 0.2);
                 }
 
-                .blank {
-                    display: none;
-                }
-
                 .botbutton {
                     display: block;
-                    /* width: 100%; */
-                    padding: 0;
+                    padding-bottom: 10px;
+                    margin: 0;
                 }
             }
 
@@ -119,19 +108,28 @@
                     -moz-box-shadow: 0px -4px 8px 0px rgba(50, 49, 56, 0.2);
                     box-shadow: 0px -4px 8px 0px rgba(50, 49, 56, 0.2);
                 }
+
+                .botbutton {
+                    display: block;
+                    padding-bottom: 10px;
+                    margin: 0;
+                }
             }
         </style>
 
 
 
-        <div id="change-user" style="display: flex;"></div>
-        <div class="things-grid things-grid-small-mobile things-grid-middle-mobile" id="blank"></div>
-        <div class="botbutton">
-            <div class="blank"></div>
-            <div style="display:inline-flex;">
-                <vaadin-button id="morebutton" on-click="displaymore">更多</vaadin-button>
+        <div class="container">
+            <div class="test" style="background-color: white;">
+                <div class="things-grid things-grid-small-mobile things-grid-middle-mobile" id="blank"></div>
+            </div>
+            <div class="botbutton">
+                <div style="display:inline-flex;">
+                    <vaadin-button id="morebutton" on-click="displaymore">更多</vaadin-button>
+                </div>
             </div>
         </div>
+
 
 
 
