@@ -16,6 +16,13 @@
                 margin: 6px;
             }
 
+            #status{
+                width: 15px;
+                height: 15px;
+                background-color: rgb(242,253,55);
+                border-radius: 100%;
+            }
+
             a:link,
             a:visited {
                 text-decoration: none;
@@ -358,8 +365,9 @@
             <a style="width: 90%;" href$="{{userUrl}}">
                 <change-user-tag></change-user-tag>
             </a>
-            <div class="shouldhide" style="visibility: hidden;align-self: center;">
+            <div class="shouldhide" style="display:flex;visibility: hidden;align-self: center;">
                 <button class="jumpeditproduct2" on-click="_deleteproduct"></button>
+                <div id="status1"></div>
             </div>
             </div>
             <a href$="{{detailUrl}}">
@@ -494,6 +502,9 @@
 
                 this.productname = all['productname'];
                 this.price = "$" + all['price'];
+                if (all['price'] == 0) {
+
+                };
                 this.ownerId = all['ownerId'];
                 this.detailUrl = '/edit-product.html?p' + all['id'] + 'u' + all['ownerId'];
                 this.userUrl = "/user.html?" + this.ownerId;
@@ -502,7 +513,12 @@
                     shadow.querySelector('.s_title_tags').innerHTML = "<polygon points=\"0,0 40,0 30,16 0,16\" style=\"fill:#ebbd35;stroke:#ebbd35;stroke-width:0\"></polygon><text x=\"3\" y=\"12\" fill=\"white\" id=\"isNew\" >全新</text>"
                 else
                     shadow.querySelector('.s_title_tags').innerHTML = "<polygon points=\"0,0 40,0 30,16 0,16\" style=\"fill:#7cd3da;stroke:#7cd3da;stroke-width:0\"></polygon><text x=\"3\" y=\"12\" fill=\"white\" id=\"isNew\" >二手</text>"
-
+                if (all.replyArray) {
+                    if (all.replyArray.length > 0) {
+                        shadow.querySelector('#status1').id = "status";
+                    }
+                }
+                shadow.querySelectot
                 this.shadowRoot.querySelector('change-user-tag').loadData(all['ownerId'], all['createTime']);
                 this.shadowRoot.querySelector('change-item-tag').loadTags(all['tags']);
                 let boolean = user.isAdmin;
