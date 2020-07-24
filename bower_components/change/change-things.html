@@ -16,10 +16,6 @@
                 margin: 6px;
             }
 
-            #price{
-                display: block;
-            }
-
             #status{
                 width: 15px;
                 height: 15px;
@@ -59,11 +55,9 @@
                 border: none;
                 border-radius: 5px;
                 cursor: pointer;
-                background-color: lightgray;
             }
 
             .jumpeditproduct2 {
-                background-color: transparent;
                 border: none;
                 border-radius: 5px;
                 background-image: url(http://change.dazzle.website/img/delete.png);
@@ -283,8 +277,7 @@
                 background-position: center center;
                 background-repeat: no-repeat;
                 width: 100%;
-                padding-top: 105%;
-                border-radius: 5px;;
+                padding-top: 75%;
                 /* 4:3 Aspect Ratio */
 
             }
@@ -368,7 +361,7 @@
         </style>
 
         <div id="deleteall" style="display: block;">
-            <div style="display: flex;">
+            <div style="display: flex; width: max-content;">
             <a style="width: 90%;" href$="{{userUrl}}">
                 <change-user-tag></change-user-tag>
             </a>
@@ -510,7 +503,7 @@
                 this.productname = all['productname'];
                 this.price = "$" + all['price'];
                 if (all['price'] == 0) {
-                    shadow.querySelector('#price').style.display = "none";
+
                 };
                 this.ownerId = all['ownerId'];
                 this.detailUrl = '/edit-product.html?p' + all['id'] + 'u' + all['ownerId'];

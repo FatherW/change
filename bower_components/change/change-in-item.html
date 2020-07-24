@@ -20,7 +20,7 @@
                 display: grid;
                 height: 100%;
                 grid-row-gap: 15px;
-                padding: 50px;
+                padding: 0px 10px;
                 grid-column-gap: 50px;
                 grid-row-gap: 40px;
                 grid-template-columns: repeat(4, 1fr);
@@ -47,8 +47,10 @@
             }
 
             .botbutton {
+                display: block;
                 text-align: center;
-                margin-bottom: 10px;
+                padding-bottom: 10px;
+                margin: 0;
                 background-color: white;
                 grid-template-columns: repeat(3, 1fr);
                 grid-column-gap: 75px;
@@ -59,30 +61,26 @@
                 box-shadow: 0px 4px 8px -1px rgba(50, 49, 56, 0.2);
             }
 
-            /* @media (max-width: 1292px) {
+            @media (max-width: 1292px) {
                 .things-grid-middle-mobile {
                     display: grid;
                     height: 100%;
                     grid-row-gap: 15px;
-                    padding-bottom: 50px;
-                    grid-column-gap: 25px;
-                    grid-row-gap: 30px;
+                    grid-column-gap: 30px;
+                    grid-row-gap: 40px;
                     grid-template-columns: repeat(3, 1fr);
                     background-color: white;
+                    -webkit-box-shadow: 0px -4px 8px 0px rgba(50, 49, 56, 0.2);
+                    -moz-box-shadow: 0px -4px 8px 0px rgba(50, 49, 56, 0.2);
+                    box-shadow: 0px -4px 8px 0px rgba(50, 49, 56, 0.2);
                 }
+            }
 
-                change-things {
-                    width: 80%;
-                    height: 80%
-                }
-            } */
-
-            @media (max-width: 940px) {
+            /* @media (max-width: 940px) {
                 .things-grid-small-mobile {
                     display: grid;
                     height: 100%;
                     grid-row-gap: 15px;
-                    padding: 50px 10px 50px 10px;
                     grid-column-gap: 30px;
                     grid-row-gap: 40px;
                     grid-template-columns: repeat(3, 1fr);
@@ -97,7 +95,7 @@
                     padding-bottom: 10px;
                     margin: 0;
                 }
-            }
+            } */
 
             @media only screen and (max-width: 768px) {
                 .things-grid-small-mobile {
@@ -105,7 +103,7 @@
                     height: 100%;
                     grid-row-gap: 15px;
                     padding-bottom: 50px;
-                    grid-column-gap: 30px;
+                    grid-column-gap: 15px;
                     grid-row-gap: 40px;
                     grid-template-columns: repeat(2, 1fr);
                     background-color: white;
@@ -113,18 +111,13 @@
                     -moz-box-shadow: 0px -4px 8px 0px rgba(50, 49, 56, 0.2);
                     box-shadow: 0px -4px 8px 0px rgba(50, 49, 56, 0.2);
                 }
-
-                .botbutton {
-                    display: block;
-                    padding-bottom: 10px;
-                    margin: 0;
-                }
             }
         </style>
 
 
 
         <div class="container">
+            <div id="change-user" style="display: flex;"></div>
             <div class="test" style="background-color: white;">
                 <div class="things-grid things-grid-small-mobile things-grid-middle-mobile" id="blank"></div>
             </div>
