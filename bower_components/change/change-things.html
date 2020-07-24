@@ -505,10 +505,9 @@
 
                 this.shadowRoot.querySelector('change-user-tag').loadData(all['ownerId'], all['createTime']);
                 this.shadowRoot.querySelector('change-item-tag').loadTags(all['tags']);
-                if (user.isAdmin) {
-                    if (user.isAdmin == true || user['_id'] == all['ownerId']) {
-                        shadow.querySelector('.shouldhide').style.visibility = 'visible';
-                    }
+                let boolean = user.isAdmin;
+                if (Boolean(boolean) || user['_id'] == all['ownerId']) {
+                    shadow.querySelector('.shouldhide').style.visibility = 'visible';
                 }
 
 
