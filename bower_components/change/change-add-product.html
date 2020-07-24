@@ -13,8 +13,7 @@
 <link rel="import" href="change-dropzone-file.html">
 <link rel="import" href="change-gallery.html">
 
-<link rel="import"
-    href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/dz-file-management/change-photo-stock.html">
+<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/dz-file-management/change-photo-stock.html">
 
 
 <link rel="stylesheet" href="">
@@ -633,7 +632,7 @@
 
 <script>
     //function for database
-    (function () {
+    (function() {
         Polymer({
             is: 'change-add-product',
             properties: {
@@ -653,7 +652,7 @@
                     "type": Number
                 }
             },
-            created: function () {
+            created: function() {
                 let shadow = this.shadowRoot;
 
                 this.bigPic = "http://change.dazzle.website.s3.amazonaws.com/files/1/1591944377549.jpeg";
@@ -706,7 +705,7 @@
                 //console.log("arrayResult:", myTags.tags);
             },
 
-            ready: function () {
+            ready: function() {
                 console.log("Entered Ready");
                 let user = store.get("change-user") || null;
 
@@ -714,9 +713,9 @@
                 let that = this;
                 let shadow = this.shadowRoot;
 
-                customElements.whenDefined('vaadin-menu-bar').then(function () {
+                customElements.whenDefined('vaadin-menu-bar').then(function() {
                     const menu = shadow.querySelector('vaadin-menu-bar');
-                    menu.addEventListener('item-selected', function (e) {
+                    menu.addEventListener('item-selected', function(e) {
                         //Get ele value
                         // shadow.querySelector('span').textContent = JSON.stringify(e.detail.value.text);
                         shadow.querySelector('span').textContent = e.detail.value.text;
@@ -816,7 +815,7 @@
                                     }, {
                                         text: 'Balance Events'
                                     }]
-                                },]
+                                }, ]
                             };
 
                             g.push(h);
@@ -896,7 +895,7 @@
                             shadow.querySelector('#vs2').value = res.resolve[0]['district'];
                             shadow.querySelector('#vs3').value = res.resolve[0]['deliveryMethod'];
                             shadow.querySelector('#pdes').value = res.resolve[0]['description'];
-                            if (typeof (res.resolve[0]['tags']) == "string") {
+                            if (typeof(res.resolve[0]['tags']) == "string") {
                                 shadow.querySelector('#myTags').tags = [res.resolve[0]['tags']];
 
                             } else {
@@ -937,7 +936,7 @@
                         "action": "getData",
                         "index": "change",
                         "type": "_user",
-                        "id": usertokenId 
+                        "id": usertokenId
                     };
                     Polymer.postData(loginUrl, defaultLocation).then(res => {
                         if (res.code > 0) {
@@ -978,16 +977,16 @@
                                 name: "你沒有專頁噢"
                             })
                         }
-                        customElements.whenDefined('vaadin-select').then(function () {
+                        customElements.whenDefined('vaadin-select').then(function() {
                             const propage = pagename;
-                            shadow.querySelector('#pro').renderer = function (root) {
+                            shadow.querySelector('#pro').renderer = function(root) {
                                 // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                                 if (root.firstChild) {
                                     return;
                                 }
                                 // Create the <vaadin-list-box>
                                 const listBox = document.createElement('vaadin-list-box');
-                                propage.forEach(function (item) {
+                                propage.forEach(function(item) {
                                     const vaadinItem = document.createElement('vaadin-item');
                                     vaadinItem.textContent = item.name;
                                     listBox.appendChild(vaadinItem);
@@ -1002,7 +1001,7 @@
                 })
                 this.valueArray = [""];
                 // let that = this;
-                customElements.whenDefined('vaadin-select').then(function () {
+                customElements.whenDefined('vaadin-select').then(function() {
 
                     const district = [{
                         name: '中西區'
@@ -1058,14 +1057,14 @@
 
 
 
-                    shadow.querySelector('#vs2').renderer = function (root) {
+                    shadow.querySelector('#vs2').renderer = function(root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        district.forEach(function (item) {
+                        district.forEach(function(item) {
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
@@ -1075,14 +1074,14 @@
                         root.appendChild(listBox);
                     };
 
-                    shadow.querySelector('#vs3').renderer = function (root) {
+                    shadow.querySelector('#vs3').renderer = function(root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        delmthod.forEach(function (item) {
+                        delmthod.forEach(function(item) {
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
@@ -1092,14 +1091,14 @@
                         root.appendChild(listBox);
                     };
 
-                    shadow.querySelector('#vs4').renderer = function (root) {
+                    shadow.querySelector('#vs4').renderer = function(root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        status.forEach(function (item) {
+                        status.forEach(function(item) {
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
@@ -1161,7 +1160,7 @@
                 });
             },
 
-            _saveData: function () {
+            _saveData: function() {
                 console.log("");
 
                 let user = store.get("change-user") || null;
@@ -1249,37 +1248,29 @@
                     if (id == "") {
                         this.next++;
                     }
-                    let json = {
-                        "categories": categories,
-                        // "isPublic": public,
-                        "sellerMsg": sellerMsg,
-                        "isFree": free,
-                        "productname": pname,
-                        "price": parseFloat(price),
-                        "district": district,
-                        "deliveryMethod": method,
-                        "description": pdes,
-                        "tags": tags,
-                        "deliveryDesc": deldes,
-                        "isNew": no,
-                        "ownerId": user['_id'],
-                        "id": thenewid,
-                        "createTime": Date.now(),
-                        "pics": this.pics,
-                        "like": 0,
-                        "postStatus": true,
-                        "replyArray":[]
-                    }
-                    let params = {
-                        "action": "addData",
-                        "index": "change",
-                        "type": "product",
-                        "id": thenewid,
-                        "body": json
-                    };
 
-                    console.log("JSON", params);
-                    console.log("UID", thenewid)
+                    let params = {
+                        "action": "addproduct",
+                        "district": "中西區",
+                        "categories": "男裝",
+                        "ownerId": "72",
+                        "isNew": true,
+                        "pics": [
+                            ""
+                        ],
+                        "tag": [
+                            "平",
+                            "靚",
+                            "正",
+                            "掂"
+                        ],
+                        "sellerMsg": "快D買我啦",
+                        "deliveryMethod": "",
+                        "productname": "好好睇好正",
+                        "deliveryDesc": "",
+                        "descrip": "又平又靚又正",
+                        "price": 948
+                    };
                     Polymer.postData(Url, params).then(res => {
                         console.log("Result", res);
                         if (res.code > 0) {
@@ -1300,8 +1291,7 @@
                             Polymer.postData(Url, paramup).then(res => {
                                 if (res.code > 0) {
                                     // alert("成功！");
-                                    console.log("JSON", json);
-                                    this.fileManager.saveFile('json/product-' + thenewid + '.json', JSON.stringify(json));
+                                    this.fileManager.saveFile('json/product-' + thenewid + '.json', JSON.stringify(res.resolve));
                                     location.replace("./edit-product.html?p" + thenewid + "u" + user['_id']);
                                 }
 
@@ -1322,7 +1312,7 @@
 
             },
 
-            _uploadFile: function (e) {
+            _uploadFile: function(e) {
                 console.log('upload', e);
                 let shadow = this.shadowRoot;
                 let that = this;

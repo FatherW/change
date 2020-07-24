@@ -130,6 +130,13 @@
             },
             created: function() {
 
+                this.user = store.get('change-user') || null;
+                if (this.user) {
+                    this.fileManager = new AwsPackage(this.user);
+                    this.dataManager = new DataPackage('_user');
+                    this.prodManager = new DataPackage('product');
+
+                }
 
 
             },
@@ -229,7 +236,7 @@
                 if (buyer == null) {
                     alert("請先登入");
                 } else {
-                    this.fileManager = new Awspackage(buyer);
+                    // this.fileManager = new Awspackage(buyer);
 
                     //POSTDATA TO CLOUD
                     console.log("BUYERID", buyer);
@@ -286,7 +293,7 @@
                         "type": "product",
                         "id": pid
                     };
-
+                    console.log("99999999", JSON.stringify(paramproduct));
                     Polymer.postData(url, params).then(res => {
                         if (res.code > 0) {
                             Polymer.postData(url, paramproduct).then(res => {

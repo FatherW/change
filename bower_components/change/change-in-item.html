@@ -10,7 +10,12 @@
             * {
                 font-family: sans-serif, 微軟正黑體;
             }
-
+            #status{
+                width: 15px;
+                height: 15px;
+                background-color: rgb(241,151,55);
+                border-radius: 100%;
+            }
             .things-grid {
                 display: grid;
                 width: 97%;
@@ -107,7 +112,7 @@
 
 
 
-        
+      <div id="change-user" style="display: flex;"></div>  
 <div class="things-grid things-grid-small-mobile things-grid-middle-mobile" id="blank"></div>
 <div class="botbutton">
     <div class="blank"></div>
@@ -541,8 +546,7 @@
                                     if (item.orderId > 0) {
                                         counti++
                                     };
-                                    let change_user = document.querySelector('change-user').shadowRoot;
-                                    change_user.querySelector('#reply').innerHTML = "待回覆(" + counti + ")";
+                                    shadow.querySelector('#change-user').innerHTML = '待回覆(' + counti + ')<div id="status"></div>';
                                 })
                             }
 
