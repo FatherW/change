@@ -12,7 +12,6 @@
                 font-family: sans-serif, Microsoft JhengHei;
 
             }
-<<<<<<< HEAD
 
             #status {
                 width: 15px;
@@ -21,9 +20,7 @@
                 border-radius: 100%;
             }
 
-=======
          
->>>>>>> 2a0ac626a91ee10c2f955c8c3a59c63ece86ff6b
             #prods {
                 margin-left: 8%;
                 margin-right: 2%;
@@ -67,7 +64,7 @@
         </style>
         <div id="container">
             <div id="prods">
-                <vaadin-tabs selected="{{page}}">
+                <vaadin-tabs selected="{{page}}" style="width: 100%; margin: 0 auto;">
                     <vaadin-tab>我的貨物</vaadin-tab>
                     <vaadin-tab>我的喜愛清單</vaadin-tab>
                     <vaadin-tab>過去交易</vaadin-tab>
@@ -89,9 +86,9 @@
                     </page>
                 </iron-pages>
             </div>
-            <div id="add">
+            <!-- <div id="add">
                 <change-addprod-butt></change-addprod-butt>
-            </div>
+            </div> -->
         </div>
     </template>
 </dom-module>
