@@ -1249,29 +1249,24 @@
                         this.next++;
                     }
 
+
                     let params = {
                         "action": "addproduct",
-                        "district": "中西區",
-                        "categories": "男裝",
-                        "ownerId": "72",
-                        "isNew": true,
-                        "pics": [
-                            ""
-                        ],
-                        "tag": [
-                            "平",
-                            "靚",
-                            "正",
-                            "掂"
-                        ],
-                        "sellerMsg": "快D買我啦",
-                        "deliveryMethod": "",
-                        "productname": "好好睇好正",
-                        "deliveryDesc": "",
-                        "descrip": "又平又靚又正",
-                        "price": 948
+                        "district": district,
+                        "categories": categories,
+                        "ownerId": user['_id'],
+                        "isNew": no,
+                        "pics": this.pics,
+                        "tag": tags,
+                        "sellerMsg": sellerMsg,
+                        "deliveryMethod": method,
+                        "productname": pname,
+                        "deliveryDesc": deldes,
+                        "descrip": pdes,
+                        "price": parseFloat(price)
                     };
-                    Polymer.postData(Url, params).then(res => {
+                    let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
+                    Polymer.postData(link, params).then(res => {
                         console.log("Result", res);
                         if (res.code > 0) {
 
@@ -1304,6 +1299,7 @@
                             alert("Failed");
                         }
                     })
+
 
                 } else {
                     alert("Please login first");

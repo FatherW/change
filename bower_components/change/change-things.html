@@ -16,6 +16,10 @@
                 margin: 6px;
             }
 
+            #price{
+                display: block;
+            }
+
             #status{
                 width: 15px;
                 height: 15px;
@@ -503,7 +507,7 @@
                 this.productname = all['productname'];
                 this.price = "$" + all['price'];
                 if (all['price'] == 0) {
-
+                    shadow.querySelector('#price').style.display = "none";
                 };
                 this.ownerId = all['ownerId'];
                 this.detailUrl = '/edit-product.html?p' + all['id'] + 'u' + all['ownerId'];
