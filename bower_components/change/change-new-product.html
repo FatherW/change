@@ -104,8 +104,9 @@
 
             .left-pics {
                 border-right: none;
-                padding: 50px 100px 0 100px;
+                padding: 50px 10% 0 10%;
                 height: auto;
+                width: 80%;
             }
 
             .right-product {
@@ -549,7 +550,7 @@
 </dom-module>
 
 <script>
-    (function() {
+    (function () {
         Polymer({
             is: 'change-new-product',
             properties: {
@@ -557,7 +558,7 @@
                     "type": String
                 }
             },
-            created: function() {
+            created: function () {
                 // call close pop-up in change-confirm
                 document.addEventListener('close-item-dialog', e => {
                     this.shadowRoot.querySelector('vaadin-dialog').opened = false;
@@ -569,7 +570,7 @@
                     this.fileManager = new AwsPackage(user);
 
             },
-            ready: function() {
+            ready: function () {
                 let loc = location.search;
                 let pid = "";
                 let posit = 0;
@@ -691,7 +692,7 @@
 
                 });
             },
-            _findseller: function() {
+            _findseller: function () {
                 let user = store.get('change-user') || null;
                 if (user == null) {
                     alert("請先登入!");

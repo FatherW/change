@@ -77,6 +77,26 @@
             .slider.round:before {
                 border-radius: 50%;
             }
+
+            @media only screen and (max-width: 640px) {
+                .switch{
+                    width: 80px;
+                }
+
+                .slider {
+                    padding-top: 5px;
+                    padding-left: 5px;
+                    font-size: 14px;
+                }
+
+                .slider:before {
+                    width: 38px;
+                }
+
+                input:checked+.slider:before {
+                    transform: translateX(36px);
+                }
+            }
         </style>
 
         <div class="status-container">
