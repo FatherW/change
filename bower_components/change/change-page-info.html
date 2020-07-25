@@ -11,8 +11,8 @@
 
 <dom-module id="change-page-info">
     <template>
-      <style>
-           *,
+        <style>
+            *,
             p,
             h5 {
                 color: black;
@@ -30,7 +30,7 @@
             }
 
             #left {
-                width: 440px;
+                width: 80%;
                 float: left;
             }
 
@@ -48,21 +48,8 @@
                 /* width: 75%; */
                 display: inline-flex;
                 align-content: flex-end;
-                
-    float: right;
-    padding-right: 4%;
             }
-
-            /* #top {
-                margin-left: 8%;
-                margin-right: 8%;
-                margin-top: 2%;
-                padding-top: 2%;
-                padding-left: 2%;
-                background-color: white;
-                height: auto;
-            } */
-
+            
             .grid-container {
                 display: grid;
                 grid-template-columns: 2.5fr 1fr;
@@ -89,15 +76,17 @@
                 margin-block-start: 1.67em;
                 margin-block-end: 1.67em;
                 margin-right: 100px;
-            }
-            #leftele{
-                margin: 0px 5px;
+                display: flex;
             }
 
             @media (max-width: 640px) {
                 .grid-container {
                     display: block;
-                    height: 250px;
+                    height: auto;
+                    width: 100%;
+                    margin: 0px;
+                    padding: 0px;
+                    padding-bottom: 20px;
                 }
 
                 #container {
@@ -111,40 +100,37 @@
                 }
 
                 .buttons {
-                    display: none;
+                    display: block;
+                    margin-block-start: 0em;
+                    margin-block-end: 0em;
+                    margin-left: 20px;
                 }
             }
-      </style>
+        </style>
         <div id="container">
-            <div id="top">
+            <div class="grid-container">
                 <div id="left">
                     <div id="info">
                         <h5>專頁資料</h5>
-                        <p class="inf">網址 : <span id="name"></span></p>
-                        <p class="inf">地區 : <span id="area"></span></p>
-                        <p class="inf">電郵 : <span id="email"></span></p>
+                        <p class="inf">名稱: <span class="infotext" id="name"></span></p>
+                        <p class="inf">地區: <span class="infotext" id="area"></span></p>
+                        <p class="inf">電郵: <span class="infotext" id="email"></span></p>
                         <p class="inf">標籤 : <span id="contact"></span></p>
                     </div>
                 </div>
                 <div id="right">
-                    <div id="leftele">
-                        <vaadin-button id="vs1" on-click="deleteadmin">指派專頁管理員</vaadin-button>
-                        <div id="shouldhide">
-                            
-                        </div>
-                    </div>
-
-                    <div id="rightele">
+                    <div class="buttons">
+                        <vaadin-button id="vs1" style="margin-right: 10px;" on-click="deleteadmin">指派專頁管理員
+                        </vaadin-button>
                         <vaadin-button id="vb" on-click="toggle">編輯</vaadin-button>
-                    </div>                    
-
+                    </div>
                 </div>
             </div>
         </div>
     </template>
 </dom-module>
 <script>
-    (function() {
+    (function () {
         Polymer({
             is: 'change-page-info',
             properties: {
@@ -153,10 +139,10 @@
                 }
 
             },
-            created: function() {
+            created: function () {
 
             },
-            ready: function() {
+            ready: function () {
                 this.status = false;
                 let shadow = this.shadowRoot;
                 let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
@@ -197,10 +183,10 @@
             },
 
 
-            execute: function() {
+            execute: function () {
                 console.log("Entered");
                 let shadow = this.shadowRoot;
-                customElements.whenDefined('vaadin-select').then(function() {
+                customElements.whenDefined('vaadin-select').then(function () {
                     const district = [{
                         id: '中西區',
                         name: '中西區'
@@ -256,14 +242,14 @@
                         id: '西貢區',
                         name: '西貢區'
                     }];
-                    shadow.querySelector('vaadin-select').renderer = function(root) {
+                    shadow.querySelector('vaadin-select').renderer = function (root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        district.forEach(function(item) {
+                        district.forEach(function (item) {
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
@@ -275,7 +261,7 @@
                 });
             },
 
-            deleteadmin: function() {
+            deleteadmin: function () {
                 let shadow = this.shadowRoot;
                 if (this.status == false) {
                     this.status = true;
@@ -286,7 +272,7 @@
                 }
             },
 
-            toggle: function() {
+            toggle: function () {
                 let loc = "?1";
 
                 let id = "";
