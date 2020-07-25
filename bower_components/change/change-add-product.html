@@ -251,12 +251,12 @@
                 display: flex;
             }
 
-            .sellerMES {
+            .sellerContact {
                 margin-top: 40px;
                 margin-bottom: 20px;
             }
 
-            #sMes {
+            #sContact {
                 resize: none;
                 overflow: hidden;
                 width: 99%;
@@ -484,7 +484,7 @@
                     </div>
 
                     <div class="fanpage">
-                        <vaadin-select id="pro" placeholder="専頁"></vaadin-select>
+                        <vaadin-select id="fanPage" placeholder="専頁"></vaadin-select>
                     </div>
 
                     <vaadin-checkbox-group label="Label" theme="vertical" id="secondlabel">
@@ -496,7 +496,6 @@
 
                 <div class="buttons first">
                     <button id="save" on-click="_saveData">發佈上架</button>
-                    <!-- <button id="post">發佈上架</button> -->
                 </div>
             </div>
         </header>
@@ -525,12 +524,12 @@
                     </div>
 
                     <div>
-                        <div class="sellerMES" id="aaa">
+                        <div class="sellerContact">
                             <b style="font-size: 20px; color: black;">賣家聯絡資料:</b>
                         </div>
                         <!-- TEXT AREA-->
                         <div class="inputbox">
-                            <textarea id="sMes" name="sellermessage" rows="15" placeholder="填寫你的聯絡資料等等"></textarea>
+                            <textarea id="sContact" name="sellerContact" rows="15" placeholder="填寫你的聯絡資料等等"></textarea>
                         </div>
                     </div>
                 </div>
@@ -539,10 +538,6 @@
                     <!-- Right Product info -->
                     <div class="fullWidth">
                         <div class="custom-select">
-                            <!-- <select id="cs1">
-                                <option value="0">全新</option>
-                                <option value="1">二手</option>
-                            </select> -->
                             <vaadin-select id="vs4" placeholder="全新" style="width: 90px;"></vaadin-select>
                         </div>
 
@@ -565,7 +560,7 @@
                     </div>
 
                     <div class="hkd" style="display: flex;">
-                        <div class="dollar" id="aaa"><b style="font-size: 30px; color: black;">$</b></div>
+                        <div class="dollar"><b style="font-size: 30px; color: black;">$</b></div>
                         <!--input box-->
                         <div class="inputbox">
                             <input type="number" id="price" name="priceHKD" placeholder="輸入商品價錢..." value="10">
@@ -681,7 +676,11 @@
                     this.getAllPics();
                     this.closeDialog();
                 });
+
+                //CREATED ENDS HERE//
             },
+
+
             reNewPic(src) {
                 let shadow = this.shadowRoot;
                 let noImage = 'http://change.dazzle.website/img/1200px-No_image_3x4.svg.png';
@@ -710,18 +709,111 @@
                 //console.log("arrayResult:", myTags.tags);
             },
 
+
             ready: function () {
                 console.log("Entered Ready");
                 let user = store.get('change-user') || null;
 
                 //get currect user token
                 let usertokenId = user['_id'];
-                console.log("BBBuser", user);
+                // console.log("BBBuser", user);
 
                 let that = this;
                 let shadow = this.shadowRoot;
 
-                //SUBCAT//
+                //DETERMINE ADD-PRODUCT MODE OR EDIT PRODUCT MODE//
+                let loginUrl = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let loc = location.search;
+                let pid = "";
+                let posit = 0;
+                let uid = "";
+                for (i = 1; i < loc.length; i++) {
+                    if (loc[i] == "u") {
+                        posit = i;
+                    };
+                };
+                for (a = 2; a < posit; a++) {
+                    pid += loc[a];
+                }
+                for (c = posit + 1; c < loc.length; c++) {
+                    uid += loc[c];
+                }
+                this.id = pid;
+                if (pid != "") {
+                    /*Edit Product Mode*/
+                    let p = {
+                        "action": "searchData",
+                        "index": "change",
+                        "type": "product",
+                        "body": {
+                            "query": {
+                                "match": {
+                                    "id": pid
+                                }
+                            }
+                        }
+                    };
+                    Polymer.postData(loginUrl, p).then(res => {
+                        // console.log("BBB", res);
+                        if (res.code > 0) {
+                            let res2 = res.resolve;
+                            this.CATE = res.resolve[0]['categories'];
+                            // shadow.querySelector('#public').checked = res.resolve[0]['isPublic'];
+                            shadow.querySelector('#free').checked = res.resolve[0]['isFree'];
+                            shadow.querySelector('#sContact').value = res.resolve[0]['sellerMsg'];
+                            if (res.resolve[0]['isNew'] == true) {
+                                shadow.querySelector('#vs4').value = "全新";
+
+                            } else {
+                                shadow.querySelector('#vs4').value = "二手";
+
+                            }
+                            shadow.querySelector('#pname').value = res.resolve[0]['productname'];
+                            shadow.querySelector('#price').value = res.resolve[0]['price'];
+                            // console.log("Matters", res.resolve[0]['price']);
+                            if (res.resolve[0]['price'] != "0") {
+
+                                shadow.querySelector('#free').checked = false;
+                            }
+                            shadow.querySelector('#vs2').value = res.resolve[0]['district'];
+                            shadow.querySelector('#vs3').value = res.resolve[0]['deliveryMethod'];
+                            shadow.querySelector('#pdes').value = res.resolve[0]['description'];
+                            if (typeof (res.resolve[0]['tags']) == "string") {
+                                shadow.querySelector('#myTags').tags = [res.resolve[0]['tags']];
+
+                            } else {
+                                shadow.querySelector('#myTags').tags = res.resolve[0]['tags'];
+
+                            }
+                            shadow.querySelector('#trans').value = res.resolve[0]['deliveryDesc'];
+                            let lenpic = res2[0]['pics'].length;
+                            for (i3 = 0; i3 < lenpic; i3++) {
+                                shadow.querySelector('#div' + i3).style.backgroundImage = 'url(' + res2[0]["pics"][i3] + ')'
+                            };
+                        }
+                    })
+                    this.next = pid;
+                } else {
+                    /*Add Product Code*/
+                    //*******SEARCH FOR TOTAL NUMBER OF PRODUCT IN DATABASE*******//
+                    let params = {
+                        "action": "searchData",
+                        "index": "change",
+                        "type": "product",
+                        "body": {
+                            "query": {
+                                "match_all": {}
+                            },
+                        }
+                    }
+                    Polymer.postData(loginUrl, params).then(res => {
+                        if (res.code > 0) {
+                            this.next = res.resolve.length;
+                        }
+                    });
+                };
+
+                //SET SUBCAT//
                 customElements.whenDefined('vaadin-menu-bar').then(function () {
                     const menu = shadow.querySelector('vaadin-menu-bar');
                     menu.addEventListener('item-selected', function (e) {
@@ -845,117 +937,7 @@
 
                 });
 
-                //DETERMINE ADD-PRODUCT MODE OR EDIT PRODUCT MODE//
-                let loginUrl = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                let loc = location.search;
-                let pid = "";
-                let posit = 0;
-                let uid = "";
-                for (i = 1; i < loc.length; i++) {
-                    if (loc[i] == "u") {
-                        posit = i;
-                    };
-                };
-                for (a = 2; a < posit; a++) {
-                    pid += loc[a];
-                }
-                for (c = posit + 1; c < loc.length; c++) {
-                    uid += loc[c];
-                }
-                this.id = pid;
-                if (pid != "") {
-                    /*Edit Product Mode*/
-                    let p = {
-                        "action": "searchData",
-                        "index": "change",
-                        "type": "product",
-                        "body": {
-                            "query": {
-                                "match": {
-                                    "id": pid
-                                }
-                            }
-                        }
-                    };
-                    Polymer.postData(loginUrl, p).then(res => {
-                        // console.log("BBB", res);
-                        if (res.code > 0) {
-                            let res2 = res.resolve;
-                            this.CATE = res.resolve[0]['categories'];
-                            // shadow.querySelector('#public').checked = res.resolve[0]['isPublic'];
-                            shadow.querySelector('#free').checked = res.resolve[0]['isFree'];
-                            shadow.querySelector('#sMes').value = res.resolve[0]['sellerMsg'];
-                            if (res.resolve[0]['isNew'] == true) {
-                                shadow.querySelector('#vs4').value = "全新";
-
-                            } else {
-                                shadow.querySelector('#vs4').value = "二手";
-
-                            }
-                            shadow.querySelector('#pname').value = res.resolve[0]['productname'];
-                            shadow.querySelector('#price').value = res.resolve[0]['price'];
-                            // console.log("Matters", res.resolve[0]['price']);
-                            if (res.resolve[0]['price'] != "0") {
-
-                                shadow.querySelector('#free').checked = false;
-                            }
-                            shadow.querySelector('#vs2').value = res.resolve[0]['district'];
-                            shadow.querySelector('#vs3').value = res.resolve[0]['deliveryMethod'];
-                            shadow.querySelector('#pdes').value = res.resolve[0]['description'];
-                            if (typeof (res.resolve[0]['tags']) == "string") {
-                                shadow.querySelector('#myTags').tags = [res.resolve[0]['tags']];
-
-                            } else {
-                                shadow.querySelector('#myTags').tags = res.resolve[0]['tags'];
-
-                            }
-                            shadow.querySelector('#trans').value = res.resolve[0]['deliveryDesc'];
-                            let lenpic = res2[0]['pics'].length;
-                            for (i3 = 0; i3 < lenpic; i3++) {
-                                shadow.querySelector('#div' + i3).style.backgroundImage = 'url(' + res2[0]["pics"][i3] + ')'
-                            };
-                        }
-                    })
-                    this.next = pid;
-                } else {
-                    /*Add Product Code*/
-                    let params = {
-                        "action": "searchData",
-                        "index": "change",
-                        "type": "product",
-                        "body": {
-                            "query": {
-                                "match_all": {}
-                            },
-                        }
-                    }
-                    Polymer.postData(loginUrl, params).then(res => {
-                        if (res.code > 0) {
-                            this.next = res.resolve.length;
-                        }
-                    });
-
-                    
-                    //SET DEFAULT LOCATION//
-                    let defaultLocation = {
-                        "action": "getData",
-                        "index": "change",
-                        "type": "_user",
-                        "id": usertokenId
-                    };
-                    console.log("BBB", usertokenId);
-                    Polymer.postData(loginUrl, defaultLocation).then(res => {
-                        if (res.code > 0) {
-                            // console.log("default", res.resolve['area']);
-                            shadow.querySelector('#vs2').value = res.resolve['area'];
-
-                        } else {
-                            console.log("get default FAIL!");
-                        }
-                    })
-                };
-
-
+                //GET FANPAGE//
                 let parampage = {
                     "action": "searchData",
                     "index": "change",
@@ -970,9 +952,8 @@
                         }
                     }
                 };
-
-
                 Polymer.postData(loginUrl, parampage).then(res => {
+                    // console.log("BBB", usertokenId);
                     let pagename = [];
                     if (res.code > 0) {
                         res.resolve.forEach(item => {
@@ -987,7 +968,7 @@
                         }
                         customElements.whenDefined('vaadin-select').then(function () {
                             const propage = pagename;
-                            shadow.querySelector('#pro').renderer = function (root) {
+                            shadow.querySelector('#fanPage').renderer = function (root) {
                                 // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                                 if (root.firstChild) {
                                     return;
@@ -1007,10 +988,10 @@
 
                     }
                 })
-                this.valueArray = [""];
-                // let that = this;
-                customElements.whenDefined('vaadin-select').then(function () {
 
+                //SET AREA, DERLIVER METHOD, PRODUCT STATUS//
+                this.valueArray = [""];
+                customElements.whenDefined('vaadin-select').then(function () {
                     const district = [{
                         name: '中西區'
                     }, {
@@ -1100,7 +1081,7 @@
                         root.appendChild(listBox);
                     };
 
-                    //NEW OR SECOND HAND// 
+                    //PRODUCT STATUS// 
                     shadow.querySelector('#vs4').renderer = function (root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
@@ -1119,11 +1100,44 @@
                     };
                 });
 
+                //ENABLE & DISABLE PRICE
+                shadow.querySelector('#free').addEventListener("click", (e) => {
+                    // console.log("worked");
+                    if (shadow.querySelector('#free').checked == true) {
+                        // console.log('Price will be disabled');
+                        shadow.querySelector('#price').disabled = true;
+                        shadow.querySelector('#price').value = "0";
+                    } else if (shadow.querySelector('#free').checked == false) {
+                        // console.log('Price will be enabled');
+                        shadow.querySelector('#price').disabled = false;
+                    }
+                })
 
+                //SET DEFAULT LOCATION//
+                let defaultLocation = {
+                    "action": "getData",
+                    "index": "change",
+                    "type": "_user",
+                    "id": usertokenId
+                };
+                Polymer.postData(loginUrl, defaultLocation).then(res => {
+                    // console.log("BBB", usertokenId);
+                    if (res.code > 0) {
+                        // console.log("default", res.resolve['area']);
+                        shadow.querySelector('#vs2').value = res.resolve['area'];
+
+                    } else {
+                        console.log("get default FAIL!");
+                    }
+                })
+
+
+                //***//
+                //**LOAD DATA FROM JSON**//
                 let userurl = "/json/user-" + usertokenId + ".json";
                 Polymer.getContent(userurl).then(str => {
                     json = JSON.parse(str);
-                    // console.log("TEST", json);
+                    // console.log("BBB", json);
                     //USER INFO COLUM
                     shadow.querySelector('#owner').innerHTML = json['username'];
 
@@ -1134,31 +1148,12 @@
                     };
                     //check the username
                     // console.log("SEE", shadow.querySelector('#gand').src);
-
-
-                    //ENABLE & DISABLE PRICE
-                    shadow.querySelector('#free').addEventListener("click", (e) => {
-                        // console.log("worked");
-                        if (shadow.querySelector('#free').checked == true) {
-                            // console.log('Price will be disabled');
-                            shadow.querySelector('#price').disabled = true;
-                            shadow.querySelector('#price').value = "0";
-                        } else if (shadow.querySelector('#free').checked == false) {
-                            // console.log('Price will be enabled');
-                            shadow.querySelector('#price').disabled = false;
-                        }
-                    })
-
-
-
                 });
 
-
-
-
-
-
+                //READY ENDS HERE//
             },
+
+
             getAllPics() {
                 let shadow = this.shadowRoot;
                 this.pics = [];
@@ -1171,41 +1166,64 @@
             },
 
             _saveData: function () {
-                console.log("");
-
+                // console.log("SAVE BUTTON IS WORKING");
+                let that = this;
+                let shadow = this.shadowRoot;
                 let user = store.get('change-user') || null;
-
+                // console.log("BBB", user);
+                // console.log("BBB1", user['_id']);
                 let temptime = user['_id'];
                 let tempid = user['goodsNum'].toString() + Math.floor(Math.random() * 10);
+                // console.log("BBB", tempid);
                 if (location.search.length < 3) {
                     var thenewid = "" + temptime.toString() + tempid;
                 } else {
                     var thenewid = this.id;
-
                 }
-                // 1
+                // console.log("BBB1", thenewid);
 
                 if (user != null) {
-                    console.log(user);
-                    let that = this;
-                    let shadow = this.shadowRoot;
-                    //Get value from select box categories
-                    var myselect = shadow.querySelector("#vs1");
-                    var categories = shadow.querySelector('span').textContent;
+                    // console.log("BBB",user);
 
-                    // let public = shadow.querySelector('#public').checked;
-                    // console.log("Public:", public);
+
+                    //*************GET INPUT PRODUCT VALUE*****************//
+                    //Get value from select box categories
+                    var categories = shadow.querySelector('span').textContent;
+                    console.log("categories", categories);
+
+                    //Get value from select box FANPAGE
+                    var fanPage = shadow.querySelector('#fanPage').value;
+                    console.log("fanPage", fanPage);
+
+                    //Get value from isFree button
+                    let free = shadow.querySelector('#free').checked;
+                    console.log("FreeButton:", free);
+
+                    //Get Photos Array
+                    this.getAllPics();
+                    console.log('Photo', this.pics);
 
                     //Get value from seller message
-                    let sellerMsg = shadow.querySelector('#sMes').value;
-                    console.log("sellerMsg:", sellerMsg);
+                    let sellerContact = shadow.querySelector('#sContact').value;
+                    console.log("sellerContact:", sellerContact);
 
-                    let free = shadow.querySelector('#free').checked;
-                    console.log("Free:", free);
+                    //Get value from select box NewOld
+                    var myselect = shadow.querySelector("#vs4");
+                    var newOld = myselect.value;
+                    console.log("New/Old:", newOld);
+                    if (newOld == "二手") {
+                        var status = Boolean(0);
+                        console.log('productStatus', status);
+                    } else {
+                        var status = Boolean(1);
+                        console.log('productStatus', status);
+                    }
 
+                    //Get value from productName input box
                     let pname = shadow.querySelector('#pname').value;
                     console.log("Productname:", pname);
 
+                    //Get value from price input box
                     let price = shadow.querySelector('#price').value;
                     console.log("Price:", price);
 
@@ -1213,38 +1231,31 @@
                     var myselect = shadow.querySelector("#vs2");
                     var district = myselect.value;
                     console.log("District:", district);
-                    //Get value from select box district
+
+                    //Get value from select box deliveryMethod
                     var myselect = shadow.querySelector("#vs3");
                     var method = myselect.value;
                     console.log("Method:", method);
+
+                    //Get value from productDescription input box
                     let pdes = shadow.querySelector('#pdes').value;
                     console.log("Productdescription:", pdes);
-                    //.tags is refering to the arrayValue
+
+                    //Get value from input tags
+                    //**tags is refering to the arrayValue**//
                     let tags = shadow.querySelector('#myTags').tags;
                     console.log("Tags:", tags);
+
+                    //Get value from deliveryDescription input box
                     let deldes = shadow.querySelector('#trans').value;
                     console.log("DeliveryDescription:", deldes);
 
-                    //Get value from select box NewOld
-                    var myselect = shadow.querySelector("#vs4");
-                    var newOld = myselect.value;
-                    console.log("New/Old:", newOld);
-                    this.getAllPics();
-                    console.log('Photo', this.pics);
-                    if (newOld == "二手") {
+                    //*********GET INPUT PRODUCT VALUE ENDS HERE**************//
 
-                        var no = Boolean(0);
-                        console.log('Used', no);
-                    } else {
-
-                        var no = Boolean(1);
-                    }
-
-
+                    //SET NEW PID
                     let x = 0;
                     let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-
-                    console.log("X", this.next);
+                    console.log("TOTAL NO. OF PRODUCT IN DATABASE", this.next);
                     let loc = location.search;
                     console.log("Path", loc);
                     console.log("Length", loc.length);
@@ -1256,68 +1267,73 @@
                     console.log("ID", id);
                     if (id == "") {
                         this.next++;
+                        console.log("TOTAL NO. OF PRODUCT IN DATABASE + 1", this.next);
                     }
 
 
                     let params = {
                         "action": "addproduct",
-                        "district": district,
                         "categories": categories,
-                        "ownerId": user['_id'],
-                        "isNew": no,
-                        "pics": this.pics,
-                        "tag": tags,
-                        "sellerMsg": sellerMsg,
-                        "deliveryMethod": method,
+                        "sellerMsg": sellerContact,
+                        "isFree": free,
                         "productname": pname,
+                        "price": parseFloat(price),
+                        "district": district,
+                        "deliveryMethod": method,
+                        "description": pdes,
+                        "tag": tags,
                         "deliveryDesc": deldes,
-                        "descrip": pdes,
-                        "price": parseFloat(price)
+                        "isNew": status,
+                        "ownerId": user['_id'],
+                        "id": this.next,
+                        "pics": this.pics
                     };
+
+                    console.log("BBB", params);
                     let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
                     Polymer.postData(link, params).then(res => {
 
-                        //FIXING HERE//
-                        console.log("TEST4", res);
-                        console.log("TEST3", res.resolve);
-                        var newproductid = res.resolve._id;
-                        this.dataManager.loadDate(newproductid).then(res => {
-                            this.fileManager.saveFile('json/product-' + newproductid + '.json', JSON.stringify(res.resolve));
+                        //FIXING HERE
+                        console.log("BBB", res);
+                        console.log("BBB1", res.resolve);
+                        // var newproductid = res.resolve._id;
+                        // this.dataManager.loadDate(newproductid).then(res => {
+                        //     this.fileManager.saveFile('json/product-' + newproductid + '.json', JSON.stringify(res.resolve));
 
-                        })
+                        // })
 
-                        if (res.code > 0) {
+                    //     if (res.code > 0) {
 
-                            let paramup = {
-                                "action": "updateData",
-                                "index": "change",
-                                "type": "_user",
-                                "id": user['_id'],
-                                "body": {
-                                    "query": {
-                                        "script": {
-                                            "source": "ctx._source['goodsNum']+=1"
-                                        }
-                                    }
-                                }
-                            };
-                            Polymer.postData(Url, paramup).then(res => {
-                                if (res.code > 0) {
-                                    // alert("成功！");
-                                    location.replace("./edit-product.html?p" + thenewid + "u" + user['_id']);
-                                } else {
-                                    alert("update fail");
-                                }
-
-
-                            });
+                    //         let paramup = {
+                    //             "action": "updateData",
+                    //             "index": "change",
+                    //             "type": "_user",
+                    //             "id": user['_id'],
+                    //             "body": {
+                    //                 "query": {
+                    //                     "script": {
+                    //                         "source": "ctx._source['goodsNum']+=1"
+                    //                     }
+                    //                 }
+                    //             }
+                    //         };
+                    //         Polymer.postData(Url, paramup).then(res => {
+                    //             if (res.code > 0) {
+                    //                 // alert("成功！");
+                    //                 location.replace("./edit-product.html?p" + thenewid + "u" + user['_id']);
+                    //             } else {
+                    //                 alert("update fail");
+                    //             }
 
 
+                    //         });
 
-                        } else {
-                            alert(res.text);
-                        }
-                    })
+
+
+                    //     } else {
+                    //         alert(res.text);
+                    //     }
+                     })
 
 
                 } else {
