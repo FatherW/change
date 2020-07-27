@@ -260,19 +260,12 @@
                     });
 
                     //POSTDATA TO POSTMAN
+
                     let params = {
-                        "action": "addData",
-                        "index": "change",
-                        "type": "order",
-                        "id": orderId,
-                        "body": {
-                            "id": orderId,
-                            "msg": msg,
-                            "productId": pid,
-                            "buyerId": buyerId,
-                            "submitTime": id,
-                            "status": "已提交訂單"
-                        }
+                        "action": "addorder",
+                        "msg": msg,
+                        "productId": pid,
+                        "buyerId": buyerId
                     };
                     let paramproduct = {
                         "action": "updateData",
@@ -287,23 +280,17 @@
                             }
                         }
                     };
-                    let paramname = {
-                        "action": "getData",
-                        "index": "change",
-                        "type": "product",
-                        "id": pid
-                    };
-                    console.log("99999999", JSON.stringify(paramproduct));
-                    Polymer.postData(url, params).then(res => {
+
+                    let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
+                    Polymer.postData(link, params).then(res => {
                         if (res.code > 0) {
                             Polymer.postData(url, paramproduct).then(res => {
                                 if (res.code > 0) {
                                     console.log("success add and update");
-                                    Polymer.postData(url, params).then(res => {
-                                        if (res.code > 0) {
-                                            this.fileManager.saveFile('json/product-' + pid + '.json', JSON.stringify(res.resolve));
-                                        }
-                                    })
+                                    this.prodManager.loadData(pid).then(res => {
+                                        this.fileManager.saveFile('json/product-' + pid + '.json', JSON.stringify(res.resolve));
+                                    });
+
                                 } else {
                                     console.log("failupdate");
                                 }
