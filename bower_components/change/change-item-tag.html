@@ -359,27 +359,30 @@
             },
             loadTags(tags) {
                 let shadow = this.shadowRoot;
-                if (tags.length == undefined || tags.length == null || tags.length == 0) {} else {
-                    shadow.querySelector('#description').innerHTML = "";
-                    tags.forEach(item => {
-                        let buttontag = document.createElement('button');
-                        buttontag.setAttribute('id', 'tagbutton');
-                        buttontag.innerHTML = item;
-                        buttontag.addEventListener('click', e => {
-                            Polymer.dzFire('query-tags', {
-                                'detail': {
-                                    'tags': item
+                if (tags) {
+                    if (tags.length == undefined || tags.length == null || tags.length == 0) {} else {
+                        shadow.querySelector('#description').innerHTML = "";
+                        tags.forEach(item => {
+                            let buttontag = document.createElement('button');
+                            buttontag.setAttribute('id', 'tagbutton');
+                            buttontag.innerHTML = item;
+                            buttontag.addEventListener('click', e => {
+                                Polymer.dzFire('query-tags', {
+                                    'detail': {
+                                        'tags': item
+                                    }
+                                });
+                                if (document.querySelector('change-itemspecial')) {
+                                    var serchcat = '/list-product.html?tag=' + encodeURIComponent(item);
+                                    location.href = serchcat;
                                 }
-                            });
-                            if (document.querySelector('change-itemspecial')) {
-                                var serchcat = '/list-product.html?tag=' + encodeURIComponent(item);
-                                location.href = serchcat;
-                            }
-                        })
-                        shadow.querySelector('#description').appendChild(buttontag);
+                            })
+                            shadow.querySelector('#description').appendChild(buttontag);
 
-                    });
+                        });
+                    }
                 }
+
 
 
             }

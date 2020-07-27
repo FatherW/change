@@ -1372,6 +1372,9 @@
                             "postStatus": this.POSTSTATUS,
                             "replyArray": this.REPLYARRAY
                         };
+                        //******* UPDATE JSON ***********//
+                        this.fileManager.saveFile('json/product-' + this.id + '.json', JSON.stringify(json2ways));
+
                         //********UPDATE DATABASE***********//
                         let paramsDatabase = {
                             "action": "addData",
@@ -1387,7 +1390,6 @@
                                 // alert("成功！");
 
                                 //********UPDATE JSON***********//
-                                this.fileManager.saveFile('json/product-' + this.id + '.json', JSON.stringify(json2ways));
                                 location.replace("./edit-product.html?p" + this.id + "u" + user['_id']);
 
                                 // //*************PASS DATA FROM DATABASE TO JSON****************//

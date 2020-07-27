@@ -445,6 +445,8 @@
 
                 });
 
+                this.dataManager = new DataPackage('product');
+                this.user = store.get('change-user') || null;
 
             },
             _reallydelete: function() {
@@ -480,16 +482,21 @@
                 this.shadowRoot.querySelector('#tempqqq').id = 'tempqqq' + this.id;
                 let that = this;
                 var json;
-                let url = "/json/product-" + this.id + ".json";
+                let url = "/json/product-" + this.id + ".json?id="+new Date().getTime();
                 Polymer.getContent(url).then(str => {
                     json = JSON.parse(str);
                     that.userdata(json);
+                },err=>{
+                    that.dataManager.loadData(that.id).then(res=>{
+                        console.log('Cannot read product',res);
+                        that.userdata(res);
+                    });
                 });
 
             },
 
             userdata(all) {
-                var user = store.get('change-user') || null;
+                var user = this.user;
                 let shadow = this.shadowRoot;
                 this.all = all;
                 this.id = this.getAttribute('id');
@@ -521,9 +528,12 @@
                 }
                 this.shadowRoot.querySelector('change-user-tag').loadData(all['ownerId'], all['createTime']);
                 this.shadowRoot.querySelector('change-item-tag').loadTags(all['tags']);
-                let boolean = Boolean(user.isAdmin) || null;
-                if (boolean || user['_id'] == all['ownerId']) {
-                    shadow.querySelector('.shouldhide').style.visibility = 'visible';
+                if (user){
+                    let boolean = user['isAdmin'] || null;
+                    if (boolean || user['_id'] == all['ownerId']) {
+                        shadow.querySelector('.shouldhide').style.visibility = 'visible';
+                    }
+
                 }
 
 
