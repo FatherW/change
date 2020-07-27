@@ -72,7 +72,7 @@
 
             },
             attributeChangedCallback() {
-                console.log('My ID', this.getAttribute('id'));
+                // console.log('My ID', this.getAttribute('id'));
             },
             connectedCallback() {},
             checkLike(user) {
@@ -80,11 +80,11 @@
                 let countlikeproduct = user['likeProduct'].length;
                 var counti2 = 0;
                 checked2 = false;
-                console.log("user liked", user);
+                // console.log("user liked", user);
                 for (i = 0; i < countlikeproduct; i++) {
                     if (user['likeProduct'][i] == this.id) {
                         this.liked = i;
-                        console.log('checked');
+                        // console.log('checked');
                         checked2 = true;
                     } else {
                         counti2++;
@@ -123,7 +123,7 @@
                     this.like = json['like'];
                     if (user2) {
                         let url = "/json/user-" + user2['_id'] + ".json";
-                        console.log("th user url", url);
+                        // console.log("th user url", url);
 
                         Polymer.getContent(url).then(str => {
                             json = JSON.parse(str);
@@ -135,7 +135,7 @@
 
 
                     } else {
-                        console.log("not login");
+                        // console.log("not login");
                     }
                 });
 
@@ -244,7 +244,7 @@
                                     }
                                 }
                             };
-                            console.log(this.liked, "qqqqqqq", JSON.stringify(paramchange));
+                            // console.log(this.liked, "qqqqqqq", JSON.stringify(paramchange));
                             Polymer.postData(URL, paramchange).then(res => {
                                 if (res.code > 0) {
                                     this.dataManager.loadData(user['_id']).then(res => {
@@ -256,7 +256,7 @@
                                     });
 
 
-                                    console.log("reduced");
+                                    // console.log("reduced");
                                 } else {
                                     console.log("error in delete favorite")
                                 }
