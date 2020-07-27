@@ -251,7 +251,7 @@
                     if (tags.length > 0) {
                         tags.forEach(item => {
                             Query.push({
-                                'term': {
+                                'match': {
                                     'tags': item
                                 }
                             });
