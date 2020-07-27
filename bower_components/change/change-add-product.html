@@ -739,6 +739,7 @@
                     uid += loc[c];
                 }
                 this.id = pid;
+                console.log("Current PID", pid);
                 if (pid != "") {
                     /*Edit Product Mode*/
                     let p = {
@@ -1171,17 +1172,6 @@
                 let shadow = this.shadowRoot;
                 let user = store.get('change-user') || null;
                 // console.log("BBB", user);
-                // console.log("BBB1", user['_id']);
-                let temptime = user['_id'];
-                let tempid = user['goodsNum'].toString() + Math.floor(Math.random() * 10);
-                // console.log("BBB", tempid);
-                if (location.search.length < 3) {
-                    var thenewid = "" + temptime.toString() + tempid;
-                } else {
-                    var thenewid = this.id;
-                }
-                // console.log("BBB1", thenewid);
-
                 if (user != null) {
                     // console.log("BBB",user);
 
@@ -1252,90 +1242,77 @@
 
                     //*********GET INPUT PRODUCT VALUE ENDS HERE**************//
 
-                    //SET NEW PID
-                    let x = 0;
+                    //SET NEW PID (NO USE)//
+                    // let x = 0;
                     let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                    console.log("TOTAL NO. OF PRODUCT IN DATABASE", this.next);
-                    let loc = location.search;
-                    console.log("Path", loc);
-                    console.log("Length", loc.length);
-                    let id = "";
-                    for (var i = 1; i < loc.length; i++) {
-                        console.log("Working");
-                        id += loc[i];
-                    }
-                    console.log("ID", id);
-                    if (id == "") {
-                        this.next++;
-                        console.log("TOTAL NO. OF PRODUCT IN DATABASE + 1", this.next);
-                    }
+                    // console.log("TOTAL NO. OF PRODUCT IN DATABASE", this.next);
+                    // let loc = location.search;
+                    // console.log("Path", loc);
+                    // console.log("Length", loc.length);
+                    // let id = "";
+                    // for (var i = 1; i < loc.length; i++) {
+                    //     console.log("Working");
+                    //     id += loc[i];
+                    // }
+                    // console.log("ID", id);
+                    // if (id == "") {
+                    //     this.next++;
+                    //     console.log("TOTAL NO. OF PRODUCT IN DATABASE + 1", this.next);
+                    // }
 
 
                     let params = {
                         "action": "addproduct",
                         "categories": categories,
                         "sellerMsg": sellerContact,
-                        "isFree": free,
                         "productname": pname,
                         "price": parseFloat(price),
                         "district": district,
                         "deliveryMethod": method,
-                        "description": pdes,
+                        "descrip": pdes,
                         "tag": tags,
                         "deliveryDesc": deldes,
                         "isNew": status,
                         "ownerId": user['_id'],
-                        "id": this.next,
                         "pics": this.pics
                     };
 
-                    console.log("BBB", params);
+                    // console.log("BBB", params);
                     let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
                     Polymer.postData(link, params).then(res => {
-
-                        //FIXING HERE
                         console.log("BBB", res);
-                        console.log("BBB1", res.resolve);
-                        // var newproductid = res.resolve._id;
-                        // this.dataManager.loadDate(newproductid).then(res => {
-                        //     this.fileManager.saveFile('json/product-' + newproductid + '.json', JSON.stringify(res.resolve));
-
-                        // })
-
-                    //     if (res.code > 0) {
-
-                    //         let paramup = {
-                    //             "action": "updateData",
-                    //             "index": "change",
-                    //             "type": "_user",
-                    //             "id": user['_id'],
-                    //             "body": {
-                    //                 "query": {
-                    //                     "script": {
-                    //                         "source": "ctx._source['goodsNum']+=1"
-                    //                     }
-                    //                 }
-                    //             }
-                    //         };
-                    //         Polymer.postData(Url, paramup).then(res => {
-                    //             if (res.code > 0) {
-                    //                 // alert("成功！");
-                    //                 location.replace("./edit-product.html?p" + thenewid + "u" + user['_id']);
-                    //             } else {
-                    //                 alert("update fail");
-                    //             }
-
-
-                    //         });
-
-
-
-                    //     } else {
-                    //         alert(res.text);
-                    //     }
-                     })
-
-
+                        var newproductid = res.resolve.id;
+                        console.log("BBB1", newproductid);
+                        this.dataManager.loadData(newproductid).then(res => {
+                            console.log("Working", res);
+                            this.fileManager.saveFile('json/product-' + newproductid + '.json', JSON.stringify(res));
+                        })
+                        if (res.code > 0) {
+                            let paramup = {
+                                "action": "updateData",
+                                "index": "change",
+                                "type": "_user",
+                                "id": user['_id'],
+                                "body": {
+                                    "query": {
+                                        "script": {
+                                            "source": "ctx._source['goodsNum']+=1"
+                                        }
+                                    }
+                                }
+                            };
+                            Polymer.postData(Url, paramup).then(res => {
+                                if (res.code > 0) {
+                                    // alert("成功！");
+                                } else {
+                                    alert("update fail");
+                                }
+                            });
+                            location.replace("./edit-product.html?p" + newproductid + "u" + user['_id']);
+                        } else {
+                            alert(res.text);
+                        }
+                    });
                 } else {
                     alert("Please login first");
                 }
