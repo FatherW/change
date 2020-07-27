@@ -254,16 +254,44 @@
                     this.checkrange = false;
                 },
                 addTags(val) {
+
                     let myTags = this.shadowRoot.querySelector('#myTags');
                     // let val = this.shadowRoot.querySelector('#inputTags').value;
                     myTags._addTag(val);
                 },
                 search() {
+                    this.shadowRoot.querySelector('paper-tags-input').tags = [];
+
                     // search(cats,tags,district,priceStart,priceEnd){
+                    if (this.tags.length > 0) {
+                        this.tags.forEach(item => {
+                            this.addTags(item)
+                        });
+                    }
+
+                    if (this.categories.length > 0) {
+                        this.categories.forEach(item => {
+                            this.addTags(item)
+                        });
+                    }
+
+                    if (this.district) {
+                        this.addTags(this.district);
+                    }
+
+
+                    if (this.isNew.length == 1) {
+                        this.addTags(this.isNew);
+                    }
+                    console.log("12121212121212121212");
+
+                    if (this.priceStart != 0 && this.priceStop != 1000000) {
+                        this.addTags("$" + this.priceStart + " - $" + this.priceStop);
+                    }
+                    console.log("rururururururururu");
                     this.shadowRoot.querySelector('change-in-item').search(this.categories, this.tags, this.district, this.isNew, this.priceStart, this.priceStop, this.isFree);
                 },
                 back(value) {
-
                     ///cookie
                     let cate = store.get('change-cate') || null;
                     if (cate) {
@@ -320,9 +348,7 @@
                         this.priceStart = 0;
                         this.priceStop = this.initprice;
                     }
-
                     this.search();
-                    this.shadowRoot.querySelector('paper-tags-input').tags = [];
                 },
                 pagetag(tag) {
                     console.log("the pagetag is", tag);
