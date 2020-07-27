@@ -480,7 +480,7 @@
                 this.shadowRoot.querySelector('#tempqqq').id = 'tempqqq' + this.id;
                 let that = this;
                 var json;
-                let url = "/json/product-" + this.id + ".json";
+                let url = "/json/product-" + this.id + ".json?id=" + new Date().getTime();
                 Polymer.getContent(url).then(str => {
                     json = JSON.parse(str);
                     that.userdata(json);
