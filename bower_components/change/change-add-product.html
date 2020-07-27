@@ -648,7 +648,28 @@
 
                 next: {
                     "type": Number
+                },
+
+                "LIKE": {
+                    "type": String
+                },
+
+                "OWNERID": {
+                    "type": String
+                },
+
+                "CREATETIME": {
+                    "type": String
+                },
+
+                "POSTSTATUS": {
+                    "type": Boolean
+                },
+
+                "REPLYARRAY": {
+                    "type": Array
                 }
+
             },
             created: function () {
                 let user = store.get('change-user') || null;
@@ -757,9 +778,18 @@
                     };
                     Polymer.postData(loginUrl, p).then(res => {
                         // console.log("BBB", res);
+
                         if (res.code > 0) {
                             let res2 = res.resolve;
+
+                            //SET PROPERTIES
                             this.CATE = res.resolve[0]['categories'];
+                            this.LIKE = res.resolve[0]['like'];
+                            this.CREATETIME = res.resolve[0]['createTime'];
+                            this.OWNERID = res.resolve[0]['ownerId'];
+                            this.POSTSTATUS = res.resolve[0]['postStatus'];
+                            this.REPLYARRAY = res.resolve[0]['replyArray'];
+
                             // shadow.querySelector('#public').checked = res.resolve[0]['isPublic'];
                             shadow.querySelector('#free').checked = res.resolve[0]['isFree'];
                             shadow.querySelector('#sContact').value = res.resolve[0]['sellerMsg'];
@@ -1083,7 +1113,7 @@
                         root.appendChild(listBox);
                     };
 
-                    //PRODUCT STATUS// 
+                    //PRODUCT STATUS//
                     shadow.querySelector('#vs4').renderer = function (root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
@@ -1286,10 +1316,7 @@
                             console.log("BBB", res);
                             var newproductid = res.resolve.id;
                             console.log("BBB1", newproductid);
-                            this.dataManager.loadData(newproductid).then(res => {
-                                console.log("Working", res);
-                                this.fileManager.saveFile('json/product-' + newproductid + '.json', JSON.stringify(res));
-                            })
+
                             if (res.code > 0) {
                                 let paramup = {
                                     "action": "updateData",
@@ -1307,8 +1334,12 @@
                                 let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                                 Polymer.postData(Url, paramup).then(res => {
                                     if (res.code > 0) {
-                                        alert("成功！");
-                                        // location.replace("./edit-product.html?p" + newproductid + "u" + user['_id']);
+                                        // alert("成功！");
+                                        this.dataManager.loadData(newproductid).then(res => {
+                                            console.log("Working", res);
+                                            this.fileManager.saveFile('json/product-' + newproductid + '.json', JSON.stringify(res));
+                                            location.replace("./edit-product.html?p" + newproductid + "u" + user['_id']);
+                                        })
                                     } else {
                                         alert("update fail");
                                     }
@@ -1321,50 +1352,60 @@
                         //*********EDIT PRODUCT MODE*************//
                         console.log("edit mode pid", this.id);
 
+                        let json2ways = {
+                            "id": this.id,
+                            "categories": categories,
+                            "sellerMsg": sellerContact,
+                            "productname": pname,
+                            "price": parseFloat(price),
+                            "district": district,
+                            "deliveryMethod": method,
+                            "description": pdes,
+                            "tags": tags,
+                            "deliveryDesc": deldes,
+                            "isFree": free,
+                            "isNew": status,
+                            "pics": this.pics,
+                            "createTime": this.CREATETIME,
+                            "like": this.LIKE,
+                            "ownerId": this.OWNERID,
+                            "postStatus": this.POSTSTATUS,
+                            "replyArray": this.REPLYARRAY
+                        };
                         //********UPDATE DATABASE***********//
                         let paramsDatabase = {
                             "action": "addData",
                             "index": "change",
                             "type": "product",
                             "id": this.id,
-                            "body": {
-                                "id": this.id,
-                                "categories": categories,
-                                "sellerMsg": sellerContact,
-                                "productname": pname,
-                                "price": parseFloat(price),
-                                "district": district,
-                                "deliveryMethod": method,
-                                "description": pdes,
-                                "tags": tags,
-                                "deliveryDesc": deldes,
-                                "isFree": free,
-                                "isNew": status,
-                                "pics": this.pics
-                            }
+                            "body": json2ways
                         };
                         let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                         Polymer.postData(Url, paramsDatabase).then(res => {
+                            console.log("json", json2ways);
                             if (res.code > 0) {
                                 // alert("成功！");
 
+                                //********UPDATE JSON***********//
+                                this.fileManager.saveFile('json/product-' + this.id + '.json', JSON.stringify(json2ways));
+                                location.replace("./edit-product.html?p" + this.id + "u" + user['_id']);
+
                                 // //*************PASS DATA FROM DATABASE TO JSON****************//
-                                let DatabaseToJson = {
-                                    "action": "getData",
-                                    "index": "change",
-                                    "type": "product",
-                                    "id": this.id
-                                };
-                                Polymer.postData(Url, DatabaseToJson).then(res => {
-                                    if (res.code > 0) {
-                                        alert("DatabaseToJson success");
-                                        console.log("DatabaseToJson reslve", res.resolve);
-                                        this.fileManager.saveFile('json/product-' + this.id + '.json', JSON.stringify(res.resolve));
-                                        // location.replace("./edit-product.html?p" + this.id + "u" + user['_id']);
-                                    } else {
-                                        alert("DatabaseToJson ERROR!");
-                                    }
-                                });
+                                // let DatabaseToJson = {
+                                //     "action": "getData",
+                                //     "index": "change",
+                                //     "type": "product",
+                                //     "id": this.id
+                                // };
+                                // Polymer.postData(Url, DatabaseToJson).then(res => {
+                                //     if (res.code > 0) {
+                                //         alert("DatabaseToJson success");
+                                //         console.log("DatabaseToJson reslve", res.resolve);
+
+                                //     } else {
+                                //         alert("DatabaseToJson ERROR!");
+                                //     }
+                                // });
                             } else {
                                 alert("update fail");
                             }
