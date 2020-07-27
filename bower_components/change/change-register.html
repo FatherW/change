@@ -88,6 +88,13 @@
                 padding-top: 0px;
                 width: 100%;
             }
+            #tologin{
+                background-color: white;
+                width: 85px;
+                border: 1px solid;
+                border-radius: 4px;
+                height: 20px;
+            }
         </style>
         <div class="register-grid">
             <span class="font-sizeh1">註冊</span>
@@ -135,7 +142,7 @@
             </div>
             <div>
                 <span>已擁有帳戶？</span>
-                <button on-click="_login">立即登入</button>
+                <button id="tologin" on-click="_login">立即登入</button>
             </div>
             <!-- <span class="privacy">簽署即表示您同意Get Change 的服務條款和隱私權政策</span> -->
             <vaadin-dialog id="login"></vaadin-dialog>

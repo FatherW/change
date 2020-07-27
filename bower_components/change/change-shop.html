@@ -212,7 +212,7 @@
 
 
     <script>
-        (function () {
+        (function() {
             Polymer({
                 is: 'change-shop',
                 properties: {
@@ -236,9 +236,12 @@
                     },
                     'isFree': {
                         'type': Boolean
+                    },
+                    "checkrange": {
+                        "type": Boolean
                     }
                 },
-                created: function () {
+                created: function() {
                     let that = this;
                     this.categories = [];
                     this.tags = [];
@@ -248,6 +251,7 @@
                     this.isNew = [];
                     this.initprice = 0;
                     this.isFree = false;
+                    this.checkrange = false;
                 },
                 addTags(val) {
                     let myTags = this.shadowRoot.querySelector('#myTags');
@@ -318,7 +322,7 @@
                     }
 
                     this.search();
-
+                    this.shadowRoot.querySelector('paper-tags-input').tags = [];
                 },
                 pagetag(tag) {
                     console.log("the pagetag is", tag);
@@ -327,7 +331,7 @@
                     this.search();
 
                 },
-                ready: function () {
+                ready: function() {
                     console.log("now shop");
                     document.addEventListener('areachange', e => {
                         this.isFree = e.detail.isFree;
@@ -386,6 +390,14 @@
                             if (maxprice[countmaxprice] != ",") {
                                 storemaxprice.push(maxprice[countmaxprice]);
                             }
+                        }
+                        console.log("this.checkrange", this.checkrange);
+                        if (this.checkrange == false) {
+                            this.checkrange = true;
+                        } else {
+                            let value = "$" + this.priceStart + " - $" + this.priceStop;
+                            console.log("1111111111", value)
+                            this.back(value);
                         }
 
                         this.priceStart = parseInt(storeminprice.join("").toString());

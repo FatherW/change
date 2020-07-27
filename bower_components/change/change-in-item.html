@@ -146,7 +146,7 @@
 </dom-module>
 
 <script>
-    (function () {
+    (function() {
 
 
 
@@ -186,10 +186,10 @@
 
             },
 
-            created: function () {
+            created: function() {
                 this.countitem = 0;
             },
-            ready: function () {
+            ready: function() {
                 // this.search();
             },
 
@@ -198,6 +198,8 @@
 
                 let that = this;
                 let shadow = this.shadowRoot;
+                shadow.querySelector('.botbutton').style.display = 'block';
+
                 let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 //////cate Id
                 // let tagsQuery = ['平價','沒有'];
@@ -394,10 +396,10 @@
                                     var price2 = [];
                                     var theans2 = [];
                                     theans.forEach(item => {
-                                        if (item['price'] > fromprice) {
+                                        if (item['price'] >= fromprice) {
                                             price1.push(item['_id']);
                                         }
-                                        if (item['price'] < toprice) {
+                                        if (item['price'] <= toprice) {
                                             price2.push(item['_id'])
                                         }
                                     });
@@ -412,7 +414,7 @@
                                     this.res2 = theans2;
                                     this.res = [];
                                     let check8 = 8;
-                                    if (theans2.length < 8) {
+                                    if (theans2.length <= 8) {
                                         check8 = theans2.length;
                                         shadow.querySelector('#morebutton').style.display = 'none';
                                     } else {
@@ -436,7 +438,7 @@
                                 } else {
                                     this.res2 = theans
                                     let check8 = 8;
-                                    if (theans.length < 8) {
+                                    if (theans.length <= 8) {
                                         check8 = theans.length;
                                         shadow.querySelector('#morebutton').style.display = 'none';
                                     } else {
@@ -462,7 +464,8 @@
 
             },
 
-            displaymore: function () {
+            displaymore: function() {
+                console.log('load');
                 let that = this;
                 let shadow = this.shadowRoot;
                 let prods = this.res2;
@@ -475,6 +478,9 @@
                     let check8 = 8;
                     if (prods.length - this.countitem < 8) {
                         check8 = prods.length - this.countitem;
+                        if (prods.length - this.countitem <= 8) {
+                            shadow.querySelector('.botbutton').style.display = 'none';
+                        }
                     }
                     for (var i = this.countitem; i < this.countitem + check8; i++) {
                         storeId.push(prods[i]['_id'])
@@ -492,6 +498,8 @@
                     let check8 = 8;
                     if (prods.length - this.countitem < 8) {
                         check8 = prods.length - this.countitem;
+                        shadow.querySelector('.botbutton').style.display = 'none';
+
                     }
                     for (var i = this.countitem; i < this.countitem + check8; i++) {
                         storeId.push(prods[i])
@@ -511,7 +519,7 @@
 
 
 
-            _showMyGoods: function () {
+            _showMyGoods: function() {
                 let shadow = this.shadowRoot;
                 shadow.querySelector('#blank').innerHTML = "";
                 let that = this;

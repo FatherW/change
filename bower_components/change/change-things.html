@@ -311,6 +311,7 @@
                 padding-top: 10px;
                 padding-bottom: 10px;
                 color: #666666;
+                display:block;
             }
 
             .name {
@@ -502,8 +503,8 @@
 
                 this.productname = all['productname'];
                 this.price = "$" + all['price'];
-                if (all['price'] == 0) {
-
+                if (all['isFree'] == true) {
+                    shadow.querySelector('#price').style.display = 'none';
                 };
                 this.ownerId = all['ownerId'];
                 this.detailUrl = '/edit-product.html?p' + all['id'] + 'u' + all['ownerId'];
@@ -518,11 +519,10 @@
                         shadow.querySelector('#status1').id = "status";
                     }
                 }
-                shadow.querySelectot
                 this.shadowRoot.querySelector('change-user-tag').loadData(all['ownerId'], all['createTime']);
                 this.shadowRoot.querySelector('change-item-tag').loadTags(all['tags']);
-                let boolean = user.isAdmin;
-                if (Boolean(boolean) || user['_id'] == all['ownerId']) {
+                let boolean = Boolean(user.isAdmin) || null;
+                if (boolean || user['_id'] == all['ownerId']) {
                     shadow.querySelector('.shouldhide').style.visibility = 'visible';
                 }
 
