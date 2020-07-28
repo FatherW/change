@@ -484,7 +484,8 @@
                 Polymer.postData(Url, param).then(res => {
                     if (res.code > 0) {
                         // location.reload();
-                        shadow.querySelector('#deleteall').style.display = "none";
+                        // shadow.querySelector('#deleteall').style.display = "none";
+                        that.remove();
                     } else {
                         console.log("error in reallydelete");
                     }
