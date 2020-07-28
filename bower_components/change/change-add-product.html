@@ -1334,11 +1334,11 @@
                                 let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                                 Polymer.postData(Url, paramup).then(res => {
                                     if (res.code > 0) {
-                                        alert("成功！");
+                                        // alert("成功！");
                                         this.dataManager.loadData(newproductid).then(res => {
                                             console.log("Working", res);
                                             this.fileManager.saveFile('json/product-' + newproductid + '.json', JSON.stringify(res));
-                                            // location.replace("./edit-product.html?p" + newproductid + "u" + user['_id']);
+                                            location.replace("./edit-product.html?p" + newproductid + "u" + user['_id']);
                                         })
                                     } else {
                                         alert("update fail");
@@ -1387,10 +1387,10 @@
                         Polymer.postData(Url, paramsDatabase).then(res => {
                             console.log("json", json2ways);
                             if (res.code > 0) {
-                                alert("成功！");
+                                // alert("成功！");
 
                                 //********UPDATE JSON***********//
-                                // location.replace("./edit-product.html?p" + this.id + "u" + user['_id']);
+                                location.replace("./edit-product.html?p" + this.id + "u" + user['_id']);
 
                                 // //*************PASS DATA FROM DATABASE TO JSON****************//
                                 // let DatabaseToJson = {
