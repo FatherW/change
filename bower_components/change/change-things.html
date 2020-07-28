@@ -5,11 +5,12 @@
 <link rel="import" href="change-user-tag.html">
 <link rel="import" href="change-item-tag.html">
 <link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
-
+<link rel="import" href="../dz-dazzle/css/medium-editor.html">
 
 
 <dom-module id="change-things">
     <template>
+        <style include="medium-editor-styles"> </style>
         <style>
             #tagbutton {
                 cursor: pointer;
@@ -270,6 +271,7 @@
 
             }
 
+
             #pics {
 
                 position: relative;
@@ -339,7 +341,10 @@
                 margin-left: 10px;
                 font-weight: 900;
             }
-
+            .shouldhide{
+            
+                visibility:hidden;
+            }
             img#_changeicon {
                 width: 40px;
                 height: 40px;
@@ -356,21 +361,38 @@
 
             }
 
+            .remove-product{
+                position:absolute;
+                top:0px;
+                right:0px;
+                z-index:2;
+            }
+            .remove-product:hover{
+                color:orange;
+            }
             /* #deleteall{
                 filter: blur(0);
             } */
+            /* #deleteall{
+                position:relative;  
+            } */
+            :host{
+                position:relative;
+            }
         </style>
 
+        <i class="fa fa-minus-circle remove-product shouldhide"  on-click="_deleteproduct"></i>
         <div id="deleteall" style="display: block;">
-            <div style="display: flex; width: max-content;">
-            <a style="width: 90%;" href$="{{userUrl}}">
-                <change-user-tag></change-user-tag>
-            </a>
-            <div class="shouldhide" style="display:flex;visibility: hidden;align-self: center;">
-                <button class="jumpeditproduct2" on-click="_deleteproduct"></button>
-                <div id="status1"></div>
+            <div style="display: flex; width:100%; position:relative;">
+                <a style="width: 90%;" href$="{{userUrl}}">
+                    <change-user-tag></change-user-tag>
+                </a>
+                <div class="shouldhide" style="display:flex;visibility: hidden;align-self: center;">
+                    <!-- <button class="jumpeditproduct2" on-click="_deleteproduct"></button> -->
+                    <div id="status1"></div>
+                </div>
             </div>
-            </div>
+
             <a href$="{{detailUrl}}">
                 <div class="svg">
                     <div id="pics" style="background-image:url({{pics}})">
@@ -445,6 +467,8 @@
 
                 });
 
+                this.dataManager = new DataPackage('product');
+                this.user = store.get('change-user') || null;
 
             },
             _reallydelete: function() {
@@ -480,16 +504,25 @@
                 this.shadowRoot.querySelector('#tempqqq').id = 'tempqqq' + this.id;
                 let that = this;
                 var json;
+<<<<<<< HEAD
                 let url = "/json/product-" + this.id + ".json?id=" + new Date().getTime();
+=======
+                let url = "/json/product-" + this.id + ".json?id="+new Date().getTime();
+>>>>>>> 1cbbd0989be47764b95f3dfdb1a2568de6a5c23a
                 Polymer.getContent(url).then(str => {
                     json = JSON.parse(str);
                     that.userdata(json);
+                },err=>{
+                    that.dataManager.loadData(that.id).then(res=>{
+                        console.log('Cannot read product',res);
+                        that.userdata(res);
+                    });
                 });
 
             },
 
             userdata(all) {
-                var user = store.get('change-user') || null;
+                var user = this.user;
                 let shadow = this.shadowRoot;
                 this.all = all;
                 this.id = this.getAttribute('id');
@@ -521,9 +554,12 @@
                 }
                 this.shadowRoot.querySelector('change-user-tag').loadData(all['ownerId'], all['createTime']);
                 this.shadowRoot.querySelector('change-item-tag').loadTags(all['tags']);
-                let boolean = Boolean(user.isAdmin) || null;
-                if (boolean || user['_id'] == all['ownerId']) {
-                    shadow.querySelector('.shouldhide').style.visibility = 'visible';
+                if (user){
+                    let boolean = user['isAdmin'] || null;
+                    if (boolean || user['_id'] == all['ownerId']) {
+                        shadow.querySelector('.shouldhide').style.visibility = 'visible';
+                    }
+
                 }
 
 
