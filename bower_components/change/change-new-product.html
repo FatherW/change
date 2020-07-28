@@ -690,12 +690,19 @@
                         posit = i;
                     };
                 };
-                for (u = posit + 1; u < loc.length; u++) { 
+                for (u = posit + 1; u < loc.length; u++) {
                     uid += loc[u];
                 };
+
+                //**NEW USERS USE "id"
+                console.log("CURRENT UID (new users)", user['id']);
+                //**OLD USERS USE "_id"
+                console.log("CURRENT UID (old users", user['_id']);
+
+                console.log("CURRENT PRODUCT OWNER", uid);
                 if (user == null) {
                     alert("請先登入!");
-                } else if (user['id'] == uid) {
+                } else if (user['id'] == uid || user['_id'] == uid) {
                     alert("不能留言自己貨物!");
                 } else {
                     console.log('contacting seller');
