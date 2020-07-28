@@ -157,6 +157,8 @@
                         console.log("CANNOT SEARCH USER!");
                     }
                 })
+
+
             },
 
             _addFanPage: function () {
@@ -184,6 +186,16 @@
                 Polymer.postData(Url, params).then(res => {
                     if (res.code > 0) {
                         alert("取消了該用戶資格");
+
+                        //PASS TO LAMBDA TO GENERATE EMAIL
+                        let LambdaParams = {
+                            "action": "cancelByUid",
+                            "uid": uid
+                        };
+                        let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
+                        Polymer.postData(link, LambdaParams).then(res => {
+                            console.log("PASS TO LAMBDA SUCCESS!");
+                        });
                     }
                 })
             },
@@ -209,6 +221,16 @@
                 Polymer.postData(Url, params).then(res => {
                     if (res.code > 0) {
                         alert("回復了該用戶資格");
+
+                        //PASS TO LAMBDA TO GENERATE EMAIL
+                        let LambdaParams = {
+                            "action": "recoverByUid",
+                            "uid": uid
+                        };
+                        let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
+                        Polymer.postData(link, LambdaParams).then(res => {
+                            console.log("PASS TO LAMBDA SUCCESS!");
+                        });
                     }
                 })
             },
