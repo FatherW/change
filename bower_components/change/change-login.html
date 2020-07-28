@@ -179,14 +179,14 @@
 <script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
 <script async defer src="https://apis.google.com/js/platform.js"></script>
 <script>
-    (function() {
+    (function () {
         Polymer({
             is: 'change-login',
             properties: {
 
             },
 
-            _forgot: function() {
+            _forgot: function () {
                 console.log('forgot password');
                 let shadow = this.shadowRoot;
                 let that = this;
@@ -194,8 +194,8 @@
                 Polymer.closeDialog(dialog)
                 Polymer.popup(dialog, "change", "change-reset", "30%", "50%");
             },
-            ready: function() {
-                window.fbAsyncInit = function() {
+            ready: function () {
+                window.fbAsyncInit = function () {
                     FB.init({
                         appId: '711018846416860',
                         cookie: true,
@@ -207,7 +207,7 @@
 
                 };
 
-                (function(d, s, id) {
+                (function (d, s, id) {
                     var js, fjs = d.getElementsByTagName(s)[0];
                     if (d.getElementById(id)) {
                         return;
@@ -232,7 +232,7 @@
 
                 this.status = false;
                 let that = this;
-                this.shadowRoot.querySelector('#changePassword1').addEventListener("keypress", function(e) {
+                this.shadowRoot.querySelector('#changePassword1').addEventListener("keypress", function (e) {
                     var key = e.which || e.keyCode || 0;
                     if (key === 13) {
                         that._login();
@@ -246,13 +246,13 @@
 
             },
 
-            log: function() {
+            log: function () {
                 console.log("good");
-                FB.login(function(response) {
+                FB.login(function (response) {
                     console.log("response", response);
                     if (response.authResponse) {
                         console.log('Welcome!  Fetching your information.... ');
-                        FB.api('/me', function(response) {
+                        FB.api('/me', function (response) {
                             console.log('Good to see you, ' + response.name + '.');
                         });
                     } else {
@@ -263,13 +263,13 @@
                 });
             },
 
-            checkLoginState: function() { // Called when a person is finished with the Login Button.
-                FB.getLoginStatus(function(response) { // See the onlogin handler
+            checkLoginState: function () { // Called when a person is finished with the Login Button.
+                FB.getLoginStatus(function (response) { // See the onlogin handler
                     statusChangeCallback(response);
                 });
             },
 
-            statusChangeCallback: function(response) { // Called with the results from FB.getLoginStatus().
+            statusChangeCallback: function (response) { // Called with the results from FB.getLoginStatus().
                 console.log('statusChangeCallback');
                 console.log(response); // The current login status of the person.
                 if (response.status === 'connected') { // Logged into your webpage and Facebook.
@@ -279,14 +279,14 @@
                 }
             },
 
-            testAPI: function() { // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
+            testAPI: function () { // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
                 console.log('Welcome!  Fetching your information.... ');
-                FB.api('/me', function(response) {
+                FB.api('/me', function (response) {
                     console.log('Successful login for: ' + response.name);
                 });
             },
 
-            _register: function() {
+            _register: function () {
                 console.log('Register');
                 let shadow = this.shadowRoot;
                 let that = this;
@@ -294,7 +294,7 @@
                 Polymer.popup(dialog, "change", "change-register", "40%", "90%");
             },
 
-            _login: function() {
+            _login: function () {
                 let shadow = this.shadowRoot;
                 let that = this;
                 let uid = shadow.querySelector('#changeEmail1').value;
@@ -322,12 +322,11 @@
                                     if (user.token == "" || user.token == null || user.token == undefined) {
                                         store.set('change-user', user);
                                         location.reload();
+                                    } else if (user.token == "1") {
+                                        alert("你已經被取消了用戶資格")
                                     } else {
-
                                         alert("請先進行電郵驗證");
-
                                     }
-
                                 } else {
                                     alert("用戶不存在，請註冊後登入");
                                 }

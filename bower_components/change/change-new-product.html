@@ -641,9 +641,9 @@
                                 }
                             }
                         }
-                        Polymer.postData(Url, p).then(reso => {
+                        Polymer.postData(Url, p).then(res => {
                             if (res.code > 0) {
-                                let un = reso.resolve[0]['username'];
+                                let un = res.resolve[0]['username'];
                                 shadow.querySelector('#owner').innerHTML = un;
                             }
                         })
