@@ -1037,4 +1037,22 @@ change-announcement {
     .menu-icon i {
         font-size: 1.7em;
     }
+
+    .shop_panel {
+        width: 100%;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .getchange {
+        padding-bottom: 50px;
+        padding-left: 2.5%;
+        padding-right: 2.5%;
+        width: 95%;
+        margin: 0 auto;
+    }
+
+    .allduiqi {
+        padding-bottom: 100px;
+    }
 }
