@@ -17,10 +17,10 @@
                 margin: 6px;
             }
 
-            #status{
+            #status {
                 width: 15px;
                 height: 15px;
-                background-color: rgb(242,253,55);
+                background-color: rgb(242, 253, 55);
                 border-radius: 100%;
             }
 
@@ -313,7 +313,7 @@
                 padding-top: 10px;
                 padding-bottom: 10px;
                 color: #666666;
-                display:block;
+                display: block;
             }
 
             .name {
@@ -341,10 +341,12 @@
                 margin-left: 10px;
                 font-weight: 900;
             }
-            .shouldhide{
-            
-                visibility:hidden;
+
+            .shouldhide {
+
+                visibility: hidden;
             }
+
             img#_changeicon {
                 width: 40px;
                 height: 40px;
@@ -361,27 +363,29 @@
 
             }
 
-            .remove-product{
-                position:absolute;
-                top:0px;
-                right:0px;
-                z-index:2;
+            .remove-product {
+                position: absolute;
+                top: 0px;
+                right: 0px;
+                z-index: 2;
             }
-            .remove-product:hover{
-                color:orange;
+
+            .remove-product:hover {
+                color: orange;
             }
+
             /* #deleteall{
                 filter: blur(0);
             } */
             /* #deleteall{
                 position:relative;  
             } */
-            :host{
-                position:relative;
+            :host {
+                position: relative;
             }
         </style>
 
-        <i class="fa fa-minus-circle remove-product shouldhide"  on-click="_deleteproduct"></i>
+        <i class="fa fa-minus-circle remove-product shouldhide" on-click="_deleteproduct" style="margin-top: 15px; font-size: 20px;"></i>
         <div id="deleteall" style="display: block;">
             <div style="display: flex; width:100%; position:relative;">
                 <a style="width: 90%;" href$="{{userUrl}}">
@@ -425,7 +429,7 @@
     </template>
 </dom-module>
 <script>
-    (function() {
+    (function () {
         Polymer({
             is: 'change-things',
             properties: {
@@ -449,7 +453,7 @@
                 }
 
             },
-            created: function() {
+            created: function () {
 
                 document.addEventListener('close-item-dialog', e => {
                     if (this.shadowRoot.querySelector('#tempqqq' + this.id).opened == true) {
@@ -471,7 +475,7 @@
                 this.user = store.get('change-user') || null;
 
             },
-            _reallydelete: function() {
+            _reallydelete: function () {
                 let that = this;
                 let shadow = this.shadowRoot;
                 let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
@@ -492,7 +496,7 @@
                 })
             },
 
-            _deleteproduct: function() {
+            _deleteproduct: function () {
                 // console.log("inside deleteproduct");
                 let that = this;
                 let shadow = this.shadowRoot;
@@ -500,18 +504,18 @@
                 let dialog = shadow.querySelector('#tempqqq' + this.id);
                 Polymer.popup(dialog, "change", "change-confirm", "30%", "50%");
             },
-            ready: function() {
+            ready: function () {
                 this.id = this.getAttribute('id');
                 this.shadowRoot.querySelector('#tempqqq').id = 'tempqqq' + this.id;
                 let that = this;
                 var json;
-                let url = "/json/product-" + this.id + ".json?id="+new Date().getTime();
+                let url = "/json/product-" + this.id + ".json?id=" + new Date().getTime();
                 Polymer.getContent(url).then(str => {
                     json = JSON.parse(str);
                     that.userdata(json);
-                },err=>{
-                    that.dataManager.loadData(that.id).then(res=>{
-                        console.log('Cannot read product',res);
+                }, err => {
+                    that.dataManager.loadData(that.id).then(res => {
+                        console.log('Cannot read product', res);
                         that.userdata(res);
                     });
                 });
@@ -551,7 +555,7 @@
                 }
                 this.shadowRoot.querySelector('change-user-tag').loadData(all['ownerId'], all['createTime']);
                 this.shadowRoot.querySelector('change-item-tag').loadTags(all['tags']);
-                if (user){
+                if (user) {
                     let boolean = user['isAdmin'] || null;
                     if (boolean || user['_id'] == all['ownerId']) {
                         shadow.querySelector('.shouldhide').style.visibility = 'visible';
