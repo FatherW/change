@@ -98,12 +98,55 @@
                 for (i = posit + 1; i < loc.length; i++) {
                     uid += loc[i];
                 }
-                let user = store.get('change-user') || null;
-                if (user['_id'] == uid) {
-                    shadow.querySelector('.orderContainter').style.display = 'block';
-                }
 
+                let user = store.get('change-user') || null;
+                console.log("CURRENT UID", user['_id']);
                 let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+
+                let findBuyer = {
+                    "action": "searchData",
+                    "index": "change",
+                    "type": "order",
+                    "body": {
+                        "query": {
+                            "bool": {
+                                "must": [
+                                    {
+                                        "match": {
+                                            "productId": pid
+                                        }
+                                    },
+                                    {
+                                        "match": {
+                                            "buyerId": user['_id']
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                };
+                Polymer.postData(Url, findBuyer).then(res => {
+                    console.log("BBB", res.resolve);
+                    if (user['_id'] == uid) {
+                        shadow.querySelector('.orderContainter').style.display = 'block';
+                        console.log("current user is owner.")
+                    } else if (res.resolve) {
+                        //**********IF NEITHER OWNER NOR USER, res.resolve[0]['buyerId'] BECOMES UNDEFINED "NORMAL"*********//
+                        let isBuyer = res.resolve[0]['buyerId'];
+                        console.log("isBuyer", isBuyer);
+                        console.log("current user is buyer.")
+                        shadow.querySelector('.orderContainter').style.display = 'block';
+                    }
+                });
+
+                // if (user['_id'] == uid) {
+                //     shadow.querySelector('.orderContainter').style.display = 'block';
+                // } else if (user['_id'] == isBuyer) {
+                //     shadow.querySelector('.orderContainter').style.display = 'block';
+                //     console.log("BBBisBuyer", isBuyer);
+                // }
+
                 let params = {
                     "action": "searchData",
                     "index": "change",
@@ -130,7 +173,7 @@
                         }
                     }
                 };
-                console.log("the param of order ,", JSON.stringify(params));
+                console.log("the param of order", JSON.stringify(params));
                 Polymer.postData(Url, params).then(res => {
                     console.log("RP", res);
                     if (res.code > 0) {
