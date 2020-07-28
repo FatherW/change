@@ -113,30 +113,42 @@
                 let shadow = this.shadowRoot;
 
                 let user2 = store.get('change-user') || null;
+                let product_url = '/json/product-' + this.id + '.json?id=' + new Date().getTime();
 
 
-
-                Polymer.getContent('/json/product-' + this.id + '.json').then(str => {
+                Polymer.getContent(product_url).then(str => {
                     let json = JSON.parse(str);
 
                     shadow.querySelector('#likes').innerHTML = json['like'];
                     this.like = json['like'];
-                    if (user2) {
-                        let url = "/json/user-" + user2['_id'] + ".json";
-                        // console.log("th user url", url);
 
-                        Polymer.getContent(url).then(str => {
-                            json = JSON.parse(str);
-                            that.user = json;
-                            this.checkLike(json);
-
-                        });
+                    // this.dataManager.loadData(user2['_id']).then(res=>{
+                    //     that.user = res;
+                    //     this.checkLike(res);
+                    // });
 
 
+                    // if (user2) {
+                    //     let url = "/json/user-" + user2['_id'] + ".json?id=" + new Date().getTime();
+                    //     // console.log("th user url", url);
 
-                    } else {
-                        // console.log("not login");
-                    }
+                    //     Polymer.getContent(url).then(str => {
+                    //         json = JSON.parse(str);
+                    //         that.user = json;
+                    //         this.checkLike(json);
+
+                    //     },err=>{
+                    //         this.dataManager.loadData(user2['_id']).then(res=>{
+                    //             that.user = res;
+                    //             this.checkLike(res);
+                    //         });
+                    //     });
+
+
+
+                    // } else {
+                    //     // console.log("not login");
+                    // }
                 });
 
                 // Polymer.postData(URL, param).then(res => {
