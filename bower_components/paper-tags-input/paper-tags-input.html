@@ -60,29 +60,41 @@ If you want to save it in bower.json file, remember to add flag --save
 -->
 <dom-module id="paper-tags-input">
     <template>
-    <style>
-      :host {
-        display: block;
-        box-sizing: border-box;
-        font-family: 'Roboto', 'Noto', sans-serif;
-      }
-      .clearfix:after {
-        content: " ";
-        display: block;
-        height: 0;
-        clear: both;
-      }
-    </style>
-  <h3>{{label}}</h3>
-    <div class="clearfix" >
-    <template is="dom-repeat" items="{{tags}}">
-      <tag-item font-color="{{fontColor}}" tag-color="{{tagColor}}" size="{{size}}" enable-remove="{{enableRemove}}" index="{{index}}" value="{{item}}"></tag-item>
-      </div>
+        <style>
+            :host {
+                display: block;
+                box-sizing: border-box;
+                font-family: 'Roboto', 'Noto', sans-serif;
+            }
+
+            .clearfix:after {
+                content: " ";
+                display: block;
+                height: 0;
+                clear: both;
+            }
+
+            .large.tag-item-container {
+                border-radius: 8px;
+                padding-left: 14px;
+                padding-right: 14px;
+                background: white;
+                border: 2px solid #a7a7a7;
+                color: #000;
+            }
+        </style>
+        <h3>{{label}}</h3>
+        <div class="clearfix">
+            <template is="dom-repeat" items="{{tags}}">
+                <tag-item font-color="{{fontColor}}" tag-color="{{tagColor}}" size="{{size}}"
+                    enable-remove="{{enableRemove}}" index="{{index}}" value="{{item}}"></tag-item>
+        </div>
     </template>
     </div>
     <template is="dom-if" if="{{enableAdd}}">
-       <paper-input on-focusout="_focusOut" error-message="{{emptyErrorMessage}}" label="{{placeholder}}" on-keydown="_keyDown" value="{{input_value}}"></paper-input>
-     </template>
+        <paper-input on-focusout="_focusOut" error-message="{{emptyErrorMessage}}" label="{{placeholder}}"
+            on-keydown="_keyDown" value="{{input_value}}"></paper-input>
+    </template>
 
     </template>
 
@@ -101,7 +113,7 @@ If you want to save it in bower.json file, remember to add flag --save
             tags: {
                 type: Array,
                 notify: true,
-                value: function() {
+                value: function () {
                     return []
                 },
             },
@@ -175,16 +187,22 @@ If you want to save it in bower.json file, remember to add flag --save
 
         // Element Lifecycle
 
-        ready: function() {
+        ready: function () {
             // `ready` is called after all elements have been configured, but
             // propagates bottom-up. This element's children are ready, but parents
             // are not.
             //
             // This is the point where you should make modifications to the DOM (when
             // necessary), or kick off any processes the element wants to perform.
+
+            /*TESTING*/
+            // let tag = shadowRoot.querySelector('tag-item');
+            // let shadow = tag.shadowRoot;
+            // shadow.querySelector('.large.tag-item-container').style.background = "white";
+
         },
 
-        attached: function() {
+        attached: function () {
             // `attached` fires once the element and its parents have been inserted
             // into a document.
             //
@@ -193,7 +211,7 @@ If you want to save it in bower.json file, remember to add flag --save
             // loading resources, etc).
         },
 
-        detached: function() {
+        detached: function () {
             // The analog to `attached`, `detached` fires when the element has been
             // removed from a document.
             //
@@ -206,11 +224,11 @@ If you want to save it in bower.json file, remember to add flag --save
          *
          * @param {string} the tag that needs to be added.
          */
-        _addTag: function(tag) {
+        _addTag: function (tag) {
             if (this.enableAdd == false) {
                 return;
             }
-            if (typeof(this.tags) == 'undefined') {
+            if (typeof (this.tags) == 'undefined') {
                 this.tags = [];
             }
             if (tag == "") {
@@ -233,10 +251,10 @@ If you want to save it in bower.json file, remember to add flag --save
          *
          * @return {string} returns the trimmed version of paper-input value.
          */
-        _getTags: function() {
+        _getTags: function () {
             return this.tags;
         },
-        _getInputVal: function() {
+        _getInputVal: function () {
             if (this.input_value)
                 this.input_value = this.input_value.trim();
             else
@@ -248,9 +266,9 @@ If you want to save it in bower.json file, remember to add flag --save
          *
          * @param {object} event object
          */
-        _focusOut: function(e) {
+        _focusOut: function (e) {
             var tag = this._getInputVal();
-            if (typeof(tag) != undefined && tag != "") {
+            if (typeof (tag) != undefined && tag != "") {
                 this._addTag(this._getInputVal());
             }
 
@@ -260,7 +278,7 @@ If you want to save it in bower.json file, remember to add flag --save
          *
          * @param {object} event object
          */
-        _keyDown: function(e) {
+        _keyDown: function (e) {
             var keyVal = e.which;
             if (keyVal == 13) {
                 this._addTag(this._getInputVal());
@@ -275,7 +293,7 @@ If you want to save it in bower.json file, remember to add flag --save
          *
          * @param {Object} event object
          */
-        _onTagItemRemove: function(e) {
+        _onTagItemRemove: function (e) {
             this.splice('tags', e.detail.index, 1);
         }
 

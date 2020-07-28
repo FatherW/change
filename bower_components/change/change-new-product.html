@@ -251,8 +251,6 @@
                 border: none;
                 font-size: large;
                 margin-top: 52px;
-                visibility: hidden;
-
             }
 
             .b3 {
@@ -429,7 +427,7 @@
         <div class="outer">
             <div class="change-new-product-container">
                 <div class="left-pics">
-                    <!-- 这里放图片 -->
+                    <!-- input pictures -->
                     <div class="bigPic" id="div0"></div>
                     <div>
 
@@ -448,10 +446,6 @@
                                 <div id="div4"></div>
                             </div>
                         </div>
-                        <!-- <div class="buttons u">
-                                <button id="upload" on-click="_uploadFile">上載圖片</button>
-                            </div>
-                            <vaadin-dialog></vaadin-dialog> -->
                     </div>
                 </div>
 
@@ -507,14 +501,7 @@
                         <!-- <span id="pn">產品名稱：儲物架</span> -->
                     </div>
                     <br>
-                    <!-- <div class="unib"><span>產品尺寸 185x130x30(cm)</span></div>
-                        <br> -->
-                    <!-- <div class="sMesCon">
-                        <div class="sMesText"><span>賣家留言:</span></div>
-                        <div class="sMes"></div>
-                    </div> -->
 
-                    <br>
                     <div class="tagContainer">
                         <div class="tag">
                             <span> 標籤： </span>
@@ -597,7 +584,6 @@
                 let user = store.get('change-user') || null;
                 if (user) {
                     shadow.querySelector('#contact').style.visibility = "visible";
-
                 }
 
                 Polymer.postData(Url, params).then(res => {
@@ -626,7 +612,7 @@
                         //get and pass tag data
                         let itemtag = "";
                         for (count = 0; count < res.resolve['tags'].length; count++) {
-                            itemtag += '<button id=\"tagbutton\">' + '<a href="list-product.html#' + res.resolve['tags'][count] + '">' + res.resolve['tags'][count] + "</a></button> &nbsp;"
+                            itemtag += '<button id=\"tagbutton\">' + '<a href="list-product.html?tag=' + res.resolve['tags'][count] + '">' + res.resolve['tags'][count] + "</a></button> &nbsp;"
                         }
                         shadow.querySelector('#t').innerHTML = itemtag;
 
@@ -696,14 +682,27 @@
             },
             _findseller: function () {
                 let user = store.get('change-user') || null;
+                loc = location.search;
+                let posit = 0;
+                let uid = "";
+                for (i = 1; i < loc.length; i++) {
+                    if (loc[i] == "u") {
+                        posit = i;
+                    };
+                };
+                for (u = posit + 1; u < loc.length; u++) { 
+                    uid += loc[u];
+                };
                 if (user == null) {
                     alert("請先登入!");
+                } else if (user['id'] == uid) {
+                    alert("不能留言自己貨物!");
                 } else {
                     console.log('contacting seller');
                     let shadow = this.shadowRoot;
                     let that = this;
                     let dialog = shadow.querySelector('vaadin-dialog');
-                    Polymer.popup(dialog, "change", "change-webcom", "325px", "600px");
+                    Polymer.popup(dialog, "change", "change-webcom", "500px", "400px");
                     console.log("end process in contact seller");
                 }
             },
