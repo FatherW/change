@@ -4,27 +4,32 @@
     <template>
         <style include="icon-styles"></style>
         <style>
-            .checked {
-                color: orange;
+            * {
+                font-family: sans-serif, Microsoft JhengHei;
+
+            }
+
+            #mp {
+                padding-top: 17%;
+                background-size: cover;
+                background-position: center center;
+                background-repeat: no-repeat;
+                background-image: url('http://change.dazzle.website/Website Design/profile page/img/profile banner/company-profile-banner.png');
             }
 
             #offer {
-                margin-left: 8%;
-                margin-right: 8%;
-                margin-top: 2%;
-            }
-
-            #offer {
-                height: 90px;
+                margin: 0 auto;
+                width: 94%;
+                display: flex;
+                padding: 10px 0;
+                height: auto;
                 background-color: white;
             }
 
             .in {
-                display: inline;
-                float: left;
                 padding-right: 1%;
-                height: inherit;
                 padding-left: 1%;
+                margin-left: 25px;
             }
 
             #dp {
@@ -32,81 +37,102 @@
                 height: 70px;
                 border-radius: 9999999999999px;
                 margin: 18% 0%;
-            }
-
-            .buttons {
-                width: 9%;
-            }
-
-            #user {
-                width: 54%;
-            }
-
-            .ret {
-                font-size: 3em;
-                text-align: center;
-            }
-
-            h6 {
-                margin: 10% 0%;
+                padding-top: 0px;
             }
 
             #user {
                 padding-top: 1%;
+                width: 100%;
             }
 
             #Uname {
                 font-size: 1.5em;
                 font-weight: 800;
+                color: black
             }
 
-            #mp {
-                height: 250px;
-                width: 100%;
-                background-size: cover;
-                background-position: center center;
-                background-repeat: no-repeat;
-                background-image: url("http://change.dazzle.website/Website Design/profile page/img/profile banner/company-profile-banner.png");
+            #check {
+                color: gray;
             }
 
-            @media (max-width: 768px) {
+            #buttonM {
+                display: flex;
+                margin-right: 25px;
+            }
+
+            .buttons {
+                width: 80px;
+                text-align: center;
+            }
+
+            h6 {
+                margin: 10% 0%;
+                font-size: 15px;
+            }
+
+            .ret {
+                font-size: 3em;
+                text-align: center;
+                color: red;
+            }
+
+            @media only screen and (max-width: 768px) {
+                .buttons {
+                    width: 70px;
+                }
+            }
+
+            @media only screen and (max-width: 640px) {
+                #offer {
+                    width: 100%;
+                    margin-bottom: 10px;
+                }
+
                 .in {
-                    display: inline;
-                    float: left;
-                    /* padding-right: 1%; */
-                    /* height: inherit; */
-                    /* padding-left: 1%; */
-                    font-size: 4px;
+                    padding-right: 0;
+                    padding-left: 0;
+                    margin-left: 0;
                 }
 
                 #dp {
-                    width: 30px;
-                    height: 30px;
-                    /* border-radius: 9999999999999px; */
-                    margin: 30% 0%;
+                    width: 60px;
+                    height: 60px;
                 }
 
                 #user {
-                    width: 32.7%;
+                    margin-top: 10px;
+                    margin-left: 10px;
+                }
+
+                #Uname {
+                    font-size: 1.1em;
+                }
+
+                #buttonM {
+                    margin-right: 0;
                 }
 
                 .buttons {
-                    width: 50px;
+                    width: 60px;
+                    margin-top: 5px;
+                }
+
+                .ret {
+                    font-size: 2em;
                 }
             }
         </style>
-        <div id="container">
-            <div id="mp">
+        <div id="mp"></div>
+        <div id="offer">
+            <div class="in">
+                <img id="dp" src="img/symbol/s5.png" alt="DP" />
             </div>
-            <div id="offer">
-                <div class="in">
-                    <img id="dp" src="img/symbol/s5.png" alt="DP" />
-                </div>
-                <div id="user" class="in">
-                    <span id="Uname"></span>
-                    <br />
-                    <span id="check"></span>
-                </div>
+            <div id="user" class="in">
+                <span id="Uname"></span>
+                <br />
+                <span id="check"></span>
+            </div>
+            <div id="buttonM">
                 <div class="in buttons">
                     <h6>上貨數</h6>
                     <span class="ret" id="gNum"></span>
@@ -115,7 +141,7 @@
                     <h6>購買數</h6>
                     <span class="ret" id="buy"></span>
                 </div>
-                <div class="in buttons">
+                <div class="in buttons" id="threeWords">
                     <h6>平均評分</h6>
                     <span class="ret" id="rate"></span>
                 </div>
@@ -124,16 +150,16 @@
     </template>
 </dom-module>
 <script>
-    (function() {
+    (function () {
         Polymer({
             is: 'change-pages-banner',
             properties: {
 
             },
-            created: function() {
+            created: function () {
 
             },
-            ready: function() {
+            ready: function () {
 
 
                 let id = document.querySelector('www').getAttribute('id');

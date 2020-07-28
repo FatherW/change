@@ -45,7 +45,7 @@
                 display: grid;
                 grid-row-gap: 20px;
                 grid-column-gap: 10px;
-                grid-template-columns: 3fr 5fr 1fr;
+                grid-template-columns: 2.5fr 4fr 2fr;
                 height: 80px;
             }
 
@@ -247,17 +247,23 @@
 
             }
 
+            @media (max-width: 768px) {
+                change-user-panel{
+                    display: none;
+                }
+
+            }
+
             @media (max-width:640px) {
                 .logo1 {
                     float: left;
                     height: 50px;
                 }
-                change-user-panel{
-                    display: none;
-                }
+            
                 button {
                     font-size: 10px;
                 }
+
                 .logo1{
                     float: left;
                     height: 68px;

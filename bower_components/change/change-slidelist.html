@@ -474,6 +474,8 @@
                                 'isNew': "全新"
                             }
                         })
+                    } else {
+                        document.querySelector('change-shop').back("全新");
                     }
                 });
                 shadow.querySelector('#isnew2').addEventListener('click', e => {
@@ -483,6 +485,8 @@
                                 'isNew': "二手"
                             }
                         })
+                    } else {
+                        document.querySelector('change-shop').back('二手');
                     }
                 });
                 shadow.querySelector('change-range').new();

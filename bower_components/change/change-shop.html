@@ -18,6 +18,11 @@
                 overflow: hidden;
             }
 
+            #containall {
+                width: 100%;
+                display: flex;
+            }
+
             .clear {
                 clear: both;
             }
@@ -94,17 +99,12 @@
             }
 
             #rightele {
-                width: 70%;
-                float:left; 
-                margin-top:50px;
-                border:'none';
-                margin-left: 50px;
-                padding-right: 60px;
-               
-            }
-
-            #containall {
                 width: 100%;
+                float: left;
+                margin-top: 50px;
+                border: 'none';
+                margin-left: 50px;
+
             }
 
             .valuebar1 {
@@ -148,46 +148,47 @@
             }
 
 
-            #viewingcat{
-                    display:block;
-                }
+            #viewingcat {
+                display: block;
+            }
+
             body {
                 margin: none;
             }
-           
-            change-mobileslide{
-                display:none;
+
+            change-mobileslide {
+                display: none;
             }
+
+
             @media (max-width: 1292px) {
-                #rightele {
-                    width: 68%;
-                    margin-top: 50px;
-                    margin-left:50px;
+                .things-grid-middle-mobile {
+                    grid-template-columns: repeat(2, 1fr);
                 }
             }
 
-            @media only screen and (max-width: 1110px) {
-                #rightele {
-                    width: 65%;
-                    margin-top: 50px;
-                    margin-left: 50px ;
+            @media only screen and (max-width: 940px) {}
+
+            @media only screen and (max-width: 768px) {
+                #containall {
+                    display: block;
                 }
-            }
-            @media only screen and (max-width: 940px) {
+
                 #rightele {
-                    width: 91%;
-                    margin-top: 5px;
-                    margin-left: 2%;
+                    margin-top: 0;
+                    border: 'none';
+                    margin-left: 0;
                 }
-                
-                change-slidelist{
+
+                change-slidelist {
                     display: none;
                 }
-                change-mobileslide{
-                    display:block;
+
+                change-mobileslide {
+                    display: block;
                 }
-                
-               
+
+
             }
         </style>
 
@@ -197,7 +198,7 @@
                 <change-mobileslide></change-mobileslide>
             </div>
 
-            <div id="rightele" >
+            <div id="rightele">
                 <div class="initemtitle" id="viewingcat">你正在瀏覽的分類 <paper-tags-input width="100%" id="myTags">
                     </paper-tags-input>
                 </div>
@@ -215,7 +216,7 @@
             Polymer({
                 is: 'change-shop',
                 properties: {
-                    'category': {
+                    'categories': {
                         "type": Array
                     },
                     'searchTags': {
@@ -235,6 +236,9 @@
                     },
                     'isFree': {
                         'type': Boolean
+                    },
+                    "checkrange": {
+                        "type": Boolean
                     }
                 },
                 created: function() {
@@ -247,18 +251,47 @@
                     this.isNew = [];
                     this.initprice = 0;
                     this.isFree = false;
+                    this.checkrange = false;
                 },
                 addTags(val) {
+
                     let myTags = this.shadowRoot.querySelector('#myTags');
                     // let val = this.shadowRoot.querySelector('#inputTags').value;
                     myTags._addTag(val);
                 },
                 search() {
+                    this.shadowRoot.querySelector('paper-tags-input').tags = [];
+
                     // search(cats,tags,district,priceStart,priceEnd){
+                    if (this.tags.length > 0) {
+                        this.tags.forEach(item => {
+                            this.addTags(item)
+                        });
+                    }
+
+                    if (this.categories.length > 0) {
+                        this.categories.forEach(item => {
+                            this.addTags(item)
+                        });
+                    }
+
+                    if (this.district) {
+                        this.addTags(this.district);
+                    }
+
+
+                    if (this.isNew.length == 1) {
+                        this.addTags(this.isNew);
+                    }
+                    console.log("12121212121212121212");
+
+                    if (this.priceStart != 0 && this.priceStop != 1000000) {
+                        this.addTags("$" + this.priceStart + " - $" + this.priceStop);
+                    }
+                    console.log("rururururururururu");
                     this.shadowRoot.querySelector('change-in-item').search(this.categories, this.tags, this.district, this.isNew, this.priceStart, this.priceStop, this.isFree);
                 },
                 back(value) {
-
                     ///cookie
                     let cate = store.get('change-cate') || null;
                     if (cate) {
@@ -315,9 +348,7 @@
                         this.priceStart = 0;
                         this.priceStop = this.initprice;
                     }
-
                     this.search();
-
                 },
                 pagetag(tag) {
                     console.log("the pagetag is", tag);
@@ -385,6 +416,14 @@
                             if (maxprice[countmaxprice] != ",") {
                                 storemaxprice.push(maxprice[countmaxprice]);
                             }
+                        }
+                        console.log("this.checkrange", this.checkrange);
+                        if (this.checkrange == false) {
+                            this.checkrange = true;
+                        } else {
+                            let value = "$" + this.priceStart + " - $" + this.priceStop;
+                            console.log("1111111111", value)
+                            this.back(value);
                         }
 
                         this.priceStart = parseInt(storeminprice.join("").toString());

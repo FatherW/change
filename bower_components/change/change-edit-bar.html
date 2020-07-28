@@ -19,13 +19,18 @@
 
             #tbar {
                 display: none;
-                justify-content: space-between;
-                padding-top: 15px;
-                padding-bottom: 25px;
                 background: #F0F0F0;
                 width: 92.5%;
                 margin: 0 auto;
                 border: 1px solid #ccc;
+                padding: 30px 0;
+            }
+
+            .containerB {
+                display: flex;
+                width: 90%;
+                margin: 0 auto;
+                justify-content: space-between;
             }
 
             #edit {
@@ -40,84 +45,57 @@
                 cursor: pointer;
                 font-family: sans-serif, Microsoft JhengHei;
                 font-size: 15px;
-            }
-
-            .left {
-                margin-top: 11px;
-                margin-left: 100px;
-                display: inline-flex;
-            }
-
-            .right {
-                margin-top: 11px;
-                margin-right: 100px;
-                display: inline-flex;
-            }
-
-            .buttons button {
                 width: 100px;
                 height: 35px;
-                font-family: sans-serif, Microsoft JhengHei;
+            }
+
+            .buttonL {
+                display: flex;
             }
 
             #copy {
                 background-color: grey;
-                margin-right: 25px;
                 border: none;
                 color: white;
             }
 
             #delete {
                 background-color: grey;
-                margin-right: 25px;
                 border: none;
                 color: white;
+                margin-left: 50px;
             }
 
-            /* #save {
-                background-color: #FF6B66;
-                border: none;
-                color: white;
-            } */
-
-            @media only screen and (max-width: 992px) {
-            }
+            @media only screen and (max-width: 992px) {}
 
             @media only screen and (max-width: 640px) {
-                #edit{
+                #edit {
                     width: 60px;
                     margin-right: 10px;
+                    border: none;
                 }
 
-                .buttons button {
+                .buttonR button {
                     width: 60px;
                 }
 
-                .left{
+                #delete {
                     margin-left: 10px;
-                }
-
-                .right {
-                    margin-right: 0;
-                }
-
-                #copy {
-                    margin-left: 25px;
-                    margin-right: 10px;
                 }
             }
         </style>
         <header>
             <div id="tbar">
-                <div class="button left">
-                    <a id="edi" href="#"><button id="edit">編輯</button></a>
-                    <change-status></change-status>
-                </div>
+                <div class="containerB">
+                    <div class="buttonL">
+                        <a id="edi" href="#"><button id="edit">編輯</button></a>
+                        <change-status></change-status>
+                    </div>
 
-                <div class="buttons right">
-                    <button id="copy" on-click="_copy">複製</button>
-                    <button id="delete" on-click="_delete">刪除</button>
-                    <!-- <button id="save">儲存</button> -->
+                    <div class="buttonR">
+                        <button id="copy" on-click="_copy">複製</button>
+                        <button id="delete" on-click="_delete">刪除</button>
+                    </div>
                 </div>
             </div>
         </header>
@@ -126,7 +104,7 @@
 
 <script>
     //function for database
-    (function() {
+    (function () {
         Polymer({
             is: 'change-edit-bar',
             properties: {
@@ -139,7 +117,7 @@
                 }
             },
 
-            ready: function() {
+            ready: function () {
                 let shadow = this.shadowRoot;
                 let that = this;
                 let loc = location.search;
@@ -163,7 +141,7 @@
                 //Check whether login or not (not login -> hide)
 
                 if (user['_id'] == uid || user.isAdmin == true) {
-                    shadow.querySelector('#tbar').style.display = "flex";
+                    shadow.querySelector('#tbar').style.display = "block";
                     this.shadowRoot.querySelector('#edi').href = "add-product.html?p" + this.id + "u" + uid;
                 }
 
@@ -171,14 +149,14 @@
 
 
 
-            created: function() {
+            created: function () {
 
 
             },
 
-            _delete: function() {
+            _delete: function () {
                 console.log("DELETE FUNCTION IS WORKING")
-                    // GET THE ITEM ID FROM THE URL
+                // GET THE ITEM ID FROM THE URL
                 let loc = location.search;
                 let pid = "";
                 let posit = 0;
@@ -221,7 +199,7 @@
 
             },
 
-            _copy: function() {
+            _copy: function () {
                 console.log("COPY FUNCTION IS WORKING");
 
                 //GENERATE UNIQUE TIME AS PRODUCT ID
@@ -248,12 +226,12 @@
                 let shadow = this.shadowRoot;
                 let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 let params = {
-                        "action": "getData",
-                        "index": "change",
-                        "type": "product",
-                        "id": pid
-                    }
-                    //SEND THE ABOVE MESSAGE TO POSTMAN
+                    "action": "getData",
+                    "index": "change",
+                    "type": "product",
+                    "id": pid
+                }
+                //SEND THE ABOVE MESSAGE TO POSTMAN
                 Polymer.postData(Url, params).then(res => {
                     if (res.code > 0) {
                         // alert("STATUS: COPY SUCCESSFUL");

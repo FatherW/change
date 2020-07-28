@@ -361,7 +361,6 @@
                 let shadow = this.shadowRoot;
                 if (tags.length == undefined || tags.length == null || tags.length == 0) {} else {
                     shadow.querySelector('#description').innerHTML = "";
-
                     tags.forEach(item => {
                         let buttontag = document.createElement('button');
                         buttontag.setAttribute('id', 'tagbutton');
@@ -372,6 +371,10 @@
                                     'tags': item
                                 }
                             });
+                            if (document.querySelector('change-itemspecial')) {
+                                var serchcat = '/list-product.html?tag=' + encodeURIComponent(item);
+                                location.href = serchcat;
+                            }
                         })
                         shadow.querySelector('#description').appendChild(buttontag);
 
