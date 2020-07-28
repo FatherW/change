@@ -1,0 +1,315 @@
+nav.navbar {
+    width: 800px;
+    margin: 0 auto;
+}
+
+svg.title_tags {
+    width: 100%;
+    height: 30px;
+}
+
+.footer {
+    background-color: #F0846C;
+    color: white;
+    height: 320px;
+    padding-top: 50px;
+    line-height: 2.5;
+}
+
+.fpanel {
+    width: 80%;
+    margin: 0 auto;
+    padding-bottom: 30px;
+}
+
+change-announcement {
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    background: white;
+    color: #808080;
+    padding: 10px;
+}
+
+ul {
+    list-style: none;
+    text-align: left;
+}
+
+svg.s_title_tags {
+    margin: 5px;
+}
+
+change-item h3 {
+    height: 20px;
+    margin: 5px auto;
+    font-size: 20px;
+}
+
+svg.s_title_tags {
+    margin: 5px;
+    height: 16px;
+}
+
+body {
+    color: #808080;
+}
+
+h1 {
+    font-size: 30.4px;
+}
+
+.gettv {
+    background: #808080;
+    padding: 10px;
+    padding-left: 70px;
+}
+
+.gettv h1 {
+    color: white;
+}
+
+.banner {
+    width: 100%;
+    height: 120px;
+}
+
+.content {
+    padding-left: 124px;
+    padding-right: 124px;
+    background: #FFE9BF;
+}
+
+.shop_panel {
+    background: white;
+    /* padding-right: 16px; */
+    /* background: yellow; */
+    padding: 0px;
+}
+
+img.logo {
+    height: 74px;
+    width: auto;
+}
+
+section.topWrap {
+    border-bottom: #EFEFEF solid 1px;
+}
+
+section.menu {
+    border-bottom: #EFEFEF solid 1px;
+}
+
+.topWrap button {
+    background: none;
+    border: none;
+    height: 75px;
+}
+
+.input-group {
+    position: relative;
+    display: block;
+    border-collapse: separate;
+    background: #efefef;
+    height: 55px;
+    margin-top: 10px;
+}
+
+button.btn.btn-default.dropdown-toggle {
+    height: 55px;
+    line-height: 45px;
+    margin-left: 10px;
+}
+
+.big-banner {
+    height: 312px;
+    width: 100%;
+    background: blue;
+}
+
+.channel {
+    color: #FFFFFF;
+    width: 124px;
+    float: left;
+    margin: 5px;
+}
+
+.channel img {
+    height: 72px;
+}
+
+.channel h3 {
+    font-size: 18px;
+}
+
+.clear {
+    clear: both;
+}
+
+.title {
+    color: white;
+    background-color: #E84D4D;
+    width: 70px;
+    padding: 5px;
+    padding-bottom: 0px;
+}
+
+.box {
+    background: linear-gradient(to bottom left, transparent 49.8%, #E0E6E5 50%) top /100% 35%, linear-gradient(to top left, transparent 49.8%, #E0E6E5 50%) bottom/100% 35%, linear-gradient(#E0E6E5, #E0E6E5) center/100% 30%;
+    background-repeat: no-repeat;
+}
+
+change-item .img img {
+    width: 184px;
+    height: 160px;
+}
+
+change-user-profile .row {
+    width: 100%;
+    padding: 5px;
+}
+
+.name {
+    text-align: left;
+    text-indent: 10px;
+    font-weight: bolder;
+}
+
+change-item-tag {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.time {
+    text-align: left;
+    text-indent: 10px;
+}
+
+change-shop {
+    width: 100%;
+    height: auto;
+}
+
+change-item {
+    width: 200px;
+    height: 350px;
+    position: relative;
+    display: block;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+    margin: 5px;
+    float: left;
+}
+
+change-user-profile {
+    position: relative;
+    width: 100%;
+}
+
+change-like {
+    top: 10px;
+    position: relative;
+}
+
+.type-title {
+    color: white;
+    background-color: #6AA64F;
+    width: 50px;
+}
+
+.getchange {
+    background: white;
+    padding: 10px;
+    padding-left: 70px;
+}
+
+change-tag.big {
+    background: #efefef;
+    color: #4d4d4d;
+    padding: 5px 15px;
+    margin: 5px;
+    border-radius: 12px;
+}
+
+change-tag.small {
+    background: #efefef;
+    color: #4d4d4d;
+    padding: 5px 10px;
+    margin: 5px;
+    border-radius: 10px;
+    font-size: 8px;
+}
+
+.tags {
+    height: 35px;
+}
+
+.more {
+    /*水平居中*/
+    text-align: center
+}
+
+.footer {
+    background-color: #F0846C;
+    color: white;
+}
+
+a.test {
+    color: white;
+}
+
+.row {
+    text-align: center
+}
+
+#banner2 {
+    width: 100%;
+    height: 100%;
+}
+
+#banner {
+    width: 100%;
+    height: 100%;
+    padding-bottom: 71px;
+}
+
+.banner1 {
+    width: 100%;
+    height: 100%;
+    clear: both;
+}
+
+#recomand {
+    padding-left: 8%;
+    padding-right: 8%;
+    width: 98%;
+    text-align: left;
+    clear: both;
+    float: left;
+    margin: 5px;
+}
+
+.col-lg-15 {
+    width: 12.5;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.medium1 {
+    font-size: 18px;
+}
+
+.small1 {
+    font-size: 12px;
+    padding-bottom: 10px;
+}
+
+.col-lg-3 {
+    width: 25%;
+    padding: 5px;
+}
+
+.black {
+    color: black;
+}
