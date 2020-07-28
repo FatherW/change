@@ -99,10 +99,10 @@
                     uid += loc[i];
                 }
 
+                //*****************DETERMINE TO DISPLAY ORDERLIST STORAGE OR NOT*****************//
                 let user = store.get('change-user') || null;
                 console.log("CURRENT UID", user['_id']);
                 let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-
                 let findBuyer = {
                     "action": "searchData",
                     "index": "change",
@@ -140,13 +140,8 @@
                     }
                 });
 
-                // if (user['_id'] == uid) {
-                //     shadow.querySelector('.orderContainter').style.display = 'block';
-                // } else if (user['_id'] == isBuyer) {
-                //     shadow.querySelector('.orderContainter').style.display = 'block';
-                //     console.log("BBBisBuyer", isBuyer);
-                // }
-
+                
+                //*****************GENERATE ORDERLIST*****************//
                 let params = {
                     "action": "searchData",
                     "index": "change",
@@ -177,17 +172,65 @@
                 Polymer.postData(Url, params).then(res => {
                     console.log("RP", res);
                     if (res.code > 0) {
-                        let a = [];
-                        for (i = 0; i < res.resolve.length; i++) {
-                            a.push(res.resolve[i]['id']);
-                        }
-                        var b = "";
-                        //stack the pending oder from <change-order-list>
-                        for (i = 0; i < res.resolve.length; i++) {
-                            b += '<change-order-list id="' + a[i] + '"></change-order-list>';
-                        }
-                        console.log("the thing should be display : ", b)
-                        shadow.querySelector('#ol').innerHTML = b;
+                        if (user['_id'] == uid) {
+                            //***GENERATE COMPLETE ORDERLIST FOR OWNER***//
+                            let a = [];
+                            for (i = 0; i < res.resolve.length; i++) {
+                                a.push(res.resolve[i]['id']);
+                            }
+                            var b = "";
+                            //stack the pending oder from <change-order-list>
+                            for (i = 0; i < res.resolve.length; i++) {
+                                b += '<change-order-list id="' + a[i] + '"></change-order-list>';
+                            }
+                            console.log("the thing should be display : ", b)
+                            shadow.querySelector('#ol').innerHTML = b;
+                        } else {
+                            //***GENERATE SPECIFIC ORDERLIST FOR BUYERS***//
+                            let findBuyer = {
+                                "action": "searchData",
+                                "index": "change",
+                                "type": "order",
+                                "body": {
+                                    "query": {
+                                        "bool": {
+                                            "must": [
+                                                {
+                                                    "match": {
+                                                        "productId": pid
+                                                    }
+                                                },
+                                                {
+                                                    "match": {
+                                                        "buyerId": user['_id']
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            };
+                            Polymer.postData(Url, findBuyer).then(res => {
+                                console.log("BBB", res.resolve);
+                                if (res.resolve) {
+                                    //**********IF NEITHER OWNER NOR USER, res.resolve[0]['buyerId'] BECOMES UNDEFINED "NORMAL"*********//
+                                    console.log("Display specific orderlist.")
+                                    let a = [];
+                                    for (i = 0; i < res.resolve.length; i++) {
+                                        a.push(res.resolve[i]['id']);
+                                    }
+                                    var b = "";
+                                    //stack the pending oder from <change-order-list>
+                                    for (i = 0; i < res.resolve.length; i++) {
+                                        b += '<change-order-list id="' + a[i] + '"></change-order-list>';
+                                    }
+                                    console.log("the thing should be display : ", b)
+                                    shadow.querySelector('#ol').innerHTML = b;
+                                } else {
+                                    console.log("ERR: GENERATE SPECIFIC ORDERLIST!");
+                                }
+                            });
+                        };
                     } else {
                         console.log("error in orderlist-storage");
                     }
