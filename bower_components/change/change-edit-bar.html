@@ -104,7 +104,7 @@
 
 <script>
     //function for database
-    (function () {
+    (function() {
         Polymer({
             is: 'change-edit-bar',
             properties: {
@@ -117,7 +117,7 @@
                 }
             },
 
-            ready: function () {
+            ready: function() {
                 let shadow = this.shadowRoot;
                 let that = this;
                 let loc = location.search;
@@ -149,14 +149,21 @@
 
 
 
-            created: function () {
+            created: function() {
 
+                this.user = store.get('change-user') || null;
+                if (this.user) {
+                    this.fileManager = new AwsPackage(this.user);
+                    this.dataManager = new DataPackage('_user');
+                    this.prodManager = new DataPackage('product');
+
+                }
 
             },
 
-            _delete: function () {
+            _delete: function() {
                 console.log("DELETE FUNCTION IS WORKING")
-                // GET THE ITEM ID FROM THE URL
+                    // GET THE ITEM ID FROM THE URL
                 let loc = location.search;
                 let pid = "";
                 let posit = 0;
@@ -199,7 +206,7 @@
 
             },
 
-            _copy: function () {
+            _copy: function() {
                 console.log("COPY FUNCTION IS WORKING");
 
                 //GENERATE UNIQUE TIME AS PRODUCT ID
@@ -226,83 +233,102 @@
                 let shadow = this.shadowRoot;
                 let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 let params = {
-                    "action": "getData",
-                    "index": "change",
-                    "type": "product",
-                    "id": pid
-                }
-                //SEND THE ABOVE MESSAGE TO POSTMAN
-                Polymer.postData(Url, params).then(res => {
-                    if (res.code > 0) {
-                        // alert("STATUS: COPY SUCCESSFUL");
-                        console.log("RES.RESOLVE", res.resolve);
-                        // store.set("change-res", res.resolve);
-
-
-                        // //PUT COPIED DATA BACK TO ADD PRODUCT PAGE
-                        // shadow.querySelector('#vs1').value = res.resolve['categories'];
-                        // // shadow.querySelector('#public').checked = res.resolve['isPublic'];
-                        // shadow.querySelector('#free').checked = res.resolve['isFree'];
-                        // shadow.querySelector('#vs4').value = res.resolve['isNew'];
-                        // shadow.querySelector('#pname').value = res.resolve['productname'];
-                        // shadow.querySelector('#price').value = res.resolve['price'];
-                        // console.log("Matters", res.resolve[0]['price']);
-                        // if (res.resolve[0]['price'] != "0") {
-
-                        //     shadow.querySelector('#free').checked = false;
-                        // }
-                        // shadow.querySelector('#vs2').value = res.resolve['district'];
-                        // shadow.querySelector('#vs3').value = res.resolve['deliveryMethod'];
-                        // shadow.querySelector('#pdes').value = res.resolve['description'];
-                        // shadow.querySelector('#myTags').tags = res.resolve['tags'];
-                        // shadow.querySelector('#trans').value = res.resolve['deliveryDesc'];
-                        // let lenpic = res.resolve[0]['pics'].length;
-                        // for (i3 = 0; i3 < lenpic; i3++) {
-                        //     shadow.querySelector('#div' + i3).style.backgroundImage = 'url(' + res.resolve[0]["pics"][i3] + ')'
-                        // };
-                        // //***USE SAVEDATA IN ADD PRODUCT***//
-
-                        let user = store.get("change-user") || null;
-                        let temptime = user['_id'];
-                        let tempid = user['goodsNum'].toString() + Math.floor(Math.random() * 10);
-                        var thenewid = "" + temptime.toString() + tempid;
-
-                        let json = {
-                            "action": "addData",
-                            "index": "change",
-                            "type": "product",
-                            "id": thenewid,
-                            "body": {
-                                "id": thenewid,
-                                "categories": res.resolve.categories,
-                                "createTime": temptime,
-                                "deliveryDesc": res.resolve.deliveryDesc,
-                                "deliveryMethod": res.resolve.deliveryMethod,
-                                "description": res.resolve.description,
-                                "district": res.resolve.district,
-                                "isFree": res.resolve.isFree,
-                                "isNew": res.resolve.isNew,
-                                "like": 0,
-                                "ownerId": res.resolve.ownerId,
-                                "pics": res.resolve.pics,
-                                "price": res.resolve.price,
-                                "productname": res.resolve.productname,
-                                "tags": res.resolve.tags,
-                                "sellerMsg": res.resolve.sellerMsg
-                            }
-                        };
-                        //SEND THE ABOVE MESSAGE TO POSTMAN
-                        Polymer.postData(Url, json).then(res => {
-                            if (res.code > 0) {
-                                console.log("POST TO POSTMAN SUCCESS!");
-                                location.replace("./add-product.html?p" + thenewid + "u" + user['_id']);
-                            } else {
-                                console.log("POST TO POSTMAN  FAILED!")
-                            }
-                        });
-                    } else {
-                        alert("STATUS: COPY UNSUCCESSFUL");
+                        "action": "getData",
+                        "index": "change",
+                        "type": "product",
+                        "id": pid
                     }
+                    //SEND THE ABOVE MESSAGE TO POSTMAN
+
+
+                this.prodManager.loadData(pid).then(res => {
+                    // alert("STATUS: COPY SUCCESSFUL");
+                    // console.log("RES.RESOLVE", res.resolve);
+                    // store.set("change-res", res.resolve);
+
+
+                    // //PUT COPIED DATA BACK TO ADD PRODUCT PAGE
+                    // shadow.querySelector('#vs1').value = res.resolve['categories'];
+                    // // shadow.querySelector('#public').checked = res.resolve['isPublic'];
+                    // shadow.querySelector('#free').checked = res.resolve['isFree'];
+                    // shadow.querySelector('#vs4').value = res.resolve['isNew'];
+                    // shadow.querySelector('#pname').value = res.resolve['productname'];
+                    // shadow.querySelector('#price').value = res.resolve['price'];
+                    // console.log("Matters", res.resolve[0]['price']);
+                    // if (res.resolve[0]['price'] != "0") {
+
+                    //     shadow.querySelector('#free').checked = false;
+                    // }
+                    // shadow.querySelector('#vs2').value = res.resolve['district'];
+                    // shadow.querySelector('#vs3').value = res.resolve['deliveryMethod'];
+                    // shadow.querySelector('#pdes').value = res.resolve['description'];
+                    // shadow.querySelector('#myTags').tags = res.resolve['tags'];
+                    // shadow.querySelector('#trans').value = res.resolve['deliveryDesc'];
+                    // let lenpic = res.resolve[0]['pics'].length;
+                    // for (i3 = 0; i3 < lenpic; i3++) {
+                    //     shadow.querySelector('#div' + i3).style.backgroundImage = 'url(' + res.resolve[0]["pics"][i3] + ')'
+                    // };
+                    // //***USE SAVEDATA IN ADD PRODUCT***//
+
+                    let user = store.get("change-user") || null;
+                    let temptime = user['_id'];
+                    let tempid = user['goodsNum'].toString() + Math.floor(Math.random() * 10);
+                    var thenewid = "" + temptime.toString() + tempid;
+
+
+                    let params = {
+                        "action": "addproduct",
+                        "categories": res.categories,
+                        "sellerMsg": res.sellerContact,
+                        "productname": res.productname,
+                        "price": parseInt(res.price),
+                        "district": res.district,
+                        "deliveryMethod": res.deliveryMethod,
+                        "descrip": res.description,
+                        "tag": res.tags,
+                        "deliveryDesc": res.deliveryDesc,
+                        "isNew": Boolean(res.isNew),
+                        "ownerId": res.ownerId,
+                        "pics": res.pics
+                    };
+
+                    // let json = {
+                    //     "action": "addData",
+                    //     "index": "change",
+                    //     "type": "product",
+                    //     "id": thenewid,
+                    //     "body": {
+                    //         "id": thenewid,
+                    //         "categories": res.resolve.categories,
+                    //         "createTime": temptime,
+                    //         "deliveryDesc": res.resolve.deliveryDesc,
+                    //         "deliveryMethod": res.resolve.deliveryMethod,
+                    //         "description": res.resolve.description,
+                    //         "district": res.resolve.district,
+                    //         "isFree": res.resolve.isFree,
+                    //         "isNew": res.resolve.isNew,
+                    //         "like": 0,
+                    //         "ownerId": res.resolve.ownerId,
+                    //         "pics": res.resolve.pics,
+                    //         "price": res.resolve.price,
+                    //         "productname": res.resolve.productname,
+                    //         "tags": res.resolve.tags,
+                    //         "sellerMsg": res.resolve.sellerMsg
+                    //     }
+                    // };
+                    let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
+
+                    //SEND THE ABOVE MESSAGE TO POSTMAN
+                    Polymer.postData(link, params).then(res => {
+                        if (res.code > 0) {
+                            let theid = res.resolve.id;
+                            let userid = res.resolve.ownerId;
+                            console.log("POST TO POSTMAN SUCCESS!");
+                            location.replace("./add-product.html?p" + theid + "u" + userid);
+                        } else {
+                            console.log("POST TO POSTMAN  FAILED!")
+                        }
+                    });
                 })
 
             }
