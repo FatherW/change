@@ -86,6 +86,9 @@
                     width: 20%;
                 }
             }
+            #info{
+                display:none;
+            }
         </style>
 
         <div class="container">
@@ -105,6 +108,17 @@
                     <button id="recover" on-click="_recovery">回復資格</button>
                     <button id="manage" on-click="_manageFanPage">管理專頁</button>
                 </div>
+                <div id="info">
+                    <h5>專頁資料</h5>
+                    <p class="inf">名稱: <span class="infotext" id="name"><vaadin-text-field id='name1'></vaadin-text-field></span></p>
+                    <p class="inf">地區: <span class="infotext" id="area"><vaadin-select id='area1' label=''></vaadin-select></span></p>
+                    <p class="inf">電郵: <span class="infotext" id="email"><vaadin-email-field id='email'></vaadin-text-field></span></p>
+                    <p class="inf">標籤: <span id="contact"><vaadin-text-field id='tag'></vaadin-text-field></span></p>
+                    <p class="inf">網址: <span class="infotext" id="website"><vaadin-text-field id='website'></vaadin-text-field></span></p>
+                    <div style="display: inline-flex;"><vaadin-button id="vb" on-click="handin">提交</vaadin-button>
+                    <vaadin-button id="vb" on-click="cancel">取消</vaadin-button>
+                        </div>
+                </div>
             </div>
         </div>
     </template>
@@ -112,15 +126,15 @@
 </dom-module>
 
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-control-pannel',
             properties: {},
 
 
-            created: function () { },
+            created: function() {},
 
-            ready: function () {
+            ready: function() {
                 let shadow = this.shadowRoot;
                 let that = this;
 
@@ -159,13 +173,98 @@
                 })
 
 
+
+                customElements.whenDefined('vaadin-select').then(function() {
+                    const district = [{
+                        name: '中西區'
+                    }, {
+                        name: '灣仔區'
+                    }, {
+                        name: '東區'
+                    }, {
+                        name: '南區'
+                    }, {
+                        name: '油尖旺區'
+                    }, {
+                        name: '深水埗區'
+                    }, {
+                        name: '九龍城區'
+                    }, {
+                        name: '黃大仙區'
+                    }, {
+                        name: '觀塘區'
+                    }, {
+                        name: '葵青區'
+                    }, {
+                        name: '荃灣區'
+                    }, {
+                        name: '屯門區'
+                    }, {
+                        name: '元朗區'
+                    }, {
+                        name: '離島區'
+                    }, {
+                        name: '北區'
+                    }, {
+                        name: '大埔區'
+                    }, {
+                        name: '沙田區'
+                    }, {
+                        name: '西貢區'
+                    }];
+
+
+                    //AREA//
+                    shadow.querySelector('#area1').renderer = function(root) {
+                        // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
+                        if (root.firstChild) {
+                            return;
+                        }
+                        // Create the <vaadin-list-box>
+                        const listBox = document.createElement('vaadin-list-box');
+                        district.forEach(function(item) {
+                            const vaadinItem = document.createElement('vaadin-item');
+                            vaadinItem.textContent = item.name;
+                            listBox.appendChild(vaadinItem);
+                            vaadinItem.setAttribute('value', item.name);
+                        });
+                        // update the content
+                        root.appendChild(listBox);
+                    };
+                });
+
+
             },
 
-            _addFanPage: function () {
-                console.log("addFanPage is working!")
+            handin() {
+                let shadow = this.shadowRoot;
+                let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
+                let param = {
+                    "action": "addFanPage",
+                    "name": shadow.querySelector('#name1').value,
+                    "website": shadow.querySelector('#website').value,
+                    "district": shadow.querySelector('#area1').value,
+                    "email": shadow.querySelector('#email').value,
+                    "tags": shadow.querySelector('#tag').value
+                };
+                Polymer.postData(link, param).then(res => {
+                    if (res.code > 0) {
+                        console.log("完成");
+                        shadow.querySelector('#info').style.display = "block";
+                    }
+                })
             },
 
-            _disqualify: function () {
+            _addFanPage: function() {
+                this.shadowRoot.querySelector('#info').style.display = "block";
+            },
+
+            cancel() {
+                this.shadowRoot.querySelector('#info').style.display = "none";
+
+            },
+
+            _disqualify: function() {
                 console.log("disqualify is working!")
                 loc = location.search;
                 let uid = "";
@@ -200,7 +299,7 @@
                 })
             },
 
-            _recovery: function () {
+            _recovery: function() {
                 console.log("recovery is working!")
                 loc = location.search;
                 let uid = "";
@@ -235,7 +334,7 @@
                 })
             },
 
-            _manageFanPage: function () {
+            _manageFanPage: function() {
                 console.log("manageFanPage is working!")
             },
         });
