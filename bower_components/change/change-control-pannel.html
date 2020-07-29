@@ -267,16 +267,16 @@
                     console.log("gggggggggg", res);
                     if (res.code > 0) {
                         console.log("完成");
-
-                        shadow.querySelector('#info').style.display = "block";
+                        shadow.querySelector('#info').style.display = "none";
+                        Polymer.dzFire("save", {
+                            "detail": {
+                                "basepath": pagename
+                            }
+                        });
                     }
                     alert(res.text);
                 });
-                Polymer.dzfire("save", {
-                    "detail": {
-                        "basepath": pagename
-                    }
-                });
+
             },
 
             _addFanPage: function() {
