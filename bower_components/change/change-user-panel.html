@@ -92,7 +92,7 @@
                 document.addEventListener('close-myself', e => {
                     s.querySelector('vaadin-dialog#register').opened = false;
                     let dialog = s.querySelector('vaadin-dialog#register');
-                    Polymer.popup(dialog, "change", "change-login", "40%", "90%");
+                    Polymer.popup(dialog, "change", '<change-login><div class="g-signin2" data-onsuccess="onSignIn"></div></change-login>', "40%", "90%");
                 });
             }
 

@@ -261,13 +261,11 @@
 
                 /////search the district
                 if (district != undefined || district != null) {
-                    if (district > 0) {
-                        Query.push({
-                            'term': {
-                                'district': district
-                            }
-                        })
-                    };
+                    Query.push({
+                        'term': {
+                            'district': district
+                        }
+                    })
                 };
 
                 /////search the price range
@@ -352,7 +350,7 @@
                         }
                     }
                 };
-                console.log("wwwwwwwwww", JSON.stringify(parammust));
+                console.log(district, "wwwwwwwwww", JSON.stringify(parammust));
                 Polymer.postData(url, paramcate).then(res => {
                     if (res.code > 0) {
                         let shouldid = [];

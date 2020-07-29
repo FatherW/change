@@ -7,6 +7,9 @@
 <link rel="import" href="change-reset.html">
 <!-- <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com"> -->
 
+<meta name="google-signin-scope" content="profile email">
+<meta name="google-signin-client_id" content="755964351228-2emctcoq1o2nj5vpqitv4j28411jj7jk.apps.googleusercontent.com">
+<script src="https://apis.google.com/js/platform.js" async defer></script>
 
 
 <dom-module id="change-login">
@@ -143,14 +146,13 @@
         <style include="icon-styles"></style>
         <div class="g-signin2" data-onsuccess="onSignIn"></div>
         <div class="login-grid">
-            <span class="font-sizeh1">登入</span>
+            <span class="font-sizeh1">登入111</span>
             <div>
                 <button on-click="log" class="logoFacebook">
                     <img src="img/icon/Facebook.png" class="logoFacebook">&nbspFacebook
                 </button>
             </div>
-            <div>
-                <button class="logoGoogle"><img src="img/icon/Google.png" class="logoGoogle">&nbspGoogle</button>
+            <div id="googlesign">
             </div>
             <div class="email">
                 <vaadin-email-field id="changeEmail1" placeholder="Email" name=" email"
@@ -174,10 +176,28 @@
             <vaadin-dialog></vaadin-dialog>
         </div>
     </template>
+    <!-- <button onclick="onSignIn" class="logoGoogle"><img src="img/icon/Google.png" class="logoGoogle">&nbspGoogle</button> -->
 
 </dom-module>
 <script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
-<script async defer src="https://apis.google.com/js/platform.js"></script>
+<!-- <script async defer src="https://apis.google.com/js/platform.js"></script> -->
+<!-- <script>
+    function onSignIn(googleUser) {
+        // Useful data for your client-side scripts:
+        var profile = googleUser.getBasicProfile();
+        console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+        console.log('Full Name: ' + profile.getName());
+        console.log('Given Name: ' + profile.getGivenName());
+        console.log('Family Name: ' + profile.getFamilyName());
+        console.log("Image URL: " + profile.getImageUrl());
+        console.log("Email: " + profile.getEmail());
+
+        // The ID token you need to pass to your backend:
+        var id_token = googleUser.getAuthResponse().id_token;
+        console.log("ID Token: " + id_token);
+    }
+</script> -->
+<script src="https://apis.google.com/js/platform.js" async defer></script>
 <script>
     (function() {
         Polymer({
@@ -195,17 +215,15 @@
                 Polymer.popup(dialog, "change", "change-reset", "30%", "50%");
             },
             ready: function() {
-                window.fbAsyncInit = function() {
-                    FB.init({
-                        appId: '711018846416860',
-                        cookie: true,
-                        xfbml: true,
-                        version: '7.0'
-                    });
+                FB.init({
+                    appId: '711018846416860',
+                    autoLogAppEvents: true,
+                    xfbml: false,
+                    version: 'v7.0',
+                    status: true
+                });
+                FB.AppEvents.logPageView();
 
-                    FB.AppEvents.logPageView();
-
-                };
 
                 (function(d, s, id) {
                     var js, fjs = d.getElementsByTagName(s)[0];
@@ -217,16 +235,6 @@
                     js.src = "https://connect.facebook.net/en_US/sdk.js";
                     fjs.parentNode.insertBefore(js, fjs);
                 }(document, 'script', 'facebook-jssdk'));
-
-
-                // FB.init({
-                //     appId: '711018846416860',
-                //     autoLogAppEvents: true,
-                //     xfbml: false,
-                //     version: 'v7.0',
-                //     status: true
-                // });
-
 
 
 
@@ -247,19 +255,17 @@
             },
 
             log: function() {
-                console.log("good");
+
                 FB.login(function(response) {
-                    console.log("response", response);
+                    console.log("fb response", response);
                     if (response.authResponse) {
                         console.log('Welcome!  Fetching your information.... ');
                         FB.api('/me', function(response) {
-                            console.log('Good to see you, ' + response.name + '.');
+                            console.log('Good to see you, ' + response + '.');
                         });
                     } else {
                         console.log('User cancelled login or did not fully authorize.');
                     }
-                }, {
-                    scope: 'public_profile,email'
                 });
             },
 
