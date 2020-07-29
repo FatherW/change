@@ -251,12 +251,12 @@
 
             handin() {
                 let shadow = this.shadowRoot;
-
+                let pagename = shadow.querySelector('#name1').value;
                 let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
                 let param = {
                     "action": "addFanPage",
                     "ownerId": this.user['_id'],
-                    "name": shadow.querySelector('#name1').value,
+                    "name": pagename,
                     "website": shadow.querySelector('#website2').value,
                     "district": shadow.querySelector('#area1').value,
                     "email": shadow.querySelector('#email').value,
@@ -272,7 +272,11 @@
                     }
                     alert(res.text);
                 });
-
+                Polymer.dzfire("save", {
+                    "detail": {
+                        "basepath": pagename
+                    }
+                });
             },
 
             _addFanPage: function() {
