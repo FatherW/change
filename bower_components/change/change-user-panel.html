@@ -72,7 +72,7 @@
                 let user = store.get('change-user');
                 if (user == null) {
                     let dialog = shadow.querySelector('vaadin-dialog#register');
-                    Polymer.popup(dialog, "change", "change-register", "350px", "600px");
+                    Polymer.popup(dialog, "change", "change-register", "360px", "600px");
                 } else {
                     store.set('change-user', null);
                     location.reload();

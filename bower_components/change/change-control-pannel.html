@@ -83,7 +83,7 @@
                 }
 
                 button {
-                    width: 20%;        
+                    width: 20%;
                 }
             }
         </style>
@@ -157,6 +157,8 @@
                         console.log("CANNOT SEARCH USER!");
                     }
                 })
+
+
             },
 
             _addFanPage: function () {
@@ -165,10 +167,72 @@
 
             _disqualify: function () {
                 console.log("disqualify is working!")
+                loc = location.search;
+                let uid = "";
+                for (i = 1; i < loc.length; i++) {
+                    uid += loc[i];
+                }
+                // console.log("uid", uid);
+                let params = {
+                    "action": "addData",
+                    "index": "change",
+                    "type": "_user",
+                    "id": uid,
+                    "body": {
+                        "token": "1"
+                    }
+                };
+                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                Polymer.postData(Url, params).then(res => {
+                    if (res.code > 0) {
+                        alert("取消了該用戶資格");
+
+                        //PASS TO LAMBDA TO GENERATE EMAIL
+                        let LambdaParams = {
+                            "action": "cancelByUid",
+                            "uid": uid
+                        };
+                        let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
+                        Polymer.postData(link, LambdaParams).then(res => {
+                            console.log("PASS TO LAMBDA SUCCESS!");
+                        });
+                    }
+                })
             },
 
             _recovery: function () {
                 console.log("recovery is working!")
+                loc = location.search;
+                let uid = "";
+                for (i = 1; i < loc.length; i++) {
+                    uid += loc[i];
+                }
+                // console.log("uid", uid);
+                let params = {
+                    "action": "addData",
+                    "index": "change",
+                    "type": "_user",
+                    "id": uid,
+                    "body": {
+                        "token": ""
+                    }
+                };
+                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                Polymer.postData(Url, params).then(res => {
+                    if (res.code > 0) {
+                        alert("回復了該用戶資格");
+
+                        //PASS TO LAMBDA TO GENERATE EMAIL
+                        let LambdaParams = {
+                            "action": "recoverByUid",
+                            "uid": uid
+                        };
+                        let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
+                        Polymer.postData(link, LambdaParams).then(res => {
+                            console.log("PASS TO LAMBDA SUCCESS!");
+                        });
+                    }
+                })
             },
 
             _manageFanPage: function () {
