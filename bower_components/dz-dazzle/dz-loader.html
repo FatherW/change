@@ -1740,8 +1740,12 @@
 
         document.addEventListener("save", (e) => {
             // let url = 'https://d25k6mzsu7mq5l.cloudfront.net/user-data/'+Polymer.uid+'/';
-
-            let basePath = "template/" + Polymer.tid + "/" + Polymer.thisPage + "/";
+            console.log("我是dz-loader的listener，我收到的e.detail", e.detail);
+            let path = Polymer.thisPage;
+            if (e.detail.basepath) {
+                path = e.detail.basepath;
+            }
+            let basePath = "template/" + Polymer.tid + "/" + path + "/";
             let masterPath = "template/" + Polymer.tid + "/_master/";
             let content;
 

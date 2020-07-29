@@ -30,7 +30,7 @@ Style                                                   | Description
 -->
 <dom-module id="dz-dashboard">
 
-	<template>
+    <template>
 
 		<style>
 
@@ -79,110 +79,116 @@ Style                                                   | Description
 </dom-module>
 
 <script>
-
-(function() {
-
+    (function() {
 
 
-	Polymer({
-		is: 'dz-dashboard',
-		properties: {
-			icon: {
-				type: String,
-				value: 'add'
-			},
-			opened: {
-				type: Boolean,
-				notify: true
-			},
-			disabled: {
-				type: Boolean,
-				value: false
-			},
-			withBackdrop: Boolean,
-		},
 
-		created:function() {
-			// if (Polymer.editMode==="admin")
-					// if (!Polymer.user['userBucket'])
-					// Polymer.dataManager.saveUserData()
-		},
-		save:function(e,detail){
-				console.log('save');
-				Polymer.dzFire('save',{});
-		},
-		help:function(e,detail){
-				// var url = prompt("請輸入匯入連結");				
-				// Polymer.import(url);
-				// console.log('Help');
-				// let elm = document.querySelector('dz-wrapper');
-				// elm.querySelectorAll('*').forEach(item =>{
-				// 	let style = window.getComputedStyle(item);
-				// 	console.log('Style',style);
-				// });
+        Polymer({
+            is: 'dz-dashboard',
+            properties: {
+                icon: {
+                    type: String,
+                    value: 'add'
+                },
+                opened: {
+                    type: Boolean,
+                    notify: true
+                },
+                disabled: {
+                    type: Boolean,
+                    value: false
+                },
+                withBackdrop: Boolean,
+            },
 
-				console.log('Style Sheet',document.styleSheets);
+            created: function() {
+                // if (Polymer.editMode==="admin")
+                // if (!Polymer.user['userBucket'])
+                // Polymer.dataManager.saveUserData()
+            },
+            save: function(e, detail) {
+                console.log('save');
 
-					for (let j=0; j<document.styleSheets.length;j++){
-						let ruleList = document.styleSheets[j].cssRules || [];
-						for (let i=0; i < ruleList.length; i++) {
-							console.log(ruleList[i]);
-							// processRule(ruleList[i]);
-						}
-					}
+                // 就比如 xyz二手好貨 擺在下面basepase就好
+
+                Polymer.dzFire('save', {});
+            },
+            help: function(e, detail) {
+                // var url = prompt("請輸入匯入連結");				
+                // Polymer.import(url);
+                // console.log('Help');
+                // let elm = document.querySelector('dz-wrapper');
+                // elm.querySelectorAll('*').forEach(item =>{
+                // 	let style = window.getComputedStyle(item);
+                // 	console.log('Style',style);
+                // });
+
+                console.log('Style Sheet', document.styleSheets);
+
+                for (let j = 0; j < document.styleSheets.length; j++) {
+                    let ruleList = document.styleSheets[j].cssRules || [];
+                    for (let i = 0; i < ruleList.length; i++) {
+                        console.log(ruleList[i]);
+                        // processRule(ruleList[i]);
+                    }
+                }
 
 
-		},
-		logout: function(e,detail){
-			store.clearAll();
-			Polymer.dzFire('logout',{});
-			location.href = Polymer.thisPage;
+            },
+            logout: function(e, detail) {
+                store.clearAll();
+                Polymer.dzFire('logout', {});
+                location.href = Polymer.thisPage;
 
-			// let loginUrl = "https://37nolo3390.execute-api.ap-northeast-1.amazonaws.com/prod";
-			// let params = {
-			// 	"uid": "dnamatch",
-			// 	"password": "phy3math4",
-			// 	"type": "loginByUidPassword"
-			// };
-			// this.postData(loginUrl,params).then(res=>{
-			// 	console.log('Res',res);
-			// });
+                // let loginUrl = "https://37nolo3390.execute-api.ap-northeast-1.amazonaws.com/prod";
+                // let params = {
+                // 	"uid": "dnamatch",
+                // 	"password": "phy3math4",
+                // 	"type": "loginByUidPassword"
+                // };
+                // this.postData(loginUrl,params).then(res=>{
+                // 	console.log('Res',res);
+                // });
 
-		},
-		mediaManage:function(e,detail){
-			document.dispatchEvent(new CustomEvent('custom-popup', { detail: {'component':'dz-file-management','size':'big'} }));
-		},
-		// Public methods
-		open: function(e) {
-		
-		},
-		close: function(e) {
-		
-		},
-		postData:function(url, data) {
-			// Default options are marked with *
-			console.log('Post Data');
-			return new Promise(function (resolve, reject) {
-				fetch(url, {
-					body: JSON.stringify(data), // must match 'Content-Type' header
-					cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-					credentials: 'same-origin', // include, same-origin, *omit
-					headers: {
-					'content-type': 'application/json'
-					},
-					method: 'POST', // *GET, POST, PUT, DELETE, etc.
-					mode: 'cors', // no-cors, cors, *same-origin
-					redirect: 'follow', // manual, *follow, error
-					referrer: 'no-referrer', // *client, no-referrer
-				})
-				.then(response => {
-					resolve(response.json());
-				}) // parses response to JSON
-			});
-			
-		}
-	});
+            },
+            mediaManage: function(e, detail) {
+                document.dispatchEvent(new CustomEvent('custom-popup', {
+                    detail: {
+                        'component': 'dz-file-management',
+                        'size': 'big'
+                    }
+                }));
+            },
+            // Public methods
+            open: function(e) {
 
-})();
+            },
+            close: function(e) {
 
+            },
+            postData: function(url, data) {
+                // Default options are marked with *
+                console.log('Post Data');
+                return new Promise(function(resolve, reject) {
+                    fetch(url, {
+                            body: JSON.stringify(data), // must match 'Content-Type' header
+                            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                            credentials: 'same-origin', // include, same-origin, *omit
+                            headers: {
+                                'content-type': 'application/json'
+                            },
+                            method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                            mode: 'cors', // no-cors, cors, *same-origin
+                            redirect: 'follow', // manual, *follow, error
+                            referrer: 'no-referrer', // *client, no-referrer
+                        })
+                        .then(response => {
+                            resolve(response.json());
+                        }) // parses response to JSON
+                });
+
+            }
+        });
+
+    })();
 </script>
