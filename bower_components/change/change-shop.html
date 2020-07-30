@@ -197,7 +197,7 @@
                 <change-slidelist></change-slidelist>
                 <change-mobileslide></change-mobileslide>
             </div>
-
+            <div style="width: 20px;height: 20px;"><button on-click="run"> try</button></div>
             <div id="rightele">
                 <div class="initemtitle" id="viewingcat">你正在瀏覽的分類 <paper-tags-input width="100%" id="myTags">
                     </paper-tags-input>
@@ -260,38 +260,25 @@
                     myTags._addTag(val);
                 },
                 search() {
-                    this.shadowRoot.querySelector('paper-tags-input').tags = [];
-
-                    // search(cats,tags,district,priceStart,priceEnd){
-                    if (this.tags.length > 0) {
-                        this.tags.forEach(item => {
-                            this.addTags(item)
-                        });
-                    }
-
-                    if (this.categories.length > 0) {
-                        this.categories.forEach(item => {
-                            this.addTags(item)
-                        });
-                    }
-
-                    if (this.district) {
-                        this.addTags(this.district);
-                    }
-
-
-                    if (this.isNew.length == 1) {
-                        this.addTags(this.isNew);
-                    }
-                    console.log("12121212121212121212");
-
-                    if (this.priceStart != 0 && this.priceStop != 1000000) {
-                        this.addTags("$" + this.priceStart + " - $" + this.priceStop);
-                    }
-                    console.log("rururururururururu");
                     this.shadowRoot.querySelector('change-in-item').search(this.categories, this.tags, this.district, this.isNew, this.priceStart, this.priceStop, this.isFree);
                 },
+
+                run() {
+                    let value = "電動";
+
+                    let papertag = this.shadowRoot.querySelector('paper-tags-input')._getTags();
+                    this.shadowRoot.querySelector('paper-tags-input')._onTagItemRemove({
+                        "detail": {
+                            "index": papertag.indexOf(value)
+                        }
+
+                    });
+                },
                 back(value) {
+                    let papertag = this.shadowRoot.querySelector('paper-tags-input')._getTags();
+
+                    console.log(papertag, "nnnnnnnnnnn", papertag.indexOf(value));
+
                     ///cookie
                     let cate = store.get('change-cate') || null;
                     if (cate) {
@@ -417,13 +404,19 @@
                                 storemaxprice.push(maxprice[countmaxprice]);
                             }
                         }
-                        console.log("this.checkrange", this.checkrange);
                         if (this.checkrange == false) {
                             this.checkrange = true;
                         } else {
                             let value = "$" + this.priceStart + " - $" + this.priceStop;
                             console.log("1111111111", value)
                             this.back(value);
+                            let papertag = this.shadowRoot.querySelector('paper-tags-input')._getTags();
+                            deletetag = this.shadowRoot.querySelector('paper-tags-input')._onTagItemRemove({
+                                "detail": {
+                                    "index": papertag.indexOf(value)
+                                }
+
+                            });
                         }
 
                         this.priceStart = parseInt(storeminprice.join("").toString());

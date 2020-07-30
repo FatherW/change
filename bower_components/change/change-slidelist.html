@@ -476,8 +476,21 @@
                             }
                         })
                     } else {
-                        document.querySelector('change-shop').back("全新");
+                        let value = "全新";
+
+                        let papertag = document.querySelector('change-shop').shadowRoot.querySelector('paper-tags-input')._getTags();
+                        document.querySelector('change-shop').shadowRoot.querySelector('paper-tags-input')._onTagItemRemove({
+                            "detail": {
+                                "index": papertag.indexOf(value)
+                            }
+
+                        });
+
+
+                        shop.back("全新");
+
                     }
+
                 });
                 shadow.querySelector('#isnew2').addEventListener('click', e => {
                     if (shadow.querySelector('#isnew2').checked == true) {
@@ -487,7 +500,19 @@
                             }
                         })
                     } else {
-                        document.querySelector('change-shop').back('二手');
+                        let value = "二手";
+
+                        let papertag = document.querySelector('change-shop').shadowRoot.querySelector('paper-tags-input')._getTags();
+                        document.querySelector('change-shop').shadowRoot.querySelector('paper-tags-input')._onTagItemRemove({
+                            "detail": {
+                                "index": papertag.indexOf(value)
+                            }
+
+                        });
+
+
+                        shop.back("二手");
+
                     }
                 });
                 shadow.querySelector('change-range').new();
