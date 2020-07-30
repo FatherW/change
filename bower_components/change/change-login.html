@@ -5,9 +5,9 @@
 <link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
 <link rel="import" href="change-register.html">
 <link rel="import" href="change-reset.html">
-<!-- <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com"> -->
 
-
+<meta name="google-signin-scope" content="profile email">
+<meta name="google-signin-client_id" content="755964351228-2emctcoq1o2nj5vpqitv4j28411jj7jk.apps.googleusercontent.com">
 
 <dom-module id="change-login">
 
@@ -153,7 +153,9 @@
                 <div class="fb-login-button" data-size="large" data-button-type="login_with" data-layout="default" data-auto-logout-link="false" data-use-continue-as="false" data-width=""></div>
             </div>
             <div>
-                <button class="logoGoogle"><img src="img/icon/Google.png" class="logoGoogle">&nbspGoogle</button>
+                    <!-- <div class="g-signin2" data-onsuccess="onSignIn"></div> -->
+
+                <button class="logoGoogle" on-click="google"><img src="img/icon/Google.png" class="logoGoogle">&nbspGoogle</button>
             </div>
             <div class="email">
                 <vaadin-email-field id="changeEmail1" placeholder="Email" name=" email"
@@ -228,6 +230,10 @@
 
 
 
+
+            },
+            google() {
+                document.querySelector('.g-signin2 .abcRioButtonContentWrapper').click();
 
             },
 
