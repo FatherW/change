@@ -202,7 +202,8 @@
                                                 "email": email,
                                                 "password": pass,
                                                 "phone": phone,
-                                                "isPromotionMsg": promotion
+                                                "isPromotionMsg": promotion,
+                                                "platform": store.get('change-platform') || "gettv"
                                             };
                                             console.log("Params", params);
                                             Polymer.postData(registerUrl, params).then(res => {
@@ -249,6 +250,7 @@
             },
 
             ready: function() {
+                let platform = store.get('change-platform') || "gettv";
 
                 let loginUrl = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 let params = {
@@ -267,6 +269,7 @@
                     }
                 });
                 let shadow = this.shadowRoot;
+                shadow.querySelector('.font-sizeh1').innerHTML = "以" + platform + "註冊";
                 customElements.whenDefined('vaadin-select').then(function() {
                     const district = [{
                         id: '中西區',
