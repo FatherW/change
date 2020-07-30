@@ -291,7 +291,7 @@
             console.log(file);
             let AWS = this.AWS;
             // console.log(this.user);
-            const uid = Polymer.user["uid"];
+            const uid = this.user["uid"];
             console.log(uid);
             //    if (!subowner)
             //        subowner=''
@@ -1106,7 +1106,6 @@
             });
         }
     };
-
     Polymer.getUserDataContent = function(path) {
         let url =
             "https://d25k6mzsu7mq5l.cloudfront.net/user-data/" +
@@ -1739,7 +1738,6 @@
         ]);
 
         document.addEventListener("save", (e) => {
-            // let url = 'https://d25k6mzsu7mq5l.cloudfront.net/user-data/'+Polymer.uid+'/';
             console.log("我是dz-loader的listener，我收到的e.detail", e.detail);
             let path = Polymer.thisPage;
             if (e.detail.basepath) {
@@ -1748,17 +1746,27 @@
             let basePath = "template/" + Polymer.tid + "/" + path + "/";
             let masterPath = "template/" + Polymer.tid + "/_master/";
             let content;
-
+            let dzWrapperHead = document.querySelector('dz-wrapper-head') || null;
+            let dzWrapperMasterHead = document.querySelector('dz-wrapper-master-head') || null;
+            let dzWrapperCss = document.querySelector('dz-wrapper-css') || null;
+            let dzWrapperMasterCss = document.querySelector('dz-wrapper-master-css') || null;
+            let dzWrapperBodyJs = document.querySelector('dz-wrapper-body-js') || null;
+            let dzWrapperMasterBodyJs = document.querySelector('dz-wrapper-master-body-js') || null;
             // Head
-            content = document.querySelector("dz-wrapper-head").innerHTML || "";
-            console.log("Save Head", basePath + "head");
-            this.fileManager.saveUserData(basePath + "head", content);
+            if (dzWrapperHead) {
+                content = document.querySelector("dz-wrapper-head").innerHTML || "";
+                console.log("Save Head", basePath + "head");
+                this.fileManager.saveUserData(basePath + "head", content);
+            }
+
 
             // Master Head
-            content =
-                document.querySelector("dz-wrapper-master-head").innerHTML || "";
-            console.log("Save Head", masterPath + "head");
-            this.fileManager.saveUserData(masterPath + "head", content);
+            if (dzWrapperMasterHead) {
+                content = document.querySelector("dz-wrapper-master-head").innerHTML || "";
+                console.log("Save Head", masterPath + "head");
+                this.fileManager.saveUserData(masterPath + "head", content);
+            }
+
 
             // HTML
             let wrapper = document.querySelector("dz-wrapper");
@@ -1769,21 +1777,32 @@
             this.fileManager.saveUserData(basePath + "html", content);
 
             // CSS
-            content = document.querySelector("dz-wrapper-css").innerHTML || "";
-            this.fileManager.saveUserData(basePath + "css", content);
+            if (dzWrapperCss) {
+                content = document.querySelector("dz-wrapper-css").innerHTML || "";
+                this.fileManager.saveUserData(basePath + "css", content);
+            }
+
 
             // Master CSS
-            content = document.querySelector("dz-wrapper-master-css").innerHTML || "";
-            this.fileManager.saveUserData(masterPath + "css", content);
+            if (dzWrapperMasterCss) {
+                content = document.querySelector("dz-wrapper-master-css").innerHTML || "";
+                this.fileManager.saveUserData(masterPath + "css", content);
+            }
+
 
             // body js
-            content = document.querySelector("dz-wrapper-body-js").innerHTML || "";
-            this.fileManager.saveUserData(basePath + "body_js", content);
+            if (dzWrapperBodyJs) {
+                content = document.querySelector("dz-wrapper-body-js").innerHTML || "";
+                this.fileManager.saveUserData(basePath + "body_js", content);
+            }
+
 
             // Master body js
-            content =
-                document.querySelector("dz-wrapper-master-body-js").innerHTML || "";
-            this.fileManager.saveUserData(masterPath + "body_js", content);
+            if (dzWrapperMasterBodyJs) {
+                content =
+                    document.querySelector("dz-wrapper-master-body-js").innerHTML || "";
+                this.fileManager.saveUserData(masterPath + "body_js", content);
+            }
 
             content = document.body.getAttribute("class") || null;
             this.fileManager.saveUserData(basePath + "body_class", content);
@@ -1906,6 +1925,13 @@
         let basePath = "template/" + Polymer.tid + "/" + Polymer.thisPage + "/";
         let masterPath = "template/" + Polymer.tid + "/_master/";
         let content;
+        let dzWrapperHead = document.querySelector('dz-wrapper-head') || null;
+        let dzWrapperMasterHead = document.querySelector('dz-wrapper-master-head') || null;
+        let dzWrapperCss = document.querySelector('dz-wrapper-css') || null;
+        let dzWrapperMasterCss = document.querySelector('dz-wrapper-master-css') || null;
+        let dzWrapperBodyJs = document.querySelector('dz-wrapper-body-js') || null;
+        let dzWrapperMasterBodyJs = document.querySelector('dz-wrapper-master-body-js') || null;
+        let dzWrapper = document.querySelector("dz-wrapper");
 
         let dom = document.createElement("html");
         let head = document.createElement("head");
@@ -1924,20 +1950,32 @@
         head.appendChild(script);
         head.appendChild(link);
 
-        let elm = document.querySelector("dz-wrapper-head").cloneNode(true);
-        head.appendChild(elm);
+        if (dzWrapperHead) {
+            let elm = document.querySelector("dz-wrapper-head").cloneNode(true);
+            head.appendChild(elm);
+        }
 
-        elm = document.querySelector("dz-wrapper-master-head").cloneNode(true);
-        head.appendChild(elm);
+        if (dzWrapperMasterHead) {
+            elm = document.querySelector("dz-wrapper-master-head").cloneNode(true);
+            head.appendChild(elm);
+        }
 
-        elm = document.querySelector("dz-wrapper").cloneNode(true);
-        body.appendChild(elm);
 
-        elm = document.querySelector("dz-wrapper-body-js").cloneNode(true);
-        body.appendChild(elm);
+        if (dzWrapper) {
+            elm = document.querySelector("dz-wrapper").cloneNode(true);
+            body.appendChild(elm);
+        }
 
-        elm = document.querySelector("dz-wrapper-master-body-js").cloneNode(true);
-        body.appendChild(elm);
+        if (dzWrapperBodyJs) {
+            elm = document.querySelector("dz-wrapper-body-js").cloneNode(true);
+            body.appendChild(elm);
+        }
+
+        if (dzWrapperMasterBodyJs) {
+            elm = document.querySelector("dz-wrapper-master-body-js").cloneNode(true);
+            body.appendChild(elm);
+        }
+
 
         dom.appendChild(head);
         dom.appendChild(body);
@@ -1963,12 +2001,11 @@
         console.log("Test Content", html);
     });
 
-    Polymer.getContent("dz-license?id=" + new Date().getTime()).then(
+    Polymer.getContent("/dz-license?id=" + new Date().getTime()).then(
         (html) => {
             console.log("License", html);
             Polymer.dzLicense = JSON.parse(html);
-            if (Polymer.dzLicense['init'])
-                Polymer.dzInit();
+            Polymer.dzInit();
         },
         (err) => {
             Polymer.dzInit();
