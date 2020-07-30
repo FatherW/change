@@ -368,6 +368,10 @@
                 if (tags) {
                     if (tags.length == undefined || tags.length == null || tags.length == 0) { } else {
                         shadow.querySelector('#description').innerHTML = "";
+                        // if (typeof tags === String) {
+                        //     tags = [tags];
+                        // }
+                        // console.log("ccc", tags);
                         tags.forEach(item => {
                             let buttontag = document.createElement('button');
                             buttontag.setAttribute('id', 'tagbutton');
@@ -378,9 +382,9 @@
                                         'tags': item
                                     }
                                 });
-                                if (document.querySelector('change-itemspecial')) {
-                                    var serchcat = '/list-product.html?tag=' + encodeURIComponent(item);
-                                    location.href = serchcat;
+                                if (document.querySelector('change-itemspecial')||document.querySelector('change-user')) {
+                                    // alert("ccc")
+                                    location.assign("./list-product.html?tag=" + encodeURIComponent(item));
                                 }
                             })
                             shadow.querySelector('#description').appendChild(buttontag);
