@@ -100,10 +100,10 @@
             <span class="font-sizeh1">註冊</span>
             <span style="font-size: 80%;">———&nbsp使用第三方帳號註冊&nbsp———</span>
             <div style="display: inline-flex;">
-                <button class="logoFacebook">
+                <button class="logoFacebook" on-click="log">
                     <img src="img/icon/Facebook.png" class="logoFacebook">&nbspFacebook
                 </button>
-                <button class="logoGoogle"><img src="img/icon/Google.png" class="logoGoogle">&nbspGoogle</button>
+                <button class="logoGoogle" on-click="google"><img src="img/icon/Google.png" class="logoGoogle">&nbspGoogle</button>
             </div>
             <!-- <div>
                 <button class="logoGoogle"><img src="img/icon/Google.png" class="logoGoogle">&nbspGoogle</button>
@@ -162,6 +162,132 @@
                 next: {
                     "type": Number
                 }
+            },
+            google() {
+                document.querySelector('.g-signin2 .abcRioButtonContentWrapper').click();
+
+            },
+            log: function() {
+                console.log("good");
+                let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let that = this;
+                FB.login(function(response) {
+                    console.log("response", response);
+                    if (response.authResponse) {
+                        console.log('Welcome!  Fetching your information.... ');
+                        FB.api('/me', {
+                            fields: 'name, email'
+                        }, function(response) {
+                            console.log('Good to see you, ' + JSON.stringify(response) + '.' + response.email);
+                            let email = response.email;
+                            let name = response.name;
+                            let param = {
+                                "action": "searchData",
+                                "index": "change",
+                                "type": "_user",
+                                "body": {
+                                    "query": {
+                                        "match": {
+                                            "email": email
+                                        }
+                                    }
+                                }
+                            };
+                            Polymer.postData(link, param).then(res => {
+                                if (res.code > 0) {
+                                    let all = res.resolve;
+                                    console.log(res);
+                                    if (all.length == 0) {
+                                        ////jump to resigter
+                                        console.log("shoud go to regis");
+                                        let platformcookie = {
+                                            "platform": "facebook",
+                                            "name": name,
+                                            "email": email
+                                        };
+                                        store.set("change-platform", platformcookie);
+                                        let dialog = that.shadowRoot.querySelector('#registerpop');
+                                        Polymer.popup(dialog, "change", "change-register", "45s%", "90%");
+                                    } else {
+                                        if (all[0].platform == "facebook") {
+                                            store.set('change-user', all[0]);
+                                            location.reload();
+                                        } else {
+                                            alert("此帳戶的郵箱已在" + all[0].platform + "註冊，請重新登入");
+                                        }
+                                    }
+                                } else {
+                                    console.log("打錯param");
+                                }
+                            })
+
+
+                            // that.userManager.loadData(response.id).then(res => {
+                            //     console.log('Result', res);
+                            //     if (Object.keys(res).length === 0) {
+                            //         alert('你的Facebook Login還未註冊，要幫你註冊麼？');
+                            //         that._fb_register(response.id, response.name, response.email);
+                            //     }
+
+                            // });
+                        });
+                    } else {
+                        console.log('User cancelled login or did not fully authorize.');
+                    }
+                }, {
+                    scope: 'email'
+                });
+            },
+            checkLoginState: function() { // Called when a person is finished with the Login Button.
+                FB.getLoginStatus(function(response) { // See the onlogin handler
+                    statusChangeCallback(response);
+                });
+            },
+
+            statusChangeCallback: function(response) { // Called with the results from FB.getLoginStatus().
+                console.log('statusChangeCallback');
+                console.log(response); // The current login status of the person.
+                if (response.status === 'connected') { // Logged into your webpage and Facebook.
+                    testAPI();
+                } else { // Not logged into your webpage or we are unable to tell.
+
+                }
+            },
+
+            testAPI: function() { // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
+                console.log('Welcome!  Fetching your information.... ');
+                FB.api('/me', function(response) {
+                    console.log('Successful login for: ' + response);
+                });
+            },
+
+            _fb_register(id, name, email) {
+                let registerUrl = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
+                let params = {
+                    "action": "changeregister",
+                    "username": email,
+                    "area": '全港',
+                    "email": email,
+                    "password": '!@#$%^#$%',
+                    "phone": id,
+                    "isPromotionMsg": false
+                };
+                console.log("Params", params);
+                Polymer.postData(registerUrl, params).then(res => {
+                    // alert(res.text);
+                    console.log('Res', res);
+
+                    that.userManager.getAllData().then(re => {
+                        console.log('Result', re);
+                    });
+
+                    if (res.code > 0) {
+
+                        // this.fileManager = new AwsPackage(res.resolve);
+                        // this.fileManager.saveFile('json/user-' + res.resolve.id + '.json', JSON.stringify(res.resolve));
+
+                    }
+                });
             },
             _register: function() {
                 let shadow = this.shadowRoot;
