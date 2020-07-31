@@ -298,7 +298,65 @@
                 // let inputField = vaadinTextFieldContainer.shadowRoot.querySelector('.target');
                 // console.log("CCC", vaadinTextFieldContainer);
 
+                //SET AREA, DERLIVER METHOD, PRODUCT STATUS//
+                this.valueArray = [""];
+                customElements.whenDefined('vaadin-select').then(function () {
+                    const district = [{
+                        name: '中西區'
+                    }, {
+                        name: '灣仔區'
+                    }, {
+                        name: '東區'
+                    }, {
+                        name: '南區'
+                    }, {
+                        name: '油尖旺區'
+                    }, {
+                        name: '深水埗區'
+                    }, {
+                        name: '九龍城區'
+                    }, {
+                        name: '黃大仙區'
+                    }, {
+                        name: '觀塘區'
+                    }, {
+                        name: '葵青區'
+                    }, {
+                        name: '荃灣區'
+                    }, {
+                        name: '屯門區'
+                    }, {
+                        name: '元朗區'
+                    }, {
+                        name: '離島區'
+                    }, {
+                        name: '北區'
+                    }, {
+                        name: '大埔區'
+                    }, {
+                        name: '沙田區'
+                    }, {
+                        name: '西貢區'
+                    }];
 
+                    //AREA//
+                    shadow.querySelector('#area1').renderer = function (root) {
+                        // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
+                        if (root.firstChild) {
+                            return;
+                        }
+                        // Create the <vaadin-list-box>
+                        const listBox = document.createElement('vaadin-list-box');
+                        district.forEach(function (item) {
+                            const vaadinItem = document.createElement('vaadin-item');
+                            vaadinItem.textContent = item.name;
+                            listBox.appendChild(vaadinItem);
+                            vaadinItem.setAttribute('value', item.name);
+                        });
+                        // update the content
+                        root.appendChild(listBox);
+                    };
+                });
             },
 
             handin() {
