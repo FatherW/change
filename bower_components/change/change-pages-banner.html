@@ -150,20 +150,21 @@
     </template>
 </dom-module>
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-pages-banner',
             properties: {
 
             },
-            created: function () {
+            created: function() {
 
             },
-            ready: function () {
+            ready: function() {
 
 
-                let id = document.querySelector('www').getAttribute('id');
-
+                let id = document.querySelector('fanpage').getAttribute('id');
+                console.log("ID5234143252345123535415353421543213", id);
+                console.log("ID", id);
                 if (id != "") {
                     let shadow = this.shadowRoot;
                     let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
@@ -173,6 +174,7 @@
                         "type": "pages",
                         "id": id
                     };
+                    console.log("qqqqqqqqqqfdsabuifasdbusdfbsaiud", JSON.stringify(params));
                     Polymer.postData(url, params).then(res => {
                         if (res.code > 0) {
                             let all = res.resolve;

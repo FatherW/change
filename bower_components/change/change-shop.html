@@ -212,7 +212,7 @@
 
 
     <script>
-        (function() {
+        (function () {
             Polymer({
                 is: 'change-shop',
                 properties: {
@@ -241,7 +241,7 @@
                         "type": Boolean
                     }
                 },
-                created: function() {
+                created: function () {
                     let that = this;
                     this.categories = [];
                     this.tags = [];
@@ -344,7 +344,9 @@
                     this.search();
 
                 },
-                ready: function() {
+                ready: function () {
+                    let that = this;
+                    let shadow = this.shadowRoot;
                     console.log("now shop");
                     document.addEventListener('areachange', e => {
                         this.isFree = e.detail.isFree;
@@ -460,7 +462,19 @@
                         store.set('change-cate', null);
                     } else {
                         this.search();
-                    }
+                    };
+
+                    
+                    // let paperTagsInput = shadow.querySelector('#myTags');
+                    // let clearfix = paperTagsInput.shadowRoot.querySelector('.clearfix');
+
+                    /*TESTING*/
+                    // let tagItem = document.clearfix.querySelector('tag-item');
+                    // console.log("TAGITEM",tagItem);
+  
+                    // let shadow1 = tagItem.shadowRoot.querySelector('large');
+                    // shadow.querySelector('.large').style.background = "white";
+
                 }
             })
         }());

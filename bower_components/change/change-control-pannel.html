@@ -1,14 +1,7 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../vaadin-text-field/vaadin-number-field.html">
-<link href="../dz-menu/css/style.html" rel="import" />
-<link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="../vaadin-select/vaadin-select.html">
 <link rel="import" href="../vaadin-button/vaadin-button.html">
-<link rel="import" href="../vaadin-text-field/vaadin-email-field.html">
-<link rel="import" href="../vaadin-text-field/vaadin-number-field.html">
-<link rel="import" href="change-icon.html">
-<link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
-
 <dom-module id="change-control-pannel">
 
     <template>
@@ -64,19 +57,77 @@
             }
 
             #add {
-                background-color: orange;
+                background-color: #ff9500;
             }
 
             #dq {
-                background-color: red;
+                background-color: #d9534f;
             }
 
             #recover {
-                background-color: green;
+                background-color: #71b758;
             }
 
+
+            /* :host([part="input-field"]) {
+                background-color: #7cd3da;
+            } */
+
+            /*******Fanpage Button*******/
             #manage {
-                background-color: blue;
+                background-color: #7cd3da;
+            }
+
+            /* .dropbtn {
+                background-color: #7cd3da;
+                color: white;
+                padding: 16px;
+                font-size: 16px;
+                border: none;
+                cursor: pointer;
+            }
+
+            .dropdown {
+                position: relative;
+                display: inline-block;
+            }
+
+            .dropdown-content {
+                display: none;
+                position: absolute;
+                background-color: #f9f9f9;
+                min-width: 160px;
+                box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+                z-index: 1;
+            }
+
+            .dropdown-content a {
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+            }
+
+            .dropdown-content a:hover {
+                background-color: #f1f1f1
+            }
+
+            .dropdown:hover .dropdown-content {
+                display: block;
+            }
+
+            .dropdown:hover .dropbtn {
+                background-color: #7cd3da;
+            } */
+
+
+            /********manipulate vaadin-number-field buttons*********/
+            /* vaadin-number-field::part(decrease-button)  {
+                color: red;
+            } */
+
+            .save {
+                width: 50px;
             }
 
             @media only screen and (max-width: 992px) {}
@@ -95,8 +146,9 @@
                     width: 20%;
                 }
             }
-            #info{
-                display:none;
+
+            #info {
+                display: none;
             }
         </style>
 
@@ -107,8 +159,9 @@
                     <span>!管理面板!</span>
                 </div>
                 <div class="miscount">
-                    <span>專頁犯錯次數:</span>
-                    <vaadin-number-field has-controls></vaadin-number-field>
+                    <span>用戶犯錯次數:</span>
+                    <vaadin-number-field value="0" min="0" has-controls id="mistake"></vaadin-number-field>
+                    <button class="save" on-click="_save">儲存</button>
                 </div>
 
                 <div class="buttons">
@@ -116,17 +169,41 @@
                     <button id="dq" on-click="_disqualify">取消資格</button>
                     <button id="recover" on-click="_recovery">回復資格</button>
                     <button id="manage" on-click="_manageFanPage">管理專頁</button>
+                    
+                    <!-- <vaadin-select id="manage" placeholder="管理專頁" on-click="_manageFanPage"></vaadin-select> -->
+                    <!-- <div class="dropdown">
+                        <button class="dropbtn" id="manage" on-click="_manageFanPage">管理專頁</button>
+                        <div class="dropdown-content">
+                            <a href="#">Link 1</a>
+                            <a href="#">Link 2</a>
+                            <a href="#">Link 3</a>
+                        </div>
+                    </div> -->
+                    <!-- <vaadin-button id="manage" on-click="_manageFanPage">管理專頁</vaadin-button> -->
                 </div>
+                
                 <div id="info">
                     <h5>專頁資料</h5>
-                    <p class="inf">名稱: <span class="infotext" id="name"><vaadin-text-field id='name1'></vaadin-text-field></span></p>
-                    <p class="inf">地區: <span class="infotext" id="area"><vaadin-select id='area1' label=''></vaadin-select></span></p>
-                    <p class="inf">電郵: <span class="infotext" id="email2"><vaadin-email-field id='email'></vaadin-text-field></span></p>
-                    <p class="inf">標籤: <span id="contact"><vaadin-text-field id='tag'></vaadin-text-field></span></p>
-                    <p class="inf">網址: <span class="infotext" id="website"><vaadin-text-field id='website2'></vaadin-text-field></span></p>
-                    <div style="display: inline-flex;"><vaadin-button id="vb" on-click="handin">提交</vaadin-button>
-                    <vaadin-button id="vb" on-click="cancel">取消</vaadin-button>
-                        </div>
+                    <p class="inf">名稱: <span class="infotext" id="name">
+                            <vaadin-text-field id='name1'></vaadin-text-field>
+                        </span></p>
+                    <p class="inf">地區: <span class="infotext" id="area">
+                            <vaadin-select id='area1' label=''></vaadin-select>
+                        </span></p>
+                    <p class="inf">電郵: <span class="infotext" id="email2">
+                            <vaadin-email-field id='email'>
+                                </vaadin-text-field>
+                        </span></p>
+                    <p class="inf">標籤: <span id="contact">
+                            <vaadin-text-field id='tag'></vaadin-text-field>
+                        </span></p>
+                    <p class="inf">網址: <span class="infotext" id="website">
+                            <vaadin-text-field id='website2'></vaadin-text-field>
+                        </span></p>
+                    <div style="display: inline-flex;">
+                        <vaadin-button id="vb" on-click="handin">提交</vaadin-button>
+                        <vaadin-button id="vb" on-click="cancel">取消</vaadin-button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -135,25 +212,31 @@
 </dom-module>
 
 <script>
-    (function() {
+    (function () {
         Polymer({
             is: 'change-control-pannel',
-            properties: {
-                "user": {
-                    "type": Array
+            properties: {},
+
+
+            created: function () {
+                let user = store.get('change-user') || null;
+                if (user.isAdmin) {
+                    user["userBucket"] = "change.dazzle.website";
+                    this.fileManager = new AwsPackage(user);
+                    console.log('USERRRR', user);
+                    console.log('是管理员账户');
+                } else {
+                    console.log('不是管理员账户');
                 }
             },
 
-
-            created: function() {},
-
-            ready: function() {
+            ready: function () {
                 let shadow = this.shadowRoot;
                 let that = this;
 
-                let usercookies = store.get('change-user') || null;
+                let usercookies = store.get('change-user');
                 let userID = usercookies['id'];
-                this.user = store.get('change-user') || null;
+
                 // console.log("cookie", userID);
                 let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 let param = {
@@ -183,11 +266,41 @@
                     } else {
                         console.log("CANNOT SEARCH USER!");
                     }
-                })
+                });
 
+                //********Get back mistakes ocunt*********//
+                let loc = location.search;
+                let uid = "";
+                for (i = 1; i < loc.length; i++) {
+                    uid += loc[i];
+                }
+                // console.log("current uid", uid);
+                let paramMistakes = {
+                    "action": "getData",
+                    "index": "change",
+                    "type": "_user",
+                    "id": uid
+                };
+                Polymer.postData(link, paramMistakes).then(res => {
+                    if (res.code > 0) {
+                        let mistake = res.resolve.mistake;
+                        // console.log("BBB", mistake);
+                        shadow.querySelector('#mistake').value = mistake;
+                    } else {
+                        alert("Err: Get user mistakes count!");
+                    }
+                });
 
+                //***CSS fanpagebutton//
+                // let selectbox = shadow.querySelector('#manage');
+                // let selcetTextField = selectbox.shadowRoot.querySelector('vaadin-select-text-field');
+                // let vaadinTextFieldContainer = selcetTextField.shadowRoot.querySelector('.vaadin-text-field-container');
+                // let inputField = vaadinTextFieldContainer.shadowRoot.querySelector('.target');
+                // console.log("CCC", vaadinTextFieldContainer);
 
-                customElements.whenDefined('vaadin-select').then(function() {
+                //SET AREA, DERLIVER METHOD, PRODUCT STATUS//
+                this.valueArray = [""];
+                customElements.whenDefined('vaadin-select').then(function () {
                     const district = [{
                         name: '中西區'
                     }, {
@@ -226,16 +339,15 @@
                         name: '西貢區'
                     }];
 
-
                     //AREA//
-                    shadow.querySelector('#area1').renderer = function(root) {
+                    shadow.querySelector('#area1').renderer = function (root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        district.forEach(function(item) {
+                        district.forEach(function (item) {
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
@@ -245,17 +357,23 @@
                         root.appendChild(listBox);
                     };
                 });
-
-
             },
 
             handin() {
+                ///////////////////////////////////////////
+                ///////////////新增專頁寫在這裡///////////////
+                ///////////////////////////////////////////
                 let shadow = this.shadowRoot;
                 let pagename = shadow.querySelector('#name1').value;
+                console.log(pagename);
+                let src = "_page-template";
+                this.fileManager.copyFolder(src, pagename);
+                let user = store.get('change-user');
+                console.log("ccc", user['_id']);
                 let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
                 let param = {
                     "action": "addFanPage",
-                    "ownerId": this.user['_id'],
+                    "ownerId": user['_id'],
                     "name": pagename,
                     "website": shadow.querySelector('#website2').value,
                     "district": shadow.querySelector('#area1').value,
@@ -268,18 +386,14 @@
                     if (res.code > 0) {
                         console.log("完成");
                         shadow.querySelector('#info').style.display = "none";
-                        Polymer.dzFire("save", {
-                            "detail": {
-                                "basepath": pagename
-                            }
-                        });
+
                     }
                     alert(res.text);
                 });
 
             },
 
-            _addFanPage: function() {
+            _addFanPage: function () {
                 this.shadowRoot.querySelector('#info').style.display = "block";
             },
 
@@ -288,7 +402,7 @@
 
             },
 
-            _disqualify: function() {
+            _disqualify: function () {
                 console.log("disqualify is working!")
                 loc = location.search;
                 let uid = "";
@@ -323,7 +437,7 @@
                 })
             },
 
-            _recovery: function() {
+            _recovery: function () {
                 console.log("recovery is working!")
                 loc = location.search;
                 let uid = "";
@@ -358,9 +472,40 @@
                 })
             },
 
-            _manageFanPage: function() {
+            _manageFanPage: function () {
                 console.log("manageFanPage is working!")
             },
+
+            _save: function () {
+                console.log("updated mistakes count!")
+
+                let shadow = this.shadowRoot;
+                let that = this;
+
+                let count = shadow.querySelector('#mistake').value;
+                console.log("Mistakes count:", count);
+
+                let loc = location.search;
+                let uid = "";
+                for (i = 1; i < loc.length; i++) {
+                    uid += loc[i];
+                }
+                // console.log("current uid", uid);
+
+                params = {
+                    "action": "addData",
+                    "index": "change",
+                    "type": "_user",
+                    "id": uid,
+                    "body": {
+                        "mistake": count
+                    }
+                };
+                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                Polymer.postData(Url, params).then(res => {
+                    alert("用戶犯錯次數已更新!");
+                });
+            }
         });
     })();
 </script>
