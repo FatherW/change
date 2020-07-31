@@ -70,8 +70,13 @@
                 background-color: blue;
             }
 
-            vaadin-number-field::part(decrease-button)  {
+            /********manipulate vaadin-number-field buttons*********/
+            /* vaadin-number-field::part(decrease-button)  {
                 color: red;
+            } */
+
+            .save {
+                width: 5%;
             }
 
             @media only screen and (max-width: 992px) {}
@@ -103,8 +108,9 @@
                     <span>!管理面板!</span>
                 </div>
                 <div class="miscount">
-                    <span>專頁犯錯次數:</span>
-                    <vaadin-number-field has-controls id="mistake"></vaadin-number-field>
+                    <span>用戶犯錯次數:</span>
+                    <vaadin-number-field value="0" min="0" has-controls id="mistake"></vaadin-number-field>
+                    <button class="save" on-click="_save">儲存</button>
                 </div>
 
                 <div class="buttons">
@@ -143,13 +149,13 @@
 </dom-module>
 
 <script>
-    (function() {
+    (function () {
         Polymer({
             is: 'change-control-pannel',
             properties: {},
 
 
-            created: function() {
+            created: function () {
                 let user = store.get('change-user') || null;
                 if (user.isAdmin) {
                     user["userBucket"] = "change.dazzle.website";
@@ -161,7 +167,7 @@
                 }
             },
 
-            ready: function() {
+            ready: function () {
                 let shadow = this.shadowRoot;
                 let that = this;
 
@@ -197,7 +203,30 @@
                     } else {
                         console.log("CANNOT SEARCH USER!");
                     }
-                })
+                });
+
+                //********Get back mistakes ocunt*********//
+                let loc = location.search;
+                let uid = "";
+                for (i = 1; i < loc.length; i++) {
+                    uid += loc[i];
+                }
+                // console.log("current uid", uid);
+                let paramMistakes = {
+                    "action": "getData",
+                    "index": "change",
+                    "type": "_user",
+                    "id": uid
+                };
+                Polymer.postData(link, paramMistakes).then(res => {
+                    if (res.code>0){
+                        let mistake = res.resolve.mistake;
+                        // console.log("BBB", mistake);
+                        shadow.querySelector('#mistake').value = mistake;
+                    } else {
+                        alert("Err: Get user mistakes count!");
+                    }
+                });
 
 
             },
@@ -234,7 +263,7 @@
 
             },
 
-            _addFanPage: function() {
+            _addFanPage: function () {
                 this.shadowRoot.querySelector('#info').style.display = "block";
             },
 
@@ -243,7 +272,7 @@
 
             },
 
-            _disqualify: function() {
+            _disqualify: function () {
                 console.log("disqualify is working!")
                 loc = location.search;
                 let uid = "";
@@ -278,7 +307,7 @@
                 })
             },
 
-            _recovery: function() {
+            _recovery: function () {
                 console.log("recovery is working!")
                 loc = location.search;
                 let uid = "";
@@ -313,9 +342,40 @@
                 })
             },
 
-            _manageFanPage: function() {
+            _manageFanPage: function () {
                 console.log("manageFanPage is working!")
             },
+
+            _save: function () {
+                console.log("updated mistakes count!")
+
+                let shadow = this.shadowRoot;
+                let that = this;
+
+                let count = shadow.querySelector('#mistake').value;
+                console.log("Mistakes count:", count);
+
+                let loc = location.search;
+                let uid = "";
+                for (i = 1; i < loc.length; i++) {
+                    uid += loc[i];
+                }
+                // console.log("current uid", uid);
+
+                params = {
+                    "action": "addData",
+                    "index": "change",
+                    "type": "_user",
+                    "id": uid,
+                    "body": {
+                        "mistake": count
+                    }
+                };
+                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                Polymer.postData(Url, params).then(res => {
+                    alert("用戶犯錯次數已更新!");
+                });
+            }
         });
     })();
 </script>
