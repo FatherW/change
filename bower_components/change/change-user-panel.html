@@ -43,6 +43,8 @@
             <button id="login" on-click="_login">/ 登入</button>
         </div>
         <vaadin-dialog id="register"></vaadin-dialog>
+        <vaadin-dialog id="registerpop"></vaadin-dialog>
+
     </template>
 
 
@@ -72,13 +74,61 @@
                 let user = store.get('change-user');
                 if (user == null) {
                     let dialog = shadow.querySelector('vaadin-dialog#register');
-                    Polymer.popup(dialog, "change", "change-register", "350px", "600px");
+                    Polymer.popup(dialog, "change", "change-register", "360px", "600px");
                 } else {
                     store.set('change-user', null);
                     location.reload();
                 }
             },
+            logingoogle() {
+                window.signOut();
+                console.log("insede logingoogle");
+                let that = this;
+                let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let platform = store.get('change-platform');
+                let email = platform['email'];
+                let name = platform['name'];
+                let param = {
+                    "action": "searchData",
+                    "index": "change",
+                    "type": "_user",
+                    "body": {
+                        "query": {
+                            "match": {
+                                "email": email
+                            }
+                        }
+                    }
+                };
+                Polymer.postData(link, param).then(res => {
+                    if (res.code > 0) {
+                        let all = res.resolve;
+                        console.log(res);
+                        if (all.length == 0) {
+                            ////jump to resigter
+                            console.log("shoud go to regis");
+                            let platformcookie = {
+                                "platform": "Google",
+                                "name": name,
+                                "email": email
+                            };
+                            store.set("change-platform", platformcookie);
+                            let dialog = that.shadowRoot.querySelector('#registerpop');
+                            Polymer.popup(dialog, "change", "change-register", "45s%", "90%");
+                        } else {
+                            if (all[0].platform == "Google") {
+                                store.set('change-user', all[0]);
+                                location.reload();
+                            } else {
+                                alert("此帳戶的郵箱已在" + all[0].platform + "註冊，請重新登入");
+                            }
+                        }
+                    } else {
+                        console.log("打錯param");
+                    }
+                })
 
+            },
             ready: function() {
                 let user = store.get('change-user') || null;
                 if (user != null) {
@@ -92,8 +142,13 @@
                 document.addEventListener('close-myself', e => {
                     s.querySelector('vaadin-dialog#register').opened = false;
                     let dialog = s.querySelector('vaadin-dialog#register');
-                    Polymer.popup(dialog, "change", "change-login", "40%", "90%");
+                    Polymer.popup(dialog, "change", '<change-login><div class="g-signin2" data-onsuccess="onSignIn"></div></change-login>', "40%", "90%");
                 });
+                console.log("hhhhhhhhh", document.querySelector('.googleloginname').innerHTML);
+                document.querySelector('.googleloginname').addEventListener('click', e => {
+                    console.log("running inside addevent");
+                    this.logingoogle();
+                })
             }
 
         });

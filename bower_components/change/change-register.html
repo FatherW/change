@@ -146,6 +146,8 @@
             </div>
             <!-- <span class="privacy">簽署即表示您同意Get Change 的服務條款和隱私權政策</span> -->
             <vaadin-dialog id="login"></vaadin-dialog>
+            <vaadin-dialog id="registerpop"></vaadin-dialog>
+
         </div>
 
     </template>
@@ -164,7 +166,13 @@
             _register: function() {
                 let shadow = this.shadowRoot;
                 let that = this;
+                let platform = store.get("change-platform") || "gettv";
+                if (platform == "gettv") {
 
+                } else {
+                    platform = platform['platform'];
+                }
+                console.log("heres are platform", platform);
                 let uid = shadow.querySelector('#changeId1').value; //使用名稱
                 let area = shadow.querySelector('#changeArea1').value; //地區
                 let email = shadow.querySelector('#changeEmail1').value; //電郵地址
@@ -203,7 +211,7 @@
                                                 "password": pass,
                                                 "phone": phone,
                                                 "isPromotionMsg": promotion,
-                                                "platform": store.get('change-platform') || "gettv"
+                                                "platform": platform
                                             };
                                             console.log("Params", params);
                                             Polymer.postData(registerUrl, params).then(res => {
@@ -250,7 +258,17 @@
             },
 
             ready: function() {
-                let platform = store.get('change-platform') || "gettv";
+                let that = this;
+                let platform = store.get("change-platform") || "gettv";
+                if (platform != "gettv") {
+                    that.shadowRoot.querySelector('.font-sizeh1').innerHTML = "以" + platform['platform'] + "平台註冊";
+                    that.shadowRoot.querySelector('#changeId1').value = platform['name'];
+                    that.shadowRoot.querySelector('#changeEmail1').value = platform['email'];
+
+                } else {
+                    that.shadowRoot.querySelector('.font-sizeh1').innerHTML = "以GetTV平台註冊";
+
+                }
 
                 let loginUrl = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 let params = {
@@ -269,7 +287,6 @@
                     }
                 });
                 let shadow = this.shadowRoot;
-                shadow.querySelector('.font-sizeh1').innerHTML = "以" + platform + "註冊";
                 customElements.whenDefined('vaadin-select').then(function() {
                     const district = [{
                         id: '中西區',
@@ -344,7 +361,6 @@
                     };
                 });
             },
-
 
 
         });

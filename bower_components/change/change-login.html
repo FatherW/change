@@ -5,9 +5,9 @@
 <link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
 <link rel="import" href="change-register.html">
 <link rel="import" href="change-reset.html">
+<!-- <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com"> -->
 
-<meta name="google-signin-scope" content="profile email">
-<meta name="google-signin-client_id" content="755964351228-2emctcoq1o2nj5vpqitv4j28411jj7jk.apps.googleusercontent.com">
+
 
 <dom-module id="change-login">
 
@@ -153,9 +153,9 @@
                 <div class="fb-login-button" data-size="large" data-button-type="login_with" data-layout="default" data-auto-logout-link="false" data-use-continue-as="false" data-width=""></div>
             </div>
             <div>
-                    <!-- <div class="g-signin2" data-onsuccess="onSignIn"></div> -->
-
                 <button class="logoGoogle" on-click="google"><img src="img/icon/Google.png" class="logoGoogle">&nbspGoogle</button>
+
+                <!-- <button class="logoGoogle"><img src="img/icon/Google.png" class="logoGoogle">&nbspGoogle</button> -->
             </div>
             <div class="email">
                 <vaadin-email-field id="changeEmail1" placeholder="Email" name=" email"
@@ -175,8 +175,10 @@
             <span id="forgetPassword">
                 <button id="forgot" on-click="_forgot">忘記密碼?</button>
 
-            </span> 
+            </span>
             <vaadin-dialog></vaadin-dialog>
+            <vaadin-dialog id="registerpop"></vaadin-dialog>
+
         </div>
     </template>
 
@@ -236,7 +238,6 @@
                 document.querySelector('.g-signin2 .abcRioButtonContentWrapper').click();
 
             },
-
             log: function() {
                 console.log("good");
                 let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
@@ -250,6 +251,7 @@
                         }, function(response) {
                             console.log('Good to see you, ' + JSON.stringify(response) + '.' + response.email);
                             let email = response.email;
+                            let name = response.name;
                             let param = {
                                 "action": "searchData",
                                 "index": "change",
@@ -265,11 +267,18 @@
                             Polymer.postData(link, param).then(res => {
                                 if (res.code > 0) {
                                     let all = res.resolve;
-                                    if (all.length = 0) {
+                                    console.log(res);
+                                    if (all.length == 0) {
                                         ////jump to resigter
                                         console.log("shoud go to regis");
-                                        let dialog = this.shadowRoot.querySelector('vaadin-dialog');
-                                        Polymer.popup(dialog, "change", "change-register", "40%", "90%");
+                                        let platformcookie = {
+                                            "platform": "facebook",
+                                            "name": name,
+                                            "email": email
+                                        };
+                                        store.set("change-platform", platformcookie);
+                                        let dialog = that.shadowRoot.querySelector('#registerpop');
+                                        Polymer.popup(dialog, "change", "change-register", "45s%", "90%");
                                     } else {
                                         if (all[0].platform == "facebook") {
                                             store.set('change-user', all[0]);
@@ -300,7 +309,6 @@
                     scope: 'email'
                 });
             },
-
             checkLoginState: function() { // Called when a person is finished with the Login Button.
                 FB.getLoginStatus(function(response) { // See the onlogin handler
                     statusChangeCallback(response);
