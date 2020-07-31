@@ -95,8 +95,9 @@
                     width: 20%;
                 }
             }
-            #info{
-                display:none;
+
+            #info {
+                display: none;
             }
         </style>
 
@@ -119,14 +120,26 @@
                 </div>
                 <div id="info">
                     <h5>專頁資料</h5>
-                    <p class="inf">名稱: <span class="infotext" id="name"><vaadin-text-field id='name1'></vaadin-text-field></span></p>
-                    <p class="inf">地區: <span class="infotext" id="area"><vaadin-select id='area1' label=''></vaadin-select></span></p>
-                    <p class="inf">電郵: <span class="infotext" id="email2"><vaadin-email-field id='email'></vaadin-text-field></span></p>
-                    <p class="inf">標籤: <span id="contact"><vaadin-text-field id='tag'></vaadin-text-field></span></p>
-                    <p class="inf">網址: <span class="infotext" id="website"><vaadin-text-field id='website2'></vaadin-text-field></span></p>
-                    <div style="display: inline-flex;"><vaadin-button id="vb" on-click="handin">提交</vaadin-button>
-                    <vaadin-button id="vb" on-click="cancel">取消</vaadin-button>
-                        </div>
+                    <p class="inf">名稱: <span class="infotext" id="name">
+                            <vaadin-text-field id='name1'></vaadin-text-field>
+                        </span></p>
+                    <p class="inf">地區: <span class="infotext" id="area">
+                            <vaadin-select id='area1' label=''></vaadin-select>
+                        </span></p>
+                    <p class="inf">電郵: <span class="infotext" id="email2">
+                            <vaadin-email-field id='email'>
+                                </vaadin-text-field>
+                        </span></p>
+                    <p class="inf">標籤: <span id="contact">
+                            <vaadin-text-field id='tag'></vaadin-text-field>
+                        </span></p>
+                    <p class="inf">網址: <span class="infotext" id="website">
+                            <vaadin-text-field id='website2'></vaadin-text-field>
+                        </span></p>
+                    <div style="display: inline-flex;">
+                        <vaadin-button id="vb" on-click="handin">提交</vaadin-button>
+                        <vaadin-button id="vb" on-click="cancel">取消</vaadin-button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -145,7 +158,17 @@
             },
 
 
-            created: function() {},
+            created: function() {
+                let user = store.get('change-user') || null;
+                if (user.isAdmin) {
+                    user["userBucket"] = "change.dazzle.website";
+                    this.fileManager = new AwsPackage(user);
+                    console.log('USERRRR', user);
+                    console.log('是管理员账户');
+                } else {
+                    console.log('不是管理员账户');
+                }
+            },
 
             ready: function() {
                 let shadow = this.shadowRoot;
@@ -250,8 +273,14 @@
             },
 
             handin() {
+                ///////////////////////////////////////////
+                ///////////////新增專頁寫在這裡///////////////
+                ///////////////////////////////////////////
                 let shadow = this.shadowRoot;
                 let pagename = shadow.querySelector('#name1').value;
+                console.log(pagename);
+                let src = "_page-template";
+                this.fileManager.copyFolder(src, pagename);
                 let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
                 let param = {
                     "action": "addFanPage",
@@ -268,11 +297,7 @@
                     if (res.code > 0) {
                         console.log("完成");
                         shadow.querySelector('#info').style.display = "none";
-                        Polymer.dzFire("save", {
-                            "detail": {
-                                "basepath": pagename
-                            }
-                        });
+
                     }
                     alert(res.text);
                 });
