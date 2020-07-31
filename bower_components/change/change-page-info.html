@@ -130,7 +130,7 @@
     </template>
 </dom-module>
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-page-info',
             properties: {
@@ -139,15 +139,15 @@
                 }
 
             },
-            created: function () {
+            created: function() {
 
             },
-            ready: function () {
+            ready: function() {
                 this.status = false;
                 let shadow = this.shadowRoot;
                 let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
 
-                let id = document.querySelector('www').getAttribute('id');
+                let id = document.querySelector('fanpage').getAttribute('id');
 
                 if (id != "") {
 
@@ -183,10 +183,10 @@
             },
 
 
-            execute: function () {
+            execute: function() {
                 console.log("Entered");
                 let shadow = this.shadowRoot;
-                customElements.whenDefined('vaadin-select').then(function () {
+                customElements.whenDefined('vaadin-select').then(function() {
                     const district = [{
                         id: '中西區',
                         name: '中西區'
@@ -242,14 +242,14 @@
                         id: '西貢區',
                         name: '西貢區'
                     }];
-                    shadow.querySelector('vaadin-select').renderer = function (root) {
+                    shadow.querySelector('vaadin-select').renderer = function(root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        district.forEach(function (item) {
+                        district.forEach(function(item) {
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
@@ -261,7 +261,7 @@
                 });
             },
 
-            deleteadmin: function () {
+            deleteadmin: function() {
                 let shadow = this.shadowRoot;
                 if (this.status == false) {
                     this.status = true;
@@ -272,7 +272,7 @@
                 }
             },
 
-            toggle: function () {
+            toggle: function() {
                 let loc = "?1";
 
                 let id = "";
