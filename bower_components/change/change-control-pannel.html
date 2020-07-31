@@ -368,10 +368,12 @@
                 console.log(pagename);
                 let src = "_page-template";
                 this.fileManager.copyFolder(src, pagename);
+                let user = store.get('change-user');
+                console.log("ccc", user['_id']);
                 let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
                 let param = {
                     "action": "addFanPage",
-                    "ownerId": this.user['_id'],
+                    "ownerId": user['_id'],
                     "name": pagename,
                     "website": shadow.querySelector('#website2').value,
                     "district": shadow.querySelector('#area1').value,
