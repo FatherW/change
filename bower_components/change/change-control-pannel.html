@@ -1,14 +1,5 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../vaadin-text-field/vaadin-number-field.html">
-<link href="../dz-menu/css/style.html" rel="import" />
-<link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
-<link rel="import" href="../vaadin-select/vaadin-select.html">
-<link rel="import" href="../vaadin-button/vaadin-button.html">
-<link rel="import" href="../vaadin-text-field/vaadin-email-field.html">
-<link rel="import" href="../vaadin-text-field/vaadin-number-field.html">
-<link rel="import" href="change-icon.html">
-<link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
-
 <dom-module id="change-control-pannel">
 
     <template>
@@ -79,6 +70,10 @@
                 background-color: blue;
             }
 
+            vaadin-number-field::part(decrease-button)  {
+                color: red;
+            }
+
             @media only screen and (max-width: 992px) {}
 
             @media only screen and (max-width: 640px) {
@@ -109,7 +104,7 @@
                 </div>
                 <div class="miscount">
                     <span>專頁犯錯次數:</span>
-                    <vaadin-number-field has-controls></vaadin-number-field>
+                    <vaadin-number-field has-controls id="mistake"></vaadin-number-field>
                 </div>
 
                 <div class="buttons">
@@ -151,11 +146,7 @@
     (function() {
         Polymer({
             is: 'change-control-pannel',
-            properties: {
-                "user": {
-                    "type": Array
-                }
-            },
+            properties: {},
 
 
             created: function() {
@@ -174,9 +165,9 @@
                 let shadow = this.shadowRoot;
                 let that = this;
 
-                let usercookies = store.get('change-user') || null;
+                let usercookies = store.get('change-user');
                 let userID = usercookies['id'];
-                this.user = store.get('change-user') || null;
+
                 // console.log("cookie", userID);
                 let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 let param = {
@@ -207,67 +198,6 @@
                         console.log("CANNOT SEARCH USER!");
                     }
                 })
-
-
-
-                customElements.whenDefined('vaadin-select').then(function() {
-                    const district = [{
-                        name: '中西區'
-                    }, {
-                        name: '灣仔區'
-                    }, {
-                        name: '東區'
-                    }, {
-                        name: '南區'
-                    }, {
-                        name: '油尖旺區'
-                    }, {
-                        name: '深水埗區'
-                    }, {
-                        name: '九龍城區'
-                    }, {
-                        name: '黃大仙區'
-                    }, {
-                        name: '觀塘區'
-                    }, {
-                        name: '葵青區'
-                    }, {
-                        name: '荃灣區'
-                    }, {
-                        name: '屯門區'
-                    }, {
-                        name: '元朗區'
-                    }, {
-                        name: '離島區'
-                    }, {
-                        name: '北區'
-                    }, {
-                        name: '大埔區'
-                    }, {
-                        name: '沙田區'
-                    }, {
-                        name: '西貢區'
-                    }];
-
-
-                    //AREA//
-                    shadow.querySelector('#area1').renderer = function(root) {
-                        // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
-                        if (root.firstChild) {
-                            return;
-                        }
-                        // Create the <vaadin-list-box>
-                        const listBox = document.createElement('vaadin-list-box');
-                        district.forEach(function(item) {
-                            const vaadinItem = document.createElement('vaadin-item');
-                            vaadinItem.textContent = item.name;
-                            listBox.appendChild(vaadinItem);
-                            vaadinItem.setAttribute('value', item.name);
-                        });
-                        // update the content
-                        root.appendChild(listBox);
-                    };
-                });
 
 
             },
