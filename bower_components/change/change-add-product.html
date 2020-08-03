@@ -789,7 +789,8 @@
                             this.OWNERID = res.resolve[0]['ownerId'];
                             this.POSTSTATUS = res.resolve[0]['postStatus'];
                             this.REPLYARRAY = res.resolve[0]['replyArray'];
-
+                            
+                            shadow.querySelector('span').textContent = res.resolve[0]['categories'];
                             // shadow.querySelector('#public').checked = res.resolve[0]['isPublic'];
                             shadow.querySelector('#free').checked = res.resolve[0]['isFree'];
                             shadow.querySelector('#sContact').value = res.resolve[0]['sellerMsg'];

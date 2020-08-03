@@ -130,6 +130,15 @@
                 width: 50px;
             }
 
+            #info {
+                width: 84%;
+                margin: 0 auto;
+            }
+
+            .handIn {
+                margin-right: 30px;
+            }
+
             @media only screen and (max-width: 992px) {}
 
             @media only screen and (max-width: 640px) {
@@ -201,7 +210,7 @@
                             <vaadin-text-field id='website2'></vaadin-text-field>
                         </span></p>
                     <div style="display: inline-flex;">
-                        <vaadin-button id="vb" on-click="handin">提交</vaadin-button>
+                        <vaadin-button id="vb" class="handIn" on-click="handin">提交</vaadin-button>
                         <vaadin-button id="vb" on-click="cancel">取消</vaadin-button>
                     </div>
                 </div>
