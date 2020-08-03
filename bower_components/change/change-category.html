@@ -7,18 +7,20 @@
 <dom-module id="change-category">
     <template>
         <style>
-             *{
-                font-family: sans-serif,微軟正黑體;
+            * {
+                font-family: sans-serif, 微軟正黑體;
             }
-            :host{
+
+            :host {
                 --lumo-contrast-10pct: hsla(0, 0%, 100%, 0);
-                --lumo-body-text-color:#808080;
+                --lumo-body-text-color: #808080;
             }
+
             .container {
                 display: flex;
             }
 
-            vaadin-menu-bar::part(container)  {
+            vaadin-menu-bar::part(container) {
                 margin-top: 15px;
             }
         </style>
@@ -26,14 +28,14 @@
             <vaadin-menu-bar class="cat"></vaadin-menu-bar>
             <div style="margin-top: 12px; display: inline-flex;">
                 <p class="result"> : </p>
-                <span></span>
+                <span style="margin-top: 12px; font-size: 16px;"></span>
             </div>
 
         </div>
     </template>
 </dom-module>
 <script>
-    (function() {
+    (function () {
         Polymer({
             is: 'change-category',
             properties: {
@@ -42,17 +44,17 @@
                 },
 
             },
-            created: function() {
+            created: function () {
                 // console.log('Created');
             },
-            ready: function() {
+            ready: function () {
                 //SUBCAT//
                 let that = this;
                 let shadow = this.shadowRoot;
 
-                customElements.whenDefined('vaadin-menu-bar').then(function() {
+                customElements.whenDefined('vaadin-menu-bar').then(function () {
                     const menu = shadow.querySelector('vaadin-menu-bar');
-                    menu.addEventListener('item-selected', function(e) {
+                    menu.addEventListener('item-selected', function (e) {
                         //Get ele value
                         // shadow.querySelector('span').textContent = JSON.stringify(e.detail.value.text);
                         shadow.querySelector('span').textContent = e.detail.value.text;
@@ -132,7 +134,7 @@
                                     }, {
                                         text: 'Balance Events'
                                     }]
-                                }, ]
+                                },]
                             };
 
                             g.push(h);
