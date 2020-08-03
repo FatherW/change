@@ -22,11 +22,13 @@
                 background-color: rgb(241, 151, 55);
                 border-radius: 100%;
                 margin: 4px;
-            } 
+            }
 
             .things-grid {
                 display: grid;
                 height: 100%;
+                width: 97%;
+                margin: 0 auto;
                 grid-row-gap: 15px;
                 padding: 0px 10px 20px 10px;
                 grid-column-gap: 50px;
@@ -119,8 +121,8 @@
                 }
 
                 .botbutton {
-                margin-bottom: 50px;
-            }
+                    margin-bottom: 50px;
+                }
             }
         </style>
 
@@ -146,7 +148,7 @@
 </dom-module>
 
 <script>
-    (function() {
+    (function () {
 
 
 
@@ -186,10 +188,10 @@
 
             },
 
-            created: function() {
+            created: function () {
                 this.countitem = 0;
             },
-            ready: function() {
+            ready: function () {
                 // this.search();
             },
 
@@ -463,7 +465,7 @@
 
             },
 
-            displaymore: function() {
+            displaymore: function () {
                 console.log('load');
                 let that = this;
                 let shadow = this.shadowRoot;
@@ -518,7 +520,7 @@
 
 
 
-            _showMyGoods: function() {
+            _showMyGoods: function () {
                 let shadow = this.shadowRoot;
                 shadow.querySelector('#blank').innerHTML = "";
                 let that = this;

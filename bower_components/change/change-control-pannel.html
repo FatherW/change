@@ -54,6 +54,8 @@
                 margin-right: 30px;
                 border: 1px solid #ccc;
                 color: white;
+
+                width: 150px;
             }
 
             #add {
@@ -78,7 +80,7 @@
                 background-color: #7cd3da;
             }
 
-            /* .dropbtn {
+            .dropbtn {
                 background-color: #7cd3da;
                 color: white;
                 padding: 16px;
@@ -118,7 +120,7 @@
 
             .dropdown:hover .dropbtn {
                 background-color: #7cd3da;
-            } */
+            }
 
 
             /********manipulate vaadin-number-field buttons*********/
@@ -139,6 +141,10 @@
                 margin-right: 30px;
             }
 
+            #info {
+                display: none;
+            }
+
             @media only screen and (max-width: 992px) {}
 
             @media only screen and (max-width: 640px) {
@@ -154,10 +160,6 @@
                 button {
                     width: 20%;
                 }
-            }
-
-            #info {
-                display: none;
             }
         </style>
 
@@ -178,8 +180,8 @@
                     <button id="dq" on-click="_disqualify">取消資格</button>
                     <button id="recover" on-click="_recovery">回復資格</button>
                     <button id="manage" on-click="_manageFanPage">管理專頁</button>
-                    
-                    <!-- <vaadin-select id="manage" placeholder="管理專頁" on-click="_manageFanPage"></vaadin-select> -->
+
+                    <!-- <vaadin-select id="manage" placeholder="管理專頁"></vaadin-select> -->
                     <!-- <div class="dropdown">
                         <button class="dropbtn" id="manage" on-click="_manageFanPage">管理專頁</button>
                         <div class="dropdown-content">
@@ -190,7 +192,7 @@
                     </div> -->
                     <!-- <vaadin-button id="manage" on-click="_manageFanPage">管理專頁</vaadin-button> -->
                 </div>
-                
+
                 <div id="info">
                     <h5>專頁資料</h5>
                     <p class="inf">名稱: <span class="infotext" id="name">
@@ -366,6 +368,51 @@
                         root.appendChild(listBox);
                     };
                 });
+
+                // //GET FANPAGE//
+                // let parampage = {
+                //     "action": "searchData",
+                //     "index": "change",
+                //     "type": "pages",
+                //     "_source": "website",
+                //     "body": {
+                //         "query": {
+                //             "match": {
+                //                 "ownerId": 74
+
+                //             }
+                //         }
+                //     }
+                // };
+                // Polymer.postData(link, parampage).then(res => {
+                //     // console.log("BBB", usertokenId);
+                //     // console.log("CCC working",res.resolve);
+                //     let pagename = [];
+                //     if (res.code > 0) {
+                //         res.resolve.forEach(item => {
+                //             pagename.push({
+                //                 website: item['website']
+                //             })
+                //         })
+                //         if (pagename.length == 0) {
+                //             pagename.push({
+                //                 name: "你沒有專頁噢"
+                //             })
+                //         }
+                //         console.log("CCC working",pagename[0]);
+                //         var fanpageN = ""
+                //         let dropdown = shadow.querySelector('.dropdown-content');
+                //         console.log('CCC', dropdown);
+                //         let a = document.createElement('a');
+                //         a.setAttribute('href', res.resolve.website);
+                //         for (i = 0; i < parampage.length; i++) {
+                //             fanpageN += pagename[i].toString();
+                //             console.log('CCC', fanpageN);
+                //         }
+                        
+
+                //     }
+                // })
             },
 
             handin() {
