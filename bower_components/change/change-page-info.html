@@ -185,7 +185,7 @@
 
                         if (res.code > 0) {
                             let all = res.resolve;
-                            shadow.querySelector('#name').innerText = all['website'];
+                            shadow.querySelector('#name').innerText = all['name'];
                             shadow.querySelector('#area').innerText = all['district'];
                             shadow.querySelector('#email').innerText = all['email'];
                             shadow.querySelector('#contact').innerText = all['tags'];
@@ -408,7 +408,7 @@
                         "type": "pages",
                         "id": id,
                         "body": {
-                            "website": name,
+                            "website": website,
                             "district": area
                         }
                     };
