@@ -789,7 +789,7 @@
                             this.OWNERID = res.resolve[0]['ownerId'];
                             this.POSTSTATUS = res.resolve[0]['postStatus'];
                             this.REPLYARRAY = res.resolve[0]['replyArray'];
-                            
+
                             shadow.querySelector('span').textContent = res.resolve[0]['categories'];
                             // shadow.querySelector('#public').checked = res.resolve[0]['isPublic'];
                             shadow.querySelector('#free').checked = res.resolve[0]['isFree'];
@@ -997,7 +997,7 @@
                         })
                         if (pagename.length == 0) {
                             pagename.push({
-                                name: "你沒有專頁噢"
+                                name: "沒有專頁可以選擇"
                             })
                         }
                         customElements.whenDefined('vaadin-select').then(function () {
@@ -1214,6 +1214,11 @@
                     //Get value from select box categories
                     var categories = shadow.querySelector('span').textContent;
                     console.log("categories", categories);
+
+                    //FIXING HERE//
+                    //Get value from select box fanpage
+                    var fanpage = shadow.querySelector('#fanpage').value;
+                    console.log("fanpage", fanPage);
 
                     //Get value from select box FANPAGE
                     var fanPage = shadow.querySelector('#fanPage').value;
