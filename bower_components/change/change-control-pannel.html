@@ -297,10 +297,17 @@
                         let mistake = res.resolve.mistake;
                         // console.log("BBB", mistake);
                         shadow.querySelector('#mistake').value = mistake;
+
+                        //***SET PANNEL TO PINK BACKGROUND IF USER IS DISQUALIFIED***//
+                        if (res.resolve.token==1) {
+                            shadow.querySelector('#controlbar').style.background = "pink";
+                        }
+
                     } else {
                         alert("Err: Get user mistakes count!");
                     }
                 });
+
 
                 //***CSS fanpagebutton//
                 // let selectbox = shadow.querySelector('#manage');

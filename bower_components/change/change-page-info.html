@@ -79,6 +79,19 @@
                 display: flex;
             }
 
+            #info2 {
+                background: white;
+                width: 94%;
+                margin: 0 auto;
+                display: none;
+            }
+
+            .inf2 {
+                line-height: 2.5;
+                color: grey;
+                margin-left: 100px;
+            }
+
             @media (max-width: 640px) {
                 .grid-container {
                     display: block;
@@ -120,17 +133,28 @@
                 </div>
                 <div id="right">
                     <div class="buttons">
-                        <vaadin-button id="vs1" style="margin-right: 10px;" on-click="deleteadmin">指派專頁管理員
+                        <vaadin-button id="vs1" style="margin-right: 10px;" on-click="setadmin">指派專頁管理員
                         </vaadin-button>
                         <vaadin-button id="vb" on-click="toggle">編輯</vaadin-button>
                     </div>
                 </div>
             </div>
         </div>
+        <div id="info2">
+            <h5 style="margin-left: 100px;">指派專頁管理員資料</h5>
+            <p class="inf2">電郵: <span class="infotext" id="adminEmail">
+                    <vaadin-text-field id='Aemail'></vaadin-text-field>
+                </span></p>
+
+            <div style="display: inline-flex; margin-left: 100px;">
+                <vaadin-button id="vb" class="handIn" on-click="handin">提交</vaadin-button>
+                <vaadin-button id="vb" on-click="cancel" style="margin-left: 20px;">取消</vaadin-button>
+            </div>
+        </div>
     </template>
 </dom-module>
 <script>
-    (function() {
+    (function () {
         Polymer({
             is: 'change-page-info',
             properties: {
@@ -139,10 +163,10 @@
                 }
 
             },
-            created: function() {
+            created: function () {
 
             },
-            ready: function() {
+            ready: function () {
                 this.status = false;
                 let shadow = this.shadowRoot;
                 let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
@@ -166,12 +190,12 @@
                             shadow.querySelector('#email').innerText = all['email'];
                             shadow.querySelector('#contact').innerText = all['tags'];
                             document.querySelector('change-shop').pagetag(all['tags']);
-                            let storeadmin = all['adminId'];
-                            let write = "";
-                            for (a = 0; a < storeadmin.length; a++) {
-                                write += '<change-icon id="' + storeadmin[a] + '"></change-icon>'
-                            }
-                            shadow.querySelector('#shouldhide').innerHTML = write;
+                            // let storeadmin = all['adminId'];
+                            // let write = "";
+                            // for (a = 0; a < storeadmin.length; a++) {
+                            //     write += '<change-icon id="' + storeadmin[a] + '"></change-icon>'
+                            // }
+                            // shadow.querySelector('#shouldhide').innerHTML = write;
 
 
 
@@ -183,10 +207,10 @@
             },
 
 
-            execute: function() {
+            execute: function () {
                 console.log("Entered");
                 let shadow = this.shadowRoot;
-                customElements.whenDefined('vaadin-select').then(function() {
+                customElements.whenDefined('vaadin-select').then(function () {
                     const district = [{
                         id: '中西區',
                         name: '中西區'
@@ -242,14 +266,14 @@
                         id: '西貢區',
                         name: '西貢區'
                     }];
-                    shadow.querySelector('vaadin-select').renderer = function(root) {
+                    shadow.querySelector('vaadin-select').renderer = function (root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        district.forEach(function(item) {
+                        district.forEach(function (item) {
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
@@ -261,18 +285,100 @@
                 });
             },
 
-            deleteadmin: function() {
+            setadmin: function () {
                 let shadow = this.shadowRoot;
-                if (this.status == false) {
-                    this.status = true;
-                    shadow.querySelector('#shouldhide').style.display = 'block';
-                } else {
-                    this.status = false;
-                    shadow.querySelector('#shouldhide').style.display = 'none';
-                }
+                // if (this.status == false) {
+                //     this.status = true;
+                //     shadow.querySelector('#shouldhide').style.display = 'block';
+                //     console.log()
+                // } else {
+                //     this.status = false;
+                //     shadow.querySelector('#shouldhide').style.display = 'none';
+                // }
+
+                this.shadowRoot.querySelector('#info2').style.display = "block";
             },
 
-            toggle: function() {
+            handin() {
+                // console.log("handin is working!");
+                let shadow = this.shadowRoot;
+                let setAdminEmail = shadow.querySelector('#Aemail').value;
+                console.log("adminEmail:", setAdminEmail);
+
+                let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let params = {
+                    "action": "searchData",
+                    "index": "change",
+                    "type": "_user",
+                    "body": {
+                        "query": {
+                            "match": {
+                                "email": setAdminEmail
+                            }
+                        }
+                    }
+                };
+                Polymer.postData(link, params).then(res => {
+                    if (res.code > 0) {
+                        if (res.resolve.length !== 0) {
+                            // console.log("User to be Admin:", res.resolve[0].id);
+                            let adminId = res.resolve[0].id;
+                            // let a = [adminId];
+                            let fanpageId = document.querySelector('fanpage').id;
+                            // console.log("fanpage:", fanpageId);
+
+                            // adminIdArray += ad
+
+                            //***GET ADMIN ARRAY***//
+                            let params1 = {
+                                "action": "getData",
+                                "index": "change",
+                                "type": "pages",
+                                "id": fanpageId
+                            };
+                            Polymer.postData(link, params1).then(res => {
+                                if (res.code > 0) {
+                                    let adminIdArray = res.resolve.adminId;
+                                    console.log("adminIdArray before:", adminIdArray);
+                                    adminIdArray.push(adminId);
+                                    console.log("adminIdArray after:", adminIdArray);
+
+                                    //***UPDATE ADMIN ARRAY***//
+                                    let params2 = {
+                                        "action": "addData",
+                                        "index": "change",
+                                        "type": "pages",
+                                        "id": fanpageId,
+                                        "body": {
+                                            "adminId": adminIdArray
+                                        }
+                                    };
+                                    Polymer.postData(link, params2).then(res => {
+                                        if (res.code > 0) {
+                                            alert("Added input user as Fanpage Admin");
+                                        } else {
+                                            alert("Err:cannot add input user as Fanpage Admin");
+                                        }
+                                    });
+
+                                } else {
+                                    alert("Err: no such Fanpage!")
+                                }
+                            });
+
+                        } else {
+                            alert("No such user!");
+                        }
+                    }
+                });
+            },
+
+            cancel() {
+                this.shadowRoot.querySelector('#info2').style.display = "none";
+
+            },
+
+            toggle: function () {
                 let loc = "?1";
 
                 let id = "";
