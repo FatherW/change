@@ -241,7 +241,7 @@
             }
 
             .svg {
-                background-image: url('http://change.dazzle.website/img/loading.svg');
+                background-image: url('./img/loading.svg');
                 position: relative;
                 background-size: 30px;
                 background-position: center center;
@@ -269,7 +269,7 @@
                 background-position: center center;
                 /* background-repeat: no-repeat; */
                 margin: 1%;
-                background-image: url(http://change.dazzle.website/img/channel_banner/1.jpg);
+                background-image: url(./img/channel_banner/1.jpg);
                 background-repeat: no-repeat;
 
             }
@@ -346,27 +346,27 @@
 </dom-module>
 
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-item-tag',
             properties: {
 
 
             },
-            created: function () {
+            created: function() {
                 console.log('User Tag');
                 this.timeStr = '剛剛';
             },
 
 
 
-            ready: function () {
+            ready: function() {
 
             },
             loadTags(tags) {
                 let shadow = this.shadowRoot;
                 if (tags) {
-                    if (tags.length == undefined || tags.length == null || tags.length == 0) { } else {
+                    if (tags.length == undefined || tags.length == null || tags.length == 0) {} else {
                         shadow.querySelector('#description').innerHTML = "";
                         // if (typeof tags === String) {
                         //     tags = [tags];
@@ -382,7 +382,7 @@
                                         'tags': item
                                     }
                                 });
-                                if (document.querySelector('change-itemspecial')||document.querySelector('change-user')) {
+                                if (document.querySelector('change-itemspecial') || document.querySelector('change-user')) {
                                     // alert("ccc")
                                     location.assign("./list-product.html?tag=" + encodeURIComponent(item));
                                 }

@@ -100,7 +100,7 @@
             </div>
             <div id="usericon">
                 <div id="a1">
-                    <img id="_changeicon" src="http://change.dazzle.website/img/user_profile.png">
+                    <img id="_changeicon" src="./img/user_profile.png">
                 </div>
                 <div id="a2">
                     <div class="name" id="owner">1234</div>
@@ -118,13 +118,13 @@
 </dom-module>
 
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-webcom',
             properties: {
 
             },
-            created: function () {
+            created: function() {
 
                 this.user = store.get('change-user') || null;
                 if (this.user) {
@@ -137,7 +137,7 @@
 
             },
             //for adding link to the user name connecting wth the databse
-            ready: function () {
+            ready: function() {
                 let that = this;
                 let loc = location.search;
                 let pid = "";
@@ -184,7 +184,7 @@
                     }
                 })
 
-                shadow.querySelector('#review').addEventListener("keypress", function (e) {
+                shadow.querySelector('#review').addEventListener("keypress", function(e) {
                     var key = e.which || e.keyCode || 0;
                     if (key === 13) {
                         that._postRequest();
@@ -207,7 +207,7 @@
 
             },
 
-            _postRequest: function () {
+            _postRequest: function() {
                 let shadow = this.shadowRoot;
                 let loc = location.search;
                 let pid = "";

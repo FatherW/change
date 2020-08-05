@@ -14,7 +14,7 @@
                 background-size: cover;
                 background-position: center center;
                 background-repeat: no-repeat;
-                background-image: url('http://change.dazzle.website/Website Design/profile page/img/profile banner/company-profile-banner.png');
+                background-image: url('./Website Design/profile page/img/profile banner/company-profile-banner.png');
             }
 
             #offer {
@@ -155,16 +155,16 @@
     </template>
 </dom-module>
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-user-banner',
             properties: {
 
             },
-            created: function () {
+            created: function() {
 
             },
-            ready: function () {
+            ready: function() {
                 let loc = location.search;
                 let id = "";
                 for (var i = 1; i < loc.length; i++) {
@@ -209,7 +209,7 @@
                                 shadow.querySelector('#buy').innerText = res.resolve[0]['history'].length;
                                 shadow.querySelector('#rate').innerText = res.resolve[0]['score'];
                                 if (res.resolve[0]['head'] == "") {
-                                    shadow.querySelector('#dp').src = "http://change.dazzle.website/img/head.svg";
+                                    shadow.querySelector('#dp').src = "./img/head.svg";
                                 } else {
                                     shadow.querySelector('#dp').src = res.resolve[0]['head'];
                                 }

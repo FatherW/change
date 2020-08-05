@@ -13,7 +13,7 @@
             }
 
             header {
-                background-image: url(http://change.dazzle.website/img/background/3.jpg);
+                background-image: url(./img/background/3.jpg);
                 padding-top: 30px;
             }
 
@@ -320,8 +320,8 @@
 
                     //SEND THE ABOVE MESSAGE TO POSTMAN
                     Polymer.postData(link, params).then(res => {
-                        console.log("CCC",params);
-                        console.log("BBB",res.resolve);
+                        console.log("CCC", params);
+                        console.log("BBB", res.resolve);
                         if (res.code > 0) {
                             let theid = res.resolve.id;
                             let userid = res.resolve.ownerId;

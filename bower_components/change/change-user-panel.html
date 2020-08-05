@@ -135,7 +135,7 @@
                 if (user != null) {
                     this.shadowRoot.querySelector('#register').innerHTML = ' / 登出';
                     if (user['head'] == "") {
-                        user['head'] = "http://change.dazzle.website/img/head.svg";
+                        user['head'] = "./img/head.svg";
                     }
                     this.shadowRoot.querySelector('#login').innerHTML = '<a href="/user.html?' + user['_id'] + '"><img src="' + user['head'] + '"></a>';
                 }

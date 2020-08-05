@@ -7,7 +7,7 @@
         <style>
             .orderContainter {
                 height: auto;
-                background-image: url(http://change.dazzle.website/img/background/3.jpg);
+                background-image: url(./img/background/3.jpg);
                 padding-bottom: 50px;
                 margin: 0 auto;
                 display: none;
@@ -60,7 +60,7 @@
 </dom-module>
 
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-orderlist-storage',
             properties: {
@@ -71,13 +71,13 @@
                     "type": String
                 }
             },
-            created: function () {
+            created: function() {
 
             },
 
 
 
-            ready: function () {
+            ready: function() {
                 console.log("inside orderlist-storage.html");
                 // html + ?xxxxxxxxxxxxxxxxx
                 let that = this;
@@ -110,18 +110,15 @@
                     "body": {
                         "query": {
                             "bool": {
-                                "must": [
-                                    {
-                                        "match": {
-                                            "productId": pid
-                                        }
-                                    },
-                                    {
-                                        "match": {
-                                            "buyerId": user['_id']
-                                        }
+                                "must": [{
+                                    "match": {
+                                        "productId": pid
                                     }
-                                ]
+                                }, {
+                                    "match": {
+                                        "buyerId": user['_id']
+                                    }
+                                }]
                             }
                         }
                     }
@@ -140,7 +137,7 @@
                     }
                 });
 
-                
+
                 //*****************GENERATE ORDERLIST*****************//
                 let params = {
                     "action": "searchData",
@@ -158,8 +155,7 @@
                                     "match": {
                                         "productId": pid
                                     }
-                                },
-                                {
+                                }, {
                                     "match": {
                                         "status": "已提交訂單"
                                     }
@@ -194,18 +190,15 @@
                                 "body": {
                                     "query": {
                                         "bool": {
-                                            "must": [
-                                                {
-                                                    "match": {
-                                                        "productId": pid
-                                                    }
-                                                },
-                                                {
-                                                    "match": {
-                                                        "buyerId": user['_id']
-                                                    }
+                                            "must": [{
+                                                "match": {
+                                                    "productId": pid
                                                 }
-                                            ]
+                                            }, {
+                                                "match": {
+                                                    "buyerId": user['_id']
+                                                }
+                                            }]
                                         }
                                     }
                                 }

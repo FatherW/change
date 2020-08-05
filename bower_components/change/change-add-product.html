@@ -16,6 +16,7 @@
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/dz-file-management/change-photo-stock.html">
 
 
+
 <link rel="stylesheet" href="">
 <link href="../dz-menu/css/style.html" rel="import" />
 <link rel="import" href="change-subcat.html">
@@ -104,7 +105,7 @@
             }
 
             header {
-                background-image: url(http://change.dazzle.website/img/background/3.jpg);
+                background-image: url(./img/background/3.jpg);
                 padding-top: 30px;
             }
 
@@ -193,7 +194,7 @@
             .outer {
                 margin: 0;
                 width: 100%;
-                background-image: url(http://change.dazzle.website/img/background/3.jpg);
+                background-image: url(./img/background/3.jpg);
                 padding-bottom: 50px;
             }
 
@@ -213,7 +214,7 @@
             .bigPic,
             #div0 {
                 height: 450px;
-                background-image: url(http://change.dazzle.website/img/nopic.png);
+                background-image: url(./img/nopic.png);
                 background-size: contain;
                 background-repeat: no-repeat;
                 background-position: center center;
@@ -234,7 +235,7 @@
             #div3,
             #div4 {
                 height: 95%;
-                background-image: url('http://change.dazzle.website/img/nopic.png');
+                background-image: url('./img/nopic.png');
                 background-size: 100%;
                 background-repeat: no-repeat;
                 background-position: center center;
@@ -366,7 +367,7 @@
             #location {
                 width: 30px;
                 height: 30px;
-                background-image: url(http://change.dazzle.website/img/icon/location.png);
+                background-image: url(./img/icon/location.png);
                 background-size: cover;
                 display: inline-block;
                 margin-top: 15px;
@@ -375,7 +376,7 @@
             #delivery {
                 width: 30px;
                 height: 30px;
-                background-image: url(http://change.dazzle.website/img/icon/delivery.png);
+                background-image: url(./img/icon/delivery.png);
                 background-size: cover;
                 display: inline-block;
                 margin-top: 15px;
@@ -384,7 +385,7 @@
 
             .bigsize {
                 font-size: 25px;
-                background-image: url(http://change.dazzle.website/img/);
+                background-image: url(./img/);
                 margin-top: 70px;
             }
 
@@ -410,7 +411,7 @@
             .outer {
                 margin: 0;
                 width: 100%;
-                background-image: url(http://change.dazzle.website/img/background/3.jpg);
+                background-image: url(./img/background/3.jpg);
                 padding-bottom: 50px;
             }
 
@@ -469,7 +470,7 @@
         </style>
 
         <div class="top-banner">
-            <img id="banner3" src="http://change.dazzle.website/img/WX20200513-110548@2x.png">
+            <img id="banner3" src="./img/WX20200513-110548@2x.png">
         </div>
 
         <header>
@@ -550,7 +551,7 @@
                     <div class="userinfo">
                         <div id="usericon">
                             <div id="a1">
-                                <img id="gand" src="http://change.dazzle.website/img/user_profile.png">
+                                <img id="gand" src="./img/user_profile.png">
                             </div>
                             <div id="a2">
                                 <div class="name" id="owner">1234</div>
@@ -683,7 +684,7 @@
                 // document.addEventListener('upload-success', e => {
                 //     let src = e.detail['Key'];
                 //     // this.pics.push(src);
-                //     // this.bigPic = "http://change.dazzle.website/"+src;
+                //     // this.bigPic = "./"+src;
                 //     this.curElm.setAttribute('src',src);
                 //     console.log('Detail', e, this.pics);
                 //     // this.reNewPic();
@@ -703,7 +704,7 @@
 
             reNewPic(src) {
                 let shadow = this.shadowRoot;
-                let noImage = 'http://change.dazzle.website/img/1200px-No_image_3x4.svg.png';
+                let noImage = './img/1200px-No_image_3x4.svg.png';
                 let i = 0;
                 this.pics.forEach(item => {
                     shadow.querySelector('#div' + i).style.backgroundImage = 'url(' + this.pics[i] || noImage + ')';
@@ -1175,7 +1176,7 @@
                     shadow.querySelector('#owner').innerHTML = json['username'];
 
                     if (json['head'] == "") {
-                        shadow.querySelector('#a1').innerHTML = '<img id="gand" src="http://change.dazzle.website/img/user_profile.png">';
+                        shadow.querySelector('#a1').innerHTML = '<img id="gand" src="./img/user_profile.png">';
                     } else {
                         shadow.querySelector('#a1').innerHTML = '<img id="gand" src=' + json['head'] + '>';
                     };

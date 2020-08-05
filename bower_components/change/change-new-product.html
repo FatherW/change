@@ -98,7 +98,7 @@
             .outer {
                 margin: 0;
                 width: 100%;
-                background-image: url(http://change.dazzle.website/img/background/3.jpg);
+                background-image: url(./img/background/3.jpg);
                 padding-bottom: 50px;
             }
 
@@ -118,7 +118,7 @@
             .bigPic,
             #div0 {
                 height: 450px;
-                background-image: url(http://change.dazzle.website/img/nopic.png);
+                background-image: url(./img/nopic.png);
                 background-size: contain;
                 background-repeat: no-repeat;
                 background-position: center center;
@@ -138,7 +138,7 @@
             #div3,
             #div4 {
                 height: 95%;
-                background-image: url("http://change.dazzle.website/img/nopic.png");
+                background-image: url("./img/nopic.png");
                 background-size: contain;
                 background-repeat: no-repeat;
                 background-position: center center;
@@ -156,7 +156,7 @@
             }
 
             /* #head {
-                background-image: url('http://change.dazzle.website/img/symbol/s5.png');
+                background-image: url('./img/symbol/s5.png');
                 width: 60px;
                 height: 60px;
                 background-size: cover;
@@ -194,7 +194,7 @@
             #location {
                 width: 30px;
                 height: 30px;
-                background-image: url('http://change.dazzle.website/img/icon/location.png');
+                background-image: url('./img/icon/location.png');
                 background-size: cover;
                 display: inline-block;
             }
@@ -207,7 +207,7 @@
             #delivery {
                 width: 30px;
                 height: 30px;
-                background-image: url('http://change.dazzle.website/img/icon/delivery.png');
+                background-image: url('./img/icon/delivery.png');
                 background-size: cover;
                 display: inline-block;
             }
@@ -259,7 +259,7 @@
 
             .bigsize {
                 font-size: 25px;
-                background-image: url('http://change.dazzle.website/img/');
+                background-image: url('./img/');
                 margin-top: 110px;
             }
 
@@ -410,7 +410,7 @@
         </style>
 
         <div class="top-banner">
-            <img id="banner3" src="http://change.dazzle.website/img/WX20200513-110548@2x.png">
+            <img id="banner3" src="./img/WX20200513-110548@2x.png">
         </div>
 
         <!-- <div>
@@ -467,7 +467,7 @@
                     <div class="userinfo">
                         <div id="usericon">
                             <div id="a1">
-                                <img src="http://change.dazzle.website/img/user_profile.png">
+                                <img src="./img/user_profile.png">
                             </div>
                             <div id="a2">
                                 <div class="name" id="owner"></div>
@@ -537,7 +537,7 @@
 </dom-module>
 
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-new-product',
             properties: {
@@ -545,7 +545,7 @@
                     "type": String
                 }
             },
-            created: function () {
+            created: function() {
                 console.log("Entered Created");
                 // call close pop-up in change-confirm
                 document.addEventListener('close-item-dialog', e => {
@@ -558,7 +558,7 @@
                     this.fileManager = new AwsPackage(user);
 
             },
-            ready: function () {
+            ready: function() {
                 console.log("Entered Ready");
                 let loc = location.search;
                 let pid = "";
@@ -680,7 +680,7 @@
 
                 });
             },
-            _findseller: function () {
+            _findseller: function() {
                 let user = store.get('change-user') || null;
                 loc = location.search;
                 let posit = 0;
