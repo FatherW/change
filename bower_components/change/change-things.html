@@ -1,18 +1,15 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-<link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="change-like.html">
-<link rel="import" href="change-confirm.html">
-<link rel="import" href="change-in-item.html">
-<link rel="import" href="change-user-tag.html">
-<link rel="import" href="change-item-tag.html">
-<link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
-<link rel="import" href="../dz-dazzle/css/medium-editor.html">
+<<<<<<< HEAD <<<<<<< HEAD=======< link rel="import" href="../polymer/polymer.html">
+    <link rel="import" href="change-like.html">
+    <link rel="import" href="change-confirm.html">
+    <link rel="import" href="change-in-item.html">
+    <link rel="import" href="change-user-tag.html">
+    <link rel="import" href="change-item-tag.html">
+    <link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
+    <link rel="import" href="../dz-dazzle/css/medium-editor.html">
 
 
-<dom-module id="change-things">
-    <template>
+    <dom-module id="change-things">
+        <template>
         <style include="medium-editor-styles"> </style>
         <style>
             #tagbutton {
@@ -426,162 +423,166 @@
         </div>
 
     </template>
-</dom-module>
-<script>
-    (function() {
-        Polymer({
-            is: 'change-things',
-            properties: {
-                like: {
-                    "type": Object
-                },
-                id: {
-                    "type": String
-                },
-                status: {
-                    "type": Boolean
-                },
-                checkhide: {
-                    "type": String
-                },
-                "pid": {
-                    "type": String
-                },
-                "res": {
-                    "type": String
-                }
-
-            },
-            created: function() {
-
-                document.addEventListener('close-item-dialog', e => {
-                    if (this.shadowRoot.querySelector('#tempqqq' + this.id).opened == true) {
-
-                        this.shadowRoot.querySelector('#tempqqq' + this.id).opened = false;
-                        // console.log("(Btn) close successfully");
-                    }
-                });
-
-                document.addEventListener('delete-item', e => {
-                    if (this.shadowRoot.querySelector('#tempqqq' + this.id).opened == true) {
-                        this.shadowRoot.querySelector('#tempqqq' + this.id).opened = false;
-                        this._reallydelete();
+    </dom-module>
+    <script>
+        (function() {
+            Polymer({
+                is: 'change-things',
+                properties: {
+                    like: {
+                        "type": Object
+                    },
+                    id: {
+                        "type": String
+                    },
+                    status: {
+                        "type": Boolean
+                    },
+                    checkhide: {
+                        "type": String
+                    },
+                    "pid": {
+                        "type": String
+                    },
+                    "res": {
+                        "type": String
                     }
 
-                });
+                },
+                created: function() {
 
-                this.dataManager = new DataPackage('product');
-                this.user = store.get('change-user') || null;
+                    document.addEventListener('close-item-dialog', e => {
+                        if (this.shadowRoot.querySelector('#tempqqq' + this.id).opened == true) {
 
-            },
-            _reallydelete: function() {
-                let that = this;
-                let shadow = this.shadowRoot;
-                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                let param = {
-                    "action": "deleteData",
-                    "index": "change",
-                    "type": "product",
-                    "id": this.id
-                };
-                Polymer.postData(Url, param).then(res => {
-                    if (res.code > 0) {
-                        // location.reload();
-                        shadow.querySelector('#deleteall').style.display = "none";
-                    } else {
-                        console.log("error in reallydelete");
-                    }
-                })
-            },
-
-            _deleteproduct: function() {
-                // console.log("inside deleteproduct");
-                let that = this;
-                let shadow = this.shadowRoot;
-                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                let dialog = shadow.querySelector('#tempqqq' + this.id);
-                Polymer.popup(dialog, "change", "change-confirm", "30%", "50%");
-            },
-            ready: function() {
-                this.id = this.getAttribute('id');
-                this.shadowRoot.querySelector('#tempqqq').id = 'tempqqq' + this.id;
-                let that = this;
-                var json;
-                let url = "/json/product-" + this.id + ".json?id="+new Date().getTime();
-                Polymer.getContent(url).then(str => {
-                    json = JSON.parse(str);
-                    that.userdata(json);
-                },err=>{
-                    that.dataManager.loadData(that.id).then(res=>{
-                        console.log('Cannot read product',res);
-                        that.userdata(res);
+                            this.shadowRoot.querySelector('#tempqqq' + this.id).opened = false;
+                            // console.log("(Btn) close successfully");
+                        }
                     });
-                });
 
-            },
+                    document.addEventListener('delete-item', e => {
+                        if (this.shadowRoot.querySelector('#tempqqq' + this.id).opened == true) {
+                            this.shadowRoot.querySelector('#tempqqq' + this.id).opened = false;
+                            this._reallydelete();
+                        }
 
-            userdata(all) {
-                var user = this.user;
-                let shadow = this.shadowRoot;
-                this.all = all;
-                this.id = this.getAttribute('id');
-                if (Array.isArray(all['pics']))
-                    this.pics = all['pics'][0];
-                else
-                    this.pics = all['pics'];
+                    });
 
-                if (!this.pics)
-                    this.pics = 'http://change.dazzle.website/img/nopic.png';
+                    this.dataManager = new DataPackage('product');
+                    this.user = store.get('change-user') || null;
 
-                this.productname = all['productname'];
-                this.price = "$" + all['price'];
-                if (all['isFree'] == true) {
-                    shadow.querySelector('#price').style.display = 'none';
-                };
-                this.ownerId = all['ownerId'];
-                this.detailUrl = '/edit-product.html?p' + all['id'] + 'u' + all['ownerId'];
-                this.userUrl = "/user.html?" + this.ownerId;
-                // console.log('Link', this.detailUrl, this.userUrl);
-                if (all['isNew'] == true)
-                    shadow.querySelector('.s_title_tags').innerHTML = "<polygon points=\"0,0 40,0 30,16 0,16\" style=\"fill:#ebbd35;stroke:#ebbd35;stroke-width:0\"></polygon><text x=\"3\" y=\"12\" fill=\"white\" id=\"isNew\" >全新</text>"
-                else
-                    shadow.querySelector('.s_title_tags').innerHTML = "<polygon points=\"0,0 40,0 30,16 0,16\" style=\"fill:#7cd3da;stroke:#7cd3da;stroke-width:0\"></polygon><text x=\"3\" y=\"12\" fill=\"white\" id=\"isNew\" >二手</text>"
-                if (all.replyArray) {
-                    if (all.replyArray.length > 0) {
-                        shadow.querySelector('#status1').id = "status";
+                },
+                _reallydelete: function() {
+                    let that = this;
+                    let shadow = this.shadowRoot;
+                    let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                    let param = {
+                        "action": "deleteData",
+                        "index": "change",
+                        "type": "product",
+                        "id": this.id
+                    };
+                    Polymer.postData(Url, param).then(res => {
+                        if (res.code > 0) {
+                            // location.reload();
+                            shadow.querySelector('#deleteall').style.display = "none";
+                        } else {
+                            console.log("error in reallydelete");
+                        }
+                    })
+                },
+
+                _deleteproduct: function() {
+                    // console.log("inside deleteproduct");
+                    let that = this;
+                    let shadow = this.shadowRoot;
+                    let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                    let dialog = shadow.querySelector('#tempqqq' + this.id);
+                    Polymer.popup(dialog, "change", "change-confirm", "30%", "50%");
+                },
+                ready: function() {
+                    this.id = this.getAttribute('id');
+                    this.shadowRoot.querySelector('#tempqqq').id = 'tempqqq' + this.id;
+                    let that = this;
+                    var json;
+                    let url = "/json/product-" + this.id + ".json?id=" + new Date().getTime();
+                    Polymer.getContent(url).then(str => {
+                        json = JSON.parse(str);
+                        that.userdata(json);
+                    }, err => {
+                        that.dataManager.loadData(that.id).then(res => {
+                            console.log('Cannot read product', res);
+                            that.userdata(res);
+                        });
+                    });
+
+                },
+
+                userdata(all) {
+                    var user = this.user;
+                    let shadow = this.shadowRoot;
+                    this.all = all;
+                    this.id = this.getAttribute('id');
+                    if (Array.isArray(all['pics']))
+                        this.pics = all['pics'][0];
+                    else
+                        this.pics = all['pics'];
+
+                    if (!this.pics)
+                        this.pics = 'http://change.dazzle.website/img/nopic.png';
+
+                    this.productname = all['productname'];
+                    this.price = "$" + all['price'];
+                    if (all['isFree'] == true) {
+                        shadow.querySelector('#price').style.display = 'none';
+                    };
+                    this.ownerId = all['ownerId'];
+                    this.detailUrl = '/edit-product.html?p' + all['id'] + 'u' + all['ownerId'];
+                    this.userUrl = "/user.html?" + this.ownerId;
+                    // console.log('Link', this.detailUrl, this.userUrl);
+                    if (all['isNew'] == true)
+                        shadow.querySelector('.s_title_tags').innerHTML = "<polygon points=\"0,0 40,0 30,16 0,16\" style=\"fill:#ebbd35;stroke:#ebbd35;stroke-width:0\"></polygon><text x=\"3\" y=\"12\" fill=\"white\" id=\"isNew\" >全新</text>"
+                    else
+                        shadow.querySelector('.s_title_tags').innerHTML = "<polygon points=\"0,0 40,0 30,16 0,16\" style=\"fill:#7cd3da;stroke:#7cd3da;stroke-width:0\"></polygon><text x=\"3\" y=\"12\" fill=\"white\" id=\"isNew\" >二手</text>"
+                    if (all.replyArray) {
+                        if (all.replyArray.length > 0) {
+                            shadow.querySelector('#status1').id = "status";
+                        }
                     }
-                }
-                this.shadowRoot.querySelector('change-user-tag').loadData(all['ownerId'], all['createTime']);
-                this.shadowRoot.querySelector('change-item-tag').loadTags(all['tags']);
-                if (user){
-                    let boolean = user['isAdmin'] || null;
-                    if (boolean || user['_id'] == all['ownerId']) {
-                        shadow.querySelector('.shouldhide').style.visibility = 'visible';
+                    if (all['isFanpage'] == true) {
+                        this.shadowRoot.querySelector('change-user-tag').loadPage(all['fanpage'], all['createTime']);
+
+                    } else {
+                        this.shadowRoot.querySelector('change-user-tag').loadData(all['ownerId'], all['createTime']);
+
+                    }
+                    this.shadowRoot.querySelector('change-item-tag').loadTags(all['tags']);
+                    if (user) {
+                        let boolean = user['isAdmin'] || null;
+                        if (boolean || user['_id'] == all['ownerId']) {
+                            shadow.querySelector('.shouldhide').style.visibility = 'visible';
+                        }
+
                     }
 
+
                 }
 
-
-            }
-
-        });
-    })();
-</script>
->>>>>>> parent of cf5527e... Merge branch 'master' of https://github.com/FatherW/change
-=======
-<<<<<<< HEAD
-<link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="change-like.html">
-<link rel="import" href="change-confirm.html">
-<link rel="import" href="change-in-item.html">
-<link rel="import" href="change-user-tag.html">
-<link rel="import" href="change-item-tag.html">
-<link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
-<link rel="import" href="../dz-dazzle/css/medium-editor.html">
+            });
+        })();
+    </script>
+    >>>>>>> parent of cf5527e... Merge branch 'master' of https://github.com/FatherW/change =======
+    <<<<<<< HEAD <link rel="import" href="../polymer/polymer.html">
+        <link rel="import" href="change-like.html">
+        <link rel="import" href="change-confirm.html">
+        <link rel="import" href="change-in-item.html">
+        <link rel="import" href="change-user-tag.html">
+        <link rel="import" href="change-item-tag.html">
+        <link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
+        <link rel="import" href="../dz-dazzle/css/medium-editor.html">
 
 
-<dom-module id="change-things">
-    <template>
+        <dom-module id="change-things">
+            <template>
         <style include="medium-editor-styles"> </style>
         <style>
             #tagbutton {
@@ -999,148 +1000,146 @@
         </div>
 
     </template>
-</dom-module>
-<script>
-    (function () {
-        Polymer({
-            is: 'change-things',
-            properties: {
-                like: {
-                    "type": Object
-                },
-                id: {
-                    "type": String
-                },
-                status: {
-                    "type": Boolean
-                },
-                checkhide: {
-                    "type": String
-                },
-                "pid": {
-                    "type": String
-                },
-                "res": {
-                    "type": String
-                }
+        </dom-module>
+        <script>
+            (function() {
+                Polymer({
+                    is: 'change-things',
+                    properties: {
+                        like: {
+                            "type": Object
+                        },
+                        id: {
+                            "type": String
+                        },
+                        status: {
+                            "type": Boolean
+                        },
+                        checkhide: {
+                            "type": String
+                        },
+                        "pid": {
+                            "type": String
+                        },
+                        "res": {
+                            "type": String
+                        }
 
-            },
-            created: function () {
+                    },
+                    created: function() {
 
-                document.addEventListener('close-item-dialog', e => {
-                    if (this.shadowRoot.querySelector('#tempqqq' + this.id).opened == true) {
+                        document.addEventListener('close-item-dialog', e => {
+                            if (this.shadowRoot.querySelector('#tempqqq' + this.id).opened == true) {
 
-                        this.shadowRoot.querySelector('#tempqqq' + this.id).opened = false;
-                        // console.log("(Btn) close successfully");
+                                this.shadowRoot.querySelector('#tempqqq' + this.id).opened = false;
+                                // console.log("(Btn) close successfully");
+                            }
+                        });
+
+                        document.addEventListener('delete-item', e => {
+                            if (this.shadowRoot.querySelector('#tempqqq' + this.id).opened == true) {
+                                this.shadowRoot.querySelector('#tempqqq' + this.id).opened = false;
+                                this._reallydelete();
+                            }
+
+                        });
+
+                        this.dataManager = new DataPackage('product');
+                        this.user = store.get('change-user') || null;
+
+                    },
+                    _reallydelete: function() {
+                        let that = this;
+                        let shadow = this.shadowRoot;
+                        let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                        let param = {
+                            "action": "deleteData",
+                            "index": "change",
+                            "type": "product",
+                            "id": this.id
+                        };
+                        Polymer.postData(Url, param).then(res => {
+                            if (res.code > 0) {
+                                // location.reload();
+                                // shadow.querySelector('#deleteall').style.display = "none";
+                                that.remove();
+                            } else {
+                                console.log("error in reallydelete");
+                            }
+                        })
+                    },
+
+                    _deleteproduct: function() {
+                        // console.log("inside deleteproduct");
+                        let that = this;
+                        let shadow = this.shadowRoot;
+                        let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                        let dialog = shadow.querySelector('#tempqqq' + this.id);
+                        Polymer.popup(dialog, "change", "change-confirm", "30%", "50%");
+                    },
+                    ready: function() {
+                        this.id = this.getAttribute('id');
+                        this.shadowRoot.querySelector('#tempqqq').id = 'tempqqq' + this.id;
+                        let that = this;
+                        var json;
+                        let url = "/json/product-" + this.id + ".json?id=" + new Date().getTime();
+                        Polymer.getContent(url).then(str => {
+                            json = JSON.parse(str);
+                            that.userdata(json);
+                        }, err => {
+                            that.dataManager.loadData(that.id).then(res => {
+                                console.log('Cannot read product', res);
+                                that.userdata(res);
+                            });
+                        });
+
+                    },
+
+                    userdata(all) {
+                        var user = this.user;
+                        let shadow = this.shadowRoot;
+                        this.all = all;
+                        this.id = this.getAttribute('id');
+                        if (Array.isArray(all['pics']))
+                            this.pics = all['pics'][0];
+                        else
+                            this.pics = all['pics'];
+
+                        if (!this.pics)
+                            this.pics = 'http://change.dazzle.website/img/nopic.png';
+
+                        this.productname = all['productname'];
+                        this.price = "$" + all['price'];
+                        if (all['isFree'] == true) {
+                            shadow.querySelector('#price').style.display = 'none';
+                        };
+                        this.ownerId = all['ownerId'];
+                        this.detailUrl = '/edit-product.html?p' + all['id'] + 'u' + all['ownerId'];
+                        this.userUrl = "/user.html?" + this.ownerId;
+                        // console.log('Link', this.detailUrl, this.userUrl);
+                        if (all['isNew'] == true)
+                            shadow.querySelector('.s_title_tags').innerHTML = "<polygon points=\"0,0 40,0 30,16 0,16\" style=\"fill:#ebbd35;stroke:#ebbd35;stroke-width:0\"></polygon><text x=\"3\" y=\"12\" fill=\"white\" id=\"isNew\" >全新</text>"
+                        else
+                            shadow.querySelector('.s_title_tags').innerHTML = "<polygon points=\"0,0 40,0 30,16 0,16\" style=\"fill:#7cd3da;stroke:#7cd3da;stroke-width:0\"></polygon><text x=\"3\" y=\"12\" fill=\"white\" id=\"isNew\" >二手</text>"
+                        if (all.replyArray) {
+                            if (all.replyArray.length > 0) {
+                                shadow.querySelector('#status1').id = "status";
+                            }
+                        }
+                        this.shadowRoot.querySelector('change-user-tag').loadData(all['ownerId'], all['createTime']);
+                        this.shadowRoot.querySelector('change-item-tag').loadTags(all['tags']);
+                        if (user) {
+                            let boolean = user['isAdmin'] || null;
+                            if (boolean || user['_id'] == all['ownerId']) {
+                                shadow.querySelector('.shouldhide').style.visibility = 'visible';
+                            }
+
+                        }
+
+
                     }
+
                 });
-
-                document.addEventListener('delete-item', e => {
-                    if (this.shadowRoot.querySelector('#tempqqq' + this.id).opened == true) {
-                        this.shadowRoot.querySelector('#tempqqq' + this.id).opened = false;
-                        this._reallydelete();
-                    }
-
-                });
-
-                this.dataManager = new DataPackage('product');
-                this.user = store.get('change-user') || null;
-
-            },
-            _reallydelete: function () {
-                let that = this;
-                let shadow = this.shadowRoot;
-                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                let param = {
-                    "action": "deleteData",
-                    "index": "change",
-                    "type": "product",
-                    "id": this.id
-                };
-                Polymer.postData(Url, param).then(res => {
-                    if (res.code > 0) {
-                        // location.reload();
-                        // shadow.querySelector('#deleteall').style.display = "none";
-                        that.remove();
-                    } else {
-                        console.log("error in reallydelete");
-                    }
-                })
-            },
-
-            _deleteproduct: function () {
-                // console.log("inside deleteproduct");
-                let that = this;
-                let shadow = this.shadowRoot;
-                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                let dialog = shadow.querySelector('#tempqqq' + this.id);
-                Polymer.popup(dialog, "change", "change-confirm", "30%", "50%");
-            },
-            ready: function () {
-                this.id = this.getAttribute('id');
-                this.shadowRoot.querySelector('#tempqqq').id = 'tempqqq' + this.id;
-                let that = this;
-                var json;
-                let url = "/json/product-" + this.id + ".json?id=" + new Date().getTime();
-                Polymer.getContent(url).then(str => {
-                    json = JSON.parse(str);
-                    that.userdata(json);
-                }, err => {
-                    that.dataManager.loadData(that.id).then(res => {
-                        console.log('Cannot read product', res);
-                        that.userdata(res);
-                    });
-                });
-
-            },
-
-            userdata(all) {
-                var user = this.user;
-                let shadow = this.shadowRoot;
-                this.all = all;
-                this.id = this.getAttribute('id');
-                if (Array.isArray(all['pics']))
-                    this.pics = all['pics'][0];
-                else
-                    this.pics = all['pics'];
-
-                if (!this.pics)
-                    this.pics = 'http://change.dazzle.website/img/nopic.png';
-
-                this.productname = all['productname'];
-                this.price = "$" + all['price'];
-                if (all['isFree'] == true) {
-                    shadow.querySelector('#price').style.display = 'none';
-                };
-                this.ownerId = all['ownerId'];
-                this.detailUrl = '/edit-product.html?p' + all['id'] + 'u' + all['ownerId'];
-                this.userUrl = "/user.html?" + this.ownerId;
-                // console.log('Link', this.detailUrl, this.userUrl);
-                if (all['isNew'] == true)
-                    shadow.querySelector('.s_title_tags').innerHTML = "<polygon points=\"0,0 40,0 30,16 0,16\" style=\"fill:#ebbd35;stroke:#ebbd35;stroke-width:0\"></polygon><text x=\"3\" y=\"12\" fill=\"white\" id=\"isNew\" >全新</text>"
-                else
-                    shadow.querySelector('.s_title_tags').innerHTML = "<polygon points=\"0,0 40,0 30,16 0,16\" style=\"fill:#7cd3da;stroke:#7cd3da;stroke-width:0\"></polygon><text x=\"3\" y=\"12\" fill=\"white\" id=\"isNew\" >二手</text>"
-                if (all.replyArray) {
-                    if (all.replyArray.length > 0) {
-                        shadow.querySelector('#status1').id = "status";
-                    }
-                }
-                this.shadowRoot.querySelector('change-user-tag').loadData(all['ownerId'], all['createTime']);
-                this.shadowRoot.querySelector('change-item-tag').loadTags(all['tags']);
-                if (user) {
-                    let boolean = user['isAdmin'] || null;
-                    if (boolean || user['_id'] == all['ownerId']) {
-                        shadow.querySelector('.shouldhide').style.visibility = 'visible';
-                    }
-
-                }
-
-
-            }
-
-        });
-    })();
-</script>
-=======
->>>>>>> 3f3c71f9c49684557370972d945a2681f46577bb
->>>>>>> 3aeecc81e84a249ea4864328c2c4bd429831f64f
+            })();
+        </script>
+        ======= >>>>>>> 3f3c71f9c49684557370972d945a2681f46577bb >>>>>>> 3aeecc81e84a249ea4864328c2c4bd429831f64f
