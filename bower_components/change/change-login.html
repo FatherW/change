@@ -150,10 +150,12 @@
                 </button>
 
                 <div id="fb-root"></div>
-                <div class="fb-login-button" data-size="large" data-button-type="login_with" data-layout="default" data-auto-logout-link="false" data-use-continue-as="false" data-width=""></div>
+                <div class="fb-login-button" data-size="large" data-button-type="login_with" data-layout="default"
+                    data-auto-logout-link="false" data-use-continue-as="false" data-width=""></div>
             </div>
             <div>
-                <button class="logoGoogle" on-click="google"><img src="img/icon/Google.png" class="logoGoogle">&nbspGoogle</button>
+                <button class="logoGoogle" on-click="google"><img src="img/icon/Google.png"
+                        class="logoGoogle">&nbspGoogle</button>
 
                 <!-- <button class="logoGoogle"><img src="img/icon/Google.png" class="logoGoogle">&nbspGoogle</button> -->
             </div>
@@ -186,17 +188,17 @@
 <script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
 <script async defer src="https://apis.google.com/js/platform.js"></script>
 <script>
-    (function() {
+    (function () {
         Polymer({
             is: 'change-login',
             properties: {
 
             },
-            created: function() {
+            created: function () {
 
                 this.userManager = new DataPackage('_user');
             },
-            _forgot: function() {
+            _forgot: function () {
                 console.log('forgot password');
                 let shadow = this.shadowRoot;
                 let that = this;
@@ -204,7 +206,7 @@
                 Polymer.closeDialog(dialog)
                 Polymer.popup(dialog, "change", "change-reset", "300px", "300px");
             },
-            ready: function() {
+            ready: function () {
 
 
 
@@ -221,7 +223,7 @@
 
                 this.status = false;
                 let that = this;
-                this.shadowRoot.querySelector('#changePassword1').addEventListener("keypress", function(e) {
+                this.shadowRoot.querySelector('#changePassword1').addEventListener("keypress", function (e) {
                     var key = e.which || e.keyCode || 0;
                     if (key === 13) {
                         that._login();
@@ -238,18 +240,17 @@
                 document.querySelector('.g-signin2 .abcRioButtonContentWrapper').click();
 
             },
-            log: function() {
+            log: function () {
                 console.log("good");
                 let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 let that = this;
-                FB.login(function(response) {
+                FB.login(function (response) {
                     console.log("response", response);
                     if (response.authResponse) {
                         console.log('Welcome!  Fetching your information.... ');
-<<<<<<< Updated upstream
                         FB.api('/me', {
                             fields: 'name, email'
-                        }, function(response) {
+                        }, function (response) {
                             console.log('Good to see you, ' + JSON.stringify(response) + '.' + response.email);
                             let email = response.email;
                             let name = response.name;
@@ -302,10 +303,6 @@
                             //     }
 
                             // });
-=======
-                        FB.api('/me', function (response) {
-                            console.log('Good to see you, ' + response + '.');
->>>>>>> Stashed changes
                         });
                     } else {
                         console.log('User cancelled login or did not fully authorize.');
@@ -314,13 +311,13 @@
                     scope: 'email'
                 });
             },
-            checkLoginState: function() { // Called when a person is finished with the Login Button.
-                FB.getLoginStatus(function(response) { // See the onlogin handler
+            checkLoginState: function () { // Called when a person is finished with the Login Button.
+                FB.getLoginStatus(function (response) { // See the onlogin handler
                     statusChangeCallback(response);
                 });
             },
 
-            statusChangeCallback: function(response) { // Called with the results from FB.getLoginStatus().
+            statusChangeCallback: function (response) { // Called with the results from FB.getLoginStatus().
                 console.log('statusChangeCallback');
                 console.log(response); // The current login status of the person.
                 if (response.status === 'connected') { // Logged into your webpage and Facebook.
@@ -330,9 +327,9 @@
                 }
             },
 
-            testAPI: function() { // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
+            testAPI: function () { // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
                 console.log('Welcome!  Fetching your information.... ');
-                FB.api('/me', function(response) {
+                FB.api('/me', function (response) {
                     console.log('Successful login for: ' + response);
                 });
             },
@@ -366,7 +363,7 @@
                 });
             },
 
-            _register: function() {
+            _register: function () {
                 console.log('Register');
                 let shadow = this.shadowRoot;
                 let that = this;
@@ -374,7 +371,7 @@
                 Polymer.popup(dialog, "change", "change-register", "40%", "90%");
             },
 
-            _login: function() {
+            _login: function () {
                 let shadow = this.shadowRoot;
                 let that = this;
                 let uid = shadow.querySelector('#changeEmail1').value;
@@ -401,7 +398,16 @@
                                     let user = res.resolve;
                                     if (user.token == "" || user.token == null || user.token == undefined) {
                                         store.set('change-user', user);
-                                        location.reload();
+                                        let shadow = this.shadowRoot;
+                                        let that = this;
+                                        let currentUser = store.get('change-user') || null;
+                                        console.log("Current USER", currentUser);
+                                        this.fileManager = new AwsPackage(user);
+                                        console.log("new AwsPackage(user):", this.fileManager);
+                                        
+                                        // location.reload();
+
+
                                     } else if (user.token == "1") {
                                         alert("你已經被取消了用戶資格");
                                     } else {
