@@ -508,7 +508,7 @@
                 this.shadowRoot.querySelector('#tempqqq').id = 'tempqqq' + this.id;
                 let that = this;
                 var json;
-                let url = "https://d25k6mzsu7mq5l.cloudfront.net/user-data/change/json/product-" + this.id + ".json?id=" + new Date().getTime();
+                let url = "/user-data/change/json/product-" + this.id + ".json?id=" + new Date().getTime();
                 Polymer.getContent(url).then(str => {
                     json = JSON.parse(str);
                     that.userdata(json);
