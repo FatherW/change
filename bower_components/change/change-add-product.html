@@ -791,6 +791,7 @@
                             this.REPLYARRAY = res.resolve[0]['replyArray'];
 
                             shadow.querySelector('span').textContent = res.resolve[0]['categories'];
+                            shadow.querySelector('#fanPage').value = res.resolve[0]['fanpage'];
                             // shadow.querySelector('#public').checked = res.resolve[0]['isPublic'];
                             shadow.querySelector('#free').checked = res.resolve[0]['isFree'];
                             shadow.querySelector('#sContact').value = res.resolve[0]['sellerMsg'];
@@ -1147,7 +1148,7 @@
                     }
                 })
 
-                //SET DEFAULT LOCATION//
+                //SET DEFAULT LOCATION, USERNAME, USERHEAD//
                 let defaultLocation = {
                     "action": "getData",
                     "index": "change",
@@ -1159,7 +1160,8 @@
                     if (res.code > 0) {
                         // console.log("default", res.resolve['area']);
                         shadow.querySelector('#vs2').value = res.resolve['area'];
-
+                        shadow.querySelector('#owner').innerHTML = res.resolve['username'];
+                        shadow.querySelector('#gand').scr = res.resolve['head'];
                     } else {
                         console.log("get default FAIL!");
                     }
@@ -1168,22 +1170,22 @@
 
                 //*********************BUG******************//
                 //**LOAD DATA FROM JSON**//
-                let userurl = "/json/user-" + usertokenId + ".json";
-                Polymer.getContent(userurl).then(str => {
-                    json = JSON.parse(str);
-                    // console.log("BBB1", json);
-                    //USER INFO COLUM
-                    shadow.querySelector('#owner').innerHTML = json['username'];
-                    console.log("ffffff",json['username']);
+                // let userurl = "/json/user-" + usertokenId + ".json";
+                // Polymer.getContent(userurl).then(str => {
+                //     json = JSON.parse(str);
+                //     // console.log("BBB1", json);
+                //     //USER INFO COLUM
+                //     shadow.querySelector('#owner').innerHTML = json['username'];
+                //     console.log("ffffff",json['username']);
 
-                    if (json['head'] == "") {
-                        shadow.querySelector('#a1').innerHTML = '<img id="gand" src="./img/user_profile.png">';
-                    } else {
-                        shadow.querySelector('#a1').innerHTML = '<img id="gand" src=' + json['head'] + '>';
-                    };
-                    //check the username
-                    // console.log("SEE", shadow.querySelector('#gand').src);
-                });
+                //     if (json['head'] == "") {
+                //         shadow.querySelector('#a1').innerHTML = '<img id="gand" src="./img/user_profile.png">';
+                //     } else {
+                //         shadow.querySelector('#a1').innerHTML = '<img id="gand" src=' + json['head'] + '>';
+                //     };
+                //     //check the username
+                //     // console.log("SEE", shadow.querySelector('#gand').src);
+                // });
 
                 //READY ENDS HERE//
             },
@@ -1218,15 +1220,15 @@
 
                     //FIXING HERE//
                     //Get value from select box fanpage
-                    // var fanpage = shadow.querySelector('#fanPage').value;
-                    // console.log("fanpage", fanPage);
-                    // let isFanpage = false;
-                    // if (fanpage == "沒有專頁可以選擇" || null) {
+                    var fanpage = shadow.querySelector('#fanPage').value;
+                    console.log("fanpage", fanpage);
+                    let isFanpage = false;
+                    if (fanpage == "沒有專頁可以選擇" || null) {
 
-                    // } else {
-                    //     isFanpage = true;
+                    } else {
+                        isFanpage = true;
 
-                    // }
+                    }
 
 
                     //Get value from isFree button
@@ -1321,8 +1323,8 @@
                             "isNew": status,
                             "ownerId": user['_id'],
                             "pics": this.pics,
-                            // "isFanpage": isFanpage,
-                            // "fanpage": fanpage
+                            "isFanpage": isFanpage,
+                            "fanpage": fanpage
                         };
                         // console.log("BBB", params);
                         let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
@@ -1381,6 +1383,8 @@
                             "isFree": free,
                             "isNew": status,
                             "pics": this.pics,
+                            "isFanpage": isFanpage,
+                            "fanpage": fanpage,
                             "createTime": this.CREATETIME,
                             "like": this.LIKE,
                             "ownerId": this.OWNERID,

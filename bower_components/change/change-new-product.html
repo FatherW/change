@@ -612,7 +612,7 @@
                         //get and pass tag data
                         let itemtag = "";
                         for (count = 0; count < res.resolve['tags'].length; count++) {
-                            itemtag += '<button id=\"tagbutton\">' + '<a href="list-product.html?tag=' + res.resolve['tags'][count] + '">' + res.resolve['tags'][count] + "</a></button> &nbsp;"
+                            itemtag += '<button id=\"tagbutton\">' + '<a href="list-product.html?tag=' + encodeURIComponent(res.resolve['tags'][count]) + '">' + res.resolve['tags'][count] + "</a></button>";
                         }
                         shadow.querySelector('#t').innerHTML = itemtag;
 
