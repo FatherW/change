@@ -1,8 +1,8 @@
 <link rel="import" href="../polymer/polymer.html" />
-<link rel="import" href="../dz-dazzle/dz-wrapper.html" />
 <script src="https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/js/store-2.0.12.min.js"></script>
 <script src="https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/js/aws-sdk-2.83.0.min.js"></script>
 <link rel="stylesheet" href="https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/css/font-awesome-4.7.0.min.css" />
+<link rel="import" href="dz-wrapper.html" />
 <dom-module id="dz-loader"> </dom-module>
 
 <script>
@@ -287,7 +287,17 @@
                 });
             });
         }
-        saveMyImage(file, tags = "") {
+
+        changeFilename(name){
+            let ext;
+            if (key.indexOf(".") > -1) ext = key.substr(key.lastIndexOf(".") + 1);
+                else ext = "";
+
+            let filename = Polymer.uid + '-'+ new Date().getTime() + '.'+ext;
+            return filename;
+
+        }
+        saveMyImage(name,file, tags = "") {
             console.log(file);
             let AWS = this.AWS;
             // console.log(this.user);
@@ -299,7 +309,7 @@
 
             // const oldFilename = encodeURIComponent(file.name);
             // const fileExtansion = oldFilename.split('.').pop();
-            const oldFilename = file.name;
+            const oldFilename = name;
             const fileExtansion = "jpg";
             const newId = "id" + new Date().getTime();
             const newFilename = newId + ".jpg";
@@ -1207,7 +1217,10 @@
 
 
     Polymer.dzInit = function() {
+        // this.loadComponent("dz-dazzle", "dz-wrapper");
+
         let editMode = store.get("editMode") || "normal";
+
         let thisPage =
             decodeURIComponent(location.pathname).substring(
                 location.pathname.indexOf("/") + 1
@@ -1254,6 +1267,7 @@
                 "<dz-wrapper></dz-wrapper><dz-dazzle></dz-dazzle>";
             this.loadComponent("dz-dazzle", "dz-dazzle");
         }
+        Polymer.pageLoader(document.querySelector('dz-wrapper'));
     };
 
     Polymer.getMasterContent = function(type) {
