@@ -1,0 +1,9 @@
+ <div id="ad1" class="ad">
+                        <img src="img/ad.jpeg" alt="Alternate Text" />
+                    </div>
+                    <div id="ad2" class="ad">
+                        <img src="img/ad.jpeg" alt="Alternate Text" />
+                    </div>
+                    <div id="ad3" class="ad">
+                        <img src="img/ad.jpeg" alt="Alternate Text" />
+                    </div>

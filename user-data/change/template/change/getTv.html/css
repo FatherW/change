@@ -1,0 +1,9 @@
+.big-banner {
+    margin-left: 4%;
+    margin-right: 4%;
+    background: #FFE9BF;
+    background-image: url(http://change.dazzle.website/img/WX20200513-112437@2x.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 292px;
+}

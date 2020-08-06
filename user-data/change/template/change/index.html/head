@@ -1,0 +1,16 @@
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <title>Home - Change</title>
+    <link rel="import" href="bower_components/change/change-edit-product.html">
+    <link rel="import" href="bower_components/change/change-slidelist.html">
+    <link rel="import" href="bower_components/change/change-in-item.html">
+    <link rel="import" href="bower_components/change/change-user-panel.html?sdfsd">
+    <link rel="import" href="bower_components/change/change-header.html">
+    <link rel="import" href="bower_components/change/change-header-nav.html">
+    <link rel="import" href="bower_components/change/change-header2.html">
+    <link rel="import" href="/bower_components/change/change-footer.html">
+    <link rel="import" href="/bower_components/change/change-announcement.html">
+    <link rel="stylesheet" href="css/style.css">

@@ -1,0 +1,26 @@
+  <!-- Body -->
+    <div id="wrapper">
+        
+<dz-block block="_header"><change-header></change-header></dz-block>
+<change-navbar></change-navbar>
+
+
+        <img id="banner3" src="img/WX20200513-110548@2x.png">
+        
+            
+            <div class="shop_panel">
+                     <change-shop>
+                        <div class="clear"></div>
+                        <div class="more"></div>
+                    </change-shop>
+
+            </div>
+
+        <div>
+<change-footer></change-footer>
+            <change-announcement>FIXED ANNOUNCEMENT</change-announcement>
+        </div>
+
+    </div>
+    <button class="googleloginname" style="display:none;">google login</button>
+<div class="g-signin2" data-onsuccess="onSignIn" style="display:none;">imgoogle</div>

@@ -1,0 +1,69 @@
+<change-header></change-header>
+    <style>
+        .container {
+            width: 90%;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: auto auto auto;
+            grid-auto-rows: 50px;
+            grid-gap: 30px 30px;
+            padding: 2%;
+            margin-left: 6%;
+        }
+        
+        .item-1 {
+            grid-column: 1 / 3;
+            grid-row: 1 / 4;
+        }
+        
+        .item-2 {
+            width: 100%;
+            background-color: aliceblue;
+            background-position: center center;
+        }
+        . container[data-ratio="16:9"] {
+            padding-top: 56.25%;
+        }
+        .item-2[data-ratio="16:9"] {
+            padding-top: 56.25%;
+        }
+        
+        #ad_1 {
+            grid-column: 3 / 4;
+            grid-row: 1 / 2;
+            background-image: url("http://change.dazzle.website/img/item/1.jpg");
+        }
+        
+        #ad_2 {
+            grid-column: 3 / 4;
+            grid-row: 2 / 3;
+            background-image: url("http://change.dazzle.website/img/item/2.jpg");
+        }
+        
+        #ad_3 {
+            grid-column: 3 / 4;
+            grid-row: 3 / 4;
+            background-image: url("http://change.dazzle.website/img/item/3.jpg");
+        }
+
+        .shop_panel2 {
+            padding: 0px;
+            padding-bottom: 30px;
+            padding-left: 3%;
+            padding-right: 3%;
+            width: 94%;
+            background-color: #FFFBF2;
+        }
+    </style>
+
+<change-pages-banner></change-pages-banner>
+<div id="padding" style="
+    background-color: #FFFBF2;
+">
+<change-page-info></change-page-info>
+<div class="shop_panel2"><change-shop></change-shop></div>
+
+</div>
+<fanpage id="1596432759632" ownerId: "74" name="Fruit" website="fruit" district="中西區" email="fruit@gmail.com" tags="fruit"></fanpage>
+<div class="container" data-ratio="16:9" id="1" name="xyz二手名牌特價手袋"></div>
+<change-footer></change-footer><button class="googleloginname" style="display:none;">writegoogle</button><div class="g-signin2" data-onsuccess="onSignIn" style="display:none;">imgoogle</div>

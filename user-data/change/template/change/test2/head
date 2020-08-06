@@ -1,0 +1,5 @@
+<link rel="import" href="bower_components/change/change-footer.html">
+<link rel="import" href="bower_components/change/change-pages-banner.html">
+<link rel="import" href="bower_components/change/change-page-info.html">
+<link rel="import" href="bower_components/change/change-shop.html">
+<link rel="stylesheet" href="css/style3.css">

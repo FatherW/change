@@ -1,0 +1,38 @@
+
+        .container {
+            width: 95%;
+            display: grid;
+            grid-template-columns: 3fr 3fr 3fr;
+            grid-template-rows: 2fr 2fr 2fr;
+            grid-auto-rows: 50px;
+            grid-gap: 30px 30px;
+            padding: 2%;
+        }
+        
+        .item-1 {
+            grid-column: 1 / 3;
+            grid-row: 1 / 4;
+        }
+        
+        .item-2 {
+            height: 0;
+            width: 100%;
+            background-color: aliceblue;
+            background-position: center center;
+        }
+        
+        .item-2[data-ratio="16:9"] {
+            padding-top: 56.25%;
+        }
+        
+        #ad_1 {
+            background-image: url("http://change.dazzle.website/img/item/1.jpg");
+        }
+        
+        #ad_2 {
+            background-image: url("http://change.dazzle.website/img/item/2.jpg");
+        }
+        
+        #ad_3 {
+            background-image: url("http://change.dazzle.website/img/item/3.jpg");
+        }
