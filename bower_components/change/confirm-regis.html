@@ -166,14 +166,15 @@
                 //     console.log("fail user id token", currentuser);
                 //     console.log("fail user id", userid);
                 // };
-                let header = document.querySelector('change-header');
-                let tophead = header.shadowRoot.querySelector('change-header-top');
-                let userpanel = tophead.shadowRoot.querySelector('change-user-panel');
-                let shadow = userpanel.shadowRoot;
-                shadow.querySelector('#register').style.display = "none";
-                shadow.querySelector('#login').style.display = "none";
-                // document.querySelector('change-header').shadowRoot.querySelector('header').shadowRoot.querySelector('change-header-top').shadowRoot.querySelector('change-user-panel')
                 
+                // let header = document.querySelector('change-header');
+                // let tophead = header.shadowRoot.querySelector('change-header-top');
+                // let userpanel = tophead.shadowRoot.querySelector('change-user-panel');
+                // let shadow = userpanel.shadowRoot;
+                // shadow.querySelector('#register').innerHTML = ' / 登出';
+                // shadow.querySelector('#login').innerHTML = '<a href="/user.html?' + user['_id'] + '"><img src="' + user['head'] + '"></a>';
+                // document.querySelector('change-header').shadowRoot.querySelector('header').shadowRoot.querySelector('change-header-top').shadowRoot.querySelector('change-user-panel')
+
                 let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 let getUparams = {
                     "action": "getData",
@@ -187,8 +188,8 @@
                         console.log("getVerified Udata Success!")
                         let userJson = res.resolve;
                         console.log("userJson:", userJson);
-                
-                        
+
+
                         this.fileManager.saveFile('json/user-' + userJson.id + '.json', JSON.stringify(userJson));
 
                     } else {

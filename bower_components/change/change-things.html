@@ -511,6 +511,8 @@
                 let url = "/json/product-" + this.id + ".json?id=" + new Date().getTime();
                 Polymer.getContent(url).then(str => {
                     json = JSON.parse(str);
+
+                    // console.log("zzzzzz1", json);
                     that.userdata(json);
                 }, err => {
                     that.dataManager.loadData(that.id).then(res => {
@@ -554,6 +556,7 @@
                 }
                 if (all['isFanpage'] == true) {
                     this.shadowRoot.querySelector('change-user-tag').loadPage(all['fanpage'], all['createTime']);
+                    this.shadowRoot.querySelector('#deleteall').style.background = "pink";
 
                 } else {
                     this.shadowRoot.querySelector('change-user-tag').loadData(all['ownerId'], all['createTime']);
