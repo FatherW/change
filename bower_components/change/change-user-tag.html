@@ -385,7 +385,7 @@
             loadData(id, time) {
                 let that = this;
                 this.id = id;
-                let url = "/user-data/change/json/user-" + this.id + ".json";
+                let url = "/json/user-" + this.id + ".json";
                 this.timeStr = this.loadUpdate(time);
                 Polymer.getContent(url).then(str => {
                     // let str = httpRequest.responseText;
