@@ -246,7 +246,6 @@
                     console.log("response", response);
                     if (response.authResponse) {
                         console.log('Welcome!  Fetching your information.... ');
-<<<<<<< Updated upstream
                         FB.api('/me', {
                             fields: 'name, email'
                         }, function(response) {
@@ -302,10 +301,6 @@
                             //     }
 
                             // });
-=======
-                        FB.api('/me', function (response) {
-                            console.log('Good to see you, ' + response + '.');
->>>>>>> Stashed changes
                         });
                     } else {
                         console.log('User cancelled login or did not fully authorize.');
