@@ -205,7 +205,7 @@
                             <vaadin-email-field id='email'>
                                 </vaadin-text-field>
                         </span></p>
-                    <p class="inf">標籤: <span id="contact">
+                    <p class="inf hide">標籤: <span id="contact">
                             <vaadin-text-field id='tag'></vaadin-text-field>
                         </span></p>
                     <p class="inf">網址: <span class="infotext" id="website">
@@ -245,6 +245,7 @@
                 let shadow = this.shadowRoot;
                 let that = this;
 
+                shadow.querySelector('.hide').style.display = "none";
                 let usercookies = store.get('change-user');
                 let userID = usercookies['id'];
 
@@ -441,7 +442,7 @@
                     "website": shadow.querySelector('#website2').value,
                     "district": shadow.querySelector('#area1').value,
                     "email": shadow.querySelector('#email').value,
-                    "tags": shadow.querySelector('#tag').value
+                    "tags": pagename
                 };
                 console.log("yyyyyyyy", JSON.stringify(param));
                 Polymer.postData(link, param).then(res => {

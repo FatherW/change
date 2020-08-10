@@ -351,7 +351,7 @@
         <div id="usericon">
             <a id="redu" style="display: flex;">
                 <div id="a1">
-                    <img id="_changeicon" src$="{{head}}">
+                    <img id="_changeicon" src$="{{head}}"> 
                 </div>
                 <div id="a2">
                     <div class="name" id="owner">{{username}}</div>
@@ -384,12 +384,14 @@
             },
             loadData(id, time) {
                 let that = this;
+                let s = this.ShadowRoot;
                 this.id = id;
                 let url = "/json/user-" + this.id + ".json";
                 this.timeStr = this.loadUpdate(time);
                 Polymer.getContent(url).then(str => {
                     // let str = httpRequest.responseText;
                     json = JSON.parse(str);
+                    // console.log("kkkkk", json);
                     that.username = json.username;
                     that.head = json.head;
 
@@ -397,9 +399,10 @@
 
                 // console.log('User Tag',id);
             },
-            loadPage(name, time) {
+            loadPage(name, time, head) {
                 this.username = name;
                 this.timeStr = this.loadUpdate(time);
+                this.head = head;
 
             },
             loadUpdate(time) {

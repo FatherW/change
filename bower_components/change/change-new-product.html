@@ -13,6 +13,7 @@
 <link rel="import" href="../change/change-buy.html">
 <link rel="import" href="../change/change-webcom.html">
 <link rel="import" href="change-edit-bar.html">
+<link rel="import" href="change-user-tag.html">
 
 
 
@@ -464,16 +465,20 @@
                             <span id="pn" class="store"></span>
                         </div>
                     </div>
-                    <div class="userinfo">
-                        <div id="usericon">
-                            <div id="a1">
-                                <img src="./img/user_profile.png">
-                            </div>
-                            <div id="a2">
-                                <div class="name" id="owner"></div>
+
+                    <a href$="{{link}}">
+                        <div class="userinfo">
+                            <div id="usericon">
+                                <div id="a1">
+                                    <img class="head" src="./img/user_profile.png">
+                                </div>
+                                <div id="a2">
+                                    <div class="name" id="owner"></div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
+
 
                     <div class="dollar" id="aaa"></div>
 
@@ -537,7 +542,7 @@
 </dom-module>
 
 <script>
-    (function() {
+    (function () {
         Polymer({
             is: 'change-new-product',
             properties: {
@@ -545,7 +550,7 @@
                     "type": String
                 }
             },
-            created: function() {
+            created: function () {
                 console.log("Entered Created");
                 // call close pop-up in change-confirm
                 document.addEventListener('close-item-dialog', e => {
@@ -558,7 +563,7 @@
                     this.fileManager = new AwsPackage(user);
 
             },
-            ready: function() {
+            ready: function () {
                 console.log("Entered Ready");
                 let loc = location.search;
                 let pid = "";
@@ -628,25 +633,52 @@
                         let deliveryDesc = res.resolve['deliveryDesc'];
                         shadow.querySelector('.deliveryDesc').innerHTML = deliveryDesc;
 
+                        //DETERMIN WHETHER IT IS UPLOADED BY FANPAGE OR USERS & GET BACK REQUIRED NAME, HEAD AND LINK
                         let o = res.resolve['ownerId'];
-                        let p = {
-                            "action": "searchData",
-                            "index": "change",
-                            "type": "_user",
-                            "body": {
-                                "query": {
-                                    "match": {
-                                        "_id": o
+                        let isFanpage = res.resolve['isFanpage'];
+                        if (isFanpage == true) {
+                            shadow.querySelector('#owner').innerHTML = res.resolve['fanpage'];
+                            let parampage = {
+                                "action": "searchData",
+                                "index": "change",
+                                "type": "pages",
+                                "body": {
+                                    "query": {
+                                        "match": {
+                                            "name": res.resolve['fanpage']
+                                        }
                                     }
                                 }
-                            }
-                        }
-                        Polymer.postData(Url, p).then(res => {
-                            if (res.code > 0) {
-                                let un = res.resolve[0]['username'];
-                                shadow.querySelector('#owner').innerHTML = un;
-                            }
-                        })
+                            };
+                            Polymer.postData(Url, parampage).then(res => {
+                                shadow.querySelector('.head').src = res.resolve[0]['head'];
+                                this.link = "/" + res.resolve[0]['website'];
+                            });
+                        } else {
+                            let p = {
+                                "action": "searchData",
+                                "index": "change",
+                                "type": "_user",
+                                "body": {
+                                    "query": {
+                                        "match": {
+                                            "_id": o
+                                        }
+                                    }
+                                }
+                            };
+                            Polymer.postData(Url, p).then(res => {
+                                if (res.code > 0) {
+                                    let un = res.resolve[0]['username'];
+                                    shadow.querySelector('#owner').innerHTML = un;
+                                    shadow.querySelector('.head').src = res.resolve[0]['head'];
+                                    this.link = "/user.html?" + res.resolve[0]['id'];
+                                }
+                            });
+
+                        };
+
+
 
                         // let f = res.resolve['isNew'];
                         // if (f == true) {
@@ -680,7 +712,7 @@
 
                 });
             },
-            _findseller: function() {
+            _findseller: function () {
                 let user = store.get('change-user') || null;
                 loc = location.search;
                 let posit = 0;

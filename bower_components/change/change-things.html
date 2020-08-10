@@ -555,8 +555,29 @@
                     }
                 }
                 if (all['isFanpage'] == true) {
-                    this.shadowRoot.querySelector('change-user-tag').loadPage(all['fanpage'], all['createTime']);
-                    this.shadowRoot.querySelector('#deleteall').style.background = "pink";
+                    let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                    let params = {
+                        "action": "searchData",
+                        "index": "change",
+                        "type": "pages",
+                        "body": {
+                            "query": {
+                                "match": {
+                                    "name": all['fanpage']
+                                }
+                            }
+                        }
+                    };
+                    Polymer.postData(link, params).then(res => {
+                        let name = res.resolve[0]['name'];
+                        let website = res.resolve[0]['website'];
+                        let head = res.resolve[0]['head'];
+
+                        // console.log("omg", head);
+                        this.userUrl = "/" + website;
+                        this.shadowRoot.querySelector('change-user-tag').loadPage(name, all['createTime'], head);
+                        this.shadowRoot.querySelector('#deleteall').style.background = "pink";
+                    });
 
                 } else {
                     this.shadowRoot.querySelector('change-user-tag').loadData(all['ownerId'], all['createTime']);

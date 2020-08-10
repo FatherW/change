@@ -1220,17 +1220,17 @@
                     var categories = shadow.querySelector('span').textContent;
                     console.log("categories", categories);
 
-                    //FIXING HERE//
                     //Get value from select box fanpage
                     var fanpage = shadow.querySelector('#fanPage').value;
                     console.log("fanpage", fanpage);
                     let isFanpage = false;
-                    if (fanpage == "沒有專頁可以選擇" || null) {
-
+                    if (shadow.querySelector('#fanPage').value == "") {
+                        //isFanpage = false//
                     } else {
                         isFanpage = true;
 
                     };
+                    console.log("isFanpage boolean", isFanpage);
 
                     //Get value from isFree button
                     let free = shadow.querySelector('#free').checked;
@@ -1281,6 +1281,9 @@
                     //Get value from input tags
                     //**tags is refering to the arrayValue**//
                     let tags = shadow.querySelector('#myTags').tags;
+                    if(fanpage){
+                        tags.push(fanpage);
+                    } 
                     console.log("Tags:", tags);
 
                     //Get value from deliveryDescription input box
@@ -1333,6 +1336,7 @@
                     if (loc == "") {
                         //******ADD PRODUCT MODE************//
 
+                        console.log("omg", tags);
                         let params = {
                             "action": "addproduct",
                             "categories": categories,
@@ -1378,7 +1382,7 @@
                                         this.dataManager.loadData(newproductid).then(res => {
                                             console.log("Working", res);
                                             this.fileManager.saveFile('json/product-' + newproductid + '.json', JSON.stringify(res)).then(res => {
-                                                // location.replace("./edit-product.html?p" + newproductid + "u" + user['_id']);
+                                                location.replace("./edit-product.html?p" + newproductid + "u" + user['_id']);
                                             });
                                         })
                                     } else {
