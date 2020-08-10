@@ -128,10 +128,10 @@
             }
         </style>
 
-        <div id="mp" on-click="_uploadFile"></div>
+        <div id="mp" type="banner" on-click="_uploadFile"></div>
         <div id="offer">
-            <div class="in" on-click="_uploadFile">
-                <img id="dp">
+            <div class="in">
+                <img id="dp" type="profile"  on-click="_uploadFile">    
                 <!-- src="img/symbol/s5.png" -->
             </div>
             <vaadin-dialog></vaadin-dialog>
@@ -188,7 +188,13 @@
                 document.addEventListener('select-image', e => {
                     let Key = e.detail['Key'];
                     // this.pics.push(Key);
-                    this.curElm.style.backgroundImage = 'url(' + Key + ')';
+                    let type = this.curElm.getAttribute('type') || 'banner';
+                    console.log('Type',type);
+                    if (type==='banner')
+                        this.curElm.style.backgroundImage = 'url(' + Key + ')';
+                    else
+                        this.curElm.setAttribute('src',Key);
+
                     // console.log('Select Image', e, this.pics);
                     this.getAllPics();
                     this.closeDialog();
