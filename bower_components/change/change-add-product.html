@@ -1209,7 +1209,24 @@
                 let that = this;
                 let shadow = this.shadowRoot;
                 let user = store.get('change-user') || null;
-                // console.log("BBB", user);
+                // console.log("omg1", user.id);
+                
+
+                // let tokUrl = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                // let tokparams = {
+                //     "action": "getData",
+                //     "index": "change",
+                //     "type": "_user",
+                //     "id": user.id
+                // };
+                // Polymer.postData(tokUrl, tokparams).then(res=>{
+                //     if (res.code >0) {
+                //         let Utoken = res.resolve['token']
+                //         if (Utoken == 1 && user!== null){
+                //             alert("你已經被取消了用戶資格");
+                //         }
+                //     }
+                // });
 
                 if (user != null) {
                     // console.log("BBB",user);

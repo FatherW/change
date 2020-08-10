@@ -12,6 +12,10 @@
     <template>
         <style include="medium-editor-styles"> </style>
         <style>
+            #deleteall {
+                display: block;
+            }
+
             #tagbutton {
                 cursor: pointer;
                 margin: 6px;
@@ -386,7 +390,7 @@
         </style>
 
         <i class="fa fa-minus-circle remove-product shouldhide" on-click="_deleteproduct"></i>
-        <div id="deleteall" style="display: block;">
+        <div id="deleteall">
             <div style="display: flex; width:100%; position:relative;">
                 <a style="width: 90%;" href$="{{userUrl}}">
                     <change-user-tag></change-user-tag>
@@ -576,7 +580,7 @@
                         // console.log("omg", head);
                         this.userUrl = "/" + website;
                         this.shadowRoot.querySelector('change-user-tag').loadPage(name, all['createTime'], head);
-                        this.shadowRoot.querySelector('#deleteall').style.background = "pink";
+                        this.shadowRoot.querySelector('#deleteall').style.outline = "1px solid gold";
                     });
 
                 } else {
