@@ -552,10 +552,11 @@
                     <div class="userinfo">
                         <div id="usericon">
                             <div id="a1">
-                                <img id="gand" src="./img/user_profile.png">
+                                <img id="gand" src="">
+                                <!-- ./img/user_profile.png -->
                             </div>
                             <div id="a2">
-                                <div class="name" id="owner">1234</div>
+                                <div class="name" id="owner"></div>
                             </div>
                         </div>
                     </div>
@@ -766,6 +767,25 @@
                 console.log("Current PID", pid);
                 if (pid != "") {
                     /*Edit Product Mode*/
+
+                    let defaultLocation = {
+                        "action": "getData",
+                        "index": "change",
+                        "type": "_user",
+                        "id": usertokenId
+                    };
+                    Polymer.postData(loginUrl, defaultLocation).then(res => {
+                        // console.log("BBB", usertokenId);
+                        if (res.code > 0) {
+                            console.log("omgusername", res.resolve['username']);
+                            shadow.querySelector('#owner').innerHTML = res.resolve['username'];
+                            console.log("omghead", res.resolve['head']);
+                            shadow.querySelector('#gand').src = res.resolve['head'];
+                        } else {
+                            console.log("get default FAIL!");
+                        }
+                    });
+
                     let p = {
                         "action": "searchData",
                         "index": "change",
@@ -832,6 +852,28 @@
                 } else {
                     /*Add Product Code*/
                     //*******SEARCH FOR TOTAL NUMBER OF PRODUCT IN DATABASE*******//
+
+                    //SET DEFAULT LOCATION, USERNAME, USERHEAD//
+                    let defaultLocation = {
+                        "action": "getData",
+                        "index": "change",
+                        "type": "_user",
+                        "id": usertokenId
+                    };
+                    Polymer.postData(loginUrl, defaultLocation).then(res => {
+                        // console.log("BBB", usertokenId);
+                        if (res.code > 0) {
+                            console.log("omgarea", res.resolve['area']);
+                            shadow.querySelector('#vs2').value = res.resolve['area'];
+                            console.log("omgusername", res.resolve['username']);
+                            shadow.querySelector('#owner').innerHTML = res.resolve['username'];
+                            console.log("omghead", res.resolve['head']);
+                            shadow.querySelector('#gand').src = res.resolve['head'];
+                        } else {
+                            console.log("get default FAIL!");
+                        }
+                    });
+
                     let params = {
                         "action": "searchData",
                         "index": "change",
@@ -1148,27 +1190,7 @@
                         // console.log('Price will be enabled');
                         shadow.querySelector('#price').disabled = false;
                     }
-                })
-
-                //SET DEFAULT LOCATION, USERNAME, USERHEAD//
-                let defaultLocation = {
-                    "action": "getData",
-                    "index": "change",
-                    "type": "_user",
-                    "id": usertokenId
-                };
-                Polymer.postData(loginUrl, defaultLocation).then(res => {
-                    // console.log("BBB", usertokenId);
-                    if (res.code > 0) {
-                        // console.log("default", res.resolve['area']);
-                        shadow.querySelector('#vs2').value = res.resolve['area'];
-                        shadow.querySelector('#owner').innerHTML = res.resolve['username'];
-                        shadow.querySelector('#gand').scr = res.resolve['head'];
-                    } else {
-                        console.log("get default FAIL!");
-                    }
-                })
-
+                });
 
                 //*********************BUG******************//
                 //**LOAD DATA FROM JSON**//
@@ -1210,7 +1232,7 @@
                 let shadow = this.shadowRoot;
                 let user = store.get('change-user') || null;
                 // console.log("omg1", user.id);
-                
+
 
                 // let tokUrl = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 // let tokparams = {
@@ -1240,14 +1262,15 @@
                     //Get value from select box fanpage
                     var fanpage = shadow.querySelector('#fanPage').value;
                     console.log("fanpage", fanpage);
-                    let isFanpage = false;
-                    if (shadow.querySelector('#fanPage').value == "") {
-                        //isFanpage = false//
+                    
+                    if (shadow.querySelector('#fanPage').value == "" ||shadow.querySelector('#fanPage').value == undefined ||shadow.querySelector('#fanPage').value == "沒有專頁可以選擇") {
+                        var isFanpage = false;
+                        var fanpage = "";
+                        console.log("omgomg", isFanpage);
                     } else {
-                        isFanpage = true;
-
+                        var isFanpage = true;
+                        console.log("omgomg2", isFanpage);
                     };
-                    console.log("isFanpage boolean", isFanpage);
 
                     //Get value from isFree button
                     let free = shadow.querySelector('#free').checked;
@@ -1298,9 +1321,9 @@
                     //Get value from input tags
                     //**tags is refering to the arrayValue**//
                     let tags = shadow.querySelector('#myTags').tags;
-                    if(fanpage){
+                    if (fanpage) {
                         tags.push(fanpage);
-                    } 
+                    }
                     console.log("Tags:", tags);
 
                     //Get value from deliveryDescription input box
@@ -1399,7 +1422,7 @@
                                         this.dataManager.loadData(newproductid).then(res => {
                                             console.log("Working", res);
                                             this.fileManager.saveFile('json/product-' + newproductid + '.json', JSON.stringify(res)).then(res => {
-                                                location.replace("./edit-product.html?p" + newproductid + "u" + user['_id']);
+                                                // location.replace("./edit-product.html?p" + newproductid + "u" + user['_id']);
                                             });
                                         })
                                     } else {
@@ -1436,7 +1459,8 @@
                             "postStatus": this.POSTSTATUS,
                             "replyArray": this.REPLYARRAY
                         };
-                        //******* UPDATE JSON ***********//
+                        console.log("omgomg3", json2ways);
+                        // //******* UPDATE JSON ***********//
                         this.fileManager.saveFile('json/product-' + this.id + '.json', JSON.stringify(json2ways));
 
                         //********UPDATE DATABASE***********//

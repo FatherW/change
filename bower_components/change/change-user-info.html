@@ -375,7 +375,7 @@
                 that.fileManager = new AwsPackage(verifiedUser);
                 console.log("fileManager", that.fileManager);
 
-                let uid = verifiedUser.id;
+                let uid = verifiedUser._id;
                 console.log("verifiedUser uid:", uid);
                 let head = verifiedUser.head;
                 console.log("verifiedUser head:", head);
@@ -405,16 +405,14 @@
                     "type": "_user",
                     "id": uid
                 };
-
+                console.log("omgomgomg", uid);
                 Polymer.postData(link, getUparams).then(res => {
                     if (res.code > 0) {
                         console.log("getVerified Udata Success!")
                         let userJson = res.resolve;
                         console.log("userJson:", userJson);
-
-
                         this.fileManager.saveFile('json/user-' + userJson.id + '.json', JSON.stringify(userJson));
-
+                        alert("用戶資料已更新!");
                     } else {
                         alert("ERR: fail to get current user!")
                     }
