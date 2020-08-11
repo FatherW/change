@@ -326,7 +326,6 @@
                         }
                     }
                 };
-                console.log("qqqqqqqqqqqqqqqq", JSON.stringify(paramcate));
                 let parammust = {
                     "action": "searchData",
                     "index": "change",
@@ -350,7 +349,7 @@
                         }
                     }
                 };
-                console.log(district, "wwwwwwwwww", JSON.stringify(parammust));
+                // console.log(district, "wwwwwwwwww", JSON.stringify(parammust));
                 Polymer.postData(url, paramcate).then(res => {
                     if (res.code > 0) {
                         let shouldid = [];
@@ -464,11 +463,10 @@
             },
 
             displaymore: function() {
-                console.log('load');
                 let that = this;
                 let shadow = this.shadowRoot;
                 let prods = this.res2;
-                if (this.res > 0) {
+                if (this.res.length > 0) {
                     prods = this.res;
 
                 }
@@ -554,7 +552,7 @@
                             wrapper.innerHTML = '';
                             let x = that.myProducts.length;
                             if (!x) {
-                                console.log("Check inside if");
+                                // console.log("Check inside if");
                                 shadow.querySelector('#blank').innerHTML = "沒有貨品";
                             } else {
                                 this.res = res.resolve;
