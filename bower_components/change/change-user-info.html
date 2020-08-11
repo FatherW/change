@@ -283,7 +283,12 @@
             toggle: function () {
                 //GET BANNER INFO//
                 let userBan = document.querySelector('change-user-banner');
+                let mp = userBan.shadowRoot.querySelector('#mp').style.backgroundImage;
+                bannerSrc = mp.replace('url(', '').replace(')', '').replace(/\"/gi, "");
+                let headSrc = userBan.shadowRoot.querySelector('#dp').src;
                 console.log("omgomg", userBan);
+                console.log("omgomg1", bannerSrc);
+                console.log("omgomg2", headSrc);
 
                 let user = store.get('change-user') || null;
                 let loc = location.search;
@@ -330,7 +335,9 @@
                                 "body": {
                                     "email": email,
                                     "username": name,
-                                    "area": area
+                                    "area": area,
+                                    "banner": bannerSrc,
+                                    "head": headSrc
                                 }
                             };
                             Polymer.postData(url, params).then(res => {
@@ -344,10 +351,13 @@
                                     user['email'] = email;
                                     user['area'] = area;
                                     user['username'] = name;
+                                    user['banner'] = bannerSrc;
+                                    user['head'] = headSrc;
                                     store.set("change-user", user);
+
+                                    this._saveJson();
                                 }
                             })
-
                         } else {
                             alert('Please login first');
                         }
@@ -355,6 +365,62 @@
                 }
 
             },
+
+
+            _saveJson: function () {
+                let that = this;
+                let shadow = this.shadowRoot;
+                let verifiedUser = store.get('change-user') || null;
+                console.log("verifiedUser store.get:", verifiedUser);
+                that.fileManager = new AwsPackage(verifiedUser);
+                console.log("fileManager", that.fileManager);
+
+                let uid = verifiedUser.id;
+                console.log("verifiedUser uid:", uid);
+                let head = verifiedUser.head;
+                console.log("verifiedUser head:", head);
+                //get currect user token
+                // let currentuser = store.get('change-user') || null;
+                // if (currentuser['_id'] == userid) {
+                //     console.log("success user id token", currentuser);
+                //     console.log("success user id", userid);
+
+                // } else {
+                //     console.log("fail user id token", currentuser);
+                //     console.log("fail user id", userid);
+                // };
+                
+                // let header = document.querySelector('change-header');
+                // let tophead = header.shadowRoot.querySelector('change-header-top');
+                // let userpanel = tophead.shadowRoot.querySelector('change-user-panel');
+                // let shadow = userpanel.shadowRoot;
+                // shadow.querySelector('#register').innerHTML = ' / 登出';
+                // shadow.querySelector('#login').innerHTML = '<a href="/user.html?' + user['_id'] + '"><img src="' + user['head'] + '"></a>';
+                // document.querySelector('change-header').shadowRoot.querySelector('header').shadowRoot.querySelector('change-header-top').shadowRoot.querySelector('change-user-panel')
+
+                let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let getUparams = {
+                    "action": "getData",
+                    "index": "change",
+                    "type": "_user",
+                    "id": uid
+                };
+
+                Polymer.postData(link, getUparams).then(res => {
+                    if (res.code > 0) {
+                        console.log("getVerified Udata Success!")
+                        let userJson = res.resolve;
+                        console.log("userJson:", userJson);
+
+
+                        this.fileManager.saveFile('json/user-' + userJson.id + '.json', JSON.stringify(userJson));
+
+                    } else {
+                        alert("ERR: fail to get current user!")
+                    }
+                });
+
+            }
         });
     })();
 </script>
