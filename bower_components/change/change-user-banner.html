@@ -132,7 +132,7 @@
         <div id="mp" type="banner" on-click="_uploadFile"></div>
         <div id="offer">
             <div class="in">
-                <img id="dp" type="profile"  on-click="_uploadFile">    
+                <img id="dp" type="profile" on-click="_uploadFile">
                 <!-- src="img/symbol/s5.png" -->
             </div>
             <vaadin-dialog></vaadin-dialog>
@@ -168,33 +168,38 @@
 
             },
             created: function () {
-                let user = store.get('change-user') || null;
                 let shadow = this.shadowRoot;
                 this.bigPic = "http://change.dazzle.website.s3.amazonaws.com/files/1/1591944377549.jpeg";
                 this.pics = [];
                 this.pics[0] = this.bigPic;
                 console.log("Created Add Product");
                 this.dataManager = new DataPackage('product');
-                this.fileManager = new AwsPackage(user);
-                console.log("new AwsPackage(user):", this.fileManager);
 
-                // document.addEventListener('upload-success', e => {
-                //     let src = e.detail['Key'];
-                //     // this.pics.push(src);
-                //     // this.bigPic = "./"+src;
-                //     this.curElm.setAttribute('src',src);
-                //     console.log('Detail', e, this.pics);
-                //     // this.reNewPic();
-                // });
+
+                let user = store.get('change-user') || null;
+                if (user !== null) {
+                    this.fileManager = new AwsPackage(user);
+                    console.log("new AwsPackage(user):", this.fileManager);
+                }
+
+
+                document.addEventListener('upload-success', e => {
+                    let src = e.detail['Key'];
+                    // this.pics.push(src);
+                    // this.bigPic = "./"+src;
+                    this.curElm.setAttribute('src',src);
+                    console.log('Detail', e, this.pics);
+                    // this.reNewPic();
+                });
                 document.addEventListener('select-image', e => {
                     let Key = e.detail['Key'];
                     // this.pics.push(Key);
                     let type = this.curElm.getAttribute('type') || 'banner';
-                    console.log('Type',type);
-                    if (type==='banner')
+                    console.log('Type', type);
+                    if (type === 'banner')
                         this.curElm.style.backgroundImage = 'url(' + Key + ')';
                     else
-                        this.curElm.setAttribute('src',Key);
+                        this.curElm.setAttribute('src', Key);
 
                     // console.log('Select Image', e, this.pics);
                     this.getAllPics();
@@ -228,7 +233,7 @@
                     Polymer.postData(url, params).then(res => {
                         if (res.code > 0) {
                             if (res.resolve.length > 0) {
-                                shadow.querySelector('#mp').style.backgroundImage = "url('"+ res.resolve[0]['banner'] + "')";
+                                shadow.querySelector('#mp').style.backgroundImage = "url('" + res.resolve[0]['banner'] + "')";
                                 shadow.querySelector('#Uname').innerText = res.resolve[0]['username'];
                                 let t = res.resolve[0]['createTime'];
                                 let _thetimenow = Date.now();

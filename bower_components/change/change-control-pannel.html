@@ -208,7 +208,7 @@
                     <p class="inf hide">標籤: <span id="contact">
                             <vaadin-text-field id='tag'></vaadin-text-field>
                         </span></p>
-                    <p class="inf">網址: <span class="infotext" id="website">
+                    <p class="inf">網址: gettv.hk/ <span class="infotext" id="website">
                             <vaadin-text-field id='website2'></vaadin-text-field>
                         </span></p>
                     <div style="display: inline-flex;">
@@ -223,15 +223,18 @@
 </dom-module>
 
 <script>
-    (function() {
+    (function () {
         Polymer({
             is: 'change-control-pannel',
             properties: {},
 
 
-            created: function() {
+            created: function () {
                 let user = store.get('change-user') || null;
-                if (user.isAdmin) {
+                console.log("omgomg", user);
+                if (user == null) {
+
+                } else if (user.isAdmin) {
                     user["userBucket"] = "change.dazzle.website";
                     this.fileManager = new AwsPackage(user);
                     console.log('USERRRR', user);
@@ -241,44 +244,49 @@
                 }
             },
 
-            ready: function() {
+            ready: function () {
                 let shadow = this.shadowRoot;
                 let that = this;
 
                 shadow.querySelector('.hide').style.display = "none";
-                let usercookies = store.get('change-user');
-                let userID = usercookies['id'];
+                
+                let usercookies = store.get('change-user') || null;
+                console.log("cookie", usercookies);
+                if (usercookies == null) {
 
-                // console.log("cookie", userID);
-                let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                let param = {
-                    "action": "searchData",
-                    "index": "change",
-                    "type": "_user",
-                    "body": {
-                        "query": {
-                            "match": {
-                                "id": userID
+                } else {
+                    let userID = usercookies['id'];
+                    console.log("cookie", userID);
+                    let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                    let param = {
+                        "action": "searchData",
+                        "index": "change",
+                        "type": "_user",
+                        "body": {
+                            "query": {
+                                "match": {
+                                    "id": userID
+                                }
                             }
                         }
-                    }
-                };
-                Polymer.postData(link, param).then(res => {
-                    if (res.code > 0) {
-                        // console.log("CHECK",res.code);
-                        let adminStatus = res.resolve[0].isAdmin;
-                        if (Boolean(adminStatus) == true) {
-                            console.log("This user is ADMIN!");
-                            console.log("status", adminStatus);
-                            shadow.querySelector("#controlbar").style.display = "block";
+                    };
+                    Polymer.postData(link, param).then(res => {
+                        if (res.code > 0) {
+                            // console.log("CHECK",res.code);
+                            let adminStatus = res.resolve[0].isAdmin;
+                            if (Boolean(adminStatus) == true) {
+                                console.log("This user is ADMIN!");
+                                console.log("status", adminStatus);
+                                shadow.querySelector("#controlbar").style.display = "block";
 
+                            } else {
+                                console.log("This user is NOT ADMIN!");
+                            }
                         } else {
-                            console.log("This user is NOT ADMIN!");
+                            console.log("CANNOT SEARCH USER!");
                         }
-                    } else {
-                        console.log("CANNOT SEARCH USER!");
-                    }
-                });
+                    });
+                }
 
                 //********Get back mistakes ocunt*********//
                 let loc = location.search;
@@ -319,7 +327,7 @@
 
                 //SET AREA, DERLIVER METHOD, PRODUCT STATUS//
                 this.valueArray = [""];
-                customElements.whenDefined('vaadin-select').then(function() {
+                customElements.whenDefined('vaadin-select').then(function () {
                     const district = [{
                         name: '中西區'
                     }, {
@@ -359,14 +367,14 @@
                     }];
 
                     //AREA//
-                    shadow.querySelector('#area1').renderer = function(root) {
+                    shadow.querySelector('#area1').renderer = function (root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        district.forEach(function(item) {
+                        district.forEach(function (item) {
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
@@ -457,7 +465,7 @@
 
             },
 
-            _addFanPage: function() {
+            _addFanPage: function () {
                 this.shadowRoot.querySelector('#info').style.display = "block";
             },
 
@@ -466,7 +474,7 @@
 
             },
 
-            _disqualify: function() {
+            _disqualify: function () {
                 console.log("disqualify is working!")
                 loc = location.search;
                 let uid = "";
@@ -501,7 +509,7 @@
                 })
             },
 
-            _recovery: function() {
+            _recovery: function () {
                 console.log("recovery is working!")
                 loc = location.search;
                 let uid = "";
@@ -536,11 +544,11 @@
                 })
             },
 
-            _manageFanPage: function() {
+            _manageFanPage: function () {
                 console.log("manageFanPage is working!")
             },
 
-            _save: function() {
+            _save: function () {
                 console.log("updated mistakes count!")
 
                 let shadow = this.shadowRoot;

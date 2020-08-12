@@ -5,9 +5,9 @@
 
 <dom-module id="change-header-top">
     <template>
- 
 
-<style>
+
+        <style>
             .index-grid {
                 display: grid;
                 grid-template-columns: 180px 1px auto 50px 100px 150px;
@@ -39,11 +39,11 @@
                 cursor: pointer;
                 outline: none;
             }
-            
-            .pointer{
+
+            .pointer {
                 cursor: pointer;
-                border:none;
-                background:#efefef;
+                border: none;
+                background: #efefef;
             }
 
             .s {
@@ -57,12 +57,12 @@
 
             .input-group1 {
                 background: none;
-
                 height: 40px;
                 margin-top: 16px;
-                width: 98%;
+                margin-left: 180px;
+                width: 80%;
                 border-color: black;
-                padding-left:5px;
+                padding-left: 5px;
             }
 
             .custom-select {
@@ -82,18 +82,19 @@
 
 
             }
+
             #searchmain {
-                    background:#efefef;
-                    border:none;
+                background: #efefef;
+                border: none;
             }
 
             @media only screen and (max-width: 768px) {
-                        
-                change-user-panel{
-                    display:none;   
+
+                change-user-panel {
+                    display: none;
                 }
 
-              
+
                 .index-grid-md {
                     display: grid;
                     grid-template-columns: 1px auto 50px 100px 50px;
@@ -110,6 +111,11 @@
                 .input {
                     grid-column: 2 / 3;
                     grid-row: 1 / 2;
+                }
+
+                .input-group1 {
+                    margin-left: 0;
+                    width: 98%;
                 }
 
                 .search {
@@ -145,19 +151,21 @@
         </style>
         <div class="full">
             <div class="index-grid index-grid-md">
-           
+
                 <a class="logo" href="getTv.html">
                 </a>
 
                 <div class="custom-select">
-                   
+
                     <div class="l"></div>
                 </div>
                 <div class="input">
                     <input id="searchmain" class="input-group1" type="text" placeholder="&nbsp搜索">
                 </div>
                 <div class="search">
-                    <button class="pointer" style="margin-top: 16px; height: 42px; background: #f0f0f0; border-color: black;" on-click="searchlist">
+                    <button class="pointer"
+                        style="margin-top: 16px; height: 42px; background: #f0f0f0; border-color: black;"
+                        on-click="searchlist">
                         <svg class="search" viewBox="0 0 24 24" style=" width: 25px; height: 15px;">
                             <title>Search Icon</title>
                             <path fill="#57585a"
@@ -185,16 +193,16 @@
 <script>
 </script>
 <script>
-    (function() {
+    (function () {
         Polymer({
             is: 'change-header-top',
             properties: {},
 
-            ready: function() {
+            ready: function () {
                 let that = this;
                 let shadow = this.shadowRoot;
 
-                shadow.querySelector('#searchmain').addEventListener("keypress", function(e) {
+                shadow.querySelector('#searchmain').addEventListener("keypress", function (e) {
                     var key = e.which || e.keyCode || 0;
                     if (key === 13) {
                         that.searchlist();
@@ -230,7 +238,7 @@
 
                 })
             },
-            searchlist: function() {
+            searchlist: function () {
                 console.log("diunilaomu");
                 let shadow = this.shadowRoot;
                 var serchcat = '/list-product.html?tag=' + encodeURIComponent(shadow.querySelector('#searchmain').value);
