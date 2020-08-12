@@ -160,21 +160,74 @@
 
                 //*************Get value from rating stars************//
                 shadow.querySelectorAll('.rates').forEach((item) => {
-                    item.addEventListener('click', (e) => { 
-                        this.userRate = item.value;       
+                    item.addEventListener('click', (e) => {
+                        this.userRate = item.value;
                     });
                 });
+
+
             },
 
             _submit: function () {
                 console.log("SUBMIT WORKING!");
                 let that = this;
                 let shadow = this.shadowRoot;
-                
+
                 console.log("user rate:", this.userRate);
 
+                let loc = location.search;
+                console.log("loc:", loc);
+                let sellerid = "";
+                for (i = 2; i < loc.length; i++) {
+                    sellerid += loc[i]
+                }
+                console.log("sellerid", sellerid);
+
+                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let param1 = {
+                    "action": "getData",
+                    "index": "change",
+                    "type": "_user",
+                    "id": sellerid
+                }
+                Polymer.postData(Url, param1).then(res => {
+                    if (res.code > 0) {
+                        // console.log("res.resolve", res.resolve);
+                        let cs = res.resolve['score'];
+                        console.log("current score", cs);
+                        let numberRate = res.resolve['numberRate'];
+                        console.log("numberRate", numberRate);
+
+                        let score = (numberRate * cs + this.userRate) / (numberRate + 1);
+                        console.log("new score", score);
+                        numberRate = numberRate + 1;
+                        console.log("new numberRate", numberRate);
+
+                        let param2 = {
+                            "action": "addData",
+                            "index": "change",
+                            "type": "_user",
+                            "id": sellerid,
+                            "body": {
+                                "numberRate": numberRate,
+                                "score": score
+                            }
+                        }
+                        Polymer.postData(Url, param2).then(res => {
+                            if (res.code > 0) {
+                                console.log("Rating is done successfully!");
+                            } else {
+                                alert("Err: Rating update unsuccessful!");
+                            }
+                        });
+
+                    } else {
+                        alert("Err: No such seller!");
+                    }
+                });
             }
 
         });
 
-    })();</script>
+    })();
+</script>
