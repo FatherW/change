@@ -1,0 +1,11 @@
+ <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="bower_components/dz-dazzle/dz-loader.html">
+    <link rel="import" href="bower_components/change/change-user-banner.html">
+    <link rel="import" href="bower_components/change/change-user-info.html">
+    <link rel="import" href="bower_components/change/change-header.html">
+    <link rel="import" href="bower_components/change/change-user.html">
+    <link rel="import" href="bower_components/change/change-footer.html">
+      <link rel="import" href="bower_components/change/change-addprod-butt.html">
+<link rel="stylesheet" href="css/style3.css">

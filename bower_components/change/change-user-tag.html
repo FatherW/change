@@ -243,7 +243,7 @@
             }
 
             .svg {
-                background-image: url('http://change.dazzle.website/img/loading.svg');
+                background-image: url('/img/loading.svg');
                 position: relative;
                 background-size: 30px;
                 background-position: center center;
@@ -271,7 +271,7 @@
                 background-position: center center;
                 /* background-repeat: no-repeat; */
                 margin: 1%;
-                background-image: url(http://change.dazzle.website/img/channel_banner/1.jpg);
+                background-image: url("../../img/channel_banner/1.jpg");
                 background-repeat: no-repeat;
 
             }
@@ -351,10 +351,10 @@
         <div id="usericon">
             <a id="redu" style="display: flex;">
                 <div id="a1">
-                    <img id="_changeicon" src$="{{res.head}}">
+                    <img id="_changeicon" src$="{{head}}"> 
                 </div>
                 <div id="a2">
-                    <div class="name" id="owner">{{res.username}}</div>
+                    <div class="name" id="owner">{{username}}</div>
                     <div id="time">{{timeStr}}</div>
                 </div>
             </a>
@@ -365,36 +365,45 @@
 </dom-module>
 
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-user-tag',
             properties: {
 
 
             },
-            created: function () {
+            created: function() {
                 console.log('User Tag');
                 this.timeStr = '剛剛';
             },
 
 
 
-            ready: function () {
+            ready: function() {
 
             },
             loadData(id, time) {
                 let that = this;
+                let s = this.ShadowRoot;
                 this.id = id;
                 let url = "/json/user-" + this.id + ".json";
                 this.timeStr = this.loadUpdate(time);
                 Polymer.getContent(url).then(str => {
                     // let str = httpRequest.responseText;
                     json = JSON.parse(str);
-                    that.res = json;
+                    // console.log("kkkkk", json);
+                    that.username = json.username;
+                    that.head = json.head;
 
                 });
 
                 // console.log('User Tag',id);
+            },
+            loadPage(name, time, head) {
+                this.username = name;
+                this.timeStr = this.loadUpdate(time);
+                this.head = head;
+
             },
             loadUpdate(time) {
                 let _thetimenow = Date.now();

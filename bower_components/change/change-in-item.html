@@ -146,7 +146,7 @@
 </dom-module>
 
 <script>
-    (function () {
+    (function() {
 
 
 
@@ -186,10 +186,10 @@
 
             },
 
-            created: function () {
+            created: function() {
                 this.countitem = 0;
             },
-            ready: function () {
+            ready: function() {
                 // this.search();
             },
 
@@ -326,7 +326,6 @@
                         }
                     }
                 };
-                console.log("qqqqqqqqqqqqqqqq", JSON.stringify(paramcate));
                 let parammust = {
                     "action": "searchData",
                     "index": "change",
@@ -350,7 +349,7 @@
                         }
                     }
                 };
-                console.log(district, "wwwwwwwwww", JSON.stringify(parammust));
+                // console.log(district, "wwwwwwwwww", JSON.stringify(parammust));
                 Polymer.postData(url, paramcate).then(res => {
                     if (res.code > 0) {
                         let shouldid = [];
@@ -463,12 +462,11 @@
 
             },
 
-            displaymore: function () {
-                console.log('load');
+            displaymore: function() {
                 let that = this;
                 let shadow = this.shadowRoot;
                 let prods = this.res2;
-                if (this.res > 0) {
+                if (this.res.length > 0) {
                     prods = this.res;
 
                 }
@@ -518,7 +516,7 @@
 
 
 
-            _showMyGoods: function () {
+            _showMyGoods: function() {
                 let shadow = this.shadowRoot;
                 shadow.querySelector('#blank').innerHTML = "";
                 let that = this;
@@ -530,6 +528,7 @@
                         "action": "searchData",
                         "index": "change",
                         "type": "product",
+                        "_source": "_id",
                         "body": {
                             "sort": [{
                                 "createTime": {
@@ -553,15 +552,21 @@
                             wrapper.innerHTML = '';
                             let x = that.myProducts.length;
                             if (!x) {
-                                console.log("Check inside if");
+                                // console.log("Check inside if");
                                 shadow.querySelector('#blank').innerHTML = "沒有貨品";
                             } else {
-                                that.myProducts.forEach(item => {
+                                this.res = res.resolve;
+                                let check8 = 8;
+                                if (res.resolve.length < check8) {
+                                    check8 = res.resolve.length;
+                                }
+                                for (i = 0; i < check8; i++) {
                                     let productItem = document.createElement('change-things');
-                                    productItem.setAttribute("id", item['_id']);
+                                    productItem.setAttribute("id", res.resolve[i]['_id']);
 
                                     wrapper.appendChild(productItem);
-                                });
+                                }
+                                this.countitem = 8;
                             }
 
                             ///display no reply
@@ -597,12 +602,19 @@
                 if (x.length == 0 || x.length == undefined || x.length == null) {
                     wrapper.innerHTML = "沒有貨品";
                 } else {
-                    x.forEach(item => {
+                    this.res = 0;
+                    this.res2 = x;
+                    let check8 = 8;
+                    if (x.length < check8) {
+                        check8 = x.length
+                    }
+                    for (i = 0; i < check8; i++) {
                         let productItem = document.createElement('change-things');
-                        productItem.setAttribute("id", item);
+                        productItem.setAttribute("id", x[i]);
 
                         wrapper.appendChild(productItem);
-                    });
+                    }
+                    this.countitem = 8;
                 }
 
 

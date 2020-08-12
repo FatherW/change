@@ -1,0 +1,67 @@
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->    
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <title>Home - Change</title>
+    <link rel="import" href="bower_components/change/change-edit-product.html">
+    <link rel="import" href="bower_components/change/change-itemspecial.html">
+    <link rel="import" href="bower_components/change/change-slidelist.html">
+    <link rel="import" href="bower_components/change/change-in-item.html">
+    <link rel="import" href="bower_components/change/change-user-panel.html?asdlfsd">
+    <link rel="import" href="bower_components/change/change-header.html"> 
+    <link rel="import" href="bower_components/change/change-announcement.html"> 
+    <link rel="stylesheet" href="css/style.css">
+<meta name="google-signin-scope" content="profile email">
+<meta name="google-signin-client_id" content="755964351228-2emctcoq1o2nj5vpqitv4j28411jj7jk.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/zh_HK/sdk.js#xfbml=1&version=v7.0&appId=711018846416860&autoLogAppEvents=1" nonce="NXzxnRL1"></script>    
+    
+    
+ <script>
+      function onSignIn(googleUser) {
+          console.log("running google");
+           var profile = googleUser.getBasicProfile(); 
+          let param = {
+              "platform":"Google",
+              "name":profile.getName(),
+              "email":profile.getEmail()
+          };
+          store.set("change-platform",param);
+          document.querySelector('.googleloginname').click();
+
+      };
+    function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance(); 
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
+  };
+
+                window.fbAsyncInit = function () {
+                    FB.init({
+                        appId: '711018846416860',
+                        cookie: true,
+                        xfbml: true,
+                        version: '7.0'
+                    });
+
+                    FB.AppEvents.logPageView();
+
+                };
+/*
+                (function (d, s, id) {
+                    var js, fjs = d.getElementsByTagName(s)[0];
+                    if (d.getElementById(id)) {
+                        return;
+                    }
+                    js = d.createElement(s);
+                    js.id = id;
+                    js.src = "https://connect.facebook.net/en_US/sdk.js";
+                    fjs.parentNode.insertBefore(js, fjs);
+                }(document, 'script', 'facebook-jssdk'));
+
+                */
+
+                </script>

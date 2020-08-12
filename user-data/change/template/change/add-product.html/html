@@ -1,0 +1,10 @@
+
+    
+<change-header></change-header>
+<change-add-product></change-add-product>
+<change-footer></change-footer>
+<change-announcement>FIXED ANNOUNCEMENT</change-announcement>
+
+<button class="googleloginname" style="display:none;">google login</button>
+<div class="g-signin2" data-onsuccess="onSignIn" style="display:none;">imgoogle</div>
+     

@@ -34,7 +34,7 @@
             <h3>恭喜！你已成功註冊帳戶，一起減廢，為環保出一分力。</h3>
             <br>
             <h3>以後只需透過電腦或手機瀏覽，即可上載物品平台，讓全港看見！</h3>
-            <a href="http://change.dazzle.website/">change.dazzle.website</a>
+            <a href="http://www.gettv.hk/">www.gettv.hk</a>
             <br>
             <h3>Get TV 讓你生活Get 多啲</h3>
 
@@ -51,6 +51,7 @@
 
             },
             created: function () {
+                console.log("CREATED HERE:");
                 let loc = location.search;
                 // let loc = "?token=1594953468686178216261";
                 let token = "";
@@ -73,48 +74,63 @@
                 Polymer.postData(link, param).then(res => {
                     if (res.code > 0) {
                         if (res.resolve) {
-                            let user = res.resolve[0];
-                            if (user.token = token) {
-                                store.set('change-user', user);
+                            // let user = res.resolve[0];
+                            // if (user.token = token) {
+                            //     store.set('change-user', user);
 
-                            }
+                            // }
+
+                            let userid = res.resolve[0]['_id'];
+                            let userEmail = res.resolve[0]['email'];
+                            let userPW = res.resolve[0]['password'];
+
+                            let paramtake = {
+                                "action": "addData",
+                                "index": "change",
+                                "type": "_user",
+                                "id": userid,
+                                "body": {
+                                    "token": ""
+                                }
+                            };
+                            Polymer.postData(link, paramtake).then(res => {
+                                if (res.code > 0) {
+                                    console.log("add success");
+                                    // location.reload();
+
+                                    //**********AUTO LOGIN****************//
+                                    let loginUrl = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
+                                    let params = {
+                                        "action": "login",
+                                        "login": userEmail,
+                                        "password": userPW
+                                    };
+                                    Polymer.postData(loginUrl, params).then(res => {
+                                        if (res.code > 0) {
+                                            // console.log("ccc", res.resolve);
+                                            alert("AUTO LOGIN SUCCESS!");
+                                            if (res.resolve) {
+                                                let user = res.resolve;
+                                                console.log("user res.resolve", user);
+                                                if (user.token == "" || user.token == null || user.token == undefined) {
+                                                    store.set('change-user', user);
+                                                    console.log("store.set", store.set('change-user', user));
+
+                                                    this._saveJson();
+                                                }
+                                            } else {
+                                                console.log("ERR: no res.resolve!")
+                                            }
+                                        } else {
+                                            alert("ERR: AUTO LOGIN Fail!");
+                                        }
+                                    });
+
+                                }
+                            });
                         };
 
-                        let userid = res.resolve[0]['_id'];
-                        let paramtake = {
-                            "action": "addData",
-                            "index": "change",
-                            "type": "_user",
-                            "id": userid,
-                            "body": {
-                                "token": ""
-                            }
-                        };
-                        Polymer.postData(link, paramtake).then(res => {
-                            if (res.code > 0) {
-                                console.log("add success");
-                                // location.reload();
-                            }
-                        });
 
-                        //get currect user token
-                        let user = store.get('change-user') || null;
-                        if (user['_id'] == userid) {
-                            console.log("success user id token", user);
-                            console.log("success user id", userid);
-
-                        } else {
-                            console.log("fail user id token", user);
-                            console.log("fail user id", userid);
-                        };
-                        let header = document.querySelector('change-header');
-                        let tophead = header.shadowRoot.querySelector('change-header-top');
-                        let userpanel = tophead.shadowRoot.querySelector('change-user-panel');
-                        let shadow = userpanel.shadowRoot;
-
-                        shadow.querySelector('#register').innerHTML = ' / 登出';
-                        shadow.querySelector('#login').innerHTML = '<a href="/user.html?' + user['_id'] + '"><img src="' + user['head'] + '"></a>';
-                        // document.querySelector('change-header').shadowRoot.querySelector('header').shadowRoot.querySelector('change-header-top').shadowRoot.querySelector('change-user-panel')
                     }
                 })
 
@@ -122,12 +138,66 @@
             },
             //for adding link to the user name connecting wth the databse
             ready: function () {
+                console.log("READY HERE:");
 
 
             },
 
 
+            _saveJson: function () {
+                let that = this;
+                let shadow = this.shadowRoot;
+                let verifiedUser = store.get('change-user') || null;
+                console.log("verifiedUser store.get:", verifiedUser);
+                that.fileManager = new AwsPackage(verifiedUser);
+                console.log("fileManager", that.fileManager);
 
+                let uid = verifiedUser.id;
+                console.log("verifiedUser uid:", uid);
+                let head = verifiedUser.head;
+                console.log("verifiedUser head:", head);
+                //get currect user token
+                // let currentuser = store.get('change-user') || null;
+                // if (currentuser['_id'] == userid) {
+                //     console.log("success user id token", currentuser);
+                //     console.log("success user id", userid);
+
+                // } else {
+                //     console.log("fail user id token", currentuser);
+                //     console.log("fail user id", userid);
+                // };
+                
+                // let header = document.querySelector('change-header');
+                // let tophead = header.shadowRoot.querySelector('change-header-top');
+                // let userpanel = tophead.shadowRoot.querySelector('change-user-panel');
+                // let shadow = userpanel.shadowRoot;
+                // shadow.querySelector('#register').innerHTML = ' / 登出';
+                // shadow.querySelector('#login').innerHTML = '<a href="/user.html?' + user['_id'] + '"><img src="' + user['head'] + '"></a>';
+                // document.querySelector('change-header').shadowRoot.querySelector('header').shadowRoot.querySelector('change-header-top').shadowRoot.querySelector('change-user-panel')
+
+                let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let getUparams = {
+                    "action": "getData",
+                    "index": "change",
+                    "type": "_user",
+                    "id": uid
+                };
+
+                Polymer.postData(link, getUparams).then(res => {
+                    if (res.code > 0) {
+                        console.log("getVerified Udata Success!")
+                        let userJson = res.resolve;
+                        console.log("userJson:", userJson);
+
+
+                        this.fileManager.saveFile('json/user-' + userJson.id + '.json', JSON.stringify(userJson));
+
+                    } else {
+                        alert("ERR: fail to get current user!")
+                    }
+                });
+
+            }
         });
     })();
 </script>

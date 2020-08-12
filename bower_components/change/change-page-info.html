@@ -128,10 +128,10 @@
                         <p class="inf">名稱: <span class="infotext" id="name"></span></p>
                         <p class="inf">地區: <span class="infotext" id="area"></span></p>
                         <p class="inf">電郵: <span class="infotext" id="email"></span></p>
-                        <p class="inf">標籤 : <span id="contact"></span></p>
+                        <p class="inf hide">標籤 : <span id="contact"></span></p>
                     </div>
                 </div>
-                <div id="right">
+                <div id="right" style="display: none;">
                     <div class="buttons">
                         <vaadin-button id="vs1" style="margin-right: 10px;" on-click="setadmin">指派專頁管理員
                         </vaadin-button>
@@ -167,8 +167,49 @@
 
             },
             ready: function () {
-                this.status = false;
                 let shadow = this.shadowRoot;
+                shadow.querySelector('.hide').style.display = "none";
+                //DETERMINE WHETHER CURRENT USER IS ADMIN OR NOT//
+                let usercookies = store.get('change-user') || null;
+                console.log("current user info", usercookies);
+
+                if (usercookies !== null) {
+                    let userID = usercookies['id'];
+                    console.log("cookie", userID);
+                    let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                    let param = {
+                        "action": "searchData",
+                        "index": "change",
+                        "type": "_user",
+                        "body": {
+                            "query": {
+                                "match": {
+                                    "id": userID
+                                }
+                            }
+                        }
+                    };
+                    Polymer.postData(link, param).then(res => {
+                        if (res.code > 0) {
+                            // console.log("CHECK",res.code);
+                            let adminStatus = res.resolve[0].isAdmin;
+                            if (Boolean(adminStatus) == true) {
+                                console.log("This user is ADMIN!");
+                                console.log("status", adminStatus);
+                                shadow.querySelector("#right").style.display = "block";
+
+                            } else {
+                                console.log("This user is NOT ADMIN!");
+                            }
+                        } else {
+                            console.log("CANNOT SEARCH USER!");
+                        }
+                    });
+
+                }
+
+                //
+                this.status = false;
                 let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
 
                 let id = document.querySelector('fanpage').getAttribute('id');

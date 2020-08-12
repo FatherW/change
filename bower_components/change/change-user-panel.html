@@ -75,13 +75,15 @@
                 let user = store.get('change-user');
                 if (user == null) {
                     let dialog = shadow.querySelector('vaadin-dialog#register');
-                    Polymer.popup(dialog, "change", "change-register", "360px", "600px");
+                    Polymer.popup(dialog, "change", "change-register", "400px", "600px");
                 } else {
                     store.set('change-user', null);
                     location.replace("./");
                 }
             },
             logingoogle() {
+                let url = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
+
                 window.signOut();
                 console.log("insede logingoogle");
                 let that = this;
@@ -118,8 +120,23 @@
                             Polymer.popup(dialog, "change", "change-register", "45s%", "90%");
                         } else {
                             if (all[0].platform == "Google") {
-                                store.set('change-user', all[0]);
-                                location.reload();
+
+                                let loginparams = {
+                                    "action": "login",
+                                    "login": uemail,
+                                    "password": all[0]['password']
+                                };
+
+                                Polymer.postData(url, loginparams).then(res => {
+                                    if (res.code > 0) {
+                                        let user = res.resolve;
+                                        store.set('change-user', user);
+                                        location.reload();
+                                    } else {
+                                        alert('登入失敗');
+                                    }
+                                });
+
                             } else {
                                 alert("此帳戶的郵箱已在" + all[0].platform + "註冊，請重新登入");
                             }
@@ -135,7 +152,7 @@
                 if (user != null) {
                     this.shadowRoot.querySelector('#register').innerHTML = ' / 登出';
                     if (user['head'] == "") {
-                        user['head'] = "http://change.dazzle.website/img/head.svg";
+                        user['head'] = "./img/head.svg";
                     }
                     this.shadowRoot.querySelector('#login').innerHTML = '<a href="/user.html?' + user['_id'] + '"><img src="' + user['head'] + '"></a>';
                 }

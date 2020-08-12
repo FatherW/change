@@ -1,0 +1,74 @@
+
+    <div class="container1 container1-md">
+
+
+                    
+                    <div class="zhongdiantuijian zhongdiantuijian-md"><h1>重點推介</h1></div><div class="item-pindao item-pindao-md"><h1><img src="img/icon/tv-black.png" id="logo">頻道</h1>
+</div>
+            <div class="item-zhongdiantuijian item-zhongdiantuijian-md">
+                
+               
+<iframe width="100%" height="100%" src="https://www.youtube.com/embed/-biOGdYiF-I" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+ <!--div pic-->
+                
+            </div>
+<change-item1>
+                        <div>
+                            <div class="medium1">愛多啲</div>
+                            <div class="small1">關懷與心靈健康</div>
+                            <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrhER3oQUYbz8wnmCv1VUBw"><div class="gettv_bg bg1"></div></a>
+                        </div>
+                    </change-item1>
+                    <change-item1>
+                        <div>
+                            <div class="medium1">識多啲</div>
+                            <div class="small1">學術與課程</div>
+                            <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqC1OITdb_QGz18JPmmj8a5"><div class="gettv_bg bg2"></div></a>
+                        </div>
+                    </change-item1>
+                    <change-item1>
+                        <div>
+                            <div class="medium1">睇多啲</div>
+                            <div class="small1">短片電影及劇集</div>
+                            <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpNTw4BXAyEyyMMkhl5XcR2"><div class="gettv_bg bg3"></div></a>
+                        </div>
+                    </change-item1>
+                    <change-item1>
+                        <div>
+                            <div class="medium1">靚多啲</div>
+                            <div class="small1">健康美容分享</div>
+                            <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHon14MDeHFMa9qXMo7zW92T"><div class="gettv_bg bg4"></div></a>
+                        </div>
+                    </change-item1>
+                    <change-item1>
+                        <div>
+                            <div class="medium1">知多啲</div>
+                            <div class="small1">新聞及資訊</div>
+                            <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqykeagwZRZwfEyOuTCYF7a"><div class="gettv_bg bg5"></div></a>
+                        </div>
+                    </change-item1>
+                    <change-item1>
+                        <div>
+                            <div class="medium1">玩多啲</div>
+                            <div class="small1">旅遊及玩樂資訊</div>
+                            <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrywYfDOzAjc0rA89VGqpa5"><div class="gettv_bg bg6"></div></a>
+                        </div>
+                    </change-item1>
+                    <change-item1>
+                        <div>
+                            <div class="medium1">食多啲</div>
+                            <div class="small1">飲食情報</div>
+                            <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpzSn5NOnJiIiGwWvIwR3jj"><div class="gettv_bg bg7"></div></a>
+                        </div>
+                    </change-item1>
+                    <change-item1>
+                        <div>
+                            <div class="medium1">Get多啲</div>
+                            <div class="small1">Get Change交易平台</div>
+                            <a href="http://change.dazzle.website/getTv.html"><div class="gettv_bg bg8"></div></a>
+                        </div>
+                    </change-item1>
+
+                    <div class="clear"></div>
+
+                </div>

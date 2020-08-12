@@ -16,6 +16,7 @@
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/dz-file-management/change-photo-stock.html">
 
 
+
 <link rel="stylesheet" href="">
 <link href="../dz-menu/css/style.html" rel="import" />
 <link rel="import" href="change-subcat.html">
@@ -104,7 +105,7 @@
             }
 
             header {
-                background-image: url(http://change.dazzle.website/img/background/3.jpg);
+                background-image: url(./img/background/3.jpg);
                 padding-top: 30px;
             }
 
@@ -193,7 +194,7 @@
             .outer {
                 margin: 0;
                 width: 100%;
-                background-image: url(http://change.dazzle.website/img/background/3.jpg);
+                background-image: url(./img/background/3.jpg);
                 padding-bottom: 50px;
             }
 
@@ -213,7 +214,7 @@
             .bigPic,
             #div0 {
                 height: 450px;
-                background-image: url(http://change.dazzle.website/img/nopic.png);
+                background-image: url('https://www.gettv.hk/img/nopic.png');
                 background-size: contain;
                 background-repeat: no-repeat;
                 background-position: center center;
@@ -234,7 +235,7 @@
             #div3,
             #div4 {
                 height: 95%;
-                background-image: url('http://change.dazzle.website/img/nopic.png');
+                background-image: url('https://www.gettv.hk/img/nopic.png');
                 background-size: 100%;
                 background-repeat: no-repeat;
                 background-position: center center;
@@ -319,7 +320,9 @@
             }
 
             #a1 img {
+                width: 40px;
                 height: 40px;
+                border-radius: 9999999999999px;
             }
 
             #cs1 {
@@ -366,7 +369,7 @@
             #location {
                 width: 30px;
                 height: 30px;
-                background-image: url(http://change.dazzle.website/img/icon/location.png);
+                background-image: url('https://www.gettv.hk/img/icon/location.png');
                 background-size: cover;
                 display: inline-block;
                 margin-top: 15px;
@@ -375,7 +378,7 @@
             #delivery {
                 width: 30px;
                 height: 30px;
-                background-image: url(http://change.dazzle.website/img/icon/delivery.png);
+                background-image: url('https://www.gettv.hk/img/icon/delivery.png');
                 background-size: cover;
                 display: inline-block;
                 margin-top: 15px;
@@ -384,7 +387,7 @@
 
             .bigsize {
                 font-size: 25px;
-                background-image: url(http://change.dazzle.website/img/);
+                background-image: url(./img/);
                 margin-top: 70px;
             }
 
@@ -410,7 +413,7 @@
             .outer {
                 margin: 0;
                 width: 100%;
-                background-image: url(http://change.dazzle.website/img/background/3.jpg);
+                background-image: url(./img/background/3.jpg);
                 padding-bottom: 50px;
             }
 
@@ -469,7 +472,7 @@
         </style>
 
         <div class="top-banner">
-            <img id="banner3" src="http://change.dazzle.website/img/WX20200513-110548@2x.png">
+            <img id="banner3" src="./img/WX20200513-110548@2x.png">
         </div>
 
         <header>
@@ -543,17 +546,19 @@
                         <div style="width: 100%;">
                             <!--input box-->
                             <div class="inputbox">
-                                <input type="text" id="pname" name="firstname" placeholder="輸入商品標題..." maxlength="14">
+                                <input type="text" id="pname" name="firstname" placeholder="輸入商品標題...">
+                                <!-- maxlength="14" -->
                             </div>
                         </div>
                     </div>
                     <div class="userinfo">
                         <div id="usericon">
                             <div id="a1">
-                                <img id="gand" src="http://change.dazzle.website/img/user_profile.png">
+                                <img id="gand" src="">
+                                <!-- ./img/user_profile.png -->
                             </div>
                             <div id="a2">
-                                <div class="name" id="owner">1234</div>
+                                <div class="name" id="owner"></div>
                             </div>
                         </div>
                     </div>
@@ -679,11 +684,12 @@
                 console.log("Created Add Product");
                 this.dataManager = new DataPackage('product');
                 this.fileManager = new AwsPackage(user);
+                console.log("new AwsPackage(user):", this.fileManager);
 
                 // document.addEventListener('upload-success', e => {
                 //     let src = e.detail['Key'];
                 //     // this.pics.push(src);
-                //     // this.bigPic = "http://change.dazzle.website/"+src;
+                //     // this.bigPic = "./"+src;
                 //     this.curElm.setAttribute('src',src);
                 //     console.log('Detail', e, this.pics);
                 //     // this.reNewPic();
@@ -703,7 +709,7 @@
 
             reNewPic(src) {
                 let shadow = this.shadowRoot;
-                let noImage = 'http://change.dazzle.website/img/1200px-No_image_3x4.svg.png';
+                let noImage = './img/1200px-No_image_3x4.svg.png';
                 let i = 0;
                 this.pics.forEach(item => {
                     shadow.querySelector('#div' + i).style.backgroundImage = 'url(' + this.pics[i] || noImage + ')';
@@ -763,6 +769,25 @@
                 console.log("Current PID", pid);
                 if (pid != "") {
                     /*Edit Product Mode*/
+
+                    let defaultLocation = {
+                        "action": "getData",
+                        "index": "change",
+                        "type": "_user",
+                        "id": usertokenId
+                    };
+                    Polymer.postData(loginUrl, defaultLocation).then(res => {
+                        // console.log("BBB", usertokenId);
+                        if (res.code > 0) {
+                            console.log("omgusername", res.resolve['username']);
+                            shadow.querySelector('#owner').innerHTML = res.resolve['username'];
+                            console.log("omghead", res.resolve['head']);
+                            shadow.querySelector('#gand').src = res.resolve['head'];
+                        } else {
+                            console.log("get default FAIL!");
+                        }
+                    });
+
                     let p = {
                         "action": "searchData",
                         "index": "change",
@@ -790,6 +815,7 @@
                             this.REPLYARRAY = res.resolve[0]['replyArray'];
 
                             shadow.querySelector('span').textContent = res.resolve[0]['categories'];
+                            shadow.querySelector('#fanPage').value = res.resolve[0]['fanpage'];
                             // shadow.querySelector('#public').checked = res.resolve[0]['isPublic'];
                             shadow.querySelector('#free').checked = res.resolve[0]['isFree'];
                             shadow.querySelector('#sContact').value = res.resolve[0]['sellerMsg'];
@@ -828,6 +854,28 @@
                 } else {
                     /*Add Product Code*/
                     //*******SEARCH FOR TOTAL NUMBER OF PRODUCT IN DATABASE*******//
+
+                    //SET DEFAULT LOCATION, USERNAME, USERHEAD//
+                    let defaultLocation = {
+                        "action": "getData",
+                        "index": "change",
+                        "type": "_user",
+                        "id": usertokenId
+                    };
+                    Polymer.postData(loginUrl, defaultLocation).then(res => {
+                        // console.log("BBB", usertokenId);
+                        if (res.code > 0) {
+                            console.log("omgarea", res.resolve['area']);
+                            shadow.querySelector('#vs2').value = res.resolve['area'];
+                            console.log("omgusername", res.resolve['username']);
+                            shadow.querySelector('#owner').innerHTML = res.resolve['username'];
+                            console.log("omghead", res.resolve['head']);
+                            shadow.querySelector('#gand').src = res.resolve['head'];
+                        } else {
+                            console.log("get default FAIL!");
+                        }
+                    });
+
                     let params = {
                         "action": "searchData",
                         "index": "change",
@@ -841,7 +889,7 @@
                     Polymer.postData(loginUrl, params).then(res => {
                         if (res.code > 0) {
                             this.next = res.resolve.length;
-                            console.log("BBB", res.resolve.length);
+                            console.log("TOTAL NUMBER OF PRODUCT IN DATABASE", res.resolve.length);
                         }
                     });
                 };
@@ -1144,44 +1192,26 @@
                         // console.log('Price will be enabled');
                         shadow.querySelector('#price').disabled = false;
                     }
-                })
-
-                //SET DEFAULT LOCATION//
-                let defaultLocation = {
-                    "action": "getData",
-                    "index": "change",
-                    "type": "_user",
-                    "id": usertokenId
-                };
-                Polymer.postData(loginUrl, defaultLocation).then(res => {
-                    // console.log("BBB", usertokenId);
-                    if (res.code > 0) {
-                        // console.log("default", res.resolve['area']);
-                        shadow.querySelector('#vs2').value = res.resolve['area'];
-
-                    } else {
-                        console.log("get default FAIL!");
-                    }
-                })
-
-
-                //***//
-                //**LOAD DATA FROM JSON**//
-                let userurl = "/json/user-" + usertokenId + ".json";
-                Polymer.getContent(userurl).then(str => {
-                    json = JSON.parse(str);
-                    // console.log("BBB", json);
-                    //USER INFO COLUM
-                    shadow.querySelector('#owner').innerHTML = json['username'];
-
-                    if (json['head'] == "") {
-                        shadow.querySelector('#a1').innerHTML = '<img id="gand" src="http://change.dazzle.website/img/user_profile.png">';
-                    } else {
-                        shadow.querySelector('#a1').innerHTML = '<img id="gand" src=' + json['head'] + '>';
-                    };
-                    //check the username
-                    // console.log("SEE", shadow.querySelector('#gand').src);
                 });
+
+                //*********************BUG******************//
+                //**LOAD DATA FROM JSON**//
+                // let userurl = "/json/user-" + usertokenId + ".json";
+                // Polymer.getContent(userurl).then(str => {
+                //     json = JSON.parse(str);
+                //     // console.log("BBB1", json);
+                //     //USER INFO COLUM
+                //     shadow.querySelector('#owner').innerHTML = json['username'];
+                //     console.log("ffffff",json['username']);
+
+                //     if (json['head'] == "") {
+                //         shadow.querySelector('#a1').innerHTML = '<img id="gand" src="./img/user_profile.png">';
+                //     } else {
+                //         shadow.querySelector('#a1').innerHTML = '<img id="gand" src=' + json['head'] + '>';
+                //     };
+                //     //check the username
+                //     // console.log("SEE", shadow.querySelector('#gand').src);
+                // });
 
                 //READY ENDS HERE//
             },
@@ -1203,7 +1233,24 @@
                 let that = this;
                 let shadow = this.shadowRoot;
                 let user = store.get('change-user') || null;
-                // console.log("BBB", user);
+                // console.log("omg1", user.id);
+
+
+                // let tokUrl = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                // let tokparams = {
+                //     "action": "getData",
+                //     "index": "change",
+                //     "type": "_user",
+                //     "id": user.id
+                // };
+                // Polymer.postData(tokUrl, tokparams).then(res=>{
+                //     if (res.code >0) {
+                //         let Utoken = res.resolve['token']
+                //         if (Utoken == 1 && user!== null){
+                //             alert("你已經被取消了用戶資格");
+                //         }
+                //     }
+                // });
 
                 if (user != null) {
                     // console.log("BBB",user);
@@ -1214,15 +1261,19 @@
                     var categories = shadow.querySelector('span').textContent;
                     console.log("categories", categories);
 
-                    //FIXING HERE//
                     //Get value from select box fanpage
-                    var fanpage = shadow.querySelector('#fanpage').value || null;
-                    console.log("fanpage", fanPage);
-                    let ownerId = user['_id'];
-                    let isFanpage = false;
-                    if (fanpage != null) {
-                        isFanpage = true;
-                    }
+                    var fanpage = shadow.querySelector('#fanPage').value;
+                    console.log("fanpage", fanpage);
+
+                    if (shadow.querySelector('#fanPage').value == "" || shadow.querySelector('#fanPage').value == undefined || shadow.querySelector('#fanPage').value == "沒有專頁可以選擇") {
+                        var isFanpage = false;
+                        var fanpage = "";
+                        console.log("omgomg", isFanpage);
+                    } else {
+                        var isFanpage = true;
+                        console.log("omgomg2", isFanpage);
+                    };
+
                     //Get value from isFree button
                     let free = shadow.querySelector('#free').checked;
                     console.log("FreeButton:", free);
@@ -1272,6 +1323,9 @@
                     //Get value from input tags
                     //**tags is refering to the arrayValue**//
                     let tags = shadow.querySelector('#myTags').tags;
+                    if (fanpage) {
+                        tags.push(fanpage);
+                    }
                     console.log("Tags:", tags);
 
                     //Get value from deliveryDescription input box
@@ -1279,6 +1333,142 @@
                     console.log("DeliveryDescription:", deldes);
 
                     //*********GET INPUT PRODUCT VALUE ENDS HERE**************//
+
+                    if (categories == "") {
+                        alert("請選擇分類!");
+                    } else {
+                        if (pname == "") {
+                            alert("請輸入商品標題!");
+                        } else {
+                            let loc = location.search;
+                            if (loc == "") {
+                                //******ADD PRODUCT MODE************//
+
+                                console.log("omg", tags);
+                                let params = {
+                                    "action": "addproduct",
+                                    "categories": categories,
+                                    "sellerMsg": sellerContact,
+                                    "productname": pname,
+                                    "price": parseFloat(price),
+                                    "district": district,
+                                    "deliveryMethod": method,
+                                    "descrip": pdes,
+                                    "tag": tags,
+                                    "deliveryDesc": deldes,
+                                    "isNew": status,
+                                    "ownerId": user['_id'],
+                                    "pics": this.pics,
+                                    "isFanpage": isFanpage,
+                                    "fanpage": fanpage
+                                };
+                                // console.log("BBB", params);
+                                let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
+                                Polymer.postData(link, params).then(res => {
+                                    console.log("BBB", res);
+                                    var newproductid = res.resolve.id;
+                                    console.log("BBB1", newproductid);
+
+                                    if (res.code > 0) {
+                                        let paramup = {
+                                            "action": "updateData",
+                                            "index": "change",
+                                            "type": "_user",
+                                            "id": user['_id'],
+                                            "body": {
+                                                "query": {
+                                                    "script": {
+                                                        "source": "ctx._source['goodsNum']+=1"
+                                                    }
+                                                }
+                                            }
+                                        };
+                                        let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                                        Polymer.postData(Url, paramup).then(res => {
+                                            if (res.code > 0) {
+                                                // alert("成功！");
+                                                this.dataManager.loadData(newproductid).then(res => {
+                                                    console.log("Working", res);
+                                                    this.fileManager.saveFile('json/product-' + newproductid + '.json', JSON.stringify(res)).then(res => {
+                                                        location.replace("./edit-product.html?p" + newproductid + "u" + user['_id']);
+                                                    });
+                                                })
+                                            } else {
+                                                alert("update fail");
+                                            }
+                                        });
+                                    } else {
+                                        alert(res.text);
+                                    }
+                                });
+                            } else {
+                                //*********EDIT PRODUCT MODE*************//
+                                console.log("edit mode pid", this.id);
+
+                                let json2ways = {
+                                    "id": this.id,
+                                    "categories": categories,
+                                    "sellerMsg": sellerContact,
+                                    "productname": pname,
+                                    "price": parseFloat(price),
+                                    "district": district,
+                                    "deliveryMethod": method,
+                                    "description": pdes,
+                                    "tags": tags,
+                                    "deliveryDesc": deldes,
+                                    "isFree": free,
+                                    "isNew": status,
+                                    "pics": this.pics,
+                                    "isFanpage": isFanpage,
+                                    "fanpage": fanpage,
+                                    "createTime": this.CREATETIME,
+                                    "like": this.LIKE,
+                                    "ownerId": this.OWNERID,
+                                    "postStatus": this.POSTSTATUS,
+                                    "replyArray": this.REPLYARRAY
+                                };
+                                console.log("omgomg3", json2ways);
+                                // //******* UPDATE JSON ***********//
+                                this.fileManager.saveFile('json/product-' + this.id + '.json', JSON.stringify(json2ways));
+
+                                //********UPDATE DATABASE***********//
+                                let paramsDatabase = {
+                                    "action": "addData",
+                                    "index": "change",
+                                    "type": "product",
+                                    "id": this.id,
+                                    "body": json2ways
+                                };
+                                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                                Polymer.postData(Url, paramsDatabase).then(res => {
+                                    console.log("json", json2ways);
+                                    if (res.code > 0) {
+                                        // alert("成功！");
+                                        location.replace("./edit-product.html?p" + this.id + "u" + user['_id']);
+
+                                        // //*************PASS DATA FROM DATABASE TO JSON****************//
+                                        // let DatabaseToJson = {
+                                        //     "action": "getData",
+                                        //     "index": "change",
+                                        //     "type": "product",
+                                        //     "id": this.id
+                                        // };
+                                        // Polymer.postData(Url, DatabaseToJson).then(res => {
+                                        //     if (res.code > 0) {
+                                        //         alert("DatabaseToJson success");
+                                        //         console.log("DatabaseToJson reslve", res.resolve);
+
+                                        //     } else {
+                                        //         alert("DatabaseToJson ERROR!");
+                                        //     }
+                                        // });
+                                    } else {
+                                        alert("update fail");
+                                    }
+                                });
+                            }
+                        }
+                    }
 
                     //SET NEW PID (NO USE)//
                     // let x = 0;
@@ -1297,128 +1487,30 @@
                     //     console.log("TOTAL NO. OF PRODUCT IN DATABASE + 1", this.next);
                     // }
 
-                    let loc = location.search;
-                    if (loc == "") {
-                        //******ADD PRODUCT MODE************//
+                    // let forFanpageinfo = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                    // fanpageInfo = {
+                    //     "action": "searchData",
+                    //     "index": "change",
+                    //     "type": "pages",
+                    //     "body": {
+                    //         "query": {
+                    //             "match": {
+                    //                 "name": fanpage
+                    //             }
+                    //         }
+                    //     }
+                    // };
+                    // let fanpageName;
+                    // let fanpageHead;
+                    // Polymer.postData(forFanpageinfo, fanpageInfo).then(res => {
+                    //     console.log("forFanpageinfo working!!", res.resolve[0]);
+                    //     fanpageName = res.resolve[0]['name'];
+                    //     fanpageHead = res.resolve[0]['head'];
+                    //     console.log("fanpageName:", fanpageName);
+                    //     console.log("fanpageHead:", fanpageHead);
+                    // });
 
-                        let params = {
-                            "action": "addproduct",
-                            "categories": categories,
-                            "sellerMsg": sellerContact,
-                            "productname": pname,
-                            "price": parseFloat(price),
-                            "district": district,
-                            "deliveryMethod": method,
-                            "descrip": pdes,
-                            "tag": tags,
-                            "deliveryDesc": deldes,
-                            "isNew": status,
-                            "ownerId": ownerId,
-                            "pics": this.pics,
-                            "isFanpage": isFanpage
-                        };
-                        // console.log("BBB", params);
-                        let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
-                        Polymer.postData(link, params).then(res => {
-                            console.log("BBB", res);
-                            var newproductid = res.resolve.id;
-                            console.log("BBB1", newproductid);
 
-                            if (res.code > 0) {
-                                let paramup = {
-                                    "action": "updateData",
-                                    "index": "change",
-                                    "type": "_user",
-                                    "id": user['_id'],
-                                    "body": {
-                                        "query": {
-                                            "script": {
-                                                "source": "ctx._source['goodsNum']+=1"
-                                            }
-                                        }
-                                    }
-                                };
-                                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                                Polymer.postData(Url, paramup).then(res => {
-                                    if (res.code > 0) {
-                                        // alert("成功！");
-                                        this.dataManager.loadData(newproductid).then(res => {
-                                            console.log("Working", res);
-                                            this.fileManager.saveFile('json/product-' + newproductid + '.json', JSON.stringify(res)).then(res => {
-                                                location.replace("./edit-product.html?p" + newproductid + "u" + user['_id']);
-                                            });
-                                        })
-                                    } else {
-                                        alert("update fail");
-                                    }
-                                });
-                            } else {
-                                alert(res.text);
-                            }
-                        });
-                    } else {
-                        //*********EDIT PRODUCT MODE*************//
-                        console.log("edit mode pid", this.id);
-
-                        let json2ways = {
-                            "id": this.id,
-                            "categories": categories,
-                            "sellerMsg": sellerContact,
-                            "productname": pname,
-                            "price": parseFloat(price),
-                            "district": district,
-                            "deliveryMethod": method,
-                            "description": pdes,
-                            "tags": tags,
-                            "deliveryDesc": deldes,
-                            "isFree": free,
-                            "isNew": status,
-                            "pics": this.pics,
-                            "createTime": this.CREATETIME,
-                            "like": this.LIKE,
-                            "ownerId": this.OWNERID,
-                            "postStatus": this.POSTSTATUS,
-                            "replyArray": this.REPLYARRAY
-                        };
-                        //******* UPDATE JSON ***********//
-                        this.fileManager.saveFile('json/product-' + this.id + '.json', JSON.stringify(json2ways));
-
-                        //********UPDATE DATABASE***********//
-                        let paramsDatabase = {
-                            "action": "addData",
-                            "index": "change",
-                            "type": "product",
-                            "id": this.id,
-                            "body": json2ways
-                        };
-                        let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                        Polymer.postData(Url, paramsDatabase).then(res => {
-                            console.log("json", json2ways);
-                            if (res.code > 0) {
-                                // alert("成功！");
-                                location.replace("./edit-product.html?p" + this.id + "u" + user['_id']);
-
-                                // //*************PASS DATA FROM DATABASE TO JSON****************//
-                                // let DatabaseToJson = {
-                                //     "action": "getData",
-                                //     "index": "change",
-                                //     "type": "product",
-                                //     "id": this.id
-                                // };
-                                // Polymer.postData(Url, DatabaseToJson).then(res => {
-                                //     if (res.code > 0) {
-                                //         alert("DatabaseToJson success");
-                                //         console.log("DatabaseToJson reslve", res.resolve);
-
-                                //     } else {
-                                //         alert("DatabaseToJson ERROR!");
-                                //     }
-                                // });
-                            } else {
-                                alert("update fail");
-                            }
-                        });
-                    }
                 } else {
                     alert("Please login first");
                 }

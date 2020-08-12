@@ -1,0 +1,5 @@
+<change-header></change-header>
+<confirm-regis></confirm-regis>
+<change-footer></change-footer>
+<button class="googleloginname" style="display:none;">google login</button>
+<div class="g-signin2" data-onsuccess="onSignIn" style="display:none;">imgoogle</div>

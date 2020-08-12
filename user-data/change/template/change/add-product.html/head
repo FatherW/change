@@ -1,0 +1,3 @@
+<link rel="import" href="bower_components/change/change-add-product.html">
+<link rel="import" href="/bower_components/change/change-footer.html">
+<link rel="import" href="bower_components/change/change-announcement.html">

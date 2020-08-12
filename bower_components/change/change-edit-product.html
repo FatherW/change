@@ -164,7 +164,7 @@
 
             .bigPic {
                 height: 45%;
-                background-image: url(http://change.dazzle.website/Website%20Design/product%20page/img/product%20preview/001.jpg);
+                background-image: url(./Website%20Design/product%20page/img/product%20preview/001.jpg);
                 background-size: contain;
                 background-repeat: no-repeat;
                 background-position: center center;
@@ -184,7 +184,7 @@
             #div3,
             #div4 {
                 height: 95%;
-                background-image: url(http://change.dazzle.website/img/item/1.jpg);
+                background-image: url(./img/item/1.jpg);
                 background-size: contain;
                 background-repeat: no-repeat;
                 background-position: center center;
@@ -294,7 +294,7 @@
             #location {
                 width: 30px;
                 height: 30px;
-                background-image: url(http://change.dazzle.website/img/icon/location.png);
+                background-image: url(./img/icon/location.png);
                 background-size: cover;
                 display: inline-block;
                 margin-top: 15px;
@@ -303,7 +303,7 @@
             #delivery {
                 width: 30px;
                 height: 30px;
-                background-image: url(http://change.dazzle.website/img/icon/delivery.png);
+                background-image: url(./img/icon/delivery.png);
                 background-size: cover;
                 display: inline-block;
                 margin-top: 15px;
@@ -312,7 +312,7 @@
 
             .bigsize {
                 font-size: 25px;
-                background-image: url(http://change.dazzle.website/img/);
+                background-image: url(./img/);
                 margin-top: 70px;
             }
 
@@ -373,7 +373,7 @@
         </style>
 
         <div class="top-banner">
-            <img id="banner3" src="http://change.dazzle.website/img/WX20200513-110548@2x.png">
+            <img id="banner3" src="./img/WX20200513-110548@2x.png">
         </div>
         <!-- 
         <div>
@@ -451,7 +451,7 @@
                 <div class="userinfo">
                     <div id="usericon">
                         <div id="a1">
-                            <img src="http://change.dazzle.website/img/user_profile.png">
+                            <img src="./img/user_profile.png">
                         </div>
                         <div id="a2">
                             <div class="name" id="owner">1234</div>
@@ -530,10 +530,8 @@
 </dom-module>
 
 <script>
-
-
     //function for database
-    (function () {
+    (function() {
         Polymer({
             is: 'change-edit-product',
             properties: {
@@ -545,7 +543,7 @@
                     "type": Array
                 }
             },
-            created: function () {
+            created: function() {
 
 
             },
@@ -564,59 +562,111 @@
                 //console.log("arrayResult:", myTags.tags);
             },
 
-            ready: function () {
+            ready: function() {
 
                 this.valueArray = [""];
                 let that = this;
                 let shadow = this.shadowRoot;
-                customElements.whenDefined('vaadin-select').then(function () {
-                    const choice = [
-                        { id: '車與地產', name: '車與地產' },
-                        { id: '潮流生活', name: '潮流生活' },
-                        { id: '家居生活', name: '家居生活' },
-                        { id: '興趣與遊戲', name: '興趣與遊戲' },
-                        { id: '工作與服務', name: '工作與服務' },
-                        { id: '其他服務', name: '其他服務' }
-                    ];
-                    const district = [
-                        { id: '中西區', name: '中西區' },
-                        { id: '灣仔區', name: '灣仔區' },
-                        { id: '東區', name: '東區' },
-                        { id: '南區', name: '南區' },
-                        { id: '油尖旺區', name: '油尖旺區' },
-                        { id: '深水埗', name: '深水埗區' },
-                        { id: '九龍城區', name: '九龍城區' },
-                        { id: '黃大仙區', name: '黃大仙區' },
-                        { id: '觀塘區', name: '觀塘區' },
-                        { id: '葵青區', name: '葵青區' },
-                        { id: '荃灣區', name: '荃灣區' },
-                        { id: '屯門區', name: '屯門區' },
-                        { id: '元朗區', name: '元朗區' },
-                        { id: '離島區', name: '離島區' },
-                        { id: '北區', name: '北區' },
-                        { id: '大埔區', name: '大埔區' },
-                        { id: '沙田區', name: '沙田區' },
-                        { id: '西貢區', name: '西貢區' }
-                    ];
+                customElements.whenDefined('vaadin-select').then(function() {
+                    const choice = [{
+                        id: '車與地產',
+                        name: '車與地產'
+                    }, {
+                        id: '潮流生活',
+                        name: '潮流生活'
+                    }, {
+                        id: '家居生活',
+                        name: '家居生活'
+                    }, {
+                        id: '興趣與遊戲',
+                        name: '興趣與遊戲'
+                    }, {
+                        id: '工作與服務',
+                        name: '工作與服務'
+                    }, {
+                        id: '其他服務',
+                        name: '其他服務'
+                    }];
+                    const district = [{
+                        id: '中西區',
+                        name: '中西區'
+                    }, {
+                        id: '灣仔區',
+                        name: '灣仔區'
+                    }, {
+                        id: '東區',
+                        name: '東區'
+                    }, {
+                        id: '南區',
+                        name: '南區'
+                    }, {
+                        id: '油尖旺區',
+                        name: '油尖旺區'
+                    }, {
+                        id: '深水埗',
+                        name: '深水埗區'
+                    }, {
+                        id: '九龍城區',
+                        name: '九龍城區'
+                    }, {
+                        id: '黃大仙區',
+                        name: '黃大仙區'
+                    }, {
+                        id: '觀塘區',
+                        name: '觀塘區'
+                    }, {
+                        id: '葵青區',
+                        name: '葵青區'
+                    }, {
+                        id: '荃灣區',
+                        name: '荃灣區'
+                    }, {
+                        id: '屯門區',
+                        name: '屯門區'
+                    }, {
+                        id: '元朗區',
+                        name: '元朗區'
+                    }, {
+                        id: '離島區',
+                        name: '離島區'
+                    }, {
+                        id: '北區',
+                        name: '北區'
+                    }, {
+                        id: '大埔區',
+                        name: '大埔區'
+                    }, {
+                        id: '沙田區',
+                        name: '沙田區'
+                    }, {
+                        id: '西貢區',
+                        name: '西貢區'
+                    }];
 
-                    const delmthod = [
-                        { id: '順豐', name: '順豐' },
-                        { id: '面交', name: '面交' },
-                    ]
+                    const delmthod = [{
+                        id: '順豐',
+                        name: '順豐'
+                    }, {
+                        id: '面交',
+                        name: '面交'
+                    }, ]
 
-                    const status = [
-                        { id: '全新', name: '全新' },
-                        { id: '二手', name: '二手' },
-                    ]
+                    const status = [{
+                        id: '全新',
+                        name: '全新'
+                    }, {
+                        id: '二手',
+                        name: '二手'
+                    }, ]
 
-                    shadow.querySelector('#vs1').renderer = function (root) {
+                    shadow.querySelector('#vs1').renderer = function(root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        choice.forEach(function (item) {
+                        choice.forEach(function(item) {
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
@@ -626,14 +676,14 @@
                         root.appendChild(listBox);
                     };
 
-                    shadow.querySelector('#vs2').renderer = function (root) {
+                    shadow.querySelector('#vs2').renderer = function(root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        district.forEach(function (item) {
+                        district.forEach(function(item) {
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
@@ -643,14 +693,14 @@
                         root.appendChild(listBox);
                     };
 
-                    shadow.querySelector('#vs3').renderer = function (root) {
+                    shadow.querySelector('#vs3').renderer = function(root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        delmthod.forEach(function (item) {
+                        delmthod.forEach(function(item) {
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
@@ -660,14 +710,14 @@
                         root.appendChild(listBox);
                     };
 
-                    shadow.querySelector('#vs4').renderer = function (root) {
+                    shadow.querySelector('#vs4').renderer = function(root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        status.forEach(function (item) {
+                        status.forEach(function(item) {
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
@@ -703,7 +753,7 @@
                 });
 
             },
-            _saveData: function () {
+            _saveData: function() {
                 let user = store.get("change-user") || null;
                 if (user != null) {
                     console.log(user);
@@ -801,15 +851,14 @@
                             alert("Failed");
                         }
                     })
-                }
-                else {
+                } else {
                     alert("Please login first");
                 }
 
 
             },
 
-            _uploadFile: function () {
+            _uploadFile: function() {
                 console.log('upload');
                 let shadow = this.shadowRoot;
                 let that = this;

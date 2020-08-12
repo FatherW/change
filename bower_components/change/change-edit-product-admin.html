@@ -153,7 +153,7 @@
 
             .bigPic {
                 height: 45%;
-                background-image: url(http://change.dazzle.website/Website%20Design/product%20page/img/product%20preview/001.jpg);
+                background-image: url(./Website%20Design/product%20page/img/product%20preview/001.jpg);
                 background-size: contain;
                 background-repeat: no-repeat;
                 background-position: center center;
@@ -173,7 +173,7 @@
             #div3,
             #div4 {
                 height: 95%;
-                background-image: url(http://change.dazzle.website/img/item/1.jpg);
+                background-image: url(./img/item/1.jpg);
                 background-size: contain;
                 background-repeat: no-repeat;
                 background-position: center center;
@@ -190,7 +190,7 @@
             }
 
             #head {
-                background-image: url(http://change.dazzle.website/img/symbol/s5.png);
+                background-image: url(./img/symbol/s5.png);
                 width: 60px;
                 height: 60px;
                 background-size: cover;
@@ -232,7 +232,7 @@
             #location {
                 width: 30px;
                 height: 30px;
-                background-image: url(http://change.dazzle.website/img/icon/location.png);
+                background-image: url(./img/icon/location.png);
                 background-size: cover;
                 display: inline-block;
             }
@@ -245,7 +245,7 @@
             #delivery {
                 width: 30px;
                 height: 30px;
-                background-image: url(http://change.dazzle.website/img/icon/delivery.png);
+                background-image: url(./img/icon/delivery.png);
                 background-size: cover;
                 display: inline-block;
             }
@@ -296,7 +296,7 @@
 
             .bigsize {
                 font-size: 25px;
-                background-image: url(http://change.dazzle.website/img/);
+                background-image: url(./img/);
                 margin-top: 110px;
             }
 
@@ -431,7 +431,7 @@
 
 
         <div class="top-banner">
-            <img id="banner3" src="http://change.dazzle.website/img/WX20200513-110548@2x.png">
+            <img id="banner3" src="./img/WX20200513-110548@2x.png">
         </div>
 
         <!-- <div>
@@ -502,7 +502,7 @@
                 <div class="userinfo">
                     <div id="usericon">
                         <div id="a1">
-                            <img src="http://change.dazzle.website/img/user_profile.png">
+                            <img src="./img/user_profile.png">
                         </div>
                         <div id="a2">
                             <div class="name" id="owner">1234</div>
@@ -603,7 +603,7 @@
                     </div>
                     <!-- <div id="t1" style="display: inline-block;">
                         <div>
-                            <img class="user" src="http://change.dazzle.website/img/head.png" alt="user">
+                            <img class="user" src="./img/head.png" alt="user">
                         </div>
                         <div style="margin-left: 15px;">
                             <a href="#" class="myButton1">對話</a>
@@ -622,7 +622,7 @@
 </dom-module>
 
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-edit-product-admin',
             properties: {
@@ -630,10 +630,10 @@
                     "type": String
                 }
             },
-            created: function () {
+            created: function() {
 
             },
-            ready: function () {
+            ready: function() {
                 let that = this;
                 let shadow = this.shadowRoot;
                 let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
@@ -701,7 +701,7 @@
 
             //            },
 
-            _uploadFile: function () {
+            _uploadFile: function() {
                 console.log('upload');
                 let shadow = this.shadowRoot;
                 let that = this;

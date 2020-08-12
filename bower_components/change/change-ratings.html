@@ -3,15 +3,43 @@
 <dom-module id="change-ratings">
     <template>
         <style>
-            fieldset,
+            #container {
+                /* height: 500px; */
+            }
+
+            #a1 {
+                margin-top: 40px;
+            }
+
+            p {
+                font-family: sans-serif, Microsoft JhengHei;
+                color: black;
+            }
+
+            #container {
+                text-align: center;
+            }
+
+            .head {
+                height: 75px;
+            }
+
+            .rate {
+                font-family: sans-serif, Microsoft JhengHei;
+                color: white;
+                font-size: 15px;
+                background-color: red;
+                border: 1px solid red;
+                border-radius: 3px;
+                padding: 15px 125px;
+                margin-bottom: 40px;
+            }
+
+            /* fieldset,
             label {
                 margin: 0;
                 padding: 0;
-            }
-
-            body {
-                margin: 20px;
-            }
+            } */
 
             h1 {
                 font-size: 1.5em;
@@ -22,7 +50,9 @@
 
             .rating {
                 border: none;
-                float: left;
+                /* float: left; */
+                width: 280px;
+                margin: 0 auto;
             }
 
             .rating>input {
@@ -31,7 +61,7 @@
 
             .rating>label:before {
                 margin: 5px;
-                font-size: 1.25em;
+                font-size: 3em;
                 font-family: FontAwesome;
                 display: inline-block;
                 content: "\f005";
@@ -54,7 +84,7 @@
             .rating:not(:checked)>label:hover,
             /* hover current star */
             .rating:not(:checked)>label:hover~label {
-                color: #FFD700;
+                color: red;
             }
 
             /* hover previous stars in list */
@@ -70,28 +100,38 @@
         </style>
         <style include="icon-styles"></style>
         <div id="container">
+            <div id="a1">
+                <img src="https://www.gettv.hk/img/user_profile.png" class="head">
+            </div>
+            <p style="font-weight: bold;">喜歡賣家服務嗎?</p>
+            <p>點一下星星來在Get Change 評分</p>
             <fieldset class="rating">
-                <input type="radio" id="star5" name="rating" value="5" /><label class="full" for="star5"
-                    title="Awesome - 5 stars"></label>
-                <input type="radio" id="star4half" name="rating" value="4 and a half" /><label class="half"
-                    for="star4half" title="Pretty good - 4.5 stars"></label>
-                <input type="radio" id="star4" name="rating" value="4" /><label class="full" for="star4"
-                    title="Pretty good - 4 stars"></label>
-                <input type="radio" id="star3half" name="rating" value="3 and a half" /><label class="half"
-                    for="star3half" title="Meh - 3.5 stars"></label>
-                <input type="radio" id="star3" name="rating" value="3" /><label class="full" for="star3"
-                    title="Meh - 3 stars"></label>
-                <input type="radio" id="star2half" name="rating" value="2 and a half" /><label class="half"
-                    for="star2half" title="Kinda bad - 2.5 stars"></label>
-                <input type="radio" id="star2" name="rating" value="2" /><label class="full" for="star2"
-                    title="Kinda bad - 2 stars"></label>
-                <input type="radio" id="star1half" name="rating" value="1 and a half" /><label class="half"
-                    for="star1half" title="Meh - 1.5 stars"></label>
-                <input type="radio" id="star1" name="rating" value="1" /><label class="full" for="star1"
-                    title="Sucks big time - 1 star"></label>
-                <input type="radio" id="starhalf" name="rating" value="half" /><label class="half" for="starhalf"
-                    title="Sucks big time - 0.5 stars"></label>
+                <input class="rates" type="radio" id="star5" name="rating" value="5" /><label class="full" for="star5"
+                    title="5分"></label>
+                <input class="rates" type="radio" id="star4half" name="rating" value="4.5" /><label class="half"
+                    for="star4half" title="4.5分"></label>
+                <input class="rates" type="radio" id="star4" name="rating" value="4" /><label class="full" for="star4"
+                    title="4分"></label>
+                <input class="rates" type="radio" id="star3half" name="rating" value="3.5" /><label class="half"
+                    for="star3half" title="3.5分"></label>
+                <input class="rates" type="radio" id="star3" name="rating" value="3" /><label class="full" for="star3"
+                    title="3分"></label>
+                <input class="rates" type="radio" id="star2half" name="rating" value="2.5" /><label class="half"
+                    for="star2half" title="2.5分"></label>
+                <input class="rates" type="radio" id="star2" name="rating" value="2" /><label class="full" for="star2"
+                    title="2分"></label>
+                <input class="rates" type="radio" id="star1half" name="rating" value="1.5" /><label class="half"
+                    for="star1half" title="1.5分"></label>
+                <input class="rates" type="radio" id="star1" name="rating" value="1" /><label class="full" for="star1"
+                    title="1分"></label>
+                <input class="rates" type="radio" id="starhalf" name="rating" value="0.5" /><label class="half"
+                    for="starhalf" title="0.5分"></label>
             </fieldset>
+            <button on-click="_submit" class="rate">評分</button>
+        </div>
+
+        <div id="container">
+
         </div>
     </template>
 </dom-module>
@@ -114,9 +154,26 @@
 
             },
             ready: function () {
+                console.log("Ready here:");
+                let that = this;
+                let shadow = this.shadowRoot;
+
+                //*************Get value from rating stars************//
+                shadow.querySelectorAll('.rates').forEach((item) => {
+                    item.addEventListener('click', (e) => { 
+                        this.userRate = item.value;       
+                    });
+                });
             },
 
+            _submit: function () {
+                console.log("SUBMIT WORKING!");
+                let that = this;
+                let shadow = this.shadowRoot;
+                
+                console.log("user rate:", this.userRate);
 
+            }
 
         });
 

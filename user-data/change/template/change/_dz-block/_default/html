@@ -1,0 +1,73 @@
+
+    <div class="container1 container1-md">
+
+
+                    
+                    <div class="zhongdiantuijian zhongdiantuijian-md"><h1>重點推介</h1></div><div class="item-pindao item-pindao-md"><h1><img src="img/icon/tv-black.png" id="logo">频道</h1>
+</div>
+            <div class="item-zhongdiantuijian item-zhongdiantuijian-md">
+                
+                <!--div pic-->
+                
+            </div>
+<change-item1>
+                        <div>
+                            <div class="medium1">愛多</div>
+                            <div class="small1">關懷與心靈健康</div>
+                            <div class="gettv_bg bg1"></div>
+                        </div>
+                    </change-item1>
+                    <change-item1>
+                        <div>
+                            <div class="medium1">識多啲</div>
+                            <div class="small1">關懷與心靈健康</div>
+                            <div class="gettv_bg bg2"></div>
+                        </div>
+                    </change-item1>
+                    <change-item1>
+                        <div>
+                            <div class="medium1">看多啲</div>
+                            <div class="small1">關懷與心靈健康</div>
+                            <div class="gettv_bg bg3"></div>
+                        </div>
+                    </change-item1>
+                    <change-item1>
+                        <div>
+                            <div class="medium1">靚多啲</div>
+                            <div class="small1">關懷與心靈健康</div>
+                            <div class="gettv_bg bg4"></div>
+                        </div>
+                    </change-item1>
+                    <change-item1>
+                        <div>
+                            <div class="medium1">知多啲</div>
+                            <div class="small1">關懷與心靈健康</div>
+                            <div class="gettv_bg bg5
+            "></div>
+                        </div>
+                    </change-item1>
+                    <change-item1>
+                        <div>
+                            <div class="medium1">玩多啲</div>
+                            <div class="small1">關懷與心靈健康</div>
+                            <div class="gettv_bg bg6"></div>
+                        </div>
+                    </change-item1>
+                    <change-item1>
+                        <div>
+                            <div class="medium1">食多啲</div>
+                            <div class="small1">關懷與心靈健康</div>
+                            <div class="gettv_bg bg7"></div>
+                        </div>
+                    </change-item1>
+                    <change-item1>
+                        <div>
+                            <div class="medium1">Get多啲</div>
+                            <div class="small1">關懷與心靈健康</div>
+                            <div class="gettv_bg bg8"></div>
+                        </div>
+                    </change-item1>
+
+                    <div class="clear"></div>
+
+                </div>

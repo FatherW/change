@@ -149,7 +149,7 @@
 				background-size: contain;
 				/* background-repeat: no-repeat; */
 				margin: 1%;
-				background-image: url(http://change.dazzle.website/img/channel_banner/1.jpg);
+				background-image: url(./img/channel_banner/1.jpg);
 			}
 
 			.circle {
@@ -166,7 +166,7 @@
             <div class="short-profile-grid">
                 <div>
                     <div id="a1">
-                        <img src="http://change.dazzle.website/img/user_profile.png">
+                        <img src="./img/user_profile.png">
                     </div>
                     <div id="a2">
                         <div class="name">Peter Chan</div>
@@ -237,7 +237,7 @@
                     <change-things>
                         <div>
                             <div id="a1">
-                                <img src="http://change.dazzle.website/img/user_profile.png">
+                                <img src="./img/user_profile.png">
                             </div>
                             <div id="a2">
                                 <div class="name">1234</div>
@@ -271,7 +271,7 @@
                     <change-things>
                         <div>
                             <div id="a1">
-                                <img src="http://change.dazzle.website/img/user_profile.png">
+                                <img src="./img/user_profile.png">
                             </div>
                             <div id="a2">
                                 <div class="name">1234</div>
@@ -303,7 +303,7 @@
                     <change-things>
                         <div>
                             <div id="a1">
-                                <img src="http://change.dazzle.website/img/user_profile.png">
+                                <img src="./img/user_profile.png">
                             </div>
                             <div id="a2">
                                 <div class="name">1234</div>
@@ -334,7 +334,7 @@
                     <change-things>
                         <div>
                             <div id="a1">
-                                <img src="http://change.dazzle.website/img/user_profile.png">
+                                <img src="./img/user_profile.png">
                             </div>
                             <div id="a2">
                                 <div class="name">1234</div>
@@ -386,8 +386,8 @@
             created: function() {
                 this.thisPage = decodeURIComponent(window.location.pathname).substring(window.location.pathname.indexOf('/') + 1) || 'index.html';
             },
-            ready: function () {
-                
+            ready: function() {
+
             },
             _showMyGoods: function() {
                 console.log('Show My Goods');
@@ -400,7 +400,7 @@
                     "type": "product",
                     "id": "17"
                 };
-                
+
                 Polymer.postData(goodsUrl, params).then(res => {
                     console.log("Result", res);
                     if (res.code > 0) {

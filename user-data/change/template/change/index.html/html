@@ -1,0 +1,115 @@
+
+    <change-header2></change-header2>
+
+    <!-- Slideshow container -->
+<div class="slideshow-container" onload="showSlides(1)" style="margin-top: -7px;">
+  <!-- Full-width images with number and caption text -->
+  <div class="mySlides fade">
+    <div class="numbertext"></div>
+    <img src="http://www.gettv.hk/Website%20Design/get%20tv/GET%20TV%20photo/slider_banner/1.jpeg" style="width:100%">
+  </div>
+<!--
+  <div class="mySlides fade">
+    <div class="numbertext"></div>
+    <img src="http://www.gettv.hk/Website%20Design/get%20tv/GET%20TV%20photo/slider_banner/2.jpeg" style="width:100%">
+  </div>
+
+  <div class="mySlides fade">
+    <div class="numbertext"></div>
+    <img src="http://www.gettv.hk/Website%20Design/get%20tv/GET%20TV%20photo/slider_banner/3.jpeg" style="width:100%">
+  </div>
+-->
+  <!-- Next and previous buttons 
+  <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+  <a class="next" onclick="plusSlides(1)">&#10095;</a> -->
+</div>
+<br>
+
+<!-- The dots/circles -->
+<div style="text-align:center">
+  <span class="dot" onclick="currentSlide(1)"></span>
+  <span class="dot" onclick="currentSlide(2)"></span>
+  <span class="dot" onclick="currentSlide(3)"></span>
+</div>
+		<div class="allduiqi">
+        
+        <dz-block block="qqqqqq">
+    <div class="container1 container1-md">
+
+
+                    
+                    <div class="zhongdiantuijian zhongdiantuijian-md"><h1>重點推介</h1></div><div class="item-pindao item-pindao-md"><h1><img src="img/icon/tv-black.png" id="logo">頻道</h1>
+</div>
+            <div class="item-zhongdiantuijian item-zhongdiantuijian-md">
+                
+               
+<iframe width="100%" height="100%" src="https://www.youtube.com/embed/-biOGdYiF-I" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+ <!--div pic-->
+                
+            </div>
+<change-item1>
+                        <div>
+                            <div class="medium1">愛多啲</div>
+                            <div class="small1">關懷與心靈健康</div>
+                            <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrhER3oQUYbz8wnmCv1VUBw"><div class="gettv_bg bg1"></div></a>
+                        </div>
+                    </change-item1>
+                    <change-item1>
+                        <div>
+                            <div class="medium1">識多啲</div>
+                            <div class="small1">學術與課程</div>
+                            <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqC1OITdb_QGz18JPmmj8a5"><div class="gettv_bg bg2"></div></a>
+                        </div>
+                    </change-item1>
+                    <change-item1>
+                        <div>
+                            <div class="medium1">睇多啲</div>
+                            <div class="small1">短片電影及劇集</div>
+                            <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpNTw4BXAyEyyMMkhl5XcR2"><div class="gettv_bg bg3"></div></a>
+                        </div>
+                    </change-item1>
+                    <change-item1>
+                        <div>
+                            <div class="medium1">靚多啲</div>
+                            <div class="small1">健康美容分享</div>
+                            <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHon14MDeHFMa9qXMo7zW92T"><div class="gettv_bg bg4"></div></a>
+                        </div>
+                    </change-item1>
+                    <change-item1>
+                        <div>
+                            <div class="medium1">知多啲</div>
+                            <div class="small1">新聞及資訊</div>
+                            <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqykeagwZRZwfEyOuTCYF7a"><div class="gettv_bg bg5"></div></a>
+                        </div>
+                    </change-item1>
+                    <change-item1>
+                        <div>
+                            <div class="medium1">玩多啲</div>
+                            <div class="small1">旅遊及玩樂資訊</div>
+                            <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrywYfDOzAjc0rA89VGqpa5"><div class="gettv_bg bg6"></div></a>
+                        </div>
+                    </change-item1>
+                    <change-item1>
+                        <div>
+                            <div class="medium1">食多啲</div>
+                            <div class="small1">飲食情報</div>
+                            <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpzSn5NOnJiIiGwWvIwR3jj"><div class="gettv_bg bg7"></div></a>
+                        </div>
+                    </change-item1>
+                    <change-item1>
+                        <div>
+                            <div class="medium1">Get多啲</div>
+                            <div class="small1">Get Change交易平台</div>
+                            <a href="http://www.gettv.hk/getTv.html"><div class="gettv_bg bg8"></div></a>
+                        </div>
+                    </change-item1>
+
+                    <div class="clear"></div>
+
+                </div></dz-block>
+    </div>
+    <change-footer></change-footer>
+    <change-announcement>FIXED ANNOUNCEMENT</change-announcement>
+        <button class="googleloginname" style="display:none;">writegoogle</button>
+        <div class="g-signin2" data-onsuccess="onSignIn" style="display:none;">imgoogle</div>
+     

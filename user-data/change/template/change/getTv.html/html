@@ -1,0 +1,136 @@
+  <!-- Body -->
+    <div id="wrapper">
+        
+<dz-block block="_header"><change-header></change-header></dz-block>
+<change-navbar></change-navbar>
+
+
+   
+        
+            
+            <div class="banner_panel" style="margin-top: 5px;">
+<img id="banner3" src="http://www.gettv.hk/img/WX20200513-110548@2x.png"><img id="banner2" src="img/WX20200513-112437@2x.png"></div>
+<div class="shop_panel">
+    <div class="gettv">
+        <h1>/<font size="5" face="Verdana">Get TV</font>頻道</h1>
+        <div id="channel_panel">
+
+            <div class="channel">
+                <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpNTw4BXAyEyyMMkhl5XcR2">
+                    <div class="channelpics" style="
+background-image: url(http://www.gettv.hk/img/channel_banner/1.jpg);
+">
+                    </div>
+                </a>
+                <h3>睇多啲</h3>
+                <p class="font-size-1px">短片電影及劇集</p>
+            </div>
+            <div class="channel">
+                <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqC1OITdb_QGz18JPmmj8a5">
+                    <div class="channelpics" style="
+background-image: url(http://www.gettv.hk/img/channel_banner/2.jpg);
+">
+                    </div>
+                </a>
+                <h3>識多啲</h3>
+                <p class="font-size-1px">學術與課程</p>
+            </div>
+            <div class="channel">
+                <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrhER3oQUYbz8wnmCv1VUBw">
+                    <div class="channelpics" style="
+background-image: url(http://www.gettv.hk/img/channel_banner/3.jpg);
+">
+                    </div>
+                </a>
+                <h3>愛多啲</h3>
+                <p class="font-size-1px">關係與心靈健康</p>
+            </div>
+            <div class="channel">
+                <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHon14MDeHFMa9qXMo7zW92T">
+                    <div class="channelpics" style="
+background-image: url(http://www.gettv.hk/img/channel_banner/4.jpg);
+">
+                    </div>
+                </a>
+                <h3>靚多啲</h3>
+                <p class="font-size-1px">健康美容分享</p>
+            </div>
+            <div class="channel">
+                <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqykeagwZRZwfEyOuTCYF7a">
+                    <div class="channelpics" style="
+background-image: url(http://www.gettv.hk/img/channel_banner/5.jpg);
+">
+                    </div>
+                </a>
+                <h3>知多啲</h3>
+                <p class="font-size-1px">新聞及資訊</p>
+            </div>
+            <div class="channel">
+                <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrywYfDOzAjc0rA89VGqpa5">
+                    <div class="channelpics" style="
+background-image: url(http://www.gettv.hk/img/channel_banner/6.png);
+">
+                    </div>
+                </a>
+                <h3>玩多啲</h3>
+                <p class="font-size-1px">旅遊及玩樂資訊</p>
+            </div>
+            <div class="channel">
+                <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpzSn5NOnJiIiGwWvIwR3jj">
+                    <div class="channelpics" style="
+background-image: url(http://www.gettv.hk/img/channel_banner/7.jpeg);
+">
+                    </div>
+                </a>
+                <h3>食多啲</h3>
+                <p class="font-size-1px">飲食情報</p>
+            </div>
+            <div class="channel">
+                <a href="http://www.gettv.hk/list-product.html">
+                    <div class="channelpics" style="
+background-image: url(http://www.gettv.hk/img/channel_banner/8.jpg);
+">
+                    </div>
+                </a>
+                <h3>GET多啲</h3>
+                <p class="font-size-1px">Get Change交易平台</p>
+            </div>
+            <div class="clear"></div>
+        </div>
+
+
+
+
+
+
+
+
+    </div>
+    <div class="getchange">
+        <h1>/<font size="6" face="Verdana">Get</font> 交易</h1>
+
+
+
+
+
+        <change-shop>
+
+
+            <change-itemspecial> </change-itemspecial>
+
+            <div class="clear"></div>
+
+        </change-shop>
+
+    </div>
+
+</div>
+
+        <div>
+<change-footer></change-footer>
+            <change-announcement>FIXED ANNOUNCEMENT</change-announcement>
+        </div>
+
+    </div>
+    <button class="googleloginname" style="display:none;">google login</button>
+<div class="g-signin2" data-onsuccess="onSignIn" style="display:none;">imgoogle</div>

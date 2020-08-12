@@ -1,0 +1,19 @@
+{
+    "id": 83,
+    "username": "casey",
+    "numberRate": 0,
+    "goodsNum": 10,
+    "area": "觀塘區",
+    "email": "kisichun@gmail.com",
+    "phone": "00",
+    "password": "1",
+    "createTime": "1596650168072",
+    "isPromotionMsg": true,
+    "head": "http://www.gettv.hk/img/user_profile.png",
+    "likeProduct": [],
+    "score": 5,
+    "history": [],
+    "isAdmin": false,
+    "token": "",
+    "platform": "gettv"
+}

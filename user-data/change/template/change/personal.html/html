@@ -1,0 +1,7 @@
+<change-header></change-header>
+    <change-user-banner></change-user-banner>
+    <change-user-info></change-user-info>
+    <change-slidelist></change-slidelist>
+    <dz-block block="_tv_footer"></dz-block>
+	<button class="googleloginname" style="display:none;">google login</button>
+<div class="g-signin2" data-onsuccess="onSignIn" style="display:none;">imgoogle</div>

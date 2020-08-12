@@ -13,6 +13,7 @@
 <link rel="import" href="../change/change-buy.html">
 <link rel="import" href="../change/change-webcom.html">
 <link rel="import" href="change-edit-bar.html">
+<link rel="import" href="change-user-tag.html">
 
 
 
@@ -98,7 +99,7 @@
             .outer {
                 margin: 0;
                 width: 100%;
-                background-image: url(http://change.dazzle.website/img/background/3.jpg);
+                background-image: url(./img/background/3.jpg);
                 padding-bottom: 50px;
             }
 
@@ -118,7 +119,7 @@
             .bigPic,
             #div0 {
                 height: 450px;
-                background-image: url(http://change.dazzle.website/img/nopic.png);
+                background-image: url(./img/nopic.png);
                 background-size: contain;
                 background-repeat: no-repeat;
                 background-position: center center;
@@ -138,7 +139,7 @@
             #div3,
             #div4 {
                 height: 95%;
-                background-image: url("http://change.dazzle.website/img/nopic.png");
+                background-image: url("./img/nopic.png");
                 background-size: contain;
                 background-repeat: no-repeat;
                 background-position: center center;
@@ -156,7 +157,7 @@
             }
 
             /* #head {
-                background-image: url('http://change.dazzle.website/img/symbol/s5.png');
+                background-image: url('./img/symbol/s5.png');
                 width: 60px;
                 height: 60px;
                 background-size: cover;
@@ -194,7 +195,7 @@
             #location {
                 width: 30px;
                 height: 30px;
-                background-image: url('http://change.dazzle.website/img/icon/location.png');
+                background-image: url('https://www.gettv.hk/img/icon/location.png');
                 background-size: cover;
                 display: inline-block;
             }
@@ -207,7 +208,7 @@
             #delivery {
                 width: 30px;
                 height: 30px;
-                background-image: url('http://change.dazzle.website/img/icon/delivery.png');
+                background-image: url('https://www.gettv.hk/img/icon/delivery.png');
                 background-size: cover;
                 display: inline-block;
             }
@@ -259,7 +260,7 @@
 
             .bigsize {
                 font-size: 25px;
-                background-image: url('http://change.dazzle.website/img/');
+                background-image: url('./img/');
                 margin-top: 110px;
             }
 
@@ -347,7 +348,9 @@
             }
 
             #a1 img {
+                width: 40px;
                 height: 40px;
+                border-radius: 9999999999999px;
             }
 
             /* .user {
@@ -410,7 +413,8 @@
         </style>
 
         <div class="top-banner">
-            <img id="banner3" src="http://change.dazzle.website/img/WX20200513-110548@2x.png">
+            <img id="banner3" src="">
+            <!-- ./img/WX20200513-110548@2x.png -->
         </div>
 
         <!-- <div>
@@ -464,16 +468,20 @@
                             <span id="pn" class="store"></span>
                         </div>
                     </div>
-                    <div class="userinfo">
-                        <div id="usericon">
-                            <div id="a1">
-                                <img src="http://change.dazzle.website/img/user_profile.png">
-                            </div>
-                            <div id="a2">
-                                <div class="name" id="owner"></div>
+
+                    <a href$="{{link}}">
+                        <div class="userinfo">
+                            <div id="usericon">
+                                <div id="a1">
+                                    <img class="head" src="./img/user_profile.png">
+                                </div>
+                                <div id="a2">
+                                    <div class="name" id="owner"></div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
+
 
                     <div class="dollar" id="aaa"></div>
 
@@ -612,7 +620,7 @@
                         //get and pass tag data
                         let itemtag = "";
                         for (count = 0; count < res.resolve['tags'].length; count++) {
-                            itemtag += '<button id=\"tagbutton\">' + '<a href="list-product.html?tag=' + res.resolve['tags'][count] + '">' + res.resolve['tags'][count] + "</a></button> &nbsp;"
+                            itemtag += '<button id=\"tagbutton\">' + '<a href="list-product.html?tag=' + encodeURIComponent(res.resolve['tags'][count]) + '">' + res.resolve['tags'][count] + "</a></button>";
                         }
                         shadow.querySelector('#t').innerHTML = itemtag;
 
@@ -628,25 +636,52 @@
                         let deliveryDesc = res.resolve['deliveryDesc'];
                         shadow.querySelector('.deliveryDesc').innerHTML = deliveryDesc;
 
+                        //DETERMIN WHETHER IT IS UPLOADED BY FANPAGE OR USERS & GET BACK REQUIRED NAME, HEAD AND LINK
                         let o = res.resolve['ownerId'];
-                        let p = {
-                            "action": "searchData",
-                            "index": "change",
-                            "type": "_user",
-                            "body": {
-                                "query": {
-                                    "match": {
-                                        "_id": o
+                        let isFanpage = res.resolve['isFanpage'];
+                        if (isFanpage == true) {
+                            shadow.querySelector('#owner').innerHTML = res.resolve['fanpage'];
+                            let parampage = {
+                                "action": "searchData",
+                                "index": "change",
+                                "type": "pages",
+                                "body": {
+                                    "query": {
+                                        "match": {
+                                            "name": res.resolve['fanpage']
+                                        }
                                     }
                                 }
-                            }
-                        }
-                        Polymer.postData(Url, p).then(res => {
-                            if (res.code > 0) {
-                                let un = res.resolve[0]['username'];
-                                shadow.querySelector('#owner').innerHTML = un;
-                            }
-                        })
+                            };
+                            Polymer.postData(Url, parampage).then(res => {
+                                shadow.querySelector('.head').src = res.resolve[0]['head'];
+                                this.link = "/" + res.resolve[0]['website'];
+                            });
+                        } else {
+                            let p = {
+                                "action": "searchData",
+                                "index": "change",
+                                "type": "_user",
+                                "body": {
+                                    "query": {
+                                        "match": {
+                                            "_id": o
+                                        }
+                                    }
+                                }
+                            };
+                            Polymer.postData(Url, p).then(res => {
+                                if (res.code > 0) {
+                                    let un = res.resolve[0]['username'];
+                                    shadow.querySelector('#owner').innerHTML = un;
+                                    shadow.querySelector('.head').src = res.resolve[0]['head'];
+                                    this.link = "/user.html?" + res.resolve[0]['id'];
+                                }
+                            });
+
+                        };
+
+
 
                         // let f = res.resolve['isNew'];
                         // if (f == true) {
