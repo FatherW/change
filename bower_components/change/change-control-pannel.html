@@ -80,70 +80,27 @@
                 background-color: #7cd3da;
             }
 
-            .dropbtn {
-                background-color: #7cd3da;
-                color: white;
-                padding: 16px;
-                font-size: 16px;
-                border: none;
-                cursor: pointer;
-            }
-
-            .dropdown {
-                position: relative;
-                display: inline-block;
-            }
-
-            .dropdown-content {
-                display: none;
-                position: absolute;
-                background-color: #f9f9f9;
-                min-width: 160px;
-                box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-                z-index: 1;
-            }
-
-            .dropdown-content a {
-                color: black;
-                padding: 12px 16px;
-                text-decoration: none;
-                display: block;
-            }
-
-            .dropdown-content a:hover {
-                background-color: #f1f1f1
-            }
-
-            .dropdown:hover .dropdown-content {
-                display: block;
-            }
-
-            .dropdown:hover .dropbtn {
-                background-color: #7cd3da;
-            }
-
-
-            /********manipulate vaadin-number-field buttons*********/
-            /* vaadin-number-field::part(decrease-button)  {
-                color: red;
-            } */
-
             .save {
                 width: 50px;
             }
 
-            #info {
+            #info1 {
                 width: 84%;
                 margin: 0 auto;
+                display: none;
             }
 
-            .handIn {
+            #info2 {
+                width: 84%;
+                margin: 0 auto;
+                display: none;
+            }
+
+            .handIn,
+            .search {
                 margin-right: 30px;
             }
 
-            #info {
-                display: none;
-            }
 
             @media only screen and (max-width: 992px) {}
 
@@ -180,20 +137,9 @@
                     <button id="dq" on-click="_disqualify">取消資格</button>
                     <button id="recover" on-click="_recovery">回復資格</button>
                     <button id="manage" on-click="_manageFanPage">管理專頁</button>
-
-                    <!-- <vaadin-select id="manage" placeholder="管理專頁"></vaadin-select> -->
-                    <!-- <div class="dropdown">
-                        <button class="dropbtn" id="manage" on-click="_manageFanPage">管理專頁</button>
-                        <div class="dropdown-content">
-                            <a href="#">Link 1</a>
-                            <a href="#">Link 2</a>
-                            <a href="#">Link 3</a>
-                        </div>
-                    </div> -->
-                    <!-- <vaadin-button id="manage" on-click="_manageFanPage">管理專頁</vaadin-button> -->
                 </div>
 
-                <div id="info">
+                <div id="info1">
                     <h5>專頁資料</h5>
                     <p class="inf">名稱: <span class="infotext" id="name">
                             <vaadin-text-field id='name1'></vaadin-text-field>
@@ -212,8 +158,19 @@
                             <vaadin-text-field id='website2'></vaadin-text-field>
                         </span></p>
                     <div style="display: inline-flex;">
-                        <vaadin-button id="vb" class="handIn" on-click="handin">提交</vaadin-button>
-                        <vaadin-button id="vb" on-click="cancel">取消</vaadin-button>
+                        <vaadin-button class="handIn" on-click="handin">提交</vaadin-button>
+                        <vaadin-button on-click="cancelinfo1">取消</vaadin-button>
+                    </div>
+                </div>
+
+                <div id="info2">
+                    <h5>搜尋專頁</h5>
+                    <p class="inf">專頁名稱: <span class="infotext" id="fpname">
+                            <vaadin-text-field id='fpname1'></vaadin-text-field>
+                        </span></p>
+                    <div style="display: inline-flex;">
+                        <vaadin-button class="search" on-click="search">搜尋</vaadin-button>
+                        <vaadin-button on-click="cancelinfo2">取消</vaadin-button>
                     </div>
                 </div>
             </div>
@@ -249,15 +206,15 @@
                 let that = this;
 
                 shadow.querySelector('.hide').style.display = "none";
-                
+
                 let usercookies = store.get('change-user') || null;
                 console.log("cookie", usercookies);
+                let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 if (usercookies == null) {
 
                 } else {
                     let userID = usercookies['id'];
                     console.log("cookie", userID);
-                    let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                     let param = {
                         "action": "searchData",
                         "index": "change",
@@ -304,7 +261,7 @@
                 Polymer.postData(link, paramMistakes).then(res => {
                     if (res.code > 0) {
                         let mistake = res.resolve.mistake;
-                        // console.log("BBB", mistake);
+                        console.log("BBB", mistake);
                         shadow.querySelector('#mistake').value = mistake;
 
                         //***SET PANNEL TO PINK BACKGROUND IF USER IS DISQUALIFIED***//
@@ -316,14 +273,6 @@
                         alert("Err: Get user mistakes count!");
                     }
                 });
-
-
-                //***CSS fanpagebutton//
-                // let selectbox = shadow.querySelector('#manage');
-                // let selcetTextField = selectbox.shadowRoot.querySelector('vaadin-select-text-field');
-                // let vaadinTextFieldContainer = selcetTextField.shadowRoot.querySelector('.vaadin-text-field-container');
-                // let inputField = vaadinTextFieldContainer.shadowRoot.querySelector('.target');
-                // console.log("CCC", vaadinTextFieldContainer);
 
                 //SET AREA, DERLIVER METHOD, PRODUCT STATUS//
                 this.valueArray = [""];
@@ -385,53 +334,9 @@
                     };
                 });
 
-                // //GET FANPAGE//
-                // let parampage = {
-                //     "action": "searchData",
-                //     "index": "change",
-                //     "type": "pages",
-                //     "_source": "website",
-                //     "body": {
-                //         "query": {
-                //             "match": {
-                //                 "ownerId": 74
-
-                //             }
-                //         }
-                //     }
-                // };
-                // Polymer.postData(link, parampage).then(res => {
-                //     // console.log("BBB", usertokenId);
-                //     // console.log("CCC working",res.resolve);
-                //     let pagename = [];
-                //     if (res.code > 0) {
-                //         res.resolve.forEach(item => {
-                //             pagename.push({
-                //                 website: item['website']
-                //             })
-                //         })
-                //         if (pagename.length == 0) {
-                //             pagename.push({
-                //                 name: "你沒有專頁噢"
-                //             })
-                //         }
-                //         console.log("CCC working",pagename[0]);
-                //         var fanpageN = ""
-                //         let dropdown = shadow.querySelector('.dropdown-content');
-                //         console.log('CCC', dropdown);
-                //         let a = document.createElement('a');
-                //         a.setAttribute('href', res.resolve.website);
-                //         for (i = 0; i < parampage.length; i++) {
-                //             fanpageN += pagename[i].toString();
-                //             console.log('CCC', fanpageN);
-                //         }
-
-
-                //     }
-                // })
             },
 
-            handin() {
+            handin: function () {
                 ///////////////////////////////////////////
                 ///////////////新增專頁寫在這裡///////////////
                 ///////////////////////////////////////////
@@ -457,7 +362,7 @@
                     console.log("gggggggggg", res);
                     if (res.code > 0) {
                         console.log("完成");
-                        shadow.querySelector('#info').style.display = "none";
+                        shadow.querySelector('#info1').style.display = "none";
 
                     }
                     alert(res.text);
@@ -466,11 +371,11 @@
             },
 
             _addFanPage: function () {
-                this.shadowRoot.querySelector('#info').style.display = "block";
+                this.shadowRoot.querySelector('#info1').style.display = "block";
             },
 
-            cancel() {
-                this.shadowRoot.querySelector('#info').style.display = "none";
+            cancelinfo1: function () {
+                this.shadowRoot.querySelector('#info1').style.display = "none";
 
             },
 
@@ -494,7 +399,7 @@
                 let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 Polymer.postData(Url, params).then(res => {
                     if (res.code > 0) {
-                        alert("取消了該用戶資格");
+                        // alert("取消了該用戶資格");
 
                         //PASS TO LAMBDA TO GENERATE EMAIL
                         let LambdaParams = {
@@ -504,6 +409,7 @@
                         let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
                         Polymer.postData(link, LambdaParams).then(res => {
                             console.log("PASS TO LAMBDA SUCCESS!");
+                            location.reload();
                         });
                     }
                 })
@@ -529,7 +435,7 @@
                 let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 Polymer.postData(Url, params).then(res => {
                     if (res.code > 0) {
-                        alert("回復了該用戶資格");
+                        // alert("回復了該用戶資格");
 
                         //PASS TO LAMBDA TO GENERATE EMAIL
                         let LambdaParams = {
@@ -539,6 +445,7 @@
                         let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
                         Polymer.postData(link, LambdaParams).then(res => {
                             console.log("PASS TO LAMBDA SUCCESS!");
+                            location.reload();
                         });
                     }
                 })
@@ -546,7 +453,46 @@
 
             _manageFanPage: function () {
                 console.log("manageFanPage is working!")
+                this.shadowRoot.querySelector('#info2').style.display = "block";
             },
+
+            search: function () {
+                let shadow = this.shadowRoot;
+                let fpname = shadow.querySelector('#fpname1').value;
+                console.log("fpname", fpname);
+
+                let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let searchbyfpname = {
+                    "action": "searchData",
+                    "index": "change",
+                    "type": "pages",
+                    "body": {
+                        "query": {
+                            "match": {
+                                "name": fpname
+                            }
+                        }
+                    }
+                }
+                Polymer.postData(link, searchbyfpname).then(res=>{
+                    if (res.resolve.length > 0){
+                        let website = res.resolve[0]['website'];
+                        console.log("website:", website);
+                        location.replace("./" + website);
+                    }else {
+                        alert("沒有這個專頁!")
+                    }
+                });
+
+
+            },
+
+            cancelinfo2: function () {
+                this.shadowRoot.querySelector('#info2').style.display = "none";
+
+            },
+
+
 
             _save: function () {
                 console.log("updated mistakes count!")
@@ -578,6 +524,7 @@
                     alert("用戶犯錯次數已更新!");
                 });
             }
+
         });
     })();
 </script>

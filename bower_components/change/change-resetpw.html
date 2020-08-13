@@ -22,6 +22,7 @@
             #content {
                 width: 40%;
                 margin: 0 auto;
+                margin-top: 100px;
             }
 
             h1 {
@@ -44,12 +45,14 @@
             }
         </style>
         <div id="content">
-            <div>
-                新密碼:<vaadin-password-field id="pass1" label="密碼" class="padding-none" name="pass"
-                    error-message="Please enter a valid password" required clear-button-visible></vaadin-password-field>
+            <div style="margin-left: 15px;">
+                <!-- label="密碼"  -->
+                新密碼:<vaadin-password-field id="pass1" class="padding-none" name="pass"
+                    error-message="Please enter a valid password" required clear-button-visible></vaadin-password-field> 
             </div>
             <div>
-                確認密碼:<vaadin-password-field id="pass2" label="確認密碼" class="padding-none" name="confirmPass"
+                <!-- label="確認密碼" -->
+                確認密碼:<vaadin-password-field id="pass2" class="padding-none" name="confirmPass"
                     error-message="Passwords do not match" required clear-button-visible></vaadin-password-field>
             </div>
             <div>
@@ -108,6 +111,7 @@
                     console.log("res", res);
                     if (res.code > 0) {
                         alert("密碼已被成功更改");
+                        location.replace("./getTv.html");
                     }
                 })
             },

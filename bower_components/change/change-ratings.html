@@ -198,7 +198,8 @@
                         let numberRate = res.resolve['numberRate'];
                         console.log("numberRate", numberRate);
 
-                        let score = (numberRate * cs + this.userRate) / (numberRate + 1);
+                        let scoreN = (numberRate * cs + this.userRate) / (numberRate + 1);
+                        let score = scoreN.toFixed(1);
                         console.log("new score", score);
                         numberRate = numberRate + 1;
                         console.log("new numberRate", numberRate);
@@ -216,6 +217,7 @@
                         Polymer.postData(Url, param2).then(res => {
                             if (res.code > 0) {
                                 console.log("Rating is done successfully!");
+                                location.replace("./getTv.html");
                             } else {
                                 alert("Err: Rating update unsuccessful!");
                             }
