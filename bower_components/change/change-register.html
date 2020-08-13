@@ -88,7 +88,8 @@
                 padding-top: 0px;
                 width: 100%;
             }
-            #tologin{
+
+            #tologin {
                 background-color: white;
                 width: 85px;
                 border: 1px solid;
@@ -103,7 +104,8 @@
                 <button class="logoFacebook" on-click="log">
                     <img src="img/icon/Facebook.png" class="logoFacebook">&nbspFacebook
                 </button>
-                <button class="logoGoogle" on-click="google"><img src="img/icon/Google.png" class="logoGoogle">&nbspGoogle</button>
+                <button class="logoGoogle" on-click="google"><img src="img/icon/Google.png"
+                        class="logoGoogle">&nbspGoogle</button>
             </div>
             <!-- <div>
                 <button class="logoGoogle"><img src="img/icon/Google.png" class="logoGoogle">&nbspGoogle</button>
@@ -320,10 +322,10 @@
                             if (phone === "") {
                                 alert('電話不可以為空');
                             } else {
-                                if (pass === "") {
+                                if (pass === "" && platform == "gettv") {
                                     alert('請輸入密碼');
                                 } else {
-                                    if (pass !== cpass) {
+                                    if (pass !== cpass && platform == "gettv") {
                                         alert('兩個密碼不一樣');
                                     } else {
                                         if (check !== true) {
@@ -343,10 +345,17 @@
                                             console.log("Params", params);
                                             Polymer.postData(registerUrl, params).then(res => {
                                                 alert(res.text);
+                                                console.log("uuuuu", res);
                                                 if (res.code > 0) {
-                                                    this.fileManager = new AwsPackage(res.resolve);
-                                                    this.fileManager.saveFile('json/user-' + res.resolve.id + '.json', JSON.stringify(res.resolve));
-
+                                                    if (platform == "Google") {
+                                                        this.google();
+                                                    } else if (platform == "facebook") {
+                                                        this.log();
+                                                    } else {
+                                                        //tbc
+                                                        // let cup = document.querySelector('change-user-panel');
+                                                        // console.log("cup", cup)
+                                                    }
                                                 }
                                             });
                                         }
@@ -390,7 +399,10 @@
                 if (platform != "gettv") {
                     that.shadowRoot.querySelector('.font-sizeh1').innerHTML = "以" + platform['platform'] + "平台註冊";
                     that.shadowRoot.querySelector('#changeId1').value = platform['name'];
+                    that.shadowRoot.querySelector('#pass1').style.display = "none";
+                    that.shadowRoot.querySelector('#pass2').style.display = "none";
                     that.shadowRoot.querySelector('#changeEmail1').value = platform['email'];
+                    that.shadowRoot.querySelector('#changeEmail1').readonly = true;
 
                 } else {
                     that.shadowRoot.querySelector('.font-sizeh1').innerHTML = "以GetTV平台註冊";
