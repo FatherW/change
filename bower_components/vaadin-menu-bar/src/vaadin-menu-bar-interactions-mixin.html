@@ -49,6 +49,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this.addEventListener('keydown', e => this._onKeydown(e));
       this.addEventListener('focusin', e => this._onFocusin(e));
 
+      // this._subMenu.addEventListener('mouseover', (e)=>{console.log('Mouse Over',e)});
       this._subMenu.addEventListener('item-selected', this.__onItemSelected.bind(this));
       this._subMenu.addEventListener('close-all-menus', this.__onEscapeClose.bind(this));
 
@@ -240,6 +241,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _onMouseOver(e) {
+      console.log('Button Mouse Over',e);
       const button = this._getButtonFromEvent(e);
       if (button && button !== this._expandedButton) {
         const isOpened = this._subMenu.opened;

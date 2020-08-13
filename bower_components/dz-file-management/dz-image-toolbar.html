@@ -1,6 +1,7 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../dz-file-management/dz-edit-image.html?id=sdk2345fsd">
 <link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
+<link rel="import" href="../vaadin-checkbox/vaadin-checkbox.html">
 <link rel="import" href="css/style.html">
 <!-- <link rel="import" href="../paper-tabs/paper-tabs.html">
 <link rel="import" href="../paper-tabs/paper-tab.html"> -->
@@ -19,7 +20,7 @@
 
 <dom-module id="dz-image-toolbar">
 
-	<template>
+    <template>
 		<style include="font-awesome"></style>
 		<!-- <style include="main-styles"></style>
 		<style include="labs-styles"></style>
@@ -43,95 +44,118 @@
 			 :host i:hover {
 				 color:orange;
 			 }
-		 </style>   
-				<i class="fa fa-check-square-o" aria-hidden="true" on-click="_select"></i>
-				<i id="dz-remove" class="fa fa-ban" aria-hidden="true" on-click="_remove"></i>
-				<i id="dz-edit" class="fa fa-pencil-square-o" aria-hidden="true" on-click="_edit"></i>
-				<vaadin-dialog aria-label="big" id="imgEdit"  theme="error"></vaadin-dialog>
+         </style>
+         <div style="display: inline-flex;">
+            <div style="background-color: white;">
+                <vaadin-checkbox value="刪除" id="checkdelete" style="display: none;"></vaadin-checkbox>
+            </div>
+            <i class="fa fa-check-square-o" aria-hidden="true" on-click="_select"></i>
+            <i id="dz-remove" class="fa fa-ban" aria-hidden="true" on-click="_remove"></i>
+            <i id="dz-edit" class="fa fa-pencil-square-o" aria-hidden="true" on-click="_edit"></i>
+    
+        </div>
+                <vaadin-dialog aria-label="big" id="imgEdit"  theme="error"></vaadin-dialog>
+                
 	</template>
 </dom-module>
 
 <script>
-
-(function() {
-
-
-
-	Polymer({
-		is: 'dz-image-toolbar',
-		properties: {
-			gid:{
-				type:String
-			},
-			host:{
-				type:Element
-			}
-		},
-
-		created:function() {
-			this.selected = false;
-			this.user = store.get('user') || null;
-			this.fileManager = Polymer.fileManager;
-			
-		},
-		ready:function() {
-			let that = this;
-			let editBtn = this.shadowRoot.querySelector('#dz-edit');
-			const shadow = this.shadowRoot;
-		  	const dialog = shadow.querySelector('vaadin-dialog');
-		  
-			editBtn.addEventListener('click',e=>{
-					console.log('Item',that.item);
-
-					customElements.whenDefined('vaadin-dialog').then(function() {
-						dialog.renderer = function(root, dialog) {
-							let elm = document.createElement('dz-edit-image');
-							// elm.item = that.item;
-							elm.setAttribute('gid',that.item['gid']);
-							elm.gid = that.item['gid'];
-							root.appendChild(elm);
-							// root.innerHTML = '<dz-edit-image gid="'+this.item['gid']+'"></dz-edit-image>';
-						};
-						dialog.resizable = true;
-						dialog.resize('80%','90%');
-						dialog.opened = true;		    
-					});
-			});
+    (function() {
 
 
 
-		},
-		_remove(){
-			
-			let params = {
-				gid: this.gid,
-				host: this.host
-			};
-			console.log('Remove',params);
+        Polymer({
+            is: 'dz-image-toolbar',
+            properties: {
+                gid: {
+                    type: String
+                },
+                host: {
+                    type: Element
+                }
+            },
 
-			this.host.dispatchEvent(new CustomEvent('item-remove', {'detail':params}));
+            created: function() {
+                this.selected = false;
+                this.user = store.get('user') || null;
+                this.fileManager = Polymer.fileManager;
 
-		},
-		_select(){
-			// let item = document.query('dz-file-management2').shadowRoot.querySelector('.brick');
-			this.selected = !this.selected;
-			console.log('Host',this.host);
-			if (this.selected)
-				this.host.classList.add('selected');
-			else
-				this.host.classList.remove('selected');
+            },
+            ready: function() {
+                let that = this;
+                let editBtn = this.shadowRoot.querySelector('#dz-edit');
+                const shadow = this.shadowRoot;
+                const dialog = shadow.querySelector('vaadin-dialog');
 
-	
-			
-		},
-		closeDialog(){	
-			const shadow = this.shadowRoot;
-			const dialog = shadow.querySelector('vaadin-dialog');
-			dialog.opened = false;
-		},
+                document.addEventListener('deletemuch', e => {
+                    if (e.detail.value == true) {
+                        shadow.querySelector('#checkdelete').style.display = "block";
+                    } else {
+                        if (shadow.querySelector('#checkdelete').checked == true) {
+                            that._remove();
+                            console.log("55555")
+                        }
+                        shadow.querySelector('#checkdelete').style.display = "none";
 
-	});
+                    }
+                })
 
-})();
+                editBtn.addEventListener('click', e => {
+                    console.log('Item', that.item);
 
+                    customElements.whenDefined('vaadin-dialog').then(function() {
+                        dialog.renderer = function(root, dialog) {
+                            let elm = document.createElement('dz-edit-image');
+                            // elm.item = that.item;
+                            elm.setAttribute('gid', that.item['gid']);
+                            elm.gid = that.item['gid'];
+                            root.appendChild(elm);
+                            // root.innerHTML = '<dz-edit-image gid="'+this.item['gid']+'"></dz-edit-image>';
+                        };
+                        dialog.resizable = true;
+                        dialog.resize('80%', '90%');
+                        dialog.opened = true;
+                    });
+                });
+
+
+
+            },
+            _remove() {
+                let shadow = this.shadowRoot;
+                let that = this;
+                this.gid = that.getAttribute('gid'); // 这个是真的gid
+                //this.host = document.querySelector('vaadin-dialog-overlay').shadowRoot.querySelector('dz-img-stock').shadowRoot.querySelector('dz-image-item#' + this.gid).host;
+                console.log("this host", this.gid);
+                let params = {
+                    gid: this.gid
+                };
+                console.log('Remove', params);
+
+                this.dispatchEvent(new CustomEvent('item-remove', {
+                    'detail': params
+                }));
+
+            },
+            _select() {
+                // let item = document.query('dz-file-management2').shadowRoot.querySelector('.brick');
+                this.selected = !this.selected;
+                console.log('Host', this.host);
+                if (this.selected)
+                    this.host.classList.add('selected');
+                else
+                    this.host.classList.remove('selected');
+
+
+
+            },
+            closeDialog() {
+                const shadow = this.shadowRoot;
+                const dialog = shadow.querySelector('vaadin-dialog');
+                dialog.opened = false;
+            },
+
+        });
+
+    })();
 </script>

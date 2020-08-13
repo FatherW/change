@@ -504,12 +504,13 @@
 				accept: function(file,done){
 					let name;
 					if (file.fullPath !== undefined)
-					name = file.fullPath;
+	  				name = file.fullPath;
 					else
-					name = file.name;
+  					name = file.name;
+          name = Polymer.fileManager.changeFilename(name);
           // file.s3upload = that.aws.myManagedUpload(name,file); 
           console.log('Tags',that.tags,file);
-          Polymer.fileManager.saveMyImage(file).then(id=>{
+          Polymer.fileManager.saveMyImage(name,file).then(id=>{
             console.log('ID',id);
             that.saveImageTags(id,that.tags);
           

@@ -1,0 +1,301 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-button/vaadin-button.html?id=sdfljsldkf">
+<link rel="import" href="../vaadin-menu-bar/vaadin-menu-bar.html">
+<link rel="import" href="../vaadin-tabs/vaadin-tabs.html">
+<link rel="import" href="../iron-pages/iron-pages.html">
+<link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../ace-widget/ace-widget.html">
+<link rel="import" href="dz-status.html">
+<!-- <link rel="import" href="../paper-tabs/paper-tabs.html">
+<link rel="import" href="../paper-tabs/paper-tab.html"> -->
+
+
+<!-- <script type="module">
+	import '@polymer/iron-lazy-pages/iron-lazy-pages.js';
+	import '@polymer/paper-tabs/paper-tabs.js';
+	import '@polymer/paper-tabs/paper-tab.js';
+  </script> -->
+
+
+<!-- <link rel="import" href="../valle-speed-dial/valle-speed-dial.html">
+<link rel="import" href="../paper-fab-speed-dial/paper-fab-speed-dial-action.html">
+<link rel="import" href="../iron-icons/iron-icons.html"> -->
+
+<dom-module id="dz-settings">
+
+    <template>
+		<style include="main-styles"></style>
+		<style include="labs-styles"></style>
+		<style include="masonry-styles"></style>
+		<style>
+              
+
+            page{
+                position:relative;
+            }
+
+            iron-pages {
+                height: 800px;
+            }
+			paper-tags-input {
+				width: 80%;
+			}
+
+			.selected {
+				outline: 10px solid #293575;
+			}
+
+			#inputTags {
+				padding: 20px;
+			}
+
+		
+		</style>
+
+		<h1 class="mat-dialog-title" mat-dialog-title="" id="mat-dialog-title-1">
+			<mat-toolbar class="mat-toolbar mat-primary mat-toolbar-multiple-rows" color="primary">
+				<mat-toolbar-row class="mat-toolbar-row">
+					<span>本頁設定</span>
+                    <span class="example-spacer"></span>
+    
+                    <vaadin-menu-bar theme="primary"></vaadin-menu-bar>
+					<!-- <vaadin-button theme="success" id="dz-upload">匯入新頁</vaadin-button>
+                    <vaadin-button theme="contrast" id="dz-buy">組件管理</vaadin-button>
+                    <vaadin-button theme="contrast" id="dz-buy">預設頁面</vaadin-button> -->
+				</mat-toolbar-row>
+			</mat-toolbar>
+		</h1>
+
+
+		<content>
+            <dz-status></dz-status>
+			<vaadin-tabs selected="{{page}}">
+                <vaadin-tab>META</vaadin-tab>
+                <vaadin-tab>CSS</vaadin-tab>
+                <vaadin-tab>JS</vaadin-tab>
+				<vaadin-tab>BODY</vaadin-tab>
+			</vaadin-tabs>
+			<iron-pages selected="[[page]]">
+				<page>
+                    <ace-widget id="head" placeholder="Write something... Anything..." initial-focus>
+                        
+                    </ace-widget>
+				</page>
+				<page>
+                    <ace-widget id="css" placeholder="Write something CSS... Anything..." initial-focus>
+                    </ace-widget>
+				
+                </page>
+
+				<page>
+                    <ace-widget id="js" placeholder="Write something JS... Anything..." initial-focus>
+                    </ace-widget>
+				
+                </page>
+				<page>
+                    <ace-widget id="body" placeholder="Write something HTML... Anything..." initial-focus>
+                    </ace-widget>
+				
+                </page>
+			</iron-pages>
+
+
+
+		</content>
+
+
+
+	</template>
+</dom-module>
+
+<script>
+    (function() {
+
+
+
+        Polymer({
+            is: 'dz-settings',
+            properties: {
+                icon: {
+                    type: String,
+                    value: 'add'
+                },
+                opened: {
+                    type: Boolean,
+                    notify: true
+                },
+                disabled: {
+                    type: Boolean,
+                    value: false
+                },
+                withBackdrop: Boolean,
+            },
+
+            created: function() {
+                this.fileManager = Polymer.fileManager;
+                this.status = true;
+            },
+            changeEditor(that){
+                console.log('Status',that);
+                // let that = this;
+                
+                let basePath =   "template/" + Polymer.tid + '/'+Polymer.thisPage;
+                let masterPath =   "template/" + Polymer.tid + '/_master';
+                let path;
+                if (that.status)
+                    path = basePath;
+                else
+                    path = masterPath;
+
+                Polymer.getUserDataContent(path+'/html').then(html=>{
+                    that.shadowRoot.querySelector('#body').setAttribute('status', that.status);
+                    that.shadowRoot.querySelector('#body').editor.setValue(html);
+                    // that.bodyEditor.editor.setValue(html);
+                });
+                Polymer.getUserDataContent(path+'/head').then(html=>{
+                    that.shadowRoot.querySelector('#head').setAttribute('status', that.status);
+                    that.shadowRoot.querySelector('#head').editor.setValue(html);
+                    // that.headEditor.editor.setValue(html);
+                });
+                Polymer.getUserDataContent(path+'/css').then(html=>{
+                    that.shadowRoot.querySelector('#css').setAttribute('status', that.status);
+                    that.shadowRoot.querySelector('#css').editor.setValue(html);
+                    // that.cssEditor.editor.setValue(html);
+                });
+                Polymer.getUserDataContent(path+'/body_js').then(html=>{
+                    // console.log('Body JS',html);
+                    that.shadowRoot.querySelector('#js').setAttribute('status', that.status);
+                    that.shadowRoot.querySelector('#js').editor.setValue(html);
+                    // that.bodyJsEditor.editor.setValue(html);
+                });
+
+            },
+            resizeEditor(bodyEditor){
+                let editor = bodyEditor.editor;
+                editor.setOptions({
+                    maxLines: Infinity
+                });
+
+                    var heightUpdateFunction = function() {
+
+                        // http://stackoverflow.com/questions/11584061/
+                        var newHeight =
+                                editor.getSession().getScreenLength()
+                                * editor.renderer.lineHeight
+                                + editor.renderer.scrollBar.getWidth();
+
+                        bodyEditor.style.height = newHeight.toString() + "px";
+                    
+                        // $('#editor-section').height(newHeight.toString() + "px");
+
+                        // This call is required for the editor to fix all of
+                        // its inner structure for adapting to a change in size
+                        editor.resize();
+                    };
+
+                    // Set initial size to match initial content
+                    heightUpdateFunction();
+
+                    // Whenever a change happens inside the ACE editor, update
+                    // the size again
+                    editor.getSession().on('change', heightUpdateFunction);
+            },
+            save(that){
+                    
+                console.log('Saved',status);
+
+                // let that = this;
+                let basePath =   "template/" + Polymer.tid + '/'+Polymer.thisPage;
+                let masterPath =   "template/" + Polymer.tid + '/_master';
+                let path;
+                if (that.status)
+                    path = basePath;
+                else
+                    path = masterPath;
+
+                let bodyEditor = that.shadowRoot.querySelector('#body');
+                let headEditor = that.shadowRoot.querySelector('#head');
+                let cssEditor = that.shadowRoot.querySelector('#css');
+                let bodyJsEditor = that.shadowRoot.querySelector('#js');
+                // Polymer.saveDataContent(path+'/html',bodyEditor.editorValue);
+                // Polymer.saveDataContent(path+'/head',headEditor.editorValue);
+                console.log('css',that.shadowRoot);
+                Polymer.fileManager.saveUserData(path+'/head',headEditor.editorValue);
+                Polymer.fileManager.saveUserData(path+'/css',cssEditor.editorValue);
+                Polymer.fileManager.saveUserData(path+'/html',bodyEditor.editorValue);
+                Polymer.fileManager.saveUserData(path+'/body_js',bodyJsEditor.editorValue);
+                // Polymer.saveDataContent(path+'/body_js',bodyJsEditor.editorValue);
+            },
+
+            import(){
+                let url = prompt('請輸入欲匯入網站之網址.');
+
+                if (url){
+                    alert('注意！！ 網頁的圖片及文字受到版權保障，設確保對方同意下方作抓取。請抓取網頁後，自行更換相關內容。如有投訴，本平台有權要求客戶將此網頁下架');
+                    Polymer.import(url);
+                    alert('新網頁已匯入成功，重新整理將能顯示新一頁');
+
+                }
+
+
+            },
+            ready(){
+                let page = Polymer.thisPage;
+                let basePath =   "template/" + Polymer.tid + '/'+Polymer.thisPage;
+                let masterPath =   "template/" + Polymer.tid + '/_master';
+                let that = this;
+                let menu = this.shadowRoot.querySelector('vaadin-menu-bar');
+                let bodyEditor = this.shadowRoot.querySelector('#body');
+                let editor = bodyEditor.editor;
+                console.log('Body',that.shadowRoot.querySelector('#body'));
+                let dzStatus = this.shadowRoot.querySelector('dz-status');
+                this.bodyEditor = this.shadowRoot.querySelector('#body');
+                this.headEditor = this.shadowRoot.querySelector('#head');
+                this.cssEditor = this.shadowRoot.querySelector('#css');
+                this.bodyJsEditor = this.shadowRoot.querySelector('#js');
+
+                dzStatus.callback = function(status){
+                    that.status = status;
+                    alert('編輯器會轉至母版，本頁內容會自動儲存');
+                    that.changeEditor(that);                
+                }
+                this.resizeEditor(bodyEditor);
+                this.changeEditor(that);
+
+
+                
+
+
+
+              
+
+                customElements.whenDefined('vaadin-menu-bar').then(function() {
+						menu.addEventListener('item-selected', function(e) {
+							console.log('Selected',e);
+                            e.detail.value.click(that);
+						});
+
+                        menu.items= [
+                            {
+                                text: '匯入設計',
+                                click: that.import
+                                // children: Polymer.menuList[tagName],
+                            },
+                            {
+                                text: '儲存',
+                                click: that.save
+                            },
+                            {
+                                text: 'Master',
+                            },
+                            
+						];
+					});
+            }
+
+
+
+        });
+
+    })();
+</script>

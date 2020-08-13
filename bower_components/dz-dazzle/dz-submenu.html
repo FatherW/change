@@ -1,34 +1,321 @@
-<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../vaadin-menu-bar/vaadin-menu-bar.html">
+
 
 <dom-module id="dz-submenu">
+	<template>
+		<style>
+			vaadin-menu-bar{
+				position:fixed;
+				top:0px;
+				left:0px;
+				z-index:5000;
+				width:auto;
+				display:none;
+				background:white;
+			}
+		</style>
+		<vaadin-menu-bar open-on-hover></vaadin-menu-bar>
+
+	</template>
+
 
 </dom-module>
 
 <script>
 
-(function() {
+	// class imgPackage {
+	// 	constructor(elm){
+	// 		// super();
+	// 		console.log('Custom IMG',elm);
+	// 		elm.label = '圖片';
 
 
+	// 		elm.menu = [{
+	// 			'text': '編輯',
+	// 			'event': 'edit'
+	// 		}, {
+	// 			'text': '圖片庫',
+	// 			'event': 'stock'
+	// 		}, {
+	// 			'text': '上載',
+	// 			'event': 'upload'
+	// 		}, {
+	// 			'text': '編輯連結',
+	// 			'event': 'link'
+	// 		}];
 
-	Polymer({
-		is: 'dz-submenu',
-		properties: {
-			block: String,
-		},
+	// 		elm.changeImg = function(url){
+	// 			elm.setAttribute('src',url);
+	// 		}
 
-		created:function() {
+	// 		elm.changeAltText = function(text){
+	// 			elm.setAttribute('alt',text);
+	// 		}
 
+	// 		elm.upload = function(){
+	// 			console.log('E Upload');
+	// 			let json = {
+	// 				folder: 'dz-file-management',
+	// 				component: 'dz-file-management3',
+	// 				width: '800px',
+	// 				height: '400px',
+	// 				source: elm
+	// 			};
+	// 			Polymer.dzFire('dz-popup',{detail: json});
+				
+	// 		}
+	// 		elm.stock = function(){
+	// 			let json = {
+	// 				folder: 'dz-file-management',
+	// 				component: 'dz-img-stock',
+	// 				width: '90%',
+	// 				height: '90%',
+	// 				source: elm
+	// 			};
+	// 			Polymer.dzFire('dz-popup',{detail: json});
 			
+	// 		}
+	// 		// this.eventListener(elm);
+	// 	}
+	// }
 
 
-		},
+  class dzSubmenu extends Polymer.Element {
+	static get is() {
+          return 'dz-submenu';
+	}
+
+	constructor() {
+			super();
+	
+			// Polymer.menuList = {
+            //         'IMG': [{
+            //             'text': '編輯',
+            //             'event': 'edit'
+            //         }, {
+            //             'text': '圖片庫',
+            //             'event': 'stock'
+            //         }, {
+            //             'text': '上載',
+            //             'event': 'upload'
+            //         }, {
+            //             'text': '編輯連結',
+            //             'event': 'link'
+            //         }],
+            //         'A': [{
+            //             'text': '編輯',
+            //             'event': 'edit'
+            //         }, {
+            //             'text': '圖片庫',
+            //             'event': 'stock'
+            //         }, {
+            //             'text': '上載',
+            //             'event': 'upload'
+            //         }]
+            //     };
+
+		}
+		hideMenu(e){
+			let menu = this.shadowRoot.querySelector('vaadin-menu-bar');
+			console.log('Hide');
+			menu.style.display= 'none';
+		}
+		loadMenu(e){
+			console.log('E',e);
+				let elm = e.target;
+				let tagName = elm.tagName || 'default';
+				let subMenu = elm.menu;				
+				console.log('Submenu',subMenu);
+				let layer = [];
+				
+				let x = e.clientX;
+				let y= e.clientY;
+
+				let menu = this.shadowRoot.querySelector('vaadin-menu-bar');
+				if (menu)
+					menu.remove();
+				menu  = document.createElement('vaadin-menu-bar');
+				this.shadowRoot.appendChild(menu);				
+				
+				menu.innerHTML = '';
+				menu.setAttribute('open-on-hover','');
+				menu.style.display = 'block';
+				menu.style.top = y+'px';
+				menu.style.left = x+'px';
+
+				console.log('Menu',e.path);
+				let stop = false;
+				let i=0;
+				e.path.forEach(item=>{
+					let tag = item.tagName || null;
+					// console.log('Tag',tag,Polymer.menuList[tag]);
+					let label = item.label || Polymer.menuLabel[tag] || tag;
+					let json;
+					if (label ==='DZ-WRAPPER')
+					stop = true;
+					if (!stop) {
+						json = {
+							text : label,
+							source: item,
+							children: item.menu
+						}
+						layer.push(json);
+					}
+					i++;
+
+				});
+				customElements.whenDefined('vaadin-menu-bar').then(function() {
+						let label = elm.label || Polymer.menuLabel[tagName] || tagName;
+						menu.addEventListener('item-selected', function(e) {
+							console.log('Selected',elm,menu);
+							let event = e.detail.value.event;
+							let source = e.detail.value.source;
+							Polymer.activeElement = source;
+							console.log('Event',e);	
+							menu.style.display='none';
+							// Polymer.dzFire(tagName.toLowerCase()+'-'+event,{'detail': {'source':elm}});
+							source[event]();	
+							// Polymer.dzDomFire(elm,event,{});
+						});
+						menu.items= [
+						{
+							text: label,
+							// children: Polymer.menuList[tagName],
+							children: elm.menu,
+							source: elm
+						},
+						{
+							text: '上一層',
+							children: layer
+						}
+						];
+					});
+		}
 		ready() {
+			super.ready();
+			// Polymer.beforeListener();
+			// this.eventListener();
+			this.newListener();
+		}
+
+		render(){
+			super.render();
+		}
+
+
+		newListener(){
+			const shadow = document.querySelector('dz-wrapper');
+			let that = this;
+			shadow.addEventListener('contextmenu',e=>{
+				// let submenu=document.querySelector('dz-admin').shadowRoot.querySelector('dz-submenu');
+				that.loadMenu(e);
+				e.preventDefault();
+			});
+
+
+ 			shadow.addEventListener('dblclick', e => {
+				console.log('DB click', e);
+				document.querySelector('dz-editor').removeEditor();
+
+
+			});
+		}
+		
+		eventListener() {
+
+			const shadow = document.querySelector('dz-wrapper');
+			let that = this;
 			
-		},
+			document.addEventListener('click', e => {
+				// let menu = this.shadowRoot.querySelector('vaadin-list-box');
+				let dzPanel = shadow.querySelector('[dz-panel]');
+				if (dzPanel)
+					dzPanel.removeAttribute('dz-panel');
+				let menu = this.shadowRoot.querySelector('vaadin-menu-bar');
+				console.log('Click');
+				menu.style.display= 'none';
+			});
 
-	});
+			shadow.addEventListener('contextmenu', e => {
+				console.log('E',e);
+				let elm = e.target;
+				let tagName = elm.tagName || 'default';
+				let subMenu = elm.menu;				
+				console.log('Submenu',subMenu);
+				let layer = [];
+				
+				let x = e.clientX;
+				let y= e.clientY;
 
-})();
+				let menu = this.shadowRoot.querySelector('vaadin-menu-bar');
+				if (menu)
+					menu.remove();
+				menu  = document.createElement('vaadin-menu-bar');
+				this.shadowRoot.appendChild(menu);				
+				
+				menu.innerHTML = '';
+				menu.setAttribute('open-on-hover','');
+				menu.style.display = 'block';
+				menu.style.top = y+'px';
+				menu.style.left = x+'px';
+
+				console.log('Menu',e.path);
+				let stop = false;
+				let i=0;
+				e.path.forEach(item=>{
+					let tag = item.tagName || null;
+					// console.log('Tag',tag,Polymer.menuList[tag]);
+					let label = item.label || Polymer.menuLabel[tag] || tag;
+					let json;
+					if (label ==='DZ-WRAPPER')
+					stop = true;
+					if (!stop) {
+						json = {
+							text : label,
+							source: item,
+							children: item.menu
+						}
+						layer.push(json);
+					}
+					i++;
+
+				})
+				customElements.whenDefined('vaadin-menu-bar').then(function() {
+						let label = elm.label || Polymer.menuLabel[tagName] || tagName;
+						menu.addEventListener('item-selected', function(e) {
+							console.log('Selected',elm,menu);
+							let event = e.detail.value.event;
+							let source = e.detail.value.source;
+							Polymer.activeElement = source;
+							console.log('Event',e);	
+							menu.style.display='none';
+							// Polymer.dzFire(tagName.toLowerCase()+'-'+event,{'detail': {'source':elm}});
+							source[event]();	
+							// Polymer.dzDomFire(elm,event,{});
+						});
+						menu.items= [
+						{
+							text: label,
+							// children: Polymer.menuList[tagName],
+							children: elm.menu,
+							source: elm
+						},
+						{
+							text: '上一層',
+							children: layer
+						}
+						];
+					});
+
+				e.preventDefault();
+			});
+		}
+
+  }
+
+  customElements.define('dz-submenu', dzSubmenu);
+
 
 
 </script>

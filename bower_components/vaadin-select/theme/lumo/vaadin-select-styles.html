@@ -11,11 +11,8 @@
 <link rel="import" href="../../../vaadin-list-box/theme/lumo/vaadin-list-box.html">
 
 <dom-module id="lumo-select" theme-for="vaadin-select">
-    <template>
+  <template>
     <style include="lumo-field-button">
-       *{
-                font-family: sans-serif,微軟正黑體;
-                            }
       :host {
         outline: none;
         -webkit-tap-highlight-color: transparent;
@@ -53,7 +50,7 @@
 </dom-module>
 
 <dom-module id="lumo-select-text-field" theme-for="vaadin-select-text-field">
-    <template>
+  <template>
     <style>
       :host([theme~="align-center"]) ::slotted([part~="value"]) {
         --_lumo-text-field-overflow-mask-image: none;
@@ -84,7 +81,7 @@
 </dom-module>
 
 <dom-module id="lumo-select-overlay" theme-for="vaadin-select-overlay">
-    <template>
+  <template>
     <style include="lumo-menu-overlay">
       :host {
         --_lumo-item-selected-icon-display: block;

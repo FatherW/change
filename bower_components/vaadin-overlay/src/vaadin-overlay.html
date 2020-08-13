@@ -493,9 +493,9 @@ This program is available under Apache License Version 2.0, available at https:/
         const evt = new CustomEvent('vaadin-overlay-outside-click', {bubbles: true, cancelable: true, detail: {sourceEvent: event}});
         this.dispatchEvent(evt);
 
-        if (this.opened && !evt.defaultPrevented) {
-          this.close(event);
-        }
+        // if (this.opened && !evt.defaultPrevented) {
+        //   this.close(event);
+        // }
       }
 
       /**

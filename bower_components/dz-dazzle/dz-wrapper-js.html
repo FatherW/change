@@ -1,0 +1,168 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<!-- <link rel="import" href="../dz-dazzle/dz-block.html"> -->
+
+<!-- <link rel="import" href="../vaadin-dialog/vaadin-dialog.html"> -->
+<!-- <link rel="import" href="dz-loader.html?id=sdsdfsdffsdf"> -->
+
+
+<dom-module id="dz-wrapper-js">
+
+</dom-module>
+
+<script>
+class dzWrapperJs extends Polymer.Element {
+	static get is() {
+          return 'dz-wrapper-js';
+	}
+
+	constructor() {
+        super();
+        this.uid = Polymer.uid;
+        this.tid = Polymer.tid;
+        this.thisPage = Polymer.thisPage;
+    }
+    ready(){
+        super.ready();
+        let that = this;
+        let type = "body_js";
+        let url =
+            "https://d25k6mzsu7mq5l.cloudfront.net/user-data/" + Polymer.uid + "/";
+
+        this.basePath =
+            url +
+            "template/" +
+            this.tid +
+            "/" +
+            this.thisPage +
+            "/" +
+            type +
+            "?id=" +
+            new Date().getTime();
+        this.masterPath =
+            url +
+            "template/" +
+            this.tid +
+            "/_master" +
+            "/" +
+            type +
+            "?id=" +
+            new Date().getTime();
+
+
+        this.defaultPath =
+            url +
+            "template/" +
+            this.tid +
+            "/_default/" +
+            type +
+            "?id=" +
+            new Date().getTime();
+        let head;
+        let elm;
+        let wrapper;
+        let mFlag = false;
+        let flag = false;
+
+        if (Polymer.editMode==="admin")
+            this.loadScript();
+
+        
+        
+        
+    }
+    loadScript(){
+        let that = this;
+        let elm;
+        return new Promise(function(resolve, reject) {
+            that.loadMaster().then(mHead=>{
+                Polymer.getContent(that.basePath).then(head => {
+                    // elm = document.createElement(mHead+head);
+                    // that.appendChild(elm);
+                    // that.innerHTML = mHead+head;
+
+                    elm = document.createRange().createContextualFragment(mHead+head);
+                    that.appendChild(elm);
+                }, err => {
+                    Polymer.getContent(that.defaultPath).then(head => {
+                        elm = document.createRange().createContextualFragment(mHead+head);
+                        that.appendChild(elm);
+
+                        // elm = document.createElement(mHead+head);
+                        // that.appendChild(elm);
+                        // that.innerHTML = mHead+head;
+
+                    });
+                });                
+            });
+
+        });
+    }
+    loadMaster(){
+        let that = this;
+        return new Promise(function(resolve, reject) {
+            Polymer.getContent(that.masterPath).then(head => {
+                    // elm = document.createRange().createContextualFragment(head);
+                    // // wrapper = document.createElement("dz-wrapper-master-body-js");
+                    // // wrapper.appendChild(elm);
+                    // this.appendChild(elm);
+                    resolve(head);
+            },err=>{
+                resolve('');
+            });
+        });
+    }
+    render(){
+ 
+    }
+};
+
+customElements.define('dz-wrapper-js', dzWrapperJs);
+
+
+// (function() {
+
+
+
+// 	Polymer({
+// 		is: 'dz-wrapper-js',
+// 		properties: {
+			
+// 		},
+
+// 		created:function() {
+//             // Polymer.dzInit();
+// 				console.log('DZ Wrapper');
+            
+//         },	
+//         ready:function(){
+// 			let dzDazzle = document.createElement('dz-dazzle');
+//             Polymer.pageLoader(this);
+// 			document.body.appendChild(dzDazzle);
+// 			Polymer.loadComponent("dz-dazzle", "dz-dazzle");
+// 			// this.loadMenu;
+//         },
+// 		loadMenu() {
+//                 let shadow = this.shadowRoot;
+//                 shadow.querySelectorAll('img').forEach(item => {
+                    
+//                     item.menu = this.menuList['IMG'];
+//                     console.log('item',item);
+//                 });
+
+//                 shadow.querySelectorAll('a').forEach(item => {
+//                     item.menu = this.menuList['A'];
+//                 });
+               
+
+
+
+// 		},
+// 		login:function(){
+
+// 		}
+// 	});
+
+// })();
+
+</script>

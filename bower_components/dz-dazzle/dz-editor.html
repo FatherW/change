@@ -1,6 +1,9 @@
 <link rel="import" href="../polymer/polymer.html">
-<script src="https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/js/medium-editor-5.23.1.min.js"></script>
-<link rel="stylesheet" href="https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/css/medium-editor-5.23.1.min.css" />
+<link rel="import" href="dz-code-editor.html">
+<script src="../medium-editor/dist/js/medium-editor.js"></script>
+<link rel="stylesheet" href="../medium-editor/dist/css/medium-editor.css">
+<!-- <script src="https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/js/medium-editor-5.23.1.js"></script>
+<link rel="stylesheet" href="https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/css/medium-editor-5.23.1.min.css" /> -->
 
 <dom-module id="dz-editor">
 
@@ -15,23 +18,34 @@
 	Polymer({
 		is: 'dz-editor',
 		properties: {
-			block: String,
+            block: String,
+            value: String,
+            source: Element
 		},
 
 		created:function() {
-
-			
-
+			Polymer.textEdit = true;
 
 		},
 		ready() {
+            // Polymer.initMenu(this);
+            console.log('My Source',this.source);
+            if (this.value)
+                this.innerHTML = this.value;
 			this.loadEditor();
-		},
+            this.querySelectorAll('*').forEach(item=>{
+                let style = window.getComputedStyle(item);
+                console.log('My Style',item,style);
+            });
+        },
+        getValue(){
+            return this.innerHTML;
+        },
 		loadEditor() {
     //    console.log('Load Editor',this.inUse);
         let that = this;
     
-        console.log('Load　Editor');
+        console.log('Load　Editor',this.source);
         let SaveButton = MediumEditor.Extension.extend({
           name: 'saveButton',
           init: function () {
@@ -48,6 +62,50 @@
           }
       });
     
+      let HtmlButton = MediumEditor.Extension.extend({
+          name: 'htmlButton',
+          init: function () {
+              this.button = this.document.createElement('button');
+              this.button.classList.add('medium-editor-action');
+              this.button.innerHTML = '<i class="fa fa-code"></i>';
+              // this.button.addEventListener('click',(e)=>{
+              //   console.log(e,this);
+              // });
+             this.on(this.button, 'click', this.handleClick.bind(this));
+          },
+          getButton: function () {
+              return this.button;
+          },
+          handleClick: function (event) {
+            console.log('HTML Selected',event);
+            Polymer.dialog.width = '90%';
+            Polymer.dialog.height = '90%';
+            // Polymer.loadComponent('dz-dazzle','dz-code-editor');
+            let dzCodeEditor =document.createElement('dz-code-editor');
+            console.log('This html',that.innerHTML);
+            // dzCodeEditor.setHtml(that.innerHTML);
+            let html = that.innerHTML;
+            dzCodeEditor.html = html;
+            Polymer.activeElement = that;
+            Polymer.componentPopup(dzCodeEditor);
+
+            // let text;
+            // let selObj = window.getSelection(); 
+            // console.log(selObj);
+            // text = selObj.toString();
+            // let newAnchor = document.createElement('a');
+            // let selectedText = selObj.getRangeAt(0);
+            // newAnchor.href=text.trim();
+            // console.log(selectedText);
+            // selectedText.surroundContents(newAnchor);
+       
+      
+      
+              // console.log(event);
+          }
+      
+        } );
+
         let AnchorButton = MediumEditor.Extension.extend({
           name: 'anchorButton',
           init: function () {
@@ -140,6 +198,7 @@
               let img = document.createElement("img");
     //          newNode.appendChild(document.createTextNode("hello"));
               img.src = 'http://dazzle.website/image/lgo.png' ;   
+              new defaultPackage(img);
               selectedText.insertNode(img);
     
           }
@@ -167,13 +226,14 @@
                   unwrapTags: []
               },
               toolbar: {
-                  buttons: ['saveButton','youtubeButton', 'anchorButton', 'imageElementButton',  'fontsize', 'bold', 'italic', 'underline', 'orderedList', 'unorderList', 'justifyLeft', 'justifyRight', 'justifyCenter', 'justifyFull', 'removeFormat', 'h1', 'h2', 'h3', 'p'],
+                  buttons: ['saveButton','htmlButton','youtubeButton', 'anchorButton', 'imageElementButton',  'fontsize', 'bold', 'italic', 'underline', 'orderedList', 'unorderList', 'justifyLeft', 'justifyRight', 'justifyCenter', 'justifyFull', 'removeFormat', 'h1', 'h2', 'h3', 'p'],
                   static: true,
                   sticky: true,
                   updateOnEmptySelection: true
               },
     
               extensions: {
+                  'htmlButton': new HtmlButton(),
                   'saveButton': new SaveButton(),
                   'youtubeButton': new youtubeButton(),
                   'imageElementButton': new ImageElementButton(),
@@ -186,6 +246,13 @@
                         {
                           command: 'saveButton',
                           key: 'S',
+                          meta: true,
+                          shift: false,
+                          alt: false
+                        },
+                        {
+                          command: 'htmlButton',
+                          key: 'H',
                           meta: true,
                           shift: false,
                           alt: false
@@ -269,9 +336,21 @@
       },
 
       removeEditor(){
+        //   Polymer.initMenu(this);
+
           document.querySelector('.medium-editor-toolbar').remove();
           this.editor.destroy();
+        //   new defaultPackage(this);
           this.outerHTML = this.innerHTML;
+
+            console.log('Remove Editor',this.source);
+            this.source.querySelectorAll('*').forEach(item=>{
+                new defaultPackage(item);
+            });        
+            this.source.addPropertyChange('innerHTML',this.source.innerHTML);
+            
+        //   Polymer.initMenu(wrapper);
+          Polymer.textEdit = false;
       },
 		loadScript:function(url){
 			const fileref=document.createElement('script');    
