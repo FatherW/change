@@ -1,0 +1,63 @@
+<link rel="import" href="../polymer/polymer.html">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+<dom-module id="change-picslide">
+
+    <template>
+
+        <style>
+            .mySlides {
+                display: none;
+            }
+        </style>
+
+        <div class="w3-content w3-display-container" style="margin-top:40px">
+            <img class="mySlides" src="https://www.gettv.hk/img/banner.jpeg" style="width:100%;">
+            <img class="mySlides" src="https://www.gettv.hk/img/add.png" style="width:100%">
+            <img class="mySlides" src="https://www.gettv.hk/img/big.png" style="width:100%">
+            <img class="mySlides" src="https://www.gettv.hk/img/ins.png" style="width:100%">
+
+            <button class="w3-button w3-black w3-display-left" on-click="plusDivs(-1)">&#10094;</button>
+            <button class="w3-button w3-black w3-display-right" on-click="plusDivs(1)">&#10095;</button>
+        </div>
+
+    </template>
+
+</dom-module>
+
+<script>
+    (function () {
+        Polymer({
+            is: 'change-picslide',
+            properties: {},
+            created: function () {
+
+            },
+
+            ready: function () {
+                let that = this;
+                this.slideIndex = 1;
+                this.showDivs(this.slideIndex);
+            },
+
+            plusDivs: function (n) {
+               this.showDivs(this.slideIndex += n);
+            },
+
+            showDivs: function (n) {
+                let shadow = this.shadowRoot;
+                let that = this;
+                var i;
+                var x = shadow.querySelectorAll(".mySlides");
+                if (n > x.length) { this.slideIndex = 1 }
+                if (n < 1) { this.slideIndex = x.length }
+                for (i = 0; i < x.length; i++) {
+                    x[i].style.display = "none";
+                }
+                console.log("XXXXXX",x[this.slideIndex - 1]);
+                x[this.slideIndex - 1].style.display = "block";
+            }
+        });
+    })();
+</script>
