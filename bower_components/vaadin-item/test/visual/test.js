@@ -20,13 +20,6 @@ gemini.suite('vaadin-item', function(rootSuite) {
         .setCaptureElements('#default-tests')
         .capture('default');
     });
-
-    gemini.suite(`vaadin-item-rtl-${theme}`, function(suite) {
-      suite
-        .setUrl(`default.html?theme=${theme}&dir=rtl`)
-        .setCaptureElements('#default-tests')
-        .capture('default');
-    });
   });
 
 });

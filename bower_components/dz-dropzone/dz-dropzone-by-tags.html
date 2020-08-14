@@ -2,23 +2,19 @@
 <link rel="import" href="../dz-dropzone/dz-dropzone.html?id=skdlf">
 <!-- <link rel="import" href="https://raw-dot-custom-elements.appspot.com/chadweimer/paper-tags-input/2.0.2/paper-tags-input/paper-tags-input.html">
  -->
-<link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
-<link rel="import" href="../paper-tags-input/paper-tags-input.html?id=sadlf">
-<script src="https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/js/dropzone.js"></script>
+ <link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
+ <link rel="import" href="../paper-tags-input/paper-tags-input.html?id=sadlf">
+ <script src="https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/js/dropzone.js"></script>
 <dom-module id="dz-dropzone-by-tags">
 
-    <template>
+	<template>
     <style>
        vaadin-text-field {
          float:left;
        }
        paper-tags-input {
-         padding-top:0px ;
          width:80%;
        }
-       #inputTags{
-				padding: 20px;
-			}
     </style>
       <vaadin-text-field id="inputTags" label="請輸入欲上載檔案的標籤" style="float:left;"></vaadin-text-field>
     <paper-tags-input enable-add="{{enable_add}}" label="上載標籤" show-counter="tags" items='{{tags}}'></paper-tags-input>
@@ -28,42 +24,44 @@
 </dom-module>
 
 <script>
-    (function() {
+
+(function() {
 
 
 
-        Polymer({
-            is: 'dz-dropzone-by-tags',
-            properties: {
+	Polymer({
+		is: 'dz-dropzone-by-tags',
+		properties: {
 
+  
+		},
 
-            },
+		created:function() {
+      this.enable_add = true;
+			 this.tags = ["hello", "new"];
+		},
+		ready:function(){
+      let tagInput = this.shadowRoot.querySelector('#inputTags');
+      let tags = this.shadowRoot.querySelector('paper-tags-input');
+      let dz = this.shadowRoot.querySelector('dz-dropzone');
+      tagInput.addEventListener('keydown',e=>{
+          console.log('Key Down',e);
+          if (e.code==="Enter") {
+            tags._addTag(tagInput.value);
+            tagInput.value = '';
+              console.log('hello',tags._getTags());
+              dz.tags = tags._getTags();
+          }
 
-            created: function() {
-                this.enable_add = true;
-                this.tags = ["hello", "new"];
-            },
-            ready: function() {
-                let tagInput = this.shadowRoot.querySelector('#inputTags');
-                let tags = this.shadowRoot.querySelector('paper-tags-input');
-                let dz = this.shadowRoot.querySelector('dz-dropzone');
-                tagInput.addEventListener('keydown', e => {
-                    console.log('Key Down', e);
-                    if (e.code === "Enter") {
-                        tags._addTag(tagInput.value);
-                        tagInput.value = '';
-                        console.log('hello', tags._getTags());
-                        dz.tags = tags._getTags();
-                    }
+      });
+      tags.addEventListener('tag-item-remove',e=>{
+          console.log('E',e,tags._getTags());
+          dz.tags = tags._getTags();
+      });
+      
+    }
+	});
 
-                });
-                tags.addEventListener('tag-item-remove', e => {
-                    console.log('E', e, tags._getTags());
-                    dz.tags = tags._getTags();
-                });
+})();
 
-            }
-        });
-
-    })();
 </script>

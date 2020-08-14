@@ -20,13 +20,6 @@ gemini.suite('vaadin-list-box', function(rootSuite) {
         .setCaptureElements('#list-box-tests')
         .capture('list-box');
     });
-
-    gemini.suite(`rtl-list-box-${theme}`, function(suite) {
-      suite
-        .setUrl(`rtl.html?theme=${theme}`)
-        .setCaptureElements('#rtl-list-box-tests')
-        .capture('list-box');
-    });
   });
 
 });
