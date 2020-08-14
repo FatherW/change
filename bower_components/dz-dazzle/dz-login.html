@@ -773,84 +773,11 @@
 										placeholder="用戶ID" type="text">
 								</div>
 							</div>
-<<<<<<< HEAD
-							<!-- 忘記密碼 -->
-							<div id="forgetAndResetpw" style="display: none;">
-								<div id="getuserinfo">
-									<div>
-										<div class="group">
-											<input id="uid" aria-invalid="false"
-												class="input ng-pristine ng-untouched ng-empty ng-invalid"
-												formcontrolname="password" placeholder="用戶ID">
-										</div>
-									</div>
-
-									<div>
-										<div class="group">
-											<input id="searchitem" aria-invalid="false"
-												class="input ng-pristine ng-untouched ng-empty ng-invalid"
-												formcontrolname="password" placeholder="輸入電話或電郵" type="text">
-										</div>
-									</div>
-
-									<p>
-										<button id="countdown" color="warn" mat-raised-button="" on-click="checkuid"
-											class="mat-raised-button mat-button-base mat-warn"
-											style="border: none;padding: 5px 10px;color: white;font-size: 14px;">
-											<span class="mat-button-wrapper">
-												{{verifly}}
-											</span>
-											<div class="mat-button-ripple mat-ripple" matripple=""></div>
-											<div class="mat-button-focus-overlay"></div>
-										</button>
-									</p>
-
-									<div>
-										<div class="group">
-											<input id="confirm" aria-invalid="false"
-												class="input ng-pristine ng-untouched ng-empty ng-invalid"
-												formcontrolname="password" placeholder="輸入驗證碼" type="text"
-												style="display: none;">
-										</div>
-									</div>
-								</div>
-								<div id=contentchange></div>
-								<!-- 更改密碼 -->
-								<div id="NewPasswordInput" style="display: none;">
-									<div>
-										<div class="group">
-											<input id="newpassword1" aria-invalid="false"
-												class="input ng-pristine ng-untouched ng-empty ng-invalid"
-												formcontrolname="password" placeholder="新密碼" type="password">
-										</div>
-									</div>
-
-									<div>
-										<div class="group">
-											<input id="newpassword2" aria-invalid="false"
-												class="input ng-pristine ng-untouched ng-empty ng-invalid"
-												formcontrolname="password" placeholder="確認密碼" type="password">
-										</div>
-									</div>
-
-									<p>
-										<button color="warn" mat-raised-button="" on-click="resetTolamda"
-											class="mat-raised-button mat-button-base mat-warn"
-											style="border: none;padding: 5px 10px;color: white;font-size: 14px;">
-											<span class="mat-button-wrapper">
-												確認更改
-											</span>
-											<div class="mat-button-ripple mat-ripple" matripple=""></div>
-											<div class="mat-button-focus-overlay"></div>
-										</button>
-									</p>
-=======
 							<div>
 								<div class="group">
 									<input id="password" aria-invalid="false"
 										class="input ng-pristine ng-untouched ng-empty ng-invalid"
 										formcontrolname="password" placeholder="密碼" type="password">
->>>>>>> origin/master
 								</div>
 							</div>
 							<p>
@@ -909,7 +836,6 @@
 		</div>
 	</template> </dom-module>
 <script>
-<<<<<<< HEAD
     (function() {
         Polymer({
             is: 'dz-login',
@@ -919,69 +845,6 @@
             created: function() {
                 this.loadScript("https://d25k6mzsu7mq5l.cloudfront.net/cdn7.2/js/data.common.js");
                 this.thisPage = decodeURIComponent(window.location.pathname).substring(window.location.pathname.indexOf('/') + 1) || 'index.html';
-            },
-            ready: function() {
-                let shadow = this.shadowRoot;
-                shadow.querySelector('#password').addEventListener('keypress', e => {
-                    if (e.code == "Enter") {
-                        this._login();
-                    }
-                })
-
-                shadow.querySelector('#searchitem').addEventListener('keydown', e => {
-                    if (e.code == "Enter") {
-                        this.checkuid();
-                    }
-                })
-
-
-
-                this.loginOrReset = "登入";
-                this.shift = "忘記密碼";
-                this.verifly = "發送驗證碼";
-            },
-            checkuid() {
-                let shadow = this.shadowRoot;
-                let uid = shadow.querySelector('#uid').value;
-                let searchitem = shadow.querySelector('#searchitem').value;
-                let content = shadow.querySelector('#contentchange');
-                let url = "https://d8fz9pfue5.execute-api.ap-northeast-1.amazonaws.com/prod/newMiscDazzleFunction";
-                let param = {
-                    "action": "MatchEmailOrPhone",
-                    "uid": uid,
-                    "email": searchitem,
-                    "phone": searchitem
-
-                }
-
-                shadow.querySelector('#confirm').style.display = "block";
-                this.verifly = "驗證碼確認";
-                shadow.querySelector('#confirm').focus();
-                // Polymer.postData(url, param).then(res => {
-                //     if (res.code > 0) {
-                //         shadow.querySelector('#getuserinfo').style.display = "none";
-
-                //         // this.resetpw();
-                //     } else {
-                //         content.innerHTML = "用戶id不符合，請重新輸入";
-                //     }
-                // })
-            },
-            contentshift() {
-                let shadow = this.shadowRoot;
-                if (this.loginOrReset == "登入") {
-                    this.loginOrReset = "忘記密碼";
-                    this.shift = "返回登入";
-                    shadow.querySelector('#originalStyle').style.display = "none";
-                    shadow.querySelector('#forgetAndResetpw').style.display = "block";
-
-                } else {
-                    this.loginOrReset = "登入";
-                    this.shift = "忘記密碼";
-                    shadow.querySelector('#originalStyle').style.display = "block";
-                    shadow.querySelector('#forgetAndResetpw').style.display = "none";
-
-                }
             },
             _login: function() {
                 console.log('Login');
@@ -1011,12 +874,6 @@
                         alert('登入錯誤');
                     }
                 });
-            },
-            resetpw: function() {
-                let that = this;
-                let dialog = that.shadowRoot.querySelector('vaadin-dialog');
-                console.log("run");
-                Polymer.popup(dialog, "dz-dazzle", "dz-resetpw", "40%", "70%");
             },
             _register: function() {
                 let shadow = this.shadowRoot;
@@ -1117,147 +974,4 @@
             }
         });
     })();
-=======
-	(function () {
-		Polymer({
-			is: 'dz-login',
-			properties: {
-
-			},
-			created: function () {
-				this.loadScript("https://d25k6mzsu7mq5l.cloudfront.net/cdn7.2/js/data.common.js");
-				this.thisPage = decodeURIComponent(window.location.pathname).substring(window.location.pathname.indexOf('/') + 1) || 'index.html';
-			},
-			_login: function () {
-				console.log('Login');
-				let shadow = this.shadowRoot;
-				let that = this;
-				let uid = shadow.querySelector('#uid').value;
-				let password = shadow.querySelector('#password').value;
-				let fileManager = new DataPackage('token');
-				let loginUrl = "https://d8fz9pfue5.execute-api.ap-northeast-1.amazonaws.com/prod/newMiscDazzleFunction";
-				let params = {
-					"action": "loginByUidPassword", "uid": uid, "password": password
-				}
-					;
-				this.postData(loginUrl, params).then(res => {
-					if (res.code > 0) {
-						let uid = res.resolve['uid'];
-						let user = res.resolve;
-						user['thisPage'] = this.thisPage;
-						store.set('user', res.resolve);
-						store.set('editMode', 'admin');
-						store.set('thisPage', this.thisPage);
-						let token = that.generatePassword();
-						console.log('Res',res.resolve);
-						location.reload();
-					}
-					else {
-						alert('登入錯誤');
-					}
-				});
-			},
-			_register: function () {
-				let shadow = this.shadowRoot;
-				let that = this;
-				let processing = shadow.querySelector('#processing');
-				processing.innerHTML = "正在處理註冊請耐心等候,註冊後會收到短信";
-				let uid = shadow.querySelector('#uid1').value;
-				let uPhone = shadow.querySelector('#uPhone').value;
-				let uEmail = shadow.querySelector('#uEmail').value;
-				let fileManager = new DataPackage('token');
-				let registerUrl = "https://d8fz9pfue5.execute-api.ap-northeast-1.amazonaws.com/prod/newMiscDazzleFunction";
-				let params = {
-					"action": "register",
-					"user": {
-						"uid": uid,
-						"phone": uPhone,
-						"email": uEmail
-					}
-				};
-
-				this.postData(registerUrl, params).then(res => {
-					if (res.code > 0) {
-						alert("成功注册");
-						processing.innerHTML = "";
-					}
-					else {
-						alert('註冊失敗');
-						processing.innerHTML = "出現不可預知的錯誤";
-					}
-				});
-			},
-
-			_idUnique: function () {
-				let shadow = this.shadowRoot;
-				let that = this;
-				let uid = shadow.querySelector('#uid1').value;
-				let input1 = shadow.querySelector('#uid1');
-				let fileManager = new DataPackage('token');
-				let registerUrl = "https://d8fz9pfue5.execute-api.ap-northeast-1.amazonaws.com/prod/newMiscDazzleFunction";
-				let errMsg = shadow.querySelector('#errMessage');
-				input1.addEventListener("blur", function (event) {
-					let target = event.target;
-					let uid = target.value;
-					let params = {
-						"action": "checkDomain",
-						"domain": uid + ".dazzle.website"
-					};
-					that.postData(registerUrl, params).then(res => {
-
-						if (res.code > 0) {
-							target.style.color = "white";
-							errMsg.innerHTML = "此ID未有人使用，可以註冊";
-						}
-						else {
-							target.style.color = "red";
-							errMsg.innerHTML = "此ID已有人使用，不可以註冊。請再輸入";
-						}
-					});
-				}, true);
-			},
-
-			handleResponse: function (response) {
-				console.log('Response', response);
-			},
-			generatePassword: function () {
-				var length = 16, charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", retVal = "";
-				for (var i = 0, n = charset.length;
-					i < length;
-					++i) {
-					retVal += charset.charAt(Math.floor(Math.random() * n));
-				}
-				return retVal;
-			},
-			loadScript: function (url) {
-				const fileref = document.createElement('script');
-				fileref.setAttribute("type", "text/javascript");
-				fileref.setAttribute("src", url + "?id=" + new Date().getTime());
-				document.getElementsByTagName("head")[0].appendChild(fileref);
-			},
-			postData: function (url, data) {
-				console.log('Json', JSON.stringify(data));
-				return new Promise(function (resolve, reject) {
-					fetch(url, {
-						body: JSON.stringify(data), // must match 'Content-Type' header
-						cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-						credentials: 'same-origin', // include, same-origin, *omit
-						headers: {
-							'user-agent': 'Mozilla/4.0 MDN Example', 'content-type': 'application/json'
-						},
-						method: 'POST', // *GET, POST, PUT, DELETE, etc.
-						mode: 'cors', // no-cors, cors, *same-origin
-						redirect: 'follow', // manual, *follow, error
-						referrer: 'no-referrer', // *client, no-referrer
-					}
-					).then(response => {
-						resolve(response.json());
-					}) // parses response to JSON
-				}
-				);
-			}
-		}
-		);
-	})();
->>>>>>> origin/master
 </script>
