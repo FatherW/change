@@ -12,6 +12,7 @@
 <link rel="import" href="../change/change-dropzone-file.html">
 <link rel="import" href="../change/change-buy.html">
 <link rel="import" href="../change/change-webcom.html">
+<link rel="import" href="../change/change-picslide.html">
 <link rel="import" href="change-edit-bar.html">
 <link rel="import" href="change-user-tag.html">
 
@@ -436,7 +437,7 @@
                     <div>
 
                         <!-- GG get Array Pic from Database -->
-                        <div class="consmall">
+                        <div class="consmall" on-click="_test">
                             <div>
                                 <div id="div1"></div>
                             </div>
@@ -451,6 +452,7 @@
                             </div>
                         </div>
                     </div>
+                    <!-- <vaadin-dialog id="picslide"></vaadin-dialog> -->
                 </div>
 
                 <div class="right-product">
@@ -498,6 +500,8 @@
                     <hr>
                     <br>
                     <button id="contact" on-click="_findseller">聯絡賣家</button>
+                    <vaadin-dialog id="seller"></vaadin-dialog>
+
                     <div class="b3">刊登於 1小時前</div>
                     <br>
 
@@ -534,11 +538,6 @@
 
             </div>
         </div>
-
-
-
-
-        <vaadin-dialog></vaadin-dialog>
 
     </template>
 
@@ -704,7 +703,7 @@
                         let h = res.resolve['deliveryMethod'];
                         shadow.querySelector('#dm').innerHTML = h;
                     } else {
-                        alert("fail")
+                        alert("fail");
                     }
                 })
 
@@ -743,11 +742,18 @@
                     console.log('contacting seller');
                     let shadow = this.shadowRoot;
                     let that = this;
-                    let dialog = shadow.querySelector('vaadin-dialog');
+                    let dialog = shadow.querySelector('vaadin-dialog#seller');
                     Polymer.popup(dialog, "change", "change-webcom", "500px", "400px");
                     console.log("end process in contact seller");
                 }
             },
+
+            // _test: function () {
+            //     let shadow = this.shadowRoot;
+            //     let that = this;
+            //     let dialog = shadow.querySelector('vaadin-dialog#picslide');
+            //     Polymer.popup(dialog, "change", "change-picslide", "753px", "573px");
+            // }
         });
     })();
 </script>
