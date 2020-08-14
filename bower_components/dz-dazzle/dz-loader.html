@@ -2,7 +2,6 @@
 <script src="https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/js/store-2.0.12.min.js"></script>
 <script src="https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/js/aws-sdk-2.83.0.min.js"></script>
 <link rel="stylesheet" href="https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/css/font-awesome-4.7.0.min.css" />
-<<<<<<< HEAD
 <link rel="import" href="./default-package/default-package.html">
 <link rel="import" href="dz-wrapper.html" />
 <!-- <link rel="import" href="dz-wrapper-head.html" /> -->
@@ -18,9 +17,6 @@
 <link rel="import" href="../change/change-footer.html">    
 <link rel="import" href="../change/change-announcement.html">
 
-=======
-<link rel="import" href="dz-wrapper.html" />
->>>>>>> origin/master
 <dom-module id="dz-loader"> </dom-module>
 
 <script>
@@ -1260,7 +1256,6 @@
 
             //   this.thisPage = document.querySelector('meta[thispage]').getAttribute('thispage') || thisPage;
             this.thisPage = thisPage;
-<<<<<<< HEAD
             document.body.innerHTML = '<dz-wrapper></dz-wrapper><vaadin-dialog></vaadin-dialog>';
             // this.loadHtmlClass();
             // this.loadComponent('dz-dazzle', 'dz-wrapper');
@@ -1358,16 +1353,6 @@
 
             // document.body.innerHTML = `<dz-wrapper></dz-wrapper><dz-admin></dz-admin>`;
             // this.loadComponent("dz-dazzle", "dz-admin");
-=======
-
-            document.body.innerHTML = `
-            <vaadin-context-menu selector="[dz-panel]">
-                <dz-wrapper></dz-wrapper>
-            </vaadin-context-menu>
-            <dz-admin></dz-admin>
-            `;
-            this.loadComponent("dz-dazzle", "dz-admin");
->>>>>>> origin/master
         } else {
             this.uid =
                 Polymer.dzLicense["uid"] ||
@@ -1868,7 +1853,6 @@
             Polymer.loadHtml(shadow),
             Polymer.loadBodyJs(),
             Polymer.loadBodyClass(),
-<<<<<<< HEAD
         ]).then(res => {
             console.log('End Load Html', Polymer.editMode);
             if (Polymer.editMode === 'admin') {
@@ -1881,54 +1865,6 @@
                 Polymer.initMenu(document.querySelector('dz-wrapper'));
             }
         });
-=======
-        ]);
-
-        document.addEventListener("save", (e) => {
-            console.log("我是dz-loader的listener，我收到的e.detail", e.detail);
-            let path = Polymer.thisPage;
-            if (e.detail.basepath) {
-                path = e.detail.basepath;
-            }
-            let basePath = "template/" + Polymer.tid + "/" + path + "/";
-            let masterPath = "template/" + Polymer.tid + "/_master/";
-            let content;
-            let dzWrapperHead = document.querySelector('dz-wrapper-head') || null;
-            let dzWrapperMasterHead = document.querySelector('dz-wrapper-master-head') || null;
-            let dzWrapperCss = document.querySelector('dz-wrapper-css') || null;
-            let dzWrapperMasterCss = document.querySelector('dz-wrapper-master-css') || null;
-            let dzWrapperBodyJs = document.querySelector('dz-wrapper-body-js') || null;
-            let dzWrapperMasterBodyJs = document.querySelector('dz-wrapper-master-body-js') || null;
-            // Head
-            if (dzWrapperHead) {
-                content = document.querySelector("dz-wrapper-head").innerHTML || "";
-                console.log("Save Head", basePath + "head");
-                this.fileManager.saveUserData(basePath + "head", content);
-            }
-
-
-            // Master Head
-            if (dzWrapperMasterHead) {
-                content = document.querySelector("dz-wrapper-master-head").innerHTML || "";
-                console.log("Save Head", masterPath + "head");
-                this.fileManager.saveUserData(masterPath + "head", content);
-            }
-
-
-            // HTML
-            let wrapper = document.querySelector("dz-wrapper");
-            wrapper.querySelectorAll("dz-editor").forEach((item) => {
-                item.outerHTML = item.innerHTML;
-            });
-            content = wrapper.innerHTML;
-            this.fileManager.saveUserData(basePath + "html", content);
-
-            // CSS
-            if (dzWrapperCss) {
-                content = document.querySelector("dz-wrapper-css").innerHTML || "";
-                this.fileManager.saveUserData(basePath + "css", content);
-            }
->>>>>>> origin/master
 
     };
 
@@ -1999,7 +1935,6 @@
             head = elm.querySelector("head").innerHTML;
             body = elm.querySelector("body").innerHTML;
 
-<<<<<<< HEAD
             console.log('Export',head,css,body,bodyJs,bodyClass);
             Promise.all([
                 this.fileManager.saveUserData(basePath+'/head',head+css),
@@ -2014,28 +1949,6 @@
             } ,err=>{
                 alert('匯入錯誤。請聯絡本平台客服');
             });
-=======
-            this.fileManager.saveFile(
-                "template/" + this.tid + "/" + this.thisPage + "/head",
-                head
-            );
-            this.fileManager.saveFile(
-                "template/" + this.tid + "/" + this.thisPage + "/css",
-                css
-            );
-            this.fileManager.saveFile(
-                "template/" + this.tid + "/" + this.thisPage + "/body_js",
-                bodyJs
-            );
-            this.fileManager.saveFile(
-                "template/" + this.tid + "/" + this.thisPage + "/html",
-                body
-            );
-            this.fileManager.saveFile(
-                "template/" + this.tid + "/" + this.thisPage + "/body_class",
-                bodyClass
-            );
->>>>>>> origin/master
         });
     }
     //    console.log('License',  await Polymer.getContent('dz-license') );
@@ -2161,7 +2074,6 @@
         head.appendChild(script);
         head.appendChild(link);
 
-<<<<<<< HEAD
         if (dzWrapperHead) {
            
                 head.appendChild(dzWrapperHead);
@@ -2176,20 +2088,6 @@
 
         if (dzWrapperJs){
             elm = document.querySelector("dz-wrapper-js").cloneNode(true);
-=======
-        if (dzWrapper) {
-            elm = document.querySelector("dz-wrapper").cloneNode(true);
-            body.appendChild(elm);
-        }
-
-        if (dzWrapperBodyJs) {
-            elm = document.querySelector("dz-wrapper-body-js").cloneNode(true);
-            body.appendChild(elm);
-        }
-
-        if (dzWrapperMasterBodyJs) {
-            elm = document.querySelector("dz-wrapper-master-body-js").cloneNode(true);
->>>>>>> origin/master
             body.appendChild(elm);
         }
 
@@ -2199,7 +2097,6 @@
         dom.appendChild(head);
         dom.appendChild(body);
 
-<<<<<<< HEAD
         this.loadBodyClass().then(res=>{
             body.setAttribute("class", res);            
         });
@@ -2218,14 +2115,6 @@
         // console.log("Export", content);
         // Polymer.fileManager.saveUserData("index.html", content);
         Polymer.fileManager.saveHtml(Polymer.thisPage,content);
-=======
-        let bodyClass = document.body.getAttribute("class") || "";
-        body.setAttribute("class", bodyClass);
-
-        content = dom.outerHTML;
-        console.log("Export", content);
-        Polymer.fileManager.saveUserData("index.html", content);
->>>>>>> origin/master
         alert("匯出成功");
     }
 
