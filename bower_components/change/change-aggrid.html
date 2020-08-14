@@ -1,0 +1,120 @@
+<link rel="import" href="../polymer/polymer.html">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.js"></script>
+
+<dom-module id="change-aggrid">
+
+    <template>
+
+        <style>
+        </style>
+        <div>Hello world</div>
+        <div id="myGrid" style="height: 1000px; width:100%;" class="ag-theme-alpine"></div>
+
+    </template>
+
+</dom-module>
+
+<script>
+    (function () {
+        Polymer({
+            is: 'change-aggrid',
+            properties: {},
+            created: function () {
+
+            },
+
+            ready: function () {
+                let shadow = this.shadowRoot;
+                let that = this;
+
+                let url = 'https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController';
+                let params = {
+                    "action": "searchData",
+                    "index": "change",
+                    "type": "_user",
+                    "body": {
+                        "query": {
+                            "match_all": {
+                            }
+                        }
+                    }
+                };
+                Polymer.postData(url, params).then(res => {
+                    if (res.resolve.lenght !== 0) {
+                        console.log("res.resolve:", res.resolve);
+                    } else {
+                        alert("Error!");
+                    }
+                });
+
+                let columnDefs = [
+                    // { headerName: "Make", field: "make" },
+                    // { headerName: "Model", field: "model" },
+                    // { headerName: "Price", field: "price" },
+                    // { headerName: "Model", field: "model" },
+
+                    { headerName: "id", field: "id" },
+                    { headerName: "username", field: "username" },
+                    { headerName: "numberRate", field: "numberRate" },
+                    { headerName: "goodsNum", field: "goodsNum" },
+                    { headerName: "area", field: "area" },
+                    { headerName: "email", field: "email" },
+                    { headerName: "phone", field: "phone" },
+                    { headerName: "password", field: "password" },
+                    { headerName: "createTime", field: "createTime" },
+                    { headerName: "isPromotionMsg", field: "isPromotionMsg" },
+                    { headerName: "head", field: "head" },
+                    { headerName: "likeProduct", field: "likeProduct" },
+                    { headerName: "score", field: "score" },
+                    { headerName: "history", field: "history" },
+                    { headerName: "isAdmin", field: "isAdmin" },
+                    { headerName: "token", field: "token" },
+                    { headerName: "platform", field: "platform" },
+                    { headerName: "banner", field: "banner" }
+                ];
+
+                // specify the data
+                var rowData = [
+                    // { make: "Toyota", model: "Celica", price: 35000 },
+                    // { make: "Ford", model: "Mondeo", price: 32000 },
+                    // { make: "Porsche", model: "Boxter", price: 72000 },
+                    {
+                        "id": 88,
+                        "username": "Moses Lee",
+                        "numberRate": 26,
+                        "goodsNum": 2,
+                        "area": "油尖旺區",
+                        "email": "moseslee714@gmail.com",
+                        "phone": "69079261",
+                        "password": "hi7be7of2",
+                        "createTime": "1597213024718",
+                        "isPromotionMsg": true,
+                        "head": "https://www.gettv.hk/files/moseslee714@gmail.com/1597213321242.jpg",
+                        "likeProduct": [],
+                        "score": 5,
+                        "history": [],
+                        "isAdmin": false,
+                        "token": "",
+                        "platform": "facebook",
+                        "banner": "https://www.gettv.hk/Website%20Design/profile%20page/img/profile%20banner/company-profile-banner.png"
+                    }
+                ];
+
+                // let the grid know which columns and what data to use
+                var gridOptions = {
+                    columnDefs: columnDefs,
+                    rowData: rowData
+                };
+
+                // setup the grid after the page has finished loading
+                document.addEventListener('DOMContentLoaded', function () {
+                    var gridDiv = shadow.querySelector('#myGrid');
+                    console.log("omg", gridDiv);
+                    new agGrid.Grid(gridDiv, gridOptions);
+                });
+            },
+
+        });
+    })();
+</script>
