@@ -1,134 +1,91 @@
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../vaadin-button/vaadin-button.html?id=sdfljsldkf">
+<link rel="import" href="../vaadin-button/vaadin-button.html">
 <link rel="import" href="../vaadin-tabs/vaadin-tabs.html">
 <link rel="import" href="../iron-pages/iron-pages.html">
 <link rel="import" href="../dz-dropzone/dz-dropzone-by-tags.html">
 <link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="../paper-tags-input/paper-tags-input.html">
 <link rel="import" href="../dz-file-management/css/style.html">
-<link rel="import" href="../dz-file-management/dz-image-item.html?id=sdfsdf">
-<link rel="import" href="../dz-file-management/dz-image-toolbar.html?id=sdsdffs234df">
+<link rel="import" href="../dz-file-management/dz-image-item.html">
+<link rel="import" href="../dz-file-management/dz-image-toolbar.html">
 
-<!-- <link rel="import" href="../paper-tabs/paper-tabs.html">
-<link rel="import" href="../paper-tabs/paper-tab.html"> -->
-
-
-<!-- <script type="module">
-	import '@polymer/iron-lazy-pages/iron-lazy-pages.js';
-	import '@polymer/paper-tabs/paper-tabs.js';
-	import '@polymer/paper-tabs/paper-tab.js';
-  </script> -->
+<link rel="import" href="css/style.html">
 
 
-<!-- <link rel="import" href="../valle-speed-dial/valle-speed-dial.html">
-<link rel="import" href="../paper-fab-speed-dial/paper-fab-speed-dial-action.html">
-<link rel="import" href="../iron-icons/iron-icons.html"> -->
+<dom-module id="dz-file-management3">
 
-<dom-module id="dz-file-management2">
 
     <template>
-		<style include="main-styles"></style>
-		<style include="labs-styles"></style>
-		<style include="masonry-styles"></style>
-		<style>
-			paper-tags-input {
-				width: 80%;
-			}
+        <style include="main-styles"></style>
+        <style include="labs-styles"></style>
+        <style include="masonry-styles"></style>
+        <style>
+            paper-tags-input {
+                width: 80%;
+            }
 
-			.selected {
-				outline: 10px solid #293575;
-			}
+            .selected {
+                outline: 10px solid #293575;
+            }
 
-			#inputTags {
-				padding: 20px;
-			}
+            #inputTags {
+                padding: 20px;
+            }
 
-			#dz-imageList {
-				display: grid;
-				grid-template-columns: 1fr 1fr 1fr 1fr;
-				grid-row-gap: 20px;
-				grid-column-gap: 20px;
-				padding: 20px;
-			}
+            #dz-imageList {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr 1fr;
+                grid-row-gap: 20px;
+                grid-column-gap: 20px;
+                padding: 20px;
+            }
 
-			@media (max-width: 1000px) {
-				#dz-imageList {
-					display: grid;
-					grid-template-columns: 1fr 1fr 1fr;
-					grid-row-gap: 20px;
-					grid-column-gap: 20px;
-					padding: 20px;
-				}
-			}
+            @media (max-width: 1000px) {
+                #dz-imageList {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr 1fr;
+                    grid-row-gap: 20px;
+                    grid-column-gap: 20px;
+                    padding: 20px;
+                }
+            }
 
-			@media (max-width: 868px) {
-				#dz-imageList {
-					display: grid;
-					grid-template-columns: 1fr 1fr;
-					grid-row-gap: 20px;
-					grid-column-gap: 20px;
-					padding: 20px;
-				}
+            @media (max-width: 868px) {
+                #dz-imageList {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    grid-row-gap: 20px;
+                    grid-column-gap: 20px;
+                    padding: 20px;
+                }
 
-			}
-		</style>
+            }
+        </style>
 
-		<h1 class="mat-dialog-title" mat-dialog-title="" id="mat-dialog-title-1">
-			<mat-toolbar class="mat-toolbar mat-primary mat-toolbar-multiple-rows" color="primary">
-				<mat-toolbar-row class="mat-toolbar-row">
-					<span>檔案及媒體管理</span>
-					<span class="example-spacer"></span>
-					<vaadin-button theme="success" id="dz-upload">上載</vaadin-button>
-					<vaadin-button theme="contrast" id="dz-buy">購買</vaadin-button>
-					<vaadin-button theme="primary" id="dz-refresh">更新</vaadin-button>
-				</mat-toolbar-row>
-			</mat-toolbar>
-		</h1>
-
-
-		<content>
-			<vaadin-tabs selected="{{page}}">
-				<vaadin-tab>圖片庫</vaadin-tab>
-				<vaadin-tab>上載</vaadin-tab>
-				<vaadin-tab>購買</vaadin-tab>
-				<vaadin-tab>檔案庫</vaadin-tab>
-			</vaadin-tabs>
-			<iron-pages selected="[[page]]">
-				<page>
-					<div style="width:100%; height:600px; overflow:auto;">
-						<vaadin-text-field id="inputTags" label="請輸入欲搜尋的標籤" style="float:left;"></vaadin-text-field>
-						<paper-tags-input label="搜尋標籤"></paper-tags-input>
-						<div id="dz-imageList" class="masonry bordered">
-
-						</div>
-					</div>
-				</page>
-				<page>
-
-					<dz-dropzone-by-tags></dz-dropzone-by-tags>
-				</page>
-
-				<page>
-					<div>
-						<dz-buy-photo></dz-buy-photo>
-					</div>
-				</page>
-				<page>
-					<h3>檔案庫</h3>
-
-					<div id="fileList">
-
-					</div>
-				</page>
-			</iron-pages>
+        <h1 class="mat-dialog-title" mat-dialog-title="" id="mat-dialog-title-1">
+            <mat-toolbar class="mat-toolbar mat-primary mat-toolbar-multiple-rows" color="primary">
+                <mat-toolbar-row class="mat-toolbar-row">
+                    <span>檔案及媒體管理</span>
+                    <span class="example-spacer"></span>
+                    <!-- <vaadin-button theme="success" id="dz-upload">上載</vaadin-button>
+                    <vaadin-button theme="contrast" id="dz-buy">購買</vaadin-button> -->
+                    <vaadin-button theme="primary" id="dz-refresh">更新</vaadin-button>
+                </mat-toolbar-row>
+            </mat-toolbar>
+        </h1>
 
 
 
-		</content>
+
+        <dz-dropzone-by-tags></dz-dropzone-by-tags>
 
 
 
-	</template>
+
+
+
+    </template>
+    </template>
 </dom-module>
 
 <script>
@@ -137,7 +94,7 @@
 
 
         Polymer({
-            is: 'dz-file-management2',
+            is: 'dz-file-management3',
             properties: {
                 icon: {
                     type: String,
@@ -247,7 +204,11 @@
                 // // elm.appendChild(figcaption);
                 let that = this;
                 let shadow = this.shadowRoot;
-                let elm = document.createElement('dz-image-item');
+                let toolbar = document.createElement('dz-image-toolbar');
+                toolbar.setAttribute('gid', item['gid']);
+
+
+                elm = document.createElement('dz-image-item');
                 elm.gid = item['gid'];
                 console.log('Elm', elm.gid);
                 elm.addEventListener('click', e => {
@@ -259,7 +220,10 @@
                     // else	
                     // 	elm.classList.remove('selected');
                 });
+                shadow.querySelector('#dz-imageList').appendChild(bar);
                 shadow.querySelector('#dz-imageList').appendChild(elm);
+
+
 
             },
             fileType(Key) {
@@ -313,7 +277,6 @@
                 });
 
             }
-
 
 
         });

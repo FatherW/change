@@ -1,15 +1,359 @@
-<!DOCTYPE html>
-<html>
+<html class="null"><head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <script src="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/webcomponentsjs/webcomponents-lite.js"></script><link rel="import" href="/bower_components/dz-dazzle/dz-loader.html"><dz-wrapper-head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
+<!-- 最新版本的 Bootstrap 核心 CSS 文件 -->    
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<title>Home - Change</title>
+<link rel="stylesheet" href="css/style.css">
+<meta name="google-signin-scope" content="profile email">
+<meta name="google-signin-client_id" content="755964351228-2emctcoq1o2nj5vpqitv4j28411jj7jk.apps.googleusercontent.com">
+<script src="https://apis.google.com/js/platform.js" async="" defer=""></script>
+<script async="" defer="" crossorigin="anonymous" src="https://connect.facebook.net/zh_HK/sdk.js#xfbml=1&amp;version=v7.0&amp;appId=711018846416860&amp;autoLogAppEvents=1" nonce="NXzxnRL1"></script>    
 
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="icon" href="favicon.ico">
-    <script src="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-    <link rel="import" href="/bower_components/dz-dazzle/dz-loader.html?sdfsdf">
-</head>
 
-<body>
-    <dz-wrapper></dz-wrapper>
-</body>
+<script>
+function onSignIn(googleUser) {
+console.log("running google");
+var profile = googleUser.getBasicProfile(); 
+console.log("myprofile",profile);
+let param = {
+  "platform":"Google",
+  "name":profile.getName(),
+  "email":profile.getEmail()
+};
+store.set("change-platform",param);
+document.querySelector('.googleloginname').click();
 
-</html>
+};
+function signOut() {
+var auth2 = gapi.auth2.getAuthInstance(); 
+auth2.signOut().then(function () {
+console.log('User signed out.');
+});
+};
+
+    window.fbAsyncInit = function () {
+        FB.init({
+            appId: '711018846416860',
+            cookie: true,
+            xfbml: true,
+            version: '7.0'
+        });
+
+        FB.AppEvents.logPageView();
+
+    };
+/*
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {
+            return;
+        }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+    */
+
+    </script>
+<style scope="change-footer">li {
+display: block;
+}
+
+.footer {
+background-color: #F0846C;
+    color: white;
+    height: auto;
+    line-height: 1.5;
+}
+
+.fpanel1 {
+width: 100%;
+    margin: 0 auto;
+    width: 100%;
+    margin: 0 auto;
+    display: grid;
+    grid-row-gap: 20px;
+    grid-column-gap: 15px;
+    grid-template-columns: 28% 28% 28%;
+    grid-template-rows: 50% 50%;
+}
+
+a.test {
+color: white;
+    text-decoration: none;
+    font-size: 12px;
+    line-height: 30px;
+}
+
+#social {
+display: flex;
+    justify-content: space-between;
+    margin: 0 auto;
+    text-align: center;
+    align-items: center;
+    display: inline-flex;
+    float: right;
+    grid-column: 1 / 5;
+    grid-row: 2 / 3;
+}
+
+.footer {
+height: 300px;
+}
+
+@media (max-width: 768px) {
+.footer {
+display: none;
+}
+
+.fpanel1 {
+width: 100%;
+        margin: 0 auto;
+        padding-bottom: 10px;
+        width: 100%;
+        margin: 0 auto;
+        display: grid;
+        grid-row-gap: 10px;
+        grid-column-gap: 15px;
+        grid-template-columns: repeat(3, 32%);
+        text-align: start;
+}
+
+#social {
+display: flex;
+        justify-content: space-between;
+        margin: 0 auto;
+        text-align: center;
+        align-items: center;
+        display: inline-flex;
+        float: right;
+        grid-column: 2 / 4;
+        grid-row: 2 / 3;
+}
+
+.footer {
+height: 500px;
+}
+
+}</style>    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
+<!-- 最新版本的 Bootstrap 核心 CSS 文件 -->    
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<title>Home - Change</title>
+<link rel="import" href="/bower_components/change/change-edit-product.html">
+<link rel="import" href="/bower_components/change/change-itemspecial.html">
+<link rel="import" href="/bower_components/change/change-slidelist.html">
+<link rel="import" href="/bower_components/change/change-in-item.html">
+<link rel="import" href="/bower_components/change/change-user-panel.html?asdlfsd">
+<link rel="import" href="/bower_components/change/change-header.html"> 
+<link rel="import" href="/bower_components/change/change-header2.html"> 
+<link rel="import" href="/bower_components/change/change-footer.html"> 
+
+<link rel="import" href="/bower_components/change/change-announcement.html"> 
+<link rel="stylesheet" href="css/style.css">
+<meta name="google-signin-scope" content="profile email">
+<meta name="google-signin-client_id" content="755964351228-2emctcoq1o2nj5vpqitv4j28411jj7jk.apps.googleusercontent.com">
+<script src="https://apis.google.com/js/platform.js" async="" defer="" gapi_processed="true"></script>
+<script async="" defer="" crossorigin="anonymous" src="https://connect.facebook.net/zh_HK/sdk.js#xfbml=1&amp;version=v7.0&amp;appId=711018846416860&amp;autoLogAppEvents=1" nonce="NXzxnRL1"></script>    
+
+
+<script>
+function onSignIn(googleUser) {
+console.log("running google");
+var profile = googleUser.getBasicProfile(); 
+console.log("myprofile",profile);
+let param = {
+  "platform":"Google",
+  "name":profile.getName(),
+  "email":profile.getEmail()
+};
+store.set("change-platform",param);
+document.querySelector('.googleloginname').click();
+
+};
+function signOut() {
+var auth2 = gapi.auth2.getAuthInstance(); 
+auth2.signOut().then(function () {
+console.log('User signed out.');
+});
+};
+
+    window.fbAsyncInit = function () {
+        FB.init({
+            appId: '711018846416860',
+            cookie: true,
+            xfbml: true,
+            version: '7.0'
+        });
+
+        FB.AppEvents.logPageView();
+
+    };
+/*
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {
+            return;
+        }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+    */
+
+    </script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="icon" href="favicon.ico">
+
+<link rel="import" href="/bower_components/change/change-itemspecial.html">
+<link rel="import" href="/bower_components/change/change-things.html">
+<link rel="import" href="/bower_components/change/change-footer.html">
+
+<link rel="import" href="/bower_components/change/change-edit-product.html?id=1597419840570"><link rel="import" href="/bower_components/change/change-itemspecial.html?id=1597419840570"><link rel="import" href="/bower_components/change/change-slidelist.html?id=1597419840570"><link rel="import" href="/bower_components/change/change-in-item.html?id=1597419840570"><link rel="import" href="/bower_components/change/change-user-panel.html?id=1597419840570"><link rel="import" href="/bower_components/change/change-header.html?id=1597419840571"><link rel="import" href="/bower_components/change/change-header2.html?id=1597419840571"><link rel="import" href="/bower_components/change/change-footer.html?id=1597419840571"><link rel="import" href="/bower_components/change/change-announcement.html?id=1597419840571"></dz-wrapper-head></head><body class="null"><dz-wrapper>  <!-- Body -->
+<div id="wrapper">
+
+<dz-block block="_header"><change-header></change-header></dz-block>
+<change-navbar></change-navbar>
+
+
+
+
+
+<div class="banner_panel" style="margin-top: 5px;">
+<img id="banner3" src="http://www.gettv.hk/img/WX20200513-110548@2x.png"><img id="banner2" src="img/WX20200513-112437@2x.png"></div>
+<div class="shop_panel">
+<div class="gettv">
+<h1>/<font size="5" face="Verdana">Get TV</font>頻道</h1>
+<div id="channel_panel">
+
+<div class="channel">
+    <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpNTw4BXAyEyyMMkhl5XcR2">
+        <div class="channelpics" style="
+background-image: url(http://www.gettv.hk/img/channel_banner/1.jpg);
+">
+        </div>
+    </a>
+    <h3>睇多啲</h3>
+    <p class="font-size-1px">短片電影及劇集</p>
+</div>
+<div class="channel">
+    <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqC1OITdb_QGz18JPmmj8a5">
+        <div class="channelpics" style="
+background-image: url(http://www.gettv.hk/img/channel_banner/2.jpg);
+">
+        </div>
+    </a>
+    <h3>識多啲</h3>
+    <p class="font-size-1px">學術與課程</p>
+</div>
+<div class="channel">
+    <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrhER3oQUYbz8wnmCv1VUBw">
+        <div class="channelpics" style="
+background-image: url(http://www.gettv.hk/img/channel_banner/3.jpg);
+">
+        </div>
+    </a>
+    <h3>愛多啲</h3>
+    <p class="font-size-1px">關係與心靈健康</p>
+</div>
+<div class="channel">
+    <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHon14MDeHFMa9qXMo7zW92T">
+        <div class="channelpics" style="
+background-image: url(http://www.gettv.hk/img/channel_banner/4.jpg);
+">
+        </div>
+    </a>
+    <h3>靚多啲</h3>
+    <p class="font-size-1px">健康美容分享</p>
+</div>
+<div class="channel">
+    <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqykeagwZRZwfEyOuTCYF7a">
+        <div class="channelpics" style="
+background-image: url(http://www.gettv.hk/img/channel_banner/5.jpg);
+">
+        </div>
+    </a>
+    <h3>知多啲</h3>
+    <p class="font-size-1px">新聞及資訊</p>
+</div>
+<div class="channel">
+    <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrywYfDOzAjc0rA89VGqpa5">
+        <div class="channelpics" style="
+background-image: url(http://www.gettv.hk/img/channel_banner/6.png);
+">
+        </div>
+    </a>
+    <h3>玩多啲</h3>
+    <p class="font-size-1px">旅遊及玩樂資訊</p>
+</div>
+<div class="channel">
+    <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpzSn5NOnJiIiGwWvIwR3jj">
+        <div class="channelpics" style="
+background-image: url(http://www.gettv.hk/img/channel_banner/7.jpeg);
+">
+        </div>
+    </a>
+    <h3>食多啲</h3>
+    <p class="font-size-1px">飲食情報</p>
+</div>
+<div class="channel">
+    <a href="http://www.gettv.hk/getchange.html">
+        <div class="channelpics" style="
+background-image: url(http://www.gettv.hk/img/channel_banner/8.jpg);
+">
+        </div>
+    </a>
+    <h3>GET多啲</h3>
+    <p class="font-size-1px">Get Change交易平台</p>
+</div>
+<div class="clear"></div>
+</div>
+
+
+
+
+
+
+
+
+</div>
+<div class="getchange">
+<h1>/<font size="6" face="Verdana">Get</font> 交易</h1>
+
+
+
+
+
+<change-shop>
+
+
+<change-itemspecial> </change-itemspecial>
+
+<div class="clear"></div>
+
+</change-shop>
+
+</div>
+
+</div>
+
+<div>
+<change-footer></change-footer>
+<change-announcement>FIXED ANNOUNCEMENT</change-announcement>
+</div>
+
+</div>
+<button class="googleloginname" style="display:none;">google login</button>
+<div class="g-signin2" data-onsuccess="onSignIn" style="display:none;">imgoogle</div>
+</dz-wrapper><dz-wrapper-js>0</dz-wrapper-js><dz-dazzle></dz-dazzle></body></html>

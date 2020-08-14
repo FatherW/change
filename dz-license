@@ -6,5 +6,16 @@
     "userType":"normal",
     "token":"",
     "init":false,
-    "local":"true"
+    "local":"true",
+    "component":[
+        "change/change-edit-product",
+        "change/change-itemspecial",
+        "change/change-slidelist",
+        "change/change-in-item",
+        "change/change-user-panel",
+        "change/change-header",
+        "change/change-header2",
+        "change/change-footer",
+        "change/change-announcement"
+    ]
 }

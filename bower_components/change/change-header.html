@@ -18,7 +18,22 @@
         Polymer({
             is: 'change-header',
             properties: {},
+            created(){
+                let basePath =  "template/" + Polymer.tid + "/_block/";
+                this.label = '種類選單';
+                this.menu = [{
+                            'text': '編輯選單',
+                            'event': 'editMenu',
+                            'source':this
+                        }];
 
+                // Polymer.getUserDataContent(basePath+'header').then(html=>{
+                //         this.innerHTML = 
+                // });        
+            },
+            editMenu(){
+
+            },
             searchlist: function() {
                 let shadow = this.shadowRoot;
                 if (shadow.querySelector('.s').value == "0") {

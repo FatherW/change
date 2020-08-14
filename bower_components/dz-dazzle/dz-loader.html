@@ -7,16 +7,6 @@
 <!-- <link rel="import" href="dz-wrapper-head.html" /> -->
 <!-- <link rel="import" href="dz-wrapper-js.html" /> -->
 
-<link rel="import" href="../change/change-edit-product.html">
-<link rel="import" href="../change/change-itemspecial.html">
-<link rel="import" href="../change/change-slidelist.html">
-<link rel="import" href="../change/change-in-item.html">
-<link rel="import" href="../change/change-user-panel.html?asdlfsd">
-<link rel="import" href="../change/change-header.html"> 
-<link rel="import" href="../change/change-header2.html"> 
-<link rel="import" href="../change/change-footer.html">    
-<link rel="import" href="../change/change-announcement.html">
-
 <dom-module id="dz-loader"> </dom-module>
 
 <script>
@@ -540,7 +530,32 @@
                 });
             });
         }
+        saveHtml(key, string) {
+            let AWS = this.AWS;
+            // console.log(window['AWS'],this.AWS);
+            let bucket = this.bucket;
+            return new Promise(function(resolve, reject) {
+                let s3 = new AWS.S3();
 
+                let params = {
+                    Bucket: bucket,
+                    Key: key,
+                    Body: string,
+                    ContentType: "text/html",
+                };
+
+                console.log(params);
+                s3.putObject(params, function(err, data) {
+                    if (err) {
+                        console.log(err);
+                        reject(err);
+                    } else {
+                        console.log(data);
+                        resolve(data);
+                    }
+                });
+            });
+        }
         saveFile(key, string) {
             let AWS = this.AWS;
             // console.log(window['AWS'],this.AWS);
@@ -1136,7 +1151,7 @@
             "https://d25k6mzsu7mq5l.cloudfront.net/user-data/" +
             Polymer.uid +
             "/" +
-            path;
+            path+'?='+ new Date().getTime();
 
         console.log("Query Url", url);
         return new Promise(function(resolve, reject) {
@@ -1183,6 +1198,7 @@
         ref.setAttribute("rel", "stylesheet");
         document.head.appendChild(ref);
     };
+    
 
     Polymer.loadComponent = function(cat, id) {
         let local = this.dzLicense["local"] || false;
@@ -1225,8 +1241,27 @@
 
     }
     Polymer.closeDialog = function(dialog) {
-
+        if (!dialog)
+            dialog = Polymer.dialog;
         dialog.opened = false;
+    }
+
+    Polymer.componentPopup = function(component, width, height) {
+        let dialog = Polymer.dialog;
+        // let dialog = document.querySelector('vaadin-dialog');
+        dialog.renderer = function(root, dialog) {
+            // root.innerHTML = '<' + component + '></' + component + '>';
+            if (root.firstElementChild) {
+                return;
+            }
+            root.appendChild(component);
+        };
+
+        dialog.resizable = true;
+        dialog.resize(width, height);
+        dialog.opened = true;
+        // Polymer.activeDialog = dialog;   
+
     }
 
 
@@ -1234,13 +1269,14 @@
         // this.loadComponent("dz-dazzle", "dz-wrapper");
 
         let editMode = store.get("editMode") || "normal";
-
+        let elm;
         let thisPage =
             decodeURIComponent(location.pathname).substring(
                 location.pathname.indexOf("/") + 1
             ) || "index.html";
 
         this.editMode = editMode;
+        Polymer.noElements = 0;
         if (editMode === "admin") {
             let user = store.get("user") || null;
             console.log('User', user);
@@ -1256,10 +1292,21 @@
 
             //   this.thisPage = document.querySelector('meta[thispage]').getAttribute('thispage') || thisPage;
             this.thisPage = thisPage;
-            document.body.innerHTML = '<dz-wrapper></dz-wrapper><vaadin-dialog></vaadin-dialog>';
-            // this.loadHtmlClass();
-            // this.loadComponent('dz-dazzle', 'dz-wrapper');
+            // document.body.innerHTML = '<dz-wrapper></dz-wrapper><vaadin-dialog></vaadin-dialog>';
             
+            // this.loadHtmlClass();
+            this.loadComponent('dz-dazzle', 'dz-admin');
+            Polymer.loadUserComponents();
+            let elm = document.createElement('dz-wrapper');
+            
+            if (!document.querySelector('dz-wrapper')) {
+                document.body.appendChild(elm);
+                elm.pageLoader();
+            } else {
+                document.querySelector('dz-wrapper').pageLoader();                   
+            } 
+
+
             document.addEventListener("save", (e) => {
                 // let url = 'https://d25k6mzsu7mq5l.cloudfront.net/user-data/'+Polymer.uid+'/';
 
@@ -1300,7 +1347,9 @@
 
                 wrapper.outerHTML = Polymer.shadowDOM.outerHTML;
 
-
+                if (wrapper) {
+                    this.fileManager.saveUserData(basePath + "html", wrapper.innerHTML);
+                }
                 // CSS
                 if (dzWrapperCss) {
                     content = document.querySelector("dz-wrapper-css").innerHTML || "";
@@ -1366,13 +1415,35 @@
             this.websiteUrl = location.hostname;
             this.thisPage = thisPage;
             this.userType = Polymer.dzLicense["userType"] || "normal";
-            document.body.innerHTML =
-                "<dz-wrapper></dz-wrapper><dz-dazzle></dz-dazzle>";
+            // document.body.innerHTML =
+            //     "<dz-wrapper></dz-wrapper><dz-dazzle></dz-dazzle>";
             this.loadComponent("dz-dazzle", "dz-dazzle");
+
+            let elm = document.createElement('dz-wrapper');
+            
+            if (!document.querySelector('dz-wrapper')) {
+                document.body.appendChild(elm);
+                elm.pageLoader();
+            } 
         }
-        Polymer.pageLoader(document.querySelector('dz-wrapper'));
+
+       
+        // Polymer.pageLoader(document.querySelector('dz-wrapper'));
     };
 
+    Polymer.loadUserComponents = function(){
+        let components = Polymer.dzLicense['component'] || null;
+        let html,link;
+        if (components){
+            components.forEach(item=>{
+                html = "/bower_components/"+item+'.html?id='+ new Date().getTime();
+                link = document.createElement('link');
+                link.setAttribute('rel','import');
+                link.setAttribute('href',html);
+                document.head.appendChild(link);
+            });
+        }
+    }
     Polymer.getMasterContent = function(type) {
         let that = this;
         let url =
@@ -1838,6 +1909,8 @@
             document.head.appendChild(dzCom);
         });
     };
+
+
     Polymer.pageLoader = function(shadow) {
         let that = this;
         Polymer.shadow = shadow;
@@ -2054,7 +2127,11 @@
     Polymer.export = function() {
         // let url = 'https://d25k6mzsu7mq5l.cloudfront.net/user-data/'+Polymer.uid+'/';
         console.log("Export")
-        let elm,content,dzid;
+        let bHead,mHead,bCss,mCss,bBodyJs,mBodyJs,html,elm,bodyClass,htmlClass;
+        let basePath = "template/" + Polymer.tid + "/" + Polymer.thisPage ;
+        let masterPath = "template/" + Polymer.tid + "/_master";
+
+        let content,dzid;
         let dom = document.createElement("html");
         let head = document.createElement("head");
         let body = document.createElement("body");
@@ -2074,48 +2151,76 @@
         head.appendChild(script);
         head.appendChild(link);
 
-        if (dzWrapperHead) {
-           
+        html = '';
+        Promise.all([
+                Polymer.getUserDataContent(basePath+'/head'),
+                Polymer.getUserDataContent(masterPath+'/head'),
+                // Polymer.getUserDataContent(basePath+'/css'),
+                // Polymer.getUserDataContent(masterPath+'/css'),
+                Polymer.getUserDataContent(basePath+'/body_js'),
+                Polymer.getUserDataContent(masterPath+'/body_js'),
+                Polymer.getUserDataContent(basePath+'/body_class'),
+                Polymer.getUserDataContent(masterPath+'/html_class'),
+            ]).then(res=>{
+                bHead = res[0] || null;
+                mHead = res[1] || null;
+                bBodyJs = res[2] || null;
+                mBodyJs = res[3] || null;
+                bodyClass = res[4] || null;
+                htmlClass = res[5] || null;
+                 
+                let dzWrapper = Polymer.shadowDOM.cloneNode(true);
+                dzWrapper.querySelectorAll('[dzid]').forEach(item=>{
+                    item.removeAttribute('dzid');
+                });
+                console.log('Dz Wrapper',dzWrapper.innerHTML);
+                // html = dzWrapper.innerHTML;
+
+                let dzWrapperHead = document.createElement('dz-wrapper-head');
+                dzWrapperHead.innerHTML = mHead + bHead;
+                
+                let components = Polymer.dzLicense['component'] || null;
+                let html,link;
+                if (components){
+                    components.forEach(item=>{
+                        html = "/bower_components/"+item+'.html?id='+ new Date().getTime();
+                        link = document.createElement('link');
+                        link.setAttribute('rel','import');
+                        link.setAttribute('href',html);
+                        dzWrapperHead.appendChild(link);
+                    });
+                }
+
                 head.appendChild(dzWrapperHead);
-        }
 
+                body.appendChild(dzWrapper);
+                let dzWrapperJs = document.createElement('dz-wrapper-js');
+                dzWrapperJs.innerHTML = mBodyJs + bBodyJs;
+                body.appendChild(dzWrapperJs);
 
-        let dzWrapper = Polymer.shadowDOM;
-        dzWrapper.querySelectorAll('[dzid]').forEach(item=>{
-            item.removeAttribute('dzid');
-        });
-        body.appendChild(dzWrapper);
+                let dzDazzle = document.createElement('dz-dazzle');
+                body.appendChild(dzDazzle);
 
-        if (dzWrapperJs){
-            elm = document.querySelector("dz-wrapper-js").cloneNode(true);
-            body.appendChild(elm);
-        }
+                body.setAttribute("class", bodyClass);            
 
-        let dzDazzle = document.createElement('dz-dazzle');
-        body.appendChild(dzDazzle);
+                dom.appendChild(head);
+                dom.appendChild(body);
+                dom.setAttribute("class", htmlClass);            
 
-        dom.appendChild(head);
-        dom.appendChild(body);
-
-        this.loadBodyClass().then(res=>{
-            body.setAttribute("class", res);            
-        });
-        Polymer.loadHtmlClass().then(res=>{
-            dom.setAttribute("class", res);            
-        });
-        let headStr = head.innerHTML; 
-        let noCache = `
-        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-        <meta http-equiv="Pragma" content="no-cache" />
-        <meta http-equiv="Expires" content="0" />
-        `;
-        headStr = noCache + headStr;
-        head.innerHTML = headStr;
-        content = dom.outerHTML;
-        // console.log("Export", content);
-        // Polymer.fileManager.saveUserData("index.html", content);
-        Polymer.fileManager.saveHtml(Polymer.thisPage,content);
-        alert("匯出成功");
+                let headStr = head.innerHTML; 
+                let noCache = `
+                <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+                <meta http-equiv="Pragma" content="no-cache" />
+                <meta http-equiv="Expires" content="0" />
+                `;
+                headStr = noCache + headStr;
+                head.innerHTML = headStr;
+                content = dom.outerHTML;
+                // console.log("Export", content);
+                // Polymer.fileManager.saveUserData("index.html", content);
+                Polymer.fileManager.saveHtml(Polymer.thisPage,content);
+                alert("匯出成功");
+            });
     }
 
     const getLicense = async() => {
@@ -2129,9 +2234,9 @@
     Polymer.getContent(url).then((html) => {
         console.log("Test Content", html);
     });
-
     Polymer.getContent("/dz-license?id=" + new Date().getTime()).then(
         (html) => {
+          
             console.log("License", html);
             Polymer.dzLicense = JSON.parse(html);
             Polymer.dzInit();

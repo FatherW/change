@@ -22,17 +22,6 @@ class dzWrapper extends Polymer.Element {
         this.uid = Polymer.uid;
         this.tid = Polymer.tid;
         this.thisPage = Polymer.thisPage;
-
-        if (Polymer.editMode==="admin") {
-            let elm = document.querySelector('dz-wrapper-head');
-            // if (document.querySelector('dz-wrapper-head'))
-            if (elm)
-                elm.remove();
-            elm = document.querySelector('dz-wrapper-js');
-            // if (document.querySelector('dz-wrapper-js'))
-            if (elm)
-                elm.remove();
-        }
     }
 
     getPath(nature,type){
@@ -63,45 +52,69 @@ class dzWrapper extends Polymer.Element {
     }
     ready(){
         super.ready();
+       
+
+       
+
+    }
+
+    pageLoader(){
         console.log('DZ WRapper',Polymer.editMode);
         let bHead,mHead,bCss,mCss,bBodyJs,mBodyJs,html,elm,bodyClass;
         let basePath = "template/" + Polymer.tid + "/" + Polymer.thisPage ;
         let masterPath = "template/" + Polymer.tid + "/_master";
 
         console.log(Polymer.thisPage,this.getPath(Polymer.thisPage,'head'));
-        if (Polymer.editMode==="admin" || !this.innerHTML) {
+            this.innerHTML = '';
+            if (document.querySelector('dz-wrapper-js'))
+                document.querySelector('dz-wrapper-js').innerHTML = '';
             Promise.all([
 
-                Polymer.getUserDataContent(basePath+'/head'),
-                Polymer.getUserDataContent(masterPath+'/head'),
-                Polymer.getUserDataContent(masterPath+'/head'),
-                Polymer.getUserDataContent(masterPath+'/css'),
+                // Polymer.getUserDataContent(masterPath+'/css'),
+                // Polymer.getUserDataContent(masterPath+'/css'),
                 Polymer.getUserDataContent(basePath+'/body_js'),
                 Polymer.getUserDataContent(masterPath+'/body_js'),
                 Polymer.getUserDataContent(basePath+'/html'),
-                Polymer.getUserDataContent(basePath+'/body_class')
+                Polymer.getUserDataContent(basePath+'/body_class'),     
+                Polymer.getUserDataContent(basePath+'/head'),
+                Polymer.getUserDataContent(masterPath+'/head'),
             ]).then(res=>{
-                bHead = res[0] || '';
-                mHead = res[1] || '';
-                bCss = res[2] || '';
-                mCss = res[3] || '';
-                bBodyJs = res[4] || '';
-                mBodyJs = res[5] || '';
-                html = res[6]|| '';
-                bodyClass = res[7] || '';
-                let dzHead=document.createElement('dz-wrapper-head');
-                elm = document.createRange().createContextualFragment(mHead+bHead);
-                dzHead.appendChild(elm);
+                // bHead = res[0] || '';
+                // mHead = res[1] || '';
+                // bCss = res[2] || '';
+                // mCss = res[3] || '';
+                bBodyJs = res[0] || '';
+                mBodyJs = res[1] || '';
+                html = res[2]|| '';
+                bodyClass = res[3] || '';
+                bHead = res[4] ||'';
+                mHead = res[5] || '';
+                 let dzHead=window.document.createElement('dz-wrapper-head');
+                dzHead.innerHTML = mHead+bHead;
+                
+                // elm = document.createRange().createContextualFragment(mHead+bHead);
+                // console.log('Add Elm',mHead+bHead);
+                // dzHead.appendChild(elm);
                 document.head.appendChild(dzHead);
+
                 this.innerHTML = html;
+                // let dzWrapper = document.createElement('dz-wrapper');
+                // dzWrapper.innerHTML = html;
+                // document.body.appendChild(dzWrapper);
                 document.body.setAttribute('class',bodyClass);
 
                 if (Polymer.editMode==='admin'){
+                    let dzAdmin = document.createElement('dz-admin');
+                    document.body.appendChild(dzAdmin);
+
                     this.querySelectorAll('*').forEach(item=>{
                         new defaultPackage(item);
                     });
                     this.shadowHtml = this.innerHTML;
                     Polymer.shadowDOM = this.cloneNode(true);
+                    document.addEventListener('save',e=>{
+                        this.save();
+                    });
                 }
 
 
@@ -117,10 +130,9 @@ class dzWrapper extends Polymer.Element {
 
 
 
-            
-        
 
-    }
+    
+
     save=function(){
         let html;
         let dummy = Polymer.shadowDOM.cloneNode(true);

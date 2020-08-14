@@ -19,91 +19,106 @@
 
 <dom-module id="dz-image-item">
 
-	<template>
+    <template>
 		<style include="font-awesome"></style>
+		<style>
+			dz-image-toolbar {
+				position: relative;
+				left: 20px;
+				top: 25px;
+				width: auto;
+				height: 20px;
+			}
+		</style>
 		<div class="brick" gid="{{gid}}" on-click="_select">
-			<img src$="{{src}}" gid="{{gid}}">
-			<dz-image-toolbar></dz-image-toolbar>
+			<img src$="{{src}}" gid="{{gid}}" style="width: 100%;">			
 		</div>
 	</template>
 </dom-module>
 
 <script>
-
-(function() {
-
+    (function() {
 
 
-	Polymer({
-		is: 'dz-image-item',
-		properties: {
-			gid:{
-				type:String
-			},
-			host:{
-				type:Element
-			},
-			selected:{
-				type:Boolean
-			}
-		},
+        Polymer({
+            is: 'dz-image-item',
+            properties: {
+                gid: {
+                    type: String
+                },
+                host: {
+                    type: Element
+                },
+                selected: {
+                    type: Boolean
+                }
+            },
 
-		created:function() {
-			this.selected = false;
-			this.fileManager = Polymer.fileManager;
-		},
-		buildItem(item){
-				let h3 = document.createElement('h3');
-				let img = document.createElement('img');
-				let div = document.createElement('div');
-			let shadow = this.shadowRoot;
-			let that = this;
-			let url = "https://designerrrr-output.s3-ap-northeast-1.amazonaws.com/images/"+Polymer.uid+"/small-web/";
-			src = url+item['gid']+'.jpg';
+            created: function() {
+                this.selected = false;
+                this.fileManager = Polymer.fileManager;
+                
+            },
+            
+            buildItem(item) {
+                let h3 = document.createElement('h3');
+                let img = document.createElement('img');
+                let div = document.createElement('div');
+                let shadow = this.shadowRoot;
+                let that = this;
+                let url = "https://designerrrr-output.s3-ap-northeast-1.amazonaws.com/images/" + Polymer.uid + "/large-web/";
+                src = url + item['gid'] + '.jpg';
 
-			let figure = document.createElement('div');
-			figure.setAttribute('class','brick');
-			let elm = figure.cloneNode(true);
-			let elm2 = img.cloneNode(true);
-			elm.setAttribute('gid',item['gid']);
-			elm2.setAttribute('src',src);
-			elm2.setAttribute('gid',item['gid']);
-			elm2.addEventListener('click',e=>{
-				let url =  "https://designerrrr-output.s3-ap-northeast-1.amazonaws.com/images/"+Polymer.uid+"/large-web/"+elm2.getAttribute('gid')+".jpg";
-				that.select(url);
-			});
-			// let figcaption = document.createElement('figcaption');
-			let toolbar = document.createElement('dz-image-toolbar');
-			toolbar.gid = item['gid'];
-			toolbar.host = elm;
-			// toolbar.key = item['Key'];
-			// figcaption.innerHTML = item['Key'];
-			elm.appendChild(elm2);     
-			elm.appendChild(toolbar);
-			// elm.appendChild(figcaption);
-			
-			shadow.querySelector('#dz-imageList').appendChild(elm);
+                let figure = document.createElement('div');
+                figure.setAttribute('class', 'brick');
+                let elm = figure.cloneNode(true);
+                let elm2 = img.cloneNode(true);
+                elm.setAttribute('gid', item['gid']);
+                elm2.setAttribute('src', src);
+                elm2.setAttribute('gid', item['gid']);
+                elm2.addEventListener('click', e => {
+                    let url = "https://designerrrr-output.s3-ap-northeast-1.amazonaws.com/images/" + Polymer.uid + "/large-web/" + elm2.getAttribute('gid') + ".jpg";
+                    that.select(url);
+                });
+                // let figcaption = document.createElement('figcaption');
+                let toolbar = document.createElement('dz-image-toolbar');
+                toolbar.gid = item['gid'];
+                toolbar.host = elm;
+                // toolbar.key = item['Key'];
+                // figcaption.innerHTML = item['Key'];
+                elm.appendChild(elm2);
+                elm.appendChild(toolbar);
+                // elm.appendChild(figcaption);
 
-		},
-		ready:function() {
-			console.log('Gid',this.gid);
-			this.src = "https://designerrrr-output.s3-ap-northeast-1.amazonaws.com/images/"+Polymer.uid+"/small-web/"+this.gid+".jpg";
+                shadow.querySelector('#dz-imageList').appendChild(elm);
+
+            },
+            ready: function() {
+                console.log('Gid', this.gid);
+                this.src = "https://designerrrr-output.s3-ap-northeast-1.amazonaws.com/images/" + Polymer.uid + "/large-web/" + this.gid + ".jpg";
+                let that = this;
+                
 
 
-		},
-		_select(callback){
-			// this.selected = !this.selected;
-			// console.log('Host',this.host);
-			// if (this.selected)
-			// 	this.host.classList.add('selected');
-			// else
-			// 	this.host.classList.remove('selected');
+            },
+            _select(callback) {
+                let activeElm = Polymer.activeElement;
+                console.log('Click',this.src,activeElm);
 
-			// callback();
-			
-		}
-	});
+                activeElm.selected(this.src);
+                document.querySelector('dz-admin').closeDialog();
+                
+                // this.selected = !this.selected;
+                // console.log('Host',this.host);
+                // if (this.selected)
+                // 	this.host.classList.add('selected');
+                // else
+                // 	this.host.classList.remove('selected');
 
-})();
+                // callback();
 
+            }
+        });
+
+    })();
 </script>
