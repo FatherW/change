@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-list-mixin",
-  "version": "2.5.0",
+  "version": "2.3.1",
   "description": "vaadin-list-mixin",
   "main": "vaadin-list-mixin.html",
   "repository": "vaadin/vaadin-list-mixin",
@@ -18,7 +18,6 @@
   },
   "homepage": "https://vaadin.com/elements",
   "files": [
-    "*.d.ts",
     "vaadin-*.js"
   ],
   "husky": {

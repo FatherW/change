@@ -1,0 +1,20 @@
+{
+    "id": 96,
+    "username": "Tonytimes",
+    "numberRate": 0,
+    "goodsNum": 0,
+    "area": "觀塘區",
+    "email": "tonygmt@gmail.com",
+    "phone": "36210622",
+    "password": "ay4asy47tony",
+    "createTime": "1597307269955",
+    "isPromotionMsg": true,
+    "head": "http://www.gettv.hk/img/user_profile.png",
+    "likeProduct": [],
+    "score": 5,
+    "history": [],
+    "isAdmin": false,
+    "token": "",
+    "platform": "gettv",
+    "banner": "https://www.gettv.hk/Website%20Design/profile%20page/img/profile%20banner/company-profile-banner.png"
+}

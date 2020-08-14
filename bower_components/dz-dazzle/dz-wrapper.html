@@ -1,8 +1,14 @@
+<<<<<<< HEAD
 <link rel="import" href="../polymer/polymer-element.html">
 <!-- <link rel="import" href="../dz-dazzle/dz-admin.html"> -->
 <!-- <link rel="import" href="../dz-dazzle/dz-wrapper-head.html">
 <link rel="import" href="../dz-dazzle/dz-wrapper-js.html"> -->
 
+=======
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../dz-dazzle/dz-block.html">
+<link rel="import" href="../dz-dazzle/dz-loader.html">
+>>>>>>> origin/master
 <!-- <link rel="import" href="../vaadin-dialog/vaadin-dialog.html"> -->
 <!-- <link rel="import" href="dz-loader.html?id=sdsdfsdffsdf"> -->
 
@@ -12,6 +18,7 @@
 </dom-module>
 
 <script>
+<<<<<<< HEAD
 class dzWrapper extends Polymer.Element {
 	static get is() {
           return 'dz-wrapper';
@@ -234,42 +241,36 @@ customElements.define('dz-wrapper', dzWrapper);
 // 	Polymer({
 // 		is: 'dz-wrapper',
 // 		properties: {
+=======
+
+(function() {
+
+
+
+	Polymer({
+		is: 'dz-wrapper',
+		properties: {
+>>>>>>> origin/master
 			
-// 		},
+		},
 
-// 		created:function() {
-//             // Polymer.dzInit();
-// 				console.log('DZ Wrapper');
-            
-//         },	
-//         ready:function(){
-// 			let dzDazzle = document.createElement('dz-dazzle');
-//             Polymer.pageLoader(this);
-// 			document.body.appendChild(dzDazzle);
-// 			Polymer.loadComponent("dz-dazzle", "dz-dazzle");
-// 			// this.loadMenu;
-//         },
-// 		loadMenu() {
-//                 let shadow = this.shadowRoot;
-//                 shadow.querySelectorAll('img').forEach(item => {
-                    
-//                     item.menu = this.menuList['IMG'];
-//                     console.log('item',item);
-//                 });
+		created:function() {
+            // Polymer.dzInit();
+				console.log('DZ Wrapper');
+        },	
+        ready:function(){
+            // Polymer.pageLoader(this);
 
-//                 shadow.querySelectorAll('a').forEach(item => {
-//                     item.menu = this.menuList['A'];
-//                 });
-               
+			// this.querySelector('*').forEach(item=>{
+			// 	let style = window.getComputedStyle(item);
+			// 	console.log('Style',style);
+			// });
+        },
+		login:function(){
 
+		}
+	});
 
-
-// 		},
-// 		login:function(){
-
-// 		}
-// 	});
-
-// })();
+})();
 
 </script>

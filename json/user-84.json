@@ -1,0 +1,20 @@
+{
+    "id": 84,
+    "username": "kc",
+    "numberRate": 0,
+    "goodsNum": 0,
+    "area": "中西區",
+    "email": "caseychun46@gmail.com",
+    "phone": "0000",
+    "password": "1",
+    "createTime": "1597052217680",
+    "isPromotionMsg": true,
+    "head": "http://www.gettv.hk/img/user_profile.png",
+    "likeProduct": [],
+    "score": 5,
+    "history": [],
+    "isAdmin": false,
+    "token": "",
+    "platform": "gettv",
+    "banner": "https://www.gettv.hk/files/caseychun46@gmail.com/1597052289415.png"
+}

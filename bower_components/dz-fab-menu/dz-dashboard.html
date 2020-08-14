@@ -33,6 +33,7 @@ Style                                                   | Description
     <template>
 
 		<style>
+
 			:host {
 				z-index: 10000;
 				position: fixed;
@@ -41,19 +42,19 @@ Style                                                   | Description
 				width: 100px;
 				height: 100px;
 			}
+
 		</style>
 
-		<valle-speed-dial direction="down">
-			<paper-fab-speed-dial-action icon="icons:save" on-click="save">儲存及匯出</paper-fab-speed-dial-action>
-			<paper-fab-speed-dial-action icon="icons:settings" on-click="settings">頁面設定</paper-fab-speed-dial-action>
-			<paper-fab-speed-dial-action icon="icons:face" on-click="userSettings">用戶設定</paper-fab-speed-dial-action>
-			<paper-fab-speed-dial-action icon="icons:perm-media" on-click="mediaManage">媒體管理
-			</paper-fab-speed-dial-action>
-			<paper-fab-speed-dial-action icon="icons:dns" on-click="dbManage">資料管理</paper-fab-speed-dial-action>
-			<paper-fab-speed-dial-action icon="icons:history" on-click="history">回復</paper-fab-speed-dial-action>
-			<paper-fab-speed-dial-action icon="icons:help" on-click="help">使用說明</paper-fab-speed-dial-action>
-			<paper-fab-speed-dial-action icon="icons:exit-to-app" on-click="logout">登出</paper-fab-speed-dial-action>
-			<!-- <valle-speed-dial-action
+	<valle-speed-dial direction="down" backdrop>
+		<paper-fab-speed-dial-action icon="icons:save" on-click="save">儲存及匯出</paper-fab-speed-dial-action>
+		<paper-fab-speed-dial-action icon="icons:settings" on-click="settings">頁面設定</paper-fab-speed-dial-action>
+		<paper-fab-speed-dial-action icon="icons:face" on-click="userSettings">用戶設定</paper-fab-speed-dial-action>
+		<paper-fab-speed-dial-action icon="icons:perm-media" on-click="mediaManage">媒體管理</paper-fab-speed-dial-action>
+		<paper-fab-speed-dial-action icon="icons:dns" on-click="dbManage">資料管理</paper-fab-speed-dial-action>
+		<paper-fab-speed-dial-action icon="icons:history" on-click="history">回復</paper-fab-speed-dial-action>
+		<paper-fab-speed-dial-action icon="icons:help" on-click="help">使用說明</paper-fab-speed-dial-action>
+		<paper-fab-speed-dial-action icon="icons:exit-to-app" on-click="logout">登出</paper-fab-speed-dial-action>
+            <!-- <valle-speed-dial-action
               label="copy"
               label-direction="right"
               icon="icons:print"
@@ -104,23 +105,13 @@ Style                                                   | Description
                 // if (Polymer.editMode==="admin")
                 // if (!Polymer.user['userBucket'])
                 // Polymer.dataManager.saveUserData()
-
-            },
-            popup(folder, component, width, height) {
-                let dzAdmin = document.querySelector('dz-admin');
-                dzAdmin.popup(folder, component, width, height);
             },
             save: function(e, detail) {
                 console.log('save');
+
+                // 就比如 xyz二手好貨 擺在下面basepase就好
+
                 Polymer.dzFire('save', {});
-            },
-            userSettings: function() {
-                let dial = this.shadowRoot.querySelector('valle-speed-dial').open = false;
-                this.popup('dz-dazzle', 'dz-usersetting', '80%', '70%');
-            },
-            settings: function() {
-                let dial = this.shadowRoot.querySelector('valle-speed-dial').open = false;
-                this.popup('dz-fab-menu', 'dz-settings', '90%', '90%');
             },
             help: function(e, detail) {
                 // var url = prompt("請輸入匯入連結");				

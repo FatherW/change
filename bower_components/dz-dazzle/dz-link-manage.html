@@ -138,7 +138,8 @@
 		ready() {
 			// this.searchTags();
 			// this.renew();
-            this.shadowRoot.querySelector('#myLink').value = this.source.getAttribute('href');
+            console.log('Shadow',this.shadowRoot.querySelector('#myLink'),Polymer._curElm);
+            this.shadowRoot.querySelector('#myLink').value = Polymer._curElm.getAttribute('href');
             
 		},
 		renew(){
@@ -202,18 +203,15 @@
     },
     select(){
 		// Polymer._curElm.getAttribute('href')=this.shadowRoot.querySelector('#myLink').value;
-		// let link = this.shadowRoot.querySelector('#myLink').value;
-		// // Polymer._curElm.setAttribute('href',link);
-		// // let params = {
-		// // 	'selected':link
-		// // };
-		// // Polymer._curElm.dispatchEvent(new CustomEvent('link-selected', {'detail':params}));
-		
-		// let activeElement = Polymer.activeElement;
-		// console.log('Active Element',activeElement);
 		let link = this.shadowRoot.querySelector('#myLink').value;
-		this.source.selected(link);
+		// Polymer._curElm.setAttribute('href',link);
+		let params = {
+			'selected':link
+		};
+		Polymer._curElm.dispatchEvent(new CustomEvent('link-selected', {'detail':params}));
 
+
+		
     },
         popup(folder,component,width,height){
             const shadow = this.shadowRoot;
@@ -230,10 +228,7 @@
             });
         
         },
-	_cancel(){
-       Polymer.closeDialog();
-	},  
-	closeDialog(){
+      closeDialog(){
         const shadow = this.shadowRoot;
         const dialog = shadow.querySelector('vaadin-dialog');
         dialog.opened = false;
