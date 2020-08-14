@@ -7,11 +7,10 @@
 
     <template>
         <style>
-            * {
-                font-family: sans-serif, Microsoft JhengHei;
+            *{
+                font-family: sans-serif,Microsoft JhengHei;
 
             }
-
             .hide {
                 display: none;
             }
@@ -23,21 +22,21 @@
                 color: #7F7F7F;
                 cursor: pointer;
             }
-
-
-            img {
+            
+           
+            img{
                 height: 40px;
                 width: 40px;
                 border-radius: 9999999999999px;
             }
-
-            #before {
+            
+            #before{
+                display: inline-flex;
+            }
+            .logining{
                 display: inline-flex;
             }
 
-            .logining {
-                display: inline-flex;
-            }
         </style>
 
         <div id="before" class="logining" part="login">
@@ -53,14 +52,14 @@
 </dom-module>
 
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-user-panel',
             properties: {},
-            created: function () {
+            created: function() {
 
             },
-            _login: function () {
+            _login: function() {
                 let shadow = this.shadowRoot;
                 let that = this;
                 let user = store.get('change-user');
@@ -70,7 +69,7 @@
                 }
             },
 
-            _register: function () {
+            _register: function() {
                 let shadow = this.shadowRoot;
                 let that = this;
                 let user = store.get('change-user');
@@ -125,7 +124,7 @@
                                 let loginparams = {
                                     "action": "login",
                                     "login": email,
-                                    "platform": "Google"
+                                    "password": all[0]['password']
                                 };
 
                                 Polymer.postData(url, loginparams).then(res => {
@@ -148,23 +147,15 @@
                 })
 
             },
-            ready: function () {
+            ready: function() {
                 let user = store.get('change-user') || null;
-
                 if (user != null) {
-                    console.log("current user cookie", user);
                     this.shadowRoot.querySelector('#register').innerHTML = ' / 登出';
                     if (user['head'] == "") {
                         user['head'] = "./img/head.svg";
                     }
                     this.shadowRoot.querySelector('#login').innerHTML = '<a href="/user.html?' + user['_id'] + '"><img src="' + user['head'] + '"></a>';
-
-                    this.fileManager = new AwsPackage(user);
-                    console.log("uuuuu1", this.fileManager);
-                    this.fileManager.saveFile('json/user-' + user['_id'] + '.json', JSON.stringify(user));
                 }
-
-
                 let s = this.shadowRoot;
                 document.addEventListener('close-myself', e => {
                     s.querySelector('vaadin-dialog#register').opened = false;
