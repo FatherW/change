@@ -1,0 +1,1279 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
+<link rel="import" href="dz-resetpw.html">
+
+<dom-module id="dz-login">
+    <template>
+		<style>
+			:host {
+				width: 640px;
+				height: 800px;
+			}
+
+			#dz-logo[_ngcontent-xxm-c0] {
+				position: fixed;
+				right: 0;
+				bottom: 0;
+				width: 100px;
+				height: 30px;
+				background-image: url(http://dazzle.website/image/lgo.png);
+				background-size: 100% auto;
+				background-repeat: no-repeat;
+				cursor: pointer;
+				z-index: 99999
+			}
+
+			eco-fab-speed-dial-trigger[_ngcontent-xxm-c0]>button[_ngcontent-xxm-c0] {
+				background-color: #2196f3
+			}
+
+			smart-grid[_ngcontent-xxm-c0] {
+				width: 100%;
+				height: auto
+			}
+
+			#dz-logo[_ngcontent-xxm-c0]:hover {
+				opacity: .8
+			}
+
+			.dz-outline[_ngcontent-xxm-c0] {
+				outline: #2196f3 solid 1px
+			}
+
+			mat-dialog-container[_ngcontent-xxm-c0] {
+				padding: 0 !important
+			}
+
+			mat-dialog-title[_ngcontent-xxm-c0] {
+				margin: 0
+			}
+
+			eco-fab-speed-dial-trigger[_ngcontent-xxm-c0] button[_ngcontent-xxm-c0] {
+				background-color: #3f51b5 !important
+			}
+
+			.example-icon[_ngcontent-xxm-c0] {
+				padding: 0 14px
+			}
+
+			.example-spacer[_ngcontent-xxm-c0] {
+				-webkit-box-flex: 1;
+				flex: 1 1 auto
+			}
+
+			.dw[_ngcontent-xxm-c0] {
+				-webkit-animation: 2s fade;
+				animation: 2s fade;
+				box-sizing: border-box;
+				-webkit-column-gap: 0;
+				-moz-column-gap: 0;
+				column-gap: 0;
+				position: relative
+			}
+
+			.dw[_ngcontent-xxm-c0] *[_ngcontent-xxm-c0] {
+				box-sizing: border-box
+			}
+
+			.dw__fcs-crtn[_ngcontent-xxm-c0] {
+				background-color: #000;
+				bottom: 0;
+				display: none;
+				left: 0;
+				opacity: .75;
+				position: fixed;
+				right: 0;
+				top: 0;
+				z-index: 2
+			}
+
+			@media (min-width:768px) {
+				.dw[_ngcontent-xxm-c0] {
+					-webkit-column-count: 4;
+					-moz-column-count: 4;
+					column-count: 4
+				}
+
+				.dw-pnl[_ngcontent-xxm-c0] {
+					-webkit-column-break-inside: avoid;
+					-moz-column-break-inside: avoid;
+					break-inside: avoid
+				}
+			}
+
+			@media (min-width:992px) {
+				.dw[_ngcontent-xxm-c0] {
+					-webkit-column-count: 6;
+					-moz-column-count: 6;
+					column-count: 6
+				}
+			}
+
+			@media (min-width:1500px) {
+				.dw[_ngcontent-xxm-c0] {
+					-webkit-column-count: 8;
+					-moz-column-count: 8;
+					column-count: 8
+				}
+			}
+
+			.dw-pnl[_ngcontent-xxm-c0] {
+				margin: 0;
+				padding: 5px
+			}
+
+			.dw-pnl--fcs[_ngcontent-xxm-c0] {
+				position: relative
+			}
+
+			.dw-pnl--fcs[_ngcontent-xxm-c0]:hover {
+				z-index: 3
+			}
+
+			.dw-pnl--fcs[_ngcontent-xxm-c0]:hover~.dw__fcs-crtn[_ngcontent-xxm-c0] {
+				display: block
+			}
+
+			.dw-pnl--pls[_ngcontent-xxm-c0] {
+				-webkit-transform-style: preserve-3d;
+				transform-style: preserve-3d;
+				-webkit-perspective: 1000;
+				perspective: 1000;
+				transition: -webkit-transform .25s ease 0s;
+				-webkit-transition: -webkit-transform .25s;
+				transition: transform .25s ease 0s;
+				transition: transform .25s ease 0s, -webkit-transform .25s ease 0s
+			}
+
+			.dw-pnl--pls[_ngcontent-xxm-c0]:hover {
+				-webkit-transform: scale(1.02);
+				transform: scale(1.02)
+			}
+
+			.dw-pnl__cntnt[_ngcontent-xxm-c0] {
+				border-radius: 10px;
+				overflow: hidden;
+				padding: 20px;
+				width: 100%
+			}
+
+			.dw-flp[_ngcontent-xxm-c0] {
+				-webkit-perspective: 1000;
+				perspective: 1000
+			}
+
+			.dw-flp[_ngcontent-xxm-c0]:hover .dw-flp__cntnt[_ngcontent-xxm-c0] {
+				-webkit-transform: rotateY(180deg);
+				transform: rotateY(180deg)
+			}
+
+			.dw-flp--sm[_ngcontent-xxm-c0] {
+				height: 200px
+			}
+
+			.dw-flp--md[_ngcontent-xxm-c0] {
+				height: 300px
+			}
+
+			.dw-flp--lg[_ngcontent-xxm-c0] {
+				height: 400px
+			}
+
+			.dw-flp__pnl[_ngcontent-xxm-c0] {
+				-webkit-backface-visibility: hidden;
+				backface-visibility: hidden;
+				border-radius: 10px;
+				height: 100%;
+				left: 0;
+				overflow: visible;
+				padding: 20px;
+				position: absolute;
+				top: 0;
+				width: 100%
+			}
+
+			.dw-flp__pnl--frnt[_ngcontent-xxm-c0] {
+				-webkit-transform: rotateY(0);
+				transform: rotateY(0);
+				z-index: 2
+			}
+
+			.dw-flp__pnl--bck[_ngcontent-xxm-c0] {
+				-webkit-transform: rotateY(180deg);
+				transform: rotateY(180deg)
+			}
+
+			.dw-flp__cntnt[_ngcontent-xxm-c0] {
+				height: 100%;
+				overflow: visible;
+				position: relative;
+				-webkit-transform-style: preserve-3d;
+				transform-style: preserve-3d;
+				-webkit-transition: .25s;
+				transition: .25s
+			}
+
+			.dw-clstr[_ngcontent-xxm-c0] {
+				display: -webkit-box;
+				display: flex;
+				padding: 0
+			}
+
+			@media (max-width:430px) {
+				.dw-clstr--vrt[_ngcontent-xxm-c0] {
+					-webkit-box-orient: vertical;
+					-webkit-box-direction: normal;
+					flex-direction: column
+				}
+			}
+
+			.dw-clstr--hrz[_ngcontent-xxm-c0] {
+				-webkit-box-orient: vertical;
+				-webkit-box-direction: normal;
+				flex-direction: column
+			}
+
+			.dw-clstr__sgmnt[_ngcontent-xxm-c0] {
+				display: -webkit-box;
+				display: flex;
+				-webkit-box-flex: 1;
+				flex: 1 1 auto
+			}
+
+			.dw-clstr__sgmnt--rw[_ngcontent-xxm-c0] {
+				display: -webkit-box;
+				display: flex
+			}
+
+			@media (max-width:430px) {
+				.dw-clstr__sgmnt--rw[_ngcontent-xxm-c0] {
+					-webkit-box-orient: vertical;
+					-webkit-box-direction: normal;
+					flex-direction: column
+				}
+			}
+
+			.dw-clstr__sgmnt--clmn[_ngcontent-xxm-c0] {
+				-webkit-box-orient: vertical;
+				-webkit-box-direction: normal;
+				flex-direction: column
+			}
+
+			@media (min-width:430px) {
+				.dw-clstr__sgmnt--hlf[_ngcontent-xxm-c0] {
+					flex-basis: 50%
+				}
+
+				.dw-clstr__sgmnt--qrt[_ngcontent-xxm-c0] {
+					flex-basis: 25%
+				}
+			}
+
+			*[_ngcontent-xxm-c0] {
+				box-sizing: border-box
+			}
+
+			.tx--left[_ngcontent-xxm-c0] {
+				text-align: left
+			}
+
+			.tx--right[_ngcontent-xxm-c0] {
+				text-align: right
+			}
+
+			.tx--center[_ngcontent-xxm-c0] {
+				text-align: center
+			}
+
+			body[_ngcontent-xxm-c0] {
+				font-family: "Open Sans", sans-serif
+			}
+
+			h3[_ngcontent-xxm-c0] {
+				margin-top: 0
+			}
+
+			.bd--black[_ngcontent-xxm-c0] {
+				border: 4px solid #000
+			}
+
+			.bg--black[_ngcontent-xxm-c0] {
+				background-color: #000
+			}
+
+			.tx--black[_ngcontent-xxm-c0] {
+				color: #000
+			}
+
+			.bd--red[_ngcontent-xxm-c0] {
+				border: 4px solid #e74c3c
+			}
+
+			.bg--red[_ngcontent-xxm-c0] {
+				background-color: #e74c3c
+			}
+
+			.tx--red[_ngcontent-xxm-c0] {
+				color: #e74c3c
+			}
+
+			.bd--blue[_ngcontent-xxm-c0] {
+				border: 4px solid #1e8bc3
+			}
+
+			.bg--blue[_ngcontent-xxm-c0] {
+				background-color: #1e8bc3
+			}
+
+			.tx--blue[_ngcontent-xxm-c0] {
+				color: #1e8bc3
+			}
+
+			.bd--green[_ngcontent-xxm-c0] {
+				border: 4px solid #26a65b
+			}
+
+			.bg--green[_ngcontent-xxm-c0] {
+				background-color: #26a65b
+			}
+
+			.tx--green[_ngcontent-xxm-c0] {
+				color: #26a65b
+			}
+
+			.bd--grey[_ngcontent-xxm-c0] {
+				border: 4px solid #6c7a89
+			}
+
+			.bg--grey[_ngcontent-xxm-c0] {
+				background-color: #6c7a89
+			}
+
+			.tx--grey[_ngcontent-xxm-c0] {
+				color: #6c7a89
+			}
+
+			.bd--purple[_ngcontent-xxm-c0] {
+				border: 4px solid #8e44ad
+			}
+
+			.bg--purple[_ngcontent-xxm-c0] {
+				background-color: #8e44ad
+			}
+
+			.tx--purple[_ngcontent-xxm-c0] {
+				color: #8e44ad
+			}
+
+			.bd--white[_ngcontent-xxm-c0] {
+				border: 4px solid #ecf0f1
+			}
+
+			.bg--white[_ngcontent-xxm-c0] {
+				background-color: #ecf0f1
+			}
+
+			.tx--white[_ngcontent-xxm-c0] {
+				color: #ecf0f1
+			}
+
+			img[_ngcontent-xxm-c0] {
+				max-height: 300px
+			}
+
+			img.dw-flp__pnl[_ngcontent-xxm-c0],
+			img.dw-pnl__cntnt[_ngcontent-xxm-c0] {
+				padding: 0
+			}
+
+			img.dw-flp__pnl[_ngcontent-xxm-c0] {
+				max-height: 100%
+			}
+
+			@-webkit-keyframes fade {
+				from {
+					opacity: 0
+				}
+
+				to {
+					opacity: 1
+				}
+			}
+
+			@keyframes fade {
+				from {
+					opacity: 0
+				}
+
+				to {
+					opacity: 1
+				}
+			}
+
+			.mat-dialog-container {
+				display: block;
+				padding: 24px;
+				border-radius: 4px;
+				box-sizing: border-box;
+				overflow: auto;
+				outline: 0;
+				width: 100%;
+				height: 100%;
+				min-height: inherit;
+				max-height: inherit
+			}
+
+			@media (-ms-high-contrast:active) {
+				.mat-dialog-container {
+					outline: solid 1px
+				}
+			}
+
+			.mat-dialog-content {
+				display: block;
+				margin: 0 -24px;
+				padding: 0 24px;
+				max-height: 65vh;
+				overflow: auto;
+				-webkit-overflow-scrolling: touch
+			}
+
+			.mat-dialog-title {
+				margin: 0 0 20px;
+				display: block
+			}
+
+			.mat-dialog-actions {
+				padding: 8px 0;
+				display: flex;
+				flex-wrap: wrap;
+				min-height: 52px;
+				align-items: center;
+				margin-bottom: -24px
+			}
+
+			.mat-dialog-actions[align=end] {
+				justify-content: flex-end
+			}
+
+			.mat-dialog-actions[align=center] {
+				justify-content: center
+			}
+
+			.mat-dialog-actions .mat-button-base+.mat-button-base {
+				margin-left: 8px
+			}
+
+			[dir=rtl] .mat-dialog-actions .mat-button-base+.mat-button-base {
+				margin-left: 0;
+				margin-right: 8px
+			}
+
+			.mat-icon {
+				background-repeat: no-repeat;
+				display: inline-block;
+				fill: currentColor;
+				height: 24px;
+				width: 24px;
+				position: absolute;
+				right: 10px;
+				top: 27%
+			}
+
+			[hidden] {
+				display: none
+			}
+
+			button.select-template {
+				position: absolute;
+				right: 0;
+				top: 0;
+				margin: 8px 12px
+			}
+
+			.loading {
+				width: 50px;
+				height: 50px;
+				margin: 10px auto
+			}
+
+			.loading img {
+				width: 100%
+			}
+
+			.mat-form-field-wrapper {
+				position: relative;
+				border-bottom: 1px solid #fff;
+				padding-bottom: 5px
+			}
+
+			.mat-form-field {
+				display: inline-block;
+				position: relative;
+				text-align: left;
+				width: 100%
+			}
+
+			.login-wrap .closeButton {
+				position: absolute;
+				right: 10px;
+				top: 10px;
+				z-index: 20;
+				color: #fff
+			}
+
+			.mat-fab.mat-warn,
+			.mat-flat-button.mat-warn,
+			.mat-mini-fab.mat-warn,
+			.mat-raised-button.mat-warn {
+				background-color: #f44336
+			}
+
+			.loginDialog {
+				width: 425px
+			}
+
+			:focus {
+				outline: 0
+			}
+
+			*,
+			:after,
+			:before {
+				box-sizing: border-box
+			}
+
+			.clearfix:after,
+			.clearfix:before {
+				content: "";
+				display: table
+			}
+
+			.clearfix:after {
+				clear: both;
+				display: block
+			}
+
+			a {
+				color: inherit;
+				text-decoration: none
+			}
+
+			.login-wrap {
+				width: 100%;
+				margin: auto;
+				min-width: 100%;
+				max-width: 100%;
+				min-height: 680px;
+				position: relative;
+				background: url(https://dazzle-template.s3.amazonaws.com/cdn6.0/images/dazzleLoginBg.jpg) center no-repeat;
+				box-shadow: 0 12px 15px 0 rgba(0, 0, 0, .24), 0 17px 50px 0 rgba(0, 0, 0, .19)
+			}
+
+			.login-html {
+				width: 100%;
+				height: 100%;
+				position: absolute;
+				padding: 40px 30px 25px;
+				background: rgba(40, 57, 101, .9)
+			}
+
+			.login-html .sign-in-htm,
+			.login-html .sign-up-htm {
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				position: absolute;
+				-webkit-transform: rotateY(180deg);
+				transform: rotateY(180deg);
+				-webkit-backface-visibility: hidden;
+				backface-visibility: hidden;
+				-webkit-transition: .4s linear;
+				transition: all .4s linear
+			}
+
+			.login-form .group .check,
+			.login-html .sign-in,
+			.login-html .sign-up {
+				display: none
+			}
+
+			.login-form .group .button,
+			.login-form .group .label,
+			.login-html .tab {
+				text-transform: uppercase
+			}
+
+			.login-html .tab {
+				font-size: 22px;
+				padding-bottom: 5px;
+				margin: 0 15px 10px 0;
+				display: inline-block;
+				border-bottom: 2px solid transparent
+			}
+
+			.login-html .sign-in:checked+.tab,
+			.login-html .sign-up:checked+.tab {
+				color: #fff;
+				border-color: #1161ee
+			}
+
+			.login-form {
+				min-height: 345px;
+				position: relative;
+				-webkit-perspective: 1000px;
+				perspective: 1000px;
+				-webkit-transform-style: preserve-3d;
+				transform-style: preserve-3d;
+				font-size: 20px;
+				color: #fff
+			}
+
+			.login-form .group {
+				margin-bottom: 15px;
+				position: relative
+			}
+
+			.login-form .group .button,
+			.login-form .group .input,
+			.login-form .group .label {
+				width: 100%;
+				color: #fff;
+				display: block
+			}
+
+			.login-form .group .button,
+			.login-form .group .input {
+				border: none;
+				padding: 15px 20px;
+				border-radius: 25px;
+				background: rgba(255, 255, 255, .1)
+			}
+
+			.login-form .group input[data-type=password] {
+				text-security: circle;
+				-webkit-text-security: circle
+			}
+
+			.login-form .group .label {
+				color: #fff;
+				font-size: 20px
+			}
+
+			.login-form .group .button {
+				background: #1161ee
+			}
+
+			.login-form .group .button:hover:enabled {
+				background: #496dff
+			}
+
+			.login-form .group .button:disabled {
+				background: rgba(198, 203, 200, .64)
+			}
+
+			.login-form .group label .icon {
+				width: 15px;
+				height: 15px;
+				border-radius: 2px;
+				position: relative;
+				display: inline-block;
+				background: rgba(255, 255, 255, .1)
+			}
+
+			.login-form .group label .icon:after,
+			.login-form .group label .icon:before {
+				content: "";
+				width: 10px;
+				height: 2px;
+				background: #fff;
+				position: absolute;
+				-webkit-transition: .2s ease-in-out;
+				transition: all .2s ease-in-out 0s
+			}
+
+			.login-form .group label .icon:before {
+				left: 3px;
+				width: 5px;
+				bottom: 6px;
+				-webkit-transform: scale(0) rotate(0);
+				transform: scale(0) rotate(0)
+			}
+
+			.login-form .group label .icon:after {
+				top: 6px;
+				right: 0;
+				-webkit-transform: scale(0) rotate(0);
+				transform: scale(0) rotate(0)
+			}
+
+			.login-form .group .check:checked+label {
+				color: #fff
+			}
+
+			.login-form .group .check:checked+label .icon {
+				background: #1161ee
+			}
+
+			.login-form .group .check:checked+label .icon:before {
+				-webkit-transform: scale(1) rotate(45deg);
+				transform: scale(1) rotate(45deg)
+			}
+
+			.login-form .group .check:checked+label .icon:after {
+				-webkit-transform: scale(1) rotate(-45deg);
+				transform: scale(1) rotate(-45deg)
+			}
+
+			.login-html .sign-in:checked+.tab+.sign-up+.tab+.login-form .sign-in-htm,
+			.login-html .sign-up:checked+.tab+.login-form .sign-up-htm {
+				-webkit-transform: rotate(0);
+				transform: rotate(0)
+			}
+
+			.hr {
+				height: 2px;
+				margin: 60px 0 50px;
+				background: rgba(255, 255, 255, .2)
+			}
+
+			.foot-lnk {
+				text-align: center
+			}
+
+			.login-wrap {
+				width: 480px;
+				margin: auto;
+				min-width: 100%;
+				max-width: 100%;
+				min-height: 800px;
+				position: relative;
+				background: url(https://dazzle-template.s3.amazonaws.com/cdn6.0/images/dazzleLoginBg.jpg) center no-repeat;
+				box-shadow: 0 12px 15px 0 rgba(0, 0, 0, .24), 0 17px 50px 0 rgba(0, 0, 0, .19);
+			}
+
+			.login-html {
+				width: 100%;
+				height: 100%;
+				position: absolute;
+				padding: 100px 30px 25px;
+				background: rgba(40, 57, 101, .9);
+			}
+
+			#loginbutton:hover {
+				cursor: pointer;
+			}
+
+			#resetbutton {
+				text-decoration: underline;
+			}
+
+			#resetbutton:hover {
+				color: tomato;
+				cursor: pointer;
+			}
+		</style>
+		<div class="login-wrap">
+			<div class="login-html">
+				<input checked="" class="sign-in" id="login" name="tab" type="radio">
+				<label class="tab" for="login">{{loginOrReset}}</label>
+				<input class="sign-up" id="register" name="tab" type="radio">
+				<label class="tab" for="register">註冊</label>
+				<div class="login-form">
+					<!-- 登入 -->
+					<div class="sign-in-htm">
+						<div class="ng-pristine ng-untouched ng-invalid" novalidate="">
+							<div id="originalStyle">
+								<div>
+									<div class="group">
+										<input id="uid" aria-invalid="false"
+											class="input ng-pristine ng-untouched ng-empty ng-invalid"
+											formcontrolname="uid" placeholder="用戶ID" type="text">
+									</div>
+								</div>
+								<div>
+									<div class="group">
+										<input id="password" aria-invalid="false"
+											class="input ng-pristine ng-untouched ng-empty ng-invalid"
+											formcontrolname="password" placeholder="密碼" type="password">
+									</div>
+								</div>
+								<p>
+									<button id="loginbutton" color="warn" mat-raised-button="" on-click="_login"
+										class="mat-raised-button mat-button-base mat-warn"
+										style="border: none;padding: 5px 10px;color: white;font-size: 14px;">
+										<span class="mat-button-wrapper">
+											登入
+										</span>
+										<div class="mat-button-ripple mat-ripple" matripple=""></div>
+										<div class="mat-button-focus-overlay"></div>
+									</button>
+								</p>
+							</div>
+							<!-- 忘記密碼 -->
+							<div id="forgetAndResetpw" style="display: none;">
+								<div id="getuserinfo">
+									<div>
+										<div class="group">
+											<input id="uidinput" aria-invalid="false"
+												class="input ng-pristine ng-untouched ng-empty ng-invalid"
+												formcontrolname="password" placeholder="用戶ID">
+										</div>
+									</div>
+
+									<div>
+										<div class="group">
+											<input id="searchitem" aria-invalid="false"
+												class="input ng-pristine ng-untouched ng-empty ng-invalid"
+												formcontrolname="password" placeholder="輸入電話或電郵" type="text">
+										</div>
+									</div>
+
+									<p style="display: inline-block;">
+										<button id="backToInit" color="warn" mat-raised-button="" on-click="backToInit"
+											class="mat-raised-button mat-button-base mat-warn"
+											style="border: none;padding: 5px 10px;color: white;font-size: 14px;display: none;">
+											<span class="mat-button-wrapper">
+												重新輸入用戶ID
+											</span>
+											<div class="mat-button-ripple mat-ripple" matripple=""></div>
+											<div class="mat-button-focus-overlay"></div>
+										</button>
+									</p>
+
+
+									<p style="display: inline-block;">
+										<button id="countdown" color="warn" mat-raised-button="" on-click="checkuid"
+											class="mat-raised-button mat-button-base mat-warn"
+											style="border: none;padding: 5px 10px;color: white;font-size: 14px;">
+											<span class="mat-button-wrapper">
+												{{verifly}}
+											</span>
+											<div class="mat-button-ripple mat-ripple" matripple=""></div>
+											<div class="mat-button-focus-overlay"></div>
+										</button>
+									</p>
+
+									<div>
+										<div class="group">
+											<input id="confirm" aria-invalid="false" maxlength="6"
+												class="input ng-pristine ng-untouched ng-empty ng-invalid"
+												formcontrolname="password" placeholder="輸入驗證碼" type="text"
+												style="display: none;">
+										</div>
+									</div>
+								</div>
+								<div id=contentchange></div>
+								<!-- 更改密碼 -->
+								<div id="NewPasswordInput" style="display: none;">
+									<div>
+										<div class="group">
+											<input id="newpassword1" aria-invalid="false"
+												class="input ng-pristine ng-untouched ng-empty ng-invalid"
+												formcontrolname="password" placeholder="新密碼" type="password">
+										</div>
+									</div>
+
+									<div>
+										<div class="group">
+											<input id="newpassword2" aria-invalid="false"
+												class="input ng-pristine ng-untouched ng-empty ng-invalid"
+												formcontrolname="password" placeholder="確認密碼" type="password">
+										</div>
+									</div>
+
+									<p>
+										<button id="resetpassword" disabled color="warn" mat-raised-button=""
+											on-click="resetTolamda" class="mat-raised-button mat-button-base mat-warn"
+											style="border: none;padding: 5px 10px;color: white;font-size: 14px;">
+											<span class="mat-button-wrapper">
+												確認更改
+											</span>
+											<div class="mat-button-ripple mat-ripple" matripple=""></div>
+											<div class="mat-button-focus-overlay"></div>
+										</button>
+									</p>
+								</div>
+
+
+							</div>
+
+							<p>
+							<div id="resetbutton" on-click="contentshift">{{shift}}</div>
+
+							</p>
+						</div>
+					</div>
+					<!-- 註冊 -->
+					<div class="sign-up-htm">
+						<div class="ng-pristine ng-untouched ng-invalid" novalidate="">
+							<div>
+								<div class="group" style="cursor: pointer;">
+									<input id="uid1" aria-invalid="false"
+										class="input ng-pristine ng-untouched ng-empty ng-invalid" formcontrolname="uid"
+										placeholder="用戶ID" type="text" on-click="_idUnique">
+									<p id="errMessage" style="font-size:10px;text-align:right;	"></p>
+								</div>
+							</div>
+							<div>
+								<div class="group">
+									<input id="uPhone" aria-invalid="false"
+										class="input ng-pristine ng-untouched ng-empty ng-invalid" formcontrolname="uid"
+										placeholder="手提電話" type="text">
+								</div>
+							</div>
+							<div>
+								<div class="group">
+									<input id="uEmail" aria-invalid="false"
+										class="input ng-pristine ng-untouched ng-empty ng-invalid" formcontrolname="uid"
+										placeholder="電郵" type="text">
+								</div>
+							</div>
+							<p>
+								<button color="warn" mat-raised-button="" on-click="_register"
+									class="mat-raised-button mat-button-base mat-warn"
+									style="border: none;padding: 5px 10px;color: white;font-size: 14px;"><span
+										class="mat-button-wrapper">
+										註冊
+									</span>
+									<div class="mat-button-ripple mat-ripple" matripple=""></div>
+									<div class="mat-button-focus-overlay"></div>
+								</button>
+							<p id="processing" style="font-size:20px;text-align:center;	"></p>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</template>
+</dom-module>
+<script>
+    (function() {
+        Polymer({
+            is: 'dz-login',
+            properties: {
+
+            },
+            created: function() {
+                this.thisPage = decodeURIComponent(window.location.pathname).substring(window.location.pathname.indexOf('/') + 1) || 'index.html';
+            },
+            ready: function() {
+                let shadow = this.shadowRoot;
+                shadow.querySelector('#password').addEventListener('keypress', e => {
+                    if (e.code == "Enter") {
+                        this._login();
+                    }
+                })
+
+                shadow.querySelector('#searchitem').addEventListener('keydown', e => {
+                    if (e.code == "Enter") {
+                        this.checkuid();
+                    }
+                })
+
+                let pw1 = shadow.querySelector('#newpassword1');
+                let pw2 = shadow.querySelector('#newpassword2');
+                let changepwbutton = shadow.querySelector('#resetpassword');
+                let contentchange = shadow.querySelector('#contentchange');
+                pw2.addEventListener('keyup', e => {
+                    contentchange.innerHTML = "";
+
+                    if (pw2.value != pw1.value) {
+                        contentchange.innerHTML = "兩次密碼不正確";
+                        changepwbutton.disabled = true;
+                    } else {
+                        changepwbutton.disabled = false;
+
+                    }
+                })
+
+
+
+                this.loginOrReset = "登入";
+                this.shift = "忘記密碼";
+                this.verifly = "發送驗證碼";
+            },
+            checkuid() {
+
+                let shadow = this.shadowRoot;
+                let backinit = shadow.querySelector('#backToInit');
+                let uid = shadow.querySelector('#uid').value;
+                let searchitem = shadow.querySelector('#searchitem').value;
+                let confirm = shadow.querySelector('#confirm');
+                let content = shadow.querySelector('#contentchange');
+                let url = "https://d8fz9pfue5.execute-api.ap-northeast-1.amazonaws.com/prod/newMiscDazzleFunction";
+                let param = {
+                    "action": "MatchEmailOrPhone",
+                    "uid": uid,
+                    "email": searchitem,
+                    "phone": searchitem
+
+                }
+
+                searchitem = "97114437";
+                backinit.style.display = "block";
+                this.resetpw(2002, searchitem);
+                // Polymer.postData(url, param).then(res => {
+                //     if (res.code > 0) {
+                //         shadow.querySelector('#confirm').style.display = "block";
+                //         uid.disable = true;
+                //         this.resetpw();
+                //     } else {
+                //         content.innerHTML = "用戶id不符合，請重新輸入";
+                //     }
+                // })
+
+
+
+            },
+            backToInit() {
+                window.stop();
+                this.verifly = "發送驗證碼";
+                let shadow = this.shadowRoot;
+                let confirm = shadow.querySelector('#confirm');
+                let uid = shadow.querySelector('#uidinput');
+                let searchitem = shadow.querySelector('#searchitem');
+                let resetinit = shadow.querySelector('#backToInit');
+
+                resetinit.style.display = "none";
+                uid.disabled = false;
+                searchitem.disabled = false;
+                confirm.style.display = "none";
+            },
+            ///send驗證碼 
+            resetpw(platform, user) {
+                let that = this;
+                let shadow = this.shadowRoot;
+                let tempnum = Math.random();
+                let temp = tempnum.toString();
+                let token = "";
+                for (i = 2; i < 8; i++) {
+                    token += temp[i]
+                }
+
+                let uid = shadow.querySelector('#uidinput');
+                let sms = shadow.querySelector('#searchitem');
+                let smsbutton = shadow.querySelector('#countdown');
+                let smsconfirm = shadow.querySelector("#confirm");
+
+                console.log(token, "mytoken");
+                // if (platform == 2002) {
+                //     Polymer.sms(user, "你的驗證碼是: " + token);
+                // } else {
+                //     Polymer.sendEmail(user, "你的驗證碼是: " + token, "你的驗證碼是: " + token);
+                // }
+
+                uid.disabled = true;
+                sms.disabled = true;
+                smsbutton.disabled = true; //当点击后倒计时时候不能点击此按钮
+                smsconfirm.style.display = "block";
+                smsconfirm.focus();
+                smsconfirm.addEventListener('keyup', e => {
+                    if (smsconfirm.value.length == 6) {
+                        if (smsconfirm.value == token) {
+                            shadow.querySelector('#contentchange').innerHTML = "請輸入新密碼";
+                            shadow.querySelector('#NewPasswordInput').style.display = "block";
+                            shadow.querySelector('#getuserinfo').style.display = "none";
+                        } else {
+                            shadow.querySelector('#contentchange').innerHTML = "驗證碼錯誤"
+                        }
+                    } else {
+                        shadow.querySelector('#contentchange').innerHTML = "";
+
+                    }
+
+                })
+
+                let resetinit = shadow.querySelector('#backToInit');
+
+                var time = 45; //倒计时30秒
+                var timer = setInterval(fun1, 1000); //设置定时器
+                function fun1() {
+                    time--;
+                    if (time >= 0 && resetinit.style.display != "none") {
+                        that.verifly = time + "s後重新發送";
+                    } else {
+                        token = null;
+                        that.verifly = "重新發送驗證碼";
+                        uid.disabled = false;
+                        sms.disabled = false;
+                        smsbutton.disabled = false; //倒计时结束能够重新点击发送的按钮
+                        smsconfirm.style.display = "none";
+                        smsconfirm.value = "";
+                        clearTimeout(timer); //清除定时器
+                        time = 5; //设置循环重新开始条件
+                    }
+                }
+
+            },
+
+            ///send request 去lamda改密碼;
+            resetTolamda() {
+                let shadow = this.shadowRoot;
+                let pw1 = shadow.querySelector('#newpassword1').value;
+                let pw2 = shadow.querySelector('#newpassword2').value;
+                let url = "https://d8fz9pfue5.execute-api.ap-northeast-1.amazonaws.com/prod/newMiscDazzleFunction";
+                let uid = shadow.querySelector('#uid').value;
+                let param = {
+                    "action": "renewPassword",
+                    "uid": uid,
+                    "password": pw1
+                }
+
+                console.log("good");
+                // Polymer.postData(url, param).then(res => {
+                // 	if (res.code > 0) {
+                // 		shadow.querySelector('#contentchange').innerHTML = "你已成功更改密碼";
+                // 	}
+                // })
+
+            },
+
+            contentshift() {
+                let shadow = this.shadowRoot;
+                if (this.loginOrReset == "登入") {
+                    this.loginOrReset = "忘記密碼";
+                    this.shift = "返回登入";
+                    shadow.querySelector('#originalStyle').style.display = "none";
+                    shadow.querySelector('#forgetAndResetpw').style.display = "block";
+
+                } else {
+                    this.loginOrReset = "登入";
+                    this.shift = "忘記密碼";
+                    shadow.querySelector('#originalStyle').style.display = "block";
+                    shadow.querySelector('#forgetAndResetpw').style.display = "none";
+
+                }
+            },
+            _login: function() {
+                console.log('Login');
+                let shadow = this.shadowRoot;
+                let that = this;
+                let uid = shadow.querySelector('#uid').value;
+                let password = shadow.querySelector('#password').value;
+                let fileManager = new DataPackage('token');
+                let loginUrl = "https://d8fz9pfue5.execute-api.ap-northeast-1.amazonaws.com/prod/newMiscDazzleFunction";
+                let params = {
+                    "action": "loginByUidPassword",
+                    "uid": uid,
+                    "password": password
+                };
+                this.postData(loginUrl, params).then(res => {
+                    if (res.code > 0) {
+                        let uid = res.resolve['uid'];
+                        let user = res.resolve;
+                        user['thisPage'] = this.thisPage;
+                        store.set('user', res.resolve);
+                        store.set('editMode', 'admin');
+                        store.set('thisPage', this.thisPage);
+                        let token = that.generatePassword();
+                        console.log('Res', res.resolve);
+                        location.reload();
+                    } else {
+                        alert('登入錯誤');
+                    }
+                });
+            },
+
+            _register: function() {
+                let shadow = this.shadowRoot;
+                let that = this;
+                let processing = shadow.querySelector('#processing');
+                processing.innerHTML = "正在處理註冊請耐心等候,註冊後會收到短信";
+                let uid = shadow.querySelector('#uid1').value;
+                let uPhone = shadow.querySelector('#uPhone').value;
+                let uEmail = shadow.querySelector('#uEmail').value;
+                let fileManager = new DataPackage('token');
+                let registerUrl = "https://d8fz9pfue5.execute-api.ap-northeast-1.amazonaws.com/prod/newMiscDazzleFunction";
+                let params = {
+                    "action": "register",
+                    "user": {
+                        "uid": uid,
+                        "phone": uPhone,
+                        "email": uEmail
+                    }
+                };
+
+                this.postData(registerUrl, params).then(res => {
+                    if (res.code > 0) {
+                        alert("成功注册");
+                        processing.innerHTML = "";
+                    } else {
+                        alert('註冊失敗');
+                        processing.innerHTML = "出現不可預知的錯誤";
+                    }
+                });
+            },
+
+            _idUnique: function() {
+                let shadow = this.shadowRoot;
+                let that = this;
+                let uid = shadow.querySelector('#uid1').value;
+                let input1 = shadow.querySelector('#uid1');
+                let fileManager = new DataPackage('token');
+                let registerUrl = "https://d8fz9pfue5.execute-api.ap-northeast-1.amazonaws.com/prod/newMiscDazzleFunction";
+                let errMsg = shadow.querySelector('#errMessage');
+                input1.addEventListener("blur", function(event) {
+                    let target = event.target;
+                    let uid = target.value;
+                    let params = {
+                        "action": "checkDomain",
+                        "domain": uid + ".dazzle.website"
+                    };
+                    that.postData(registerUrl, params).then(res => {
+
+                        if (res.code > 0) {
+                            target.style.color = "white";
+                            errMsg.innerHTML = "此ID未有人使用，可以註冊";
+                        } else {
+                            target.style.color = "red";
+                            errMsg.innerHTML = "此ID已有人使用，不可以註冊。請再輸入";
+                        }
+                    });
+                }, true);
+            },
+
+            handleResponse: function(response) {
+                console.log('Response', response);
+            },
+            generatePassword: function() {
+                var length = 16,
+                    charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+                    retVal = "";
+                for (var i = 0, n = charset.length; i < length;
+                    ++i) {
+                    retVal += charset.charAt(Math.floor(Math.random() * n));
+                }
+                return retVal;
+            },
+            loadScript: function(url) {
+                const fileref = document.createElement('script');
+                fileref.setAttribute("type", "text/javascript");
+                fileref.setAttribute("src", url + "?id=" + new Date().getTime());
+                document.getElementsByTagName("head")[0].appendChild(fileref);
+            },
+            postData: function(url, data) {
+                console.log('Json', JSON.stringify(data));
+                return new Promise(function(resolve, reject) {
+                    fetch(url, {
+                            body: JSON.stringify(data), // must match 'Content-Type' header
+                            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                            credentials: 'same-origin', // include, same-origin, *omit
+                            headers: {
+                                'user-agent': 'Mozilla/4.0 MDN Example',
+                                'content-type': 'application/json'
+                            },
+                            method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                            mode: 'cors', // no-cors, cors, *same-origin
+                            redirect: 'follow', // manual, *follow, error
+                            referrer: 'no-referrer', // *client, no-referrer
+                        }).then(response => {
+                            resolve(response.json());
+                        }) // parses response to JSON
+                });
+            }
+        });
+    })();
+</script>

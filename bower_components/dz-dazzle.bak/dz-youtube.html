@@ -1,0 +1,82 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-button/vaadin-button.html">
+<dom-module id="dz-youtube">
+	<template>
+		<style>
+			.youtube-container{
+				position:relative;
+			}
+			:host{
+				position:relative;
+			}
+			[hide]{
+				display:none;
+			}
+			#manage{
+				position: relative;
+				/* z-index: 1000; */
+				top: 0px;
+				left: 0px;
+				background: #080808;
+				color: white;
+			}
+		</style>
+		<vaadin-button id="manage" on-click="_manage" hide>管理</vaadin-button>
+		<iframe width$="{{width}}" height$="{{height}}" 
+		src$="{{src}}" 
+		frameborder="0" allow="accelerometer; 
+		encrypted-media; gyroscope; picture-in-picture" 
+		allowfullscreen></iframe>
+
+
+	
+	</template>
+
+</dom-module>
+
+<script>
+
+(function() {
+
+
+
+	Polymer({
+		is: 'dz-youtube',
+		properties: {
+			src: {
+				type: String,
+				value: 'https://www.youtube.com/watch?v=ZaiUVvF47pE'
+			}
+		},
+
+		created:function() {
+        	this.youtubeID = this.getYoutubeID(this.src);
+			this.src = "https://www.youtube.com/embed/"+this.youtubeID;
+			this.width="100%";
+			this.height = "400px";
+		},
+		getYoutubeID(src){
+			let url = src;
+			url = url.split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+			  return (url[2] !== undefined) ? url[2].split(/[^0-9a-z_\-]/i)[0] : url[0];
+		},
+
+		
+		ready() {
+				if (Polymer.editMode==="admin")
+					this.shadowRoot.querySelector('#manage').removeAttribute('hide');
+				else 
+					this.shadowRoot.querySelector('#manage').setAttribute('hide','');
+				
+				
+		},
+		_manage(){
+			let url = prompt("請貼上Youtube的連結");
+			this.youtubeID = this.getYoutubeID(url);
+			this.src = "https://www.youtube.com/embed/"+this.youtubeID;
+		}
+	});
+
+})();
+
+</script>

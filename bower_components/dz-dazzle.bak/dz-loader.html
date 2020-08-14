@@ -1,0 +1,2311 @@
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
+<!-- <link rel="import" href="../dz-dazzle/dz-editor2.html"> -->
+
+<!-- <link rel="import" href="../polymer-tinymce/polymer-tinymce.html"> -->
+
+<!-- <link rel="import" href="../dz-dazzle/dz-wrapper.html" /> -->
+<script src="https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/js/store-2.0.12.min.js"></script>
+<script src="https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/js/aws-sdk-2.83.0.min.js"></script>
+<link rel="stylesheet" href="https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/css/font-awesome-4.7.0.min.css" />
+<link rel="import" href="./default-package/default-package.html">
+<!-- <link rel="import" href="dz-wrapper.html" /> -->
+<!-- <link rel="import" href="dz-wrapper-head.html" /> -->
+<!-- <link rel="import" href="dz-wrapper-js.html" /> -->
+
+<dom-module id="dz-loader"> </dom-module>
+
+<script>
+    let AwsPackage = class {
+        constructor(user) {
+            //        const user = window['user'] || store.get('user') || null;
+            let that = this;
+            console.log(user);
+            this.key = user["key"] || null;
+            this.miscUrl =
+                "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/dazzleEditorMiscFunction";
+            console.log("AWS User", user);
+            this.bucket = user["userBucket"];
+            this.user = user;
+
+            let AWS = window["AWS"];
+            let thisPage = store.get("thisPage") || "index.html";
+            AWS.config = new AWS.Config();
+            if (this.key) {
+                AWS.config.accessKeyId = this.key["AccessKeyId"];
+                AWS.config.secretAccessKey = this.key["SecretAccessKey"];
+                AWS.config.sessionToken = this.key["SessionToken"];
+                AWS.config.region = "ap-northeast-1";
+            }
+
+            window["AWS"] = AWS;
+            this.AWS = AWS;
+            console.log("AWS", AWS);
+            this.getFile(thisPage).then((html) => {
+                that.thisPageContent = html;
+            });
+        }
+        getExternalContent(url) {
+            let miscFcUrl =
+                "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/dazzleEditorMiscFunction";
+            let params = {
+                url: url,
+                action: "grabPage",
+            };
+            let that = this;
+            return new Promise(function(resolve, reject) {
+                that.postData(miscFcUrl, params).then((result) => {
+                    resolve(result.resolve);
+                });
+            });
+        }
+
+        saveImageTags(id, tags) {
+            let table = this.table;
+            let dbUrl =
+                "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+            let that = this;
+            let json = {
+                action: "addData",
+                index: "gallery",
+                type: "table",
+                id: id,
+                body: {
+                    tags: tags,
+                },
+            };
+            console.log(JSON.stringify(json));
+            return new Promise(function(resolve, reject) {
+                Polymer.postData(dbUrl, json).then((result) => {
+                    console.log(result);
+                    if (result.code < 0) {
+                        resolve({});
+                    } else {
+                        resolve(result.resolve);
+                    }
+                });
+            });
+        }
+        saveExternalContent(url, thisPath) {
+            let that = this;
+
+            console.log("Save Url", url);
+            if (url.indexOf("//") >= 0) {
+                this.getExternalContent(url).then((res) => {
+                    that.saveFile(thisPath, res);
+                });
+            }
+        }
+        grabPage(url) {
+            let that = this;
+            let params = {
+                action: "grabPage",
+                url: url,
+            };
+            console.log("Grab URL", url);
+            return new Promise(function(resolve, reject) {
+                that.postData(that.miscUrl, params).then((result) => {
+                    console.log(result);
+                    if (result.code < 0) {
+                        resolve({});
+                    } else {
+                        resolve(result.resolve);
+                    }
+                });
+            });
+        }
+
+        saveImage(url, path) {
+            let that = this;
+            let params = {
+                action: "saveImage",
+                url: url,
+                bucket: this.bucket,
+                path: path,
+            };
+            return new Promise(function(resolve, reject) {
+                that.postData(that.miscUrl, params).then((result) => {
+                    console.log(result);
+                    if (result.code < 0) {
+                        resolve({});
+                    } else {
+                        resolve(result.resolve);
+                    }
+                });
+            });
+        }
+        getData(url, data) {
+            // Default options are marked with *
+            let newUrl = url + "?" + data;
+            return new Promise(function(resolve, reject) {
+                fetch(newUrl, {
+                    // body: JSON.stringify(data), // must match 'Content-Type' header
+                    // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                    // credentials: 'same-origin', // include, same-origin, *omit
+                    headers: {
+                        "x-product": "DazzleStock",
+                        "x-api-key": "d9b126638ff44a84a0145c89a8c8ee01",
+                    },
+                    mode: "no-cors", // no-cors, cors, *same-origin
+
+                    method: "GET", // *GET, POST, PUT, DELETE, etc.
+                    // mode: 'cors', // no-cors, cors, *same-origin
+                    // redirect: 'follow', // manual, *follow, error
+                    // referrer: 'no-referrer', // *client, no-referrer
+                }).then((response) => {
+                    resolve(response);
+                }); // parses response to JSON
+            });
+        }
+
+        postData(url, data) {
+            // Default options are marked with *
+
+            return new Promise(function(resolve, reject) {
+                fetch(url, {
+                    body: JSON.stringify(data), // must match 'Content-Type' header
+                    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+                    credentials: "same-origin", // include, same-origin, *omit
+                    headers: {
+                        "content-type": "application/json",
+                    },
+                    method: "POST", // *GET, POST, PUT, DELETE, etc.
+                    mode: "cors", // no-cors, cors, *same-origin
+                    redirect: "follow", // manual, *follow, error
+                    referrer: "no-referrer", // *client, no-referrer
+                }).then((response) => {
+                    resolve(response.json());
+                }); // parses response to JSON
+            });
+        }
+        parseThisPage(html) {
+            let parser = new DOMParser();
+            let doc = parser.parseFromString(html, "text/html");
+            //this.document = doc;
+            return doc;
+            // console.log('Parse',doc);
+        }
+
+        loadScript(url) {
+            const fileref = document.createElement("script");
+            fileref.setAttribute("type", "text/javascript");
+            fileref.setAttribute("src", url);
+            document.getElementsByTagName("head")[0].appendChild(fileref);
+        }
+
+        myManagedUpload(key, body) {
+            let tags = key.split("/");
+            let AWS = this.AWS;
+            tags.pop();
+
+            const json = {
+                Bucket: this.bucket,
+                Key: "files/" + key,
+                Body: body,
+            };
+            console.log(json);
+            const s3 = new AWS.S3();
+            console.log(AWS);
+            return s3.upload(json);
+            // return s3.ManagedUpload(json);
+        }
+        listAllFiles() {
+            // const bucket = this.user.myUser['userBucket'];
+            // const bucket = this.user.myUser['userBucket'];
+            let AWS = window["AWS"];
+            let that = this;
+            return new Promise(function(resolve, reject) {
+                var s3 = new AWS.S3();
+                var params = {
+                    Bucket: that.bucket,
+                    Delimiter: "/",
+                    // Prefix: prefix
+                };
+                s3.listObjects(params, function(err, data) {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(data.Contents);
+                    }
+                });
+            });
+        }
+
+        listFile(prefix) {
+            // const bucket = this.user.myUser['userBucket'];
+            // const bucket = this.user.myUser['userBucket'];
+            let AWS = window["AWS"];
+            let that = this;
+            return new Promise(function(resolve, reject) {
+                var s3 = new AWS.S3();
+                var params = {
+                    Bucket: that.bucket,
+                    Prefix: prefix,
+                };
+                s3.listObjects(params, function(err, data) {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(data.Contents);
+                    }
+                });
+            });
+
+        }
+        saveMyImageByUrl(url) {
+            function dataURItoBlob(dataURI) {
+                var binary = atob(dataURI.split(",")[1]);
+                var array = [];
+                for (var i = 0; i < binary.length; i++) {
+                    array.push(binary.charCodeAt(i));
+                }
+                return new Blob([new Uint8Array(array)], {
+                    type: "image/jpeg"
+                });
+            }
+            let AWS = this.AWS;
+            const uid = Polymer.user["uid"];
+            var blobData = dataURItoBlob(url);
+            const fileExtansion = "jpg";
+            const newId = "id" + new Date().getTime();
+            const newFilename = newId + ".jpg";
+            const s3 = new AWS.S3();
+            var params = {
+                Bucket: "designerrrr",
+                Key: "images/" + uid + "/" + newFilename,
+                ContentType: "image/jpeg",
+                Body: blobData,
+                Metadata: {
+                    newVersion: "new",
+                    gid: newId,
+                    owner_id: uid,
+                    original_name: newFilename,
+                    galleryType: "photo",
+                    tags: "",
+                },
+                // Key: newFilename, ContentType: 'image/jpeg', Body: blobData
+            };
+            console.log("Params", params);
+
+            return new Promise(function(resolve, reject) {
+                s3.upload(params, function(err, data) {
+                    console.log(err, data);
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(newId);
+                    }
+                });
+            });
+        }
+
+        changeFilename(key) {
+            let ext;
+            if (key.indexOf(".") > -1) ext = key.substr(key.lastIndexOf(".") + 1);
+            else ext = "";
+
+            let filename = Polymer.uid + '-' + new Date().getTime() + '.' + ext;
+            return filename;
+
+        }
+
+        saveMyImage(name, file, tags = "") {
+            console.log(file);
+            let AWS = this.AWS;
+            // console.log(this.user);
+            const uid = this.user["uid"];
+            console.log(uid);
+            //    if (!subowner)
+            //        subowner=''
+            const s3 = new AWS.S3();
+
+            // const oldFilename = encodeURIComponent(file.name);
+            // const fileExtansion = oldFilename.split('.').pop();
+            const oldFilename = name;
+            const fileExtansion = "jpg";
+            const newId = "id" + new Date().getTime();
+            const newFilename = newId + ".jpg";
+            const params = {
+                Bucket: "designerrrr",
+                Key: "images/" + uid + "/" + newFilename,
+                ContentType: file.type,
+                Body: file,
+                Metadata: {
+                    newVersion: "new",
+                    gid: newId,
+                    owner_id: uid,
+                    original_name: oldFilename,
+                    galleryType: "photo",
+                    tags: tags,
+                },
+            };
+            console.log("Params", params);
+
+            return new Promise(function(resolve, reject) {
+                s3.upload(params, function(err, data) {
+                    console.log(err, data);
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(newId);
+                    }
+                });
+                // s3.putObject(params, function (err, data) {
+                //     if (err) {
+                //         reject(err);
+                //     } else {
+                //         resolve(newId);
+                //     }
+                // });
+            });
+        }
+
+        isBucketExist(bucket) {
+            let AWS = this.AWS;
+            return new Promise(function(resolve, reject) {
+                let s3 = new AWS.S3();
+
+                let params = {
+                    Bucket: bucket,
+                };
+                s3.headBucket(params, function(err, data) {
+                    if (err) resolve(false);
+                    // an error occurred
+                    else resolve(true); // successful response
+                });
+            });
+        }
+
+        copyFile(copySource, key) {
+            let AWS = this.AWS;
+            let bucket = this.bucket;
+            return new Promise(function(resolve, reject) {
+                var s3 = new AWS.S3();
+                var params = {
+                    Bucket: bucket,
+                    Key: key,
+                    CopySource: encodeURIComponent(copySource),
+                };
+                s3.copyObject(params, function(err, data) {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(data);
+                    }
+                });
+            });
+        }
+
+        copyFolder(src, dest) {
+            let that = this;
+            let bucket = this.bucket;
+            let AWS = this.AWS;
+            return new Promise(function(resolve, reject) {
+                var s3 = new AWS.S3();
+                var params = {
+                    Bucket: bucket,
+                    Prefix: src,
+                };
+                s3.listObjects(params, function(err, data) {
+                    if (err) reject();
+
+                    console.log("Data", data);
+                    var count = 0;
+                    data.Contents.forEach(function(content) {
+                        var str = content.Key;
+                        str = str.replace(src, dest);
+
+                        that.getFile(content.Key).then(
+                            function(data2) {
+                                console.log("Data2", data2);
+                                that.saveFile(str, data2).then(
+                                    function(data3) {
+                                        count++;
+                                        console.log("Count", count);
+                                        console.log(data.Contents.length);
+                                        if (count == data.Contents.length) resolve(data3);
+                                    },
+                                    function() {
+                                        reject();
+                                    }
+                                );
+                            },
+                            function() {
+                                reject();
+                            }
+                        );
+                    });
+                });
+            });
+        }
+        checkImage(key) {
+
+            let ext;
+            if (key.indexOf(".") > -1) ext = key.substr(key.lastIndexOf(".") + 1);
+            else ext = "";
+            switch (ext) {
+                case 'jpg':
+                case 'JPG':
+                case 'jpeg':
+                case 'JPEG':
+                case 'png':
+                case 'PNG':
+                case 'gif':
+                case 'GIF':
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+
+        saveUserData(key, string) {
+            let AWS = this.AWS;
+            // console.log(window['AWS'],this.AWS);
+            let bucket = "dazzle-template";
+            return new Promise(function(resolve, reject) {
+                let s3 = new AWS.S3();
+
+                let params = {
+                    Bucket: bucket,
+                    Key: "user-data/" + Polymer.uid + "/" + key,
+                    Body: string,
+                    ContentType: "text/html",
+                };
+                let ext;
+                if (key.indexOf(".") > -1) ext = key.substr(key.lastIndexOf(".") + 1);
+                else ext = "";
+                if (ext === "css") {
+                    params.ContentType = "text/css";
+                } else if (ext === "less") {
+                    params.ContentType = "text/css";
+                } else if (ext === "js") {
+                    params.ContentType = "application/javascript";
+                } else if (ext === "json") {
+                    params.ContentType = "application/json";
+                } else if (ext === "jpg") {
+                    params.ContentType = "image/jpeg";
+                } else if (ext === "jpeg") {
+                    params.ContentType = "image/jpeg";
+                } else if (ext === "png") {
+                    params.ContentType = "image/png";
+                } else if (ext === "gif") {
+                    params.ContentType = "image/gif";
+                } else if (ext === "html") {
+                    params.ContentType = "text/html";
+                } else {
+                    params.ContentType = "text/html";
+                }
+                console.log("User Data", params);
+                s3.putObject(params, function(err, data) {
+                    if (err) {
+                        console.log(err);
+                        reject("Save User Data", err);
+                    } else {
+                        console.log(data);
+                        resolve(data);
+                    }
+                });
+            });
+        }
+        saveUserData(path, string) {
+            let AWS = this.AWS;
+            let key = "user-data/" + Polymer.uid + "/" + path;
+            // console.log(window['AWS'],this.AWS);
+            let bucket = this.bucket;
+            return new Promise(function(resolve, reject) {
+                let s3 = new AWS.S3();
+
+                let params = {
+                    Bucket: "dazzle-template",
+                    Key: key,
+                    Body: string,
+                    ContentType: "text/html",
+                };
+                let ext;
+                if (key.indexOf(".") > -1) ext = key.substr(key.lastIndexOf(".") + 1);
+                else ext = "";
+                if (ext === "css") {
+                    params.ContentType = "text/css";
+                } else if (ext === "less") {
+                    params.ContentType = "text/css";
+                } else if (ext === "js") {
+                    params.ContentType = "application/javascript";
+                } else if (ext === "json") {
+                    params.ContentType = "application/json";
+                } else if (ext === "jpg") {
+                    params.ContentType = "image/jpeg";
+                } else if (ext === "jpeg") {
+                    params.ContentType = "image/jpeg";
+                } else if (ext === "png") {
+                    params.ContentType = "image/png";
+                } else if (ext === "gif") {
+                    params.ContentType = "image/gif";
+                } else if (ext === "html") {
+                    params.ContentType = "text/html";
+                } else {
+                    params.ContentType = "text/html";
+                }
+                console.log(params);
+                s3.putObject(params, function(err, data) {
+                    if (err) {
+                        console.log(err);
+                        reject(err);
+                    } else {
+                        console.log(data);
+                        resolve(data);
+                    }
+                });
+            });
+        }
+        saveHtml(key, string) {
+            let AWS = this.AWS;
+            // console.log(window['AWS'],this.AWS);
+            let bucket = this.bucket;
+            return new Promise(function(resolve, reject) {
+                let s3 = new AWS.S3();
+
+                let params = {
+                    Bucket: bucket,
+                    Key: key,
+                    Body: string,
+                    ContentType: "text/html",
+                };
+
+                console.log(params);
+                s3.putObject(params, function(err, data) {
+                    if (err) {
+                        console.log(err);
+                        reject(err);
+                    } else {
+                        console.log(data);
+                        resolve(data);
+                    }
+                });
+            });
+        }
+        saveFile(key, string) {
+            let AWS = this.AWS;
+            // console.log(window['AWS'],this.AWS);
+            let bucket = this.bucket;
+            return new Promise(function(resolve, reject) {
+                let s3 = new AWS.S3();
+
+                let params = {
+                    Bucket: bucket,
+                    Key: key,
+                    Body: string,
+                    ContentType: "text/html",
+                };
+                let ext;
+                if (key.indexOf(".") > -1) ext = key.substr(key.lastIndexOf(".") + 1);
+                else ext = "";
+                if (ext === "css") {
+                    params.ContentType = "text/css";
+                } else if (ext === "less") {
+                    params.ContentType = "text/css";
+                } else if (ext === "js") {
+                    params.ContentType = "application/javascript";
+                } else if (ext === "json") {
+                    params.ContentType = "application/json";
+                } else if (ext === "jpg") {
+                    params.ContentType = "image/jpeg";
+                } else if (ext === "jpeg") {
+                    params.ContentType = "image/jpeg";
+                } else if (ext === "png") {
+                    params.ContentType = "image/png";
+                } else if (ext === "gif") {
+                    params.ContentType = "image/gif";
+                } else if (ext === "html") {
+                    params.ContentType = "text/html";
+                } else {
+                    params.ContentType = "text/html";
+                }
+                console.log(params);
+                s3.putObject(params, function(err, data) {
+                    if (err) {
+                        console.log(err);
+                        reject(err);
+                    } else {
+                        console.log(data);
+                        resolve(data);
+                    }
+                });
+            });
+        }
+        getContent(url) {
+            console.log("Query Url", url);
+            return new Promise(function(resolve, reject) {
+                fetch(url, {
+                        cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+                        mode: "no-cors",
+                    })
+                    .then((response) => resolve(response.text()))
+                    .catch((error) => {
+                        console.error("Error:", error);
+                        reject();
+                    });
+            });
+        }
+        getFile(key) {
+            let that = this;
+            let AWS = this.AWS;
+            let bucket = this.bucket;
+            // let AWS = window['AWS'];
+
+            // console.log(window,window['AWS']);
+            return new Promise(function(resolve, reject) {
+                let s3 = new AWS.S3();
+                let params = {
+                    Bucket: bucket,
+                    Key: key,
+                    ResponseExpires: new Date().getTime(),
+                };
+                console.log("Get File", params);
+                s3.getObject(params, function(err, data) {
+                    console.log("Data", params, data);
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(data.Body.toString());
+                    }
+                });
+            });
+        }
+    };
+    let DataPackage = class {
+        constructor(table) {
+            this.dbUrl =
+                "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+            this.uid = Polymer.uid;
+            this.table = table || "_info";
+            // if (!table){
+            //     let index = prompt("請輸入新資料表的名稱");
+            //     this.createTable(index).then(result=>{
+            //             console.log(result);
+            //             window['myTable'].push(this);
+            //             alert('成功建立資料表:'+index);
+            //     },err=>{
+            //         alert('資料表可能已建立，或者其他錯誤。請聯絡管理員');
+            //     });
+
+            // }
+        }
+
+        getGridColumns() {
+            let that = this;
+            return new Promise(function(resolve, reject) {
+                that
+                    .getContent(
+                        "https://d25k6mzsu7mq5l.cloudfront.net/user-data/" +
+                        window["tid"] +
+                        "/DZ-DATASET/" +
+                        that.table +
+                        ".json?id=" +
+                        new Date().getTime()
+                    )
+                    .then((result) => {
+                        that.schema = JSON.parse(result);
+                        resolve(that.constructColumns());
+                    });
+            });
+        }
+        constructColumns() {
+            let fields = this.schema.field;
+            let default_col = {
+                sortable: true,
+                filter: true,
+            };
+            this.columns = [];
+            this.key = "_id";
+
+            fields.forEach((item) => {
+                console.log("Items", item);
+
+                let label = item["label"] || item["field"];
+                default_col = {
+                    field: item["field"],
+                    headerName: label,
+                    sortable: true,
+                    filter: true,
+                };
+                switch (item["type"]) {
+                    case "key":
+                        this.key = item["field"];
+                        default_col["hide"] = true;
+                        break;
+
+                    case "date":
+                        default_col["cellRenderer"] = window["DateRenderer"];
+                        default_col["cellEditor"] = window["DateEditor"];
+                        break;
+
+                    case "file":
+                        default_col["cellRenderer"] = window["FileRenderer"];
+                        break;
+
+                    case "select":
+                        default_col["cellEditor"] = "agSelectCellEditor";
+                        default_col["cellEditorParams"] = {
+                            values: item["list"],
+                        };
+                        break;
+
+                    case "page":
+                        default_col["cellRenderer"] = window["PageRenderer"];
+                        default_col["cellEditor"] = null;
+                        default_col["pageTemplate"] = item["pageTemplate"];
+                        default_col["pageName"] = item["pageName"];
+                        break;
+
+                    case "code":
+                        default_col["cellRenderer"] = window["codeRenderer"];
+                        default_col["cellEditor"] = null;
+                        break;
+
+                    case "image":
+                        default_col["cellRenderer"] = window["ImageRenderer"];
+                        break;
+                }
+
+                this.columns.push(default_col);
+            });
+            console.log("This Columns", this.columns);
+
+            return this.columns;
+        }
+        postData(url, data) {
+            // Default options are marked with *
+
+            return new Promise(function(resolve, reject) {
+                fetch(url, {
+                    body: JSON.stringify(data), // must match 'Content-Type' header
+                    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+                    credentials: "same-origin", // include, same-origin, *omit
+                    headers: {
+                        "content-type": "application/json",
+                    },
+                    method: "POST", // *GET, POST, PUT, DELETE, etc.
+                    mode: "cors", // no-cors, cors, *same-origin
+                    redirect: "follow", // manual, *follow, error
+                    referrer: "no-referrer", // *client, no-referrer
+                }).then((response) => {
+                    resolve(response.json());
+                }); // parses response to JSON
+            });
+        }
+
+        saveSchema(schema) {
+            let that = this;
+            let json = {
+                action: "addData",
+                index: window["uid"],
+                type: "_info",
+                id: this.table,
+                body: {
+                    schema: schema,
+                },
+            };
+            console.log(JSON.stringify(json));
+            return new Promise(function(resolve, reject) {
+                that.postData(that.dbUrl, json).then((result) => {
+                    console.log(result);
+                    if (result.code < 0) {
+                        resolve({});
+                    } else {
+                        resolve(result.resolve);
+                    }
+                });
+            });
+        }
+
+        createIndex(table) {
+            let that = this;
+            let json = {
+                action: "createIndex",
+                index: Polymer.uid + "." + table,
+            };
+            console.log(JSON.stringify(json));
+            return new Promise(function(resolve, reject) {
+                that.postData(that.dbUrl, json).then((result) => {
+                    console.log(result);
+                    if (result.code < 0) {
+                        resolve({});
+                    } else {
+                        resolve(result.resolve);
+                    }
+                });
+            });
+        }
+
+        matchData(json) {
+            let table = this.table;
+            let that = this;
+            let params = {
+                action: "searchData",
+                index: this.uid,
+                type: table,
+                body: {
+                    query: {
+                        match: json,
+                    },
+                },
+                sort: [{
+                    updated: "desc"
+                }],
+            };
+            console.log("Params", params);
+            return new Promise(function(resolve, reject) {
+                that.postData(that.dbUrl, params).then((result) => {
+                    if (result.code < 0) {
+                        reject();
+                    } else {
+                        resolve(result.resolve);
+                    }
+                });
+            });
+        }
+
+        saveData(id, data) {
+            let table = this.table;
+            let that = this;
+            let json = {
+                action: "addData",
+                index: this.uid,
+                type: table,
+                id: id,
+                body: data,
+            };
+            console.log(JSON.stringify(json));
+            return new Promise(function(resolve, reject) {
+                that.postData(that.dbUrl, json).then((result) => {
+                    console.log(result);
+                    if (result.code < 0) {
+                        resolve({});
+                    } else {
+                        resolve(result.resolve);
+                    }
+                });
+            });
+        }
+        getToken(token) {
+            let that = this;
+            let now = new Date().getTime();
+            let json = {
+                action: "getData",
+                index: "dazzle",
+                type: "token",
+                id: token,
+            };
+            console.log(json);
+            return new Promise(function(resolve, reject) {
+                that.postData(that.dbUrl, json).then((result) => {
+                    if (result.code < 0) {
+                        resolve({});
+                    } else {
+                        console.log(result.resolve);
+                        resolve(result.resolve);
+                    }
+                });
+            });
+        }
+        saveToken(uid, token, user) {
+            let table = this.table;
+            let that = this;
+            let now = new Date().getTime();
+            let json = {
+                action: "addData",
+                index: "dazzle",
+                type: "token",
+                id: token,
+                body: {
+                    expiryDate: now + 6 * 3600 * 1000,
+                    uid: uid,
+                    id: token,
+                    user: user,
+                    createDate: now,
+                },
+            };
+            console.log(json);
+            return new Promise(function(resolve, reject) {
+                that.postData(that.dbUrl, json).then((result) => {
+                    console.log(result);
+                    if (result.code < 0) {
+                        reject();
+                    } else {
+                        resolve(result);
+                    }
+                });
+            });
+        }
+
+        getAllTokenData() {
+            let table = this.table;
+            let that = this;
+            let json = {
+                action: "searchData",
+                index: "dazzle",
+                type: "token",
+                body: {
+                    query: {
+                        match_all: {},
+                    },
+                },
+            };
+            console.log("Get all", json);
+            return new Promise(function(resolve, reject) {
+                that.postData(that.dbUrl, json).then((result) => {
+                    if (result.code < 0) {
+                        resolve([]);
+                    } else {
+                        resolve(result.resolve);
+                    }
+                });
+            });
+        }
+
+        getAllData() {
+            let table = this.table;
+            let that = this;
+            let json = {
+                action: "searchData",
+                index: this.uid,
+                type: table,
+                body: {
+                    query: {
+                        match_all: {},
+                    },
+                    sort: [{
+                        _id: {
+                            order: "desc"
+                        },
+                    }, ],
+                },
+            };
+            console.log("Get all", json);
+            return new Promise(function(resolve, reject) {
+                that.postData(that.dbUrl, json).then((result) => {
+                    if (result.code < 0) {
+                        resolve([]);
+                    } else {
+                        resolve(result.resolve);
+                    }
+                });
+            });
+        }
+        removeData(id) {
+            let table = this.table;
+            let that = this;
+            let json = {
+                action: "deleteData",
+                index: this.uid,
+                type: table,
+                id: id,
+            };
+            console.log(JSON.stringify(json));
+            return new Promise(function(resolve, reject) {
+                that.postData(that.dbUrl, json).then((result) => {
+                    console.log(result);
+                    if (result.code < 0) {
+                        resolve({});
+                    } else {
+                        console.log(result.resolve);
+                        resolve(result.resolve);
+                    }
+                });
+            });
+        }
+
+        login(uid, password) {
+            let loginUrl =
+                "https://37nolo3390.execute-api.ap-northeast-1.amazonaws.com/prod";
+            let params = {
+                uid: uid,
+                password: password,
+                type: "loginByUidPassword",
+            };
+            return new Promise(function(resolve, reject) {
+                that.postData(loginUrl, params).then((res) => {
+                    console.log("Result", res);
+                });
+            });
+        }
+        loadData(id) {
+            let table = this.table;
+            let that = this;
+            let json = {
+                action: "getData",
+                index: this.uid,
+                type: table,
+                id: id,
+            };
+            console.log(json);
+            return new Promise(function(resolve, reject) {
+                that.postData(that.dbUrl, json).then((result) => {
+                    if (result.code < 0) {
+                        resolve({});
+                    } else {
+                        console.log(result.resolve);
+                        resolve(result.resolve);
+                    }
+                });
+            });
+        }
+        updateData(id, data) {
+            let that = this;
+            let index = uid;
+            let table = this.table;
+            delete data["_id"];
+
+            let params = {
+                action: "addData",
+                index: this.uid,
+                type: table,
+                id: id,
+                body: data,
+                // "sort":[{"發佈日期":"desc"}]
+            };
+            return new Promise(function(resolve, reject) {
+                that
+                    .postData(that.dbUrl, params)
+                    .then((data) => {
+                        console.log("Data", data);
+                        if (data.code > 0) {
+                            console.log("成功更新");
+                            resolve();
+                            // alert('成功更新資料');
+                            // that.refresh();
+                        }
+                    }) // JSON from `response.json()` call
+                    .catch((error) => {
+                        console.error(error);
+                        reject();
+                    });
+            });
+        }
+        bulkUpdateData(params) {
+            console.log("Params", params);
+            let that = this;
+            let json = {
+                action: "bulkData",
+                body: params,
+            };
+            console.log(JSON.stringify(json));
+            return new Promise(function(resolve, reject) {
+                that
+                    .postData(that.dbUrl, json)
+                    .toPromise()
+                    .then((result) => {
+                        console.log(result);
+                        if (result.code > 0) {
+                            resolve();
+                            z;
+                        } else {
+                            console.log("Error", result.text + ":" + result.err.code);
+                            reject();
+                        }
+                    });
+            });
+        }
+        removeGalleryRecord(id) {
+            let that = this;
+            let json = {
+                action: "deleteData",
+                index: "gallery",
+                type: "table",
+                id: id,
+            };
+            console.log(json);
+            return new Promise(function(resolve, reject) {
+                that.postData(that.dbUrl, json).then((result) => {
+                    console.log("Result", result);
+                    if (result.code < 0) {
+                        resolve({});
+                    } else {
+                        console.log(result.resolve);
+                        resolve(result.resolve);
+                    }
+                });
+            });
+        }
+        getGalleryRecord(id) {
+            let that = this;
+            let json = {
+                action: "getData",
+                index: "gallery",
+                type: "table",
+                id: id,
+            };
+            console.log(json);
+            return new Promise(function(resolve, reject) {
+                that.postData(that.dbUrl, json).then((result) => {
+                    if (result.code < 0) {
+                        resolve({});
+                    } else {
+                        console.log(result.resolve);
+                        resolve(result.resolve);
+                    }
+                });
+            });
+        }
+
+        getContent(url) {
+            console.log("Query Url", url);
+            return new Promise(function(resolve, reject) {
+                fetch(url)
+                    .then((response) => resolve(response.text()))
+                    .catch((error) => {
+                        console.error("Error:", error);
+                        reject();
+                    });
+            });
+        }
+        newSaveToken(token) {
+            let loginUrl =
+                "https://d8fz9pfue5.execute-api.ap-northeast-1.amazonaws.com/prod/newMiscDazzleFunction";
+            let params = {
+                "action": "loginByToken",
+                "token": token
+            };
+            return new Promise(function(resolve, reject) {
+                that.postData(loginUrl, params).then((res) => {
+                    console.log("Token Login Result", res);
+                });
+            });
+        }
+    };
+    Polymer.getUserDataContent = function(path) {
+        let url =
+            "https://d25k6mzsu7mq5l.cloudfront.net/user-data/" +
+            Polymer.uid +
+            "/" +
+            path + "?" + new Date().getTime();
+
+        console.log("Query Url", url);
+        return new Promise(function(resolve, reject) {
+            fetch(url)
+                .then((response) => {
+                    if (!response.ok) {
+                        reject();
+                    } else resolve(response.text());
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    reject();
+                });
+        });
+    };
+
+    Polymer.getContent = function(url) {
+        console.log("Query Url", url);
+
+        return new Promise(function(resolve, reject) {
+            fetch(url)
+                .then((response) => {
+                    if (!response.ok) {
+                        reject();
+                    } else resolve(response.text());
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    reject();
+                });
+        });
+    };
+
+    Polymer.loadScript = function(url) {
+        const fileref = document.createElement("script");
+        fileref.setAttribute("type", "text/javascript");
+        fileref.setAttribute("src", url + "?id=" + new Date().getTime());
+        document.head.appendChild(fileref);
+    };
+
+    Polymer.loadStyle = function(url) {
+        const ref = document.createElement("link");
+        ref.setAttribute("href", url);
+        ref.setAttribute("rel", "stylesheet");
+        document.head.appendChild(ref);
+    };
+
+    Polymer.loadComponent = function(cat, id) {
+        let local = this.dzLicense["local"] || false;
+        let base;
+        if (local === "true") base = "/";
+        else base = "https://d25k6mzsu7mq5l.cloudfront.net/";
+
+        let html =
+            '<link rel="import" href="' +
+            base +
+            "bower_components/" +
+            cat +
+            "/" +
+            id +
+            ".html?id=" +
+            new Date().getTime() +
+            '">';
+        // let item = document.createRange().createContextualFragment(html);
+        let item = document.createElement('link');
+        item.setAttribute('rel','import');
+        item.setAttribute('href','/bower_components/'+cat+'/'+id+'.html?id='+new Date().getTime());
+        document.head.appendChild(item);
+        // let elm = document.createElement(id);
+        // document.body.appendChild(elm);
+    };
+
+    Polymer.listenEvent = function() {
+        if (this.editMode === "admin") {}
+        if (this.editMode === "normal") {}
+    };
+
+
+    Polymer.testPopup = function() {
+        let dialog = document.querySelector('vaadin-dialog');
+        // let dialog = document.querySelector('vaadin-dialog');
+        dialog.renderer = function(root, dialog) {
+            // root.innerHTML = '<' + component + '></' + component + '>';
+            // if (root.firstElementChild) {
+            //     return;
+            // }
+            // root.appendChild(component);  
+            let tinyMce = widnow.document.createElement('polymer-tinymce');
+            tinyMce.tinytoolbar =
+                root.innerHTML = `
+                <polymer-tinymce id="editor2"
+                    tinytoolbar="insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+                    tinyplugins='["template advlist autolink lists link image charmap print preview anchor","searchreplace visualblocks code fullscreen","insertdatetime media table contextmenu paste"]'
+                    templates='[
+                    {"title": "Some title 1", "description": "Some desc 1", "content": "My content"},
+                    {"title": "Some title 2", "description": "Some desc 2", "url": "http://google.com"}]'
+                    ></polymer-tinymce>
+
+                `;
+        };
+
+        dialog.resizable = true;
+        dialog.resize('90%', '90%');
+        dialog.opened = true;
+        // Polymer.activeDialog = dialog;   
+
+    }
+
+
+    Polymer.componentPopup = function(component, width, height) {
+        let dialog = Polymer.dialog;
+        // let dialog = document.querySelector('vaadin-dialog');
+        dialog.renderer = function(root, dialog) {
+            // root.innerHTML = '<' + component + '></' + component + '>';
+            if (root.firstElementChild) {
+                return;
+            }
+            root.appendChild(component);
+        };
+
+        dialog.resizable = true;
+        dialog.resize(width, height);
+        dialog.opened = true;
+        // Polymer.activeDialog = dialog;   
+
+    }
+
+    Polymer.popup = function(dialog, folder, component, width, height) {
+
+        customElements.whenDefined(component).then(function() {
+            dialog.renderer = function(root, dialog) {
+                root.innerHTML = '<' + component + '></' + component + '>';
+            };
+            dialog.resizable = true;
+            dialog.resize(width, height);
+            dialog.opened = true;
+            // Polymer.activeDialog = dialog;   
+        });
+
+    }
+    Polymer.closeDialog = function(dialog) {
+        if (!dialog)
+            dialog = Polymer.dialog;
+        dialog.opened = false;
+    }
+
+
+    Polymer.dzInit = function() {
+        console.log('Dz Init');
+        let editMode = store.get("editMode") || "normal";
+        let thisPage =
+            decodeURIComponent(location.pathname).substring(
+                location.pathname.indexOf("/") + 1
+            ) || "index.html";
+        this.menuList = {};
+        this.editMode = editMode;
+        let dzhead = document.querySelector('dz-wrapper-head');
+        let dzwrapper = document.querySelector('dz-wrapper');
+        let dzfoot = document.querySelector('dz-foot');
+
+        Polymer.noElements = 0;
+        if (editMode === "admin") {
+            /////
+            if (dzhead)
+                dzhead.remove();
+            if (dzwrapper)
+                dzwrapper.remove();
+            if (dzfoot)
+                dzwrapper.remove();
+
+
+            /////
+            let user = store.get("user") || null;
+            console.log('User', user);
+            user['userBucket'] = Polymer.dzLicense['userBucket'];
+            this.fileManager = new AwsPackage(user);
+            this.dataManager = new DataPackage("_info");
+            this.user = user;
+            this.tid = Polymer.dzLicense["tid"];
+            this.uid = this.user["uid"];
+            this.userBucket = Polymer.dzLicense["userBucket"];
+            this.websiteUrl = this.user["websiteUrl"] || "//" + this.userBucket + "/";
+            this.userType = Polymer.dzLicense["userType"] || "normal";
+
+            //   this.thisPage = document.querySelector('meta[thispage]').getAttribute('thispage') || thisPage;
+            this.thisPage = thisPage;
+            this.loadComponent('dz-dazzle', 'dz-wrapper');
+            document.body.innerHTML = '<dz-wrapper></dz-wrapper><vaadin-dialog></vaadin-dialog>';
+            this.loadHtmlClass();
+            // document.body.innerHTML = `
+            // <vaadin-context-menu selector="[dz-panel]">
+            //     <dz-wrapper></dz-wrapper>
+            // </vaadin-context-menu>
+            // <dz-admin></dz-admin>
+            // `;
+
+            // document.body.innerHTML = `
+            //     <dz-wrapper></dz-wrapper>
+            //  <dz-admin></dz-admin>
+            // `;
+
+            // document.body.innerHTML = `<dz-wrapper></dz-wrapper><dz-admin></dz-admin>`;
+            // this.loadComponent("dz-dazzle", "dz-admin");
+        } else {
+            this.uid =
+                Polymer.dzLicense["uid"] ||
+                document.querySelector("meta[uid]").getAttribute("uid");
+            this.tid =
+                Polymer.dzLicense["tid"] ||
+                document.querySelector("meta[tid]").getAttribute("tid") ||
+                this.uid;
+            this.dataManager = new DataPackage("_info");
+            this.userBucket = Polymer.dzLicense["userBucket"] || null;
+            this.websiteUrl = location.hostname;
+            this.thisPage = thisPage;
+            this.userType = Polymer.dzLicense["userType"] || "normal";
+            // document.body.innerHTML =
+            //     "<dz-wrapper></dz-wrapper><dz-dazzle></dz-dazzle>";
+            // this.loadComponent("dz-dazzle", "dz-dazzle");
+
+
+        }
+
+        if (Polymer.editMode === 'normal') {
+            Polymer.loadComponent("dz-dazzle", "dz-dazzle");
+            let dzDazzle = document.createElement('dz-dazzle');
+            document.body.appendChild(dzDazzle);
+        } else {
+            Polymer.loadComponent("dz-dazzle", "dz-admin");
+            let dzAdmin = document.createElement('dz-admin');
+            document.body.appendChild(dzAdmin);
+        }
+
+
+        let elm = document.querySelector('dz-wrapper-head') || null;
+        if (!elm) {
+            let head = document.createElement('dz-wrapper-head');
+            document.head.appendChild(head);
+        }
+        // this.loadComponent("dz-dazzle", "dz-wrapper");
+
+
+    };
+
+    Polymer.getMasterContent = function(type) {
+        let that = this;
+        let url =
+            "https://d25k6mzsu7mq5l.cloudfront.net/user-data/" + Polymer.uid + "/";
+        let basePath = url + "template/" + this.tid + "/_master";
+        let defaultPath = "template/" + this.tid + "/_default";
+        // this.basePath = '//'+this.userBucket+'/template/'+this.tid+'/'+this.thisPage;
+        this.masterPath = basePath;
+        console.log("Path", basePath + "/" + type + "?id=" + new Date().getTime());
+
+        return new Promise(function(resolve, reject) {
+            // if (this.editMode==="normal")
+            Polymer.getContent(
+                basePath + "/" + type + "?id=" + new Date().getTime()
+            ).then(
+                (result) => {
+                    resolve(result);
+                },
+                (err) => {
+                    resolve("");
+                }
+            );
+        });
+    };
+    Polymer.loadHead = function() {
+        console.log('Load Head');
+        let that = this;
+        let type = "head";
+        let url =
+            "https://d25k6mzsu7mq5l.cloudfront.net/user-data/" + Polymer.uid + "/";
+        let basePath =
+            url +
+            "template/" +
+            this.tid +
+            "/" +
+            this.thisPage +
+            "/" +
+            type +
+            "?id=" +
+            new Date().getTime();
+
+        let masterPath =
+            url +
+            "template/" +
+            this.tid +
+            "/_master" +
+            "/" +
+            type +
+            "?id=" +
+            new Date().getTime();
+
+        let defaultPath =
+            url +
+            "template/" +
+            this.tid +
+            "/_default/" +
+            type +
+            "?id=" +
+            new Date().getTime();
+
+        // let defaultPath = 'template/'+this.tid+'/_default';
+        // // this.basePath = '//'+this.userBucket+'/template/'+this.tid+'/'+this.thisPage;
+        // this.basePath = basePath;
+        // console.log('Path',basePath+'/'+type+'?id='+new Date().getTime());
+        let head;
+        let elm;
+        let wrapper;
+        let mFlag = false;
+        let flag = false;
+        return new Promise(function(resolve, reject) {
+
+            Polymer.getContent(masterPath).then(head => {
+                elm = document.createRange().createContextualFragment(head);
+                wrapper = document.createElement("dz-wrapper-master-head");
+                wrapper.appendChild(elm);
+                document.head.appendChild(wrapper);
+                mFlag = true;
+                if (mFlag && flag)
+                    resolve();
+            });
+
+            Polymer.getContent(basePath).then(head => {
+                elm = document.createRange().createContextualFragment(head);
+                wrapper = document.createElement("dz-wrapper-head");
+                wrapper.appendChild(elm);
+                document.head.appendChild(wrapper);
+                flag = true;
+                if (mFlag && flag)
+                    resolve();
+            }, err => {
+                Polymer.getContent(defaultPath).then(head => {
+                    elm = document.createRange().createContextualFragment(head);
+                    wrapper = document.createElement("dz-wrapper-head");
+                    wrapper.appendChild(elm);
+                    document.head.appendChild(wrapper);
+                    flag = true;
+                    if (mFlag && flag)
+                        resolve();
+                });
+            });
+
+
+            Promise.all([
+                Polymer.getContent(masterPath),
+                Polymer.getContent(basePath),
+            ]).then(function(results) {
+                let head;
+                let elm;
+                let wrapper;
+
+                head = results[0];
+                console.log('Head', results);
+                elm = document.createRange().createContextualFragment(head);
+                wrapper = document.createElement("dz-wrapper-master-head");
+                wrapper.appendChild(elm);
+                document.head.appendChild(wrapper);
+
+                head = results[1];
+                elm = document.createRange().createContextualFragment(head);
+                wrapper = document.createElement("dz-wrapper-head");
+                wrapper.appendChild(elm);
+                document.head.appendChild(wrapper);
+                resolve();
+            }, err => {
+                console.log('Error', err);
+            });
+        });
+    };
+    Polymer.loadBodyJs = function() {
+        console.log('Load Body JS');
+        let that = this;
+        let type = "body_js";
+        let url =
+            "https://d25k6mzsu7mq5l.cloudfront.net/user-data/" + Polymer.uid + "/";
+
+        let basePath =
+            url +
+            "template/" +
+            this.tid +
+            "/" +
+            this.thisPage +
+            "/" +
+            type +
+            "?id=" +
+            new Date().getTime();
+        let masterPath =
+            url +
+            "template/" +
+            this.tid +
+            "/_master" +
+            "/" +
+            type +
+            "?id=" +
+            new Date().getTime();
+
+
+        let defaultPath =
+            url +
+            "template/" +
+            this.tid +
+            "/_default/" +
+            type +
+            "?id=" +
+            new Date().getTime();
+        let head;
+        let elm;
+        let wrapper;
+        let mFlag = false;
+        let flag = false;
+
+        return new Promise(function(resolve, reject) {
+
+            Polymer.getContent(masterPath).then(head => {
+                elm = document.createRange().createContextualFragment(head);
+                wrapper = document.createElement("dz-wrapper-master-body-js");
+                wrapper.appendChild(elm);
+                document.body.appendChild(wrapper);
+                mFlag = true;
+                if (mFlag && flag)
+                    resolve();
+            });
+
+            Polymer.getContent(basePath).then(head => {
+                elm = document.createRange().createContextualFragment(head);
+                wrapper = document.createElement("dz-wrapper-body-js");
+                wrapper.appendChild(elm);
+                document.body.appendChild(wrapper);
+                flag = true;
+                // resolve();
+                if (mFlag && flag)
+                    resolve();
+            }, err => {
+                Polymer.getContent(defaultPath).then(head => {
+                    elm = document.createRange().createContextualFragment(head);
+                    wrapper = document.createElement("dz-wrapper-body-js");
+                    wrapper.appendChild(elm);
+                    document.body.appendChild(wrapper);
+                    flag = true;
+                    // resolve();
+                    if (mFlag && flag)
+                        resolve();
+                });
+            });
+        });
+    };
+    Polymer.loadCss = function() {
+        let that = this;
+        let type = "css";
+        let url =
+            "https://d25k6mzsu7mq5l.cloudfront.net/user-data/" + Polymer.uid + "/";
+        let basePath =
+            url +
+            "template/" +
+            this.tid +
+            "/" +
+            this.thisPage +
+            "/" +
+            type +
+            "?id=" +
+            new Date().getTime();
+        let masterPath =
+            url +
+            "template/" +
+            this.tid +
+            "/_master" +
+            "/" +
+            type +
+            "?id=" +
+            new Date().getTime();
+
+        let defaultPath =
+            url +
+            "template/" +
+            this.tid +
+            "/_default/" +
+            type +
+            "?id=" +
+            new Date().getTime();
+        let head;
+        let elm;
+        let wrapper;
+        let mFlag = false;
+        let flag = false;
+
+        return new Promise(function(resolve, reject) {
+
+            Polymer.getContent(masterPath).then(head => {
+                elm = document.createRange().createContextualFragment(head);
+                wrapper = document.createElement("dz-wrapper-master-css");
+                wrapper.appendChild(elm);
+                document.head.appendChild(wrapper);
+                mFlag = true;
+                if (mFlag && flag)
+                    resolve();
+            });
+
+            Polymer.getContent(basePath).then(head => {
+                elm = document.createRange().createContextualFragment(head);
+                wrapper = document.createElement("dz-wrapper-master-css");
+                wrapper.appendChild(elm);
+                document.head.appendChild(wrapper);
+                flag = true;
+                if (mFlag && flag)
+                    resolve();
+            }, err => {
+                Polymer.getContent(defaultPath).then(head => {
+                    elm = document.createRange().createContextualFragment(head);
+                    wrapper = document.createElement("dz-wrapper-css");
+                    wrapper.appendChild(elm);
+                    document.head.appendChild(wrapper);
+                    flag = true;
+                    if (mFlag && flag)
+                        resolve();
+                });
+            });
+        });
+    };
+
+    Polymer.loadHtml = function(shadow) {
+        console.log('Start Load Html');
+
+        let that = this;
+        let type = "html";
+        let url =
+            "https://d25k6mzsu7mq5l.cloudfront.net/user-data/" + Polymer.uid + "/";
+        let basePath =
+            url +
+            "template/" +
+            this.tid +
+            "/" +
+            this.thisPage +
+            "/" +
+            type +
+            "?id=" +
+            new Date().getTime();
+        let masterPath =
+            url +
+            "template/" +
+            this.tid +
+            "/_master" +
+            "/" +
+            type +
+            "?id=" +
+            new Date().getTime();
+        let defaultPath =
+            url +
+            "template/" +
+            this.tid +
+            "/_default/" +
+            type +
+            "?id=" +
+            new Date().getTime();
+        // let masterPath = url+'template/'+this.tid+'/_master'+'/'+type;
+
+        console.log("Load HTML", basePath);
+
+        return new Promise(function(resolve, reject) {
+            Polymer.getContent(basePath).then(
+                (html) => {
+                    shadow.innerHTML = html;
+                    Polymer.shadowDOM = shadow;
+                    console.log('End Load Html');
+
+                    // Polymer.beforeListener();
+                    resolve();
+                },
+                (err) => {
+                    Polymer.getContent(defaultPath).then(
+                        (html) => {
+                            shadow.innerHTML = html;
+                            Polymer.shadowDOM = shadow;
+                            console.log('End Load Html');
+                            resolve();
+                        },
+                        (err) => {
+                            resolve();
+                        }
+                    );
+                }
+            );
+        });
+    };
+
+    Polymer.beforeListener = function() {
+
+
+        console.log('Before Listener');
+        var observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type == "attributes") {
+                    console.log("attributes changed", mutation);
+                }
+            });
+        });
+
+        observer.observe(element, {
+            attributes: true //configure it to listen to attribute changes
+        });
+
+    };
+
+    Polymer.loadHtmlClass = function() {
+        let type = "html_class";
+        let url =
+            "https://d25k6mzsu7mq5l.cloudfront.net/user-data/" + Polymer.uid + "/";
+
+        let masterPath =
+            url +
+            "template/" +
+            this.tid +
+            "/_master" +
+            "/" +
+            type +
+            "?id=" +
+            new Date().getTime();
+
+        console.log('HTML Class', masterPath);
+        return new Promise(function(resolve, reject) {
+            Polymer.getContent(masterPath).then(
+                (bodyClass) => {
+                    console.log('HTML Class', bodyClass);
+                    document.querySelector('html').setAttribute("class", bodyClass);
+                    resolve();
+                },
+                (err) => {
+                    resolve();
+                }
+            );
+        });
+    };
+    Polymer.loadBodyClass = function() {
+        let type = "body_class";
+        let url =
+            "https://d25k6mzsu7mq5l.cloudfront.net/user-data/" + Polymer.uid + "/";
+        let basePath =
+            url +
+            "template/" +
+            this.tid +
+            "/" +
+            this.thisPage +
+            "/" +
+            type +
+            "?id=" +
+            new Date().getTime();
+
+        let masterPath =
+            url +
+            "template/" +
+            this.tid +
+            "/_master" +
+            "/" +
+            type +
+            "?id=" +
+            new Date().getTime();
+
+        let defaultPath =
+            url +
+            "template/" +
+            this.tid +
+            "/_default/" +
+            type +
+            "?id=" +
+            new Date().getTime();
+
+        console.log('Body Class', basePath, masterPath, defaultPath);
+        return new Promise(function(resolve, reject) {
+            Polymer.getContent(basePath).then(
+                (bodyClass) => {
+                    document.body.setAttribute("class", bodyClass);
+                    resolve();
+                },
+                (err) => {
+                    Polymer.getContent(defaultPath).then(
+                        (bodyClass) => {
+                            document.body.setAttribute("class", bodyClass);
+                            resolve();
+                        });
+                }
+            );
+        });
+    };
+
+    Polymer.contextRender = function(menu) {
+        console.log("Menu", menu, Polymer._curElm);
+
+        const shadow = document.querySelector("dz-wrapper");
+        const contextMenu = document.querySelector("vaadin-context-menu");
+        contextMenu.renderer = function(root) {
+            let listBox = root.firstElementChild;
+            // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
+            if (listBox) {
+                listBox.innerHTML = "";
+            } else {
+                listBox = window.document.createElement("vaadin-list-box");
+                root.appendChild(listBox);
+            }
+            console.log("Root", root);
+            menu.forEach(function(ele) {
+                const item = window.document.createElement("vaadin-item");
+                item.textContent = ele.label;
+                console.log("Event", item);
+
+                item.addEventListener("click", (e) => {
+                    console.log("Event", Polymer._curElm);
+
+                    document.dispatchEvent(
+                        new CustomEvent(ele.event, {
+                            detail: {
+                                size: "big",
+                                element: that.curElm
+                            },
+                        })
+                    );
+                });
+                listBox.appendChild(item);
+            });
+        };
+    };
+
+    Polymer.getPageContent = function(type) {
+        let that = this;
+        let url =
+            "https://d25k6mzsu7mq5l.cloudfront.net/user-data/" + Polymer.uid + "/";
+        let basePath = url + "template/" + this.tid + "/" + this.thisPage;
+        let masterPath = url + "template/" + this.tid + "/_master";
+
+        let defaultPath = "template/" + this.tid + "/_default";
+        // this.basePath = '//'+this.userBucket+'/template/'+this.tid+'/'+this.thisPage;
+        this.basePath = basePath;
+        console.log("Path", basePath + "/" + type + "?id=" + new Date().getTime());
+
+        return new Promise(function(resolve, reject) {
+            // if (this.editMode==="normal")
+
+            Polymer.getContent(
+                basePath + "/" + type + "?id=" + new Date().getTime()
+            ).then(
+                (result) => {
+                    resolve(result);
+                },
+                (err) => {
+                    Polymer.getContent(
+                        defaultPath + "/" + type + "?id=" + new Date().getTime()
+                    ).then(
+                        (result) => {
+                            resolve(result);
+                        },
+                        (err) => {
+                            reject();
+                        }
+                    );
+                }
+            );
+        });
+    };
+
+    Polymer.componentLoader = function() {
+        let basePath = "template/" + this.tid + "/";
+        this.getContent(basePath + "_master/components").then((html) => {
+            let elm = document.createRange().createContextualFragment(html);
+            let dzCom = document.createElement("dz-wrapper-component");
+            dzCom.appendChild(elm);
+            document.head.appendChild(dzCom);
+        });
+    };
+    Polymer.pageLoader = function(shadow) {
+        let that = this;
+        Polymer.shadow = shadow;
+        let basePath = "template/" + this.tid + "/" + this.thisPage;
+        this.basePath = basePath;
+
+        let style = shadow.querySelector("style");
+        console.log("Style", style, shadow);
+
+        Promise.all([
+            Polymer.loadHead(),
+            Polymer.loadCss(),
+            Polymer.loadHtml(shadow),
+            Polymer.loadBodyJs(),
+            Polymer.loadBodyClass(),
+        ]).then(res => {
+            console.log('End Load Html', Polymer.editMode);
+            if (Polymer.editMode === 'admin') {
+                console.log('Init Menu');
+                Polymer.initMenu(document.querySelector('dz-wrapper'));
+            }
+        }, err => {
+            if (Polymer.editMode === 'admin') {
+                console.log('Init Menu');
+                Polymer.initMenu(document.querySelector('dz-wrapper'));
+            }
+        });
+        document.addEventListener("save", (e) => {
+            // let url = 'https://d25k6mzsu7mq5l.cloudfront.net/user-data/'+Polymer.uid+'/';
+
+
+            console.log('Shadown DOM', Polymer.shadowDOM);
+            let basePath = "template/" + Polymer.tid + "/" + Polymer.thisPage + "/";
+            let masterPath = "template/" + Polymer.tid + "/_master/";
+            let content;
+            let dzWrapperHead = document.querySelector('dz-wrapper-head') || null;
+            let dzWrapperMasterHead = document.querySelector('dz-wrapper-master-head') || null;
+            let dzWrapperCss = document.querySelector('dz-wrapper-css') || null;
+            let dzWrapperMasterCss = document.querySelector('dz-wrapper-master-css') || null;
+            let dzWrapperBodyJs = document.querySelector('dz-wrapper-body-js') || null;
+            let dzWrapperMasterBodyJs = document.querySelector('dz-wrapper-master-body-js') || null;
+            // Head
+            if (dzWrapperHead) {
+                content = document.querySelector("dz-wrapper-head").innerHTML || "";
+                console.log("Save Head", basePath + "head");
+                this.fileManager.saveUserData(basePath + "head", content);
+            }
+
+
+            // Master Head
+            if (dzWrapperMasterHead) {
+                content = document.querySelector("dz-wrapper-master-head").innerHTML || "";
+                console.log("Save Head", masterPath + "head");
+                this.fileManager.saveUserData(masterPath + "head", content);
+            }
+
+
+            // HTML
+            let wrapper = document.querySelector("dz-wrapper");
+            // wrapper.querySelectorAll("dz-editor").forEach((item) => {
+            //     item.outerHTML = item.innerHTML;
+            // });
+            // content = wrapper.innerHTML;
+            // this.fileManager.saveUserData(basePath + "html", content);
+
+            wrapper.outerHTML = Polymer.shadowDOM.outerHTML;
+
+
+            // CSS
+            if (dzWrapperCss) {
+                content = document.querySelector("dz-wrapper-css").innerHTML || "";
+                this.fileManager.saveUserData(basePath + "css", content);
+            }
+
+
+            // Master CSS
+            if (dzWrapperMasterCss) {
+                content = document.querySelector("dz-wrapper-master-css").innerHTML || "";
+                this.fileManager.saveUserData(masterPath + "css", content);
+            }
+
+
+            // body js
+            if (dzWrapperBodyJs) {
+                content = document.querySelector("dz-wrapper-body-js").innerHTML || "";
+                this.fileManager.saveUserData(basePath + "body_js", content);
+            }
+
+
+            // Master body js
+            if (dzWrapperMasterBodyJs) {
+                content =
+                    document.querySelector("dz-wrapper-master-body-js").innerHTML || "";
+                this.fileManager.saveUserData(masterPath + "body_js", content);
+            }
+
+            content = document.body.getAttribute("class") || null;
+            this.fileManager.saveUserData(basePath + "body_class", content);
+
+            // Polymer.dzFire('export',{});
+            Polymer.export();
+            // alert('儲存成功');
+        });
+    };
+    Polymer.dzDomFire = function(src, event, params) {
+        console.log("Fire", event, params);
+        src.dispatchEvent(new CustomEvent(event, params));
+    };
+
+    Polymer.dzFire = function(event, params) {
+        console.log("Fire", event, params);
+        document.dispatchEvent(new CustomEvent(event, params));
+    };
+
+    Polymer.import = function(url) {
+        console.log('Import ', url);
+        let a = new URL(url);
+        // let pathname = a.pathname;
+        // console.log('Path Name',pathname);
+        let pathname = this.thisPage;
+        let that = this;
+        this.fileManager.getExternalContent(url).then((html) => {
+            console.log("HTML", html);
+            var elm = document.createElement("html");
+            let css = "";
+            elm.innerHTML = html;
+
+            let head, body;
+            let bodyClass = elm.querySelector("body").getAttribute("class");
+            let bodyJs = "";
+            elm.querySelectorAll('link[rel="stylesheet"]').forEach((item) => {
+                // css += item.outerHTML+"\n";
+                let url = item.getAttribute("href") || null;
+                console.log("HREF", url);
+                // if (url) {
+                //     let urlStr = new URL(url);
+                //     console.log('String',urlStr.pathname);
+                //     let thisPath = decodeURIComponent(urlStr.pathname).substring(urlStr.pathname.indexOf('/') + 1) || 'index.html';
+                //     that.fileManager.saveExternalContent(url,'assets/'+thisPath);
+                //     item.setAttribute('href','assets/'+thisPath);
+                // }
+                css += item.outerHTML + "\n";
+                item.remove();
+            });
+            elm.querySelectorAll("style").forEach((item) => {
+                css += item.outerHTML + "\n";
+                item.remove();
+            });
+            // that.fileManager.saveFile('assets/'+that.thisPage+'.css');
+            // let link = document.createElement('link');
+            // link.setAttribute('rel','stylesheet');
+            // link.setAttribute('href','assets/'+that.thisPage+'.css');
+            // elm.querySelector('head').appendChild(link);
+
+            elm.querySelectorAll("body script").forEach((item) => {
+                let url = item.getAttribute("src") || null;
+                //   if (url) {
+                //         let urlStr = new URL(url);
+                //         console.log('String',urlStr.pathname);
+                //         let thisPath = decodeURIComponent(urlStr.pathname).substring(urlStr.pathname.indexOf('/') + 1) || 'index.html';
+                //         that.fileManager.saveExternalContent(url,'assets/'+thisPath);
+                //         item.setAttribute('src','assets/'+thisPath);
+                //     }
+
+                bodyJs += item.outerHTML + "\n";
+                item.remove();
+            });
+
+            head = elm.querySelector("head").innerHTML;
+            body = elm.querySelector("body").innerHTML;
+
+
+            this.fileManager.saveUserData(
+                "template/" + this.tid + "/" + this.thisPage + "/head",
+                head
+            );
+            this.fileManager.saveUserData(
+                "template/" + this.tid + "/" + this.thisPage + "/css",
+                css
+            );
+            this.fileManager.saveUserData(
+                "template/" + this.tid + "/" + this.thisPage + "/body_js",
+                bodyJs
+            );
+            this.fileManager.saveUserData(
+                "template/" + this.tid + "/" + this.thisPage + "/html",
+                body
+            );
+            this.fileManager.saveUserData(
+                "template/" + this.tid + "/" + this.thisPage + "/body_class",
+                bodyClass
+            );
+        });
+    };
+    //    console.log('License',  await Polymer.getContent('dz-license') );
+
+    Polymer.postData = function(url, data) {
+        // Default options are marked with *
+
+        return new Promise(function(resolve, reject) {
+            fetch(url, {
+                body: JSON.stringify(data), // must match 'Content-Type' header
+                cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: "same-origin", // include, same-origin, *omit
+                headers: {
+                    "content-type": "application/json",
+                },
+                method: "POST", // *GET, POST, PUT, DELETE, etc.
+                mode: "cors", // no-cors, cors, *same-origin
+                redirect: "follow", // manual, *follow, error
+                referrer: "no-referrer", // *client, no-referrer
+            }).then((response) => {
+                resolve(response.json());
+            }); // parses response to JSON
+        });
+    };
+
+    Polymer.export = function() {
+        // let url = 'https://d25k6mzsu7mq5l.cloudfront.net/user-data/'+Polymer.uid+'/';
+        console.log("Export");
+        let basePath = "template/" + Polymer.tid + "/" + Polymer.thisPage + "/";
+        let masterPath = "template/" + Polymer.tid + "/_master/";
+        let content;
+        let dzWrapperHead = document.querySelector('dz-wrapper-head') || null;
+        let dzWrapperMasterHead = document.querySelector('dz-wrapper-master-head') || null;
+        let dzWrapperCss = document.querySelector('dz-wrapper-css') || null;
+        let dzWrapperMasterCss = document.querySelector('dz-wrapper-master-css') || null;
+        let dzWrapperBodyJs = document.querySelector('dz-wrapper-body-js') || null;
+        let dzWrapperMasterBodyJs = document.querySelector('dz-wrapper-master-body-js') || null;
+        let dzWrapper = document.querySelector("dz-wrapper");
+
+        let dom = document.createElement("html");
+        let head = document.createElement("head");
+        let body = document.createElement("body");
+        let script = document.createElement("script");
+        let link = document.createElement("link");
+        script.setAttribute(
+            "src",
+            "https://d25k6mzsu7mq5l.cloudfront.net/bower_components/webcomponentsjs/webcomponents-lite.js"
+        );
+        link.setAttribute("rel", "import");
+        link.setAttribute(
+            "href",
+            "https://d25k6mzsu7mq5l.cloudfront.net/bower_components/dz-dazzle/dz-loader.html"
+        );
+        head.appendChild(script);
+        head.appendChild(link);
+
+        if (dzWrapperHead) {
+            let elm = document.querySelector("dz-wrapper-head").cloneNode(true);
+            head.appendChild(elm);
+        }
+
+        if (dzWrapperMasterHead) {
+            elm = document.querySelector("dz-wrapper-master-head").cloneNode(true);
+            head.appendChild(elm);
+        }
+
+
+        if (dzWrapper) {
+            // elm = document.querySelector("dz-wrapper").cloneNode(true);
+            // body.appendChild(elm);
+            body.appendChild(Polymer.shadowDOM);
+        }
+
+
+
+
+
+        if (dzWrapperBodyJs) {
+            elm = document.querySelector("dz-wrapper-body-js").cloneNode(true);
+            body.appendChild(elm);
+        }
+
+        if (dzWrapperMasterBodyJs) {
+            elm = document.querySelector("dz-wrapper-master-body-js").cloneNode(true);
+            body.appendChild(elm);
+        }
+
+
+        dom.appendChild(head);
+        dom.appendChild(body);
+
+        let bodyClass = document.body.getAttribute("class") || "";
+        body.setAttribute("class", bodyClass);
+        let headStr = head.innerHTML;
+        let noCache = `
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Expires" content="0" />
+        `;
+        headStr = noCache + headStr;
+        head.innerHTML = headStr;
+        content = dom.outerHTML;
+        console.log("Export", content);
+        // Polymer.fileManager.saveUserData("index.html", content);
+        Polymer.fileManager.saveHtml(Polymer.thisPage, content);
+        alert("匯出成功");
+    };
+
+    const getLicense = async() => {
+        const response = await fetch("dz-license");
+        const json = await response.text();
+        console.log("License", json, JSON.parse(json));
+    };
+
+
+    Polymer.getContent("/dz-license?id=" + new Date().getTime()).then(
+        (html) => {
+            console.log("License", html);
+            Polymer.dzLicense = JSON.parse(html);
+            Polymer.dzInit();
+        },
+        (err) => {
+            Polymer.dzInit();
+        }
+    );
+
+
+    Polymer.sms = function(mobileNumber, data) {
+        // Default options are marked with *
+
+        return new Promise(function(resolve, reject) {
+            let url = "https://e57jikxilj.execute-api.ap-northeast-1.amazonaws.com/prod/";
+            let parma = {
+                "to": mobileNumber,
+                "message": data
+            };
+            Polymer.postData(url, parma).then(res => {
+                if (res.code > 0) {
+                    console.log("666");
+                    resolve("chenggongle");
+                } else {
+                    console.log("error la");
+                }
+            })
+        });
+    };
+
+    Polymer.sendEmail = function(to, subject, content) {
+        return new Promise(function(resolve, reject) {
+            let url = "https://e57jikxilj.execute-api.ap-northeast-1.amazonaws.com/prod/";
+            let parma = {
+                "from": "support@01power.net",
+                "to": to,
+                "subject": subject,
+                "html": content
+            };
+            Polymer.postData(url, parma).then(res => {
+                if (res.code > 0) {
+                    console.log("666");
+                    resolve("chenggongle");
+                } else {
+                    console.log("error la");
+                }
+            })
+        });
+
+    };
+</script>

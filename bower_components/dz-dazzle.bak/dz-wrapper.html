@@ -1,0 +1,458 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<!-- <link rel="import" href="../dz-dazzle/dz-admin.html"> -->
+<link rel="import" href="../dz-dazzle/dz-wrapper-head.html">
+<link rel="import" href="../dz-dazzle/dz-wrapper-js.html">
+
+<!-- <link rel="import" href="../vaadin-dialog/vaadin-dialog.html"> -->
+<!-- <link rel="import" href="dz-loader.html?id=sdsdfsdffsdf"> -->
+
+
+<dom-module id="dz-wrapper">
+
+</dom-module>
+
+<script>
+class dzWrapper extends Polymer.Element {
+	static get is() {
+          return 'dz-wrapper';
+	}
+
+	constructor() {
+        super();
+        console.log('DZ WRapper');
+        this.uid = Polymer.uid;
+        this.tid = Polymer.tid;
+        this.thisPage = Polymer.thisPage;
+        let elm = document.createElement('dz-wrapper-head');
+        if (!document.querySelector('dz-wrapper-head'))
+            document.head.appendChild(elm);
+        else {
+            elm.remove();
+            document.head.appendChild(elm);
+        }
+
+        document.addEventListener("save", (e) => {
+            // that.export();
+            // that.restore();
+            this.save();
+            this.export();
+        });
+    }
+
+    getPath(nature,type){
+        let url =
+            "https://d25k6mzsu7mq5l.cloudfront.net/user-data/" + Polymer.uid + "/";
+        
+        return
+            url +
+            "template/" +
+            Polymer.tid +
+            "/" +
+            nature +
+            "/" +
+            type +
+            "?id=" +
+            new Date().getTime();
+    }
+    ready(){
+        super.ready();
+        console.log('DZ WRapper',Polymer.editMode);
+       
+        if (Polymer.editMode==='admin'){
+
+
+
+            // this.loadBodyClass().then(res=>{
+            //     document.body.setAttribute("class", res);
+            // });
+            Polymer.loadBodyClass().then(res=>{
+                this.loadHtml().then(html=>{
+                    // document.querySelector('dz-wrapper-js').remove();
+                    this.innerHTML = html;
+                    // Polymer.initElement(this);
+                    this.querySelectorAll('*').forEach(item=>{
+                        new defaultPackage(item);
+                    });
+                    this.shadowHtml = this.innerHTML;
+                    Polymer.shadowDOM = this.cloneNode(true);
+                    
+                    console.log('Dz Wrapper',Polymer.shadowDOM, this);
+                    let dzWrapperJs = document.createElement('dz-wrapper-js');
+                    document.body.appendChild(dzWrapperJs);            
+                    
+                    
+                    // this.loadWrapperJs();
+                    // Polymer.initMenu(this);             
+
+
+                    
+                    
+                    // let dzDazzle = document.createElement('dz-dazzle');
+                    // let dzAdmin =document.createElement('dz-admin');
+
+
+                    // document.body.appendChild(dzWrapperJs);            
+                    console.log('Hi Render');  
+                    
+                });
+            });
+
+            
+        }
+        // Polymer.loadComponent('dz-dazzle','dz-admin');
+
+    }
+    loadWrapperJs(){
+        let dzWrapperJs = document.createElement('dz-wrapper-js');
+        Polymer.loadComponent('dz-dazzle','dz-wrapper-js');
+        // if (!document.querySelector('dz-wrapper-js'))
+            document.body.appendChild(dzWrapperJs);
+    }
+
+    loadBodyClass = function() {
+        let type = "body_class";
+        let that = this;
+        return new Promise(function(resolve, reject) {
+            Polymer.getContent(basePath).then(
+                (bodyClass) => {
+                    document.body.setAttribute("class", bodyClass);
+                    resolve();
+                },
+                (err) => {
+                    Polymer.getContent(defaultPath).then(
+                        (bodyClass) => {
+                            document.body.setAttribute("class", bodyClass);
+                            resolve();
+                        });
+                }
+            );
+        });
+    }
+    save(){
+        let html;
+        let dummy = Polymer.shadowDOM.cloneNode(true);
+        dummy.querySelectorAll('[dzid]').forEach(item=>{
+            item.removeAttribute('dzid');
+        });
+        html = dummy.innerHTML;
+        
+        let type = "html";
+        let basePath =
+            "template/" +
+            this.tid +
+            "/" +
+            this.thisPage +
+            "/" +
+            type;
+        console.log('Save',basePath,html);
+        Polymer.fileManager.saveUserData(basePath, html);        
+    }
+
+    restore(){
+        // document.querySelector('dz-wrapper-js').remove();
+        // this.querySelectorAll('div').forEach(item=>{
+        //     item.restoreAttr();
+        // });
+        console.log('History',Polymer.changeList);
+        
+        // console.log('Before',this.shadowDOM);
+
+            // this.querySelectorAll('*').forEach(item=>{
+
+            // });
+
+        // Polymer.changeList.forEach(item=>{
+        //     let elm = item['element'];
+        //     let dzId = elm.getAttribute('dzid');
+        //     let newElm = this.shadowDOM.querySelector('[dzid="'+dzId+'"]');
+        //     for (var k in item['attribute']){
+        //         newElm.setAttribute(k,item['attribute'][k]);
+        //     }
+        //     for (var k in item['property']){
+        //         newElm[k] = item['property'][k];
+        //     }
+        // });
+        
+        
+        console.log('After',this);  
+
+    }
+    loadBodyClass = function() {
+        let type = "body_class";
+        let url =
+            "https://d25k6mzsu7mq5l.cloudfront.net/user-data/" + Polymer.uid + "/";
+        let basePath =
+            url +
+            "template/" +
+            this.tid +
+            "/" +
+            this.thisPage +
+            "/" +
+            type +
+            "?id=" +
+            new Date().getTime();
+
+        let masterPath =
+            url +
+            "template/" +
+            this.tid +
+            "/_master" +
+            "/" +
+            type +
+            "?id=" +
+            new Date().getTime();
+
+        let defaultPath =
+            url +
+            "template/" +
+            this.tid +
+            "/_default/" +
+            type +
+            "?id=" +
+            new Date().getTime();
+
+        return new Promise(function(resolve, reject) {
+            Polymer.getContent(basePath).then(
+                (bodyClass) => {
+                    resolve(bodyClass);
+                },
+                (err) => {
+                    Polymer.getContent(defaultPath).then(
+                        (bodyClass) => {
+                            resolve(bodyClass);
+                        });
+                }
+            );
+        });
+    }
+    export = function() {
+        // let url = 'https://d25k6mzsu7mq5l.cloudfront.net/user-data/'+Polymer.uid+'/';
+        console.log("Export")
+        let elm,content,dzid;
+        let dom = document.createElement("html");
+        let head = document.createElement("head");
+        let body = document.createElement("body");
+        let script = document.createElement("script");
+        let link = document.createElement("link");
+        let dzWrapperHead = document.head.querySelector('dz-wrapper-head');
+        let dzWrapperJs = document.body.querySelector('dz-wrapper-js');
+        script.setAttribute(
+            "src",
+            "https://d25k6mzsu7mq5l.cloudfront.net/bower_components/webcomponentsjs/webcomponents-lite.js"
+        );
+        link.setAttribute("rel", "import");
+        link.setAttribute(
+            "href",
+            "https://d25k6mzsu7mq5l.cloudfront.net/bower_components/dz-dazzle/dz-loader.html"
+        );
+        head.appendChild(script);
+        head.appendChild(link);
+
+        if (dzWrapperHead) {
+            // console.log('Load Head',dzWrapperHead.originHead);
+                let elm = document.createElement('dz-wrapper-head');
+                elm.innerHTML = dzWrapperHead.originHead;
+                head.appendChild(elm);
+        }
+
+
+        // if (dzWrapper){
+        //     // elm = document.querySelector("dz-wrapper").cloneNode(true);
+        //     // body.appendChild(elm);
+        //     body.appendChild(Polymer.shadowDOM);        
+        // }
+        // let wrp = document.createElement('dz-wrapper');
+   
+
+        // wrp.innerHTML = this.shadowHtml;
+        // wrp = this.cloneNode(true);
+        
+
+        // this.querySelectorAll('*').forEach(item=>{
+      
+        //         dzid = item.getAttribute('dzid')|| null;
+        //         let attrList = item.changeList['attribute'];
+        //         let propList = item.changeList['property'];
+
+        //         if (attrList.length && dzid) {
+        //             attrList.forEach(json=>{
+        //                 let elm = wrp.querySelector('[dzid="'+dzid+'"]');
+        //                 let key = Object.keys(json);
+        //                 console.log('Key',elm,key[0],json,dzid);
+        //                 elm.setAttribute(key[0],json[key[0]]);
+        //                 console.log('Export',elm);                        
+        //             });
+        //         }
+
+        //         if (propList.length && dzid) {
+        //             propList.forEach(json=>{
+        //                 let elm = wrp.querySelector('[dzid="'+dzid+'"]');
+        //                 let key = Object.keys(json);
+        //                 console.log('Key',key[0],json);
+        //                 elm[key[0]] = json[key[0]];   
+        //                 console.log('Export',elm);                        
+        //             });
+        //         }
+
+        // });
+        
+
+        let dzWrapper = Polymer.shadowDOM;
+        dzWrapper.querySelectorAll('[dzid]').forEach(item=>{
+            item.removeAttribute('dzid');
+        });
+        body.appendChild(dzWrapper);
+
+        if (dzWrapperJs){
+            elm = document.querySelector("dz-wrapper-js").cloneNode(true);
+            body.appendChild(elm);
+        }
+
+        let dzDazzle = document.createElement('dz-dazzle');
+        body.appendChild(dzDazzle);
+
+        dom.appendChild(head);
+        dom.appendChild(body);
+
+        this.loadBodyClass().then(res=>{
+            body.setAttribute("class", res);            
+        });
+        Polymer.loadHtmlClass().then(res=>{
+            dom.setAttribute("class", res);            
+        });
+        let headStr = head.innerHTML; 
+        let noCache = `
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Expires" content="0" />
+        `;
+        headStr = noCache + headStr;
+        head.innerHTML = headStr;
+        content = dom.outerHTML;
+        // console.log("Export", content);
+        // Polymer.fileManager.saveUserData("index.html", content);
+        Polymer.fileManager.saveHtml(Polymer.thisPage,content);
+        alert("匯出成功");
+    }
+
+
+    loadHtml() {
+        let shadow = this;
+        console.log('Start Load Html');
+
+        let that = this;
+        let type = "html";
+        let url =
+            "https://d25k6mzsu7mq5l.cloudfront.net/user-data/" + Polymer.uid + "/";
+        let basePath =
+            url +
+            "template/" +
+            this.tid +
+            "/" +
+            this.thisPage +
+            "/" +
+            type +
+            "?id=" +
+            new Date().getTime();
+        let masterPath =
+            url +
+            "template/" +
+            this.tid +
+            "/_master" +
+            "/" +
+            type +
+            "?id=" +
+            new Date().getTime();
+        let defaultPath =
+            url +
+            "template/" +
+            this.tid +
+            "/_default/" +
+            type +
+            "?id=" +
+            new Date().getTime();
+        // let masterPath = url+'template/'+this.tid+'/_master'+'/'+type;
+
+        console.log("Load HTML", basePath);
+
+        return new Promise(function(resolve, reject) {
+            Polymer.getContent(basePath).then(
+                (html) => {
+                    that.originHTML = html;
+                    // that.innerHTML = html;
+                    // Polymer.shadowDOM = shadow;
+                    console.log('End Load Html');   
+                    resolve(html);
+                },
+                (err) => {
+                    Polymer.getContent(defaultPath).then(
+                        (html) => {
+                            that.originHTML = html;
+                            // that.innerHTML = html;
+                            // Polymer.shadowDOM = shadow;
+                            console.log('End Load Html');
+                            resolve(html);
+                        },
+                        (err) => {
+                            resolve('');
+                        }
+                    );
+                }
+            );
+        });
+    }
+
+    render(){
+ 
+    }
+};
+
+customElements.define('dz-wrapper', dzWrapper);
+
+
+// (function() {
+
+
+
+// 	Polymer({
+// 		is: 'dz-wrapper',
+// 		properties: {
+			
+// 		},
+
+// 		created:function() {
+//             // Polymer.dzInit();
+// 				console.log('DZ Wrapper');
+            
+//         },	
+//         ready:function(){
+// 			let dzDazzle = document.createElement('dz-dazzle');
+//             Polymer.pageLoader(this);
+// 			document.body.appendChild(dzDazzle);
+// 			Polymer.loadComponent("dz-dazzle", "dz-dazzle");
+// 			// this.loadMenu;
+//         },
+// 		loadMenu() {
+//                 let shadow = this.shadowRoot;
+//                 shadow.querySelectorAll('img').forEach(item => {
+                    
+//                     item.menu = this.menuList['IMG'];
+//                     console.log('item',item);
+//                 });
+
+//                 shadow.querySelectorAll('a').forEach(item => {
+//                     item.menu = this.menuList['A'];
+//                 });
+               
+
+
+
+// 		},
+// 		login:function(){
+
+// 		}
+// 	});
+
+// })();
+
+</script>

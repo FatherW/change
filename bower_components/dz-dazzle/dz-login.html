@@ -816,7 +816,7 @@
 								<div id="getuserinfo">
 									<div>
 										<div class="group">
-											<input id="uidinput" aria-invalid="false"
+											<input id="uid" aria-invalid="false"
 												class="input ng-pristine ng-untouched ng-empty ng-invalid"
 												formcontrolname="password" placeholder="用戶ID">
 										</div>
@@ -830,20 +830,7 @@
 										</div>
 									</div>
 
-									<p style="display: inline-block;">
-										<button id="backToInit" color="warn" mat-raised-button="" on-click="backToInit"
-											class="mat-raised-button mat-button-base mat-warn"
-											style="border: none;padding: 5px 10px;color: white;font-size: 14px;display: none;">
-											<span class="mat-button-wrapper">
-												重新輸入用戶ID
-											</span>
-											<div class="mat-button-ripple mat-ripple" matripple=""></div>
-											<div class="mat-button-focus-overlay"></div>
-										</button>
-									</p>
-
-
-									<p style="display: inline-block;">
+									<p>
 										<button id="countdown" color="warn" mat-raised-button="" on-click="checkuid"
 											class="mat-raised-button mat-button-base mat-warn"
 											style="border: none;padding: 5px 10px;color: white;font-size: 14px;">
@@ -857,7 +844,7 @@
 
 									<div>
 										<div class="group">
-											<input id="confirm" aria-invalid="false" maxlength="6"
+											<input id="confirm" aria-invalid="false"
 												class="input ng-pristine ng-untouched ng-empty ng-invalid"
 												formcontrolname="password" placeholder="輸入驗證碼" type="text"
 												style="display: none;">
@@ -884,8 +871,8 @@
 									</div>
 
 									<p>
-										<button id="resetpassword" disabled color="warn" mat-raised-button=""
-											on-click="resetTolamda" class="mat-raised-button mat-button-base mat-warn"
+										<button color="warn" mat-raised-button="" on-click="resetTolamda"
+											class="mat-raised-button mat-button-base mat-warn"
 											style="border: none;padding: 5px 10px;color: white;font-size: 14px;">
 											<span class="mat-button-wrapper">
 												確認更改
@@ -974,22 +961,6 @@
                     }
                 })
 
-                let pw1 = shadow.querySelector('#newpassword1');
-                let pw2 = shadow.querySelector('#newpassword2');
-                let changepwbutton = shadow.querySelector('#resetpassword');
-                let contentchange = shadow.querySelector('#contentchange');
-                pw2.addEventListener('keyup', e => {
-                    contentchange.innerHTML = "";
-
-                    if (pw2.value != pw1.value) {
-                        contentchange.innerHTML = "兩次密碼不正確";
-                        changepwbutton.disabled = true;
-                    } else {
-                        changepwbutton.disabled = false;
-
-                    }
-                })
-
 
 
                 this.loginOrReset = "登入";
@@ -997,12 +968,9 @@
                 this.verifly = "發送驗證碼";
             },
             checkuid() {
-
                 let shadow = this.shadowRoot;
-                let backinit = shadow.querySelector('#backToInit');
                 let uid = shadow.querySelector('#uid').value;
                 let searchitem = shadow.querySelector('#searchitem').value;
-                let confirm = shadow.querySelector('#confirm');
                 let content = shadow.querySelector('#contentchange');
                 let url = "https://d8fz9pfue5.execute-api.ap-northeast-1.amazonaws.com/prod/newMiscDazzleFunction";
                 let param = {
@@ -1013,125 +981,19 @@
 
                 }
 
-                searchitem = "97114437";
-                backinit.style.display = "block";
-                this.resetpw(2002, searchitem);
+                shadow.querySelector('#confirm').style.display = "block";
+                this.verifly = "驗證碼確認";
+                shadow.querySelector('#confirm').focus();
                 // Polymer.postData(url, param).then(res => {
                 //     if (res.code > 0) {
-                //         shadow.querySelector('#confirm').style.display = "block";
-                //         uid.disable = true;
-                //         this.resetpw();
+                //         shadow.querySelector('#getuserinfo').style.display = "none";
+
+                //         // this.resetpw();
                 //     } else {
                 //         content.innerHTML = "用戶id不符合，請重新輸入";
                 //     }
                 // })
-
-
-
             },
-            backToInit() {
-                window.stop();
-                this.verifly = "發送驗證碼";
-                let shadow = this.shadowRoot;
-                let confirm = shadow.querySelector('#confirm');
-                let uid = shadow.querySelector('#uidinput');
-                let searchitem = shadow.querySelector('#searchitem');
-                let resetinit = shadow.querySelector('#backToInit');
-
-                resetinit.style.display = "none";
-                uid.disabled = false;
-                searchitem.disabled = false;
-                confirm.style.display = "none";
-            },
-            ///send驗證碼 
-            resetpw(platform, user) {
-                let that = this;
-                let shadow = this.shadowRoot;
-                let tempnum = Math.random();
-                let temp = tempnum.toString();
-                let token = "";
-                for (i = 2; i < 8; i++) {
-                    token += temp[i]
-                }
-
-                let uid = shadow.querySelector('#uidinput');
-                let sms = shadow.querySelector('#searchitem');
-                let smsbutton = shadow.querySelector('#countdown');
-                let smsconfirm = shadow.querySelector("#confirm");
-
-                console.log(token, "mytoken");
-                // if (platform == 2002) {
-                //     Polymer.sms(user, "你的驗證碼是: " + token);
-                // } else {
-                //     Polymer.sendEmail(user, "你的驗證碼是: " + token, "你的驗證碼是: " + token);
-                // }
-
-                uid.disabled = true;
-                sms.disabled = true;
-                smsbutton.disabled = true; //当点击后倒计时时候不能点击此按钮
-                smsconfirm.style.display = "block";
-                smsconfirm.focus();
-                smsconfirm.addEventListener('keyup', e => {
-                    if (smsconfirm.value.length == 6) {
-                        if (smsconfirm.value == token) {
-                            shadow.querySelector('#contentchange').innerHTML = "請輸入新密碼";
-                            shadow.querySelector('#NewPasswordInput').style.display = "block";
-                            shadow.querySelector('#getuserinfo').style.display = "none";
-                        } else {
-                            shadow.querySelector('#contentchange').innerHTML = "驗證碼錯誤"
-                        }
-                    } else {
-                        shadow.querySelector('#contentchange').innerHTML = "";
-
-                    }
-
-                })
-
-                let resetinit = shadow.querySelector('#backToInit');
-
-                var time = 45; //倒计时30秒
-                var timer = setInterval(fun1, 1000); //设置定时器
-                function fun1() {
-                    time--;
-                    if (time >= 0 && resetinit.style.display != "none") {
-                        that.verifly = time + "s後重新發送";
-                    } else {
-                        token = null;
-                        that.verifly = "重新發送驗證碼";
-                        uid.disabled = false;
-                        sms.disabled = false;
-                        smsbutton.disabled = false; //倒计时结束能够重新点击发送的按钮
-                        smsconfirm.style.display = "none";
-                        smsconfirm.value = "";
-                        clearTimeout(timer); //清除定时器
-                        time = 5; //设置循环重新开始条件
-                    }
-                }
-
-            },
-
-            ///send request 去lamda改密碼;
-            resetTolamda() {
-                let shadow = this.shadowRoot;
-                let pw1 = shadow.querySelector('#newpassword1').value;
-                let pw2 = shadow.querySelector('#newpassword2').value;
-                let url = "https://d8fz9pfue5.execute-api.ap-northeast-1.amazonaws.com/prod/newMiscDazzleFunction";
-                let uid = shadow.querySelector('#uid').value;
-                let param = {
-                    "action": "renewPassword",
-                    "uid": uid,
-                    "password": pw1
-                }
-
-                console.log("good");
-                // Polymer.postData(url, param).then(res => {
-                // 	if (res.code > 0) {
-                // 		shadow.querySelector('#contentchange').innerHTML = "你已成功更改密碼";
-                // 	}
-                // })
-
-            },
-
             contentshift() {
                 let shadow = this.shadowRoot;
                 if (this.loginOrReset == "登入") {
@@ -1177,7 +1039,12 @@
                     }
                 });
             },
-
+            resetpw: function() {
+                let that = this;
+                let dialog = that.shadowRoot.querySelector('vaadin-dialog');
+                console.log("run");
+                Polymer.popup(dialog, "dz-dazzle", "dz-resetpw", "40%", "70%");
+            },
             _register: function() {
                 let shadow = this.shadowRoot;
                 let that = this;

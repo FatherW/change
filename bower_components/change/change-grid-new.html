@@ -232,8 +232,8 @@
                 const template = Polymer.tid;
                 const uid = Polymer.uid;
                 const id = this.getAttribute('id') || '_default';
-                const user = store.get('user');
-                const editMode = store.get('editMode') || 'normal';
+                const user = Polymer.user;
+                const editMode = Polymer.editMode  || 'normal';
                 this.key = "_id";
                 this.updateAll = false;
                 let allow_menu = [];
@@ -342,7 +342,7 @@
 
             initButton: function(){
                 let that = this;
-                let editMode = store.get('editMode') || 'normal';
+                let editMode = Polymer.editMode || 'normal';
                 let toolbar = this.querySelector('#toolbar-button');
                 let button = document.createElement('smart-button');
                 button.setAttribute('class','raised');
@@ -392,7 +392,7 @@
                 newButton6 = button.cloneNode(true);
                 newButton6.innerHTML = '匯入';
                 newButton6.addEventListener('click',e=>{
-                    const user = store.get('user');
+                    const user = Polymer.user;
                     let fileManager = new AwsPackage(user);
                     fileManager.getFile('files/book.json').then(result=>{
                         console.log('Result',result);

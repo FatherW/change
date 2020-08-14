@@ -1,0 +1,563 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-context-menu/vaadin-context-menu.html">
+<link rel="import" href="../vaadin-list-box/vaadin-list-box.html">
+<link rel="import" href="../vaadin-menu-bar/vaadin-menu-bar.html">
+
+<link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
+<link rel="import" href="../dz-fab-menu/dz-dashboard.html">
+<!-- <link rel="import" href="../dz-file-management/dz-file-management.html"> -->
+<!-- <link rel="import" href="../dz-dazzle/dz-editor.html"> -->
+<link rel="import" href="../dz-dazzle/dz-submenu.html">
+<!-- <link rel="import" href="../dz-dazzle/dz-hotkey.html"> -->
+<!-- <link rel="import" href="../dz-dazzle/dz-wrapper.html"> -->
+<!-- <link rel="import" href="../dz-file-management/dz-img-stock.html">
+<link rel="import" href="../dz-file-management/dz-file-management3.html"> -->
+<link rel="import" href="default-package/default-package.html">
+
+<link rel="stylesheet" href="https://d25k6mzsu7mq5l.cloudfront.net/file7.0/css/dz-panel.css">
+
+<dom-module id="dz-admin">
+    <template>
+	<style>
+   
+
+	</style>
+
+	<style>
+		dz-fab-menu{
+			position:fixed;
+			top:0px;
+			right:0px;
+		}
+    [hide]{
+      display:none;
+    }
+		[dz-panel] {
+		outline: 2px solid #2196f3 !important;
+		}
+		[part="content"]{
+
+		display: flex;
+		animation: none !important;
+		min-width: 300px;
+		padding:0px;
+
+		}
+      
+	</style>
+  <dz-submenu></dz-submenu>
+  <dz-dashboard></dz-dashboard>
+  <dz-hotkey></dz-hotkey>
+
+  <!-- <vaadin-list-box>
+    <b>Register to a Run Event</b>
+    <vaadin-item>5k</vaadin-item>
+    <vaadin-item>10k (sold out)</vaadin-item>
+    <vaadin-item>Half marathon</vaadin-item>
+    <vaadin-item>Marathon</vaadin-item>
+</vaadin-list-box> -->
+
+	<vaadin-dialog aria-label="big" id="dialog"  theme="error"></vaadin-dialog>
+
+</template>
+
+</dom-module>
+
+<script>
+    (function() {
+
+
+
+        Polymer({
+            is: 'dz-admin',
+            properties: {
+
+            },
+
+            created: function() {
+                this.level = 0;
+                this.edit = false;
+                this.previewMode = false;
+                this.mode = 'context';
+                this.fileManager = Polymer.fileManager;
+                Polymer.textEdit = false;
+
+            },
+            ready() {
+                // this.loadMenu();
+                Polymer.dialog = this.shadowRoot.querySelector('vaadin-dialog');
+                this.eventListener();
+            },
+            loadMenu() {
+                let shadow = this.shadowRoot;
+                this.menu = this.shadowRoot.querySelector('vaadin-menu-bar');
+
+                shadow.querySelectorAll('img').forEach(item => {
+
+                    item.menu = this.menuList['IMG'];
+                    console.log('item', item);
+                });
+
+                shadow.querySelectorAll('a').forEach(item => {
+                    item.menu = this.menuList['A'];
+                });
+
+
+
+
+            },
+            contextRender(menu) {
+                let that = this;
+                const shadow = document.querySelector('dz-wrapper');
+                const contextMenu = document.querySelector('vaadin-context-menu');
+                contextMenu.renderer = function(root) {
+                    let listBox = root.firstElementChild;
+                    // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
+                    if (listBox) {
+                        listBox.innerHTML = '';
+                    } else {
+                        listBox = window.document.createElement('vaadin-list-box');
+                        root.appendChild(listBox);
+                    }
+                    console.log('Root', root);
+                    menu.forEach(function(ele) {
+                        const item = window.document.createElement('vaadin-item');
+                        item.textContent = ele.label;
+                        console.log('Event', item);
+
+                        item.addEventListener('click', e => {
+                            that.mode = 'edit';
+                            Polymer._curElm = that.curElm;
+                            console.log('Event', Polymer._curElm, ele.event);
+
+                            document.dispatchEvent(new CustomEvent(ele.event, {
+                                detail: {
+                                    'size': 'big',
+                                    'element': that.curElm
+                                }
+                            }));
+                        });
+                        listBox.appendChild(item);
+                    });
+                };
+
+            },
+
+            popup(folder, component, width, height) {
+                const shadow = this.shadowRoot;
+                const dialog = shadow.querySelector('vaadin-dialog');
+                // let link = document.createElement('link');
+                // link.setAttribute('rel','import');
+                // link.setAttribute('href','https://d25k6mzsu7mq5l.cloudfront.net/bower_components/'+folder+'/'+component+'.html?id='+new Date().getTime());            
+
+
+                //document.querySelector('head').appendChild(link);
+
+                Polymer.loadComponent(folder, component);
+                customElements.whenDefined(component).then(function() {
+                    dialog.renderer = function(root, dialog) {
+                        root.innerHTML = '<' + component + '></' + component + '>';
+                    };
+                    dialog.resizable = true;
+                    dialog.cancelable = false;
+                    dialog.resize(width, height);
+                    dialog.opened = true;
+                    Polymer.activeDialog = dialog;
+                });
+
+            },
+            closeDialog() {
+                const shadow = this.shadowRoot;
+                const dialog = shadow.querySelector('vaadin-dialog');
+                this.mode = "context";
+                dialog.opened = false;
+            },
+            eventListener() {
+                console.log('Event Listen');
+
+                const shadow = document.querySelector('dz-wrapper');
+                let that = this;
+
+                document.addEventListener('dz-popup', e => {
+                    let detail = e.detail;
+                    console.log('Dz popup', detail);
+                    that.popup(detail.folder, detail.component, detail.width, detail.height);
+                });
+                // shadow.addEventListener('mouseover', e => {
+                //     if (that.mode !== 'context')
+                //         return;
+
+                //     let elm = e.path[0];
+                //     if (that.level == 0 && !that.edit)
+                //         elm.setAttribute('dz-panel', '');
+                //     that.baseElm = elm;
+                //     that.path = e.path;
+                //     that.curElm = elm;
+                //     //console.log('Mouse Over',elm);
+                // });
+
+                // shadow.addEventListener('mouseout', e => {
+                //     if (that.mode !== 'context')
+                //         return;
+
+                //     let elm = e.path[0];
+                //     that.baseElm = null;
+                //     that.path = [];
+                //     // if (elm===that.curElm)
+                //     if (that.level == 0 && !that.edit)
+                //         elm.removeAttribute('dz-panel', '');
+                //     //console.log('Mouse Out', e);
+                // });
+
+                document.addEventListener('set-panel', e => {
+                    console.log('Set Panel');
+                    let dzPanel = shadow.querySelector('[dz-panel]');
+                    if (dzPanel)
+                        dzPanel.removeAttribute('dz-panel');
+                    let src = e.detail.source;
+                    console.log('Source', src);
+                    src.setAttribute('dz-panel', '');
+                });
+
+                document.addEventListener('click', e => {
+                    // let menu = this.shadowRoot.querySelector('vaadin-list-box');
+                    let dzPanel = shadow.querySelector('[dz-panel]');
+                    if (dzPanel)
+                        dzPanel.removeAttribute('dz-panel');
+                });
+
+
+
+                // shadow.addEventListener('contextmenu', e => {
+                //     let tagName = that.curElm.tagName;
+                //     console.log('Menu', that.curElm, that.curElm.menu);
+                //     let menu = [{
+                //         'label': '編輯',
+                //         'event': 'img-edit'
+                //     }, {
+                //         'label': '圖片庫',
+                //         'event': 'img-stock'
+                //     }];
+                //     console.log(tagName);
+                //     switch (tagName) {
+                //         case 'IMG':
+                //             menu = [{
+                //                 'label': '編輯',
+                //                 'event': 'img-edit'
+                //             }, {
+                //                 'label': '圖片庫',
+                //                 'event': 'img-stock'
+                //             }, {
+                //                 'label': '上載',
+                //                 'event': 'img-upload'
+                //             }, {
+                //                 'label': '編輯連結',
+                //                 'event': 'img-link'
+                //             }];
+                //             break;
+                //         case 'A':
+                //             menu = [{
+                //                 'label': '編輯連結',
+                //                 'event': 'link-edit'
+                //             }, {
+                //                 'label': '取消連結',
+                //                 'event': 'cancel-link'
+                //             }, {
+                //                 'label': '編輯內文',
+                //                 'event': 'load-editor'
+                //             }];
+
+                //             break;
+
+
+                //         default:
+                //             menu = [{
+                //                 'label': '編輯',
+                //                 'event': 'load-editor'
+                //             }, {
+                //                 'label': '編輯HTML',
+                //                 'event': 'edit-html'
+                //             }, {
+                //                 'label': '刪除',
+                //                 'event': 'delete'
+                //             }, {
+                //                 'label': '複製',
+                //                 'event': 'copy'
+                //             }, {
+                //                 'label': '貼上',
+                //                 'event': 'paste'
+                //             }, ];
+
+                //             break;
+
+                //     }
+
+
+                //     that.contextRender(menu);
+
+                // });
+
+                document.addEventListener('keydown', e => {
+                    console.log('Key Down', e);
+                    if (!Polymer.textEdit) {
+                        switch (e.code) {
+                            case 'Escape':
+                                switch (that.mode) {
+                                    case 'preview':
+                                        that.mode = 'context';
+                                        shadow.querySelector('dz-dashboard').removeAttribute('hide');
+                                        shadow.querySelector('[dz-panel]').removeAttribute('dz-panel');
+                                        break;
+
+                                    case 'context':
+                                        that.mode = 'preview';
+                                        shadow.querySelector('dz-dashboard').setAttribute('hide', '');
+                                        break;
+
+                                    case 'edit':
+
+                                        break;
+
+                                }
+
+
+                                break;
+
+
+                            case 'ArrowUp':
+                                that.level++;
+                                that.curElm.removeAttribute('dz-panel');
+                                that.curElm = that.path[that.level];
+                                that.curElm.setAttribute('dz-panel', '');
+
+                                e.preventDefault();
+                                e.stopPropagation();
+                                break;
+                            case 'ArrowDown':
+                                that.level--;
+                                that.curElm.removeAttribute('dz-panel');
+                                that.curElm = that.path[that.level];
+                                that.curElm.setAttribute('dz-panel', '');
+                                e.preventDefault();
+                                e.stopPropagation();
+                                break;
+
+
+                            case 'Backspace':
+                            case 'Delete':
+                                that.curElm.remove();
+                                break;
+
+                        }
+
+                    }
+
+                    if (that.mode === "edit") {
+                        switch (e.code) {
+                            case 'Enter':
+                                Polymer.dzFire('cropper-confirm', {});
+
+                                break;
+                        }
+                    }
+
+                });
+
+
+                document.addEventListener('dblclick', e => {
+                    console.log('DB click', e);
+
+                    // Polymer.activeElement = null;
+                    // document.dispatchEvent(new CustomEvent('close-editor', {
+                    //     detail: {}
+                    // }));
+
+                    // that.closeDialog();
+
+                    // if (that.mode ==='edit') {
+                    //   document.dispatchEvent(new CustomEvent('close-editor', { detail: {} }));
+                    //   that.mode = 'context';
+                    //   e.preventDefault();
+                    //   e.stopPropagation();
+                    //   return;
+                    // } else {
+                    //   that.mode = 'edit';
+                    //   document.dispatchEvent(new CustomEvent('load-editor', { detail: {} }));
+                    //   e.preventDefault();
+                    //   e.stopPropagation();
+                    // }
+
+
+
+                    // if (!that.edit) {
+                    //   let elm = that.curElm;
+
+                    //   let html = elm.outerHTML;
+                    //   let dzEditor = document.createElement('dz-editor');
+                    //   dzEditor.innerHTML = html;
+                    //   elm.outerHTML = dzEditor.outerHTML;
+                    //   that.edit = true;
+
+                    // } else {
+                    //   that.edit = false;
+                    //   let elm = shadow.querySelector('dz-editor');
+                    //   elm.removeEditor();
+                    //   // elm.outerHTML = elm.innerHTML;
+                    // }
+
+                    // e.preventDefault();
+                    // e.stopPropagation();
+
+                });
+
+                document.addEventListener('edit', e => {
+                    let elm = that.curElm;
+                    let tagName = elm.tagName;
+                    switch (tagName) {
+                        case 'IMG':
+                            Polymer._curElm = elm;
+                            document.dispatchEvent(new CustomEvent('img-stock', {
+                                detail: {}
+                            }));
+                            break;
+                        case 'UL':
+                        case 'LI':
+                        case 'OL':
+                        case 'NAV':
+
+                            break;
+
+
+                        case 'SPAN':
+                        case 'P':
+                        case 'H1':
+                        case 'H2':
+                        case 'H3':
+                        case 'H4':
+                        case 'H5':
+                        case 'H6':
+                            // default:
+                            document.dispatchEvent(new CustomEvent('load-editor', {
+                                detail: {}
+                            }));
+                            break;
+                    }
+
+                });
+
+                document.addEventListener('load-editor', e => {
+                    let elm = that.curElm;
+                    let html = elm.outerHTML;
+                    let dzEditor = document.createElement('dz-editor');
+                    dzEditor.innerHTML = html;
+                    elm.outerHTML = dzEditor.outerHTML;
+                });
+
+                document.addEventListener('close-editor', e => {
+                    let elm = shadow.querySelector('dz-editor');
+                    elm.removeEditor();
+                });
+
+
+                document.addEventListener('link-edit', e => {
+                    // document.dispatchEvent(new CustomEvent('custom-popup', { detail: {'component':'dz-file-management','size':'big'} }));
+                    console.log('E', e);
+                    that.popup('dz-dazzle', 'dz-link-manage', '800px', '580px');
+
+
+                    this.curElm.addEventListener('link-selected', e => {
+
+                        let href = e.detail['selected'];
+                        this.curElm.setAttribute('href', href);
+                        console.log('Linked selected', href, this.curElm, this.curElm.getAttribute('href'));
+
+                        this.closeDialog();
+                    });
+                });
+
+                document.addEventListener('img-edit', e => {
+                    // document.dispatchEvent(new CustomEvent('custom-popup', { detail: {'component':'dz-file-management','size':'big'} }));
+                    console.log('E', e);
+                    // that.popup('dz-file-management','dz-image-editor','90%','90%');
+
+                    Polymer.loadComponent('dz-file-management', 'dz-outer-image-editor');
+
+                    let elm = Polymer._curElm;
+                    let src = elm.getAttribute('src');
+                    console.log('Src', src);
+                    let html = elm.outerHTML;
+                    let dzEditor = document.createElement('dz-outer-image-editor');
+                    dzEditor.setAttribute('src', src);
+                    dzEditor.innerHTML = html;
+                    elm.outerHTML = dzEditor.outerHTML;
+
+                    console.log('Polymer', Polymer._curElm);
+                    // elm = dzEditor;
+                    // 
+
+                });
+
+                // document.addEventListener('img-upload', e => {
+                //     // document.dispatchEvent(new CustomEvent('custom-popup', { detail: {'component':'dz-file-management','size':'big'} }));
+                //     console.log('E', e);
+                //     that.popup('dz-file-management', 'dz-file-management3', '800px', '400px');
+
+
+                // });
+
+                // document.addEventListener('img-stock', e => {
+                //     // document.dispatchEvent(new CustomEvent('custom-popup', { detail: {'component':'dz-file-management','size':'big'} }));
+                //     console.log('E', e);
+                //     that.popup('dz-file-management', 'dz-img-stock', '90%', '90%');
+
+
+                // });
+
+
+
+                document.addEventListener('keypress', e => {
+
+                    if (e.ctrlKey) {
+                        switch (e.key) {
+
+                            case 'c':
+                                console.log('Copy');
+                                that.clipBoard = that.curElm;
+                                break;
+
+                            case 'u':
+                                console.log('Paste Up');
+
+                                let elm = that.curElm;
+                                clm = that.clipBoard.cloneNode(true);
+                                elm.parentElement.insertBefore(clm, elm);
+                                break;
+
+                            case 'v':
+                                console.log('Paste Down', window['dz-clip']);
+
+                                clm = that.clipBoard.cloneNode(true);
+                                insertAfter(clm, that.curElm);
+                                break;
+
+                            case 'e':
+                                // document.dispatchEvent(new CustomEvent('custom-popup', { detail: {'component':'code-editor', 'size':'big'} }));
+                                break;
+                        }
+                    }
+                });
+
+
+
+
+
+
+                function insertAfter(newNode, referenceNode) {
+                    referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+                }
+
+            },
+
+        });
+    })();
+</script>

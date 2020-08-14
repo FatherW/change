@@ -1,0 +1,279 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-context-menu/vaadin-context-menu.html">
+<link href="https://d25k6mzsu7mq5l.cloudfront.net/file7.0/css/dz-panel.css" rel="stylesheet">
+<dom-module id="dz-panel">
+<template>
+	<style>
+
+		[dz-panel] {
+		outline: 2px solid #2196f3 !important;
+		}
+		[part="content"]{
+
+		display: flex;
+		animation: none !important;
+		min-width: 300px;
+		padding:0px;
+
+		}
+
+	</style>
+
+	<vaadin-dialog aria-label="big" id="dialog"  theme="error"></vaadin-dialog>
+
+</template>
+	
+</dom-module>
+
+<script>
+
+(function() {
+
+
+
+	Polymer({
+		is: 'dz-panel',
+		properties: {
+			
+		},
+
+		created:function() {
+
+	// 		<vaadin-context-menu selector="[dz-panel]">
+	// </vaadin-context-menu>
+			let contextMenu = document.createElement('vaadin-context-menu');
+			contextMenu.setAttribute('selector','[dz-panel]');
+			document.appendChild(contextMenu);
+
+			customElements.whenDefined('vaadin-context-menu').then(function() {
+					console.log('Vaadin Context Menu');
+					let menu = [{
+						'label':'編輯',
+						'event':'img-edit'
+						},{
+						'label':'圖片庫',
+						'event':'img-stock'
+					}];
+					that.contextRender(menu);
+				});
+		},
+		ready(){
+			// Polymer.loadStyle("https://d25k6mzsu7mq5l.cloudfront.net/file7.0/css/dz-panel.css");
+			let panel = this.shadowRoot.querySelector('vaadin-context-menu');
+			this.panel = panel;
+			// Polymer.pageLoader(panel);		
+			this.eventListener();	
+
+		},
+		eventListener(){
+				
+				const shadow = document.querySelector('dz-wrapper');
+				console.log('Event Listen',shadow);
+				
+				let that = this;
+				//  this.fileManager = new AwsPackage(this.user);
+			
+	
+				shadow.addEventListener('mouseover',e=>{
+				console.log('Preview Mode',that.previewMode,e.path[0]);
+					if (that.previewMode)
+					return;
+						let elm = e.path[0];
+						if (that.level==0 && !that.edit)
+							elm.setAttribute('dz-panel','');
+						that.baseElm = elm;
+						that.path = e.path;
+						that.curElm = elm;
+						console.log('Mouse Over',elm);
+				});
+				shadow.addEventListener('mouseout',e=>{
+				if (that.previewMode)
+					return;
+					let elm = e.path[0];
+					that.baseElm = null;
+					that.path = [];
+					// if (elm===that.curElm)
+					if (that.level==0 && !that.edit)
+					elm.removeAttribute('dz-panel','');
+					console.log('Mouse Out',e);
+				});
+				shadow.addEventListener('click',e=>{
+					if (that.previewMode)
+						return;
+
+					that.baseElm = null;
+						that.path = [];
+						that.level = 0;
+						shadow.querySelector('[dz-panel]').removeAttribute('dz-panel');
+						console.log('Click',e);
+						e.preventDefault();
+						e.stopPropagation();
+				});
+					shadow.addEventListener('contextmenu',e=>{
+						let tagName = that.curElm.tagName;
+						console.log(tagName);
+						switch(tagName){
+							case 'IMG':
+								let menu = [{
+									'label':'編輯',
+									'event':'img-edit'
+								},{
+								'label':'圖片庫',
+								'event':'img-stock'
+								}];
+
+								that.contextRender(menu);
+							break;
+
+						}
+
+					});
+
+					document.addEventListener('keydown',e=>{
+						console.log('Key Down',e);
+						if (!that.edit) {
+							switch (e.code){
+								case 'Escape':
+								that.previewMode = !that.previewMode;
+								shadow.querySelector('[dz-panel]').removeAttribute('dz-panel');
+								if (that.previewMode) 
+									shadow.querySelector('dz-fab-menu').classList.addClass('hide');
+								else  
+									shadow.querySelector('dz-fab-menu').classList.removeClass('hide');
+								break;
+
+
+								case 'ArrowUp':
+									that.level++;
+									that.curElm.removeAttribute('dz-panel');
+									that.curElm = that.path[that.level];
+									that.curElm.setAttribute('dz-panel','');
+									
+									e.preventDefault();
+									e.stopPropagation();
+								break;
+								case 'ArrowDown':
+									that.level--;
+									that.curElm.removeAttribute('dz-panel');
+									that.curElm = that.path[that.level];
+									that.curElm.setAttribute('dz-panel','');
+									e.preventDefault();
+									e.stopPropagation();
+								break;  
+								
+								
+								case 'Backspace':
+								case 'Delete':
+									that.curElm.remove();
+								break;
+
+							}
+
+						}
+					});
+					shadow.addEventListener('dblclick',e=>{
+						console.log('DB click',e);
+						if (!that.edit) {
+							let elm = that.curElm;
+
+							let html = elm.outerHTML;
+							let dzEditor = document.createElement('dz-editor');
+							dzEditor.innerHTML = html;
+							elm.outerHTML = dzEditor.outerHTML;
+							that.edit = true;
+
+						} else {
+							that.edit = false;
+							let elm = shadow.querySelector('dz-editor');
+							elm.removeEditor();
+							// elm.outerHTML = elm.innerHTML;
+						}
+
+					});
+
+				document.addEventListener('img-stock',e=>{
+					
+					that.popup('dz-file-management');
+
+
+				});
+				
+
+
+
+
+				document.addEventListener('keypress',e=>{
+				let page = document.querySelector('dz-page');
+				if (e.ctrlKey){
+					switch(e.key){
+
+						case 'c':
+						console.log('Copy');
+						that.clipBoard = that.curElm;
+						break;
+						
+						case 'u':
+						console.log('Paste Up');
+
+						let elm = that.curElm;
+						clm = that.clipBoard.cloneNode(true);
+						elm.parentElement.insertBefore(clm,elm);
+						break;
+
+						case 'v':
+						console.log('Paste Down',window['dz-clip']);
+
+						clm = that.clipBoard.cloneNode(true);
+						insertAfter(clm,that.curElm);
+						break;
+
+						case 'e':
+						// document.dispatchEvent(new CustomEvent('custom-popup', { detail: {'component':'code-editor', 'size':'big'} }));
+						break;
+					}
+				}
+			});
+
+
+
+
+
+			function insertAfter(newNode, referenceNode) {
+				referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+			}
+
+      },
+   
+		contextRender(menu){
+			let that = this;
+			
+			const shadow = document.querySelector('dz-wrapper');
+			const contextMenu = shadow.querySelector('vaadin-context-menu');
+			contextMenu.renderer = function(root) {
+			let listBox = root.firstElementChild;
+			// Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
+			if (listBox) {
+				listBox.innerHTML = '';
+			} else {
+				listBox = window.document.createElement('vaadin-list-box');
+				root.appendChild(listBox);
+			}
+			console.log('Root',root);
+			menu.forEach(function(ele) {
+				const item = window.document.createElement('vaadin-item');
+				item.textContent = ele.label;
+				item.addEventListener('click',e=>{
+					console.log('Event',ele.event);
+					document.dispatchEvent(new CustomEvent(ele.event, { detail: {'size':'big'} }));
+				});
+				listBox.appendChild(item);
+			});
+			};
+
+		},
+
+
+	});
+})();
+
+</script>
