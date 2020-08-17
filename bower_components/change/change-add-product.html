@@ -13,7 +13,8 @@
 <link rel="import" href="change-dropzone-file.html">
 <link rel="import" href="change-gallery.html">
 
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/dz-file-management/change-photo-stock.html">
+<link rel="import"
+    href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/dz-file-management/change-photo-stock.html">
 
 
 
@@ -634,7 +635,7 @@
 
 <script>
     //function for database
-    (function() {
+    (function () {
         Polymer({
             is: 'change-add-product',
             properties: {
@@ -675,7 +676,7 @@
                 }
 
             },
-            created: function() {
+            created: function () {
                 let user = store.get('change-user') || null;
                 let shadow = this.shadowRoot;
                 this.bigPic = "http://change.dazzle.website.s3.amazonaws.com/files/1/1591944377549.jpeg";
@@ -736,7 +737,7 @@
             },
 
 
-            ready: function() {
+            ready: function () {
                 console.log("Entered Ready");
                 let user = store.get('change-user') || null;
 
@@ -836,7 +837,7 @@
                             shadow.querySelector('#vs2').value = res.resolve[0]['district'];
                             shadow.querySelector('#vs3').value = res.resolve[0]['deliveryMethod'];
                             shadow.querySelector('#pdes').value = res.resolve[0]['description'];
-                            if (typeof(res.resolve[0]['tags']) == "string") {
+                            if (typeof (res.resolve[0]['tags']) == "string") {
                                 shadow.querySelector('#myTags').tags = [res.resolve[0]['tags']];
 
                             } else {
@@ -895,9 +896,9 @@
                 };
 
                 //SET SUBCAT//
-                customElements.whenDefined('vaadin-menu-bar').then(function() {
+                customElements.whenDefined('vaadin-menu-bar').then(function () {
                     const menu = shadow.querySelector('vaadin-menu-bar');
-                    menu.addEventListener('item-selected', function(e) {
+                    menu.addEventListener('item-selected', function (e) {
                         //Get ele value
                         // shadow.querySelector('span').textContent = JSON.stringify(e.detail.value.text);
                         shadow.querySelector('span').textContent = e.detail.value.text;
@@ -997,7 +998,7 @@
                                     }, {
                                         text: 'Balance Events'
                                     }]
-                                }, ]
+                                },]
                             };
 
                             g.push(h);
@@ -1047,16 +1048,16 @@
                                 name: "沒有專頁可以選擇"
                             })
                         }
-                        customElements.whenDefined('vaadin-select').then(function() {
+                        customElements.whenDefined('vaadin-select').then(function () {
                             const propage = pagename;
-                            shadow.querySelector('#fanPage').renderer = function(root) {
+                            shadow.querySelector('#fanPage').renderer = function (root) {
                                 // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                                 if (root.firstChild) {
                                     return;
                                 }
                                 // Create the <vaadin-list-box>
                                 const listBox = document.createElement('vaadin-list-box');
-                                propage.forEach(function(item) {
+                                propage.forEach(function (item) {
                                     const vaadinItem = document.createElement('vaadin-item');
                                     vaadinItem.textContent = item.name;
                                     listBox.appendChild(vaadinItem);
@@ -1072,7 +1073,7 @@
 
                 //SET AREA, DERLIVER METHOD, PRODUCT STATUS//
                 this.valueArray = [""];
-                customElements.whenDefined('vaadin-select').then(function() {
+                customElements.whenDefined('vaadin-select').then(function () {
                     const district = [{
                         name: '中西區'
                     }, {
@@ -1127,14 +1128,14 @@
 
 
                     //AREA//
-                    shadow.querySelector('#vs2').renderer = function(root) {
+                    shadow.querySelector('#vs2').renderer = function (root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        district.forEach(function(item) {
+                        district.forEach(function (item) {
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
@@ -1145,14 +1146,14 @@
                     };
 
                     //DELIVER METHOD//
-                    shadow.querySelector('#vs3').renderer = function(root) {
+                    shadow.querySelector('#vs3').renderer = function (root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        delmthod.forEach(function(item) {
+                        delmthod.forEach(function (item) {
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
@@ -1163,14 +1164,14 @@
                     };
 
                     //PRODUCT STATUS//
-                    shadow.querySelector('#vs4').renderer = function(root) {
+                    shadow.querySelector('#vs4').renderer = function (root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        status.forEach(function(item) {
+                        status.forEach(function (item) {
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
@@ -1228,7 +1229,7 @@
                 });
             },
 
-            _saveData: function() {
+            _saveData: function () {
                 // console.log("SAVE BUTTON IS WORKING");
                 let that = this;
                 let shadow = this.shadowRoot;
@@ -1340,132 +1341,136 @@
                         if (pname == "") {
                             alert("請輸入商品標題!");
                         } else {
-                            let loc = location.search;
-                            if (loc == "") {
-                                //******ADD PRODUCT MODE************//
+                            if (tags.length == 0) {
+                                alert("請輸入標籤!");
+                            } else {
+                                let loc = location.search;
+                                if (loc == "") {
+                                    //******ADD PRODUCT MODE************//
 
-                                console.log("omg", tags);
-                                let params = {
-                                    "action": "addproduct",
-                                    "categories": categories,
-                                    "sellerMsg": sellerContact,
-                                    "productname": pname,
-                                    "price": parseFloat(price),
-                                    "district": district,
-                                    "deliveryMethod": method,
-                                    "descrip": pdes,
-                                    "tag": tags,
-                                    "deliveryDesc": deldes,
-                                    "isNew": status,
-                                    "ownerId": user['_id'],
-                                    "pics": this.pics,
-                                    "isFanpage": isFanpage,
-                                    "fanpage": fanpage
-                                };
-                                // console.log("BBB", params);
-                                let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
-                                Polymer.postData(link, params).then(res => {
-                                    console.log("BBB", res);
-                                    var newproductid = res.resolve.id;
-                                    console.log("BBB1", newproductid);
+                                    console.log("omg", tags);
+                                    let params = {
+                                        "action": "addproduct",
+                                        "categories": categories,
+                                        "sellerMsg": sellerContact,
+                                        "productname": pname,
+                                        "price": parseFloat(price),
+                                        "district": district,
+                                        "deliveryMethod": method,
+                                        "descrip": pdes,
+                                        "tag": tags,
+                                        "deliveryDesc": deldes,
+                                        "isNew": status,
+                                        "ownerId": user['_id'],
+                                        "pics": this.pics,
+                                        "isFanpage": isFanpage,
+                                        "fanpage": fanpage
+                                    };
+                                    // console.log("BBB", params);
+                                    let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
+                                    Polymer.postData(link, params).then(res => {
+                                        console.log("BBB", res);
+                                        var newproductid = res.resolve.id;
+                                        console.log("BBB1", newproductid);
 
-                                    if (res.code > 0) {
-                                        let paramup = {
-                                            "action": "updateData",
-                                            "index": "change",
-                                            "type": "_user",
-                                            "id": user['_id'],
-                                            "body": {
-                                                "query": {
-                                                    "script": {
-                                                        "source": "ctx._source['goodsNum']+=1"
+                                        if (res.code > 0) {
+                                            let paramup = {
+                                                "action": "updateData",
+                                                "index": "change",
+                                                "type": "_user",
+                                                "id": user['_id'],
+                                                "body": {
+                                                    "query": {
+                                                        "script": {
+                                                            "source": "ctx._source['goodsNum']+=1"
+                                                        }
                                                     }
                                                 }
-                                            }
-                                        };
-                                        let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                                        Polymer.postData(Url, paramup).then(res => {
-                                            if (res.code > 0) {
-                                                // alert("成功！");
-                                                this.dataManager.loadData(newproductid).then(res => {
-                                                    console.log("Working", res);
-                                                    this.fileManager.saveFile('json/product-' + newproductid + '.json', JSON.stringify(res)).then(res => {
-                                                        location.replace("./edit-product.html?p" + newproductid + "u" + user['_id']);
-                                                    });
-                                                })
-                                            } else {
-                                                alert("update fail");
-                                            }
-                                        });
-                                    } else {
-                                        alert(res.text);
-                                    }
-                                });
-                            } else {
-                                //*********EDIT PRODUCT MODE*************//
-                                console.log("edit mode pid", this.id);
+                                            };
+                                            let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                                            Polymer.postData(Url, paramup).then(res => {
+                                                if (res.code > 0) {
+                                                    // alert("成功！");
+                                                    this.dataManager.loadData(newproductid).then(res => {
+                                                        console.log("Working", res);
+                                                        this.fileManager.saveFile('json/product-' + newproductid + '.json', JSON.stringify(res)).then(res => {
+                                                            location.replace("./edit-product.html?p" + newproductid + "u" + user['_id']);
+                                                        });
+                                                    })
+                                                } else {
+                                                    alert("update fail");
+                                                }
+                                            });
+                                        } else {
+                                            alert(res.text);
+                                        }
+                                    });
+                                } else {
+                                    //*********EDIT PRODUCT MODE*************//
+                                    console.log("edit mode pid", this.id);
 
-                                let json2ways = {
-                                    "id": this.id,
-                                    "categories": categories,
-                                    "sellerMsg": sellerContact,
-                                    "productname": pname,
-                                    "price": parseFloat(price),
-                                    "district": district,
-                                    "deliveryMethod": method,
-                                    "description": pdes,
-                                    "tags": tags,
-                                    "deliveryDesc": deldes,
-                                    "isFree": free,
-                                    "isNew": status,
-                                    "pics": this.pics,
-                                    "isFanpage": isFanpage,
-                                    "fanpage": fanpage,
-                                    "createTime": this.CREATETIME,
-                                    "like": this.LIKE,
-                                    "ownerId": this.OWNERID,
-                                    "postStatus": this.POSTSTATUS,
-                                    "replyArray": this.REPLYARRAY
-                                };
-                                console.log("omgomg3", json2ways);
-                                // //******* UPDATE JSON ***********//
-                                this.fileManager.saveFile('json/product-' + this.id + '.json', JSON.stringify(json2ways));
+                                    let json2ways = {
+                                        "id": this.id,
+                                        "categories": categories,
+                                        "sellerMsg": sellerContact,
+                                        "productname": pname,
+                                        "price": parseFloat(price),
+                                        "district": district,
+                                        "deliveryMethod": method,
+                                        "description": pdes,
+                                        "tags": tags,
+                                        "deliveryDesc": deldes,
+                                        "isFree": free,
+                                        "isNew": status,
+                                        "pics": this.pics,
+                                        "isFanpage": isFanpage,
+                                        "fanpage": fanpage,
+                                        "createTime": this.CREATETIME,
+                                        "like": this.LIKE,
+                                        "ownerId": this.OWNERID,
+                                        "postStatus": this.POSTSTATUS,
+                                        "replyArray": this.REPLYARRAY
+                                    };
+                                    console.log("omgomg3", json2ways);
+                                    // //******* UPDATE JSON ***********//
+                                    this.fileManager.saveFile('json/product-' + this.id + '.json', JSON.stringify(json2ways));
 
-                                //********UPDATE DATABASE***********//
-                                let paramsDatabase = {
-                                    "action": "addData",
-                                    "index": "change",
-                                    "type": "product",
-                                    "id": this.id,
-                                    "body": json2ways
-                                };
-                                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                                Polymer.postData(Url, paramsDatabase).then(res => {
-                                    console.log("json", json2ways);
-                                    if (res.code > 0) {
-                                        // alert("成功！");
-                                        location.replace("./edit-product.html?p" + this.id + "u" + user['_id']);
+                                    //********UPDATE DATABASE***********//
+                                    let paramsDatabase = {
+                                        "action": "addData",
+                                        "index": "change",
+                                        "type": "product",
+                                        "id": this.id,
+                                        "body": json2ways
+                                    };
+                                    let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                                    Polymer.postData(Url, paramsDatabase).then(res => {
+                                        console.log("json", json2ways);
+                                        if (res.code > 0) {
+                                            // alert("成功！");
+                                            location.replace("./edit-product.html?p" + this.id + "u" + user['_id']);
 
-                                        // //*************PASS DATA FROM DATABASE TO JSON****************//
-                                        // let DatabaseToJson = {
-                                        //     "action": "getData",
-                                        //     "index": "change",
-                                        //     "type": "product",
-                                        //     "id": this.id
-                                        // };
-                                        // Polymer.postData(Url, DatabaseToJson).then(res => {
-                                        //     if (res.code > 0) {
-                                        //         alert("DatabaseToJson success");
-                                        //         console.log("DatabaseToJson reslve", res.resolve);
+                                            // //*************PASS DATA FROM DATABASE TO JSON****************//
+                                            // let DatabaseToJson = {
+                                            //     "action": "getData",
+                                            //     "index": "change",
+                                            //     "type": "product",
+                                            //     "id": this.id
+                                            // };
+                                            // Polymer.postData(Url, DatabaseToJson).then(res => {
+                                            //     if (res.code > 0) {
+                                            //         alert("DatabaseToJson success");
+                                            //         console.log("DatabaseToJson reslve", res.resolve);
 
-                                        //     } else {
-                                        //         alert("DatabaseToJson ERROR!");
-                                        //     }
-                                        // });
-                                    } else {
-                                        alert("update fail");
-                                    }
-                                });
+                                            //     } else {
+                                            //         alert("DatabaseToJson ERROR!");
+                                            //     }
+                                            // });
+                                        } else {
+                                            alert("update fail");
+                                        }
+                                    });
+                                }
                             }
                         }
                     }
@@ -1518,7 +1523,7 @@
 
             },
 
-            _uploadFile: function(e) {
+            _uploadFile: function (e) {
                 let shadow = this.shadowRoot;
                 let that = this;
                 this.pics = [];

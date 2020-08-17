@@ -196,11 +196,11 @@
                     // this.pics.push(Key);
                     let type = this.curElm.getAttribute('type') || 'banner';
                     console.log('Type', type);
-                    if (type === 'banner')
+                    if (type === 'banner'){
                         this.curElm.style.backgroundImage = 'url(' + Key + ')';
-                    else
+                    }else{
                         this.curElm.setAttribute('src', Key);
-
+                    }
                     // console.log('Select Image', e, this.pics);
                     this.getAllPics();
                     this.closeDialog();
@@ -233,6 +233,7 @@
                     Polymer.postData(url, params).then(res => {
                         if (res.code > 0) {
                             if (res.resolve.length > 0) {
+                                let bgImg = res.resolve[0]['banner'] || "https://www.gettv.hk/Website%20Design/profile%20page/img/profile%20banner/company-profile-banner.png";
                                 shadow.querySelector('#mp').style.backgroundImage = "url('" + res.resolve[0]['banner'] + "')";
                                 shadow.querySelector('#Uname').innerText = res.resolve[0]['username'];
                                 let t = res.resolve[0]['createTime'];
@@ -254,11 +255,8 @@
                                 shadow.querySelector('#gNum').innerText = res.resolve[0]['goodsNum'];
                                 shadow.querySelector('#buy').innerText = res.resolve[0]['history'].length;
                                 shadow.querySelector('#rate').innerText = res.resolve[0]['score'];
-                                if (res.resolve[0]['head'] == "") {
-                                    shadow.querySelector('#dp').src = "./img/head.svg";
-                                } else {
-                                    shadow.querySelector('#dp').src = res.resolve[0]['head'];
-                                }
+                                let proPic = res.resolve[0]['head'] || "https://img.favpng.com/20/11/12/computer-icons-user-profile-png-favpng-0UAKKCpRRsMj5NaiELzw1pV7L.jpg";
+                                shadow.querySelector('#dp').src = proPic;
                             }
                         }
                     })
@@ -313,7 +311,9 @@
                 this.curElm = e.path[0];
 
                 // Polymer.popup(dialog, "change", "change-dropzone-file", "60%", "50%");
-                Polymer.popup(dialog, 'change', 'change-gallery', '90%', '90%');
+                if (Polymer.editMode==="admin") {
+                    Polymer.popup(dialog, 'change', 'change-gallery', '90%', '90%');
+                }
                 // console.log('saved', bucket)
             },
 
