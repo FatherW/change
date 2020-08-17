@@ -149,6 +149,7 @@
                 let user = store.get('change-user') || null;
 
                 if (user != null) {
+                    console.log("current user cookie", user);
                     this.shadowRoot.querySelector('#register').innerHTML = ' / 登出';
                     if (user['head'] == "") {
                         user['head'] = "./img/head.svg";
@@ -156,6 +157,7 @@
                     this.shadowRoot.querySelector('#login').innerHTML = '<a href="/user.html?' + user['_id'] + '"><img src="' + user['head'] + '"></a>';
 
                     this.fileManager = new AwsPackage(user);
+                    console.log("uuuuu1", this.fileManager);
                     this.fileManager.saveFile('json/user-' + user['_id'] + '.json', JSON.stringify(user));
                 }
 
