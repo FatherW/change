@@ -187,7 +187,7 @@
                     let src = e.detail['Key'];
                     // this.pics.push(src);
                     // this.bigPic = "./"+src;
-                    this.curElm.setAttribute('src',src);
+                    this.curElm.setAttribute('src', src);
                     console.log('Detail', e, this.pics);
                     // this.reNewPic();
                 });
@@ -196,9 +196,9 @@
                     // this.pics.push(Key);
                     let type = this.curElm.getAttribute('type') || 'banner';
                     console.log('Type', type);
-                    if (type === 'banner'){
+                    if (type === 'banner') {
                         this.curElm.style.backgroundImage = 'url(' + Key + ')';
-                    }else{
+                    } else {
                         this.curElm.setAttribute('src', Key);
                     }
                     // console.log('Select Image', e, this.pics);
@@ -255,6 +255,11 @@
                                 shadow.querySelector('#gNum').innerText = res.resolve[0]['goodsNum'];
                                 shadow.querySelector('#buy').innerText = res.resolve[0]['history'].length;
                                 shadow.querySelector('#rate').innerText = res.resolve[0]['score'];
+                                // if (res.resolve[0]['head'] == "") {
+                                //     shadow.querySelector('#dp').src = "./img/head.svg";
+                                // } else {
+                                //     shadow.querySelector('#dp').src = res.resolve[0]['head'];
+                                // }
                                 let proPic = res.resolve[0]['head'] || "https://img.favpng.com/20/11/12/computer-icons-user-profile-png-favpng-0UAKKCpRRsMj5NaiELzw1pV7L.jpg";
                                 shadow.querySelector('#dp').src = proPic;
                             }
@@ -311,9 +316,18 @@
                 this.curElm = e.path[0];
 
                 // Polymer.popup(dialog, "change", "change-dropzone-file", "60%", "50%");
-                if (Polymer.editMode==="admin") {
-                    Polymer.popup(dialog, 'change', 'change-gallery', '90%', '90%');
-                }
+                
+                    let userInfo = document.querySelector('change-user-info');
+                    console.log("userInfo", userInfo);
+                    let keyword = userInfo.shadowRoot.querySelector('#vb').innerHTML;
+                    console.log("keyword", keyword);
+                    if (keyword == "提交") {
+                        Polymer.popup(dialog, 'change', 'change-gallery', '90%', '90%');
+                    } else {
+                        console.log("Will not be able to open gallery!");
+                    }
+    
+                
                 // console.log('saved', bucket)
             },
 
