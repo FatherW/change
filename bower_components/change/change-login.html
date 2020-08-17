@@ -199,7 +199,6 @@
                 this.userManager = new DataPackage('_user');
             },
             _forgot: function() {
-                console.log('forgot password');
                 let shadow = this.shadowRoot;
                 let that = this;
                 let dialog = shadow.querySelector('vaadin-dialog');
@@ -242,17 +241,13 @@
             },
             log: function() {
                 let url = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
-                console.log("good");
                 let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 let that = this;
                 FB.login(function(response) {
-                    console.log("response", response);
                     if (response.authResponse) {
-                        console.log('Welcome!  Fetching your information.... ');
                         FB.api('/me', {
                             fields: 'name, email'
                         }, function(response) {
-                            console.log('Good to see you, ' + JSON.stringify(response) + '.' + response.email);
                             let email = response.email;
                             let name = response.name;
                             let param = {
@@ -270,10 +265,8 @@
                             Polymer.postData(link, param).then(res => {
                                 if (res.code > 0) {
                                     let all = res.resolve;
-                                    console.log(res);
                                     if (all.length == 0) {
                                         ////jump to resigter
-                                        console.log("shoud go to regis");
                                         let platformcookie = {
                                             "platform": "facebook",
                                             "name": name,
@@ -334,8 +327,6 @@
             },
 
             statusChangeCallback: function(response) { // Called with the results from FB.getLoginStatus().
-                console.log('statusChangeCallback');
-                console.log(response); // The current login status of the person.
                 if (response.status === 'connected') { // Logged into your webpage and Facebook.
                     testAPI();
                 } else { // Not logged into your webpage or we are unable to tell.
@@ -344,10 +335,7 @@
             },
 
             testAPI: function() { // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
-                console.log('Welcome!  Fetching your information.... ');
-                FB.api('/me', function(response) {
-                    console.log('Successful login for: ' + response);
-                });
+                FB.api('/me', function(response) {});
             },
 
             _fb_register(id, name, email) {
@@ -361,14 +349,10 @@
                     "phone": id,
                     "isPromotionMsg": false
                 };
-                console.log("Params", params);
                 Polymer.postData(registerUrl, params).then(res => {
                     // alert(res.text);
-                    console.log('Res', res);
 
-                    that.userManager.getAllData().then(re => {
-                        console.log('Result', re);
-                    });
+                    that.userManager.getAllData().then(re => {});
 
                     if (res.code > 0) {
 
@@ -380,7 +364,6 @@
             },
 
             _register: function() {
-                console.log('Register');
                 let shadow = this.shadowRoot;
                 let that = this;
                 let dialog = shadow.querySelector('vaadin-dialog');
@@ -404,12 +387,8 @@
                             "login": uid,
                             "password": password
                         };
-                        console.log("Login JSON", params);
                         Polymer.postData(loginUrl, params).then(res => {
-                            console.log("Login", res);
                             if (res.code > 0) {
-                                console.log("Result1", res.resolve);
-                                console.log("Result2", res.resolve.length);
                                 if (res.resolve) {
                                     let user = res.resolve;
                                     if (user.token == "" || user.token == null || user.token == undefined) {
