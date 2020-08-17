@@ -171,6 +171,7 @@
 
             },
             log: function() {
+                let url = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
                 console.log("good");
                 let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 let that = this;
@@ -208,13 +209,28 @@
                                             "name": name,
                                             "email": email
                                         };
+
                                         store.set("change-platform", platformcookie);
                                         let dialog = that.shadowRoot.querySelector('#registerpop');
                                         Polymer.popup(dialog, "change", "change-register", "45s%", "90%");
                                     } else {
                                         if (all[0].platform == "facebook") {
-                                            store.set('change-user', all[0]);
-                                            location.reload();
+                                            let loginparams = {
+                                                "action": "login",
+                                                "login": email,
+                                                "password": all[0]['password']
+                                            };
+
+                                            Polymer.postData(url, loginparams).then(res => {
+                                                if (res.code > 0) {
+                                                    let user = res.resolve;
+                                                    store.set('change-user', user);
+                                                    location.reload();
+                                                } else {
+                                                    alert('登入失敗');
+                                                }
+                                            });
+
                                         } else {
                                             alert("此帳戶的郵箱已在" + all[0].platform + "註冊，請重新登入");
                                         }
