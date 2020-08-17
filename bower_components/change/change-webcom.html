@@ -250,88 +250,89 @@
                 } else {
                     // this.fileManager = new Awspackage(buyer);
 
+                    //******************************************************************************//
                     // Henry's Code
                     
-                    let to; // seller's Email
-                    let html;
+                    // let to; // seller's Email
+                    // let html;
 
-                    Polymer.getContent('/email-template/sendcontactemail.html').then(html=>{
-                        html.replace("[[image]]",image);
-                        html.replace("[[productname]]",productname);
-                        // .......
-                        this.sendmail('support@01power.net',to,'你有新的訊息',html);
+                    // Polymer.getContent('/email-template/sendcontactemail.html').then(html=>{
+                    //     html.replace("[[image]]",image);
+                    //     html.replace("[[productname]]",productname);
+                    //     // .......
+                    //     this.sendmail('support@01power.net',to,'你有新的訊息',html);
 
-                    }); 
-
-
-
+                    // }); 
+                    //******************************************************************************//
 
 
 
 
 
-                    //POSTDATA TO CLOUD
-                    // console.log("BUYERID", buyer);
-                    // let buyerId = buyer['_id'];
-                    // let ab = buyerId;
-                    // let cd = pid.toString() + Math.floor((Math.random() * 10));
-                    // let orderId = "" + ab + cd.toString();
-                    // let emailurl = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
-                    // let p = {
-                    //     "action": "sendContactEmail",
-                    //     "uid": sellerid,
-                    //     "pid": pid,
-                    //     "oid": orderId,
-                    //     "contactinfo": msg
-                    // };
 
-                    // console.log("P", p);
 
-                    // Polymer.postData(emailurl, p).then(res => {
-                    //     console.log("Please wait for seller response!");
-                    //     location.reload();
-                    // });
+                    POSTDATA TO CLOUD
+                    console.log("BUYERID", buyer);
+                    let buyerId = buyer['_id'];
+                    let ab = buyerId;
+                    let cd = pid.toString() + Math.floor((Math.random() * 10));
+                    let orderId = "" + ab + cd.toString();
+                    let emailurl = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
+                    let p = {
+                        "action": "sendContactEmail",
+                        "uid": sellerid,
+                        "pid": pid,
+                        "oid": orderId,
+                        "contactinfo": msg
+                    };
 
-                    // //POSTDATA TO POSTMAN
+                    console.log("P", p);
 
-                    // let params = {
-                    //     "action": "addorder",
-                    //     "msg": msg,
-                    //     "productId": pid,
-                    //     "buyerId": buyerId
-                    // };
-                    // let paramproduct = {
-                    //     "action": "updateData",
-                    //     "index": "change",
-                    //     "type": "product",
-                    //     "id": pid,
-                    //     "body": {
-                    //         "query": {
-                    //             "script": {
-                    //                 "source": "ctx._source['replyArray'].add('" + orderId + "')"
-                    //             }
-                    //         }
-                    //     }
-                    // };
+                    Polymer.postData(emailurl, p).then(res => {
+                        console.log("Please wait for seller response!");
+                        location.reload();
+                    });
 
-                    // let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
-                    // Polymer.postData(link, params).then(res => {
-                    //     if (res.code > 0) {
-                    //         Polymer.postData(url, paramproduct).then(res => {
-                    //             if (res.code > 0) {
-                    //                 console.log("success add and update");
-                    //                 this.prodManager.loadData(pid).then(res => {
-                    //                     this.fileManager.saveFile('json/product-' + pid + '.json', JSON.stringify(res.resolve));
-                    //                 });
+                    //POSTDATA TO POSTMAN
 
-                    //             } else {
-                    //                 console.log("failupdate");
-                    //             }
-                    //         })
-                    //     } else {
-                    //         console.log("failadd order");
-                    //     }
-                    // });
+                    let params = {
+                        "action": "addorder",
+                        "msg": msg,
+                        "productId": pid,
+                        "buyerId": buyerId
+                    };
+                    let paramproduct = {
+                        "action": "updateData",
+                        "index": "change",
+                        "type": "product",
+                        "id": pid,
+                        "body": {
+                            "query": {
+                                "script": {
+                                    "source": "ctx._source['replyArray'].add('" + orderId + "')"
+                                }
+                            }
+                        }
+                    };
+
+                    let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
+                    Polymer.postData(link, params).then(res => {
+                        if (res.code > 0) {
+                            Polymer.postData(url, paramproduct).then(res => {
+                                if (res.code > 0) {
+                                    console.log("success add and update");
+                                    this.prodManager.loadData(pid).then(res => {
+                                        this.fileManager.saveFile('json/product-' + pid + '.json', JSON.stringify(res.resolve));
+                                    });
+
+                                } else {
+                                    console.log("failupdate");
+                                }
+                            })
+                        } else {
+                            console.log("failadd order");
+                        }
+                    });
                 }
             },
 
