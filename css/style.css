@@ -1,5 +1,4 @@
-
-* { 
+* {
     font-family: sans-serif, Microsoft JhengHei;
 }
 
@@ -77,7 +76,6 @@ img.logo-md {
     }
 }
 
-
 html,
 body {
     width: 100%;
@@ -122,13 +120,9 @@ header {
     margin: 0;
     padding: 0;
     display: -webkit-box;
-
     display: -moz-box;
-
     display: -ms-flexbox;
-
     display: -webkit-flex;
-
     display: flex;
 }
 
@@ -190,7 +184,6 @@ header {
     min-width: 150px;
     min-height: 200px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-
     z-index: 1;
 }
 
@@ -198,9 +191,7 @@ header {
     display: none;
     position: absolute;
     background-color: white;
-
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-
     z-index: 1;
     margin-top: 40px;
     right: 0;
@@ -225,21 +216,21 @@ ul {
 .arrow {
     width: 25px;
 }
-change-user-panel{
-        display: block;
-    }
+
+change-user-panel {
+    display: block;
+}
+
 @media (max-width: 992px) {
     div.disappear {
         display: none;
     }
-
 }
 
 @media (max-width: 768px) {
-    change-user-panel{
+    change-user-panel {
         display: none;
     }
-
 }
 
 @media (max-width:640px) {
@@ -247,17 +238,14 @@ change-user-panel{
         float: left;
         height: 50px;
     }
-
     button {
         font-size: 10px;
     }
-
-    .logo1{
+    .logo1 {
         float: left;
         height: 68px;
     }
 }
-
 
 * {
     font-family: sans-serif, Microsoft JhengHei;
@@ -779,7 +767,7 @@ h1 {
     padding-left: 3%;
     padding-right: 3%;
     width: 94%;
-    background-image: url(http://change.dazzle.website/img/background/3.jpg);
+    background-image: url(../img/background/3.jpg);
 }
 
 img.logo1 {
