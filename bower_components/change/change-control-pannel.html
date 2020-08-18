@@ -154,9 +154,9 @@
                     <p class="inf hide">標籤: <span id="contact">
                             <vaadin-text-field id='tag'></vaadin-text-field>
                         </span></p>
-                    <p class="inf">網址: gettv.hk/ <span class="infotext" id="website">
+                    <p class="inf">網址: www.gettv.hk/ <span class="infotext" id="website">
                             <vaadin-text-field id='website2'></vaadin-text-field>
-                        </span></p>
+                        </span>.html</p>
                     <div style="display: inline-flex;">
                         <vaadin-button class="handIn" on-click="handin">提交</vaadin-button>
                         <vaadin-button on-click="cancelinfo1">取消</vaadin-button>
@@ -189,6 +189,8 @@
             created: function () {
                 let user = store.get('change-user') || null;
                 console.log("omgomg", user);
+                this.fileManager = new AwsPackage(user);
+                console.log("##new AwsPackage(user):", this.fileManager);
                 if (user == null) {
 
                 } else if (user.isAdmin) {
@@ -345,7 +347,9 @@
                 console.log(pagename);
                 let src = "_page-template";
                 this.fileManager.copyFolder(src, pagename);
-                let user = store.get('change-user');
+                let user = store.get('change-user') || null;
+                let that = this;
+                let html;
                 console.log("ccc", user['_id']);
                 let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
                 let param = {
@@ -364,6 +368,19 @@
                         console.log("完成");
                         shadow.querySelector('#info1').style.display = "none";
 
+
+                        //modifying here
+                        that.fileManager.getFile('template/page-template.html').then(go =>{
+                            html = html.replace('[[fanpage]]', shadow.querySelector('#website2').value);
+                            // html = html.replace('[[ownerId]]', user['_id']);
+                            // html = html.replace('[[pagename]]', pagename);
+                            // html = html.replace('[[website]]', shadow.querySelector('#website2').value);
+                            // html = html.replace('[[district]]', shadow.querySelector('#area1').value);
+                            // html = html.replace('[[email]]', shadow.querySelector('#email').value);
+                            // html = html.replace('[[tags]]', pagename);
+                            that.fileManager.saveHtml('template/' + shadow.querySelector('#website2').value + '.html');
+                            console.log("success!");
+                        });
                     }
                     alert(res.text);
                 });

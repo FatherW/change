@@ -1,0 +1,122 @@
+<html class="null">
+
+<head>
+    <script src="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="/bower_components/dz-dazzle/dz-loader.html">
+    <link rel="import" href="/bower_components/change/change-header.html">
+    <link rel="import" href="/bower_components/change/change-footer.html">
+    <link rel="import" href="/bower_components/change/change-pages-banner.html">
+    <link rel="import" href="/bower_components/change/change-page-info.html">
+    <link rel="import" href="/bower_components/change/change-shop.html">
+    <link rel="stylesheet" href="/css/style3.css">
+    <link rel="stylesheet" href="kingdommin.css">
+    <link rel="stylesheet" href="kingdommin-master.css">
+    <style scope="change-footer">
+        li {
+            display: block;
+        }
+
+        .footer {
+            background-color: #F0846C;
+            color: white;
+            height: auto;
+            line-height: 1.5;
+        }
+
+        .fpanel1 {
+            width: 100%;
+            margin: 0 auto;
+            width: 100%;
+            margin: 0 auto;
+            display: grid;
+            grid-row-gap: 20px;
+            grid-column-gap: 15px;
+            grid-template-columns: 28% 28% 28%;
+            grid-template-rows: 50% 50%;
+        }
+
+        a.test {
+            color: white;
+            text-decoration: none;
+            font-size: 12px;
+            line-height: 30px;
+        }
+
+        #social {
+            display: flex;
+            justify-content: space-between;
+            margin: 0 auto;
+            text-align: center;
+            align-items: center;
+            display: inline-flex;
+            float: right;
+            grid-column: 1 / 5;
+            grid-row: 2 / 3;
+        }
+
+        .footer {
+            height: 300px;
+        }
+
+        @media (max-width: 768px) {
+            .footer {
+                display: none;
+            }
+
+            .fpanel1 {
+                width: 100%;
+                margin: 0 auto;
+                padding-bottom: 10px;
+                width: 100%;
+                margin: 0 auto;
+                display: grid;
+                grid-row-gap: 10px;
+                grid-column-gap: 15px;
+                grid-template-columns: repeat(3, 32%);
+                text-align: start;
+            }
+
+            #social {
+                display: flex;
+                justify-content: space-between;
+                margin: 0 auto;
+                text-align: center;
+                align-items: center;
+                display: inline-flex;
+                float: right;
+                grid-column: 2 / 4;
+                grid-row: 2 / 3;
+            }
+
+            .footer {
+                height: 500px;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+    <change-header></change-header>
+
+    <!---->
+    <change-pages-banner></change-pages-banner>
+    <div id="padding" style="background-color: #FFFBF2;">
+        <change-page-info></change-page-info>
+        <div class="shop_panel2">
+            <change-shop></change-shop>
+        </div>
+    </div>
+
+    <fanpage id="1597216767857" ownerId="74" name="國度事奉中心" website="kingdommin" district="油尖旺區" email="kingdomminenquiry@gmail.com" tags="國度事奉中心"></fanpage>
+    <!---->
+    
+    <change-footer></change-footer>
+
+    <dz-dazzle></dz-dazzle>
+
+    <button class="googleloginname" style="display:none;">writegoogle</button>
+    <div class="g-signin2" data-onsuccess="onSignIn" style="display:none;">imgoogle</div>
+</body>
+
+</html>
