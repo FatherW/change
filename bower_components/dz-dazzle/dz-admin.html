@@ -5,14 +5,18 @@
 
 <link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
 <link rel="import" href="../dz-fab-menu/dz-dashboard.html">
+<link rel="import" href="../dz-dazzle/dz-submenu.html">
+<link rel="import" href="default-package/default-package.html">
+
+
+
 <!-- <link rel="import" href="../dz-file-management/dz-file-management.html"> -->
 <!-- <link rel="import" href="../dz-dazzle/dz-editor.html"> -->
-<link rel="import" href="../dz-dazzle/dz-submenu.html">
+
 <!-- <link rel="import" href="../dz-dazzle/dz-hotkey.html"> -->
 <!-- <link rel="import" href="../dz-dazzle/dz-wrapper.html"> -->
 <!-- <link rel="import" href="../dz-file-management/dz-img-stock.html">
 <link rel="import" href="../dz-file-management/dz-file-management3.html"> -->
-<link rel="import" href="default-package/default-package.html">
 
 <link rel="stylesheet" href="https://d25k6mzsu7mq5l.cloudfront.net/file7.0/css/dz-panel.css">
 
@@ -49,14 +53,6 @@
   <dz-dashboard></dz-dashboard>
   <dz-hotkey></dz-hotkey>
 
-  <!-- <vaadin-list-box>
-    <b>Register to a Run Event</b>
-    <vaadin-item>5k</vaadin-item>
-    <vaadin-item>10k (sold out)</vaadin-item>
-    <vaadin-item>Half marathon</vaadin-item>
-    <vaadin-item>Marathon</vaadin-item>
-</vaadin-list-box> -->
-
 	<vaadin-dialog aria-label="big" id="dialog"  theme="error"></vaadin-dialog>
 
 </template>
@@ -88,24 +84,7 @@
                 Polymer.dialog = this.shadowRoot.querySelector('vaadin-dialog');
                 this.eventListener();
             },
-            loadMenu() {
-                let shadow = this.shadowRoot;
-                this.menu = this.shadowRoot.querySelector('vaadin-menu-bar');
-
-                shadow.querySelectorAll('img').forEach(item => {
-
-                    item.menu = this.menuList['IMG'];
-                    console.log('item', item);
-                });
-
-                shadow.querySelectorAll('a').forEach(item => {
-                    item.menu = this.menuList['A'];
-                });
-
-
-
-
-            },
+          
             contextRender(menu) {
                 let that = this;
                 const shadow = document.querySelector('dz-wrapper');
@@ -299,7 +278,6 @@
 
                 document.addEventListener('keydown', e => {
                     console.log('Key Down', e);
-                    if (!Polymer.textEdit) {
                         switch (e.code) {
                             case 'Escape':
                                 switch (that.mode) {
@@ -342,15 +320,89 @@
                                 e.stopPropagation();
                                 break;
 
+                            case 'KeyC':
+                                if (e.ctrlKey){
+                                        console.log('Copy',e);
+                                        Polymer.dzElementFire(Polymer.activeElement,'copy',{});
+                                }
+                            break;
+
+
+                            case 'KeyU':
+                                if (e.ctrlKey){
+                                        console.log('Copy',e);
+                                        Polymer.dzElementFire(Polymer.activeElement,'paste-before',{});
+                                }
+                            break;
+
+
+                            case 'KeyV':
+                                if (e.ctrlKey){
+                                        console.log('Copy',e);
+                                        Polymer.dzElementFire(Polymer.activeElement,'paste-after',{});
+                                }
+                            break;
+
+                            case 'KeyZ':
+                                if (e.ctrlKey){
+                                        console.log('Undo',Polymer.history);                                        
+                                        let json = Polymer.history.pop();
+                                        let elm = document.querySelector('[dzid="'+json.dzid+'"]');
+                                        let shadow = Polymer.shadowDOM.querySelector('[dzid="'+json.dzid+'"]');
+                                        let body;
+                                        console.log('All',json.action,json.body,json.dzid);     
+                                        switch(json.action){
+                                            case 'style':
+                                                body = json.json;
+                                                for (var k in body){
+                                                    elm.style[k] = body[k];
+                                                    shadow.style[k] = body[k];
+                                                }
+
+                                            break;
+
+                                            case 'property':
+                                                body = json.json;
+                                                for (var k in body){
+                                                    elm[k] = body[k];
+                                                    shadow[k] = body[k];
+                                                }
+
+                                            break;
+                                        
+                                            case 'attribute':
+                                                body = json.json;
+                                                for (var k in body){
+                                                    elm.setAttribute(k , body[k]);
+                                                    shadow.setAttribute(k , body[k]);
+                                                }
+
+                                            break;
+
+                                            case 'tree':
+                                                // console.log('InnerHTML',json.body.innerHTML);
+                                                elm.innerHTML = json.body;
+                                                shadow.innerHTML = json.body;
+                                                elm.querySelectorAll('*').forEach(item=>{
+                                                    new defaultPackage(item);
+                                                });
+
+                                                // elm = body;
+                                            break;
+                                        }         
+
+                                }
+                            break;
 
                             case 'Backspace':
                             case 'Delete':
-                                that.curElm.remove();
-                                break;
+                                if (!Polymer.editing)
+                                    Polymer.dzElementFire(Polymer.activeElement,'delete',{});
+                            break;
 
                         }
 
-                    }
+                    
 
                     if (that.mode === "edit") {
                         switch (e.code) {
@@ -520,29 +572,29 @@
                     if (e.ctrlKey) {
                         switch (e.key) {
 
-                            case 'c':
-                                console.log('Copy');
-                                that.clipBoard = that.curElm;
-                                break;
+                            // case 'c':
+                            //     console.log('Copy');
+                            //     that.clipBoard = that.curElm;
+                            //     break;
 
-                            case 'u':
-                                console.log('Paste Up');
+                            // case 'u':
+                            //     console.log('Paste Up');
 
-                                let elm = that.curElm;
-                                clm = that.clipBoard.cloneNode(true);
-                                elm.parentElement.insertBefore(clm, elm);
-                                break;
+                            //     let elm = that.curElm;
+                            //     clm = that.clipBoard.cloneNode(true);
+                            //     elm.parentElement.insertBefore(clm, elm);
+                            //     break;
 
-                            case 'v':
-                                console.log('Paste Down', window['dz-clip']);
+                            // case 'v':
+                            //     console.log('Paste Down', window['dz-clip']);
 
-                                clm = that.clipBoard.cloneNode(true);
-                                insertAfter(clm, that.curElm);
-                                break;
+                            //     clm = that.clipBoard.cloneNode(true);
+                            //     insertAfter(clm, that.curElm);
+                            //     break;
 
-                            case 'e':
-                                // document.dispatchEvent(new CustomEvent('custom-popup', { detail: {'component':'code-editor', 'size':'big'} }));
-                                break;
+                            // case 'e':
+                            //     // document.dispatchEvent(new CustomEvent('custom-popup', { detail: {'component':'code-editor', 'size':'big'} }));
+                            //     break;
                         }
                     }
                 });

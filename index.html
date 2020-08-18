@@ -1,81 +1,37 @@
-<html class="null"><head>
-                <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-                <meta http-equiv="Pragma" content="no-cache">
-                <meta http-equiv="Expires" content="0">
-                <script src="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/webcomponentsjs/webcomponents-lite.js"></script><link rel="import" href="/bower_components/dz-dazzle/dz-loader.html"><dz-wrapper-head><meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
-    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->    
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    <title>Home - Change</title>
-    <link rel="stylesheet" href="css/style.css">
-    <meta name="google-signin-scope" content="profile email">
-    <meta name="google-signin-client_id" content="755964351228-2emctcoq1o2nj5vpqitv4j28411jj7jk.apps.googleusercontent.com">
-    <script src="https://apis.google.com/js/platform.js" async="" defer=""></script>
-    <script async="" defer="" crossorigin="anonymous" src="https://connect.facebook.net/zh_HK/sdk.js#xfbml=1&amp;version=v7.0&amp;appId=711018846416860&amp;autoLogAppEvents=1" nonce="NXzxnRL1"></script>    
+<html><head>
     
-    
- <script>
-      function onSignIn(googleUser) {
-          console.log("running google");
-           var profile = googleUser.getBasicProfile(); 
-          console.log("myprofile",profile);
-          let param = {
-              "platform":"Google",
-              "name":profile.getName(),
-              "email":profile.getEmail()
-          };
-          store.set("change-platform",param);
-          document.querySelector('.googleloginname').click();
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <script src="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="/bower_components/dz-dazzle/dz-loader.html">
 
-      };
-    function signOut() {
-    var auth2 = gapi.auth2.getAuthInstance(); 
-    auth2.signOut().then(function () {
-      console.log('User signed out.');
-    });
-  };
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
+        <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <title>Home - Change</title>
+        <link rel="stylesheet" href="css/style.css">
+        <meta name="google-signin-scope" content="profile email">
+        <meta name="google-signin-client_id" content="755964351228-2emctcoq1o2nj5vpqitv4j28411jj7jk.apps.googleusercontent.com">
+        <script src="https://apis.google.com/js/platform.js" async="" defer=""></script>
+        <script async="" defer="" crossorigin="anonymous" src="https://connect.facebook.net/zh_HK/sdk.js#xfbml=1&amp;version=v7.0&amp;appId=711018846416860&amp;autoLogAppEvents=1" nonce="NXzxnRL1"></script>
+        <style scope="change-footer">
+            li {
+                display: block;
+            }
 
-                window.fbAsyncInit = function () {
-                    FB.init({
-                        appId: '711018846416860',
-                        cookie: true,
-                        xfbml: true,
-                        version: '7.0'
-                    });
-
-                    FB.AppEvents.logPageView();
-
-                };
-/*
-                (function (d, s, id) {
-                    var js, fjs = d.getElementsByTagName(s)[0];
-                    if (d.getElementById(id)) {
-                        return;
-                    }
-                    js = d.createElement(s);
-                    js.id = id;
-                    js.src = "https://connect.facebook.net/en_US/sdk.js";
-                    fjs.parentNode.insertBefore(js, fjs);
-                }(document, 'script', 'facebook-jssdk'));
-
-                */
-
-                </script>
-<style scope="change-footer">li {
-  display: block;
-}
-
-.footer {
-  background-color: #F0846C;
+            .footer {
+                background-color: #F0846C;
                 color: white;
                 height: auto;
                 line-height: 1.5;
-}
+            }
 
-.fpanel1 {
-  width: 100%;
+            .fpanel1 {
+                width: 100%;
                 margin: 0 auto;
                 width: 100%;
                 margin: 0 auto;
@@ -84,17 +40,17 @@
                 grid-column-gap: 15px;
                 grid-template-columns: 28% 28% 28%;
                 grid-template-rows: 50% 50%;
-}
+            }
 
-a.test {
-  color: white;
+            a.test {
+                color: white;
                 text-decoration: none;
                 font-size: 12px;
                 line-height: 30px;
-}
+            }
 
-#social {
-  display: flex;
+            #social {
+                display: flex;
                 justify-content: space-between;
                 margin: 0 auto;
                 text-align: center;
@@ -103,19 +59,19 @@ a.test {
                 float: right;
                 grid-column: 1 / 5;
                 grid-row: 2 / 3;
-}
+            }
 
-.footer {
-  height: 300px;
-}
+            .footer {
+                height: 300px;
+            }
 
-@media (max-width: 768px) {
-.footer {
-  display: none;
-}
+            @media (max-width: 768px) {
+                .footer {
+                    display: none;
+                }
 
-.fpanel1 {
-  width: 100%;
+                .fpanel1 {
+                    width: 100%;
                     margin: 0 auto;
                     padding-bottom: 10px;
                     width: 100%;
@@ -125,10 +81,10 @@ a.test {
                     grid-column-gap: 15px;
                     grid-template-columns: repeat(3, 32%);
                     text-align: start;
-}
+                }
 
-#social {
-  display: flex;
+                #social {
+                    display: flex;
                     justify-content: space-between;
                     margin: 0 auto;
                     text-align: center;
@@ -137,615 +93,117 @@ a.test {
                     float: right;
                     grid-column: 2 / 4;
                     grid-row: 2 / 3;
-}
-
-.footer {
-  height: 500px;
-}
-
-}</style>    
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
-<!-- 最新版本的 Bootstrap 核心 CSS 文件 -->    
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-<title>Home - Change</title>
-<link rel="import" href="/bower_components/change/change-edit-product.html">
-<link rel="import" href="/bower_components/change/change-itemspecial.html">
-<link rel="import" href="/bower_components/change/change-slidelist.html">
-<link rel="import" href="/bower_components/change/change-in-item.html">
-<link rel="import" href="/bower_components/change/change-user-panel.html?asdlfsd">
-<link rel="import" href="/bower_components/change/change-header.html"> 
-<link rel="import" href="/bower_components/change/change-header2.html"> 
-<link rel="import" href="/bower_components/change/change-footer.html"> 
-
-<link rel="import" href="/bower_components/change/change-announcement.html"> 
-<link rel="stylesheet" href="css/style.css">
-<meta name="google-signin-scope" content="profile email">
-<meta name="google-signin-client_id" content="755964351228-2emctcoq1o2nj5vpqitv4j28411jj7jk.apps.googleusercontent.com">
-<style scope="change-footer">li {
-    display: block;
-  }
-  
-  .footer {
-    background-color: #F0846C;
-                  color: white;
-                  height: auto;
-                  line-height: 1.5;
-  }
-  
-  .fpanel1 {
-    width: 100%;
-                  margin: 0 auto;
-                  width: 100%;
-                  margin: 0 auto;
-                  display: grid;
-                  grid-row-gap: 20px;
-                  grid-column-gap: 15px;
-                  grid-template-columns: 28% 28% 28%;
-                  grid-template-rows: 50% 50%;
-  }
-  
-  a.test {
-    color: white;
-                  text-decoration: none;
-                  font-size: 12px;
-                  line-height: 30px;
-  }
-  
-  #social {
-    display: flex;
-                  justify-content: space-between;
-                  margin: 0 auto;
-                  text-align: center;
-                  align-items: center;
-                  display: inline-flex;
-                  float: right;
-                  grid-column: 1 / 5;
-                  grid-row: 2 / 3;
-  }
-  
-  .footer {
-    height: 300px;
-  }
-  
-  @media (max-width: 768px) {
-  .footer {
-    display: none;
-  }
-  
-  .fpanel1 {
-    width: 100%;
-                      margin: 0 auto;
-                      padding-bottom: 10px;
-                      width: 100%;
-                      margin: 0 auto;
-                      display: grid;
-                      grid-row-gap: 10px;
-                      grid-column-gap: 15px;
-                      grid-template-columns: repeat(3, 32%);
-                      text-align: start;
-  }
-  
-  #social {
-    display: flex;
-                      justify-content: space-between;
-                      margin: 0 auto;
-                      text-align: center;
-                      align-items: center;
-                      display: inline-flex;
-                      float: right;
-                      grid-column: 2 / 4;
-                      grid-row: 2 / 3;
-  }
-  
-  .footer {
-    height: 500px;
-  }
-  
-  }</style>
-<style>
-    body {
-        margin: 0;
-        font-family: Arial;
-    }
-    eee{
-            display: none;
-        }
-    .topnav {
-        background-color: white;
-        justify-content: center;
-        display: flex;
-        
-    }
-
-    .topnav a {
-        float: left;
-        display: block;
-        color: black;
-        text-align: center;
-        padding: 14px 16px;
-        text-decoration: none;
-        font-size: 17px;
-        text-align: center;
-    }
-
-    .active {
-        background-color: white;
-        color: black;
-    }
-
-    .topnav .icon {
-        display: none;
-    }
-
-    .dropdown {
-        float: left;
-        overflow: hidden;
-    }
-
-    .dropdown .dropbtn {
-        font-size: 17px;
-        border: none;
-        outline: none;
-        color: black;
-        padding: 14px 16px;
-        background-color: inherit;
-        font-family: inherit;
-        margin: 0;
-    }
-
-    .dropdown-content {
-        display: none;
-        position: absolute;
-        background-color: #f9f9f9;
-        min-width: 160px;
-        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-        z-index: 1;
-    }
-
-    .dropdown-content a {
-        float: none;
-        color: black;
-        padding: 12px 16px;
-        text-decoration: none;
-        display: block;
-        text-align: left;
-    }
-
-    .topnav a:hover,
-    .dropdown:hover .dropbtn {
-        background-color: white;
-        color: black;
-    }
-
-    .dropdown-content a:hover {
-        background-color: white;
-        color: black;
-    }
-
-    .dropdown:hover .dropdown-content {
-        display: block;
-    }
-
-    @media screen and (max-width: 768px) {
-        eee{
-            display: contents;
-        }
-        a.icon{
-            position: absolute;;
-            top:15px;
-            right:15px;
-        }
-        .topnav a:not(:first-child),
-        .dropdown .dropbtn {
-            display: none;
-        }
-
-        .topnav a.icon {
-            float: right;
-            display: block;
-        }
-
-        .topnav.responsive {
-            position: relative;
-        }
-
-        .topnav.responsive .icon {
-            position:fixed;
-            top:15px;
-            right:15px;
-        }
-
-        .topnav.responsive a {
-            float: none;
-            display: block;
-            text-align: left;
-        }
-
-        .topnav.responsive .dropdown {
-            float: none;
-            width:100%;
-        }
-
-        .topnav.responsive .dropdown-content {
-            position: relative;
-        }
-
-        .topnav.responsive .dropdown .dropbtn {
-            display: block;
-            width: 100%;
-            text-align: left;
-        }
-
-        .dropdown {
-            float: left;
-            overflow: hidden;
-        }
-
-        .topnav {
-            overflow: hidden;
-            background-color: white;
-            justify-content:none;
-            display: block;
-        }
-
-    }
-</style>
-
-<style scope="change-header2">* {
-font-family: sans-serif, Microsoft JhengHei;
-}
-
-.header {
-min-height: 140px;
-}
-
-section.topWrap {
-border-bottom: #EFEFEF solid 1px;
-}
-
-section.topWrap2 {
-border-bottom: #EFEFEF solid 1px;
-}
-
-section.menu {
-border-bottom: #EFEFEF solid 1px;
-}
-
-button {
-cursor: pointer;
-}
-
-.topWrap button {
-background: none;
-        border: none;
-        height: 75px;
-}
-
-.index-grid {
-width: 100%;
-        margin: 0 auto;
-        display: grid;
-        grid-row-gap: 20px;
-        grid-column-gap: 10px;
-        grid-template-columns: 2.5fr 4fr 2fr;
-        height: 80px;
-}
-
-.input-group1 {
-position: relative;
-        display: block;
-        border-collapse: collapse;
-        background: #efefef;
-        height: 41px;
-        width: 106%;
-        margin-top: 16px;
-        border-style: none;
-        font-size: 15px;
-        padding: 0;
-}
-
-#input {
-height: 80%;
-        width: 100%;
-        background: #efefef;
-}
-
-img.logo {
-height: 74px;
-        width: auto;
-}
-
-img.logo-md {
-height: 74px;
-        width: auto;
-        padding-left: 120px;
-}
-
-@media (min-width:640px) {
-img.logo1 {
-height: 74px;
-            width: auto;
-            float: right;
-}
-
-}
-
-html, body {
-width: 100%;
-        height: 100%;
-        margin: 0;
-        padding: 0;
-}
-
-a {
-text-decoration: none;
-}
-
-li {
-list-style: none;
-}
-
-header {
-width: 100%;
-        height: 50px;
-        line-height: 50px;
-        text-align: center;
-        font-family: sans-serif;
-        background-color: white;
-}
-
-.brand {
-width: auto;
-        height: 100%;
-        float: left;
-        margin: 0 0 0 5%;
-}
-
-.menu {
-width: 60%;
-        height: 100%;
-        float: right;
-}
-
-.menu ul {
-width: 100%;
-        height: inherit;
-        margin: 0;
-        padding: 0;
-        display: -webkit-box;
-
-        display: -moz-box;
-
-        display: -ms-flexbox;
-
-        display: -webkit-flex;
-
-        display: flex;
-}
-
-.menu ul a {
-width: 20%;
-        height: inherit;
-        color: #222;
-        display: inline-block;
-}
-
-.menu ul a:hover {
-background-color: #222;
-        color: #fff;
-}
-
-#menuToggle {
-display: none;
-}
-
-.menu-icon {
-display: none;
-}
-
-.s {
-height: 41px;
-        margin-top: 16px;
-        border-style: none;
-        background: #efefef;
-        font-size: 15px;
-}
-
-.categories {
-display: flex;
-        width: 60%;
-        padding-left: 15%;
-        padding-right: 15%;
-        margin-left: 100px;
-}
-
-.categories li {
-width: 100%;
-        display: flex;
-}
-
-.categories a {
-color: black;
-        width: 60px;
-        font-weight: 350;
-}
-
-.dropdown {
-        display: inline-block;
-}
-
-.dropdown-content {
-        display: none;
-        position: absolute;
-        background-color: white;
-        min-width: 150px;
-        min-height: 200px;
-        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-
-        z-index: 1;
-}
-
-.dropdown-content0 {
-display: none;
-        position: absolute;
-        background-color: white;
-
-        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-
-        z-index: 1;
-        margin-top: 40px;
-        right: 0;
-}
-
-.dropdown:hover .dropdown-content {
-display: block;
-}
-
-.dropdown:hover .dropdown-content0 {
-display: block;
-}
-
-ul {
-/* border-bottom: #EFEFEF solid 1px; */
-}
-
-.ar {
-margin-top: 5px;
-}
-
-.arrow {
-width: 25px;
-}
-
-change-user-panel {
-display: block;
-}
-
-@media (max-width: 992px) {
-div.disappear {
-display: none;
-}
-
-}
-
-@media (max-width: 768px) {
-change-user-panel {
-display: none;
-}
-
-}
-
-@media (max-width:640px) {
-.logo1 {
-float: left;
-            height: 50px;
-}
-
-button {
-font-size: 10px;
-}
-
-.logo1 {
-float: left;
-            height: 68px;
-}
-
-}</style>
-
-
-<script src="https://apis.google.com/js/platform.js" async="" defer="" gapi_processed="true"></script>
-<script async="" defer="" crossorigin="anonymous" src="https://connect.facebook.net/zh_HK/sdk.js#xfbml=1&amp;version=v7.0&amp;appId=711018846416860&amp;autoLogAppEvents=1" nonce="NXzxnRL1"></script>    
-
-
-<script>function onSignIn(googleUser) {
-  console.log("running google");
-  var profile = googleUser.getBasicProfile();
-  console.log("myprofile", profile);
-  let param = {
-    "platform": "Google",
-    "name": profile.getName(),
-    "email": profile.getEmail()
-  };
-  store.set("change-platform", param);
-  document.querySelector('.googleloginname').click();
+                }
+
+                .footer {
+                    height: 500px;
+                }
+
+            }
+        </style>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
+        <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <title>Home - Change</title>
+        <link rel="import" href="/bower_components/change/change-itemspecial.html">
+        <link rel="import" href="/bower_components/change/change-things.html">
+        <link rel="import" href="/bower_components/change/change-footer.html">
+
+        <link rel="import" href="/bower_components/change/change-edit-product.html?id=1597419840570">
+        <link rel="import" href="/bower_components/change/change-itemspecial.html?id=1597419840570">
+        <link rel="import" href="/bower_components/change/change-slidelist.html?id=1597419840570">
+        <link rel="import" href="/bower_components/change/change-in-item.html?id=1597419840570">
+        <link rel="import" href="/bower_components/change/change-user-panel.html?id=1597419840570">
+        <link rel="import" href="/bower_components/change/change-header.html?id=1597419840571">
+        <link rel="import" href="/bower_components/change/change-header2.html?id=1597419840571">
+        <link rel="import" href="/bower_components/change/change-footer.html?id=1597419840571">
+        <link rel="import" href="/bower_components/change/change-announcement.html?id=1597419840571">
+        <link rel="stylesheet" href="css/style.css">
+        <meta name="google-signin-scope" content="profile email">
+        <meta name="google-signin-client_id" content="755964351228-2emctcoq1o2nj5vpqitv4j28411jj7jk.apps.googleusercontent.com">
+        <script src="https://apis.google.com/js/platform.js" async="" defer="" gapi_processed="true"></script>
+        <script async="" defer="" crossorigin="anonymous" src="https://connect.facebook.net/zh_HK/sdk.js#xfbml=1&amp;version=v7.0&amp;appId=711018846416860&amp;autoLogAppEvents=1" nonce="NXzxnRL1"></script>
+
+
+        <script>function onSignIn(googleUser) {
+console.log("running google");
+var profile = googleUser.getBasicProfile();
+console.log("myprofile", profile);
+let param = {
+"platform": "Google",
+"name": profile.getName(),
+"email": profile.getEmail()
+};
+store.set("change-platform", param);
+document.querySelector('.googleloginname').click();
 }
 
 ;
 
 function signOut() {
-  var auth2 = gapi.auth2.getAuthInstance();
-  auth2.signOut().then(function () {
-    console.log('User signed out.');
-  });
+var auth2 = gapi.auth2.getAuthInstance();
+auth2.signOut().then(function () {
+console.log('User signed out.');
+});
 }
 
 ;
 
 window.fbAsyncInit = function () {
-  FB.init({
-    appId: '711018846416860',
-    cookie: true,
-    xfbml: true,
-    version: '7.0'
-  });
-  FB.AppEvents.logPageView();
-};
-/*
-            (function (d, s, id) {
-                var js, fjs = d.getElementsByTagName(s)[0];
-                if (d.getElementById(id)) {
-                    return;
-                }
-                js = d.createElement(s);
-                js.id = id;
-                js.src = "https://connect.facebook.net/en_US/sdk.js";
-                fjs.parentNode.insertBefore(js, fjs);
-            }(document, 'script', 'facebook-jssdk'));
+FB.init({
+appId: '711018846416860',
+cookie: true,
+xfbml: true,
+version: '7.0'
+});
+FB.AppEvents.logPageView();
+};</script>
 
-            */</script>    
-<link rel="import" href="/bower_components/change/change-edit-product.html?id=1597419083682"><link rel="import" href="/bower_components/change/change-itemspecial.html?id=1597419083682"><link rel="import" href="/bower_components/change/change-slidelist.html?id=1597419083682"><link rel="import" href="/bower_components/change/change-in-item.html?id=1597419083682"><link rel="import" href="/bower_components/change/change-user-panel.html?id=1597419083682"><link rel="import" href="/bower_components/change/change-header.html?id=1597419083682"><link rel="import" href="/bower_components/change/change-header2.html?id=1597419083682"><link rel="import" href="/bower_components/change/change-footer.html?id=1597419083683"><link rel="import" href="/bower_components/change/change-announcement.html?id=1597419083683"></dz-wrapper-head></head><body class="null"><dz-wrapper>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="icon" href="favicon.ico">
+</head><body class="">
 <header class="header">
-        <section class="top" style="height: 65px;">
-            <div class="topLine"></div>
-            <section class="topWrap ">
-                <div class="index-grid index-grid-md">
-                    <div>
-                        <a href="./getchange.html"><img src="./Website%20Design/get%20tv/GET%20TV%20photo/logo/GetTV%20logo_0430-03.png" class="logo"></a>
-                    </div>
-                    <div>
-                        <a href="./getchange.html"><img src="./img/logo/Change.png" class="logo1"></a>
-                        
-                    </div>
-                    <change-user-panel>
-                        <div><button>/ 註冊</button><button>/ 登入</button></div>
-                    </change-user-panel>
-
+    <section class="top" style="height: 65px;">
+        <div class="topLine"></div>
+        <section class="topWrap ">
+            <div class="index-grid index-grid-md">
+                <div>
+                    <a href="./getchange.html"><img src="./Website%20Design/get%20tv/GET%20TV%20photo/logo/GetTV%20logo_0430-03.png" class="logo"></a>
                 </div>
-            </section>
+                <div>
+                    <a href="./getchange.html"><img src="./img/logo/Change.png" class="logo1"></a>
+                    
+                </div>
+                <change-user-panel>
+                    <div><button>/ 註冊</button><button>/ 登入</button></div>
+                </change-user-panel>
+
+            </div>
         </section>
-        <change-header-nav2>
-            <div class="topnav" id="myTopnav">
-                <a href="javascript:void(0);" style="font-size:15px;" class="icon" id="icon">☰</a>
-                <div class="dropdown"><button class="dropbtn"><eee>+ </eee>玩多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHp2q7-8rxD6C5WSM6HSKHVy">電玩資訊</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHroMg1NSo53ikWUYJqY3ciu">體育</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpusGeLqXMt--3g8Q6KOX7-">旅遊資訊</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHq9EW4xkU6Zvl5L0GF28NHY">本土好去處</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqYaIxqHfVL-dKZSpwuCOj9">綜藝遊戲</a></div></div><div class="dropdown"><button class="dropbtn"><eee>+ </eee>睇多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrrS-kA9Geb-_afII8MiEgw">動漫宅</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrBVwpn2MJxBGr1bgceTTlq">音樂才藝</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHorvLAkpj_avOxmp4SeQ1B3">演藝</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHp07hrMs8qOBRBf8rfxRtDS">搞笑短片</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrcBs1RWj6MiIAnRped1WwV">電影搜查</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrqxL1SxhKZZZIMM0PX8wXT">萌爆寵物</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpdieDtKi2rZd93q3wzYjOt">明星</a></div></div><div class="dropdown"><button class="dropbtn"><eee>+ </eee>知多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHptLxr__fSt0Cb8B5p5V_Me">探秘</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHp63PlSrikC0z2o9mEXc17j">時事新知</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpXYloxspfAwz0-z_iDrBmv">歷史故事</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpyTe5x7Yvm-pcjfq1MHURr">錢錢錢錢</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrdpxipNmduxT3BC054x6ZX">政治知識</a></div></div><div class="dropdown"><button class="dropbtn"><eee>+ </eee>食多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHoOiaow3zqgm13ePmK2Uns6">餐廳介紹</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpLdVeCRStJgC_Jejseegth">開懷帳飲</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHoO50IPbFhk4R2JjgEcq8rJ">食物知識</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrQ_VScdE-fDCK_RPpGGLXE">好煮意</a></div></div><div class="dropdown"><button class="dropbtn"><eee>+ </eee>識多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpFvp4QunyL9SmEaemp-F2x">教學短片</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrJXxwgsl5qy6SvK12dqUfE">小知識</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpMOgUlq5a92oMpyyn2wE1W">學術</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpPqwwverPDuzL8ahCSaeoq">學攝影</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpqT7uMApjA6eMTxYO0eUul">問答遊戲</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHoFlb6-NDX_27H6XGj2ScAO">學音樂</a></div></div><div class="dropdown"><button class="dropbtn"><eee>+ </eee>靚多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqK65-cEXt6znFOuU0GFduy">男仔</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHoOCWBkyXvoNa154feJNt5G">形象與健康</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqq2mSH1NL2_mBBiOHROJF6">女仔</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqXTFkx4Hmpozyy5bigYcnT">放鬆心情</a></div></div><div class="dropdown"><button class="dropbtn"><eee>+ </eee>愛多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpuvTypSCgCco7L1Vzsv_Gz">兩性關系</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqnGdWHNlP3tsmQCtLVGLRK">價值觀</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqke9FZGbEulMJMQSwzmyJi">親子關系</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpegFCTRdNbLQV14122E0wP">心靈健康</a></div></div>
-            </div>
-        </change-header-nav2>
-        <!-- <div>
+    </section>
+    <change-header-nav2>
+        <div class="topnav" id="myTopnav">
+            <a href="javascript:void(0);" style="font-size:15px;" class="icon" id="icon">☰</a>
+            <div class="dropdown"><button class="dropbtn"><eee>+ </eee>玩多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHp2q7-8rxD6C5WSM6HSKHVy">電玩資訊</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHroMg1NSo53ikWUYJqY3ciu">體育</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpusGeLqXMt--3g8Q6KOX7-">旅遊資訊</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHq9EW4xkU6Zvl5L0GF28NHY">本土好去處</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqYaIxqHfVL-dKZSpwuCOj9">綜藝遊戲</a></div></div><div class="dropdown"><button class="dropbtn"><eee>+ </eee>睇多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrrS-kA9Geb-_afII8MiEgw">動漫宅</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrBVwpn2MJxBGr1bgceTTlq">音樂才藝</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHorvLAkpj_avOxmp4SeQ1B3">演藝</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHp07hrMs8qOBRBf8rfxRtDS">搞笑短片</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrcBs1RWj6MiIAnRped1WwV">電影搜查</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrqxL1SxhKZZZIMM0PX8wXT">萌爆寵物</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpdieDtKi2rZd93q3wzYjOt">明星</a></div></div><div class="dropdown"><button class="dropbtn"><eee>+ </eee>知多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHptLxr__fSt0Cb8B5p5V_Me">探秘</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHp63PlSrikC0z2o9mEXc17j">時事新知</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpXYloxspfAwz0-z_iDrBmv">歷史故事</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpyTe5x7Yvm-pcjfq1MHURr">錢錢錢錢</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrdpxipNmduxT3BC054x6ZX">政治知識</a></div></div><div class="dropdown"><button class="dropbtn"><eee>+ </eee>食多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHoOiaow3zqgm13ePmK2Uns6">餐廳介紹</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpLdVeCRStJgC_Jejseegth">開懷帳飲</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHoO50IPbFhk4R2JjgEcq8rJ">食物知識</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrQ_VScdE-fDCK_RPpGGLXE">好煮意</a></div></div><div class="dropdown"><button class="dropbtn"><eee>+ </eee>識多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpFvp4QunyL9SmEaemp-F2x">教學短片</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrJXxwgsl5qy6SvK12dqUfE">小知識</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpMOgUlq5a92oMpyyn2wE1W">學術</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpPqwwverPDuzL8ahCSaeoq">學攝影</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpqT7uMApjA6eMTxYO0eUul">問答遊戲</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHoFlb6-NDX_27H6XGj2ScAO">學音樂</a></div></div><div class="dropdown"><button class="dropbtn"><eee>+ </eee>靚多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqK65-cEXt6znFOuU0GFduy">男仔</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHoOCWBkyXvoNa154feJNt5G">形象與健康</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqq2mSH1NL2_mBBiOHROJF6">女仔</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqXTFkx4Hmpozyy5bigYcnT">放鬆心情</a></div></div><div class="dropdown"><button class="dropbtn"><eee>+ </eee>愛多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpuvTypSCgCco7L1Vzsv_Gz">兩性關系</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqnGdWHNlP3tsmQCtLVGLRK">價值觀</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqke9FZGbEulMJMQSwzmyJi">親子關系</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpegFCTRdNbLQV14122E0wP">心靈健康</a></div></div>
+        </div>
+    </change-header-nav2>
+    <!-- <div>
 
-            <div class="topnav" id="myTopnav">
-
-
-                    <a href="javascript:void(0);" style="font-size:15px;" id="mMenu" class="icon" onclick="myFunction()">☰</a>
-                <div class="dropdown"><button class="dropbtn"><eee>+ </eee>玩多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHp2q7-8rxD6C5WSM6HSKHVy">電玩資訊</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHroMg1NSo53ikWUYJqY3ciu">體育</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpusGeLqXMt--3g8Q6KOX7-">旅遊資訊</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHq9EW4xkU6Zvl5L0GF28NHY">本土好去處</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqYaIxqHfVL-dKZSpwuCOj9">綜藝遊戲</a></div></div><div class="dropdown"><button class="dropbtn"><eee>+ </eee>睇多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrrS-kA9Geb-_afII8MiEgw">動漫宅</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrBVwpn2MJxBGr1bgceTTlq">音樂才藝</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHorvLAkpj_avOxmp4SeQ1B3">演藝</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHp07hrMs8qOBRBf8rfxRtDS">搞笑短片</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrcBs1RWj6MiIAnRped1WwV">電影搜查</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrqxL1SxhKZZZIMM0PX8wXT">萌爆寵物</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpdieDtKi2rZd93q3wzYjOt">明星</a></div></div><div class="dropdown"><button class="dropbtn"><eee>+ </eee>知多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHptLxr__fSt0Cb8B5p5V_Me">探秘</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHp63PlSrikC0z2o9mEXc17j">時事新知</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpXYloxspfAwz0-z_iDrBmv">歷史故事</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpyTe5x7Yvm-pcjfq1MHURr">錢錢錢錢</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrdpxipNmduxT3BC054x6ZX">政治知識</a></div></div><div class="dropdown"><button class="dropbtn"><eee>+ </eee>食多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHoOiaow3zqgm13ePmK2Uns6">餐廳介紹</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpLdVeCRStJgC_Jejseegth">開懷帳飲</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHoO50IPbFhk4R2JjgEcq8rJ">食物知識</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrQ_VScdE-fDCK_RPpGGLXE">好煮意</a></div></div><div class="dropdown"><button class="dropbtn"><eee>+ </eee>識多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpFvp4QunyL9SmEaemp-F2x">教學短片</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrJXxwgsl5qy6SvK12dqUfE">小知識</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpMOgUlq5a92oMpyyn2wE1W">學術</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpPqwwverPDuzL8ahCSaeoq">學攝影</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpqT7uMApjA6eMTxYO0eUul">問答遊戲</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHoFlb6-NDX_27H6XGj2ScAO">學音樂</a></div></div><div class="dropdown"><button class="dropbtn"><eee>+ </eee>靚多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqK65-cEXt6znFOuU0GFduy">男仔</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHoOCWBkyXvoNa154feJNt5G">形象與健康</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqq2mSH1NL2_mBBiOHROJF6">女仔</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqXTFkx4Hmpozyy5bigYcnT">放鬆心情</a></div></div><div class="dropdown"><button class="dropbtn"><eee>+ </eee>愛多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpuvTypSCgCco7L1Vzsv_Gz">兩性關系</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqnGdWHNlP3tsmQCtLVGLRK">價值觀</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqke9FZGbEulMJMQSwzmyJi">親子關系</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpegFCTRdNbLQV14122E0wP">心靈健康</a></div></div></div>
-            </div>
- -->
+        <div class="topnav" id="myTopnav">
 
 
+                <a href="javascript:void(0);" style="font-size:15px;" id="mMenu" class="icon" onclick="myFunction()">☰</a>
+            <div class="dropdown"><button class="dropbtn"><eee>+ </eee>玩多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHp2q7-8rxD6C5WSM6HSKHVy">電玩資訊</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHroMg1NSo53ikWUYJqY3ciu">體育</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpusGeLqXMt--3g8Q6KOX7-">旅遊資訊</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHq9EW4xkU6Zvl5L0GF28NHY">本土好去處</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqYaIxqHfVL-dKZSpwuCOj9">綜藝遊戲</a></div></div><div class="dropdown"><button class="dropbtn"><eee>+ </eee>睇多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrrS-kA9Geb-_afII8MiEgw">動漫宅</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrBVwpn2MJxBGr1bgceTTlq">音樂才藝</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHorvLAkpj_avOxmp4SeQ1B3">演藝</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHp07hrMs8qOBRBf8rfxRtDS">搞笑短片</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrcBs1RWj6MiIAnRped1WwV">電影搜查</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrqxL1SxhKZZZIMM0PX8wXT">萌爆寵物</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpdieDtKi2rZd93q3wzYjOt">明星</a></div></div><div class="dropdown"><button class="dropbtn"><eee>+ </eee>知多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHptLxr__fSt0Cb8B5p5V_Me">探秘</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHp63PlSrikC0z2o9mEXc17j">時事新知</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpXYloxspfAwz0-z_iDrBmv">歷史故事</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpyTe5x7Yvm-pcjfq1MHURr">錢錢錢錢</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrdpxipNmduxT3BC054x6ZX">政治知識</a></div></div><div class="dropdown"><button class="dropbtn"><eee>+ </eee>食多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHoOiaow3zqgm13ePmK2Uns6">餐廳介紹</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpLdVeCRStJgC_Jejseegth">開懷帳飲</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHoO50IPbFhk4R2JjgEcq8rJ">食物知識</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrQ_VScdE-fDCK_RPpGGLXE">好煮意</a></div></div><div class="dropdown"><button class="dropbtn"><eee>+ </eee>識多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpFvp4QunyL9SmEaemp-F2x">教學短片</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrJXxwgsl5qy6SvK12dqUfE">小知識</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpMOgUlq5a92oMpyyn2wE1W">學術</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpPqwwverPDuzL8ahCSaeoq">學攝影</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpqT7uMApjA6eMTxYO0eUul">問答遊戲</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHoFlb6-NDX_27H6XGj2ScAO">學音樂</a></div></div><div class="dropdown"><button class="dropbtn"><eee>+ </eee>靚多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqK65-cEXt6znFOuU0GFduy">男仔</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHoOCWBkyXvoNa154feJNt5G">形象與健康</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqq2mSH1NL2_mBBiOHROJF6">女仔</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqXTFkx4Hmpozyy5bigYcnT">放鬆心情</a></div></div><div class="dropdown"><button class="dropbtn"><eee>+ </eee>愛多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpuvTypSCgCco7L1Vzsv_Gz">兩性關系</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqnGdWHNlP3tsmQCtLVGLRK">價值觀</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqke9FZGbEulMJMQSwzmyJi">親子關系</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpegFCTRdNbLQV14122E0wP">心靈健康</a></div></div></div>
+        </div>
+-->
 
-    </header>
+
+
+</header>
 
 <!-- Slideshow container -->
 <div class="slideshow-container" onload="showSlides(1)" style="margin-top: -7px;">
@@ -777,189 +235,150 @@ window.fbAsyncInit = function () {
 <span class="dot" onclick="currentSlide(2)"></span>
 <span class="dot" onclick="currentSlide(3)"></span>
 </div>
-    <div class="allduiqi">
-    
+<div class="allduiqi">
+
 
 <div class="container1 container1-md">
 
 
-                
-                <div class="zhongdiantuijian zhongdiantuijian-md"><h1>重點推介1</h1></div><div class="item-pindao item-pindao-md"><h1><img src="img/icon/tv-black.png" id="logo">頻道</h1>
-</div>
-        <div class="item-zhongdiantuijian item-zhongdiantuijian-md">
             
-           
+            <div class="zhongdiantuijian zhongdiantuijian-md"><h1>重點推介</h1></div><div class="item-pindao item-pindao-md"><h1><img src="img/icon/tv-black.png" id="logo">頻道</h1>
+</div>
+    <div class="item-zhongdiantuijian item-zhongdiantuijian-md">
+        
+       
 <iframe width="100%" height="100%" src="https://www.youtube.com/embed/XoDMCn3P5pI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
 <!--div pic-->
 
+        
+    </div>
+
+                <div>
+                    <div class="medium1">愛多啲</div>
+                    <div class="small1">關懷與心靈健康</div>
+                    <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrhER3oQUYbz8wnmCv1VUBw"><div class="gettv_bg bg1"></div></a>
+                </div>
             
+            
+                <div>
+                    <div class="medium1">識多啲</div>
+                    <div class="small1">學術與課程</div>
+                    <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqC1OITdb_QGz18JPmmj8a5"><div class="gettv_bg bg2"></div></a>
+                </div>
+            
+            
+                <div>
+                    <div class="medium1">睇多啲</div>
+                    <div class="small1">短片電影及劇集</div>
+                    <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpNTw4BXAyEyyMMkhl5XcR2"><div class="gettv_bg bg3"></div></a>
+                </div>
+            
+            
+                <div>
+                    <div class="medium1">靚多啲</div>
+                    <div class="small1">健康美容分享</div>
+                    <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHon14MDeHFMa9qXMo7zW92T"><div class="gettv_bg bg4"></div></a>
+                </div>
+            
+            
+                <div>
+                    <div class="medium1">知多啲</div>
+                    <div class="small1">新聞及資訊</div>
+                    <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqykeagwZRZwfEyOuTCYF7a"><div class="gettv_bg bg5"></div></a>
+                </div>
+            
+            
+                <div>
+                    <div class="medium1">玩多啲</div>
+                    <div class="small1">旅遊及玩樂資訊</div>
+                    <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrywYfDOzAjc0rA89VGqpa5"><div class="gettv_bg bg6"></div></a>
+                </div>
+            
+            
+                <div>
+                    <div class="medium1">食多啲</div>
+                    <div class="small1">飲食情報</div>
+                    <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpzSn5NOnJiIiGwWvIwR3jj"><div class="gettv_bg bg7"></div></a>
+                </div>
+            
+            
+                <div>
+                    <div class="medium1">Get多啲</div>
+                    <div class="small1">Get Change交易平台</div>
+                    <a href="http://www.gettv.hk/getchange.html"><div class="gettv_bg bg8"></div></a>
+                </div>
+            
+
+            <div class="clear"></div>
+
         </div>
-
-                    <div>
-                        <div class="medium1">愛多啲</div>
-                        <div class="small1">關懷與心靈健康</div>
-                        <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrhER3oQUYbz8wnmCv1VUBw"><div class="gettv_bg bg1"></div></a>
-                    </div>
-                
-                
-                    <div>
-                        <div class="medium1">識多啲</div>
-                        <div class="small1">學術與課程</div>
-                        <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqC1OITdb_QGz18JPmmj8a5"><div class="gettv_bg bg2"></div></a>
-                    </div>
-                
-                
-                    <div>
-                        <div class="medium1">睇多啲</div>
-                        <div class="small1">短片電影及劇集</div>
-                        <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpNTw4BXAyEyyMMkhl5XcR2"><div class="gettv_bg bg3"></div></a>
-                    </div>
-                
-                
-                    <div>
-                        <div class="medium1">靚多啲</div>
-                        <div class="small1">健康美容分享</div>
-                        <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHon14MDeHFMa9qXMo7zW92T"><div class="gettv_bg bg4"></div></a>
-                    </div>
-                
-                
-                    <div>
-                        <div class="medium1">知多啲</div>
-                        <div class="small1">新聞及資訊</div>
-                        <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqykeagwZRZwfEyOuTCYF7a"><div class="gettv_bg bg5"></div></a>
-                    </div>
-                
-                
-                    <div>
-                        <div class="medium1">玩多啲</div>
-                        <div class="small1">旅遊及玩樂資訊</div>
-                        <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrywYfDOzAjc0rA89VGqpa5"><div class="gettv_bg bg6"></div></a>
-                    </div>
-                
-                
-                    <div>
-                        <div class="medium1">食多啲</div>
-                        <div class="small1">飲食情報</div>
-                        <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpzSn5NOnJiIiGwWvIwR3jj"><div class="gettv_bg bg7"></div></a>
-                    </div>
-                
-                
-                    <div>
-                        <div class="medium1">Get多啲</div>
-                        <div class="small1">Get Change交易平台</div>
-                        <a href="http://www.gettv.hk/getchange.html"><div class="gettv_bg bg8"></div></a>
-                    </div>
-                
-
-                <div class="clear"></div>
-
-            </div>
 </div>
 <change-footer>
 
-    <footer class="footer" id="footer">
-        <div style="width: 90%; margin: 0 auto;">
-            <div class="fpanel1 fpanel1-md">
-                <div>
-                    <ul>
-                        <li><a href="#" class="test" style="font-size: large;">幫助中心</a></li>
-                        <li><a href="./question.html" class="test">問題反映</a></li>
-                        <li><a href="./term.html" class="test">使用條款</a></li>
-                        <li><a href="./privacy.html" class="test">隱私政策</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <ul>
-                        <li><a href="#" class="test" style="font-size: large;">最新消息</a></li>
-                        <!-- ./xyz二手名牌特價手袋 -->
-                        <li><a href="./activity.html" class="test">活動</a></li>
-                        <li><a href="./promotion.html" class="test">推廣</a></li>
-                        <li><a href="./dragon.html" class="test">頻道龍虎榜</a></li>
-                        <li><a href="./cooperation.html" class="test">品牌合作</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <ul>
-                        <li><a href="#" class="test" style="font-size: large;">頻道</a></li>
-                        <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrywYfDOzAjc0rA89VGqpa5" class="test">玩多啲</a></li>
-                        <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpNTw4BXAyEyyMMkhl5XcR2" class="test">睇多啲</a></li>
-                        <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqykeagwZRZwfEyOuTCYF7a" class="test">知多啲</a></li>
-                        <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpzSn5NOnJiIiGwWvIwR3jj" class="test">食多啲</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <ul style="margin-top: 45px;">
-                        <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqC1OITdb_QGz18JPmmj8a5" class="test">識多啲</a></li>
-                        <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHon14MDeHFMa9qXMo7zW92T" class="test">靚多啲</a></li>
-                        <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrhER3oQUYbz8wnmCv1VUBw" class="test">愛多啲</a></li>
-                        <li><a href="https://www.gettv.hk/getchange.html" class="test">Get Change</a></li>
-                    </ul>
-                </div>
-                <div id="social">
-                    <a href="https://www.instagram.com/hkgettv/">
-                        <div style="background-image: url('./img/ins.png');background-position: center center;background-size: contain;width: 50px;height: 50px; margin-right: 20px;">
-                        </div>
-                    </a>
-                    <a href="https://www.facebook.com/gettvhk/">
-                        <div style="background-image: url('./img/face.png');background-position: center center;background-size: contain;width: 50px;height: 50px; margin-right: 20px;">
-                        </div>
-                    </a>
-                    <a href="https://www.youtube.com/channel/UCCd5rMzWWFZEfb-yjj63O2w">
-                        <div style="background-image: url('./img/you.png');background-position: center center;background-size: contain;width: 50px;height: 50px; border-radius: 50%;">
-                        </div>
-                    </a>
-                </div>
+<footer class="footer" id="footer">       
+     <div style="width: 90%; margin: 0 auto;">
+        <div class="fpanel1 fpanel1-md">
+            <div>
+                <ul>
+                    <li><a href="#" class="test" style="font-size: large;">幫助中心</a></li>
+                    <li><a href="./question.html" class="test">問題反映</a></li>
+                    <li><a href="./term.html" class="test">使用條款</a></li>
+                    <li><a href="./privacy.html" class="test">隱私政策</a></li>
+                </ul>
             </div>
-
-
-
+            <div>
+                <ul>
+                    <li><a href="#" class="test" style="font-size: large;">最新消息</a></li>
+                    <!-- ./xyz二手名牌特價手袋 -->
+                    <li><a href="./activity.html" class="test">活動</a></li>
+                    <li><a href="./promotion.html" class="test">推廣</a></li>
+                    <li><a href="./dragon.html" class="test">頻道龍虎榜</a></li>
+                    <li><a href="./cooperation.html" class="test">品牌合作</a></li>
+                </ul>
+            </div>
+            <div>
+                <ul>
+                    <li><a href="#" class="test" style="font-size: large;">頻道</a></li>
+                    <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrywYfDOzAjc0rA89VGqpa5" class="test">玩多啲</a></li>
+                    <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpNTw4BXAyEyyMMkhl5XcR2" class="test">睇多啲</a></li>
+                    <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqykeagwZRZwfEyOuTCYF7a" class="test">知多啲</a></li>
+                    <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpzSn5NOnJiIiGwWvIwR3jj" class="test">食多啲</a></li>
+                </ul>
+            </div>
+            <div>
+                <ul style="margin-top: 45px;">
+                    <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqC1OITdb_QGz18JPmmj8a5" class="test">識多啲</a></li>
+                    <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHon14MDeHFMa9qXMo7zW92T" class="test">靚多啲</a></li>
+                    <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrhER3oQUYbz8wnmCv1VUBw" class="test">愛多啲</a></li>
+                    <li><a href="https://www.gettv.hk/getchange.html" class="test">Get Change</a></li>
+                </ul>
+            </div>
+            <div id="social">
+                <a href="https://www.instagram.com/hkgettv/">
+                    <div style="background-image: url('./img/ins.png');background-position: center center;background-size: contain;width: 50px;height: 50px; margin-right: 20px;">
+                    </div>
+                </a>
+                <a href="https://www.facebook.com/gettvhk/">
+                    <div style="background-image: url('./img/face.png');background-position: center center;background-size: contain;width: 50px;height: 50px; margin-right: 20px;">
+                    </div>
+                </a>
+                <a href="https://www.youtube.com/channel/UCCd5rMzWWFZEfb-yjj63O2w">
+                    <div style="background-image: url('./img/you.png');background-position: center center;background-size: contain;width: 50px;height: 50px; border-radius: 50%;">
+                    </div>
+                </a>
+            </div>
         </div>
-    </footer>
+
+
+
+    </div>
+    <change-announcement>FIXED ANNOUNCEMENT</change-announcement>
+    <button class="googleloginname" style="display:none;">writegoogle</button>
+    <div class="g-signin2" data-onsuccess="onSignIn" style="display:none;">imgoogle</div>
+</footer>
 
 </change-footer>
-<change-announcement>FIXED ANNOUNCEMENT</change-announcement>
-    <button class="googleloginname" style="display:none;">writegoogle</button>
-    <div class="g-signin2" data-onsuccess="onSignIn" style="display:none;" data-gapiscan="true" data-onload="true"><div style="height:36px;width:120px;" class="abcRioButton abcRioButtonLightBlue"><div class="abcRioButtonContentWrapper"><div class="abcRioButtonIcon" style="padding:8px"><div style="width:18px;height:18px;" class="abcRioButtonSvgImageWithFallback abcRioButtonIconImage abcRioButtonIconImage18"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewBox="0 0 48 48" class="abcRioButtonSvg"><g><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path><path fill="none" d="M0 0h48v48H0z"></path></g></svg></div></div><span style="font-size:13px;line-height:34px;" class="abcRioButtonContents"><span id="not_signed_indswxmss6l39n">登入</span><span id="connecteddswxmss6l39n" style="display:none">Signed in</span></span></div></div></div></dz-wrapper><dz-wrapper-js>null
-<!--  <script>
-	var slideIndex = 1;
-	
 
-	// Next/previous controls
-	function plusSlides(n) {
-	  showSlides(slideIndex += n);
-	}
 
-	// Thumbnail image controls
-	function currentSlide(n) {
-	  showSlides(slideIndex = n);
-	}
 
-	function showSlides(n) {
-	  var i;
-	  var slides = document.getElementsByClassName("mySlides");
-	  var dots = document.getElementsByClassName("dot");
-	  if (n > slides.length) {slideIndex = 1}
-	  if (n < 1) {slideIndex = slides.length}
-	  for (i = 0; i < slides.length; i++) {
-		  slides[i].style.display = "none";
-	  }
-	  for (i = 0; i < dots.length; i++) {
-		  dots[i].className = dots[i].className.replace(" active", "");
-	  }
-	  slides[slideIndex-1].style.display = "block";
-	  dots[slideIndex-1].className += " active";
-	}
-	showSlides(slideIndex);
-</script> -->
-
-<script>
-	function change() {
-		var x = document.getElementById("myTopnav");
-		if (x.className === "topnav") {
-			x.className += " responsive";
-		} else {
-			x.className = "topnav";
-		}
-	}
-</script>
-</dz-wrapper-js><dz-dazzle></dz-dazzle></body></html>
+<dz-dazzle></dz-dazzle></body></html>

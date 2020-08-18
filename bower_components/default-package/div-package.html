@@ -1,0 +1,118 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../dz-code-editor.html">
+<script>
+
+	class divPackage {
+		constructor(elm){
+			// super();
+			elm.label = '區塊';
+			elm.menu = [
+					{		
+                        'text': '編輯',
+                        'event': 'editor'
+                    },{
+                        'text': '更換背景',
+                        'event': 'stock'
+                    }, {
+                        'text': '設定',
+                        'children':[
+							{
+								'text':'背景設定',
+								'event':'bgStyle',
+								'source':elm
+							}
+						]
+                    }, {
+                        'text': 'HTML',
+                        'event': 'code'
+                    },
+					{
+                        'text': '上載',
+                        'event': 'upload'
+                    }];
+
+			elm.menu.forEach(item=>{
+				item.source = elm;
+			});
+
+			
+			elm.selected = function(url){
+				elm.changeBg(url);
+			}
+			elm.updateContent = function(html){
+				Polymer.changeList.push({
+					'element':elm,
+					'property': {
+						'innerHTML':html
+					}
+				});
+				elm.innerHTML = html;	
+			}
+
+			elm.setting = function(){
+				console.log('Settings');
+			}
+			elm.changeBg = function(url){
+				elm.addStyleChange('backgroundImage', 'url('+url+')');
+				elm.addStyleChange('backgroundSize', '100% 100%');
+				// elm.addPropertyChange('style',{
+				// 	'backgroundImage':  'url('+url+')',
+				// 	'backgroundSize': '100% 100%'
+				// });
+				// elm.style.backgroundImage = 'url('+url+')';
+				// elm.style.backgroundSize = '100% 100%';
+			}
+			elm.code = function(){
+				Polymer.dialog.width = '90%';
+				Polymer.dialog.height = '90%';
+				let dzCodeEditor =document.createElement('dz-code-editor');
+				let html = elm.innerHTML;
+				dzCodeEditor.html = html;
+				Polymer.componentPopup(dzCodeEditor);
+
+			}
+
+			
+			elm.upload = function(){
+				console.log('E Upload');
+				let json = {
+					folder: 'dz-file-management',
+					component: 'dz-file-management3',
+					width: '800px',
+					height: '400px',
+					source: elm
+				};
+				Polymer.dzFire('dz-popup',{detail: json});
+				
+			}
+			elm.stock = function(){
+				Polymer.dialog.width = '90%';
+				Polymer.dialog.height = '90%';
+				// let dzCodeEditor =document.createElement('dz-code-editor');
+				Polymer.loadComponent('dz-file-management','dz-img-stock');
+
+				let imgStock = document.createElement('dz-img-stock');
+				imgStock.source = elm;
+				Polymer.componentPopup(imgStock);
+			}
+
+			elm.bgStyle = function(){
+				Polymer.dialog.width = '150px';
+				Polymer.dialog.height = '240px';
+				// let dzCodeEditor =document.createElement('dz-code-editor');
+				Polymer.loadComponent('dz-dazzle','dz-style-settings');
+
+				let popup = document.createElement('dz-style-settings');
+				popup.source = elm;
+				popup.styles =['backgroundRepeat','backgroundSize','backgroundPosition','backgroundBlendMode'];
+				Polymer.componentPopup(popup);
+			}
+		
+			// this.eventListener(elm);
+		}
+	}
+
+
+  
+
+</script>

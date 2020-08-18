@@ -22,6 +22,10 @@ class dzWrapper extends Polymer.Element {
         this.uid = Polymer.uid;
         this.tid = Polymer.tid;
         this.thisPage = Polymer.thisPage;
+        this.pageHead = '';
+        this.pageBodyJs = '';
+        this.pageBodyClass = '';
+
     }
 
     getPath(nature,type){
@@ -38,15 +42,13 @@ class dzWrapper extends Polymer.Element {
             "?id=" +
             new Date().getTime());
 
-        let str = url +
+        let str = 
             "template/" +
             Polymer.tid +
             "/" +
             nature +
             "/" +
-            type +
-            "?id=" +
-            new Date().getTime();
+            type;
 
         return str;
     }
@@ -58,31 +60,119 @@ class dzWrapper extends Polymer.Element {
 
     }
 
+    loadPageInfo(path){
+        let that = this;
+        return new Promise(function(resolve, reject) {
+            if (Polymer.editMode==="admin")
+                Polymer.fileManager.getUserData(path).then(res=>resolve(res));
+            else
+                Polymer.getUserDataContent(path).then(res=>resolve(res));
+        });
+
+    }
+
+    adminPageLoader(){
+        let basePath = "template/" + Polymer.tid + "/" + Polymer.thisPage ;
+        Polymer.getContent(Polymer.thisPage).then(html=>{
+            // let elm = document.createRange().createContextualFragment(html);
+            // let elm = document.createElement('wrapper');
+            // elm.outerHTML = html;
+
+            let parser = new DOMParser();
+            let elm = parser.parseFromString(html, "text/html");
+            console.log('Elm',elm);
+
+            let body = elm.querySelector('body');
+            let head = elm.querySelector('head');
+            let bodyJs ='';
+            this.pageHead = head.innerHTML;
+            // this.pageHtmlClass = elm.querySelector('html').getAttribute('class') || '';
+            // document.querySelector('html').setAttribute('class',this.pageHtmlClass);
+          
+            this.pageHtmlClass = elm.querySelector('html').getAttribute('class') || '';
+            this.pageBodyClass = body.getAttribute('class') || '';
+            body.querySelectorAll('style').forEach(item=>{
+                bodyJs += item.outerHTML;
+                item.remove();
+            });
+
+            body.querySelectorAll('script').forEach(item=>{
+                bodyJs += item.outerHTML;
+                item.remove();
+            });
+
+            body.querySelector('dz-dazzle').remove();
+
+            this.innerHTML = body.innerHTML;
+            
+            this.querySelectorAll('*').forEach(item=>{
+                        new defaultPackage(item);
+            });
+            this.shadowHtml = this.innerHTML;
+            Polymer.shadowDOM = this.cloneNode(true);
+
+
+            document.addEventListener('save',e=>{
+                this.save();
+            });
+
+            this.pageBodyJs =  bodyJs;
+                console.log('Body',bodyJs);
+            let dzBody=document.createElement('dz-wrapper-js');
+            elm = document.createRange().createContextualFragment(bodyJs);
+            // dzHead.appendChild(elm);
+            dzBody.appendChild(elm);
+            document.body.appendChild(dzBody);           
+            
+            let dzAdmin = document.createElement('dz-admin');
+            document.body.appendChild(dzAdmin);
+            
+            Polymer.dzElementFire(window,'load',{});
+
+
+        });
+
+    }
+
     pageLoader(){
         console.log('DZ WRapper',Polymer.editMode);
         let bHead,mHead,bCss,mCss,bBodyJs,mBodyJs,html,elm,bodyClass;
+        let that = this;
         let basePath = "template/" + Polymer.tid + "/" + Polymer.thisPage ;
         let masterPath = "template/" + Polymer.tid + "/_master";
+        let defaultPath = "template/"+ Polymer.tid + '/_default';
 
         console.log(Polymer.thisPage,this.getPath(Polymer.thisPage,'head'));
             this.innerHTML = '';
+
             if (document.querySelector('dz-wrapper-js'))
-                document.querySelector('dz-wrapper-js').innerHTML = '';
+                // document.querySelector('dz-wrapper-js').innerHTML = '';
+                document.querySelector('dz-wrapper-js').remove();
+
+            if (Polymer.editMode==='admin'){
+                if (!document.querySelector('dz-admin'))
+                    document.body.appendChild(document.createElement('dz-admin'));
+            } else {
+                if (!document.querySelector('dz-dazzle'))
+                    document.body.appendChild(document.createElement('dz-dazzle'));
+                    
+            }
             Promise.all([
 
                 // Polymer.getUserDataContent(masterPath+'/css'),
                 // Polymer.getUserDataContent(masterPath+'/css'),
-                Polymer.getUserDataContent(basePath+'/body_js'),
-                Polymer.getUserDataContent(masterPath+'/body_js'),
-                Polymer.getUserDataContent(basePath+'/html'),
-                Polymer.getUserDataContent(basePath+'/body_class'),     
-                Polymer.getUserDataContent(basePath+'/head'),
-                Polymer.getUserDataContent(masterPath+'/head'),
+                that.loadPageInfo(basePath+'/body_js'),
+                that.loadPageInfo(masterPath+'/body_js'),
+                that.loadPageInfo(basePath+'/html'),
+                that.loadPageInfo(basePath+'/body_class'),     
+                that.loadPageInfo(basePath+'/head'),
+                that.loadPageInfo(masterPath+'/head'),
             ]).then(res=>{
                 // bHead = res[0] || '';
                 // mHead = res[1] || '';
                 // bCss = res[2] || '';
                 // mCss = res[3] || '';
+                console.log('Hi');
                 bBodyJs = res[0] || '';
                 mBodyJs = res[1] || '';
                 html = res[2]|| '';
@@ -90,27 +180,31 @@ class dzWrapper extends Polymer.Element {
                 bHead = res[4] ||'';
                 mHead = res[5] || '';
                  let dzHead=window.document.createElement('dz-wrapper-head');
+                 console.log('Head',mHead+bHead);
                 dzHead.innerHTML = mHead+bHead;
                 
-                // elm = document.createRange().createContextualFragment(mHead+bHead);
-                // console.log('Add Elm',mHead+bHead);
-                // dzHead.appendChild(elm);
-                document.head.appendChild(dzHead);
+               
+                // document.head.appendChild(dzHead);
 
                 if (!html){
-                    Polymer.getUserDataContent("_default/html").then(html=>{
-                        this.innerHTML = html;
-                    });
-                }
+                    console.log('HTML',html);   
+                    Polymer.loadComponent('dz-dazzle','dz-message-box');
+                    let dzPopup = document.createElement('dz-message-box');
+                    dzPopup.title = "匯入頁面";
+                    dzPopup.msg = "你這頁未有內容，匯入頁面嗎？你可以選擇已建立的樣版，跟據網址匯入，或者上載自己的設計";
+                    Polymer.componentPopup(dzPopup,'400px','500px');
+                    // Polymer.getUserDataContent(defaultPath+"/html").then(html=>{
+                    //     this.innerHTML = html;
+                    // });
+                } else 
+                    this.innerHTML = html;
                 // let dzWrapper = document.createElement('dz-wrapper');
                 // dzWrapper.innerHTML = html;
                 // document.body.appendChild(dzWrapper);
+
                 document.body.setAttribute('class',bodyClass);
 
                 if (Polymer.editMode==='admin'){
-                    let dzAdmin = document.createElement('dz-admin');
-                    document.body.appendChild(dzAdmin);
-
                     this.querySelectorAll('*').forEach(item=>{
                         new defaultPackage(item);
                     });
@@ -119,15 +213,17 @@ class dzWrapper extends Polymer.Element {
                     document.addEventListener('save',e=>{
                         this.save();
                     });
-                }
+                } 
 
 
                 let dzBody=document.createElement('dz-wrapper-js');
                 elm = document.createRange().createContextualFragment(mBodyJs+bBodyJs);
                 // dzHead.appendChild(elm);
                 dzBody.appendChild(elm);
+
                 document.body.appendChild(dzBody);               
 
+                Polymer.dzElementFire(window,'load',{});
             });
 
         }
@@ -154,7 +250,35 @@ class dzWrapper extends Polymer.Element {
             "/" +
             type;
         console.log('Save',basePath,html);
-        Polymer.fileManager.saveUserData(basePath, html);        
+        Polymer.fileManager.saveUserData(this.getPath(Polymer.thisPage,'head'), this.pageHead);     
+        Polymer.fileManager.saveUserData(this.getPath(Polymer.thisPage,'html'), html);     
+        Polymer.fileManager.saveUserData(this.getPath(Polymer.thisPage,'body_js'), this.pageBodyJs);     
+        Polymer.fileManager.saveUserData(this.getPath(Polymer.thisPage,'body_class'), this.pageBodyClass);     
+        console.log('My DOM');
+        this.export();   
+    }
+    export = function(){
+        let dom = document.createElement('html');
+        let head = document.createElement('head');
+        let body = document.createElement('body');
+        let dzDazzle = document.createElement('dz-dazzle');
+        let html='';
+        console.log('My DOM',dom,this.pageHead);
+        head.innerHTML = this.pageHead;
+        console.log('My DOM',dom);
+
+        let dummy = Polymer.shadowDOM.cloneNode(true);
+        dummy.querySelectorAll('[dzid]').forEach(item=>{
+            item.removeAttribute('dzid');
+        });
+        html = dummy.innerHTML + this.pageBodyJs;
+        body.innerHTML = html;
+        body.setAttribute('class',this.pageBodyClass);
+        body.appendChild(dzDazzle);
+        dom.appendChild(head);
+        dom.appendChild(body);
+        console.log('My DOM',dom);
+        Polymer.fileManager.saveHtml(Polymer.thisPage,dom.outerHTML);
     }
 
     restore=function(){
@@ -235,7 +359,7 @@ class dzWrapper extends Polymer.Element {
             );
         });
     }
-
+ 
   
 
 }

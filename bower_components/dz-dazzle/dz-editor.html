@@ -30,7 +30,7 @@
 		loadEditor() {
     //    console.log('Load Editor',this.inUse);
         let that = this;
-    
+            Polymer.editor = true;
         console.log('Load　Editor');
         let SaveButton = MediumEditor.Extension.extend({
           name: 'saveButton',
@@ -269,9 +269,18 @@
       },
 
       removeEditor(){
+          Polymer.editor = false;
           document.querySelector('.medium-editor-toolbar').remove();
           this.editor.destroy();
           this.outerHTML = this.innerHTML;
+          console.log('Parent element',this,this.source);
+          this.source.querySelectorAll('*').forEach(item=>{
+                new defaultPackage(item);
+          });
+          this.source.addPropertyChange('innerHTML',this.source.innerHTML);
+        //   this.activeElement.addPropertyChange('innerHTML',this.activeElement.innerHTML);
+
+        //   Polymer.dzElementFire(this.parentElement,'tree-update',{});
       },
 		loadScript:function(url){
 			const fileref=document.createElement('script');    

@@ -1,6 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
-<link rel="import" href="change-login.html">
+<link rel="import" href="change-login.html?id=asdklfsd">
 <link rel="import" href="change-register.html">
 
 <dom-module id="change-user-panel">
@@ -53,14 +53,14 @@
 </dom-module>
 
 <script>
-    (function() {
+    (function () {
         Polymer({
             is: 'change-user-panel',
             properties: {},
-            created: function() {
+            created: function () {
 
             },
-            _login: function() {
+            _login: function () {
                 let shadow = this.shadowRoot;
                 let that = this;
                 let user = store.get('change-user');
@@ -70,7 +70,7 @@
                 }
             },
 
-            _register: function() {
+            _register: function () {
                 let shadow = this.shadowRoot;
                 let that = this;
                 let user = store.get('change-user');
@@ -79,13 +79,20 @@
                     Polymer.popup(dialog, "change", "change-register", "400px", "600px");
                 } else {
                     store.set('change-user', null);
-                    location.replace("./");
+
+                    FB.logout(function(response) {
+                            console.log(response);
+                    });
+                    location.replace("/index.html");
+
+
                 }
             },
             logingoogle() {
                 let url = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
 
                 window.signOut();
+                console.log("insede logingoogle");
                 let that = this;
                 let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 let platform = store.get('change-platform');
@@ -106,8 +113,10 @@
                 Polymer.postData(link, param).then(res => {
                     if (res.code > 0) {
                         let all = res.resolve;
+                        console.log(res);
                         if (all.length == 0) {
                             ////jump to resigter
+                            console.log("shoud go to regis");
                             let platformcookie = {
                                 "platform": "Google",
                                 "name": name,
@@ -145,7 +154,7 @@
                 })
 
             },
-            ready: function() {
+            ready: function () {
                 let user = store.get('change-user') || null;
 
                 if (user != null) {
@@ -154,7 +163,16 @@
                     if (user['head'] == "") {
                         user['head'] = "./img/head.svg";
                     }
-                    this.shadowRoot.querySelector('#login').innerHTML = '<a href="/user.html?' + user['_id'] + '"><img src="' + user['head'] + '"></a>';
+                    let a = document.createElement('a');
+                    let img = document.createElement('img');
+                    let src = user['head'] || 'https://devshift.biz/wp-content/uploads/2017/04/profile-icon-png-898.png';
+                    a.setAttribute('href','/user.html?' + user['_id'] );
+                    img.setAttribute('src',src);
+                    a.appendChild(img);
+                    let login = this.shadowRoot.querySelector('#login');
+                    login.innerHTML = '';
+                    login.appendChild(a);
+                    // this.shadowRoot.querySelector('#login').innerHTML = '<a href="/user.html?' + user['_id'] + '"><img src="' + user['head'] + '"></a>';
 
                     this.fileManager = new AwsPackage(user);
                     console.log("uuuuu1", this.fileManager);
@@ -168,7 +186,9 @@
                     let dialog = s.querySelector('vaadin-dialog#register');
                     Polymer.popup(dialog, "change", '<change-login><div class="g-signin2" data-onsuccess="onSignIn"></div></change-login>', "40%", "90%");
                 });
+                console.log("hhhhhhhhh", document.querySelector('.googleloginname').innerHTML);
                 document.querySelector('.googleloginname').addEventListener('click', e => {
+                    console.log("running inside addevent");
                     this.logingoogle();
                 })
             }

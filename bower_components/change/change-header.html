@@ -20,18 +20,28 @@
             properties: {},
             created(){
                 let basePath =  "template/" + Polymer.tid + "/_block/";
-                this.label = '種類選單';
+                this.label = 'Get Change選單';
                 this.menu = [{
                             'text': '編輯選單',
                             'event': 'editMenu',
                             'source':this
                         }];
+                this.editMenu=function(){
+                   console.log('Edit Menu');
+                    // console.log('Edit Menu',this.selected);
+                    Polymer.loadComponent('change','change-edit-category');
+                    let popup = document.createElement('change-edit-category');
+                    Polymer.componentPopup(popup,'640px','480px');
+                }
 
-                // Polymer.getUserDataContent(basePath+'header').then(html=>{
-                //         this.innerHTML = 
-                // });        
+                if (Polymer.editMode==="admin"){
+                    // this.addEventListener('contextmenu',e=>{
+                    //     console.log('Context',e.path[0]);
+                    // });
+                }                 
             },
-            editMenu(){
+            ready(){
+    
 
             },
             searchlist: function() {

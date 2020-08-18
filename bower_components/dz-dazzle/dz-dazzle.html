@@ -78,7 +78,7 @@
 			}
 
 
-
+			
 
 
 		},
@@ -112,7 +112,6 @@
 			let that = this;
 			const logo = this.shadowRoot.querySelector('#dz-logo');
 			console.log('Logo',logo,Polymer.userType);
-			if (Polymer.userType==="professional") {
 				logo.setAttribute('hide','');
 
 				document.addEventListener('keypress',e=>{
@@ -131,7 +130,6 @@
 						}
 					}
 				});
-			}
 			let json2 = { 'component': 'dz-history', 'width': '90%', 'height': '80%' };
 
                 // button2.addEventListener('click', e => {

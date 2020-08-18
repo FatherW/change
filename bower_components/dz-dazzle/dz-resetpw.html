@@ -1,0 +1,212 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-button/vaadin-button.html">
+<link rel="import" href="../vaadin-tabs/vaadin-tabs.html">
+<link rel="import" href="../iron-pages/iron-pages.html">
+<link rel="import" href="../dz-dropzone/dz-dropzone-by-tags.html">
+<link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../paper-tags-input/paper-tags-input.html">
+<link rel="import" href="../dz-file-management/css/style.html">
+<link rel="import" href="../dz-file-management/dz-image-item.html">
+<link rel="import" href="../dz-file-management/dz-image-toolbar.html">
+<link rel="import" href="../vaadin-text-field/vaadin-password-field.html">
+
+
+<dom-module id="dz-resetpw">
+
+    <template>
+
+        <style include="main-styles"></style>
+        <style include="labs-styles"></style>
+        <style include="masonry-styles"></style>
+        <style>
+            vaadin-button:hover {
+                cursor: pointer;
+            }
+        </style>
+        <h1 class="mat-dialog-title" mat-dialog-title="" id="mat-dialog-title-1">
+            <mat-toolbar class="mat-toolbar mat-primary mat-toolbar-multiple-rows" color="primary">
+                <mat-toolbar-row class="mat-toolbar-row">
+                    <span>忘記密碼</span>
+                    <span class="example-spacer"></span>
+                    <vaadin-button on-click="select">返回</vaadin-button>
+                </mat-toolbar-row>
+            </mat-toolbar>
+        </h1>
+
+        <div style="padding: 8px;display: block;" id="userinfoinput">
+            <div>
+                用戶ID: <vaadin-text-field class="shouldblock" placeholder="請輸入用戶id" id="uid"></vaadin-text-field>
+            </div>
+            <div>
+            </div>
+            <div>
+                <vaadin-text-field class="shouldblock" id="searchitem"></vaadin-text-field>
+                <vaadin-button on-click="checkuid" id="countdown">發送驗證碼</vaadin-button>
+                <vaadin-text-field label="輸入驗證碼" id="confirm" maxlength="6" readonly style="display: inline-block;">
+                </vaadin-text-field>
+
+            </div>
+        </div>
+        <div id="contentchange"></div>
+
+        <div id="NewPasswordInput" style="display: none;">
+            <vaadin-password-field label="新密碼" id="newpassword1"></vaadin-password-field>
+            <vaadin-password-field label="確認密碼" id="newpassword2"></vaadin-password-field>
+            <vaadin-button on-click="resetTolamda">更改</vaadin-button>
+        </div>
+    </template>
+</dom-module>
+
+<script>
+    (function() {
+
+
+
+        Polymer({
+            is: 'dz-resetpw',
+            properties: {
+
+            },
+
+            created: function() {
+
+            },
+            ready: function() {
+                let shadow = this.shadowRoot;
+                //vaadin-select setting
+
+
+                ///addeventlistener
+                shadow.querySelector('#searchitem').addEventListener('keypress', e => {
+                    if (e.code == "Enter") {
+                        this.checkuid();
+                    }
+                })
+            },
+            //after click 睇uid同phone/email match 唔match
+            checkuid() {
+                let shadow = this.shadowRoot;
+                let uid = shadow.querySelector('#uid').value;
+                let searchitem = shadow.querySelector('#searchitem').value;
+                let url = "https://d8fz9pfue5.execute-api.ap-northeast-1.amazonaws.com/prod/newMiscDazzleFunction";
+                if (shadow.querySelector('#selectmenu').value == "電話號碼") {
+                    var param = {
+                        "action": "MatchEmailOrPhone",
+                        "uid": uid,
+                        "phone": searchitem
+                    }
+                } else {
+                    var param = {
+                        "action": "MatchEmailOrPhone",
+                        "uid": uid,
+                        "email": searchitem
+                    }
+                }
+
+                Polymer.postData(url, param).then(res => {
+                    if (res.code > 0) {
+                        shadow.querySelector('#confirm').readonly = false;
+                        this.resetpw();
+                    } else {
+                        alert("用戶id不符合，請重新輸入")
+                    }
+                })
+            },
+            ///send request 去lamda改密碼;
+            resetTolamda() {
+                let shadow = this.shadowRoot;
+                let pw1 = shadow.querySelector('#newpassword1').value;
+                let pw2 = shadow.querySelector('#newpassword2').value;
+                let url = "https://d8fz9pfue5.execute-api.ap-northeast-1.amazonaws.com/prod/newMiscDazzleFunction";
+                let uid = shadow.querySelector('#uid').value;
+                let param = {
+                    "action": "renewPassword",
+                    "uid": uid,
+                    "password": pw1
+                }
+
+                if (pw1 == pw2) {
+                    Polymer.postData(url, param).then(res => {
+                        if (res.code > 0) {
+                            shadow.querySelector('#contentchange').innerHTML = "你已成功更改密碼";
+                        }
+                    })
+                } else {
+                    alert("兩次密碼不一樣，請重新輸入");
+                }
+
+            },
+            //用黎關dialog
+            select() {
+                Polymer.dzFire('dz-login-close-dialog', {});
+            },
+            ///send驗證碼 
+            resetpw() {
+                let shadow = this.shadowRoot;
+                let tempnum = Math.random();
+                let temp = tempnum.toString();
+                let token = "";
+                for (i = 2; i < 8; i++) {
+                    token += temp[i]
+                }
+                let sms = shadow.querySelector('#searchitem');
+                let smsbutton = shadow.querySelector('#countdown');
+                let user = sms.value;
+                let smsconfirm = shadow.querySelector("#confirm");
+
+                if (shadow.querySelector('#selectmenu').value == "電話號碼") {
+                    Polymer.sms(user, "你的驗證碼是: " + token);
+                } else {
+                    Polymer.sendEmail(user, "你的驗證碼是: " + token, "你的驗證碼是: " + token);
+                }
+
+                shadow.querySelectorAll('.shouldblock').forEach(item => {
+                    item.readonly = true;
+                })
+
+                smsconfirm.readonly = false;
+                smsconfirm.addEventListener('keyup', e => {
+                    if (smsconfirm.value.length == 6) {
+                        if (smsconfirm.value == token) {
+                            shadow.querySelector('#contentchange').innerHTML = "請輸入新密碼";
+                            shadow.querySelector('#NewPasswordInput').style.display = "block";
+                            shadow.querySelector('#userinfoinput').style.display = "none";
+                        } else {
+                            shadow.querySelector('#contentchange').innerHTML = "驗證碼錯誤"
+                        }
+                    } else {
+                        shadow.querySelector('#contentchange').innerHTML = "";
+
+                    }
+
+                })
+
+
+
+                sms.readonly = true; //display電詰號碼以免驗證中更改
+                smsbutton.disabled = true; //当点击后倒计时时候不能点击此按钮
+                var time = 45; //倒计时30秒
+                var timer = setInterval(fun1, 1000); //设置定时器
+                function fun1() {
+                    time--;
+                    if (time >= 0) {
+                        smsbutton.innerHTML = time + "s後重新發送";
+                    } else {
+                        token = null;
+                        smsbutton.innerHTML = "重新發送驗證碼";
+                        sms.readonly = false;
+                        smsbutton.disabled = false; //倒计时结束能够重新点击发送的按钮
+                        smsconfirm.readonly = true;
+                        smsconfirm.value = "";
+                        smsconfirm.placeholder = "請重新驗證";
+                        clearTimeout(timer); //清除定时器
+                        time = 5; //设置循环重新开始条件
+                    }
+                }
+
+            },
+
+        });
+
+    })();
+</script>

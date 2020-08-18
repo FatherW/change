@@ -1,0 +1,385 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-button/vaadin-button.html">
+<link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../vaadin-text-field/vaadin-email-field.html">
+<link rel="import" href="../vaadin-form-layout/vaadin-form-layout.html">
+<link rel="import" href="../vaadin-form-layout/vaadin-form-item.html">
+<link rel="import" href="../vaadin-form-layout/index.html">
+<link rel="import" href="../vaadin-date-picker/vaadin-date-picker.html">
+<dom-module id="dz-userinfo">
+
+    <template>
+        <style>
+            .container {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                margin: 3%;
+                overflow: hidden;
+            }
+
+
+            #smsdiv,
+            #emaildiv {
+                display: none;
+            }
+        </style>
+        <div class="container">
+            <div>
+                <!-- show uid -->
+                <vaadin-text-field label="用戶ID" theme="small" value="{{user.uid}}" readonly>
+                </vaadin-text-field>
+
+            </div>
+            <div>
+                <!-- 公司br -->
+                <vaadin-text-field class="bigdiv" id="comName" label="公司名稱" error-message="公司名稱不能為空" disable required>
+                </vaadin-text-field>
+                <vaadin-button id="br" theme="small">上載公司BR</vaadin-button>
+
+            </div>
+            <div>
+                <!-- 電話 -->
+                <vaadin-number-field class="bigdiv allowinput" id='SMS' label="電話" value="{{user.phone}}" theme="small"
+                    size="8" error-message="請輸入正確的香港手機號碼" readonly required></vaadin-number-field>
+
+                <div id="smsdiv">
+                    <!-- 認證 -->
+                    <vaadin-button id="popSms" theme="small" on-click="sendSMS">發送短訊驗證碼
+                    </vaadin-button>
+
+                    <vaadin-number-field class="bigdiv" maxlength="6" id="smsconfirm" label="驗證碼確認" theme="small"
+                        size="8" readonly required>
+                    </vaadin-number-field>
+
+                </div>
+                <div id="sms_message" style="display: inline-block;">
+
+                </div>
+
+            </div>
+            <div>
+                <!-- email -->
+                <vaadin-email-field class="bigdiv allowinput" value="{{user.email}}" id='Emailinput' label="電郵"
+                    name="email" error-message="請輸入正確的郵箱地址" theme="small" readonly clear-button-visible required>
+                </vaadin-email-field>
+
+                <div id="emaildiv">
+                    <!-- 認證 -->
+                    <vaadin-button id="email" theme="small" on-click="sendEmail">發送郵箱驗證碼
+                    </vaadin-button>
+
+                    <vaadin-number-field class="bigdiv" id='emailconfirm' label="驗證碼確認" theme="small" size="8"
+                        maxlength="6" readonly required></vaadin-number-field>
+
+                </div>
+
+                <div id="email_message" style="display: inline-block;">
+
+                </div>
+
+            </div>
+            <div>
+                <!-- 增值 -->
+                <vaadin-text-field class="bigdiv" label="Credit" theme="small" value="HK$Value" readonly>
+                </vaadin-text-field>
+                <vaadin-button id="increment" theme="small">增值</vaadin-button>
+                <div>
+                    <vaadin-button style="width: 50%;margin: 45px;" on-click="infochange">{{change}}</vaadin-button>
+                    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+                        <input type="hidden" name="cmd" value="_s-xclick">
+                        <input type="hidden" name="hosted_button_id" value="SYQP7HUT8M968">
+                        <table>
+                            <tr>
+                                <td><input type="hidden" name="on0" value="增值">增值</td>
+                            </tr>
+                            <tr>
+                                <td><select name="os0">
+                                        <option value="1.">1. $200.00 HKD</option>
+                                        <option value="2.">2. $500.00 HKD</option>
+                                        <option value="3.">3. $1,000.00 HKD</option>
+                                    </select> </td>
+                            </tr>
+                        </table>
+                        <input type="hidden" name="currency_code" value="HKD">
+                        <input type="image" src="https://www.paypalobjects.com/en_GB/HK/i/btn/btn_buynowCC_LG_wCUP.gif"
+                            border="0" name="submit" alt="PayPal – The safer, easier way to pay online!">
+                        <img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/scr/pixel.gif" width="1"
+                            height="1">
+                    </form>
+
+                </div>
+
+            </div>
+            <div>
+                <!-- 到期日 -->
+                <vaadin-text-field label="註冊日期: 年-月-日" value="{{timeStart}}" readonly></vaadin-text-field>
+                <vaadin-text-field label="到期日期: 年-月-日" value="{{timeEnd}}" readonly></vaadin-text-field>
+
+            </div>
+            <!-- 更改 -->
+            <div id="paypal-button-container"></div>
+
+        </div>
+    </template>
+
+
+</dom-module>
+<script src="https://www.paypal.com/sdk/js?client-id=AYWhNRlKOa6JmuEUOO5cPDZx9QhrwNBOUappHjg3N8Rqlp4avE81U5CFFknca5ZIT2__A2sqfHM1dV5i&currency=USD"></script>
+
+<script>
+    (function() {
+
+
+
+        Polymer({
+            is: 'dz-userinfo',
+            properties: {
+                "user": {
+                    "type": Array
+                }
+            },
+            paypal() {
+                console.log("good!");
+                let shadow = this.shadowRoot;
+                let paypal2 = shadow.querySelector('#paypal-button-container');
+                console.log(paypal2);
+                // Render the PayPal button into #paypal-button-container
+                paypal.Buttons({
+
+                    // Set up the transaction
+                    createOrder: function(data, actions) {
+                        return actions.order.create({
+                            purchase_units: [{
+                                amount: {
+                                    value: '0.01'
+                                }
+                            }]
+                        });
+                    },
+
+                    // Finalize the transaction
+                    onApprove: function(data, actions) {
+                        return actions.order.capture().then(function(details) {
+                            // Show a success message to the buyer
+                            alert('Transaction completed by ' + details.payer.name.given_name + '!');
+                        });
+                    }
+
+
+                }).render(paypal2);
+            },
+            created: function() {},
+            ready: function() {
+                this.paypal();
+                let that = this;
+                let user = store.get('user');
+                let shadow = this.shadowRoot;
+                console.log(JSON.stringify(user));
+                that.user = user;
+                let regisdate = user['註冊日期'];
+                if (user['到期日期']) {
+                    var expirdate = user['到期日期'];
+                } else {
+                    var expirdate = regisdate + 31536000;
+                }
+
+                this.timephrase(regisdate, expirdate);
+                this.change = "更改";
+
+                shadow.querySelector('#SMS').addEventListener('keypress', e => {
+                    shadow.querySelector('#smsdiv').style.display = "inline-block"
+                })
+
+                shadow.querySelector('#Emailinput').addEventListener('keypress', e => {
+                    shadow.querySelector('#emaildiv').style.display = "inline-block"
+                })
+
+
+            },
+
+            timephrase(Regis, Expire) {
+                let that = this;
+                let d = new Date(Regis * 1000);
+                let day = d.getDate();
+                let month = d.getMonth() + 1;
+                let year = d.getFullYear();
+
+                that.timeStart = year + "-" + month + "-" + day;
+
+                d = new Date(Expire * 1000);
+                day = d.getDate();
+                month = d.getMonth() + 1;
+                year = d.getFullYear();
+
+                that.timeEnd = year + "-" + month + "-" + day;
+
+
+            },
+
+            sendSMS() {
+                let shadow = this.shadowRoot;
+                let tempnum = Math.random();
+                let temp = tempnum.toString();
+                let token = "";
+                for (i = 2; i < 8; i++) {
+                    token += temp[i]
+                }
+                let sms = shadow.querySelector('#SMS');
+                let smsbutton = shadow.querySelector('#popSms');
+                let user = sms.value;
+                let smsconfirm = shadow.querySelector("#smsconfirm");
+
+                Polymer.sms(user, "你的驗證碼是: " + token);
+
+                smsconfirm.readonly = false;
+                smsconfirm.addEventListener('keyup', e => {
+                    if (smsconfirm.value.length == 6) {
+                        if (smsconfirm.value == token) {
+                            shadow.querySelector('#smsdiv').style.display = "none";
+                            shadow.querySelector('#sms_message').innerHTML = "成功更改電話號碼!"
+
+                        } else {
+                            shadow.querySelector('#sms_message').innerHTML = "驗證碼錯誤"
+                        }
+                    } else {
+                        shadow.querySelector('#sms_message').innerHTML = "";
+
+                    }
+
+                })
+
+                sms.readonly = true; //display電詰號碼以免驗證中更改
+                smsbutton.disabled = true; //当点击后倒计时时候不能点击此按钮
+                var time = 45; //倒计时30秒
+                var timer = setInterval(fun1, 1000); //设置定时器
+                function fun1() {
+                    time--;
+                    if (time >= 0) {
+                        smsbutton.innerHTML = time + "s後重新發送";
+                    } else {
+                        token = null;
+                        smsbutton.innerHTML = "重新發送驗證碼";
+                        sms.readonly = false;
+                        smsbutton.disabled = false; //倒计时结束能够重新点击发送的按钮
+                        smsconfirm.readonly = true;
+                        smsconfirm.value = "";
+                        smsconfirm.placeholder = "請重新驗證";
+                        clearTimeout(timer); //清除定时器
+                        time = 5; //设置循环重新开始条件
+                    }
+                }
+
+
+
+            },
+            sendEmail() {
+                let shadow = this.shadowRoot;
+                let tempnum = Math.random();
+                let temp = tempnum.toString();
+                let token = "";
+                for (i = 2; i < 8; i++) {
+                    token += temp[i]
+                }
+                let email = shadow.querySelector('#Emailinput');
+                let emailbutton = shadow.querySelector('#email');
+                let user = email.value;
+                let emailconfirm = shadow.querySelector('#emailconfirm');
+
+                Polymer.sendEmail(user, "你的驗證碼是: " + token, "你的驗證碼是: " + token);
+
+
+
+                emailconfirm.addEventListener('keyup', e => {
+                    if (emailconfirm.value.length == 6) {
+                        if (emailconfirm.value == token) {
+                            shadow.querySelector('#emaildiv').style.display = "none";
+                            shadow.querySelector('#email_message').innerHTML = "成功更改電郵!"
+                        } else {
+                            shadow.querySelector('#email_message').innerHTML = "驗證碼錯誤"
+                        }
+                    } else {
+                        shadow.querySelector('#email_message').innerHTML = "";
+
+                    }
+
+                })
+                emailconfirm.readonly = false;
+                email.readonly = true; //display電詰號碼以免驗證中更改
+                emailbutton.disabled = true; //当点击后倒计时时候不能点击此按钮
+                var time = 45; //倒计时30秒
+                var timer = setInterval(fun1, 1000); //设置定时器
+                function fun1() {
+                    time--;
+                    if (time >= 0) {
+                        emailbutton.innerHTML = time + "s後重新發送";
+                    } else {
+                        token = null;
+                        emailbutton.innerHTML = "重新發送驗證碼";
+                        email.readonly = false;
+                        emailbutton.disabled = false; //倒计时结束能够重新点击发送的按钮
+                        emailconfirm.readonly = true;
+                        emailconfirm.value = "";
+                        emailconfirm.placeholder = "請重新驗證";
+                        clearTimeout(timer); //清除定时器
+                        time = 5; //设置循环重新开始条件
+                    }
+                }
+
+            },
+
+            ////更改資料button
+            infochange() {
+                let url = "https://d8fz9pfue5.execute-api.ap-northeast-1.amazonaws.com/prod/newMiscDazzleFunction";
+                let user = store.get('user');
+                let shadow = this.shadowRoot;
+                let button = this.change;
+                if (button == "更改") {
+                    this.change = "確認";
+                    let x, i;
+                    x = shadow.querySelectorAll(".allowinput");
+                    for (i = 0; i < x.length; i++) {
+                        x[i].readonly = false;
+                    }
+
+                } else {
+                    let userEmail = user.email;
+                    let phone = user.phone;
+                    let uid = user.uid;
+                    this.change = "更改";
+                    shadow.querySelector('#smsdiv').style.display = "none";
+                    shadow.querySelector('#emaildiv').style.display = "none";
+
+                    x = shadow.querySelectorAll(".allowinput");
+                    for (i = 0; i < x.length; i++) {
+                        x[i].readonly = true;
+                    }
+
+
+                    // if (userEmail != user.email || phone != user.phone) {
+
+                    //     let param = {
+                    //         "action": "changeUserInfo",
+                    //         "email": userEmail,
+                    //         "phone": phone,
+                    //         "uid": uid
+                    //     };
+
+                    //     Polymer.postData(url, param).then(res => {
+                    //         if (res.code > 0) {
+
+                    //         } else {
+                    //             alert("param打錯了")
+                    //         }
+                    //     })
+
+
+                    // } else {
+                    //     console.log("same");
+                    // }
+
+                }
+            },
+        });
+
+    })();
+</script>

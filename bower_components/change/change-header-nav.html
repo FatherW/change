@@ -158,13 +158,37 @@
 
 
         <div>
-            <div class="topnav" id="myTopnav">
+            <!-- <div class="topnav" id="myTopnav">
 
 
                 <a href="javascript:void(0);" style="font-size:15px;" class="icon" on-click="myFunction">&#9776;</a>
-            </div>
-        </div>
 
+
+            </div> -->
+
+            <div class="topnav" id="myTopnav">
+                <a href="javascript:void(0);" style="font-size:15px;" class="icon">☰</a>
+                
+                    <template is="dom-repeat" items="{{categories}}" as="category">
+                        <div class="dropdown">
+                            <button class="dropbtn">
+                               <eee>+ </eee>
+                               {{category.name}}
+                            </button>
+
+                             <div class="dropdown-content">
+                                <template is="dom-repeat" items="{{category.children}}" as="item">
+                                        <a href$="/list-product.html?cate={{item}}">{{item}}</a>
+                                    </template>
+                                  
+                                <!-- <a href="list-product.html?cate=%E9%9B%BB%E5%AD%90%E5%99%A8%E6%9D%90">電子器材</a><a href="list-product.html?cate=%E6%89%8B%E6%A9%9F%E5%8F%8A%E5%B9%B3%E6%9D%BF%E9%A1%9E">手機及平板類</a><a href="list-product.html?cate=%E6%89%8B%E6%8F%90%E9%9B%BB%E8%85%A6">手提電腦</a><a href="list-product.html?cate=%E6%A1%8C%E4%B8%8A%E4%B8%BB%E6%A9%9F">桌上主機</a> -->
+                            
+                            </div> 
+                         </div>
+                    </template>
+
+             </div> 
+        </div>
 
 
     </template>
@@ -177,83 +201,32 @@
     (function () {
         Polymer({
             is: 'change-header-nav',
-            properties: {},
+            properties: {
+                categories: Array
+            },
             created: function () {
 
-                this.label = '種類選單';
-                this.menu = [{
-                            'text': '編輯選單',
-                            'event': 'editMenu',
-                            'source':this
-                        }];
-
-
+              
+            
+                // Polymer.getContent('https://www.gettv.hk/json/category.json?id='+new Date().getTime()).then(html=>{
+                //     this.categories = JSON.parse(html);
+                // });
+                this.renew();
+                document.addEventListener('renew-categories',e=>{
+                    this.renew();
+                });
+                // this.categories = [];
             },
-            editMenu(){
-
+            renew(){
+                Polymer.getContent('https://www.gettv.hk/json/category.json?id='+new Date().getTime()).then(html=>{
+                    this.categories = JSON.parse(html);
+                });
             },
             ready: function () {
-                let shadow = this.shadowRoot;
-                let that = this;
-                let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                let params = {
-                    "action": "searchData",
-                    "index": "change",
-                    "type": "categories",
-                    "body": {
-                        "sort": [{
-                            "parent": {
-                                "order": "asc"
-                            },
-                            "id": {
-                                "order": "asc"
-                            }
-                        }],
-                        "query": {
-                            "match_all": {}
-                        }
-                    }
-                };
-                Polymer.postData(url, params).then(res => {
-                    let maincates = [];
-                    let subcates = [];
-                    for (i = 0; i < res.resolve.length; i++) {
-                        if (res.resolve[i]['parent'] == "0") {
-                            maincates.push(res.resolve[i]);
-                        } else {
-                            subcates.push(res.resolve[i]);
-                        }
-                    };
-                    let div = shadow.querySelector('div#myTopnav');
-                    maincates.forEach(maincate => {
-                        let div1 = document.createElement('div');
-                        div1.setAttribute('class', 'dropdown');
-                        // div1 包住所有的东西
-                        let button = document.createElement('button')
 
-                        button.setAttribute('class', 'dropbtn');
-                        button.innerHTML = "<eee>+ </eee>" + maincate['name'];
-                        let div2 = document.createElement('div');
-                        div2.setAttribute('class', 'dropdown-content');
-                        subcates.forEach(subcate => {
-                            if (subcate['parent'] == maincate['_id']) {
-                                let a = document.createElement('a');
-                                a.setAttribute('href', "list-product.html?cate=" + encodeURIComponent(subcate['name']));
-                                a.innerText = subcate['name'];
-                                div2.appendChild(a);
-                            }
-                        });
-                        div1.appendChild(button);
-                        div1.appendChild(div2);
-                        div.appendChild(div1);
+                if (Polymer.editMode==="admin")
+                    new defaultPackage(this);
 
-                    });
-                    let aboutUs = document.createElement('li');
-                    aboutUs.setAttribute('class', 'dropdown');
-                    aboutUs.setAttribute('style', 'color: black;');
-                    aboutUs.innerHTML = ''
-
-                })
             },
 
             searchlist: function () {

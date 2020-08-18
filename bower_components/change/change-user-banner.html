@@ -234,7 +234,7 @@
                         if (res.code > 0) {
                             if (res.resolve.length > 0) {
                                 let bgImg = res.resolve[0]['banner'] || "https://www.gettv.hk/Website%20Design/profile%20page/img/profile%20banner/company-profile-banner.png";
-                                shadow.querySelector('#mp').style.backgroundImage = "url('" + bgImg+ "')";
+                                shadow.querySelector('#mp').style.backgroundImage = "url('" + bgImg + "')";
                                 shadow.querySelector('#Uname').innerText = res.resolve[0]['username'];
                                 let t = res.resolve[0]['createTime'];
                                 let _thetimenow = Date.now();
@@ -256,7 +256,7 @@
                                 shadow.querySelector('#buy').innerText = res.resolve[0]['history'].length;
                                 shadow.querySelector('#rate').innerText = res.resolve[0]['score'];
                                 let proPic = res.resolve[0]['head'] || "https://img.favpng.com/20/11/12/computer-icons-user-profile-png-favpng-0UAKKCpRRsMj5NaiELzw1pV7L.jpg";
-                                    shadow.querySelector('#dp').src = proPic;
+                                shadow.querySelector('#dp').src = proPic;
                             }
                         }
                     })
@@ -310,9 +310,19 @@
                 this.dialog = dialog;
                 this.curElm = e.path[0];
 
+                console.log("gosh")
                 // Polymer.popup(dialog, "change", "change-dropzone-file", "60%", "50%");
-                if (Polymer.editMode==="admin")
+
+                let userInfo = document.querySelector('change-user-info');
+                console.log("userInfo", userInfo);
+                let keyword = userInfo.shadowRoot.querySelector('#vb').innerHTML;
+                console.log("keyword", keyword);
+                if (keyword == "提交") {
                     Polymer.popup(dialog, 'change', 'change-gallery', '90%', '90%');
+                } else {
+                    console.log("Will not be able to open gallery!");
+                }
+
                 // console.log('saved', bucket)
             },
 

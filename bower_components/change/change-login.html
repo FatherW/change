@@ -199,6 +199,7 @@
                 this.userManager = new DataPackage('_user');
             },
             _forgot: function() {
+                console.log('forgot password');
                 let shadow = this.shadowRoot;
                 let that = this;
                 let dialog = shadow.querySelector('vaadin-dialog');
@@ -229,99 +230,172 @@
                     }
 
                 });
+                FB.getLoginStatus(function(response){
+                    console.log('FB',response);
+                    if (response.status==="connected"){
+                        //if we do have a non-null response.session, call FB.logout(),
+                        //the JS method will log the user out of Facebook and remove any authorization cookies
+                    
+
+                        that.log();
+                    }
+
+                    if (!response.session) {
+                        // window.location = "/mysite/Login.aspx";
+                        
+                        
+                        return;
+
+
+                    }
+                    // FB.logout(function(response){
+                    //         console.log('Logout',response);
+                    //     });
+
+
+                });
 
 
 
 
 
             },
+            _register(json){
+                let user = new DataManager("_user");
+
+                return new Promise(function(resolve, reject) {
+                    user.updateData(json['email'],json).then(res=>{
+                        resolve();
+                    },err=>{
+                        reject();
+                    });
+                });
+
+
+            },
+
+
             google() {
                 document.querySelector('.g-signin2 .abcRioButtonContentWrapper').click();
 
             },
             log: function() {
                 let url = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
+                console.log("good");
                 let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 let that = this;
-                FB.login(function(response) {
-                    if (response.authResponse) {
-                        FB.api('/me', {
-                            fields: 'name, email'
-                        }, function(response) {
-                            let email = response.email;
-                            let name = response.name;
-                            let param = {
-                                "action": "searchData",
-                                "index": "change",
-                                "type": "_user",
-                                "body": {
-                                    "query": {
-                                        "match": {
-                                            "email": email
+
+              
+                    // user is now logged out
+                    FB.login(function(response) {
+                        console.log("response", response);
+                        if (response.authResponse) {
+                            console.log('Welcome!  Fetching your information.... ');
+                            FB.api('/me', {
+                                fields: 'name, email'
+                            }, function(response) {
+                                console.log('Good to see you, ' + JSON.stringify(response) + '.' + response.email);
+                                let email = response.email;
+                                let name = response.name;
+                                let head = "http://graph.facebook.com/" + response.id + "/picture?type=normal";
+                                let param = {
+                                    "action": "searchData",
+                                    "index": "change",
+                                    "type": "_user",
+                                    "body": {
+                                        "query": {
+                                            "match": {
+                                                "email": email
+                                            }
                                         }
                                     }
-                                }
-                            };
-                            Polymer.postData(link, param).then(res => {
-                                if (res.code > 0) {
-                                    let all = res.resolve;
-                                    if (all.length == 0) {
-                                        ////jump to resigter
-                                        let platformcookie = {
-                                            "platform": "facebook",
-                                            "name": name,
-                                            "email": email
-                                        };
-
-                                        store.set("change-platform", platformcookie);
-                                        let dialog = that.shadowRoot.querySelector('#registerpop');
-                                        Polymer.popup(dialog, "change", "change-register", "45s%", "90%");
-                                    } else {
-                                        if (all[0].platform == "facebook") {
-                                            let loginparams = {
-                                                "action": "login",
-                                                "login": email,
-                                                "password": all[0]['password']
-                                            };
-
-                                            Polymer.postData(url, loginparams).then(res => {
-                                                if (res.code > 0) {
-                                                    let user = res.resolve;
-                                                    store.set('change-user', user);
-                                                    FB.logout(function(response) {
-                                                        // Person is now logged out
-                                                    });
-                                                    location.reload();
-                                                } else {
-                                                    alert('登入失敗');
-                                                }
+                                };
+                                // FB.logout(function(response) {
+                                //     // Person is now logged out
+                                // });
+                                Polymer.postData(link, param).then(res => {
+                                    if (res.code > 0) {
+                                        let all = res.resolve;
+                                        console.log(res);
+                                        let pw = generatePassword();
+                                        if (all.length)
+                                            that.logWithPasswd(email, all[0]['password']);
+                                        else {
+                                            // that._fb_register(email);
+                                            let json ={
+                                                'email': email,
+                                                'name': email,
+                                                'password': pw
+                                            }
+                                            that._register(json).then(res=>{
+                                                that.logWithPasswd(email, pw);
                                             });
-
-                                        } else {
-                                            alert("此帳戶的郵箱已在" + all[0].platform + "註冊，請重新登入");
                                         }
+
+
+
+                                        // if (all.length == 0) {
+                                        //     ////jump to resigter
+                                        //     console.log("shoud go to regis");
+                                        //     let platformcookie = {
+                                        //         "platform": "facebook",
+                                        //         "name": name,
+                                        //         "email": email,
+                                        //         "head": head
+                                        //     };
+
+
+                                        //     store.set("change-platform", platformcookie);
+                                        //     let dialog = that.shadowRoot.querySelector('#registerpop');
+                                        //     Polymer.popup(dialog, "change", "change-register", "45s%", "90%");
+                                        // } else {
+                                        //     // if (all[0].platform == "facebook") {
+
+                                        //     that.logWithPasswd(email, all[0]['password']);
+                                        //     // let loginparams = {
+                                        //     //     "action": "login",
+                                        //     //     "login": email,
+                                        //     //     "password": all[0]['password']
+                                        //     // };
+
+                                        //     // Polymer.postData(url, loginparams).then(res => {
+                                        //     //     if (res.code > 0) {
+                                        //     //         let user = res.resolve;
+                                        //     //         store.set('change-user', user);
+                                        //     //         // location.reload();
+                                        //     //     } else {
+                                        //     //         alert('登入失敗');
+                                        //     //     }
+                                        //     // });
+
+                                        //     // } else {
+                                        //     //     alert("此帳戶的郵箱已在" + all[0].platform + "註冊，請重新登入");
+                                        //     // }
+                                        // }
+                                    } else {
+                                        console.log("打錯param");
                                     }
-                                } else {
-                                    console.log("打錯param");
-                                }
-                            })
+                                })
 
 
-                            // that.userManager.loadData(response.id).then(res => {
-                            //     console.log('Result', res);
-                            //     if (Object.keys(res).length === 0) {
-                            //         alert('你的Facebook Login還未註冊，要幫你註冊麼？');
-                            //         that._fb_register(response.id, response.name, response.email);
-                            //     }
+                                // that.userManager.loadData(response.id).then(res => {
+                                //     console.log('Result', res);
+                                //     if (Object.keys(res).length === 0) {
+                                //         alert('你的Facebook Login還未註冊，要幫你註冊麼？');
+                                //         that._fb_register(response.id, response.name, response.email);
+                                //     }
 
-                            // });
-                        });
-                    } else {
-                        console.log('User cancelled login or did not fully authorize.');
-                    }
-                }, {
-                    scope: 'email'
-                });
+                                // });
+                            });
+                        } else {
+                            console.log('User cancelled login or did not fully authorize.');
+                        }
+                    }, {
+                        scope: 'email'
+                    });
+
+
+              
             },
             checkLoginState: function() { // Called when a person is finished with the Login Button.
                 FB.getLoginStatus(function(response) { // See the onlogin handler
@@ -330,6 +404,8 @@
             },
 
             statusChangeCallback: function(response) { // Called with the results from FB.getLoginStatus().
+                console.log('statusChangeCallback');
+                console.log(response); // The current login status of the person.
                 if (response.status === 'connected') { // Logged into your webpage and Facebook.
                     testAPI();
                 } else { // Not logged into your webpage or we are unable to tell.
@@ -338,10 +414,13 @@
             },
 
             testAPI: function() { // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
-                FB.api('/me', function(response) {});
+                console.log('Welcome!  Fetching your information.... ');
+                FB.api('/me', function(response) {
+                    console.log('Successful login for: ' + response);
+                });
             },
 
-            _fb_register(id, name, email) {
+            _fb_register(email) {
                 let registerUrl = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
                 let params = {
                     "action": "changeregister",
@@ -349,16 +428,19 @@
                     "area": '全港',
                     "email": email,
                     "password": '!@#$%^#$%',
-                    "phone": id,
                     "isPromotionMsg": false
                 };
+                console.log("Params", params);
                 Polymer.postData(registerUrl, params).then(res => {
                     // alert(res.text);
+                    console.log('Res', res);
 
-                    that.userManager.getAllData().then(re => {});
+                    // that.userManager.getAllData().then(re => {
+                    //     console.log('Result', re);
+                    // });
 
                     if (res.code > 0) {
-
+                            console.log(res);
                         // this.fileManager = new AwsPackage(res.resolve);
                         // this.fileManager.saveFile('json/user-' + res.resolve.id + '.json', JSON.stringify(res.resolve));
 
@@ -367,6 +449,7 @@
             },
 
             _register: function() {
+                console.log('Register');
                 let shadow = this.shadowRoot;
                 let that = this;
                 let dialog = shadow.querySelector('vaadin-dialog');
@@ -384,38 +467,67 @@
                     if (password === "") {
                         alert('密碼不可以為空');
                     } else {
-                        let loginUrl = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
-                        let params = {
-                            "action": "login",
-                            "login": uid,
-                            "password": password
-                        };
-                        Polymer.postData(loginUrl, params).then(res => {
-                            if (res.code > 0) {
-                                if (res.resolve) {
-                                    let user = res.resolve;
-                                    if (user.token == "" || user.token == null || user.token == undefined) {
-                                        store.set('change-user', user);
-                                        location.reload();
-                                    } else if (user.token == "1") {
-                                        alert("你已經被取消了用戶資格");
-                                    } else {
-                                        alert("請先進行電郵驗證");
-                                    }
-                                } else {
-                                    alert("用戶不存在，請註冊後登入");
-                                }
-                            } else {
-                                alert('登入失敗');
-                            }
-                        });
+                        this.logWithPasswd(uid, password);
                     }
                 }
             },
 
 
+            logWithPasswd: function(uid, password) {
 
+                let loginUrl = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
+                let params = {
+                    "action": "login",
+                    "login": uid,
+                    "password": password
+                };
+                console.log("Login JSON", params);
+                Polymer.postData(loginUrl, params).then(res => {
+                    console.log("Login", res);
+                    if (res.code > 0) {
+                        console.log("Result1", res.resolve);
+                        console.log("Result2", res.resolve.length);
+                        if (res.resolve) {
+                            let user = res.resolve;
+                            // if (user.token == "" || user.token == null || user.token == undefined) {
+                            store.set('change-user', user);
+                            location.reload();
+                            // } else if (user.token == "1") {
+                            //     alert("你已經被取消了用戶資格");
+                            // } else {
+                            //     alert("請先進行電郵驗證");
+                            // }
+                        } else {
+                            alert("用戶不存在，請註冊後登入");
+                        }
+                    } else {
+                        alert('登入失敗');
+                    }
+                });
+            }
 
         });
     })();
+
+    function handleSessionResponse(response) {
+        //if we dont have a session (which means the user has been logged out, redirect the user)
+        if (!response.session) {
+            // window.location = "/mysite/Login.aspx";
+            return;
+        }
+
+        //if we do have a non-null response.session, call FB.logout(),
+        //the JS method will log the user out of Facebook and remove any authorization cookies
+        FB.logout(handleSessionResponse);
+    }
+
+    function generatePassword() {
+        var length = 8,
+            charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+            retVal = "";
+        for (var i = 0, n = charset.length; i < length; ++i) {
+            retVal += charset.charAt(Math.floor(Math.random() * n));
+        }
+        return retVal;
+    }
 </script>

@@ -1,5 +1,9 @@
 <link rel="import" href="../polymer/polymer.html">
-<dom-module id="dz-login"> <template>
+<link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
+<link rel="import" href="dz-resetpw.html">
+
+<dom-module id="dz-login">
+    <template>
 		<style>
 			:host {
 				width: 640px;
@@ -756,43 +760,152 @@
 				padding: 100px 30px 25px;
 				background: rgba(40, 57, 101, .9);
 			}
+
+			#loginbutton:hover {
+				cursor: pointer;
+			}
+
+			#resetbutton {
+				text-decoration: underline;
+			}
+
+			#resetbutton:hover {
+				color: tomato;
+				cursor: pointer;
+			}
 		</style>
 		<div class="login-wrap">
 			<div class="login-html">
 				<input checked="" class="sign-in" id="login" name="tab" type="radio">
-				<label class="tab" for="login">登入</label>
+				<label class="tab" for="login">{{loginOrReset}}</label>
 				<input class="sign-up" id="register" name="tab" type="radio">
 				<label class="tab" for="register">註冊</label>
 				<div class="login-form">
+					<!-- 登入 -->
 					<div class="sign-in-htm">
 						<div class="ng-pristine ng-untouched ng-invalid" novalidate="">
-							<div>
-								<div class="group">
-									<input id="uid" aria-invalid="false"
-										class="input ng-pristine ng-untouched ng-empty ng-invalid" formcontrolname="uid"
-										placeholder="用戶ID" type="text">
+							<div id="originalStyle">
+								<div>
+									<div class="group">
+										<input id="uid" aria-invalid="false"
+											class="input ng-pristine ng-untouched ng-empty ng-invalid"
+											formcontrolname="uid" placeholder="用戶ID" type="text">
+									</div>
 								</div>
-							</div>
-							<div>
-								<div class="group">
-									<input id="password" aria-invalid="false"
-										class="input ng-pristine ng-untouched ng-empty ng-invalid"
-										formcontrolname="password" placeholder="密碼" type="password">
+								<div>
+									<div class="group">
+										<input id="password" aria-invalid="false"
+											class="input ng-pristine ng-untouched ng-empty ng-invalid"
+											formcontrolname="password" placeholder="密碼" type="password">
+									</div>
 								</div>
+								<p>
+									<button id="loginbutton" color="warn" mat-raised-button="" on-click="_login"
+										class="mat-raised-button mat-button-base mat-warn"
+										style="border: none;padding: 5px 10px;color: white;font-size: 14px;">
+										<span class="mat-button-wrapper">
+											登入
+										</span>
+										<div class="mat-button-ripple mat-ripple" matripple=""></div>
+										<div class="mat-button-focus-overlay"></div>
+									</button>
+								</p>
 							</div>
+							<!-- 忘記密碼 -->
+							<div id="forgetAndResetpw" style="display: none;">
+								<div id="getuserinfo">
+									<div>
+										<div class="group">
+											<input id="uidinput" aria-invalid="false"
+												class="input ng-pristine ng-untouched ng-empty ng-invalid"
+												formcontrolname="password" placeholder="用戶ID">
+										</div>
+									</div>
+
+									<div>
+										<div class="group">
+											<input id="searchitem" aria-invalid="false"
+												class="input ng-pristine ng-untouched ng-empty ng-invalid"
+												formcontrolname="password" placeholder="輸入電話或電郵" type="text">
+										</div>
+									</div>
+
+									<p style="display: inline-block;">
+										<button id="backToInit" color="warn" mat-raised-button="" on-click="backToInit"
+											class="mat-raised-button mat-button-base mat-warn"
+											style="border: none;padding: 5px 10px;color: white;font-size: 14px;display: none;">
+											<span class="mat-button-wrapper">
+												重新輸入用戶ID
+											</span>
+											<div class="mat-button-ripple mat-ripple" matripple=""></div>
+											<div class="mat-button-focus-overlay"></div>
+										</button>
+									</p>
+
+
+									<p style="display: inline-block;">
+										<button id="countdown" color="warn" mat-raised-button="" on-click="checkuid"
+											class="mat-raised-button mat-button-base mat-warn"
+											style="border: none;padding: 5px 10px;color: white;font-size: 14px;">
+											<span class="mat-button-wrapper">
+												{{verifly}}
+											</span>
+											<div class="mat-button-ripple mat-ripple" matripple=""></div>
+											<div class="mat-button-focus-overlay"></div>
+										</button>
+									</p>
+
+									<div>
+										<div class="group">
+											<input id="confirm" aria-invalid="false" maxlength="6"
+												class="input ng-pristine ng-untouched ng-empty ng-invalid"
+												formcontrolname="password" placeholder="輸入驗證碼" type="text"
+												style="display: none;">
+										</div>
+									</div>
+								</div>
+								<div id=contentchange></div>
+								<!-- 更改密碼 -->
+								<div id="NewPasswordInput" style="display: none;">
+									<div>
+										<div class="group">
+											<input id="newpassword1" aria-invalid="false"
+												class="input ng-pristine ng-untouched ng-empty ng-invalid"
+												formcontrolname="password" placeholder="新密碼" type="password">
+										</div>
+									</div>
+
+									<div>
+										<div class="group">
+											<input id="newpassword2" aria-invalid="false"
+												class="input ng-pristine ng-untouched ng-empty ng-invalid"
+												formcontrolname="password" placeholder="確認密碼" type="password">
+										</div>
+									</div>
+
+									<p>
+										<button id="resetpassword" disabled color="warn" mat-raised-button=""
+											on-click="resetTolamda" class="mat-raised-button mat-button-base mat-warn"
+											style="border: none;padding: 5px 10px;color: white;font-size: 14px;">
+											<span class="mat-button-wrapper">
+												確認更改
+											</span>
+											<div class="mat-button-ripple mat-ripple" matripple=""></div>
+											<div class="mat-button-focus-overlay"></div>
+										</button>
+									</p>
+								</div>
+
+
+							</div>
+
 							<p>
-								<button color="warn" mat-raised-button="" on-click="_login"
-									class="mat-raised-button mat-button-base mat-warn"
-									style="border: none;padding: 5px 10px;color: white;font-size: 14px;">
-									<span class="mat-button-wrapper">
-										登入
-									</span>
-									<div class="mat-button-ripple mat-ripple" matripple=""></div>
-									<div class="mat-button-focus-overlay"></div>
-								</button>
+							<div id="resetbutton" on-click="contentshift">{{shift}}</div>
+
 							</p>
 						</div>
 					</div>
+					<!-- 註冊 -->
 					<div class="sign-up-htm">
 						<div class="ng-pristine ng-untouched ng-invalid" novalidate="">
 							<div>
@@ -827,14 +940,15 @@
 									<div class="mat-button-ripple mat-ripple" matripple=""></div>
 									<div class="mat-button-focus-overlay"></div>
 								</button>
-								<p id="processing" style="font-size:20px;text-align:center;	"></p>
+							<p id="processing" style="font-size:20px;text-align:center;	"></p>
 							</p>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</template> </dom-module>
+	</template>
+</dom-module>
 <script>
     (function() {
         Polymer({
@@ -845,6 +959,188 @@
             created: function() {
                 this.loadScript("https://d25k6mzsu7mq5l.cloudfront.net/cdn7.2/js/data.common.js");
                 this.thisPage = decodeURIComponent(window.location.pathname).substring(window.location.pathname.indexOf('/') + 1) || 'index.html';
+            },
+            ready: function() {
+                let shadow = this.shadowRoot;
+                shadow.querySelector('#password').addEventListener('keypress', e => {
+                    if (e.code == "Enter") {
+                        this._login();
+                    }
+                })
+
+                shadow.querySelector('#searchitem').addEventListener('keydown', e => {
+                    if (e.code == "Enter") {
+                        this.checkuid();
+                    }
+                })
+
+                let pw1 = shadow.querySelector('#newpassword1');
+                let pw2 = shadow.querySelector('#newpassword2');
+                let changepwbutton = shadow.querySelector('#resetpassword');
+                let contentchange = shadow.querySelector('#contentchange');
+                pw2.addEventListener('keyup', e => {
+                    contentchange.innerHTML = "";
+
+                    if (pw2.value != pw1.value) {
+                        contentchange.innerHTML = "兩次密碼不正確";
+                        changepwbutton.disabled = true;
+                    } else {
+                        changepwbutton.disabled = false;
+
+                    }
+                })
+
+
+
+                this.loginOrReset = "登入";
+                this.shift = "忘記密碼";
+                this.verifly = "發送驗證碼";
+            },
+            checkuid() {
+
+                let shadow = this.shadowRoot;
+                let backinit = shadow.querySelector('#backToInit');
+                let uid = shadow.querySelector('#uid').value;
+                let searchitem = shadow.querySelector('#searchitem').value;
+                let confirm = shadow.querySelector('#confirm');
+                let content = shadow.querySelector('#contentchange');
+                let url = "https://d8fz9pfue5.execute-api.ap-northeast-1.amazonaws.com/prod/newMiscDazzleFunction";
+                let param = {
+                    "action": "MatchEmailOrPhone",
+                    "uid": uid,
+                    "email": searchitem,
+                    "phone": searchitem
+
+                }
+
+                Polymer.postData(url, param).then(res => {
+                    if (res.code > 0) {
+                        backinit.style.display = "block";
+                        this.resetpw(2002, searchitem);
+                    } else {
+                        content.innerHTML = "用戶id不符合，請重新輸入";
+                    }
+                })
+
+
+
+            },
+            backToInit() {
+                window.stop();
+                this.verifly = "發送驗證碼";
+                let shadow = this.shadowRoot;
+                let confirm = shadow.querySelector('#confirm');
+                let uid = shadow.querySelector('#uidinput');
+                let searchitem = shadow.querySelector('#searchitem');
+                let resetinit = shadow.querySelector('#backToInit');
+
+                resetinit.style.display = "none";
+                uid.disabled = false;
+                searchitem.disabled = false;
+                confirm.style.display = "none";
+            },
+            ///send驗證碼 
+            resetpw(platform, user) {
+                let that = this;
+                let shadow = this.shadowRoot;
+                let tempnum = Math.random();
+                let temp = tempnum.toString();
+                let token = "";
+                for (i = 2; i < 8; i++) {
+                    token += temp[i]
+                }
+
+                let uid = shadow.querySelector('#uidinput');
+                let sms = shadow.querySelector('#searchitem');
+                let smsbutton = shadow.querySelector('#countdown');
+                let smsconfirm = shadow.querySelector("#confirm");
+
+                if (platform == 2002) {
+                    Polymer.sms(user, "你的驗證碼是: " + token);
+                } else {
+                    Polymer.sendEmail(user, "你的驗證碼是: " + token, "你的驗證碼是: " + token);
+                }
+
+                uid.disabled = true;
+                sms.disabled = true;
+                smsbutton.disabled = true; //当点击后倒计时时候不能点击此按钮
+                smsconfirm.style.display = "block";
+                smsconfirm.focus();
+                smsconfirm.addEventListener('keyup', e => {
+                    if (smsconfirm.value.length == 6) {
+                        if (smsconfirm.value == token) {
+                            shadow.querySelector('#contentchange').innerHTML = "請輸入新密碼";
+                            shadow.querySelector('#NewPasswordInput').style.display = "block";
+                            shadow.querySelector('#getuserinfo').style.display = "none";
+                        } else {
+                            shadow.querySelector('#contentchange').innerHTML = "驗證碼錯誤"
+                        }
+                    } else {
+                        shadow.querySelector('#contentchange').innerHTML = "";
+
+                    }
+
+                })
+
+                let resetinit = shadow.querySelector('#backToInit');
+
+                var time = 45; //倒计时30秒
+                var timer = setInterval(fun1, 1000); //设置定时器
+                function fun1() {
+                    time--;
+                    if (time >= 0 && resetinit.style.display != "none") {
+                        that.verifly = time + "s後重新發送";
+                    } else {
+                        token = null;
+                        that.verifly = "重新發送驗證碼";
+                        uid.disabled = false;
+                        sms.disabled = false;
+                        smsbutton.disabled = false; //倒计时结束能够重新点击发送的按钮
+                        smsconfirm.style.display = "none";
+                        smsconfirm.value = "";
+                        clearTimeout(timer); //清除定时器
+                        time = 5; //设置循环重新开始条件
+                    }
+                }
+
+            },
+
+            ///send request 去lamda改密碼;
+            resetTolamda() {
+                let shadow = this.shadowRoot;
+                let pw1 = shadow.querySelector('#newpassword1').value;
+                let pw2 = shadow.querySelector('#newpassword2').value;
+                let url = "https://d8fz9pfue5.execute-api.ap-northeast-1.amazonaws.com/prod/newMiscDazzleFunction";
+                let uid = shadow.querySelector('#uid').value;
+                let param = {
+                    "action": "renewPassword",
+                    "uid": uid,
+                    "password": pw1
+                }
+
+                Polymer.postData(url, param).then(res => {
+                    if (res.code > 0) {
+                        shadow.querySelector('#contentchange').innerHTML = "你已成功更改密碼";
+                    }
+                })
+
+            },
+
+            contentshift() {
+                let shadow = this.shadowRoot;
+                if (this.loginOrReset == "登入") {
+                    this.loginOrReset = "忘記密碼";
+                    this.shift = "返回登入";
+                    shadow.querySelector('#originalStyle').style.display = "none";
+                    shadow.querySelector('#forgetAndResetpw').style.display = "block";
+
+                } else {
+                    this.loginOrReset = "登入";
+                    this.shift = "忘記密碼";
+                    shadow.querySelector('#originalStyle').style.display = "block";
+                    shadow.querySelector('#forgetAndResetpw').style.display = "none";
+
+                }
             },
             _login: function() {
                 console.log('Login');
@@ -875,6 +1171,7 @@
                     }
                 });
             },
+
             _register: function() {
                 let shadow = this.shadowRoot;
                 let that = this;
@@ -975,3 +1272,4 @@
         });
     })();
 </script>
+© 2020 GitHub, Inc. Terms Privacy Security Status Help Contact GitHub Pricing API Training Blog About

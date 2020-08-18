@@ -181,6 +181,7 @@
                         }, function(response) {
                             let email = response.email;
                             let name = response.name;
+                            let head = "http://graph.facebook.com/" + response.id + "/picture?type=normal";
                             let param = {
                                 "action": "searchData",
                                 "index": "change",
@@ -193,6 +194,9 @@
                                     }
                                 }
                             };
+                            FB.logout(function(response) {
+                                // Person is now logged out
+                            });
                             Polymer.postData(link, param).then(res => {
                                 if (res.code > 0) {
                                     let all = res.resolve;
@@ -202,7 +206,8 @@
                                         let platformcookie = {
                                             "platform": "facebook",
                                             "name": name,
-                                            "email": email
+                                            "email": email,
+                                            "head": head
                                         };
 
                                         store.set("change-platform", platformcookie);
@@ -219,9 +224,6 @@
                                             Polymer.postData(url, loginparams).then(res => {
                                                 if (res.code > 0) {
                                                     let user = res.resolve;
-                                                    FB.logout(function(response) {
-                                                        // Person is now logged out
-                                                    });
                                                     store.set('change-user', user);
                                                     location.reload();
                                                 } else {
@@ -262,6 +264,8 @@
             },
 
             statusChangeCallback: function(response) { // Called with the results from FB.getLoginStatus().
+                console.log('statusChangeCallback');
+                console.log(response); // The current login status of the person.
                 if (response.status === 'connected') { // Logged into your webpage and Facebook.
                     testAPI();
                 } else { // Not logged into your webpage or we are unable to tell.
@@ -270,7 +274,10 @@
             },
 
             testAPI: function() { // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
-                FB.api('/me', function(response) {});
+                console.log('Welcome!  Fetching your information.... ');
+                FB.api('/me', function(response) {
+                    console.log('Successful login for: ' + response);
+                });
             },
 
             _fb_register(id, name, email) {
@@ -284,10 +291,14 @@
                     "phone": id,
                     "isPromotionMsg": false
                 };
+                console.log("Params", params);
                 Polymer.postData(registerUrl, params).then(res => {
                     // alert(res.text);
+                    console.log('Res', res);
 
-                    that.userManager.getAllData().then(re => {});
+                    that.userManager.getAllData().then(re => {
+                        console.log('Result', re);
+                    });
 
                     if (res.code > 0) {
 
@@ -300,12 +311,17 @@
             _register: function() {
                 let shadow = this.shadowRoot;
                 let that = this;
-                let platform = store.get("change-platform") || "gettv";
-                if (platform == "gettv") {
-
+                let platform;
+                let head;
+                let searchplatform = store.get("change-platform") || "gettv";
+                if (searchplatform.platform == "gettv") {
+                    platform = "gettv";
+                    head = "http://www.gettv.hk/img/user_profile.png";
                 } else {
                     platform = platform['platform'];
+                    head = searchplatform.head;
                 }
+                console.log("heres are platform", platform);
                 let uid = shadow.querySelector('#changeId1').value; //使用名稱
                 let area = shadow.querySelector('#changeArea1').value; //地區
                 let email = shadow.querySelector('#changeEmail1').value; //電郵地址
@@ -344,10 +360,13 @@
                                                 "password": pass,
                                                 "phone": phone,
                                                 "isPromotionMsg": promotion,
-                                                "platform": platform
+                                                "platform": platform,
+                                                "head": head
                                             };
+                                            console.log("Params", params);
                                             Polymer.postData(registerUrl, params).then(res => {
                                                 alert(res.text);
+                                                console.log("uuuuu", res);
                                                 if (res.code > 0) {
                                                     if (platform == "Google") {
                                                         this.google();

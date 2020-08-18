@@ -172,8 +172,9 @@
 							let event = e.detail.value.event;
 							let source = e.detail.value.source;
 							Polymer.activeElement = source;
-							console.log('Event',e);	
+							console.log('Event',e,source,event);	
 							menu.style.display='none';
+							Polymer.editing = true;
 							// Polymer.dzFire(tagName.toLowerCase()+'-'+event,{'detail': {'source':elm}});
 							source[event]();	
 							// Polymer.dzDomFire(elm,event,{});

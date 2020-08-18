@@ -35,7 +35,7 @@
 				item.source = elm;
 			});
 
-
+			
 			elm.selected = function(url){
 				elm.changeBg(url);
 			}
@@ -68,7 +68,7 @@
 				let dzCodeEditor =document.createElement('dz-code-editor');
 				let html = elm.innerHTML;
 				dzCodeEditor.html = html;
-				Polymer.componentPopup(dzCodeEditor);
+				Polymer.componentPopup(dzCodeEditor,'90%','90%');
 
 			}
 
@@ -107,7 +107,7 @@
 				popup.styles =['backgroundRepeat','backgroundSize','backgroundPosition','backgroundBlendMode'];
 				Polymer.componentPopup(popup);
 			}
-
+		
 			// this.eventListener(elm);
 		}
 	}

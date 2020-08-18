@@ -78,6 +78,7 @@ class dzCodeEditor extends Polymer.Element {
                         },
                         {
                             text: '離開',
+                            click: that.close
                         },
                         
                     ];
@@ -89,6 +90,9 @@ class dzCodeEditor extends Polymer.Element {
         
     }
 
+    close(){
+        Polymer.closeDialog();
+    }
     init(){
         console.log('My HTML',this,this.html);
                 let editor = this.shadowRoot.querySelector('#editor').editor;

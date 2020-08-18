@@ -3,42 +3,40 @@
 <dom-module id="change-like">
     <template>
         <style>
-            #toggle-heart{
+            #toggle-heart {
                 position: absolute;
-                left: -100vw;}
-         
-            [for = toggle-heart] {
-               
-               
+                left: -100vw;
             }
 
-            .like-img{
-                width:20px;
-                height:20px;
-                background-size: contain;                
+            [for=toggle-heart] {}
+
+            .like-img {
+                width: 20px;
+                height: 20px;
+                background-size: contain;
                 background-repeat: no-repeat;
                 background-size: contain;
                 cursor: pointer;
-                border:none;
+                border: none;
                 background-color: transparent;
                 color: transparent;
-                margin-top:10px;
-                margin-right:10px;
+                margin-top: 10px;
+                margin-right: 10px;
                 margin-bottom: -2px;
             }
 
-            [id = "toggle-heart"]:checked + label{
-               /* background-color: red; */
+            [id="toggle-heart"]:checked+label {
+                /* background-color: red; */
             }
         </style>
         <style include="icon-styles"></style>
         <div id="container">
-            <input on-click="checklogin" id="toggle-heart" type="checkbox" />            
+            <input on-click="checklogin" id="toggle-heart" type="checkbox" />
             <label for="toggle-heart">
                 <img src="/img/symbol/like-outlined.png" class="like-img">
-                <span id="likes">{{like}}</span> 
+                <span id="likes">{{like}}</span>
             </label>
-            
+
         </div>
     </template>
 </dom-module>
@@ -83,7 +81,6 @@
                 // console.log("user liked", user);
                 for (i = 0; i < countlikeproduct; i++) {
                     if (user['likeProduct'][i] == this.id) {
-                        this.liked = i;
                         // console.log('checked');
                         checked2 = true;
                     } else {
@@ -114,13 +111,20 @@
 
                 let user2 = store.get('change-user') || null;
                 let product_url = '/json/product-' + this.id + '.json?id=' + new Date().getTime();
+                if (user2) {
+                    let user_url = '/json/user-' + user2._id + '.json?id=' + new Date().getTime();
+                    Polymer.getContent(user_url).then(res => {
+                        let user = JSON.parse(res);
+                        this.checkLike(user);
 
-
+                    })
+                }
                 Polymer.getContent(product_url).then(str => {
                     let json = JSON.parse(str);
-
-                    shadow.querySelector('#likes').innerHTML = json['like'];
                     this.like = json['like'];
+
+
+
 
                     // this.dataManager.loadData(user2['_id']).then(res=>{
                     //     that.user = res;
@@ -191,8 +195,13 @@
             checklogin: function() {
                 let user = store.get('change-user') || null;
                 if (user != null) {
-                    this.addCount();
-
+                    this.dataManager.loadData(user['_id']).then(res => {
+                        let likeProduct = res.likeProduct;
+                        this.liked = likeProduct.indexOf(this.id);
+                        console.log(likeProduct, this.liked);
+                    }).then(res => {
+                        this.addCount();
+                    })
                 } else {
                     alert("請先登入");
                     this.shadowRoot.querySelector('#toggle-heart').checked = false;
@@ -202,13 +211,11 @@
 
 
             addCount: function() {
+
                 let that = this;
                 let shadow = this.shadowRoot;
                 let user = store.get('change-user') || null;
-
                 let URL = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-
-
                 let param = {
                     "action": "updateData",
                     "index": "change",
@@ -239,6 +246,9 @@
 
 
                 if (shadow.querySelector('#toggle-heart').checked != true) {
+
+
+
                     shadow.querySelector('#likes').innerHTML = parseInt(shadow.querySelector('#likes').innerHTML) - 1;
                     Polymer.postData(URL, param2).then(res => {
                         if (res.code > 0) {
@@ -256,7 +266,7 @@
                                     }
                                 }
                             };
-                            // console.log(this.liked, "qqqqqqq", JSON.stringify(paramchange));
+                            console.log(this.liked, "qqqqqqq", JSON.stringify(paramchange));
                             Polymer.postData(URL, paramchange).then(res => {
                                 if (res.code > 0) {
                                     this.dataManager.loadData(user['_id']).then(res => {
@@ -303,13 +313,14 @@
                             Polymer.postData(URL, paramchange2).then(res => {
                                 if (res.code > 0) {
                                     this.dataManager.loadData(user['_id']).then(res => {
-                                        this.liked = res.likeProduct.length;
                                         this.fileManager.saveFile('json/user-' + user['_id'] + '.json', JSON.stringify(res));
                                     });
 
 
                                     this.prodManager.loadData(this.id).then(res => {
-                                        this.fileManager.saveFile('json/product-' + this.id + '.json', JSON.stringify(res));
+                                        this.fileManager.saveFile('json/product-' + this.id + '.json', JSON.stringify(res)).then(res => {
+                                            console.log("finish save json");
+                                        });
                                     });
                                 } else {
                                     console.log("error in add favorite")
