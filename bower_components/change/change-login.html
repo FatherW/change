@@ -288,6 +288,9 @@
                                                 if (res.code > 0) {
                                                     let user = res.resolve;
                                                     store.set('change-user', user);
+                                                    FB.logout(function(response) {
+                                                        // Person is now logged out
+                                                    });
                                                     location.reload();
                                                 } else {
                                                     alert('登入失敗');

@@ -219,6 +219,9 @@
                                             Polymer.postData(url, loginparams).then(res => {
                                                 if (res.code > 0) {
                                                     let user = res.resolve;
+                                                    FB.logout(function(response) {
+                                                        // Person is now logged out
+                                                    });
                                                     store.set('change-user', user);
                                                     location.reload();
                                                 } else {
