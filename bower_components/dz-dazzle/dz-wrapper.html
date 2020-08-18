@@ -97,7 +97,11 @@ class dzWrapper extends Polymer.Element {
                 // dzHead.appendChild(elm);
                 document.head.appendChild(dzHead);
 
-                this.innerHTML = html;
+                if (!html){
+                    Polymer.getUserDataContent("_default/html").then(html=>{
+                        this.innerHTML = html;
+                    });
+                }
                 // let dzWrapper = document.createElement('dz-wrapper');
                 // dzWrapper.innerHTML = html;
                 // document.body.appendChild(dzWrapper);

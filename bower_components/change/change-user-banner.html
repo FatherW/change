@@ -234,7 +234,7 @@
                         if (res.code > 0) {
                             if (res.resolve.length > 0) {
                                 let bgImg = res.resolve[0]['banner'] || "https://www.gettv.hk/Website%20Design/profile%20page/img/profile%20banner/company-profile-banner.png";
-                                shadow.querySelector('#mp').style.backgroundImage = "url('" + res.resolve[0]['banner'] + "')";
+                                shadow.querySelector('#mp').style.backgroundImage = "url('" + bgImg+ "')";
                                 shadow.querySelector('#Uname').innerText = res.resolve[0]['username'];
                                 let t = res.resolve[0]['createTime'];
                                 let _thetimenow = Date.now();
@@ -255,13 +255,8 @@
                                 shadow.querySelector('#gNum').innerText = res.resolve[0]['goodsNum'];
                                 shadow.querySelector('#buy').innerText = res.resolve[0]['history'].length;
                                 shadow.querySelector('#rate').innerText = res.resolve[0]['score'];
-                                // if (res.resolve[0]['head'] == "") {
-                                //     shadow.querySelector('#dp').src = "./img/head.svg";
-                                // } else {
-                                //     shadow.querySelector('#dp').src = res.resolve[0]['head'];
-                                // }
                                 let proPic = res.resolve[0]['head'] || "https://img.favpng.com/20/11/12/computer-icons-user-profile-png-favpng-0UAKKCpRRsMj5NaiELzw1pV7L.jpg";
-                                shadow.querySelector('#dp').src = proPic;
+                                    shadow.querySelector('#dp').src = proPic;
                             }
                         }
                     })
@@ -316,18 +311,8 @@
                 this.curElm = e.path[0];
 
                 // Polymer.popup(dialog, "change", "change-dropzone-file", "60%", "50%");
-                
-                    let userInfo = document.querySelector('change-user-info');
-                    console.log("userInfo", userInfo);
-                    let keyword = userInfo.shadowRoot.querySelector('#vb').innerHTML;
-                    console.log("keyword", keyword);
-                    if (keyword == "提交") {
-                        Polymer.popup(dialog, 'change', 'change-gallery', '90%', '90%');
-                    } else {
-                        console.log("Will not be able to open gallery!");
-                    }
-    
-                
+                if (Polymer.editMode==="admin")
+                    Polymer.popup(dialog, 'change', 'change-gallery', '90%', '90%');
                 // console.log('saved', bucket)
             },
 

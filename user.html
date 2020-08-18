@@ -15,6 +15,14 @@
 <script src="https://apis.google.com/js/platform.js" async="" defer=""></script>
 <script async="" defer="" crossorigin="anonymous" src="https://connect.facebook.net/zh_HK/sdk.js#xfbml=1&amp;version=v7.0&amp;appId=711018846416860&amp;autoLogAppEvents=1" nonce="NXzxnRL1"></script>    
 
+<<<<<<< Updated upstream
+=======
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="favicon.ico">
+    <script src="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="/bower_components/dz-dazzle/dz-loader.html">
+>>>>>>> Stashed changes
 
 <script>
 function onSignIn(googleUser) {
@@ -29,6 +37,7 @@ let param = {
 store.set("change-platform",param);
 document.querySelector('.googleloginname').click();
 
+<<<<<<< Updated upstream
 };
 function signOut() {
 var auth2 = gapi.auth2.getAuthInstance(); 
@@ -36,6 +45,11 @@ auth2.signOut().then(function () {
 console.log('User signed out.');
 });
 };
+=======
+<body>
+    <dz-dazzle></dz-dazzle>
+</body>
+>>>>>>> Stashed changes
 
     window.fbAsyncInit = function () {
         FB.init({
