@@ -349,7 +349,7 @@
                 this.fileManager.copyFolder(src, pagename);
                 let user = store.get('change-user') || null;
                 let that = this;
-                let html;
+                // let html;
                 console.log("ccc", user['_id']);
                 let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
                 let param = {
@@ -368,17 +368,19 @@
                         console.log("完成");
                         shadow.querySelector('#info1').style.display = "none";
 
-
+                        
                         //modifying here
-                        that.fileManager.getFile('template/page-template.html').then(go =>{
-                            html = html.replace('[[fanpage]]', shadow.querySelector('#website2').value);
+                        that.fileManager.getFile('template/page-template.html').then(html =>{
+                            console.log("omg2", that);
+                            html = html.replace('[[fanspage]]', shadow.querySelector('#website2').value);
+                            console.log("omg", html);
                             // html = html.replace('[[ownerId]]', user['_id']);
                             // html = html.replace('[[pagename]]', pagename);
                             // html = html.replace('[[website]]', shadow.querySelector('#website2').value);
                             // html = html.replace('[[district]]', shadow.querySelector('#area1').value);
                             // html = html.replace('[[email]]', shadow.querySelector('#email').value);
                             // html = html.replace('[[tags]]', pagename);
-                            that.fileManager.saveHtml('template/' + shadow.querySelector('#website2').value + '.html');
+                            that.fileManager.saveHtml('template/' + shadow.querySelector('#website2').value + '.html', html);
                             console.log("success!");
                         });
                     }
