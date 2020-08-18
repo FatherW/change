@@ -1,6 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
-<link rel="import" href="change-login.html?id=asdklfsd">
+
 <link rel="import" href="change-register.html">
 
 <dom-module id="change-user-panel">
@@ -58,7 +58,7 @@
             is: 'change-user-panel',
             properties: {},
             created: function () {
-
+                Polymer.loadComponent('change','change-login');
             },
             _login: function () {
                 let shadow = this.shadowRoot;
