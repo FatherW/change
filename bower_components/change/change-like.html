@@ -124,78 +124,14 @@
                     this.like = json['like'];
 
 
-
-
-                    // this.dataManager.loadData(user2['_id']).then(res=>{
-                    //     that.user = res;
-                    //     this.checkLike(res);
-                    // });
-
-
-                    // if (user2) {
-                    //     let url = "/json/user-" + user2['_id'] + ".json?id=" + new Date().getTime();
-                    //     // console.log("th user url", url);
-
-                    //     Polymer.getContent(url).then(str => {
-                    //         json = JSON.parse(str);
-                    //         that.user = json;
-                    //         this.checkLike(json);
-
-                    //     },err=>{
-                    //         this.dataManager.loadData(user2['_id']).then(res=>{
-                    //             that.user = res;
-                    //             this.checkLike(res);
-                    //         });
-                    //     });
-
-
-
-                    // } else {
-                    //     // console.log("not login");
-                    // }
                 });
-
-                // Polymer.postData(URL, param).then(res => {
-                //     if (res.code > 0) {
-                //         shadow.querySelector('#likes').innerHTML = res.resolve['like'];
-                //         this.like = res.resolve['like'];
-                //         Polymer.postData(URL, paramuser).then(res => {
-                //             if (res.code > 0) {
-                //                 let countlikeproduct = res.resolve['likeProduct'].length;
-                //                 var counti2 = 0;
-                //                 checked2 = false;
-                //                 for (i = 0; i < countlikeproduct; i++) {
-                //                     if (res.resolve['likeProduct'][i] == this.id) {
-                //                         this.liked = i
-                //                         checked2 = true;
-                //                     } else {
-                //                         counti2++;
-
-                //                     }
-                //                 }
-
-                //                 if (checked2 == false) {} else {
-                //                     this.status = true;
-
-                //                 }
-                //                 shadow.querySelector('#toggle-heart').checked = this.status;
-
-
-                //             }
-                //         });
-
-                //     } else {
-                //         console.log('error in change-like')
-                //     }
-                // });
-
-
             },
 
             checklogin: function() {
                 let user = store.get('change-user') || null;
+                let url = "/json/user-" + user._id + ".json?id=" + new Date().getTime();
                 if (user != null) {
-                    this.dataManager.loadData(user['_id']).then(res => {
+                    Polymer.getContent(url).then(res => {
                         let likeProduct = res.likeProduct;
                         this.liked = likeProduct.indexOf(this.id);
                         console.log(likeProduct, this.liked);

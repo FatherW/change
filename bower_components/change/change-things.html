@@ -433,7 +433,7 @@
     </template>
 </dom-module>
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-things',
             properties: {
@@ -457,7 +457,7 @@
                 }
 
             },
-            created: function () {
+            created: function() {
 
                 document.addEventListener('close-item-dialog', e => {
                     if (this.shadowRoot.querySelector('#tempqqq' + this.id).opened == true) {
@@ -479,7 +479,7 @@
                 this.user = store.get('change-user') || null;
 
             },
-            _reallydelete: function () {
+            _reallydelete: function() {
                 let that = this;
                 let shadow = this.shadowRoot;
                 let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
@@ -499,7 +499,7 @@
                 })
             },
 
-            _deleteproduct: function () {
+            _deleteproduct: function() {
                 // console.log("inside deleteproduct");
                 let that = this;
                 let shadow = this.shadowRoot;
@@ -507,7 +507,7 @@
                 let dialog = shadow.querySelector('#tempqqq' + this.id);
                 Polymer.popup(dialog, "change", "change-confirm", "30%", "50%");
             },
-            ready: function () {
+            ready: function() {
                 this.id = this.getAttribute('id');
                 this.shadowRoot.querySelector('#tempqqq').id = 'tempqqq' + this.id;
                 let that = this;
@@ -558,34 +558,8 @@
                         shadow.querySelector('#status1').id = "status";
                     }
                 }
-                if (all['isFanpage'] == true) {
-                    // let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                    // let params = {
-                    //     "action": "searchData",
-                    //     "index": "change",
-                    //     "type": "pages",
-                    //     "body": {
-                    //         "query": {
-                    //             "match": {
-                    //                 "name": all['fanpage']
-                    //             }
-                    //         }
-                    //     }
-                    // };
-                    // Polymer.postData(link, params).then(res => {
-                    //     let name = res.resolve[0]['name'];
-                    //     let website = res.resolve[0]['website'];
-                    //     let head = res.resolve[0]['head'];
-
-                    //     // console.log("omg", head);
-                    //     this.userUrl = "/" + website;
-                    //     this.shadowRoot.querySelector('change-user-tag').loadPage(name, all['createTime'], head);
-                    //     // this.shadowRoot.querySelector('#deleteall').style.outline = "1px solid gold";
-                    // });
-
-                } else {
+                if (all['isFanpage'] == false) {
                     this.shadowRoot.querySelector('change-user-tag').loadData(all['ownerId'], all['createTime']);
-
                 }
                 this.shadowRoot.querySelector('change-item-tag').loadTags(all['tags']);
                 if (user) {

@@ -128,13 +128,6 @@
                     shadow.querySelector('#mp')._showMyGoods();
 
                     ///search fav product
-                    let p = {
-                        "action": "getData",
-                        "index": "change",
-                        "type": "_user",
-                        "_id": id
-
-                    };
                     let userurl = "/json/user-" + id + ".json";
                     Polymer.getContent(userurl).then(str => {
                         let jsonlike = JSON.parse(str)
