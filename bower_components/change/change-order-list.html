@@ -125,38 +125,44 @@
         </style>
 
         <!-- INFO ON THE LEFT -->
-        <div class="holder" id="containall">
+        <!-- <template is="dom-if" if="[[permitted]]"> -->
+            <div class="holder" id="containall">
 
-            <div class="in">
-                <img id="a1" src="" alt="">
-            </div>
-            <div id="a2" class="in">
-                <div class="name"></div>
-                <div id="time"></div>
-                <div id="message" style="overflow: hidden;"></div>
-            </div>
+                <div class="in">
+                    <img id="a1" src$="{{buyer.head}}" alt="">
+                </div>
+                <div id="a2" class="in">
+                    <div class="name">{{buyer.username}}</div>
+                    <div id="time">{{ago}}</div>
+                    <div id="message" style="overflow: hidden;">{{order.msg}}</div>
+                </div>
+    
+                <!-- BUTTONS ON THE RIGHT -->
+                <template  is="dom-if" if="{{readOnly()}}">
+                    <div class="in buttons hide1">
+                        <button id="info" on-click="buyerinfo">查看賣家信息</button>
+                        <button class="pointer" style="background: #f0f0f0; border-color: black;" on-click="buyerinfo">
+                            <svg class="search" viewBox="0 0 24 24" style="height: 15px;">
+                                <title>Search Icon</title>
+                                <path fill="#57585a"
+                                    d="M15.618 17.032a9 9 0 1 1 1.414-1.414l5.675 5.675a1 1 0 0 1-1.414 1.414l-5.675-5.675zm-.701-2.05a1.017 1.017 0 0 1 .065-.065 7 7 0 1 0-.066.066z">
+                                </path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="in buttons hide2">
+                        <button class="accept" on-click="accept">接受</button>
+                        <button class="accept2" on-click="accept">✔</button>
+                    </div>
+                    <div class="in buttons hide3">
+                        <button class="reject" on-click="reject">拒絕</button>
+                        <button class="reject2" on-click="reject">X</button>
+                    </div>
+                </template>
 
-            <!-- BUTTONS ON THE RIGHT -->
-            <div class="in buttons hide1">
-                <button id="info" on-click="buyerinfo">查看賣家信息</button>
-                <button class="pointer" style="background: #f0f0f0; border-color: black;" on-click="buyerinfo">
-                    <svg class="search" viewBox="0 0 24 24" style="height: 15px;">
-                        <title>Search Icon</title>
-                        <path fill="#57585a"
-                            d="M15.618 17.032a9 9 0 1 1 1.414-1.414l5.675 5.675a1 1 0 0 1-1.414 1.414l-5.675-5.675zm-.701-2.05a1.017 1.017 0 0 1 .065-.065 7 7 0 1 0-.066.066z">
-                        </path>
-                    </svg>
-                </button>
             </div>
-            <div class="in buttons hide2">
-                <button class="accept" on-click="accept">接受</button>
-                <button class="accept2" on-click="accept">✔</button>
-            </div>
-            <div class="in buttons hide3">
-                <button class="reject" on-click="reject">拒絕</button>
-                <button class="reject2" on-click="reject">X</button>
-            </div>
-        </div>
+    
+        <!-- </template> -->
 
     </template>
 
@@ -170,13 +176,91 @@
                 "id": {
                     "type": String
                 },
-                "buyerId": {
+                "ownerId": {
                     "type": String
-                }
+                },
+                "product": Object
             },
             created: function() {
+                this.dataManager = new DataPackage('order');
+                this.userManager = new DataPackage('_user');
+                this.orderManager = new DataPackage('order');
+                this.prodManager = new DataPackage('product');
+                this.user = store.get('change-user') || null;
+            },
+            readOnly(){
+                console.log('Read Only',this.product['ownerId'],this.user['id']);
+                if (this.product['ownerId'] != this.user['id'])
+                    return false;
+                else    
+                    return true;
+            },
+            initOrder(){
+                this.loadUser(this.order['buyerId']).then(res=>{
+                    this.buyer = res; 
+                    // this.loadProduct(this.order['productId']).then(res=>{
+                    //     this.product = res; 
+                    //     this.isPermitted();
+                    // });             
+                    console.log('Buyer',this.buyer);
+                    this.ago = this.timeAgo(this.order['submitTime']);   
+                });
+                this.isPermitted();
+
 
             },
+            loadOrder(pid) {
+                let that = this;
+                return new Promise(function(resolve, reject) {
+                    Polymer.getContent('/json/order-'+pid+'.json?id='+new Date().getTime()).then(res=>{
+                        resolve(JSON.parse(res));
+                    },err=>{
+                        that.orderManager.loadData(pid).then(prod=>{
+                            resolve(prod);
+                        });
+                    });
+                    // this.fileManager.getFile('json/product-' + pid + '.json').then(res => {
+                    //     let json = JSON.parse(res);
+                    // });
+                });
+                
+
+            },
+            loadProduct(pid) {
+                let that = this;
+                return new Promise(function(resolve, reject) {
+                    Polymer.getContent('/json/product-'+pid+'.json?id='+new Date().getTime()).then(res=>{
+                        resolve(JSON.parse(res));
+                    },err=>{
+                        that.prodManager.loadData(pid).then(prod=>{
+                            resolve(prod);
+                        });
+                    });
+                    // this.fileManager.getFile('json/product-' + pid + '.json').then(res => {
+                    //     let json = JSON.parse(res);
+                    // });
+                });
+                
+
+            },
+            loadUser(pid) {
+                let that = this;
+                return new Promise(function(resolve, reject) {
+                    Polymer.getContent('/json/user-'+pid+'.json?id='+new Date().getTime()).then(res=>{
+                        resolve(JSON.parse(res));
+                    },err=>{
+                        that.userManager.loadData(pid).then(prod=>{
+                            resolve(prod);
+                        });
+                    });
+                    // this.fileManager.getFile('json/product-' + pid + '.json').then(res => {
+                    //     let json = JSON.parse(res);
+                    // });
+                });
+                
+
+            },
+
 
             accept: function() {
                 let loc = location.search;
@@ -192,21 +276,11 @@
                     pid += loc[a];
                 }
 
-                //POSTDATA TO POSTMAN
-                let param = {
-                    "action": "addData",
-                    "index": "change",
-                    "type": "order",
-                    "id": this.id,
-                    "body": {
+                this.dataManager.saveData(this.id,{
                         "status": "處理中"
-                    }
-                };
-                let urlP = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                console.log("Param", param)
-                Polymer.postData(urlP, param).then(res => {
-                    console.log("postdata to postman successfully!")
-                });
+                    }).then(res=>{
+                        console.log("postdata to postman successfully!")
+                    });
 
                 //POSTDATA TO LAMBDA
                 let json = {
@@ -240,24 +314,34 @@
             reject: function() {
                 let that = this;
                 let shadow = this.shadowRoot;
-                let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                let param = {
-                    "action": "deleteData",
-                    "index": "change",
-                    "type": "order",
-                    "id": this.id
-                }
-                Polymer.postData(url, param).then(res => {
-                    if (res.code > 0) {
-                        console.log("Deleted Successfully");
-                        shadow.querySelector('#containall').remove();
-                    } else {
-                        console.log("error inreject");
-                    }
-                })
+
+                this.dataManager.removeData(this.id).then(res=>{
+                    console.log("Deleted Successfully");
+                    shadow.querySelector('#containall').remove();
+                });
             },
 
+            timeAgo(time){
+                let str;
+                let _thetimenow = Date.now();
+                var comparetime = (_thetimenow - time) / 1000;
+                if (comparetime < 60) {
+                    str = "剛剛"
+                } else if (comparetime / 60 < 60) {
+                    str = Math.floor(comparetime / 60) + "分鐘前"
+                } else if (comparetime / 60 / 60 < 24) {
+                   str = Math.floor(comparetime / 60 / 60) + "小時前"
+                } else if (comparetime / 60 / 60 / 24 < 7) {
+                    str= Math.floor(comparetime / 60 / 60 / 24) + "日前"
+                } else if (comparetime / 60 / 60 / 24 / 7 < 30) {
+                    str = Math.floor(comparetime / 60 / 60 / 24 / 7) + "星期前"
+                } else if (comparetime / 60 / 60 / 24 / 7 / 30 < 365) {
+                    srt= Math.floor(comparetime / 60 / 60 / 24 / 7 / 30) + "月前"
+                }
+                console.log('Time',time,str);
+                return str;
 
+            },
             ready: function() {
                 this.id = this.getAttribute('id');
 
@@ -265,106 +349,60 @@
                 // search for "order" data in postman
                 let that = this;
                 let shadow = this.shadowRoot;
-                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                let params = {
-                    "action": "searchData",
-                    "index": "change",
-                    "type": "order",
-                    "body": {
-                        "query": {
-                            "match": {
-                                "_id": this.id
-                            }
-                        }
-                    }
-                }
-
-                Polymer.postData(Url, params).then(res => {
-                    if (res.code > 0) {
-                        //order Array
-                        let orderLen = res.resolve.length;
-                        this.buyerId = res.resolve[0]['buyerId'];
-                        //INFO OF USERS INTERESTED TO ORDER//
-                        let params2 = {
-                            "action": "searchData",
-                            "index": "change",
-                            "type": "_user",
-                            "body": {
-                                "query": {
-                                    "match": {
-                                        "_id": this.buyerId
-                                    }
-                                }
-                            }
-                        };
-                        Polymer.postData(Url, params2).then(res => {
-                            //HEAD 
-                            if (res.code > 0) {
-                                shadow.querySelector('.name').innerText = res.resolve[0]['username'];
-                                if (res.resolve[0]['head'] == "") {
-                                    shadow.querySelector('#a1').src = "./img/head.svg";
-                                } else {
-                                    shadow.querySelector('#a1').src = res.resolve[0]['head'];
-                                }
-
-                            }
-                        });
-                        //TIME//
-                        //check time
-                        let _thetimenow = Date.now();
-                        for (i = 0; i < orderLen; i++) {
-                            var comparetime = (_thetimenow - res.resolve[i]['submitTime']) / 1000;
-                            if (comparetime < 60) {
-                                shadow.querySelector('#time').innerHTML = "剛剛"
-                            } else if (comparetime / 60 < 60) {
-                                shadow.querySelector('#time').innerHTML = Math.floor(comparetime / 60) + "分鐘前"
-                            } else if (comparetime / 60 / 60 < 24) {
-                                shadow.querySelector('#time').innerHTML = Math.floor(comparetime / 60 / 60) + "小時前"
-                            } else if (comparetime / 60 / 60 / 24 < 7) {
-                                shadow.querySelector('#time').innerHTML = Math.floor(comparetime / 60 / 60 / 24) + "日前"
-                            } else if (comparetime / 60 / 60 / 24 / 7 < 30) {
-                                shadow.querySelector('#time').innerHTML = Math.floor(comparetime / 60 / 60 / 24 / 7) + "星期前"
-                            } else if (comparetime / 60 / 60 / 24 / 7 / 30 < 365) {
-                                shadow.querySelector('#time').innerHTML = Math.floor(comparetime / 60 / 60 / 24 / 7 / 30) + "月前"
-                            }
-
-                        }
-
-                        //message//
-                        for (i = 0; i < orderLen; i++) {
-                            shadow.querySelector('#message').innerHTML = res.resolve[i]['msg'];
-                        }
-                    }
+                   // this.id = this.getAttribute('id');
+                   console.log('Order ID',this.id);  
+                this.loadOrder(this.id).then(res=>{
+                    this.order=res; 
+                    this.initOrder();
+                    console.log('Order',this.order);
                 });
 
-                //*******HIDE BUTTONS IF IT IS BUYERS*******//
-                let loc = location.search;
-                let pid = "";
-                let uid = "";
-                let posit = 0;
-                for (i = 1; i < loc.length; i++) {
-                    if (loc[i] == "u") {
-                        posit = i;
-                    };
-                };
-                for (a = 2; a < posit; a++) {
-                    pid += loc[a];
-                };
-                for (i = posit + 1; i < loc.length; i++) {
-                    uid += loc[i];
-                }
-                let user = store.get('change-user') || null;
-                console.log("CCC CURRENT UID", user['_id']);
-                console.log("CCC PRODUCT OWNER ID", uid);
+                // //*******HIDE BUTTONS IF IT IS BUYERS*******//
+                // let loc = location.search;
+                // let pid = "";
+                // let uid = "";
+                // let posit = 0;
+                // for (i = 1; i < loc.length; i++) {
+                //     if (loc[i] == "u") {
+                //         posit = i;
+                //     };
+                // };
+                // for (a = 2; a < posit; a++) {
+                //     pid += loc[a];
+                // };
+                // for (i = posit + 1; i < loc.length; i++) {
+                //     uid += loc[i];
+                // }
+                // let user = store.get('change-user') || null;
+                // console.log("CCC CURRENT UID", user['_id']);
+                // console.log("CCC PRODUCT OWNER ID", uid);
 
-                if (user['_id'] !== uid) {
-                    shadow.querySelector('.hide1').style.display = "none";
-                    shadow.querySelector('.hide2').style.display = "none";
-                    shadow.querySelector('.hide3').style.display = "none";
-                };
+                // if (user['_id'] !== uid) {
+                //     shadow.querySelector('.hide1').style.display = "none";
+                //     shadow.querySelector('.hide2').style.display = "none";
+                //     shadow.querySelector('.hide3').style.display = "none";
+                // };
 
             },
+            isPermitted(){
+                let user = store.get('change-user') || null;
+                let buyerId = this.order['buyerId'] || 0;
+                let permitted = true;
+                if (!user)
+                    permitted = false;
 
+                if (this.product['ownerId']=== user['id'])
+                    return;
+
+                if (user['id'] === buyerId)
+                    return;
+                else
+                    this.remove();
+                console.log('Fanspage',this.product['isFanpage']);
+                // For fansPage admin permission
+                // if (this.product['isFanpage'])
+                //     checkFansAdmin();
+            }
         });
     })();
 </script>

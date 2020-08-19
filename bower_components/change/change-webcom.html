@@ -122,7 +122,8 @@
         Polymer({
             is: 'change-webcom',
             properties: {
-
+                seller: Object,
+                product: Object
             },
             created: function() {
 
@@ -131,9 +132,25 @@
                     this.fileManager = new AwsPackage(this.user);
                     this.dataManager = new DataPackage('_user');
                     this.prodManager = new DataPackage('product');
-
+                    this.orderManager = new DataPackage('order');
                 }
 
+
+            },
+            loadUser(uid) {
+                return new Promise(function(resolve, reject) {
+                    Polymer.getContent('/json/user-'+uid+'.json?id='+new Date().getTime()).then(res=>{
+                        resolve(JSON.parse(res));
+                    },err=>{
+                        this.userManager.loadData(uid).then(prod=>{
+                            resolve(prod);
+                        });
+                    });
+                    // this.fileManager.getFile('json/product-' + pid + '.json').then(res => {
+                    //     let json = JSON.parse(res);
+                    // });
+                });
+                
 
             },
             //for adding link to the user name connecting wth the databse
@@ -155,41 +172,21 @@
                     uid += loc[b];
                 }
 
+                console.log('User',this.seller);
+                console.log('Product',this.product);
                 let shadow = this.shadowRoot;
-                let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                let param = {
-                    "action": "getData",
-                    "index": "change",
-                    "type": "_user",
-                    "id": uid
-                };
-
-                Polymer.postData(url, param).then(res => {
-                    if (res.code > 0) {
-                        shadow.querySelector('#_changeicon').src = res.resolve['head'];
-                        shadow.querySelector('#owner').innerHTML = res.resolve['username'];
-                        shadow.querySelector('#time').innerHTML += res.resolve['score']; + '( ' + res.resolve['numberRate'] + ' )';
-                    }
-                })
-
-                let param2 = {
-                    "action": "getData",
-                    "index": "change",
-                    "type": "product",
-                    "id": pid
-                };
-                Polymer.postData(url, param2).then(res => {
-                    if (res.code > 0) {
-                        shadow.querySelector('#para').innerHTML = res.resolve['description'];
-                    }
-                })
+                // this.loadUser(uid).then(user=>{
+                    shadow.querySelector('#_changeicon').src = this.seller['head'];
+                    shadow.querySelector('#owner').innerHTML = this.seller['username'];
+                    shadow.querySelector('#time').innerHTML += this.seller['score']; + '( ' + this.seller['numberRate'] + ' )';                    
+                // });
+                shadow.querySelector('#para').innerHTML = this.product['description'];
 
                 shadow.querySelector('#review').addEventListener("keypress", function(e) {
                     var key = e.which || e.keyCode || 0;
                     if (key === 13) {
                         that._postRequest();
                     }
-
                 });
 
                 let cfmDialog = shadow.querySelector('#back');
@@ -201,8 +198,10 @@
                     document.dispatchEvent(event);
 
                 });
-
-
+                // this.saveOrder();
+                // this.orderManager.getAllData().then(res=>{
+                //     console.log('Order',res);
+                // });
 
 
             },
@@ -226,6 +225,7 @@
             _postRequest: function() {
                 let shadow = this.shadowRoot;
                 let loc = location.search;
+                let html;
                 let pid = "";
                 let sellerid = "";
                 let posit = 0;
@@ -242,99 +242,80 @@
                 };
                 let msg = shadow.querySelector('#review').value;
                 let id = Date.now();
-                let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
 
                 let buyer = store.get("change-user") || null;
+                let contactinfo = shadow.querySelector('#review').value;
                 if (buyer == null) {
                     alert("請先登入");
                 } else {
                     // this.fileManager = new Awspackage(buyer);
 
                     // Henry's Code
-                    
-                    let to; // seller's Email
+                    this.saveOrder();
+                    let to = this.seller['email'];
                     let html;
+                    
+                        let image = this.product['pics'][0];
+                        let productname = this.product['productname'];
+                        let sellerImage = this.seller['head'];
+                        let sellerName =  this.seller['username'];
+                        let price =  this.product['price'];
+                        let district =  this.product['district'];
+                        let deliveryMethod = this.product['deliveryMethod'];
+                        let deliveryMethod2 = this.product['deliveryMethod'];                       
+                        let token = "1sd895ndsd";
 
                     Polymer.getContent('/email-template/sendcontactemail.html').then(html=>{
-                        html.replace("[[image]]",image);
-                        html.replace("[[productname]]",productname);
-                        // .......
+                        html = html.replace("[[image]]",image);
+                        html = html.replace("[[productname]]",productname);
+                        html = html.replace("[[sellerImage]]",sellerImage);
+                        html = html.replace("[[sellerName]]",sellerName);
+                        html = html.replace("[[price]]",price);
+                        html = html.replace("[[district]]",district);
+                        html = html.replace("[[deliveryMethod]]",deliveryMethod);
+                        html = html.replace("[[deliveryMethod2]]",deliveryMethod);
+                        html = html.replace("[[contactinfo]]",contactinfo);
+                        html = html.replace("[[token]]",token);
+
+
+                        // // .......
                         this.sendmail('support@01power.net',to,'你有新的訊息',html);
+                        alert('電郵已發出');
+                        // location.reload();
 
                     }); 
 
-
-
-
-
-
-
-
-                    //POSTDATA TO CLOUD
-                    // console.log("BUYERID", buyer);
-                    // let buyerId = buyer['_id'];
-                    // let ab = buyerId;
-                    // let cd = pid.toString() + Math.floor((Math.random() * 10));
-                    // let orderId = "" + ab + cd.toString();
-                    // let emailurl = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
-                    // let p = {
-                    //     "action": "sendContactEmail",
-                    //     "uid": sellerid,
-                    //     "pid": pid,
-                    //     "oid": orderId,
-                    //     "contactinfo": msg
-                    // };
-
-                    // console.log("P", p);
-
-                    // Polymer.postData(emailurl, p).then(res => {
-                    //     console.log("Please wait for seller response!");
-                    //     location.reload();
-                    // });
-
-                    // //POSTDATA TO POSTMAN
-
-                    // let params = {
-                    //     "action": "addorder",
-                    //     "msg": msg,
-                    //     "productId": pid,
-                    //     "buyerId": buyerId
-                    // };
-                    // let paramproduct = {
-                    //     "action": "updateData",
-                    //     "index": "change",
-                    //     "type": "product",
-                    //     "id": pid,
-                    //     "body": {
-                    //         "query": {
-                    //             "script": {
-                    //                 "source": "ctx._source['replyArray'].add('" + orderId + "')"
-                    //             }
-                    //         }
-                    //     }
-                    // };
-
-                    // let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
-                    // Polymer.postData(link, params).then(res => {
-                    //     if (res.code > 0) {
-                    //         Polymer.postData(url, paramproduct).then(res => {
-                    //             if (res.code > 0) {
-                    //                 console.log("success add and update");
-                    //                 this.prodManager.loadData(pid).then(res => {
-                    //                     this.fileManager.saveFile('json/product-' + pid + '.json', JSON.stringify(res.resolve));
-                    //                 });
-
-                    //             } else {
-                    //                 console.log("failupdate");
-                    //             }
-                    //         })
-                    //     } else {
-                    //         console.log("failadd order");
-                    //     }
-                    // });
                 }
             },
+            saveOrder(){
+                let arr = this.product['replyArray'];
+                let id = 'order-'+this.product['id']+'-'+arr.length;
+                let msg = this.shadowRoot.querySelector('#review').value;
+                let json = {
+                    "buyerId": this.user['id'],
+                    "id": id,
+                    "msg": msg,
+                    productId: this.product['id'],
+                    status: "已提交訂單",
+                    submitTime: new Date().getTime()
+
+                };
+                this.orderManager.saveData(id,json);
+                this.product['replyArray'].push(id);
+                this.prodManager.saveData(this.product['id'],this.product);
+                this.fileManager.saveFile('json/product-' + this.product['id'] + '.json', JSON.stringify(this.product));
+                this.fileManager.saveFile('json/order-' + id + '.json', JSON.stringify(json));
+            
+            } 
+
+
+
+
+
+
+                
 
         });
     })();
-</script>
+    </script>
+   

@@ -13,6 +13,9 @@
 <link rel="import" href="../change/change-buy.html">
 <link rel="import" href="../change/change-webcom.html">
 <link rel="import" href="../change/change-picslide.html">
+<link rel="import" href="../change/change-orderlist-storage.html">
+<link rel="import" href="../change/change-order-list.html">
+
 <link rel="import" href="change-edit-bar.html">
 <link rel="import" href="change-user-tag.html">
 
@@ -147,7 +150,7 @@
                 border-style: solid;
                 border: 1px solid #ccc;
                 margin-top: 2px;
-                visibility: visible;
+                visibility: hidden;
 
             }
 
@@ -458,44 +461,56 @@
                 <div class="right-product">
                     <div class="fullWidth">
                         <div class="yaqzaan" style="display: inline-block;">
-                            <svg class="new">
-                                <!-- <polygon points="0,0 80,0 60,32 0,32"
-                                    style="fill:#6AA64F;stroke:#6AA64F;stroke-width:0">
-                                </polygon>
-                                <text class="n o" x="6" y="23" fill="white" style="font-size:20px;">全新</text> -->
-                            </svg>
+                            
+                            <template is="dom-if" if="{{product.isNew}}">
+                                <svg class="new">
+                                <polygon points="0,0 80,0 60,32 0,32" style="fill:#ebbd35;stroke:#ebbd35;stroke-width:0"></polygon><text x="6" y="23" fill="white" id="isNew" >全新</text>
+                                    </svg>
+                            </template>
 
+                              <template is="dom-if" if="{{!product.isNew}}">
+                                    <svg class="new">
+                                        <polygon points="0,0 80,0 60,32 0,32" style="fill:#7cd3da;stroke:#7cd3da;stroke-width:0"></polygon><text x="6" y="23" fill="white" id="isNew" >二手</text>
+                                    </svg>
+                              </template>
                         </div>
+
                         <div style="display: inline-block;">
-                            <span id="pn" class="store"></span>
+                            <span id="pn" class="store">{{product.productname}}</span>
                         </div>
                     </div>
 
-                    <a href$="{{link}}">
-                        <div class="userinfo">
-                            <div id="usericon">
-                                <div id="a1">
-                                    <img class="head" src="./img/user_profile.png">
-                                </div>
-                                <div id="a2">
-                                    <div class="name" id="owner"></div>
+                        <a id="userSite" href="#">
+                            <div class="userinfo">
+                                <div id="usericon">
+                                    <div id="a1">
+                                        <img class="head" src$="{{owner.head}}">
+                                    </div>
+                                    <div id="a2">
+                                        <div class="name" id="owner">{{owner.username}}</div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </a>
+                        </a>
 
+                 
 
-                    <div class="dollar" id="aaa"></div>
+                    <div class="dollar" id="aaa">${{product.price}}</div>
 
                     <hr>
 
                     <div>
                         <div id="location"></div>
-                        <p id="dis" class="b1"></p>
+                        <p id="dis" class="b1">
+
+                            {{product.district}}
+                        </p>
                     </div>
                     <div>
                         <div id="delivery"></div>
-                        <p id="dm" class="b2"></p>
+                        <p id="dm" class="b2">
+                            {{product.deliveryMethod}}
+                        </p>
                     </div>
                     <hr>
                     <br>
@@ -539,6 +554,7 @@
             </div>
         </div>
 
+
     </template>
 
 </dom-module>
@@ -561,9 +577,54 @@
                 });
 
                 let user = store.get('change-user') || null;
+                this.user = user;
                 if (user)
                     this.fileManager = new AwsPackage(user);
+                
+                this.dataManager = new DataPackage('product');
+                this.userManager = new DataPackage('_user');
+                this.orderManager = new DataPackage('order');
 
+            },
+            initProduct(prod){
+                console.log('Product',prod);
+                let that = this;
+                let shadow = this.shadowRoot;
+
+                this.product = prod;
+                // let a = res.resolve['price'];
+                // shadow.querySelector('#aaa').innerHTML = "$" + a;
+                if (!this.product['pics'])
+                    this.products['pics'] = ['./img/nopic.png'];
+
+                if (!Array.isArray(this.product['pics']))
+                    this.product['pics'] = [this.product['pics']];
+
+                for (qwe = 0; qwe < this.product['pics'].length; qwe++) {
+                    if (this.product['pics'][qwe]) {
+                        shadow.querySelector('#div' + qwe).style.backgroundImage = 'url(' + this.product['pics'][qwe] + ')';
+                        shadow.querySelector('#div'+qwe).style.visibility = "visible";
+                    }
+                }
+
+
+                this.loadTags();
+                shadow.querySelector('.unib').innerHTML = this.product['description'];
+                shadow.querySelector('.deliveryDesc').innerHTML = this.product['deliveryDesc'];
+                this.loadOwner();
+                if (this.user){
+                    let orderList = document.createElement('change-orderlist-storage');
+                    orderList.orders = this.product['replyArray'];
+                    this.product['replyArray'].forEach(item=>{
+                        let listItem = document.createElement('change-order-list');
+                        listItem.id = item;
+                        listItem.product = this.product;
+                        listItem.setAttribute('id',item);
+                        orderList.appendChild(listItem);
+                    });
+                    shadow.appendChild(orderList);
+                    
+                }
             },
             ready: function () {
                 console.log("Entered Ready");
@@ -581,138 +642,156 @@
                 console.log("pid", pid);
                 let that = this;
                 let shadow = this.shadowRoot;
-                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                let params = {
-                    "action": "getData",
-                    "index": "change",
-                    "type": "product",
-                    "id": pid
-                }
-                let user = store.get('change-user') || null;
-                if (user) {
-                    shadow.querySelector('#contact').style.visibility = "visible";
-                }
 
-                Polymer.postData(Url, params).then(res => {
-                    console.log("Result", res);
-                    if (res.code > 0) {
-                        let a = res.resolve['price'];
-                        shadow.querySelector('#aaa').innerHTML = "$" + a;
-                        let b = res.resolve['pics'];
-                        let imglen = [];
-                        for (qwe = 0; qwe < b.length; qwe++) {
-                            if (b[qwe] == "") {
-                                shadow.querySelector('#div' + qwe).style.visibility = "hidden";
+                this.loadProduct(pid).then(prod=>{
+                    console.log('Product',prod);
+                    this.initProduct(prod);
+                },err=>{
+                    alert('不能載入資料');
+                });
 
-                            } else {
-                                imglen.push(b[qwe])
-                            }
-                        }
-                        let lenb = imglen.length;
-                        for (q22 = 0; q22 < lenb; q22++) {
-                            shadow.querySelector('#div' + q22).style.backgroundImage = 'url(' + imglen[q22] + ')';
-                        };
+                // let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                // let params = {
+                //     "action": "getData",
+                //     "index": "change",
+                //     "type": "product",
+                //     "id": pid
+                // }
+                // let user = store.get('change-user') || null;
+                // if (user) {
+                //     shadow.querySelector('#contact').style.visibility = "visible";
+                // }
 
-                        let c = res.resolve['productname'];
-                        shadow.querySelector('#pn').innerHTML = c;
+                // Polymer.postData(Url, params).then(res => {
+                //     console.log("Result", res);
+                //     if (res.code > 0) {
+                //         let a = res.resolve['price'];
+                //         shadow.querySelector('#aaa').innerHTML = "$" + a;
+                //         let b = res.resolve['pics'];
+                //         let imglen = [];
+                //         for (qwe = 0; qwe < b.length; qwe++) {
+                //             if (b[qwe] == "") {
+                //                 shadow.querySelector('#div' + qwe).style.visibility = "hidden";
 
-                        //get and pass tag data
-                        let itemtag = "";
-                        for (count = 0; count < res.resolve['tags'].length; count++) {
-                            itemtag += '<button id=\"tagbutton\">' + '<a href="list-product.html?tag=' + encodeURIComponent(res.resolve['tags'][count]) + '">' + res.resolve['tags'][count] + "</a></button>";
-                        }
-                        shadow.querySelector('#t').innerHTML = itemtag;
+                //             } else {
+                //                 imglen.push(b[qwe])
+                //             }
+                //         }
+                //         let lenb = imglen.length;
+                //         for (q22 = 0; q22 < lenb; q22++) {
+                //             shadow.querySelector('#div' + q22).style.backgroundImage = 'url(' + imglen[q22] + ')';
+                //         };
 
-                        //get and pass description data
-                        let description = res.resolve['description'];
-                        shadow.querySelector('.unib').innerHTML = description;
+                //         let c = res.resolve['productname'];
+                //         shadow.querySelector('#pn').innerHTML = c;
 
-                        //get and pass seller message data
-                        // let sellerMsg = res.resolve['sellerMsg'];
-                        // shadow.querySelector('.sMes').innerHTML = sellerMsg;
+                //         //get and pass tag data
+                //         let itemtag = "";
+                //         for (count = 0; count < res.resolve['tags'].length; count++) {
+                //             itemtag += '<button id=\"tagbutton\">' + '<a href="list-product.html?tag=' + encodeURIComponent(res.resolve['tags'][count]) + '">' + res.resolve['tags'][count] + "</a></button>";
+                //         }
+                //         shadow.querySelector('#t').innerHTML = itemtag;
 
-                        //get and pass deliveryDesc data
-                        let deliveryDesc = res.resolve['deliveryDesc'];
-                        shadow.querySelector('.deliveryDesc').innerHTML = deliveryDesc;
+                //         //get and pass description data
+                //         let description = res.resolve['description'];
+                //         shadow.querySelector('.unib').innerHTML = description;
 
-                        //DETERMIN WHETHER IT IS UPLOADED BY FANPAGE OR USERS & GET BACK REQUIRED NAME, HEAD AND LINK
-                        let o = res.resolve['ownerId'];
-                        let isFanpage = res.resolve['isFanpage'];
-                        if (isFanpage == true) {
-                            shadow.querySelector('#owner').innerHTML = res.resolve['fanpage'];
-                            let parampage = {
-                                "action": "searchData",
-                                "index": "change",
-                                "type": "pages",
-                                "body": {
-                                    "query": {
-                                        "match": {
-                                            "name": res.resolve['fanpage']
-                                        }
-                                    }
-                                }
-                            };
-                            Polymer.postData(Url, parampage).then(res => {
-                                shadow.querySelector('.head').src = res.resolve[0]['head'];
-                                this.link = "/" + res.resolve[0]['website'];
-                            });
-                        } else {
-                            let p = {
-                                "action": "searchData",
-                                "index": "change",
-                                "type": "_user",
-                                "body": {
-                                    "query": {
-                                        "match": {
-                                            "_id": o
-                                        }
-                                    }
-                                }
-                            };
-                            Polymer.postData(Url, p).then(res => {
-                                if (res.code > 0) {
-                                    let un = res.resolve[0]['username'];
-                                    shadow.querySelector('#owner').innerHTML = un;
-                                    shadow.querySelector('.head').src = res.resolve[0]['head'];
-                                    this.link = "/user.html?" + res.resolve[0]['id'];
-                                }
-                            });
+                //         //get and pass seller message data
+                //         // let sellerMsg = res.resolve['sellerMsg'];
+                //         // shadow.querySelector('.sMes').innerHTML = sellerMsg;
 
-                        };
+                //         //get and pass deliveryDesc data
+                //         let deliveryDesc = res.resolve['deliveryDesc'];
+                //         shadow.querySelector('.deliveryDesc').innerHTML = deliveryDesc;
+
+                //         //DETERMIN WHETHER IT IS UPLOADED BY FANPAGE OR USERS & GET BACK REQUIRED NAME, HEAD AND LINK
+                //         let o = res.resolve['ownerId'];
+                //         let isFanpage = res.resolve['isFanpage'];
+                //         if (isFanpage == true) {
+                //             shadow.querySelector('#owner').innerHTML = res.resolve['fanpage'];
+                //             let parampage = {
+                //                 "action": "searchData",
+                //                 "index": "change",
+                //                 "type": "pages",
+                //                 "body": {
+                //                     "query": {
+                //                         "match": {
+                //                             "name": res.resolve['fanpage']
+                //                         }
+                //                     }
+                //                 }
+                //             };
+                //             Polymer.postData(Url, parampage).then(res => {
+                //                 shadow.querySelector('.head').src = res.resolve[0]['head'];
+                //                 this.link = "/" + res.resolve[0]['website'];
+                //             });
+                //         } else {
+                //             let p = {
+                //                 "action": "searchData",
+                //                 "index": "change",
+                //                 "type": "_user",
+                //                 "body": {
+                //                     "query": {
+                //                         "match": {
+                //                             "_id": o
+                //                         }
+                //                     }
+                //                 }
+                //             };
+                //             Polymer.postData(Url, p).then(res => {
+                //                 if (res.code > 0) {
+                //                     let un = res.resolve[0]['username'];
+                //                     shadow.querySelector('#owner').innerHTML = un;
+                //                     shadow.querySelector('.head').src = res.resolve[0]['head'];
+                //                     this.link = "/user.html?" + res.resolve[0]['id'];
+                //                 }
+                //             });
+
+                //         };
 
 
 
-                        // let f = res.resolve['isNew'];
-                        // if (f == true) {
-                        //     shadow.querySelector('.n').innerText = "全新";
-                        // } else {
-                        //     shadow.querySelector('.o').innerHTML = "二手";
-                        // }
-                        let thenew = ""
-                        if (res.resolve['isNew'] == true) {
-                            thenew = "<polygon points=\"0,0 80,0 60,32 0,32\" style=\"fill:#ebbd35;stroke:#ebbd35;stroke-width:0\"></polygon><text x=\"6\" y=\"23\" fill=\"white\" id=\"isNew\" >全新</text>"
+                //         // let f = res.resolve['isNew'];
+                //         // if (f == true) {
+                //         //     shadow.querySelector('.n').innerText = "全新";
+                //         // } else {
+                //         //     shadow.querySelector('.o').innerHTML = "二手";
+                //         // }
+                //         let thenew = ""
+                //         if (res.resolve['isNew'] == true) {
+                //             thenew = "<polygon points=\"0,0 80,0 60,32 0,32\" style=\"fill:#ebbd35;stroke:#ebbd35;stroke-width:0\"></polygon><text x=\"6\" y=\"23\" fill=\"white\" id=\"isNew\" >全新</text>"
 
-                        } else {
-                            thenew = "<polygon points=\"0,0 80,0 60,32 0,32\" style=\"fill:#7cd3da;stroke:#7cd3da;stroke-width:0\"></polygon><text x=\"6\" y=\"23\" fill=\"white\" id=\"isNew\" >二手</text>"
-                        }
-                        shadow.querySelector('.new').innerHTML = thenew;
+                //         } else {
+                //             thenew = "<polygon points=\"0,0 80,0 60,32 0,32\" style=\"fill:#7cd3da;stroke:#7cd3da;stroke-width:0\"></polygon><text x=\"6\" y=\"23\" fill=\"white\" id=\"isNew\" >二手</text>"
+                //         }
+                //         shadow.querySelector('.new').innerHTML = thenew;
 
-                        let g = res.resolve['district'];
-                        shadow.querySelector('#dis').innerHTML = g;
+                //         let g = res.resolve['district'];
+                //         shadow.querySelector('#dis').innerHTML = g;
 
-                        let h = res.resolve['deliveryMethod'];
-                        shadow.querySelector('#dm').innerHTML = h;
-                    } else {
-                        alert("fail");
-                    }
-                })
+                //         let h = res.resolve['deliveryMethod'];
+                //         shadow.querySelector('#dm').innerHTML = h;
+                //     } else {
+                //         alert("fail");
+                //     }
+                // })
 
             },
             loadProduct(pid) {
-                this.fileManager.getFile('json/product-' + pid + '.json').then(res => {
-                    let json = JSON.parse(res);
-
+                return new Promise(function(resolve, reject) {
+                    Polymer.getContent('/json/product-'+pid+'.json?id='+new Date().getTime()).then(res=>{
+                        resolve(JSON.parse(res));
+                    },err=>{
+                        this.dataManager.loadData(pid).then(prod=>{
+                            resolve(prod);
+                        });
+                    });
+                    // this.fileManager.getFile('json/product-' + pid + '.json').then(res => {
+                    //     let json = JSON.parse(res);
+                    // });
                 });
+                
+
             },
             _findseller: function () {
                 let user = store.get('change-user') || null;
@@ -742,10 +821,33 @@
                     console.log('contacting seller');
                     let shadow = this.shadowRoot;
                     let that = this;
-                    let dialog = shadow.querySelector('vaadin-dialog#seller');
-                    Polymer.popup(dialog, "change", "change-webcom", "500px", "400px");
+                    let popup = document.createElement('change-webcom');
+                    popup.seller = this.owner;
+                    popup.product = this.product;
+                    this.componentPopup(popup,'500px','400px');
+                    
+                    // Polymer.popup(dialog, "change", "change-webcom", "500px", "400px");
                     console.log("end process in contact seller");
                 }
+            },
+
+            componentPopup(component, width, height) {
+                let dialog = this.shadowRoot.querySelector('vaadin-dialog#seller');
+                // let dialog = Polymer.dialog;
+                // let dialog = document.querySelector('vaadin-dialog');
+                dialog.renderer = function(root, dialog) {
+                    // root.innerHTML = '<' + component + '></' + component + '>';
+                    if (root.firstElementChild) {
+                        return;
+                    }
+                    root.appendChild(component);
+                };
+
+                dialog.resizable = true;
+                dialog.resize(width, height);
+                dialog.opened = true;
+                // Polymer.activeDialog = dialog;   
+
             },
 
             // _test: function () {
@@ -754,6 +856,80 @@
             //     let dialog = shadow.querySelector('vaadin-dialog#picslide');
             //     Polymer.popup(dialog, "change", "change-picslide", "753px", "573px");
             // }
+
+            loadImages(imgs){
+                
+            },
+            
+            loadTags(){
+                let shadow = this.shadowRoot;
+                        //get and pass tag data
+                let itemtag = "";
+                let tags = document.createElement('div');
+                for (var count = 0; count < this.product['tags'].length; count++) {
+                    let button = document.createElement('button');
+                    button.setAttribute('id','tagbutton');
+                    let a = document.createElement('a');
+                    a.setAttribute('href','/list-product.html?tag='+this.product['tags'][count]);
+                    a.innerHTML = this.product['tags'][count];
+                    button.appendChild(a);
+                    tags.appendChild(button);
+                    // itemtag += '<button id=\"tagbutton\">' + '<a href="list-product.html?tag=' + encodeURIComponent(res.resolve['tags'][count]) + '">' + res.resolve['tags'][count] + "</a></button>";
+                }
+                console.log('Tag',tags);
+                shadow.querySelector('#t').innerHTML = tags.innerHTML;
+            },
+
+
+            loadOrder(pid) {
+                let that = this;
+                return new Promise(function(resolve, reject) {
+                    Polymer.getContent('/json/order-'+pid+'.json?id='+new Date().getTime()).then(res=>{
+                        resolve(JSON.parse(res));
+                    },err=>{
+                        that.orderManager.loadData(pid).then(prod=>{
+                            resolve(prod);
+                        });
+                    });
+                    // this.fileManager.getFile('json/product-' + pid + '.json').then(res => {
+                    //     let json = JSON.parse(res);
+                    // });
+                });
+                
+
+            },
+            loadUser(userId){
+                console.log('User',userId);
+                this.userManager.loadData(userId).then(res=>{
+                    this.owner = res;
+                    this.shadowRoot.querySelector('#userSite').setAttribute('href','/user.html?'+this.owner['id']);
+                });
+            },
+            loadPage(pageId){
+                let pageManager = new DataPackage('pages');
+                pageManager.loadData(pageId).then(res=>{
+                    this.pages = res;
+                    this.shadowRoot.querySelector('#userSite').setAttribute('href',this.pages['website']);
+                });
+            },
+            // ownerSite(){
+            //     let isFanpage = this.product['isFanpage'] || null;
+
+            //     if (!isFanpage) 
+            //         this.shadowRoot.querySelector('#userSite').setAttribute('href','/user.html?'+this.owner['id']);
+            //     else
+            //         this.shadowRoot.querySelector('#userSite').setAttribute('href',this.pages['website']);
+            // },
+            loadOwner(){
+                let o = this.product['ownerId'];
+                let isFanpage = this.product['isFanpage'] || null;
+                console.log('is Fan Page',isFanpage);
+                if (!isFanpage)
+                    this.loadUser(o);
+                else
+                    this.loadPage(o);
+
+            }
         });
     })();
 </script>

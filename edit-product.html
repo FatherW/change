@@ -29,7 +29,6 @@ let param = {
 store.set("change-platform",param);
 document.querySelector('.googleloginname').click();
 
-<<<<<<< Updated upstream
 };
 function signOut() {
 var auth2 = gapi.auth2.getAuthInstance(); 
@@ -37,11 +36,6 @@ auth2.signOut().then(function () {
 console.log('User signed out.');
 });
 };
-=======
-<body>
-  
-</body>
->>>>>>> Stashed changes
 
     window.fbAsyncInit = function () {
         FB.init({
@@ -167,8 +161,8 @@ height: 500px;
 
 <change-header></change-header>
 <change-new-product></change-new-product>
-<change-orderlist-storage></change-orderlist-storage>
 <change-footer></change-footer>
 <button class="googleloginname" style="display:none;">google login</button>
 <div class="g-signin2" data-onsuccess="onSignIn" style="display:none;">imgoogle</div>
-</dz-wrapper><dz-wrapper-js>0</dz-wrapper-js><dz-dazzle></dz-dazzle></body></html>
+</dz-wrapper>
+<dz-dazzle></dz-dazzle></body></html>
