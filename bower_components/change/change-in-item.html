@@ -275,36 +275,6 @@
                     var fromprice = priceStart;
                     var toprice = priceEnd;
                 };
-                var rangeparam = {
-                    "action": "searchData",
-                    "index": "change",
-                    "type": "product",
-                    "_source": "_id",
-                    "body": {
-                        "sort": [{
-                            "createTime": {
-                                "order": "desc"
-                            }
-                        }],
-                        "query": {
-                            "bool": {
-                                "should": {
-                                    "range": {
-                                        "price": {
-                                            "gte": fromprice,
-                                            "lte": toprice,
-                                            "boost": 1.0
-                                        }
-
-                                    }
-                                }
-                            }
-                        }
-                    }
-                };
-
-
-
 
                 //// the cate query
                 let paramcate = {
@@ -348,7 +318,7 @@
                         }
                     }
                 };
-                // console.log(district, "wwwwwwwwww", JSON.stringify(parammust));
+                // console.log(JSON.stringify(paramcate), "wwwwwwwwww", JSON.stringify(parammust));
                 Polymer.postData(url, paramcate).then(res => {
                     if (res.code > 0) {
                         let shouldid = [];

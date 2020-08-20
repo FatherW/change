@@ -491,7 +491,6 @@
                 };
                 Polymer.postData(Url, param).then(res => {
                     if (res.code > 0) {
-                        // location.reload();
                         shadow.querySelector('#deleteall').style.display = "none";
                     } else {
                         console.log("error in reallydelete");
@@ -500,10 +499,8 @@
             },
 
             _deleteproduct: function() {
-                // console.log("inside deleteproduct");
                 let that = this;
                 let shadow = this.shadowRoot;
-                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 let dialog = shadow.querySelector('#tempqqq' + this.id);
                 Polymer.popup(dialog, "change", "change-confirm", "30%", "50%");
             },

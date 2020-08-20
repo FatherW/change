@@ -12,7 +12,7 @@
 
             }
 
-            
+
 
             hr.moremore {
                 width: 70%;
@@ -350,7 +350,6 @@
                     background-color: white;
                 }
             }
-            
         </style>
 
 
@@ -452,73 +451,6 @@
                     }
                 };
 
-                let paramdistrict = {
-                    "action": "searchData",
-                    "index": "change",
-                    "type": "categories",
-                    "body": {
-                        "sort": [{
-                            "_id": {
-                                "order": "asc"
-                            }
-                        }],
-                        "query": {
-                            "match_all": {
-
-                            }
-                        }
-                    }
-                };
-
-                Polymer.postData(Url, paramdistrict).then(res => {
-                    if (res.code > 0) {
-                        let cat = res.resolve;
-                        let maincates = [];
-                        let temsubcates = [];
-                        cat.forEach(item => {
-                            if (item.parent == "0") {
-                                maincates.push(item);
-                            } else {
-                                temsubcates.push(item);
-                            }
-                        });
-                        console.log("maincat", maincates);
-                        let div = shadow.querySelector('.titlebutton');
-                        maincates.forEach(main => {
-                            let subcate = [];
-                            temsubcates.forEach(sub => {
-                                if (sub.parent == main._id) {
-                                    subcate.push(sub.name);
-                                }
-                            });
-
-                            let button = document.createElement('button');
-                            button.setAttribute('class', 'catbutton');
-                            button.innerHTML = main.name;
-                            button.addEventListener('click', e => {
-                                let cate2list = {
-                                    "main": main.name,
-                                    "sub": subcate
-                                };
-                                store.set('change-cate', cate2list);
-                                location.href = '/list-product.html';
-                            });
-                            div.appendChild(button);
-
-                        })
-                        let button = document.createElement('button');
-                        button.setAttribute('id', 'cat_all');
-                        button.innerHTML = "所有類別";
-                        button.addEventListener('click', e => {
-                            store.set('change-cate', null);
-                            location.href = '/list-product.html';
-                        })
-                        div.appendChild(button);
-
-                    };
-
-                });
-
                 Polymer.postData(Url, param).then(res => {
                     if (res.code > 0) {
                         let prods = res.resolve;
@@ -557,12 +489,46 @@
                     this.isfree(e.detail.isFree);
                 });
 
-
+                that.buildCategory();
+            },
+            buildCategory() {
+                let shadow = this.shadowRoot;
+                let cateUrl = "/json/category.json";
+                Polymer.getContent(cateUrl).then(res => {
+                    let div = shadow.querySelector('.titlebutton');
+                    res = JSON.parse(res);
+                    res.forEach(item => {
+                        let button = document.createElement('button');
+                        button.setAttribute('class', 'catbutton');
+                        button.innerHTML = item.name;
+                        button.addEventListener('click', e => {
+                            let cate2list = {
+                                "main": item.name,
+                                "sub": item.children
+                            }
+                            store.set('change-cate', cate2list);
+                            location.href = '/list-product.html';
+                        });
+                        div.appendChild(button);
+                    })
+                    let button = document.createElement('button');
+                    button.setAttribute('id', 'cat_all');
+                    button.innerHTML = "所有類別";
+                    button.addEventListener('click', e => {
+                        store.set('change-cate', null);
+                        location.href = '/list-product.html';
+                    })
+                    div.appendChild(button);
+                })
             },
             isfree(isFree) {
                 let that = this;
                 let shadow = this.shadowRoot;
                 this.countitem = 0;
+
+
+
+
                 let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
 
                 var paidquery = {
@@ -634,7 +600,6 @@
                 let that = this;
                 let shadow = this.shadowRoot;
 
-
                 if (this.res.code > 0) {
                     let prods = this.res.resolve;
 
@@ -645,11 +610,9 @@
                     }
                     for (var i = this.countitem; i < this.countitem + check8; i++) {
                         let theidis = prods[i]['_id'];
-
                         storeId.push(theidis)
 
                     };
-
 
                     if (prods.length - this.countitem < 8) {
                         check8 = prods.length - this.countitem;
@@ -662,19 +625,11 @@
 
                     }
                     this.countitem += 8;
-
                 } else {
                     alert("error");
                 }
 
-
-
-
             },
-
-
-
-
 
 
         });
