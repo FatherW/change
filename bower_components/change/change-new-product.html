@@ -468,91 +468,91 @@
                                     </svg>
                             </template>
 
-                              <template is="dom-if" if="{{!product.isNew}}">
+    <template is="dom-if" if="{{!product.isNew}}">
                                     <svg class="new">
                                         <polygon points="0,0 80,0 60,32 0,32" style="fill:#7cd3da;stroke:#7cd3da;stroke-width:0"></polygon><text x="6" y="23" fill="white" id="isNew" >二手</text>
                                     </svg>
                               </template>
-                        </div>
+    </div>
 
-                        <div style="display: inline-block;">
-                            <span id="pn" class="store">{{product.productname}}</span>
-                        </div>
-                    </div>
+    <div style="display: inline-block;">
+        <span id="pn" class="store">{{product.productname}}</span>
+    </div>
+    </div>
 
-                        <a id="userSite" href="#">
-                            <div class="userinfo">
-                                <div id="usericon">
-                                    <div id="a1">
-                                        <img class="head" src$="{{owner.head}}">
-                                    </div>
-                                    <div id="a2">
-                                        <div class="name" id="owner">{{owner.username}}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-
-                 
-
-                    <div class="dollar" id="aaa">${{product.price}}</div>
-
-                    <hr>
-
-                    <div>
-                        <div id="location"></div>
-                        <p id="dis" class="b1">
-
-                            {{product.district}}
-                        </p>
-                    </div>
-                    <div>
-                        <div id="delivery"></div>
-                        <p id="dm" class="b2">
-                            {{product.deliveryMethod}}
-                        </p>
-                    </div>
-                    <hr>
-                    <br>
-                    <button id="contact" on-click="_findseller">聯絡賣家</button>
-                    <vaadin-dialog id="seller"></vaadin-dialog>
-
-                    <div class="b3">刊登於 1小時前</div>
-                    <br>
-
-                    <div class="bigsize">
-                        <span>產品資料:</span>
-                    </div>
-                    <br>
-                    <div class="unib">
-                        <!-- <span id="pn">產品名稱：儲物架</span> -->
-                    </div>
-                    <br>
-
-                    <div class="tagContainer">
-                        <div class="tag">
-                            <span> 標籤： </span>
-                        </div>
-                        <div class="buttontag">
-                            <div id="t"></div>
-                        </div>
-                    </div>
-                    <br>
-                    <hr>
-
-                    <div>
-                        <span class="bigsize">運輸：</span>
-                        <div class="deliveryDesc">
-                            <p style="margin-bottom: 0px;"></p>
-                        </div>
-
-
-                    </div>
-                    <br>
+    <a id="userSite" href="#">
+        <div class="userinfo">
+            <div id="usericon">
+                <div id="a1">
+                    <img class="head" src$="{{owner.head}}">
                 </div>
-
+                <div id="a2">
+                    <div class="name" id="owner">{{owner.username}}</div>
+                </div>
             </div>
         </div>
+    </a>
+
+
+
+    <div class="dollar" id="aaa">${{product.price}}</div>
+
+    <hr>
+
+    <div>
+        <div id="location"></div>
+        <p id="dis" class="b1">
+
+            {{product.district}}
+        </p>
+    </div>
+    <div>
+        <div id="delivery"></div>
+        <p id="dm" class="b2">
+            {{product.deliveryMethod}}
+        </p>
+    </div>
+    <hr>
+    <br>
+    <button id="contact" on-click="_findseller">聯絡賣家</button>
+    <vaadin-dialog id="seller"></vaadin-dialog>
+
+    <div class="b3">刊登於 {{timeStr}}</div>
+    <br>
+
+    <div class="bigsize">
+        <span>產品資料:</span>
+    </div>
+    <br>
+    <div class="unib">
+        <!-- <span id="pn">產品名稱：儲物架</span> -->
+    </div>
+    <br>
+
+    <div class="tagContainer">
+        <div class="tag">
+            <span> 標籤： </span>
+        </div>
+        <div class="buttontag">
+            <div id="t"></div>
+        </div>
+    </div>
+    <br>
+    <hr>
+
+    <div>
+        <span class="bigsize">運輸：</span>
+        <div class="deliveryDesc">
+            <p style="margin-bottom: 0px;"></p>
+        </div>
+
+
+    </div>
+    <br>
+    </div>
+
+    </div>
+    </div>
 
 
     </template>
@@ -560,7 +560,7 @@
 </dom-module>
 
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-new-product',
             properties: {
@@ -568,7 +568,7 @@
                     "type": String
                 }
             },
-            created: function () {
+            created: function() {
                 console.log("Entered Created");
                 // call close pop-up in change-confirm
                 document.addEventListener('close-item-dialog', e => {
@@ -580,14 +580,13 @@
                 this.user = user;
                 if (user)
                     this.fileManager = new AwsPackage(user);
-                
+
                 this.dataManager = new DataPackage('product');
                 this.userManager = new DataPackage('_user');
                 this.orderManager = new DataPackage('order');
 
             },
-            initProduct(prod){
-                console.log('Product',prod);
+            initProduct(prod) {
                 let that = this;
                 let shadow = this.shadowRoot;
 
@@ -603,30 +602,32 @@
                 for (qwe = 0; qwe < this.product['pics'].length; qwe++) {
                     if (this.product['pics'][qwe]) {
                         shadow.querySelector('#div' + qwe).style.backgroundImage = 'url(' + this.product['pics'][qwe] + ')';
-                        shadow.querySelector('#div'+qwe).style.visibility = "visible";
+                        shadow.querySelector('#div' + qwe).style.visibility = "visible";
                     }
                 }
+                if (prod.isFanpage || prod.isFanpage == true) {
 
-
+                }
+                that.timeStr = that.loadUpdate(prod.createTime);
                 this.loadTags();
                 shadow.querySelector('.unib').innerHTML = this.product['description'];
                 shadow.querySelector('.deliveryDesc').innerHTML = this.product['deliveryDesc'];
                 this.loadOwner();
-                if (this.user){
+                if (this.user) {
                     let orderList = document.createElement('change-orderlist-storage');
                     orderList.orders = this.product['replyArray'];
-                    this.product['replyArray'].forEach(item=>{
+                    this.product['replyArray'].forEach(item => {
                         let listItem = document.createElement('change-order-list');
                         listItem.id = item;
                         listItem.product = this.product;
-                        listItem.setAttribute('id',item);
+                        listItem.setAttribute('id', item);
                         orderList.appendChild(listItem);
                     });
                     shadow.appendChild(orderList);
-                    
+
                 }
             },
-            ready: function () {
+            ready: function() {
                 console.log("Entered Ready");
                 let loc = location.search;
                 let pid = "";
@@ -643,10 +644,10 @@
                 let that = this;
                 let shadow = this.shadowRoot;
 
-                this.loadProduct(pid).then(prod=>{
-                    console.log('Product',prod);
+                this.loadProduct(pid).then(prod => {
+                    console.log('Product', prod);
                     this.initProduct(prod);
-                },err=>{
+                }, err => {
                     alert('不能載入資料');
                 });
 
@@ -779,10 +780,10 @@
             },
             loadProduct(pid) {
                 return new Promise(function(resolve, reject) {
-                    Polymer.getContent('/json/product-'+pid+'.json?id='+new Date().getTime()).then(res=>{
+                    Polymer.getContent('/json/product-' + pid + '.json?id=' + new Date().getTime()).then(res => {
                         resolve(JSON.parse(res));
-                    },err=>{
-                        this.dataManager.loadData(pid).then(prod=>{
+                    }, err => {
+                        this.dataManager.loadData(pid).then(prod => {
                             resolve(prod);
                         });
                     });
@@ -790,10 +791,10 @@
                     //     let json = JSON.parse(res);
                     // });
                 });
-                
+
 
             },
-            _findseller: function () {
+            _findseller: function() {
                 let user = store.get('change-user') || null;
                 loc = location.search;
                 let posit = 0;
@@ -824,8 +825,8 @@
                     let popup = document.createElement('change-webcom');
                     popup.seller = this.owner;
                     popup.product = this.product;
-                    this.componentPopup(popup,'500px','400px');
-                    
+                    this.componentPopup(popup, '500px', '400px');
+
                     // Polymer.popup(dialog, "change", "change-webcom", "500px", "400px");
                     console.log("end process in contact seller");
                 }
@@ -857,26 +858,26 @@
             //     Polymer.popup(dialog, "change", "change-picslide", "753px", "573px");
             // }
 
-            loadImages(imgs){
-                
+            loadImages(imgs) {
+
             },
-            
-            loadTags(){
+
+            loadTags() {
                 let shadow = this.shadowRoot;
-                        //get and pass tag data
+                //get and pass tag data
                 let itemtag = "";
                 let tags = document.createElement('div');
                 for (var count = 0; count < this.product['tags'].length; count++) {
                     let button = document.createElement('button');
-                    button.setAttribute('id','tagbutton');
+                    button.setAttribute('id', 'tagbutton');
                     let a = document.createElement('a');
-                    a.setAttribute('href','/list-product.html?tag='+this.product['tags'][count]);
+                    a.setAttribute('href', '/list-product.html?tag=' + this.product['tags'][count]);
                     a.innerHTML = this.product['tags'][count];
                     button.appendChild(a);
                     tags.appendChild(button);
                     // itemtag += '<button id=\"tagbutton\">' + '<a href="list-product.html?tag=' + encodeURIComponent(res.resolve['tags'][count]) + '">' + res.resolve['tags'][count] + "</a></button>";
                 }
-                console.log('Tag',tags);
+                console.log('Tag', tags);
                 shadow.querySelector('#t').innerHTML = tags.innerHTML;
             },
 
@@ -884,10 +885,10 @@
             loadOrder(pid) {
                 let that = this;
                 return new Promise(function(resolve, reject) {
-                    Polymer.getContent('/json/order-'+pid+'.json?id='+new Date().getTime()).then(res=>{
+                    Polymer.getContent('/json/order-' + pid + '.json?id=' + new Date().getTime()).then(res => {
                         resolve(JSON.parse(res));
-                    },err=>{
-                        that.orderManager.loadData(pid).then(prod=>{
+                    }, err => {
+                        that.orderManager.loadData(pid).then(prod => {
                             resolve(prod);
                         });
                     });
@@ -895,21 +896,24 @@
                     //     let json = JSON.parse(res);
                     // });
                 });
-                
+
 
             },
-            loadUser(userId){
-                console.log('User',userId);
-                this.userManager.loadData(userId).then(res=>{
-                    this.owner = res;
-                    this.shadowRoot.querySelector('#userSite').setAttribute('href','/user.html?'+this.owner['id']);
-                });
+            loadUser(userId) {
+                let that = this;
+                let url = "/json/user-" + userId + ".json?id=" + new Date().getTime();
+                Polymer.getContent(url).then(res => {
+                    that.owner = JSON.parse(res)
+                    this.shadowRoot.querySelector('#userSite').setAttribute('href', '/user.html?' + userId);
+
+                })
+
             },
-            loadPage(pageId){
+            loadPage(pageId) {
                 let pageManager = new DataPackage('pages');
-                pageManager.loadData(pageId).then(res=>{
+                pageManager.loadData(pageId).then(res => {
                     this.pages = res;
-                    this.shadowRoot.querySelector('#userSite').setAttribute('href',this.pages['website']);
+                    this.shadowRoot.querySelector('#userSite').setAttribute('href', this.pages['website']);
                 });
             },
             // ownerSite(){
@@ -920,15 +924,32 @@
             //     else
             //         this.shadowRoot.querySelector('#userSite').setAttribute('href',this.pages['website']);
             // },
-            loadOwner(){
+            loadOwner() {
                 let o = this.product['ownerId'];
                 let isFanpage = this.product['isFanpage'] || null;
-                console.log('is Fan Page',isFanpage);
-                if (!isFanpage)
+                console.log('is Fan Page', isFanpage);
+                if (!isFanpage || isFanpage == false)
                     this.loadUser(o);
                 else
                     this.loadPage(o);
 
+            },
+            loadUpdate(time) {
+                let _thetimenow = Date.now();
+                let comparetime = (_thetimenow - time) / 1000;
+                if (comparetime < 60) {
+                    return "剛剛";
+                } else if (comparetime / 60 < 60) {
+                    return Math.floor(comparetime / 60) + "分鐘前";
+                } else if (comparetime / 60 / 60 < 24) {
+                    return Math.floor(comparetime / 60 / 60) + "小時前";
+                } else if (comparetime / 60 / 60 / 24 < 7) {
+                    return Math.floor(comparetime / 60 / 60 / 24) + "日前";
+                } else if (comparetime / 60 / 60 / 24 / 7 < 30) {
+                    return Math.floor(comparetime / 60 / 60 / 24 / 7) + "星期前";
+                } else if (comparetime / 60 / 60 / 24 / 7 / 30 < 365) {
+                    return Math.floor(comparetime / 60 / 60 / 24 / 30) + "月前";
+                }
             }
         });
     })();

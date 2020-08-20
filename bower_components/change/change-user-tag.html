@@ -351,10 +351,10 @@
         <div id="usericon">
             <a id="redu" style="display: flex;">
                 <div id="a1">
-                    <img id="_changeicon" src$="{{head}}"> 
+                    <img id="_changeicon" src$="{{user.head}}"> 
                 </div>
                 <div id="a2">
-                    <div class="name" id="owner">{{username}}</div>
+                    <div class="name" id="owner">{{user.username}}</div>
                     <div id="time">{{timeStr}}</div>
                 </div>
             </a>
@@ -389,11 +389,12 @@
                 let url = "/json/user-" + this.id + ".json";
                 this.timeStr = this.loadUpdate(time);
                 Polymer.getContent(url).then(str => {
+                    if (this.id == 56) {
+                        console.log(JSON.parse(str), 'iiiii');
+                    }
                     // let str = httpRequest.responseText;
-                    json = JSON.parse(str);
+                    that.user = JSON.parse(str);
                     // console.log("kkkkk", json);
-                    that.username = json.username;
-                    that.head = json.head;
 
                 });
 
