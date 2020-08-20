@@ -136,7 +136,7 @@
     </template>
 </dom-module>
 <script>
-    (function () {
+    (function() {
 
 
 
@@ -148,12 +148,12 @@
                 }
             },
 
-            created: function () {
+            created: function() {
 
 
 
             },
-            ready: function () {
+            ready: function() {
                 console.log("Ready here:");
                 let that = this;
                 let shadow = this.shadowRoot;
@@ -168,12 +168,10 @@
 
             },
 
-            _submit: function () {
-                console.log("SUBMIT WORKING!");
+            _submit: function() {
                 let that = this;
                 let shadow = this.shadowRoot;
 
-                console.log("user rate:", this.userRate);
 
                 let loc = location.search;
                 console.log("loc:", loc);
@@ -184,48 +182,38 @@
                 console.log("sellerid", sellerid);
 
                 let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                let param1 = {
-                    "action": "getData",
-                    "index": "change",
-                    "type": "_user",
-                    "id": sellerid
-                }
-                Polymer.postData(Url, param1).then(res => {
-                    if (res.code > 0) {
-                        // console.log("res.resolve", res.resolve);
-                        let cs = res.resolve['score'];
-                        console.log("current score", cs);
-                        let numberRate = res.resolve['numberRate'];
-                        console.log("numberRate", numberRate);
 
-                        let scoreN = (numberRate * cs + this.userRate) / (numberRate + 1);
-                        let score = scoreN.toFixed(1);
-                        console.log("new score", score);
-                        numberRate = numberRate + 1;
-                        console.log("new numberRate", numberRate);
+                let userurl = "/json/user-" + sellerid + ".json?id=" + new Date().getTime();
+                Polymer.getContent(userurl).then(str => {
+                    res = JSON.parse(str);
 
-                        let param2 = {
-                            "action": "addData",
-                            "index": "change",
-                            "type": "_user",
-                            "id": sellerid,
-                            "body": {
-                                "numberRate": numberRate,
-                                "score": score
-                            }
+                    // console.log("res.resolve", res.resolve);
+                    let cs = res['score'];
+                    let numberRate = res['numberRate'];
+
+                    let scoreN = (numberRate * cs + this.userRate) / (numberRate + 1);
+                    let score = scoreN.toFixed(1);
+                    numberRate = numberRate + 1;
+
+                    let param2 = {
+                        "action": "addData",
+                        "index": "change",
+                        "type": "_user",
+                        "id": sellerid,
+                        "body": {
+                            "numberRate": numberRate,
+                            "score": score
                         }
-                        Polymer.postData(Url, param2).then(res => {
-                            if (res.code > 0) {
-                                console.log("Rating is done successfully!");
-                                location.replace("./getTv.html");
-                            } else {
-                                alert("Err: Rating update unsuccessful!");
-                            }
-                        });
-
-                    } else {
-                        alert("Err: No such seller!");
                     }
+                    Polymer.postData(Url, param2).then(res => {
+                        if (res.code > 0) {
+                            location.replace("./getTv.html");
+                        } else {
+                            alert("Err: Rating update unsuccessful!");
+                        }
+                    });
+
+
                 });
             }
 

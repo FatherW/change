@@ -110,7 +110,7 @@
 </dom-module>
 
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-status',
             properties: {
@@ -121,18 +121,18 @@
                     "type": String
                 }
             },
-            created: function () {
+            created: function() {
 
             },
 
 
 
-            ready: function () {
+            ready: function() {
                 let that = this;
                 let shadow = this.shadowRoot;
 
                 //Eventlistener for the switch button
-                let cStatus = shadow.querySelector('.status')
+                let cStatus = shadow.querySelector('.status');
                 cStatus.addEventListener('click', e => {
                     that.upStock();
                 });
@@ -149,50 +149,43 @@
                 for (a = 2; a < posit; a++) {
                     pid += loc[a];
                 }
-                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                let params = {
-                    "action": "getData",
-                    "index": "change",
-                    "type": "product",
-                    "id": pid,
-                };
 
-                Polymer.postData(Url, params).then(res => {
-                    console.log(res);
-                    if (res.code > 0) {
-                        //CHECK WHETHER THERE IS POSTSTATUS SCHEMA INSIDE PRODUCT
-                        if (typeof (res.resolve.postStatus) == "undefined") {
-                            let Url1 = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                            let p1 = {
-                                "action": "addData",
-                                "index": "change",
-                                "type": "product",
-                                "id": pid,
-                                "body": {
-                                    "postStatus": true
-                                }
-                            };
-                            //ADD POSTSTATUS TO PRODUCT
-                            Polymer.postData(Url1, p1).then(res => {
-                                if (res.code > 0) {
-                                    console.log("added postStatus!");
-                                }
+                let url = "/json/product-" + this.id + ".json?id=" + new Date().getTime();
+                Polymer.getContent(url).then(str => {
+                    res = JSON.parse(str);
 
-                            });
-                            //TURN SWITCH TO TRUE ALSO
-                            shadow.querySelector('.status').checked = true;
+                    //CHECK WHETHER THERE IS POSTSTATUS SCHEMA INSIDE PRODUCT
+                    if (typeof(res.postStatus) == "undefined") {
+                        let Url1 = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                        let p1 = {
+                            "action": "addData",
+                            "index": "change",
+                            "type": "product",
+                            "id": pid,
+                            "body": {
+                                "postStatus": true
+                            }
+                        };
+                        //ADD POSTSTATUS TO PRODUCT
+                        Polymer.postData(Url1, p1).then(res => {
+                            if (res.code > 0) {
+                                console.log("added postStatus!");
+                            }
 
-                        } else {
-                            //THERE IS POSTSTATUS SCHEMA, PASS VALUE TO SWITCH BUTTON
-                            shadow.querySelector('.status').checked = res.resolve.postStatus;
-                            console.log("STATUS:", shadow.querySelector('.status').checked);
-                        }
+                        });
+                        //TURN SWITCH TO TRUE ALSO
+                        shadow.querySelector('.status').checked = true;
+
+                    } else {
+                        //THERE IS POSTSTATUS SCHEMA, PASS VALUE TO SWITCH BUTTON
+                        shadow.querySelector('.status').checked = res.postStatus;
                     }
+
                 });
             },
 
             //UP & DOWN FUNCTION
-            upStock: function () {
+            upStock: function() {
                 let shadow = this.shadowRoot;
                 let check = shadow.querySelector('.status').checked;
                 let loc = location.search;
@@ -218,18 +211,7 @@
                 };
 
                 Polymer.postData(loginUrl, p).then(res => {
-                    console.log(res);
-                    if (res.code > 0) {
-                        //PASS TRUE VALUE TO POSTSTATUS IN POSTMAN
-                        if (check == true) {
-                            console.log("postStatus", check);
-                        } else {
-                            //PASS FALSE VALUE TO POSTSTATUS IN POSTMAN
-                            console.log("postStatus", check);
-                        };
-
-                    }
-                    else {
+                    if (res.code > 0) {} else {
                         alert(" fail!");
                     };
                 });

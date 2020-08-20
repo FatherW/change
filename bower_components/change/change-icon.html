@@ -84,10 +84,10 @@
         <div id="usericon">
             <a id="redu" href="#">
             <div id="a1">
-                <img id="_changeicon" src="./img/head.svg">
+                <img id="_changeicon" src={{user.head}}>
             </div>
             <div id="a2">
-                <div class="name" id="owner"></div>
+                <div class="name" id="owner">{{user.username}}</div>
                 <div id="time">...</div>
             </div>
             </a>
@@ -216,20 +216,9 @@
                 this.id = this.getAttribute('id');
                 let that = this;
                 let shadow = this.shadowRoot;
-                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                let param = {
-                    "action": "getData",
-                    "index": "change",
-                    "type": "_user",
-                    "id": this.id
-                };
-
-                Polymer.postData(Url, param).then(res => {
-                    if (res.code > 0) {
-                        let c = res.resolve;
-                        shadow.querySelector('#owner').innerHTML = c['username'];
-                        shadow.querySelector('#_changeicon').src = c['head'];
-                    }
+                let url = "/json/user-" + this.id + ".json?id=" + new Date().getTime();
+                Polymer.getContent(url).then(str => {
+                    this.user = JSON.parse(str);
                 })
 
 
