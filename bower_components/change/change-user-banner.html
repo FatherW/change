@@ -132,27 +132,27 @@
         <div id="mp" type="banner" on-click="_uploadFile"></div>
         <div id="offer">
             <div class="in">
-                <img id="dp" type="profile" on-click="_uploadFile">
+                <img id="dp" type="profile" on-click="_uploadFile" src={{user.head}}>
                 <!-- src="img/symbol/s5.png" -->
             </div>
             <vaadin-dialog></vaadin-dialog>
             <div id="user" class="in">
-                <span id="Uname"></span>
+                <span id="Uname">{{user.username}}</span>
                 <br />
-                <span id="check"> 註冊日期:</span>
+                <span id="check"> 註冊日期:{{regisDate}}</span>
             </div>
             <div id="buttonM">
                 <div class="in buttons">
                     <h6>上貨數</h6>
-                    <span class="ret" id="gNum"></span>
+                    <span class="ret" id="gNum">{{user.goodsNum}}</span>
                 </div>
                 <div class="in buttons">
                     <h6>購買數</h6>
-                    <span class="ret" id="buy"></span>
+                    <span class="ret" id="buy">{{history}}</span>
                 </div>
                 <div class="in buttons" id="threeWords">
                     <h6>平均評分</h6>
-                    <span class="ret" id="rate"></span>
+                    <span class="ret" id="rate">{{user.score}}</span>
                 </div>
             </div>
 
@@ -161,13 +161,15 @@
     </template>
 </dom-module>
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-user-banner',
             properties: {
-
+                "id": {
+                    'type': String
+                }
             },
-            created: function () {
+            created: function() {
                 let shadow = this.shadowRoot;
                 this.bigPic = "http://change.dazzle.website.s3.amazonaws.com/files/1/1591944377549.jpeg";
                 this.pics = [];
@@ -209,88 +211,51 @@
                 //CREATED ENDS HERE//
             },
 
-            ready: function () {
+            ready: function() {
+                let that = this;
+                let shadow = this.shadowRoot;
                 let loc = location.search;
                 let id = "";
                 for (var i = 1; i < loc.length; i++) {
                     id += loc[i];
                 }
+                this.id = id;
                 if (id != "") {
-                    let shadow = this.shadowRoot;
-                    let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                    let params = {
-                        "action": "searchData",
-                        "index": "change",
-                        "type": "_user",
-                        "body": {
-                            "query": {
-                                "match": {
-                                    "_id": id
-                                }
-                            }
-                        }
-                    };
-                    Polymer.postData(url, params).then(res => {
-                        if (res.code > 0) {
-                            if (res.resolve.length > 0) {
-                                let bgImg = res.resolve[0]['banner'] || "https://www.gettv.hk/Website%20Design/profile%20page/img/profile%20banner/company-profile-banner.png";
-                                shadow.querySelector('#mp').style.backgroundImage = "url('" + bgImg + "')";
-                                shadow.querySelector('#Uname').innerText = res.resolve[0]['username'];
-                                let t = res.resolve[0]['createTime'];
-                                let _thetimenow = Date.now();
-                                let comparetime = (_thetimenow - t) / 1000;
-                                if (comparetime < 60) {
-                                    shadow.querySelector('#check').innerHTML += "剛剛"
-                                } else if (comparetime / 60 < 60) {
-                                    shadow.querySelector('#check').innerHTML += Math.floor(comparetime / 60) + "分鐘前"
-                                } else if (comparetime / 60 / 60 < 24) {
-                                    shadow.querySelector('#check').innerHTML += Math.floor(comparetime / 60 / 60) + "小時前"
-                                } else if (comparetime / 60 / 60 / 24 < 7) {
-                                    shadow.querySelector('#check').innerHTML += Math.floor(comparetime / 60 / 60 / 24) + "日前"
-                                } else if (comparetime / 60 / 60 / 24 / 7 < 30) {
-                                    shadow.querySelector('#check').innerHTML += Math.floor(comparetime / 60 / 60 / 24 / 7) + "星期前"
-                                } else if (comparetime / 60 / 60 / 24 / 7 / 30 < 365) {
-                                    shadow.querySelector('#check').innerHTML += Math.floor(comparetime / 60 / 60 / 24 / 7 / 30) + "月前"
-                                }
-                                shadow.querySelector('#gNum').innerText = res.resolve[0]['goodsNum'];
-                                shadow.querySelector('#buy').innerText = res.resolve[0]['history'].length;
-                                shadow.querySelector('#rate').innerText = res.resolve[0]['score'];
-                                let proPic = res.resolve[0]['head'] || "https://img.favpng.com/20/11/12/computer-icons-user-profile-png-favpng-0UAKKCpRRsMj5NaiELzw1pV7L.jpg";
-                                shadow.querySelector('#dp').src = proPic;
-                            }
-                        }
+                    let url = "/json/user-" + id + ".json?id=" + new Date().getTime();
+                    Polymer.getContent(url).then(res => {
+                        res = JSON.parse(res);
+                        that.user = res;
+                        that.history = res.history.length;
+                        let bgImg = res['banner'] || "https://www.gettv.hk/Website%20Design/profile%20page/img/profile%20banner/company-profile-banner.png";
+                        shadow.querySelector('#mp').style.backgroundImage = "url('" + bgImg + "')";
+                        let t = res['createTime'];
+                        this.regisDate = that.parseDate(t);
+
+                    }, err => {
+                        alert('沒有此用戶');
                     })
                 } else {
-                    let user = store.get("change-user") || null;
-                    if (user != null) {
-                        let shadow = this.shadowRoot;
-                        shadow.querySelector('#Uname').innerText = user['username'];
-                        let t = res.resolve[0]['createTime'];
-                        let _thetimenow = Date.now();
-                        let comparetime = (_thetimenow - t) / 1000;
-                        if (comparetime < 60) {
-                            shadow.querySelector('#check').innerHTML = "剛剛"
-                        } else if (comparetime / 60 < 60) {
-                            shadow.querySelector('#check').innerHTML = Math.floor(comparetime / 60) + "分鐘前"
-                        } else if (comparetime / 60 / 60 < 24) {
-                            shadow.querySelector('#check').innerHTML = Math.floor(comparetime / 60 / 60) + "小時前"
-                        } else if (comparetime / 60 / 60 / 24 < 7) {
-                            shadow.querySelector('#check').innerHTML = Math.floor(comparetime / 60 / 60 / 24) + "日前"
-                        } else if (comparetime / 60 / 60 / 24 / 7 < 30) {
-                            shadow.querySelector('#check').innerHTML = Math.floor(comparetime / 60 / 60 / 24 / 7) + "星期前"
-                        } else if (comparetime / 60 / 60 / 24 / 7 / 30 < 365) {
-                            shadow.querySelector('#check').innerHTML = Math.floor(comparetime / 60 / 60 / 24 / 7 / 30) + "月前"
-                        }
-                        shadow.querySelector('#gNum').innerText = user['goodsNum'];
-                        shadow.querySelector('#buy').innerText = user['alreadyBuy'];
-                        shadow.querySelector('#rate').innerText = user['score'];
-                        shadow.querySelector('#dp').src = res.resolve['head'];
-                    } else {
-                        alert('沒有此用戶 請先登入');
-                    }
+                    alert('沒有此用戶 請先登入');
+                }
+
+            },
+            parseDate(time) {
+                let _thetimenow = Date.now();
+                let comparetime = (_thetimenow - time) / 1000;
+                if (comparetime < 60) {
+                    return "剛剛";
+                } else if (comparetime / 60 < 60) {
+                    return Math.floor(comparetime / 60) + "分鐘前";
+                } else if (comparetime / 60 / 60 < 24) {
+                    return Math.floor(comparetime / 60 / 60) + "小時前";
+                } else if (comparetime / 60 / 60 / 24 < 7) {
+                    return Math.floor(comparetime / 60 / 60 / 24) + "日前";
+                } else if (comparetime / 60 / 60 / 24 / 7 < 30) {
+                    return Math.floor(comparetime / 60 / 60 / 24 / 7) + "星期前";
+                } else if (comparetime / 60 / 60 / 24 / 7 / 30 < 365) {
+                    return Math.floor(comparetime / 60 / 60 / 24 / 30) + "月前";
                 }
             },
-
             getAllPics() {
                 let shadow = this.shadowRoot;
                 this.pics = [];
@@ -302,22 +267,18 @@
                 });
             },
 
-            _uploadFile: function (e) {
+            _uploadFile: function(e) {
                 let shadow = this.shadowRoot;
                 let that = this;
                 this.pics = [];
                 let dialog = shadow.querySelector('vaadin-dialog');
                 this.dialog = dialog;
                 this.curElm = e.path[0];
-
-                console.log("gosh")
-                // Polymer.popup(dialog, "change", "change-dropzone-file", "60%", "50%");
+                let user = store.get('change-user') || null;
 
                 let userInfo = document.querySelector('change-user-info');
-                console.log("userInfo", userInfo);
                 let keyword = userInfo.shadowRoot.querySelector('#vb').innerHTML;
-                console.log("keyword", keyword);
-                if (keyword == "提交") {
+                if (keyword == "提交" && user._id == this.id) {
                     Polymer.popup(dialog, 'change', 'change-gallery', '90%', '90%');
                 } else {
                     console.log("Will not be able to open gallery!");
