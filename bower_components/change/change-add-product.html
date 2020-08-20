@@ -680,12 +680,8 @@
                 this.bigPic = "http://change.dazzle.website.s3.amazonaws.com/files/1/1591944377549.jpeg";
                 this.pics = [];
                 this.pics[0] = this.bigPic;
-                console.log("Created Add Product");
                 this.dataManager = new DataPackage('product');
                 this.fileManager = new AwsPackage(user);
-                console.log("new AwsPackage(user):", this.fileManager);
-
-
                 document.addEventListener('select-image', e => {
                     let Key = e.detail['Key'];
                     // this.pics.push(Key);
