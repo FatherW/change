@@ -139,10 +139,11 @@
                 this.id = pid;
                 let user = store.get('change-user') || null;
                 //Check whether login or not (not login -> hide)
-
-                if (user['_id'] == uid || user.isAdmin == true) {
-                    shadow.querySelector('#tbar').style.display = "block";
-                    this.shadowRoot.querySelector('#edi').href = "add-product.html?p" + this.id + "u" + uid;
+                if (user) {
+                    if (user['_id'] == uid || user.isAdmin == true) {
+                        shadow.querySelector('#tbar').style.display = "block";
+                        this.shadowRoot.querySelector('#edi').href = "add-product.html?p" + this.id + "u" + uid;
+                    }
                 }
 
             },

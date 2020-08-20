@@ -100,15 +100,15 @@
             </div>
             <div id="usericon">
                 <div id="a1">
-                    <img id="_changeicon" src="https://www.gettv.hk/img/user_profile.png">
+                    <img id="_changeicon" src={{seller.head}}>
                 </div>
                 <div id="a2">
-                    <div class="name" id="owner">1234</div>
-                    <div id="time">評分/人數:</div>
+                    <div class="name" id="owner">{{seller.username}}</div>
+                    <div id="time">評分/人數:{{seller.score}}/{{seller.numberRate}}</div>
                 </div>
             </div>
             <div id='para'>
-                Loading....
+                {{product.description}}
             </div>
             <vaadin-text-area id="review" placeholder="留言給賣家"></vaadin-text-area>
             <button id="click-button" on-click="_postRequest">送出</button>

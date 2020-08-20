@@ -336,7 +336,7 @@
                 } else if (comparetime / 60 / 60 / 24 / 7 < 30) {
                     str = Math.floor(comparetime / 60 / 60 / 24 / 7) + "星期前"
                 } else if (comparetime / 60 / 60 / 24 / 7 / 30 < 365) {
-                    srt= Math.floor(comparetime / 60 / 60 / 24 / 7 / 30) + "月前"
+                    srt= Math.floor(comparetime / 60 / 60 / 24 / 30) + "月前"
                 }
                 console.log('Time',time,str);
                 return str;

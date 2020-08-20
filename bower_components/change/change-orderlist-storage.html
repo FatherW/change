@@ -108,11 +108,11 @@
             },
             loadProduct(pid) {
                 return new Promise(function(resolve, reject) {
-                    Polymer.getContent('/json/product-'+pid+'.json?id='+new Date().getTime()).then(res=>{
-                        console.log('Orders',res);
+                    Polymer.getContent('/json/product-' + pid + '.json?id=' + new Date().getTime()).then(res => {
+                        console.log('Orders', res);
                         resolve(JSON.parse(res));
-                    },err=>{
-                        this.prodManager.loadData(pid).then(prod=>{
+                    }, err => {
+                        this.prodManager.loadData(pid).then(prod => {
                             resolve(prod);
                         });
                     });
@@ -120,15 +120,15 @@
                     //     let json = JSON.parse(res);
                     // });
                 });
-                
+
 
             },
             loadOrder(pid) {
                 return new Promise(function(resolve, reject) {
-                    Polymer.getContent('/json/order-'+pid+'.json?id='+new Date().getTime()).then(res=>{
+                    Polymer.getContent('/json/order-' + pid + '.json?id=' + new Date().getTime()).then(res => {
                         resolve(JSON.parse(res));
-                    },err=>{
-                        this.orderManager.loadData(pid).then(prod=>{
+                    }, err => {
+                        this.orderManager.loadData(pid).then(prod => {
                             resolve(prod);
                         });
                     });
@@ -136,7 +136,7 @@
                     //     let json = JSON.parse(res);
                     // });
                 });
-                
+
 
             },
 
@@ -146,12 +146,10 @@
                 // html + ?xxxxxxxxxxxxxxxxx
                 let that = this;
                 let shadow = this.shadowRoot;
-               
-                console.log('My Order',this.orders);
                 //*****************DETERMINE TO DISPLAY ORDERLIST STORAGE OR NOT*****************//
                 let user = store.get('change-user') || null;
-                console.log("CURRENT UID", user['_id']);
-                console.log('Orders',this.orders);
+
+
                 // let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 // let findBuyer = {
                 //     "action": "searchData",
