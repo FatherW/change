@@ -139,10 +139,10 @@
             },
             loadUser(uid) {
                 return new Promise(function(resolve, reject) {
-                    Polymer.getContent('/json/user-'+uid+'.json?id='+new Date().getTime()).then(res=>{
+                    Polymer.getContent('/json/user-' + uid + '.json?id=' + new Date().getTime()).then(res => {
                         resolve(JSON.parse(res));
-                    },err=>{
-                        this.userManager.loadData(uid).then(prod=>{
+                    }, err => {
+                        this.userManager.loadData(uid).then(prod => {
                             resolve(prod);
                         });
                     });
@@ -150,7 +150,7 @@
                     //     let json = JSON.parse(res);
                     // });
                 });
-                
+
 
             },
             //for adding link to the user name connecting wth the databse
@@ -172,13 +172,11 @@
                     uid += loc[b];
                 }
 
-                console.log('User',this.seller);
-                console.log('Product',this.product);
                 let shadow = this.shadowRoot;
                 // this.loadUser(uid).then(user=>{
-                    shadow.querySelector('#_changeicon').src = this.seller['head'];
-                    shadow.querySelector('#owner').innerHTML = this.seller['username'];
-                    shadow.querySelector('#time').innerHTML += this.seller['score']; + '( ' + this.seller['numberRate'] + ' )';                    
+                shadow.querySelector('#_changeicon').src = this.seller['head'];
+                shadow.querySelector('#owner').innerHTML = this.seller['username'];
+                shadow.querySelector('#time').innerHTML += this.seller['score']; + '( ' + this.seller['numberRate'] + ' )';
                 // });
                 shadow.querySelector('#para').innerHTML = this.product['description'];
 
@@ -206,16 +204,16 @@
 
             },
 
-            sendmail(from,to,subject,html){
-                let json ={
-                        'from': from,
-                        'to': to,
-                        'subject':subject,
-                        'html': html
-                    }
-                    let emailUrl = "https://9hhtm40jpe.execute-api.ap-northeast-1.amazonaws.com/sendemail/";
+            sendmail(from, to, subject, html) {
+                let json = {
+                    'from': from,
+                    'to': to,
+                    'subject': subject,
+                    'html': html
+                }
+                let emailUrl = "https://9hhtm40jpe.execute-api.ap-northeast-1.amazonaws.com/sendemail/";
 
-                    Polymer.postData(emailUrl, json).then(res => {
+                Polymer.postData(emailUrl, json).then(res => {
                     if (res.code > 0) {
                         alert('成功發送');
                     }
@@ -254,42 +252,42 @@
                     this.saveOrder();
                     let to = this.seller['email'];
                     let html;
-                    
-                        let image = this.product['pics'][0];
-                        let productname = this.product['productname'];
-                        let sellerImage = this.seller['head'];
-                        let sellerName =  this.seller['username'];
-                        let price =  this.product['price'];
-                        let district =  this.product['district'];
-                        let deliveryMethod = this.product['deliveryMethod'];
-                        let deliveryMethod2 = this.product['deliveryMethod'];                       
-                        let token = "1sd895ndsd";
 
-                    Polymer.getContent('/email-template/sendcontactemail.html').then(html=>{
-                        html = html.replace("[[image]]",image);
-                        html = html.replace("[[productname]]",productname);
-                        html = html.replace("[[sellerImage]]",sellerImage);
-                        html = html.replace("[[sellerName]]",sellerName);
-                        html = html.replace("[[price]]",price);
-                        html = html.replace("[[district]]",district);
-                        html = html.replace("[[deliveryMethod]]",deliveryMethod);
-                        html = html.replace("[[deliveryMethod2]]",deliveryMethod);
-                        html = html.replace("[[contactinfo]]",contactinfo);
-                        html = html.replace("[[token]]",token);
+                    let image = this.product['pics'][0];
+                    let productname = this.product['productname'];
+                    let sellerImage = this.seller['head'];
+                    let sellerName = this.seller['username'];
+                    let price = this.product['price'];
+                    let district = this.product['district'];
+                    let deliveryMethod = this.product['deliveryMethod'];
+                    let deliveryMethod2 = this.product['deliveryMethod'];
+                    let token = "1sd895ndsd";
+
+                    Polymer.getContent('/email-template/sendcontactemail.html').then(html => {
+                        html = html.replace("[[image]]", image);
+                        html = html.replace("[[productname]]", productname);
+                        html = html.replace("[[sellerImage]]", sellerImage);
+                        html = html.replace("[[sellerName]]", sellerName);
+                        html = html.replace("[[price]]", price);
+                        html = html.replace("[[district]]", district);
+                        html = html.replace("[[deliveryMethod]]", deliveryMethod);
+                        html = html.replace("[[deliveryMethod2]]", deliveryMethod);
+                        html = html.replace("[[contactinfo]]", contactinfo);
+                        html = html.replace("[[token]]", token);
 
 
                         // // .......
-                        this.sendmail('support@01power.net',to,'你有新的訊息',html);
+                        this.sendmail('support@01power.net', to, '你有新的訊息', html);
                         alert('電郵已發出');
                         // location.reload();
 
-                    }); 
+                    });
 
                 }
             },
-            saveOrder(){
+            saveOrder() {
                 let arr = this.product['replyArray'];
-                let id = 'order-'+this.product['id']+'-'+arr.length;
+                let id = 'order-' + this.product['id'] + '-' + arr.length;
                 let msg = this.shadowRoot.querySelector('#review').value;
                 let json = {
                     "buyerId": this.user['id'],
@@ -300,22 +298,21 @@
                     submitTime: new Date().getTime()
 
                 };
-                this.orderManager.saveData(id,json);
+                this.orderManager.saveData(id, json);
                 this.product['replyArray'].push(id);
-                this.prodManager.saveData(this.product['id'],this.product);
+                this.prodManager.saveData(this.product['id'], this.product);
                 this.fileManager.saveFile('json/product-' + this.product['id'] + '.json', JSON.stringify(this.product));
                 this.fileManager.saveFile('json/order-' + id + '.json', JSON.stringify(json));
-            
-            } 
+
+            }
 
 
 
 
 
 
-                
+
 
         });
     })();
-    </script>
-   
+</script>
