@@ -119,9 +119,9 @@
                 <div id="left">
                     <div id="info">
                         <h5>賣家資料</h5>
-                        <p class="inf">名稱: <span class="infotext" id="name"></span></p>
-                        <p class="inf">地區: <span class="infotext" id="area"></span></p>
-                        <p class="inf">電郵: <span class="infotext" id="email"></span></p>
+                        <p class="inf">名稱: <span class="infotext" id="name">{{user.username}}</span></p>
+                        <p class="inf">地區: <span class="infotext" id="area">{{user.area}}</span></p>
+                        <p class="inf">電郵: <span class="infotext" id="email">{{user.email}}</span></p>
                         <!-- <p class="inf">電話: <span class="infotext" id="contact"></span></p> -->
                     </div>
                 </div>
@@ -131,7 +131,7 @@
                             <vaadin-button id="ap" style="margin-right: 10px;">新增貨品</vaadin-button>
                         </a>
 
-                        <vaadin-button id="vb" on-click="toggle">編輯</vaadin-button>
+                        <vaadin-button id="vb" on-click="toggle">{{edit}}</vaadin-button>
 
                     </div>
                 </div>
@@ -140,73 +140,45 @@
     </template>
 </dom-module>
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-user-info',
             properties: {
 
             },
-            created: function () {
+            created: function() {
 
             },
-            ready: function () {
+            ready: function() {
                 let loc = location.search;
                 let user = store.get('change-user') || null;
                 let shadow = this.shadowRoot;
-                console.log("Path", loc);
-                console.log("Length", loc.length);
+                let that = this
                 let id = "";
                 for (var i = 1; i < loc.length; i++) {
                     console.log("Working");
                     id += loc[i];
                 }
-                console.log(user, "232323");
-
+                this.id = id;
                 if (user == null || id != user['_id']) {
                     shadow.querySelector('#right').style.display = 'none'; /*none*/
-                    console.log("not owner");
-                } else {
-                    console.log('is owner');
                 }
+
                 if (id != "") {
-                    console.log("Entered");
-                    let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                    let params = {
-                        "action": "searchData",
-                        "index": "change",
-                        "type": "_user",
-                        "body": {
-                            "query": {
-                                "match": {
-                                    "_id": id
-                                }
-                            }
-                        }
-                    };
-                    console.log("DYNAMIC", params);
-                    Polymer.postData(url, params).then(res => {
-                        console.log(res);
-                        if (res.code > 0) {
-                            if (res.resolve.length > 0) {
-                                shadow.querySelector('#name').innerText = res.resolve[0]['username'];
-                                shadow.querySelector('#area').innerText = res.resolve[0]['area'];
-                                shadow.querySelector('#email').innerText = res.resolve[0]['email'];
-                            }
-                        }
+                    let url = "/json/user-" + id + ".json?id=" + new Date().getTime();
+                    Polymer.getContent(url).then(res => {
+                        res = JSON.parse(res);
+                        that.user = res;
                     })
-                } else {
-                    console.log("Info", user);
-                    if (user != null) {
-                        shadow.querySelector('#name').innerText = user['username'];
-                        shadow.querySelector('#area').innerText = user['area'];
-                        shadow.querySelector('#email').innerText = user['email'];
-                    }
                 }
+
+                this.edit = "編輯";
+
             },
-            execute: function () {
+            execute: function() {
                 console.log("Entered");
                 let shadow = this.shadowRoot;
-                customElements.whenDefined('vaadin-select').then(function () {
+                customElements.whenDefined('vaadin-select').then(function() {
                     const district = [{
                         id: '中西區',
                         name: '中西區'
@@ -262,14 +234,14 @@
                         id: '西貢區',
                         name: '西貢區'
                     }];
-                    shadow.querySelector('vaadin-select').renderer = function (root) {
+                    shadow.querySelector('vaadin-select').renderer = function(root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        district.forEach(function (item) {
+                        district.forEach(function(item) {
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
@@ -280,142 +252,80 @@
                     };
                 });
             },
-            toggle: function () {
+            toggle: function() {
                 //GET BANNER INFO//
                 let userBan = document.querySelector('change-user-banner');
                 let mp = userBan.shadowRoot.querySelector('#mp').style.backgroundImage;
                 bannerSrc = mp.replace('url(', '').replace(')', '').replace(/\"/gi, "");
                 let headSrc = userBan.shadowRoot.querySelector('#dp').src;
-                console.log("omgomg", userBan);
-                console.log("omgomg1", bannerSrc);
-                console.log("omgomg2", headSrc);
 
                 let user = store.get('change-user') || null;
                 let loc = location.search;
-                console.log("Path", loc);
-                console.log("Length", loc.length);
                 let id = "";
                 for (var i = 1; i < loc.length; i++) {
                     console.log("Working");
                     id += loc[i];
                 }
-                console.log("ID", id);
-                console.log("UserID", user['_id'])
                 if (id == "") {
                     id = user['_id'];
                 }
-                if (id != user['_id']) {
-                    alert('Cannot edit this user. Not your account!');
-                } else {
+                if (id != user['_id']) {} else {
                     let shadow = this.shadowRoot;
                     let text = shadow.querySelector('#vb');
-                    if (text.innerHTML == "編輯") {
-                        let name = shadow.querySelector('#name').innerText;
-                        let email = shadow.querySelector('#email').innerText;
-                        let area = shadow.querySelector('#area').innerText;
-                        shadow.querySelector('#name').innerHTML = "<vaadin-text-field id='name1' value='" + name + "'></vaadin-text-field>";
-                        shadow.querySelector('#area').innerHTML = "<vaadin-select id='area1' value='" + area + "' label=''></vaadin-select>";
+                    if (this.edit == "編輯") {
+                        this.user.username = "<vaadin-text-field id='name1' value='" + name + "'></vaadin-text-field>";
+                        this.user.area = "<vaadin-select id='area1' value='" + area + "' label=''></vaadin-select>";
                         this.execute();
-                        shadow.querySelector('#email').innerHTML = "<vaadin-email-field id='email1' value='" + email + "'disabled></vaadin-text-field>";
-                        text.innerHTML = "提交";
+                        this.user.email = "<vaadin-email-field id='email1' value='" + email + "'disabled></vaadin-text-field>";
+                        this.edit = "提交";
                     } else {
-                        if (user != null) {
-                            let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                            let name = shadow.querySelector('#name1').value;
-                            let area = shadow.querySelector('#area1').value;
-                            let email = shadow.querySelector('#email1').value;
-                            console.log("User", user);
+                        let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                        let name = shadow.querySelector('#name1').value;
+                        let area = shadow.querySelector('#area1').value;
+                        let email = shadow.querySelector('#email1').value;
 
+                        let params = {
+                            "action": "addData",
+                            "index": "change",
+                            "type": "_user",
+                            "id": user['_id'],
+                            "body": {
+                                "email": email,
+                                "username": name,
+                                "area": area,
+                                "banner": bannerSrc,
+                                "head": headSrc
+                            }
+                        };
+                        Polymer.postData(url, params).then(res => {
+                            if (res.code > 0) {
+                                this.user.name = name;
+                                this.user.area = area;
+                                this.user.email = email;
+                                this.edit = "編輯";
+                                user['email'] = email;
+                                user['area'] = area;
+                                user['username'] = name;
+                                user['banner'] = bannerSrc;
+                                user['head'] = headSrc;
+                                store.set("change-user", user);
 
-                            let params = {
-                                "action": "addData",
-                                "index": "change",
-                                "type": "_user",
-                                "id": user['_id'],
-                                "body": {
-                                    "email": email,
-                                    "username": name,
-                                    "area": area,
-                                    "banner": bannerSrc,
-                                    "head": headSrc
-                                }
-                            };
-                            Polymer.postData(url, params).then(res => {
-                                console.log(res);
-                                console.log(params);
-                                if (res.code > 0) {
-                                    shadow.querySelector('#name').innerHTML = name;
-                                    shadow.querySelector('#area').innerHTML = area;
-                                    shadow.querySelector('#email').innerHTML = email;
-                                    text.innerHTML = "編輯";
-                                    user['email'] = email;
-                                    user['area'] = area;
-                                    user['username'] = name;
-                                    user['banner'] = bannerSrc;
-                                    user['head'] = headSrc;
-                                    store.set("change-user", user);
-
-                                    this._saveJson();
-                                }
-                            })
-                        } else {
-                            alert('Please login first');
-                        }
+                                this._saveJson();
+                            }
+                        })
                     }
                 }
 
             },
 
 
-            _saveJson: function () {
-                let that = this;
-                let shadow = this.shadowRoot;
-                let verifiedUser = store.get('change-user') || null;
-                console.log("verifiedUser store.get:", verifiedUser);
-                that.fileManager = new AwsPackage(verifiedUser);
-                console.log("fileManager", that.fileManager);
+            _saveJson: function() {
+                let url = "/json/user-" + this.id + ".json?id=" + new Date().getTime();
+                Polymer.getContent(url).then(res => {
+                    res = JSON.parse(res);
+                    this.fileManager.saveFile('json/user-' + userJson.id + '.json', JSON.stringify(res));
+                    alert("用戶資料已更新!");
 
-                let uid = verifiedUser._id;
-                console.log("verifiedUser uid:", uid);
-                let head = verifiedUser.head;
-                console.log("verifiedUser head:", head);
-                //get currect user token
-                // let currentuser = store.get('change-user') || null;
-                // if (currentuser['_id'] == userid) {
-                //     console.log("success user id token", currentuser);
-                //     console.log("success user id", userid);
-
-                // } else {
-                //     console.log("fail user id token", currentuser);
-                //     console.log("fail user id", userid);
-                // };
-                
-                // let header = document.querySelector('change-header');
-                // let tophead = header.shadowRoot.querySelector('change-header-top');
-                // let userpanel = tophead.shadowRoot.querySelector('change-user-panel');
-                // let shadow = userpanel.shadowRoot;
-                // shadow.querySelector('#register').innerHTML = ' / 登出';
-                // shadow.querySelector('#login').innerHTML = '<a href="/user.html?' + user['_id'] + '"><img src="' + user['head'] + '"></a>';
-                // document.querySelector('change-header').shadowRoot.querySelector('header').shadowRoot.querySelector('change-header-top').shadowRoot.querySelector('change-user-panel')
-
-                let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                let getUparams = {
-                    "action": "getData",
-                    "index": "change",
-                    "type": "_user",
-                    "id": uid
-                };
-                console.log("omgomgomg", uid);
-                Polymer.postData(link, getUparams).then(res => {
-                    if (res.code > 0) {
-                        console.log("getVerified Udata Success!")
-                        let userJson = res.resolve;
-                        console.log("userJson:", userJson);
-                        this.fileManager.saveFile('json/user-' + userJson.id + '.json', JSON.stringify(userJson));
-                        alert("用戶資料已更新!");
-                    } else {
-                        alert("ERR: fail to get current user!")
-                    }
                 });
 
             }
