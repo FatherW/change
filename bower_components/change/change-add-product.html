@@ -9,22 +9,15 @@
 <link rel="import" href="../vaadin-button/vaadin-button.html">
 <link rel="import" href="../vaadin-menu-bar/vaadin-menu-bar.html">
 <link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
-
 <link rel="import" href="change-dropzone-file.html">
 <link rel="import" href="change-gallery.html">
-
-<link rel="import"
-    href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/dz-file-management/change-photo-stock.html">
-
-
-
+<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/dz-file-management/change-photo-stock.html">
 <link rel="stylesheet" href="">
 <link href="../dz-menu/css/style.html" rel="import" />
 <link rel="import" href="change-subcat.html">
 
 
 <dom-module id="change-add-product">
-
     <template>
         <style include="icon-styles"></style>
         <style>
@@ -483,15 +476,15 @@
                     <div class="container">
                         <vaadin-menu-bar class="cat"></vaadin-menu-bar>
                         <p class="result"> : </p>
-                        <span></span>
+                        <span>{{prod.categories}}</span>
                     </div>
 
                     <div class="fanpage">
-                        <vaadin-select id="fanPage" placeholder="専頁"></vaadin-select>
+                        <vaadin-select id="fanPage" placeholder="専頁" value={{prod.fanpage}}></vaadin-select>
                     </div>
 
                     <vaadin-checkbox-group label="Label" theme="vertical" id="secondlabel">
-                        <vaadin-checkbox theme="custom" value="1" id="free">是否免費區
+                        <vaadin-checkbox theme="custom" value="1" id="free" checked={{prod.isFree}}>是否免費區
                         </vaadin-checkbox>
                     </vaadin-checkbox-group>
 
@@ -532,7 +525,8 @@
                         </div>
                         <!-- TEXT AREA-->
                         <div class="inputbox">
-                            <textarea id="sContact" name="sellerContact" rows="15" placeholder="填寫你的聯絡資料等等"></textarea>
+                            <textarea id="sContact" name="sellerContact" rows="15" placeholder="填寫你的聯絡資料等等"
+                                value={{prod.sellerMsg}}></textarea>
                         </div>
                     </div>
                 </div>
@@ -547,7 +541,8 @@
                         <div style="width: 100%;">
                             <!--input box-->
                             <div class="inputbox">
-                                <input type="text" id="pname" name="firstname" placeholder="輸入商品標題...">
+                                <input type="text" id="pname" value={{prod.productname}} name="firstname"
+                                    placeholder="輸入商品標題...">
                                 <!-- maxlength="14" -->
                             </div>
                         </div>
@@ -555,11 +550,11 @@
                     <div class="userinfo">
                         <div id="usericon">
                             <div id="a1">
-                                <img id="gand" src="">
+                                <img id="gand" src={{user.head}}>
                                 <!-- ./img/user_profile.png -->
                             </div>
                             <div id="a2">
-                                <div class="name" id="owner"></div>
+                                <div class="name" id="owner">{{user.username}}</div>
                             </div>
                         </div>
                     </div>
@@ -568,7 +563,8 @@
                         <div class="dollar"><b style="font-size: 30px; color: black;">$</b></div>
                         <!--input box-->
                         <div class="inputbox">
-                            <input type="number" id="price" name="priceHKD" placeholder="輸入商品價錢..." value="10">
+                            <input type="number" id="price" name="priceHKD" placeholder="輸入商品價錢..."
+                                value={{prod.price}}>
                         </div>
                     </div>
                     <hr>
@@ -577,7 +573,7 @@
                     <div class="loca" style="display: flex;">
                         <div id="location"></div>
                         <div style="margin-top: 11px; margin-left: 12px;">
-                            <vaadin-select id="vs2" placeholder="選擇地區"></vaadin-select>
+                            <vaadin-select id="vs2" placeholder="選擇地區" value={{user.area}}></vaadin-select>
                         </div>
                     </div>
 
@@ -586,7 +582,7 @@
                     <div class="del" style="display: flex;">
                         <div id="delivery"></div>
                         <div style="margin-top: 11px; margin-left: 12px;">
-                            <vaadin-select id="vs3" placeholder="選擇發送方法"></vaadin-select>
+                            <vaadin-select id="vs3" placeholder="選擇發送方法" value={{prod.deliveryMethod}}></vaadin-select>
                         </div>
                     </div>
 
@@ -599,7 +595,8 @@
                         </div>
                         <!--typing box-->
                         <div class="inputbox">
-                            <textarea id="pdes" name="productdescription" rows="12" placeholder="輸入商品描述..."></textarea>
+                            <textarea id="pdes" value={{prod.description}} name="productdescription" rows="12"
+                                placeholder="輸入商品描述..."></textarea>
                         </div>
                     </div>
 
@@ -619,7 +616,8 @@
                         <div style="margin-top: 20px; margin-bottom: 30px;"><span class="bigsize">運輸：</span></div>
                         <!--input box-->
                         <div class="inputbox">
-                            <textarea id="trans" name="transportation" rows="6" placeholder="輸入物流資料..."></textarea>
+                            <textarea id="trans" value={{prod.deliveryDesc}} name="transportation" rows="6"
+                                placeholder="輸入物流資料..."></textarea>
                         </div>
 
                     </div>
@@ -635,7 +633,7 @@
 
 <script>
     //function for database
-    (function () {
+    (function() {
         Polymer({
             is: 'change-add-product',
             properties: {
@@ -676,7 +674,7 @@
                 }
 
             },
-            created: function () {
+            created: function() {
                 let user = store.get('change-user') || null;
                 let shadow = this.shadowRoot;
                 this.bigPic = "http://change.dazzle.website.s3.amazonaws.com/files/1/1591944377549.jpeg";
@@ -687,14 +685,7 @@
                 this.fileManager = new AwsPackage(user);
                 console.log("new AwsPackage(user):", this.fileManager);
 
-                // document.addEventListener('upload-success', e => {
-                //     let src = e.detail['Key'];
-                //     // this.pics.push(src);
-                //     // this.bigPic = "./"+src;
-                //     this.curElm.setAttribute('src',src);
-                //     console.log('Detail', e, this.pics);
-                //     // this.reNewPic();
-                // });
+
                 document.addEventListener('select-image', e => {
                     let Key = e.detail['Key'];
                     // this.pics.push(Key);
@@ -717,10 +708,6 @@
                     i++;
                 });
 
-                // shadow.querySelector('#div1').style.backgroundImage = url(this.pics[1] || noImage);
-                // shadow.querySelector('#div2').style.backgroundImage = url(this.pics[2] || noImage);
-                // shadow.querySelector('#div3').style.backgroundImage = url(this.pics[3] || noImage);
-                // shadow.querySelector('#div4').style.backgroundImage = url(this.pics[4] || noImage);
             },
 
             //Henery added//
@@ -737,21 +724,12 @@
             },
 
 
-            ready: function () {
-                console.log("Entered Ready");
+            ready: function() {
                 let user = store.get('change-user') || null;
-
-                //get currect user token
-                let usertokenId = user['_id'];
-                // console.log("BBBuser", user);
-
+                this.user = user;
                 let that = this;
                 let shadow = this.shadowRoot;
-
-                //DETERMINE ADD-PRODUCT MODE OR EDIT PRODUCT MODE//
-                let loginUrl = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 let loc = location.search;
-                console.log("Path", loc);
                 let pid = "";
                 let posit = 0;
                 let uid = "";
@@ -767,454 +745,67 @@
                     uid += loc[c];
                 }
                 this.id = pid;
-                console.log("Current PID", pid);
                 if (pid != "") {
-                    /*Edit Product Mode*/
+                    let url = "/json/product-" + pid + ".json?id=" + new Date().getTime();
+                    Polymer.getContent(url).then(res => {
+                        res = JSON.parse(res);
+                        that.prod = res;
+                        //SET PROPERTIES
+                        this.CATE = res['categories'];
+                        this.LIKE = res['like'];
+                        this.CREATETIME = res['createTime'];
+                        this.OWNERID = res['ownerId'];
+                        this.POSTSTATUS = res['postStatus'];
+                        this.REPLYARRAY = res['replyArray'];
 
-                    let defaultLocation = {
-                        "action": "getData",
-                        "index": "change",
-                        "type": "_user",
-                        "id": usertokenId
-                    };
-                    Polymer.postData(loginUrl, defaultLocation).then(res => {
-                        // console.log("BBB", usertokenId);
-                        if (res.code > 0) {
-                            console.log("omgusername", res.resolve['username']);
-                            shadow.querySelector('#owner').innerHTML = res.resolve['username'];
-                            console.log("omghead", res.resolve['head']);
-                            shadow.querySelector('#gand').src = res.resolve['head'];
+                        if (res['isNew'] == true) {
+                            shadow.querySelector('#vs4').value = "全新";
+
                         } else {
-                            console.log("get default FAIL!");
+                            shadow.querySelector('#vs4').value = "二手";
+
                         }
-                    });
-
-                    let p = {
-                        "action": "searchData",
-                        "index": "change",
-                        "type": "product",
-                        "body": {
-                            "query": {
-                                "match": {
-                                    "id": pid
-                                }
-                            }
+                        if (res['price'] != 0) {
+                            shadow.querySelector('#free').checked = false;
                         }
-                    };
-                    Polymer.postData(loginUrl, p).then(res => {
-                        // console.log("BBB", res);
+                        if (typeof(res['tags']) == "string") {
+                            shadow.querySelector('#myTags').tags = [res['tags']];
 
-                        if (res.code > 0) {
-                            let res2 = res.resolve;
+                        } else {
+                            shadow.querySelector('#myTags').tags = res['tags'];
 
-                            //SET PROPERTIES
-                            this.CATE = res.resolve[0]['categories'];
-                            this.LIKE = res.resolve[0]['like'];
-                            this.CREATETIME = res.resolve[0]['createTime'];
-                            this.OWNERID = res.resolve[0]['ownerId'];
-                            this.POSTSTATUS = res.resolve[0]['postStatus'];
-                            this.REPLYARRAY = res.resolve[0]['replyArray'];
-
-                            shadow.querySelector('span').textContent = res.resolve[0]['categories'];
-                            shadow.querySelector('#fanPage').value = res.resolve[0]['fanpage'];
-                            // shadow.querySelector('#public').checked = res.resolve[0]['isPublic'];
-                            shadow.querySelector('#free').checked = res.resolve[0]['isFree'];
-                            shadow.querySelector('#sContact').value = res.resolve[0]['sellerMsg'];
-                            if (res.resolve[0]['isNew'] == true) {
-                                shadow.querySelector('#vs4').value = "全新";
-
-                            } else {
-                                shadow.querySelector('#vs4').value = "二手";
-
-                            }
-                            shadow.querySelector('#pname').value = res.resolve[0]['productname'];
-                            shadow.querySelector('#price').value = res.resolve[0]['price'];
-                            // console.log("Matters", res.resolve[0]['price']);
-                            if (res.resolve[0]['price'] != "0") {
-
-                                shadow.querySelector('#free').checked = false;
-                            }
-                            shadow.querySelector('#vs2').value = res.resolve[0]['district'];
-                            shadow.querySelector('#vs3').value = res.resolve[0]['deliveryMethod'];
-                            shadow.querySelector('#pdes').value = res.resolve[0]['description'];
-                            if (typeof (res.resolve[0]['tags']) == "string") {
-                                shadow.querySelector('#myTags').tags = [res.resolve[0]['tags']];
-
-                            } else {
-                                shadow.querySelector('#myTags').tags = res.resolve[0]['tags'];
-
-                            }
-                            shadow.querySelector('#trans').value = res.resolve[0]['deliveryDesc'];
-                            let lenpic = res2[0]['pics'].length;
-                            for (i3 = 0; i3 < lenpic; i3++) {
-                                shadow.querySelector('#div' + i3).style.backgroundImage = 'url(' + res2[0]["pics"][i3] + ')'
-                            };
                         }
+                        let lenpic = res['pics'].length;
+                        for (i3 = 0; i3 < lenpic; i3++) {
+                            shadow.querySelector('#div' + i3).style.backgroundImage = 'url(' + res2[0]["pics"][i3] + ')'
+                        };
+
                     })
                     this.next = pid;
                 } else {
-                    /*Add Product Code*/
-                    //*******SEARCH FOR TOTAL NUMBER OF PRODUCT IN DATABASE*******//
-
-                    //SET DEFAULT LOCATION, USERNAME, USERHEAD//
-                    let defaultLocation = {
-                        "action": "getData",
-                        "index": "change",
-                        "type": "_user",
-                        "id": usertokenId
-                    };
-                    Polymer.postData(loginUrl, defaultLocation).then(res => {
-                        // console.log("BBB", usertokenId);
-                        if (res.code > 0) {
-                            console.log("omgarea", res.resolve['area']);
-                            shadow.querySelector('#vs2').value = res.resolve['area'];
-                            console.log("omgusername", res.resolve['username']);
-                            shadow.querySelector('#owner').innerHTML = res.resolve['username'];
-                            console.log("omghead", res.resolve['head']);
-                            shadow.querySelector('#gand').src = res.resolve['head'];
-                        } else {
-                            console.log("get default FAIL!");
-                        }
-                    });
-
-                    let params = {
-                        "action": "searchData",
-                        "index": "change",
-                        "type": "product",
-                        "body": {
-                            "query": {
-                                "match_all": {}
-                            },
-                        }
-                    }
-                    Polymer.postData(loginUrl, params).then(res => {
-                        if (res.code > 0) {
-                            this.next = res.resolve.length;
-                            console.log("TOTAL NUMBER OF PRODUCT IN DATABASE", res.resolve.length);
-                        }
-                    });
-                };
-
-                //SET SUBCAT//
-                customElements.whenDefined('vaadin-menu-bar').then(function () {
-                    const menu = shadow.querySelector('vaadin-menu-bar');
-                    menu.addEventListener('item-selected', function (e) {
-                        //Get ele value
-                        // shadow.querySelector('span').textContent = JSON.stringify(e.detail.value.text);
-                        shadow.querySelector('span').textContent = e.detail.value.text;
-                        this.CATE = e.detail.value.text;
-                        // console.log("this cate", this.CATE);
-                        // console.log("e", e.detail.value.text);
-                    });
-
-                    // console.log("ready");
-                    let c = {};
-                    let arr = [];
-                    let g = [];
-                    let childarr = [];
-                    let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                    let params = {
-                        "action": "searchData",
-                        "index": "change",
-                        "type": "categories",
-                        "body": {
-                            "sort": [{
-                                "_id": {
-                                    "order": "asc"
-                                }
-                            }],
-                            "query": {
-                                "match_all": {}
-                            }
-                        }
-                    };
-                    Polymer.postData(url, params).then(res => {
-                        if (res.code > 0) {
-                            let a = res.resolve;
-                            let arrchild = [];
-
-
-                            for (i = 0; i < a.length; i++) {
-                                if (a[i].parent == 0) {
-                                    let b = a[i].name;
-                                    // generate childarr
-                                    for (x = 0; x < a.length; x++) {
-                                        if (a[i].id == a[x].parent) {
-                                            let j = a[x].name;
-                                            let k = {
-                                                "text": j
-                                            };
-                                            childarr.push(k);
-                                        }
-                                    }
-                                    let c = {
-                                        "text": b,
-                                        "children": childarr
-                                    };
-                                    arr.push(c);
-                                    // console.log("ChildArr:", childarr);
-                                    childarr = [];
-
-
-                                    let id = a[i].id;
-                                    // console.log("C:", c);
-
-
-                                    // for (x = 0; x < a.length; x++) {
-                                    //     if (a[x].parent == id) {
-                                    //         let d = a[x].name;
-                                    //         let e = { "text": d };
-                                    //         //在这里把e摆到children里去
-                                    //         arrchild.push(e);
-
-
-                                    //     }
-                                    //     f = {
-                                    //         "text": a[x].name,
-                                    //         "children": arrchild
-                                    //     };
-                                    //     arr.push(f);
-                                    //     arrchild = [];
-                                    // }
-
-                                }
-
-                            }
-                            // console.log("ARR_RESULT:", arr);
-                            let h = {
-
-                                text: 'Project',
-                                children: [{
-                                    text: 'Users',
-                                    children: [{
-                                        text: 'List'
-                                    }, {
-                                        text: 'Add'
-                                    }]
-                                }, {
-                                    text: 'Billing',
-                                    children: [{
-                                        text: 'Invoices'
-                                    }, {
-                                        text: 'Balance Events'
-                                    }]
-                                },]
-                            };
-
-                            g.push(h);
-                            //g 就是我们要的答案
-                            // console.log("g", g);
-                            // console.log("CHECK:", c);
-                            // console.log("arrchild", arrchild);
-                        }
-
-                    });
-                    let i = [];
-                    let h = {
-                        text: '請選擇分類',
-                        children: arr
-                    };
-
-                    menu.items = [h];
-
+                    // that.prod.price = '10';
+                }
+                let url = "/json/user-" + user._id + ".json?id=" + new Date().getTime();
+                Polymer.getContent(url).then(res => {
+                    res = JSON.parse(res);
+                    that.user = res;
                 });
 
-                //GET FANPAGE//
-                let parampage = {
-                    "action": "searchData",
-                    "index": "change",
-                    "type": "pages",
-                    "_source": "name",
-                    "body": {
-                        "query": {
-                            "match": {
-                                "adminId": usertokenId
-
-                            }
-                        }
-                    }
-                };
-                Polymer.postData(loginUrl, parampage).then(res => {
-                    // console.log("BBB", usertokenId);
-                    let pagename = [];
-                    if (res.code > 0) {
-                        res.resolve.forEach(item => {
-                            pagename.push({
-                                name: item['name']
-                            })
-                        })
-                        if (pagename.length == 0) {
-                            pagename.push({
-                                name: "沒有專頁可以選擇"
-                            })
-                        }
-                        customElements.whenDefined('vaadin-select').then(function () {
-                            const propage = pagename;
-                            shadow.querySelector('#fanPage').renderer = function (root) {
-                                // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
-                                if (root.firstChild) {
-                                    return;
-                                }
-                                // Create the <vaadin-list-box>
-                                const listBox = document.createElement('vaadin-list-box');
-                                propage.forEach(function (item) {
-                                    const vaadinItem = document.createElement('vaadin-item');
-                                    vaadinItem.textContent = item.name;
-                                    listBox.appendChild(vaadinItem);
-                                    vaadinItem.setAttribute('value', item.name);
-                                });
-                                // update the content
-                                root.appendChild(listBox);
-                            };
-                        });
-
-                    }
-                })
-
-                //SET AREA, DERLIVER METHOD, PRODUCT STATUS//
-                this.valueArray = [""];
-                customElements.whenDefined('vaadin-select').then(function () {
-                    const district = [{
-                        name: '中西區'
-                    }, {
-                        name: '灣仔區'
-                    }, {
-                        name: '東區'
-                    }, {
-                        name: '南區'
-                    }, {
-                        name: '油尖旺區'
-                    }, {
-                        name: '深水埗區'
-                    }, {
-                        name: '九龍城區'
-                    }, {
-                        name: '黃大仙區'
-                    }, {
-                        name: '觀塘區'
-                    }, {
-                        name: '葵青區'
-                    }, {
-                        name: '荃灣區'
-                    }, {
-                        name: '屯門區'
-                    }, {
-                        name: '元朗區'
-                    }, {
-                        name: '離島區'
-                    }, {
-                        name: '北區'
-                    }, {
-                        name: '大埔區'
-                    }, {
-                        name: '沙田區'
-                    }, {
-                        name: '西貢區'
-                    }];
-
-                    const delmthod = [{
-                        name: '面交'
-                    }, {
-                        name: '運送'
-                    }, {
-                        name: '面交或運送'
-                    }];
-
-                    const status = [{
-                        name: '全新'
-                    }, {
-                        name: '二手'
-                    }];
-
-
-                    //AREA//
-                    shadow.querySelector('#vs2').renderer = function (root) {
-                        // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
-                        if (root.firstChild) {
-                            return;
-                        }
-                        // Create the <vaadin-list-box>
-                        const listBox = document.createElement('vaadin-list-box');
-                        district.forEach(function (item) {
-                            const vaadinItem = document.createElement('vaadin-item');
-                            vaadinItem.textContent = item.name;
-                            listBox.appendChild(vaadinItem);
-                            vaadinItem.setAttribute('value', item.name);
-                        });
-                        // update the content
-                        root.appendChild(listBox);
-                    };
-
-                    //DELIVER METHOD//
-                    shadow.querySelector('#vs3').renderer = function (root) {
-                        // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
-                        if (root.firstChild) {
-                            return;
-                        }
-                        // Create the <vaadin-list-box>
-                        const listBox = document.createElement('vaadin-list-box');
-                        delmthod.forEach(function (item) {
-                            const vaadinItem = document.createElement('vaadin-item');
-                            vaadinItem.textContent = item.name;
-                            listBox.appendChild(vaadinItem);
-                            vaadinItem.setAttribute('value', item.name);
-                        });
-                        // update the content
-                        root.appendChild(listBox);
-                    };
-
-                    //PRODUCT STATUS//
-                    shadow.querySelector('#vs4').renderer = function (root) {
-                        // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
-                        if (root.firstChild) {
-                            return;
-                        }
-                        // Create the <vaadin-list-box>
-                        const listBox = document.createElement('vaadin-list-box');
-                        status.forEach(function (item) {
-                            const vaadinItem = document.createElement('vaadin-item');
-                            vaadinItem.textContent = item.name;
-                            listBox.appendChild(vaadinItem);
-                            vaadinItem.setAttribute('value', item.name);
-                        });
-                        // update the content
-                        root.appendChild(listBox);
-                    };
-                });
+                that.vaadin_select();
+                that.fanpage();
+                that.submenu();
 
                 //ENABLE & DISABLE PRICE
                 shadow.querySelector('#free').addEventListener("click", (e) => {
-                    // console.log("worked");
                     if (shadow.querySelector('#free').checked == true) {
-                        // console.log('Price will be disabled');
                         shadow.querySelector('#price').disabled = true;
-                        shadow.querySelector('#price').value = "0";
+                        shadow.querySelector('#price').value = 0;
                     } else if (shadow.querySelector('#free').checked == false) {
-                        // console.log('Price will be enabled');
                         shadow.querySelector('#price').disabled = false;
                     }
                 });
 
-                //*********************BUG******************//
-                //**LOAD DATA FROM JSON**//
-                // let userurl = "/json/user-" + usertokenId + ".json";
-                // Polymer.getContent(userurl).then(str => {
-                //     json = JSON.parse(str);
-                //     // console.log("BBB1", json);
-                //     //USER INFO COLUM
-                //     shadow.querySelector('#owner').innerHTML = json['username'];
-                //     console.log("ffffff",json['username']);
 
-                //     if (json['head'] == "") {
-                //         shadow.querySelector('#a1').innerHTML = '<img id="gand" src="./img/user_profile.png">';
-                //     } else {
-                //         shadow.querySelector('#a1').innerHTML = '<img id="gand" src=' + json['head'] + '>';
-                //     };
-                //     //check the username
-                //     // console.log("SEE", shadow.querySelector('#gand').src);
-                // });
-
-                //READY ENDS HERE//
             },
 
 
@@ -1229,30 +820,10 @@
                 });
             },
 
-            _saveData: function () {
-                // console.log("SAVE BUTTON IS WORKING");
+            _saveData: function() {
                 let that = this;
                 let shadow = this.shadowRoot;
                 let user = store.get('change-user') || null;
-                // console.log("omg1", user.id);
-
-
-                // let tokUrl = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                // let tokparams = {
-                //     "action": "getData",
-                //     "index": "change",
-                //     "type": "_user",
-                //     "id": user.id
-                // };
-                // Polymer.postData(tokUrl, tokparams).then(res=>{
-                //     if (res.code >0) {
-                //         let Utoken = res.resolve['token']
-                //         if (Utoken == 1 && user!== null){
-                //             alert("你已經被取消了用戶資格");
-                //         }
-                //     }
-                // });
-
                 if (user != null) {
                     // console.log("BBB",user);
 
@@ -1347,8 +918,6 @@
                                 let loc = location.search;
                                 if (loc == "") {
                                     //******ADD PRODUCT MODE************//
-
-                                    console.log("omg", tags);
                                     let params = {
                                         "action": "addproduct",
                                         "categories": categories,
@@ -1366,49 +935,9 @@
                                         "isFanpage": isFanpage,
                                         "fanpage": fanpage
                                     };
-                                    // console.log("BBB", params);
-                                    let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
-                                    Polymer.postData(link, params).then(res => {
-                                        console.log("BBB", res);
-                                        var newproductid = res.resolve.id;
-                                        console.log("BBB1", newproductid);
-
-                                        if (res.code > 0) {
-                                            let paramup = {
-                                                "action": "updateData",
-                                                "index": "change",
-                                                "type": "_user",
-                                                "id": user['_id'],
-                                                "body": {
-                                                    "query": {
-                                                        "script": {
-                                                            "source": "ctx._source['goodsNum']+=1"
-                                                        }
-                                                    }
-                                                }
-                                            };
-                                            let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                                            Polymer.postData(Url, paramup).then(res => {
-                                                if (res.code > 0) {
-                                                    // alert("成功！");
-                                                    this.dataManager.loadData(newproductid).then(res => {
-                                                        console.log("Working", res);
-                                                        this.fileManager.saveFile('json/product-' + newproductid + '.json', JSON.stringify(res)).then(res => {
-                                                            location.replace("./edit-product.html?p" + newproductid + "u" + user['_id']);
-                                                        });
-                                                    })
-                                                } else {
-                                                    alert("update fail");
-                                                }
-                                            });
-                                        } else {
-                                            alert(res.text);
-                                        }
-                                    });
+                                    that.saveproduct(params);
                                 } else {
                                     //*********EDIT PRODUCT MODE*************//
-                                    console.log("edit mode pid", this.id);
-
                                     let json2ways = {
                                         "id": this.id,
                                         "categories": categories,
@@ -1431,90 +960,11 @@
                                         "postStatus": this.POSTSTATUS,
                                         "replyArray": this.REPLYARRAY
                                     };
-                                    console.log("omgomg3", json2ways);
-                                    // //******* UPDATE JSON ***********//
-                                    this.fileManager.saveFile('json/product-' + this.id + '.json', JSON.stringify(json2ways));
-
-                                    //********UPDATE DATABASE***********//
-                                    let paramsDatabase = {
-                                        "action": "addData",
-                                        "index": "change",
-                                        "type": "product",
-                                        "id": this.id,
-                                        "body": json2ways
-                                    };
-                                    let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                                    Polymer.postData(Url, paramsDatabase).then(res => {
-                                        console.log("json", json2ways);
-                                        if (res.code > 0) {
-                                            // alert("成功！");
-                                            location.replace("./edit-product.html?p" + this.id + "u" + user['_id']);
-
-                                            // //*************PASS DATA FROM DATABASE TO JSON****************//
-                                            // let DatabaseToJson = {
-                                            //     "action": "getData",
-                                            //     "index": "change",
-                                            //     "type": "product",
-                                            //     "id": this.id
-                                            // };
-                                            // Polymer.postData(Url, DatabaseToJson).then(res => {
-                                            //     if (res.code > 0) {
-                                            //         alert("DatabaseToJson success");
-                                            //         console.log("DatabaseToJson reslve", res.resolve);
-
-                                            //     } else {
-                                            //         alert("DatabaseToJson ERROR!");
-                                            //     }
-                                            // });
-                                        } else {
-                                            alert("update fail");
-                                        }
-                                    });
+                                    that.editproduct(json2ways);
                                 }
                             }
                         }
                     }
-
-                    //SET NEW PID (NO USE)//
-                    // let x = 0;
-                    // console.log("TOTAL NO. OF PRODUCT IN DATABASE", this.next);
-                    // let loc = location.search;
-                    // console.log("Path", loc);
-                    // console.log("Length", loc.length);
-                    // let id = "";
-                    // for (var i = 1; i < loc.length; i++) {
-                    //     console.log("Working");
-                    //     id += loc[i];
-                    // }
-                    // console.log("ID", id);
-                    // if (id == "") {
-                    //     this.next++;
-                    //     console.log("TOTAL NO. OF PRODUCT IN DATABASE + 1", this.next);
-                    // }
-
-                    // let forFanpageinfo = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                    // fanpageInfo = {
-                    //     "action": "searchData",
-                    //     "index": "change",
-                    //     "type": "pages",
-                    //     "body": {
-                    //         "query": {
-                    //             "match": {
-                    //                 "name": fanpage
-                    //             }
-                    //         }
-                    //     }
-                    // };
-                    // let fanpageName;
-                    // let fanpageHead;
-                    // Polymer.postData(forFanpageinfo, fanpageInfo).then(res => {
-                    //     console.log("forFanpageinfo working!!", res.resolve[0]);
-                    //     fanpageName = res.resolve[0]['name'];
-                    //     fanpageHead = res.resolve[0]['head'];
-                    //     console.log("fanpageName:", fanpageName);
-                    //     console.log("fanpageHead:", fanpageHead);
-                    // });
-
 
                 } else {
                     alert("Please login first");
@@ -1523,7 +973,7 @@
 
             },
 
-            _uploadFile: function (e) {
+            _uploadFile: function(e) {
                 let shadow = this.shadowRoot;
                 let that = this;
                 this.pics = [];
@@ -1539,20 +989,330 @@
             closeDialog() {
                 // let dialog = shadow.querySelector('vaadin-dialog');
                 this.dialog.opened = false;
-            }
-            // _disablePrice: function () {
-            //     console.log('free now');
-            //     let shadow = this.shadowRoot;
-            //     let that = this;
-            //     if (shadow.querySelector('#free').checked == true) {
-            //         console.log('Price disabled');
-            //         shadow.querySelector('#price').setEnabled(false);
-            //         shadow.querySelector('#price').value = "0";
-            //     } else if (shadow.querySelector('#free').checked == false) {
-            //         console.log('Price enabled');
-            //         shadow.querySelector('#price').setEnabled(true);
-            //     };
-            // }
+            },
+            saveproduct(param) {
+                let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
+                Polymer.postData(link, param).then(res => {
+                    var newproductid = res.resolve.id;
+                    if (res.code > 0) {
+                        let paramup = {
+                            "action": "updateData",
+                            "index": "change",
+                            "type": "_user",
+                            "id": user['_id'],
+                            "body": {
+                                "query": {
+                                    "script": {
+                                        "source": "ctx._source['goodsNum']+=1"
+                                    }
+                                }
+                            }
+                        };
+                        let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                        Polymer.postData(Url, paramup).then(res => {
+                            if (res.code > 0) {
+                                this.dataManager.loadData(newproductid).then(res => {
+                                    this.fileManager.saveFile('json/product-' + newproductid + '.json', JSON.stringify(res)).then(res => {
+                                        location.replace("./edit-product.html?p" + newproductid + "u" + user['_id']);
+                                    });
+                                })
+                            }
+                        });
+                    } else {
+                        alert(res.text);
+                    }
+                });
+            },
+            editproduct(param) {
+
+                //********UPDATE DATABASE***********//
+                let paramsDatabase = {
+                    "action": "addData",
+                    "index": "change",
+                    "type": "product",
+                    "id": this.id,
+                    "body": param
+                };
+                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                Polymer.postData(Url, paramsDatabase).then(res => {
+                    console.log("json", json2ways);
+                    if (res.code > 0) {
+                        this.dataManager.loadData(this.id).then(res => {
+                            this.fileManager.saveFile('json/product-' + this.id + '.json', JSON.stringify(res)).then(res => {
+                                location.replace("./edit-product.html?p" + this.id + "u" + user['_id']);
+                            });
+                        })
+                    }
+                });
+            },
+            vaadin_select() {
+                let shadow = this.shadowRoot;
+                //SET AREA, DERLIVER METHOD, PRODUCT STATUS//
+                this.valueArray = [""];
+                customElements.whenDefined('vaadin-select').then(function() {
+                    const district = [{
+                        name: '中西區'
+                    }, {
+                        name: '灣仔區'
+                    }, {
+                        name: '東區'
+                    }, {
+                        name: '南區'
+                    }, {
+                        name: '油尖旺區'
+                    }, {
+                        name: '深水埗區'
+                    }, {
+                        name: '九龍城區'
+                    }, {
+                        name: '黃大仙區'
+                    }, {
+                        name: '觀塘區'
+                    }, {
+                        name: '葵青區'
+                    }, {
+                        name: '荃灣區'
+                    }, {
+                        name: '屯門區'
+                    }, {
+                        name: '元朗區'
+                    }, {
+                        name: '離島區'
+                    }, {
+                        name: '北區'
+                    }, {
+                        name: '大埔區'
+                    }, {
+                        name: '沙田區'
+                    }, {
+                        name: '西貢區'
+                    }];
+
+                    const delmthod = [{
+                        name: '面交'
+                    }, {
+                        name: '運送'
+                    }, {
+                        name: '面交或運送'
+                    }];
+
+                    const status = [{
+                        name: '全新'
+                    }, {
+                        name: '二手'
+                    }];
+
+
+                    //AREA//
+                    shadow.querySelector('#vs2').renderer = function(root) {
+                        // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
+                        if (root.firstChild) {
+                            return;
+                        }
+                        // Create the <vaadin-list-box>
+                        const listBox = document.createElement('vaadin-list-box');
+                        district.forEach(function(item) {
+                            const vaadinItem = document.createElement('vaadin-item');
+                            vaadinItem.textContent = item.name;
+                            listBox.appendChild(vaadinItem);
+                            vaadinItem.setAttribute('value', item.name);
+                        });
+                        // update the content
+                        root.appendChild(listBox);
+                    };
+
+                    //DELIVER METHOD//
+                    shadow.querySelector('#vs3').renderer = function(root) {
+                        // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
+                        if (root.firstChild) {
+                            return;
+                        }
+                        // Create the <vaadin-list-box>
+                        const listBox = document.createElement('vaadin-list-box');
+                        delmthod.forEach(function(item) {
+                            const vaadinItem = document.createElement('vaadin-item');
+                            vaadinItem.textContent = item.name;
+                            listBox.appendChild(vaadinItem);
+                            vaadinItem.setAttribute('value', item.name);
+                        });
+                        // update the content
+                        root.appendChild(listBox);
+                    };
+
+                    //PRODUCT STATUS//
+                    shadow.querySelector('#vs4').renderer = function(root) {
+                        // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
+                        if (root.firstChild) {
+                            return;
+                        }
+                        // Create the <vaadin-list-box>
+                        const listBox = document.createElement('vaadin-list-box');
+                        status.forEach(function(item) {
+                            const vaadinItem = document.createElement('vaadin-item');
+                            vaadinItem.textContent = item.name;
+                            listBox.appendChild(vaadinItem);
+                            vaadinItem.setAttribute('value', item.name);
+                        });
+                        // update the content
+                        root.appendChild(listBox);
+                    };
+                });
+
+            },
+            fanpage() {
+                let shadow = this.shadowRoot
+                    //GET FANPAGE//
+                let parampage = {
+                    "action": "searchData",
+                    "index": "change",
+                    "type": "pages",
+                    "_source": "name",
+                    "body": {
+                        "query": {
+                            "match": {
+                                "adminId": this.user._id
+
+                            }
+                        }
+                    }
+                };
+                let loginUrl = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+
+                Polymer.postData(loginUrl, parampage).then(res => {
+                    // console.log("BBB", usertokenId);
+                    let pagename = [];
+                    if (res.code > 0) {
+                        res.resolve.forEach(item => {
+                            pagename.push({
+                                name: item['name']
+                            })
+                        })
+                        if (pagename.length == 0) {
+                            pagename.push({
+                                name: "沒有專頁可以選擇"
+                            })
+                        }
+                        customElements.whenDefined('vaadin-select').then(function() {
+                            const propage = pagename;
+                            shadow.querySelector('#fanPage').renderer = function(root) {
+                                // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
+                                if (root.firstChild) {
+                                    return;
+                                }
+                                // Create the <vaadin-list-box>
+                                const listBox = document.createElement('vaadin-list-box');
+                                propage.forEach(function(item) {
+                                    const vaadinItem = document.createElement('vaadin-item');
+                                    vaadinItem.textContent = item.name;
+                                    listBox.appendChild(vaadinItem);
+                                    vaadinItem.setAttribute('value', item.name);
+                                });
+                                // update the content
+                                root.appendChild(listBox);
+                            };
+                        });
+
+                    }
+                })
+
+            },
+            submenu() {
+                let shadow = this.shadowRoot;
+                customElements.whenDefined('vaadin-menu-bar').then(function() {
+                    const menu = shadow.querySelector('vaadin-menu-bar');
+                    menu.addEventListener('item-selected', function(e) {
+                        this.prod.categories = e.detail.value.text;
+                        this.CATE = e.detail.value.text;
+                    });
+
+                    let c = {};
+                    let arr = [];
+                    let g = [];
+                    let childarr = [];
+                    let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                    let params = {
+                        "action": "searchData",
+                        "index": "change",
+                        "type": "categories",
+                        "body": {
+                            "sort": [{
+                                "_id": {
+                                    "order": "asc"
+                                }
+                            }],
+                            "query": {
+                                "match_all": {}
+                            }
+                        }
+                    };
+                    Polymer.postData(url, params).then(res => {
+                        if (res.code > 0) {
+                            let a = res.resolve;
+                            let arrchild = [];
+
+
+                            for (i = 0; i < a.length; i++) {
+                                if (a[i].parent == 0) {
+                                    let b = a[i].name;
+                                    // generate childarr
+                                    for (x = 0; x < a.length; x++) {
+                                        if (a[i].id == a[x].parent) {
+                                            let j = a[x].name;
+                                            let k = {
+                                                "text": j
+                                            };
+                                            childarr.push(k);
+                                        }
+                                    }
+                                    let c = {
+                                        "text": b,
+                                        "children": childarr
+                                    };
+                                    arr.push(c);
+                                    childarr = [];
+
+
+                                    let id = a[i].id;
+
+
+                                }
+
+                            }
+                            let h = {
+
+                                text: 'Project',
+                                children: [{
+                                    text: 'Users',
+                                    children: [{
+                                        text: 'List'
+                                    }, {
+                                        text: 'Add'
+                                    }]
+                                }, {
+                                    text: 'Billing',
+                                    children: [{
+                                        text: 'Invoices'
+                                    }, {
+                                        text: 'Balance Events'
+                                    }]
+                                }, ]
+                            };
+
+                            g.push(h);
+                        }
+
+                    });
+                    let i = [];
+                    let h = {
+                        text: '請選擇分類',
+                        children: arr
+                    };
+
+                    menu.items = [h];
+
+                });
+
+            },
 
 
         });
