@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script>var __basePath = '/';</script>
+    <script src="https://unpkg.com/@ag-grid-enterprise/all-modules@23.2.0/dist/ag-grid-enterprise.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-alpine.css">
+    <!-- <link rel="import" href="../vaadin-select/vaadin-select.html"> -->
+
+
+    <style>
+        .functionBar {
+            height: 22px;
+            border: 1px solid #babfc7;
+        }
+
+        .but {
+            float: right;
+        }
+
+        .ag-row-editing {
+            background-color: #5bc0de !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="functionBar">
+        <div class="but">
+            <select name="table" id="table" class="select">
+                <option value="_user">user</option>
+                <option value="product">product</option>
+                <option value="order">order</option>
+                <option value="pages">fanpage</option>
+            </select>
+            <button onclick="reload()">Reload</button>
+            <button onclick="save()">Save</button>
+            <button onclick="onBtExport()">Export to Excel</button>
+        </div>
+    </div>
+
+    <div id="myGrid" style="height: 650px;" class="ag-theme-alpine"></div>
+
+    <script type="text/javascript" charset="utf-8">
+        var url = 'https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController';
+
+        //Generate Table
+        document.querySelector('.select').addEventListener("click", showTable);
+        function showTable() {
+            let type = document.querySelector('.select').value;
+            // console.log("Generate Table type:", type);
+
+            //Data Type we want to get
+            let x = type;
+            search(x);
+        };
+
+
+
+
+        //****************************************************************//
+        //************************ag grid setting*************************//
+        function search(x) {
+            let that = this;
+            // clear previous grid if there is one
+            if (document.querySelector('.ag-root-wrapper')) {
+                let toberemoved = document.querySelector('.ag-root-wrapper');
+                toberemoved.remove();
+            }
+
+            //Data Type we want to get
+            // var x = type();
+            // console.log("OMG", x);
+
+            // specify the columns
+            if (x == "_user") {
+                var columnDefs = [
+                    { headerName: "id", field: "id", editable: false },
+                    { headerName: "username", field: "username" },
+                    { headerName: "numberRate", field: "numberRate", editable: false },
+                    { headerName: "goodsNum", field: "goodsNum", editable: false },
+                    { headerName: "area", field: "area" },
+                    { headerName: "email", field: "email" },
+                    { headerName: "phone", field: "phone", cellEditor: 'numericCellEditor' },
+                    { headerName: "password", field: "password" },
+                    { headerName: "createTime", field: "createTime", editable: false },
+                    {
+                        headerName: "isPromotionMsg", field: "isPromotionMsg",
+                        cellEditor: 'agSelectCellEditor',
+                        cellEditorParams: {
+                            values: ['true', 'false']
+                        }
+                    },
+                    { headerName: "head", field: "head", editable: false },
+                    { headerName: "likeProduct", field: "likeProduct", editable: false },
+                    { headerName: "score", field: "score", cellEditor: 'numericCellEditor' },
+                    // { headerName: "history", field: "history" },
+                    {
+                        headerName: "isAdmin", field: "isAdmin",
+                        cellEditor: 'agSelectCellEditor',
+                        cellEditorParams: {
+                            values: ['true', 'false']
+                        }
+                    },
+                    // { headerName: "token", field: "token" },
+                    { headerName: "platform", field: "platform", editable: false },
+                    { headerName: "banner", field: "banner", editable: false }
+                ];
+            } else if (x == "product") {
+                var columnDefs = [
+                    { headerName: "id", field: "id", editable: false },
+                    { headerName: "categories", field: "categories" },
+                    { headerName: "createTime", field: "createTime", editable: false },
+                    { headerName: "district", field: "district" },
+                    { headerName: "deliveryMethod", field: "deliveryMethod" },
+                    { headerName: "description", field: "description" },
+                    { headerName: "deliveryDesc", field: "deliveryDesc" },
+                    { headerName: "isFree", field: "isFree" },
+                    { headerName: "isNew", field: "isNew" },
+                    { headerName: "like", field: "like", cellEditor: 'numericCellEditor' },
+                    { headerName: "ownerId", field: "ownerId", editable: false },
+                    { headerName: "productname", field: "productname" },
+                    { headerName: "pics", field: "pics" },
+                    { headerName: "price", field: "price", cellEditor: 'numericCellEditor' },
+                    { headerName: "sellerMsg", field: "sellerMsg" },
+                    { headerName: "tags", field: "tags" },
+                    { headerName: "replyArray", field: "replyArray" },
+                    // { headerName: "_id", field: "_id", editable: false }
+                ];
+            } else if (x == "order") {
+                var columnDefs = [
+                    { headerName: "id", field: "id", editable: false },
+                    { headerName: "msg", field: "msg", editable: false },
+                    { headerName: "productId", field: "productId", editable: false },
+                    { headerName: "buyerId", field: "buyerId", editable: false },
+                    { headerName: "status", field: "status" },
+                    { headerName: "submitTime", field: "submitTime", editable: false },
+                    // { headerName: "_id", field: "_id", editable: false }
+                ];
+            } else {
+                //fanpage
+                var columnDefs = [
+                    { headerName: "ownerId", field: "ownerId", editable: false },
+                    { headerName: "name", field: "name" },
+                    { headerName: "website", field: "website", editable: false },
+                    { headerName: "district", field: "district" },
+                    { headerName: "email", field: "email" },
+                    // { headerName: "tags", field: "tags"},
+                    { headerName: "id", field: "id", editable: false },
+                    { headerName: "adminId", field: "adminId" },
+                    { headerName: "head", field: "head", editable: false },
+                    { headerName: "goods", field: "goods", editable: false },
+                    { headerName: "alreadybuy", field: "alreadybuy", editable: false },
+                    { headerName: "score", field: "score", cellEditor: 'numericCellEditor' },
+                    // { headerName: "_id", field: "_id", editable: false }
+                ];
+            }
+
+
+            // let the grid know which columns to use
+            var gridOptions = {
+                columnDefs: columnDefs,
+                //set data editable as default
+                defaultColDef: {
+                    editable: true,
+                    cellClass: 'stringType',
+                    sortable: true,
+                    filter: true
+                },
+                components: {
+                    numericCellEditor: getNumericCellEditor(),
+                },
+                editType: 'fullRow',
+                // rowData: getRowData(),
+
+                onCellValueChanged: function (event) {
+                    console.log(
+                        'onCellValueChanged: ' + event.colDef.field + ' = ' + event.newValue
+                    );
+                },
+                onRowValueChanged: function (event) {
+                    var data = event.data;
+                    // console.log(
+                    //     'onRowValueChanged: (' +
+                    //     data.id +
+                    //     ', ' +
+                    //     data.username +
+                    //     ', ' +
+                    //     data.numberRate +
+                    //     ', ' +
+                    //     data.goodsNum +
+                    //     ', ' +
+                    //     data.area +
+                    //     ', ' +
+                    //     data.email +
+                    //     ', ' +
+                    //     data.phone +
+                    //     ', ' +
+                    //     data.password +
+                    //     ', ' +
+                    //     data.isPromotionMsg +
+                    //     ', ' +
+                    //     data.head +
+                    //     ', ' +
+                    //     ')'
+                    // );
+
+                    //updated results in string
+                    // console.log("Updated data:", data);
+                    that.ans = data;
+                },
+
+                excelStyles: [
+                    // {
+                    //     id: 'booleanType',
+                    //     dataType: 'boolean',
+                    // },
+                    {
+                        id: 'stringType',
+                        dataType: 'string',
+                    }
+                ]
+            };
+            //this.result is used to pass the content to Excel
+            this.result = gridOptions;
+
+            // lookup the container we want the Grid to use
+            var eGridDiv = document.querySelector('#myGrid');
+            // create the grid passing in the div to use together with the columns & data we want to use
+            new agGrid.Grid(eGridDiv, gridOptions);
+
+            //************************Fetching database to pass to ag grid*************************//
+            var res = {};
+            var http = new XMLHttpRequest();
+            var params = {
+                "action": "searchData",
+                "index": "change",
+                "type": x,
+                "body": {
+                    "query": {
+                        "match_all": {
+                        }
+                    }
+                }
+            };
+            // console.log("params:", params);
+            http.open('POST', url, true);
+            //Send the proper header information along with the request
+            http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+            http.onreadystatechange = function () {//Call a function when the state changes.
+                if (http.readyState == 4 && http.status == 200) {
+                    this.res = JSON.parse(http.responseText);
+                    // console.log("raw fetched data RES:", this.res);
+                    for (i = 0; i < this.res.resolve.length; i++) {
+                        if (this.res.resolve[i].createTime) {
+                            var d = new Date(this.res.resolve[i].createTime);
+                            let day = d.getDate();
+                            let month = d.getMonth() + 1;
+                            let year = d.getFullYear();
+                            var ct = year + "-" + month + "-" + day;
+                            this.res.resolve[i].createTime = ct;
+                            // console.log("createTime:", ct);
+                        } else {
+                            var d = new Date(this.res.resolve[i].submitTime);
+                            let day = d.getDate();
+                            let month = d.getMonth() + 1;
+                            let year = d.getFullYear();
+                            var ct = year + "-" + month + "-" + day;
+                            this.res.resolve[i].submitTime = ct;
+                            // console.log("submitTime:", ct);
+                        }
+                    }
+                    gridOptions.api.setRowData(this.res.resolve);
+                    // console.log("fetched data RES.Resolve:", this.res.resolve);
+                    // let y = this.res.resolve;
+                }
+            }
+            http.send(JSON.stringify(params));
+        };
+
+
+
+
+
+        //****************************************************************//
+        //************************ag grid functions*************************//
+        // function getRowData(y) {
+        //     var rowData = y;
+        //     return rowData;
+        // };
+
+        function getNumericCellEditor() {
+            function isCharNumeric(charStr) {
+                return !!/\d/.test(charStr);
+            }
+
+            function isKeyPressedNumeric(event) {
+                var charCode = getCharCodeFromEvent(event);
+                var charStr = String.fromCharCode(charCode);
+                return isCharNumeric(charStr);
+            }
+
+            function getCharCodeFromEvent(event) {
+                event = event || window.event;
+                return typeof event.which === 'undefined' ? event.keyCode : event.which;
+            }
+
+            // function to act as a class
+            function NumericCellEditor() { }
+
+            // gets called once before the renderer is used
+            NumericCellEditor.prototype.init = function (params) {
+                // we only want to highlight this cell if it started the edit, it is possible
+                // another cell in this row started the edit
+                this.focusAfterAttached = params.cellStartedEdit;
+
+                // create the cell
+                this.eInput = document.createElement('input');
+                this.eInput.style.width = '100%';
+                this.eInput.style.height = '100%';
+                this.eInput.value = isCharNumeric(params.charPress)
+                    ? params.charPress
+                    : params.value;
+
+                var that = this;
+                this.eInput.addEventListener('keypress', function (event) {
+                    if (!isKeyPressedNumeric(event)) {
+                        that.eInput.focus();
+                        if (event.preventDefault) event.preventDefault();
+                    }
+                });
+            };
+
+            // gets called once when grid ready to insert the element
+            NumericCellEditor.prototype.getGui = function () {
+                return this.eInput;
+            };
+
+            // focus and select can be done after the gui is attached
+            NumericCellEditor.prototype.afterGuiAttached = function () {
+                // only focus after attached if this cell started the edit
+                if (this.focusAfterAttached) {
+                    this.eInput.focus();
+                    this.eInput.select();
+                }
+            };
+
+            // returns the new value after editing
+            NumericCellEditor.prototype.isCancelBeforeStart = function () {
+                return this.cancelBeforeStart;
+            };
+
+            // example - will reject the number if it contains the value 007
+            // - not very practical, but demonstrates the method.
+            NumericCellEditor.prototype.isCancelAfterEnd = function () { };
+
+            // returns the new value after editing
+            NumericCellEditor.prototype.getValue = function () {
+                return this.eInput.value;
+            };
+
+            // when we tab onto this editor, we want to focus the contents
+            NumericCellEditor.prototype.focusIn = function () {
+                var eInput = this.getGui();
+                eInput.focus();
+                eInput.select();
+                console.log('NumericCellEditor.focusIn()');
+            };
+
+            // when we tab out of the editor, this gets called
+            NumericCellEditor.prototype.focusOut = function () {
+                // but we don't care, we just want to print it for demo purposes
+                console.log('NumericCellEditor.focusOut()');
+            };
+
+            return NumericCellEditor;
+        };
+
+
+
+
+
+
+        //*****************************External user functions********************************//
+        //type = type of data we want (user/product/order/fanpage)
+        function reload() {
+            let type = document.querySelector('.select').value;
+            // console.log("type user picked:", type);
+            //Data Type we want to get
+            let x = type;
+            search(x);
+        };
+
+        //Modify database
+        function save() {
+            let that = this;
+            if (that.ans == undefined) {
+                alert("Nothing to be updated!")
+            } else {
+                let type = document.querySelector('.select').value;
+                // console.log("type to be updated:", type);
+
+                let resolve = that.ans;
+                if (resolve.createTime) {
+                    delete resolve['createTime'];
+                } else {
+                    delete resolve['submitTime'];
+                }
+                console.log("To be updated:", resolve);
+
+
+                let id = that.ans.id;
+                var http = new XMLHttpRequest();
+                let params2 = {
+                    "action": "addData",
+                    "index": "change",
+                    "type": type,
+                    "id": id,
+                    "body": resolve
+                };
+                console.log("params2 Data to be updated:", params2);
+                http.open('POST', url, true);
+                //Send the proper header information along with the request
+                http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+                http.onreadystatechange = function () {//Call a function when the state changes.
+                    if (http.readyState == 4 && http.status == 200) {
+                        this.res = JSON.parse(http.responseText);
+                        console.log("RES:", this.res);
+
+                    }
+                }
+                http.send(JSON.stringify(params2));
+            }
+        };
+
+        //Export to Excel
+        function onBtExport() {
+            console.log("Excel content:", this.result);
+
+            //this.result is the data content 
+            this.result.api.exportDataAsExcel({});
+        };
+    </script>
+</body>
+
+</html>
