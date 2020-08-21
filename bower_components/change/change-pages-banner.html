@@ -173,6 +173,7 @@
                     Polymer.postData(url, params).then(res => {
                         if (res.code > 0) {
                             let all = res.resolve;
+                            this.page = JSON.parse(all);
                             if (all['head'] == "") {
                                 shadow.querySelector('#dp').src = "./img/head.svg";
                             } else {

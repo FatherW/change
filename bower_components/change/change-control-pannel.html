@@ -154,9 +154,7 @@
                     <p class="inf hide">標籤: <span id="contact">
                             <vaadin-text-field id='tag'></vaadin-text-field>
                         </span></p>
-                    <p class="inf">網址: gettv.hk/ <span class="infotext" id="website">
-                            <vaadin-text-field id='website2'></vaadin-text-field>
-                        </span>.html</p>
+                    <p class="inf">網址: www.gettv.hk/{{pagename}}</p>
                     <div style="display: inline-flex;">
                         <vaadin-button class="handIn" on-click="handin">提交</vaadin-button>
                         <vaadin-button on-click="cancelinfo1">取消</vaadin-button>
@@ -193,6 +191,7 @@
                 } else if (user.isAdmin) {
                     user["userBucket"] = "change.dazzle.website";
                     this.fileManager = new AwsPackage(user);
+                    this.pageManager = new DataPackage('pages');
                 }
             },
 
@@ -214,6 +213,11 @@
 
                 }
                 that.vaadin_select();
+
+                let pagename = shadow.querySelector('#name1');
+                pagename.addEventListener('keyup', e => {
+                    that.pagename = pagename.value;
+                })
             },
             vaadin_select() {
 
@@ -279,44 +283,53 @@
 
             },
             handin: function() {
-                ///////////////////////////////////////////
-                ///////////////新增專頁寫在這裡///////////////
-                ///////////////////////////////////////////
+                let that = this;
                 let shadow = this.shadowRoot;
-                let pagename = shadow.querySelector('#name1').value;
-                let src = "_page-template";
-                this.fileManager.copyFolder(src, pagename);
+                let pagename = shadow.querySelector('#name1');
+                let pagelink = shadow.querySelector('#website2');
+                let pagedist = shadow.querySelector('#area1');
+                let pageemail = shadow.querySelector('#email');
                 let user = store.get('change-user');
-                let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
                 let param = {
-                    "action": "addFanPage",
-                    "ownerId": user['_id'],
-                    "name": pagename,
-                    "website": shadow.querySelector('#website2').value,
-                    "district": shadow.querySelector('#area1').value,
-                    "email": shadow.querySelector('#email').value,
-                    "tags": pagename
+                    'name': pagename.value
                 };
-                Polymer.postData(link, param).then(res => {
-                    if (res.code > 0) {
-                        console.log("完成");
-                        shadow.querySelector('#info1').style.display = "none";
-
-                        // modifying here
-                        // Polymer.filemanager.getFile('template/page-template.html').then(html =>{
-                        //     html = html.replace('[[fanpage]]', shadow.querySelector('#website2').value);
-                        //     Polymer.fileManager.saveFile(shadow.querySelector('#website2').value + '.html');
-                        //     alert("success!");
-                        // });
-
-                    }
-                    alert(res.text);
-                });
-
+                if (pagename != "") {
+                    that.pageManager.matchDataNosort(param).then(res => {
+                        if (res.length > 0) {
+                            alert('專頁已存在，請重新輸入');
+                            pagename.value = "";
+                        } else {
+                            param = {
+                                "ownerId": user._id,
+                                "district": pagedist.value,
+                                "email": pageemail.value,
+                                "id": pagename.value,
+                                "adminId": [user.id],
+                                "head": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Windows_Settings_app_icon.png",
+                                "goods": 0,
+                                "alreadybuy": 0,
+                                "score": 5,
+                            }
+                            that.pageManager.saveData(pagename.value, param).then(e => {
+                                this.fileManager.saveFile('json/page-' + pagename.value + '.json', JSON.stringify(param));
+                                that.fanpageGen(pagename.value)
+                            })
+                        }
+                    })
+                }
             },
-
+            fanpageGen(pagename) {
+                let url = "/json/fanpage/fanPageTemplate.html?id=" + new Date().getTime();
+                Polymer.getContent(url).then(html => {
+                    let newFanpage = html.replace("[pageid]", pagename);
+                    this.fileManager.saveHtml(pagename, newFanpage);
+                    this.shadowRoot.querySelector('#info1').style.display = "none";
+                    alert("成功新增專頁");
+                })
+            },
             _addFanPage: function() {
                 this.shadowRoot.querySelector('#info1').style.display = "block";
+
             },
 
             cancelinfo1: function() {
@@ -396,39 +409,7 @@
             },
 
             _manageFanPage: function() {
-                console.log("manageFanPage is working!")
                 this.shadowRoot.querySelector('#info2').style.display = "block";
-            },
-
-            search: function() {
-                let shadow = this.shadowRoot;
-                let fpname = shadow.querySelector('#fpname1').value;
-                console.log("fpname", fpname);
-
-                let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                let searchbyfpname = {
-                    "action": "searchData",
-                    "index": "change",
-                    "type": "pages",
-                    "body": {
-                        "query": {
-                            "match": {
-                                "name": fpname
-                            }
-                        }
-                    }
-                }
-                Polymer.postData(link, searchbyfpname).then(res => {
-                    if (res.resolve.length > 0) {
-                        let website = res.resolve[0]['website'];
-                        console.log("website:", website);
-                        location.replace("./" + website);
-                    } else {
-                        alert("沒有這個專頁!")
-                    }
-                });
-
-
             },
 
             cancelinfo2: function() {

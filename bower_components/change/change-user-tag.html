@@ -354,8 +354,8 @@
                     <img id="_changeicon" src$={{user.head}}> 
                 </div>
                 <div id="a2">
-                    <div class="name" id="owner">{{user.username}}</div>
-                    <div id="time">{{timeStr}}</div>
+                    <div class="name" id="owner">{{name}}</div>
+                    <div id="time">{{timeStr}}前</div>
                 </div>
             </a>
 
@@ -373,8 +373,8 @@
 
             },
             created: function() {
-                console.log('User Tag');
                 this.timeStr = '剛剛';
+
             },
 
 
@@ -387,36 +387,28 @@
                 let s = this.ShadowRoot;
                 this.id = id;
                 let url = "/json/user-" + this.id + ".json";
-                this.timeStr = this.loadUpdate(time);
+                this.timeStr = Polymer.parseTime(time);
                 Polymer.getContent(url).then(str => {
                     that.user = JSON.parse(str);
+                    that.name = that.user.username;
                 });
 
                 // console.log('User Tag',id);
             },
-            loadPage(name, time, head) {
-                this.user.username = name;
-                this.timeStr = this.loadUpdate(time);
-                this.head = head;
+            loadPage(name, time) {
+                let that = this;
+                console.log(name);
+                this.name = name;
+                this.timeStr = Polymer.parseTime(time);
+                let url = "/json/page-" + name + ".json";
+                Polymer.getContent(url).then(str => {
+                    page = JSON.parse(str);
+                    that.user.head = page.head;
+                });
+
 
             },
-            loadUpdate(time) {
-                let _thetimenow = Date.now();
-                let comparetime = (_thetimenow - time) / 1000;
-                if (comparetime < 60) {
-                    return "剛剛";
-                } else if (comparetime / 60 < 60) {
-                    return Math.floor(comparetime / 60) + "分鐘前";
-                } else if (comparetime / 60 / 60 < 24) {
-                    return Math.floor(comparetime / 60 / 60) + "小時前";
-                } else if (comparetime / 60 / 60 / 24 < 7) {
-                    return Math.floor(comparetime / 60 / 60 / 24) + "日前";
-                } else if (comparetime / 60 / 60 / 24 / 7 < 30) {
-                    return Math.floor(comparetime / 60 / 60 / 24 / 7) + "星期前";
-                } else if (comparetime / 60 / 60 / 24 / 7 / 30 < 365) {
-                    return Math.floor(comparetime / 60 / 60 / 24 / 30) + "月前";
-                }
-            }
+
 
         });
     })();

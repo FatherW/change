@@ -828,7 +828,7 @@
                     var fanpage = shadow.querySelector('#fanPage').value;
                     if (shadow.querySelector('#fanPage').value == "" || shadow.querySelector('#fanPage').value == undefined || shadow.querySelector('#fanPage').value == "沒有專頁可以選擇") {
                         var isFanpage = false;
-                        var fanpage = "";
+                        fanpage = "";
                     } else {
                         var isFanpage = true;
                     };
@@ -1126,12 +1126,12 @@
             },
             fanpage() {
                 let shadow = this.shadowRoot
-                    //GET FANPAGE//
+                let that = this;
                 let parampage = {
                     "action": "searchData",
                     "index": "change",
                     "type": "pages",
-                    "_source": "name",
+                    "_source": "_id",
                     "body": {
                         "query": {
                             "match": {
@@ -1145,17 +1145,19 @@
 
                 Polymer.postData(loginUrl, parampage).then(res => {
                     // console.log("BBB", usertokenId);
-                    let pagename = [];
                     if (res.code > 0) {
+                        let pagename = [];
                         res.resolve.forEach(item => {
                             pagename.push({
-                                name: item['name']
+                                name: item['_id']
                             })
-                        })
-                        if (pagename.length == 0) {
+                        });
+                        if (res.resolve.length == 0) {
                             pagename.push({
                                 name: "沒有專頁可以選擇"
-                            })
+                            });
+
+                            shadow.querySelector('#fanpage').value = "沒有專頁可以選擇";
                         }
                         customElements.whenDefined('vaadin-select').then(function() {
                             const propage = pagename;
@@ -1177,6 +1179,8 @@
                             };
                         });
 
+                    } else {
+                        alert("u");
                     }
                 })
 

@@ -625,7 +625,6 @@
                 console.log(params);
                 s3.putObject(params, function(err, data) {
                     if (err) {
-                        console.log(err);
                         reject(err);
                     } else {
                         console.log(data);
@@ -910,6 +909,32 @@
                     if (result.code < 0) {
                         reject();
                     } else {
+                        resolve(result.resolve);
+                    }
+                });
+            });
+        }
+
+        matchDataNosort(json) {
+            let table = this.table;
+            let that = this;
+            let params = {
+                action: "searchData",
+                index: this.uid,
+                type: table,
+                body: {
+                    query: {
+                        match: json,
+                    },
+                }
+            };
+            console.log("Params", params);
+            return new Promise(function(resolve, reject) {
+                that.postData(that.dbUrl, params).then((result) => {
+                    if (result.code < 0) {
+                        reject();
+                    } else {
+                        console.log("run");
                         resolve(result.resolve);
                     }
                 });
@@ -1326,7 +1351,7 @@
     }
 
     Polymer.componentPopup = function(component, width, height) {
-        
+
         let dialog = Polymer.dialog;
         // let dialog = document.querySelector('vaadin-dialog');
         dialog.renderer = function(root, dialog) {
@@ -1360,6 +1385,7 @@
         Polymer.history = [];
         Polymer.editing = false;
         Polymer.editor = false;
+
         if (editMode === "admin") {
             let user = store.get("user") || null;
             console.log('User', user);
@@ -1384,14 +1410,14 @@
 
             if (!document.querySelector('dz-wrapper')) {
 
-                Polymer.fileManager.getFile(Polymer.thisPage).then(html=>{
+                Polymer.fileManager.getFile(Polymer.thisPage).then(html => {
 
-                    console.log('Polymer',Polymer.thisPage,html);
+                    console.log('Polymer', Polymer.thisPage, html);
                     document.body.innerHTML = '';
                     document.body.appendChild(elm);
                     elm.adminPageLoader();
 
-                },err=>{
+                }, err => {
                     console.log('Cannot find');
                 })
 
@@ -1403,12 +1429,11 @@
 
         } else {
             this.uid =
-                Polymer.dzLicense["uid"] ||
-                document.querySelector("meta[uid]").getAttribute("uid");
+                Polymer.dzLicense["uid"];
             this.tid =
-                Polymer.dzLicense["tid"] ||
-                document.querySelector("meta[tid]").getAttribute("tid") ||
-                this.uid;
+                Polymer.dzLicense["tid"];
+
+            console.log('Admin', Polymer.uid);
             this.dataManager = new DataPackage("_info");
             this.userBucket = Polymer.dzLicense["userBucket"] || null;
             this.websiteUrl = location.hostname;
@@ -1419,7 +1444,7 @@
             this.loadComponent("dz-dazzle", "dz-dazzle");
 
             let elm = document.createElement('dz-wrapper');
-            
+
             // Polymer.getContent(Polymer.thisPage).then(res=>{ },err=>{
             //     document.body.appendChild(elm);
             //     elm.pageLoader();
@@ -2389,4 +2414,39 @@
         });
 
     };
+
+    Polymer.parseTime = function(oldtime) {
+        let _thetimenow = Date.now();
+        let time = (_thetimenow - oldtime) / 1000;
+        let sec = 60;
+        let min = sec * 60;
+        let hour = min * 24;
+        let day = hour * 7;
+        let week = hour * 30;
+        let month = hour * 365;
+        switch (true) {
+            case (time < sec):
+                return "剛剛";
+                break;
+            case (time < min):
+                return Math.floor(time / sec) + "分鐘";
+                break
+            case (time < hour):
+                return Math.floor(time / min) + "小時";
+                break
+            case (time < day):
+                return Math.floor(time / hour) + "日";
+                break
+            case (time < week):
+                return Math.floor(time / day) + "星期";
+                break
+            case (time < month):
+                return Math.floor(time / week) + "月";
+                break
+            case (time > month):
+                return Math.floor(time / month) + "年";
+                break
+        }
+
+    }
 </script>

@@ -139,7 +139,7 @@
             <div id="user" class="in">
                 <span id="Uname">{{user.username}}</span>
                 <br />
-                <span id="check"> 註冊日期:{{regisDate}}</span>
+                <span id="check"> 註冊日期:{{regisDate}}前</span>
             </div>
             <div id="buttonM">
                 <div class="in buttons">
@@ -229,7 +229,7 @@
                         let bgImg = res['banner'] || "https://www.gettv.hk/Website%20Design/profile%20page/img/profile%20banner/company-profile-banner.png";
                         shadow.querySelector('#mp').style.backgroundImage = "url('" + bgImg + "')";
                         let t = res['createTime'];
-                        this.regisDate = that.parseDate(t);
+                        this.regisDate = Polymer.parseTime(t);
 
                     }, err => {
                         alert('沒有此用戶');
@@ -239,23 +239,7 @@
                 }
 
             },
-            parseDate(time) {
-                let _thetimenow = Date.now();
-                let comparetime = (_thetimenow - time) / 1000;
-                if (comparetime < 60) {
-                    return "剛剛";
-                } else if (comparetime / 60 < 60) {
-                    return Math.floor(comparetime / 60) + "分鐘前";
-                } else if (comparetime / 60 / 60 < 24) {
-                    return Math.floor(comparetime / 60 / 60) + "小時前";
-                } else if (comparetime / 60 / 60 / 24 < 7) {
-                    return Math.floor(comparetime / 60 / 60 / 24) + "日前";
-                } else if (comparetime / 60 / 60 / 24 / 7 < 30) {
-                    return Math.floor(comparetime / 60 / 60 / 24 / 7) + "星期前";
-                } else if (comparetime / 60 / 60 / 24 / 7 / 30 < 365) {
-                    return Math.floor(comparetime / 60 / 60 / 24 / 30) + "月前";
-                }
-            },
+
             getAllPics() {
                 let shadow = this.shadowRoot;
                 this.pics = [];

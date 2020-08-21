@@ -1,0 +1,33 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="change-pages-banner.html">
+<link rel="import" href="change-page-info.html">
+
+<dom-module id="change-fanpage">
+
+    <template>
+        <change-page-info id={{id}}></change-page-info>
+        <change-pages-banner id={{id}}></change-pages-banner>
+
+
+    </template>
+
+</dom-module>
+
+<script>
+    (function() {
+        Polymer({
+            is: 'change-fanpage',
+            properties: {},
+            created: function() {
+
+            },
+
+            ready: function() {
+                this.id = this.getAttribute('id');
+            },
+
+
+
+        });
+    })();
+</script>
