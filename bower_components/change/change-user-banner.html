@@ -152,7 +152,7 @@
                 </div>
                 <div class="in buttons" id="threeWords">
                     <h6>平均評分</h6>
-                    <span class="ret" id="rate">{{user.score}}</span>
+                    <span class="ret" id="rate">{{score}}</span>
                 </div>
             </div>
 
@@ -181,34 +181,24 @@
                 let user = store.get('change-user') || null;
                 if (user !== null) {
                     this.fileManager = new AwsPackage(user);
-                    console.log("new AwsPackage(user):", this.fileManager);
                 }
 
 
                 document.addEventListener('upload-success', e => {
                     let src = e.detail['Key'];
-                    // this.pics.push(src);
-                    // this.bigPic = "./"+src;
                     this.curElm.setAttribute('src', src);
-                    console.log('Detail', e, this.pics);
-                    // this.reNewPic();
                 });
                 document.addEventListener('select-image', e => {
                     let Key = e.detail['Key'];
-                    // this.pics.push(Key);
                     let type = this.curElm.getAttribute('type') || 'banner';
-                    console.log('Type', type);
                     if (type === 'banner') {
                         this.curElm.style.backgroundImage = 'url(' + Key + ')';
                     } else {
                         this.curElm.setAttribute('src', Key);
                     }
-                    // console.log('Select Image', e, this.pics);
                     this.getAllPics();
                     this.closeDialog();
                 });
-
-                //CREATED ENDS HERE//
             },
 
             ready: function() {
@@ -225,7 +215,9 @@
                     Polymer.getContent(url).then(res => {
                         res = JSON.parse(res);
                         that.user = res;
-                        that.history = res.history.length;
+                        this.score = Math.round(res.score * 10) / 10;
+                        let counthistory = res.history || 0;
+                        that.history = counthistory.length;
                         let bgImg = res['banner'] || "https://www.gettv.hk/Website%20Design/profile%20page/img/profile%20banner/company-profile-banner.png";
                         shadow.querySelector('#mp').style.backgroundImage = "url('" + bgImg + "')";
                         let t = res['createTime'];

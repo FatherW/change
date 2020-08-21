@@ -202,15 +202,17 @@
                 shadow.querySelector('.hide').style.display = "none";
 
                 let user = store.get('change-user') || null;
-                if (user.isAdmin == true) {
-                    shadow.querySelector("#controlbar").style.display = "block";
-                    shadow.querySelector('#mistake').value = user.mistake;
+                if (user) {
+                    if (user.isAdmin == true) {
+                        shadow.querySelector("#controlbar").style.display = "block";
+                        shadow.querySelector('#mistake').value = user.mistake;
 
-                    //***SET PANNEL TO PINK BACKGROUND IF USER IS DISQUALIFIED***//
-                    if (user.token == 1) {
-                        shadow.querySelector('#controlbar').style.background = "pink";
+                        //***SET PANNEL TO PINK BACKGROUND IF USER IS DISQUALIFIED***//
+                        if (user.token == 1) {
+                            shadow.querySelector('#controlbar').style.background = "pink";
+                        }
+
                     }
-
                 }
                 that.vaadin_select();
 
