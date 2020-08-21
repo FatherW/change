@@ -128,22 +128,22 @@
                 <img id="dp" src="img/symbol/s5.png" alt="DP" />
             </div>
             <div id="user" class="in">
-                <span id="Uname"></span>
+                <span id="Uname">{{page.name}}</span>
                 <br />
                 <span id="check"></span>
             </div>
             <div id="buttonM">
                 <div class="in buttons">
                     <h6>上貨數</h6>
-                    <span class="ret" id="gNum"></span>
+                    <span class="ret" id="gNum">{{page.goods}}</span>
                 </div>
                 <div class="in buttons">
                     <h6>購買數</h6>
-                    <span class="ret" id="buy"></span>
+                    <span class="ret" id="buy">{{page.alreadybuy}}</span>
                 </div>
                 <div class="in buttons" id="threeWords">
                     <h6>平均評分</h6>
-                    <span class="ret" id="rate"></span>
+                    <span class="ret" id="rate">{{page.score}}</span>
                 </div>
             </div>
         </div>
@@ -160,11 +160,7 @@
 
             },
             ready: function() {
-
-
-                let id = document.querySelector('fanpage').getAttribute('id');
-                console.log("ID5234143252345123535415353421543213", id);
-                console.log("ID", id);
+                let id = this.getAttribute('id');
                 if (id != "") {
                     let shadow = this.shadowRoot;
                     let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
@@ -174,21 +170,14 @@
                         "type": "pages",
                         "id": id
                     };
-                    console.log("qqqqqqqqqqfdsabuifasdbusdfbsaiud", JSON.stringify(params));
                     Polymer.postData(url, params).then(res => {
                         if (res.code > 0) {
                             let all = res.resolve;
-
-                            shadow.querySelector('#Uname').innerText = all['name'];
-
                             if (all['head'] == "") {
                                 shadow.querySelector('#dp').src = "./img/head.svg";
                             } else {
                                 shadow.querySelector('#dp').src = all['head'];
                             }
-                            shadow.querySelector('#gNum').innerHTML = all['goods'];
-                            shadow.querySelector('#buy').innerHTML = all['alreadybuy'];
-                            shadow.querySelector('#rate').innerHTML = all['score'];
                         }
                     })
 

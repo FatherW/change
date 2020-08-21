@@ -125,10 +125,9 @@
                 <div id="left">
                     <div id="info">
                         <h5>專頁資料</h5>
-                        <p class="inf">名稱: <span class="infotext" id="name"></span></p>
-                        <p class="inf">地區: <span class="infotext" id="area"></span></p>
-                        <p class="inf">電郵: <span class="infotext" id="email"></span></p>
-                        <p class="inf hide">標籤 : <span id="contact"></span></p>
+                        <p class="inf">名稱: <span class="infotext" id="name">{{page.name}}</span></p>
+                        <p class="inf">地區: <span class="infotext" id="area">{{page.district}}</span></p>
+                        <p class="inf">電郵: <span class="infotext" id="email">{{page.email}}</span></p>
                     </div>
                 </div>
                 <div id="right" style="display: none;">
@@ -154,7 +153,7 @@
     </template>
 </dom-module>
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-page-info',
             properties: {
@@ -163,95 +162,39 @@
                 }
 
             },
-            created: function () {
+            created: function() {
 
             },
-            ready: function () {
+            ready: function() {
                 let shadow = this.shadowRoot;
-                shadow.querySelector('.hide').style.display = "none";
-                //DETERMINE WHETHER CURRENT USER IS ADMIN OR NOT//
-                let usercookies = store.get('change-user') || null;
-                console.log("current user info", usercookies);
-
-                if (usercookies !== null) {
-                    let userID = usercookies['id'];
-                    console.log("cookie", userID);
-                    let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                    let param = {
-                        "action": "searchData",
-                        "index": "change",
-                        "type": "_user",
-                        "body": {
-                            "query": {
-                                "match": {
-                                    "id": userID
-                                }
-                            }
-                        }
-                    };
-                    Polymer.postData(link, param).then(res => {
-                        if (res.code > 0) {
-                            // console.log("CHECK",res.code);
-                            let adminStatus = res.resolve[0].isAdmin;
-                            if (Boolean(adminStatus) == true) {
-                                console.log("This user is ADMIN!");
-                                console.log("status", adminStatus);
-                                shadow.querySelector("#right").style.display = "block";
-
-                            } else {
-                                console.log("This user is NOT ADMIN!");
-                            }
-                        } else {
-                            console.log("CANNOT SEARCH USER!");
-                        }
-                    });
-
+                let user = store.get('change-user') || null;
+                if (Boolean(user.isAdmin) == true) {
+                    shadow.querySelector("#right").style.display = "block";
                 }
-
-                //
-                this.status = false;
                 let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let id = this.getAttribute('id');
+                let params = {
+                    "action": "getData",
+                    "index": "change",
+                    "type": "pages",
+                    "id": id
+                };
+                Polymer.postData(url, params).then(res => {
+                    if (res.code > 0) {
+                        let all = res.resolve;
+                        this.page = JSON.parse(all);
+                        document.querySelector('change-shop').pagetag(all['tags']);
 
-                let id = document.querySelector('fanpage').getAttribute('id');
-
-                if (id != "") {
-
-                    let params = {
-                        "action": "getData",
-                        "index": "change",
-                        "type": "pages",
-                        "id": id
-                    };
-                    Polymer.postData(url, params).then(res => {
-
-                        if (res.code > 0) {
-                            let all = res.resolve;
-                            shadow.querySelector('#name').innerText = all['name'];
-                            shadow.querySelector('#area').innerText = all['district'];
-                            shadow.querySelector('#email').innerText = all['email'];
-                            shadow.querySelector('#contact').innerText = all['tags'];
-                            document.querySelector('change-shop').pagetag(all['tags']);
-                            // let storeadmin = all['adminId'];
-                            // let write = "";
-                            // for (a = 0; a < storeadmin.length; a++) {
-                            //     write += '<change-icon id="' + storeadmin[a] + '"></change-icon>'
-                            // }
-                            // shadow.querySelector('#shouldhide').innerHTML = write;
+                    }
+                })
 
 
-
-                        }
-                    })
-                } else {
-
-                }
             },
 
 
-            execute: function () {
-                console.log("Entered");
+            execute: function() {
                 let shadow = this.shadowRoot;
-                customElements.whenDefined('vaadin-select').then(function () {
+                customElements.whenDefined('vaadin-select').then(function() {
                     const district = [{
                         id: '中西區',
                         name: '中西區'
@@ -307,14 +250,14 @@
                         id: '西貢區',
                         name: '西貢區'
                     }];
-                    shadow.querySelector('vaadin-select').renderer = function (root) {
+                    shadow.querySelector('vaadin-select').renderer = function(root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        district.forEach(function (item) {
+                        district.forEach(function(item) {
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
@@ -326,7 +269,7 @@
                 });
             },
 
-            setadmin: function () {
+            setadmin: function() {
                 let shadow = this.shadowRoot;
                 // if (this.status == false) {
                 //     this.status = true;
@@ -419,7 +362,7 @@
 
             },
 
-            toggle: function () {
+            toggle: function() {
                 let loc = "?1";
 
                 let id = "";

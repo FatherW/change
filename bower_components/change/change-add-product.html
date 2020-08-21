@@ -821,72 +821,47 @@
                 let shadow = this.shadowRoot;
                 let user = store.get('change-user') || null;
                 if (user != null) {
-                    // console.log("BBB",user);
-
-
                     //*************GET INPUT PRODUCT VALUE*****************//
                     //Get value from select box categories
                     var categories = shadow.querySelector('span').textContent;
-                    // console.log("categories", categories);
-
                     //Get value from select box fanpage
                     var fanpage = shadow.querySelector('#fanPage').value;
-                    // console.log("fanpage", fanpage);
-
                     if (shadow.querySelector('#fanPage').value == "" || shadow.querySelector('#fanPage').value == undefined || shadow.querySelector('#fanPage').value == "沒有專頁可以選擇") {
                         var isFanpage = false;
                         var fanpage = "";
-                        // console.log("omgomg", isFanpage);
                     } else {
                         var isFanpage = true;
-                        // console.log("omgomg2", isFanpage);
                     };
-
                     //Get value from isFree button
                     let free = shadow.querySelector('#free').checked;
-                    // console.log("FreeButton:", free);
-
                     //Get Photos Array
                     this.getAllPics();
-                    // console.log('Photo', this.pics);
-
                     //Get value from seller message
                     let sellerContact = shadow.querySelector('#sContact').value;
-                    // console.log("sellerContact:", sellerContact);
-
                     //Get value from select box NewOld
                     var myselect = shadow.querySelector("#vs4");
                     var newOld = myselect.value;
-                    // console.log("New/Old:", newOld);
                     if (newOld == "二手") {
                         var status = Boolean(0);
-                        // console.log('productStatus', status);
                     } else {
                         var status = Boolean(1);
-                        // console.log('productStatus', status);
                     }
-
                     //Get value from productName input box
                     let pname = shadow.querySelector('#pname').value;
-                    // console.log("Productname:", pname);
 
                     //Get value from price input box
                     let price = shadow.querySelector('#price').value;
-                    // console.log("Price:", price);
 
                     //Get value from select box district
                     var myselect = shadow.querySelector("#vs2");
                     var district = myselect.value;
-                    // console.log("District:", district);
 
                     //Get value from select box deliveryMethod
                     var myselect = shadow.querySelector("#vs3");
                     var method = myselect.value;
-                    // console.log("Method:", method);
 
                     //Get value from productDescription input box
                     let pdes = shadow.querySelector('#pdes').value;
-                    // console.log("Productdescription:", pdes);
 
                     //Get value from input tags
                     //**tags is refering to the arrayValue**//
@@ -894,14 +869,9 @@
                     if (fanpage) {
                         tags.push(fanpage);
                     }
-                    // console.log("Tags:", tags);
-
                     //Get value from deliveryDescription input box
                     let deldes = shadow.querySelector('#trans').value;
-                    // console.log("DeliveryDescription:", deldes);
-
                     //*********GET INPUT PRODUCT VALUE ENDS HERE**************//
-
                     if (categories == "") {
                         alert("請選擇分類!");
                     } else {
@@ -963,7 +933,7 @@
                     }
 
                 } else {
-                    alert("Please login first");
+                    alert("請先登入");
                 }
 
 
