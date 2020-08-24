@@ -1,4 +1,4 @@
-<html class="null">
+<html>
 
 <head>
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -156,22 +156,57 @@
             }
         </style>
         <link rel="import" href="bower_components/change/change-aggrid.html">
-        <link rel="import" href="/bower_components/change/change-header.html">
-        <link rel="import" href="/bower_components/change/change-footer.html">
-        <link rel="import" href="bower_components/change/change-announcement.html">
+        <!-- <link rel="import" href="/bower_components/change/change-header.html">
+        <link rel="import" href="/bower_components/change/change-footer.html"> -->
+
+
+        <script>var __basePath = '/';</script>
+        <script src="https://unpkg.com/@ag-grid-enterprise/all-modules@23.2.0/dist/ag-grid-enterprise.min.js"></script>
+        <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
+        <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-alpine.css">
     </dz-wrapper-head>
 </head>
 
 <body>
     <div id="wrapper">
 
-        <change-header></change-header>
-        
-        <change-aggrid></change-aggrid>
-        <change-footer></change-footer>
-        <change-announcement>FIXED ANNOUNCEMENT</change-announcement>
+        <!-- <change-header></change-header> -->
+        <change-aggrid>
+
+
+            <style>
+                .functionBar {
+                    height: 22px;
+                    border: 1px solid #babfc7;
+                }
+    
+                .but {
+                    float: right;
+                }
+    
+                .ag-row-editing {
+                    background-color: #5bc0de !important;
+                }
+            </style>
+            <div class="functionBar">
+                <div class="but">
+                    <select name="table" id="table" class="select">
+                        <option value="_user">user</option>
+                        <option value="product">product</option>
+                        <option value="order">order</option>
+                        <option value="pages">fanpage</option>
+                    </select>
+                    <button class="reload" on-click="reload">Reload</button>
+                    <button class="save" on-click="save">Save</button>
+                    <button class="excel" on-click="onBtExport">Export to Excel</button>
+                </div>
+            </div>
+            <div id="myGrid" style="height: 650px;" class="ag-theme-alpine"></div>
+    
+    </change-aggrid>
+        <!-- <change-footer></change-footer>
         <button class="googleloginname" style="display:none;">google login</button>
-        <div class="g-signin2" data-onsuccess="onSignIn" style="display:none;">imgoogle</div>
+        <div class="g-signin2" data-onsuccess="onSignIn" style="display:none;">imgoogle</div> -->
     </div>
     <dz-dazzle></dz-dazzle>
 </body>

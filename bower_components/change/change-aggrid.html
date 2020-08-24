@@ -1,19 +1,46 @@
-<link rel="import" href="../polymer/polymer.html">
+<!-- <link rel="import" href="../polymer/polymer.html">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.js"></script>
+<script>var __basePath = '/';</script>
+<script src="https://unpkg.com/@ag-grid-enterprise/all-modules@23.2.0/dist/ag-grid-enterprise.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
+<link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-alpine.css"> -->
 
-<dom-module id="change-aggrid">
+<!-- <dom-module id="change-aggrid">
 
     <template>
 
         <style>
+            .functionBar {
+                height: 22px;
+                border: 1px solid #babfc7;
+            }
+
+            .but {
+                float: right;
+            }
+
+            .ag-row-editing {
+                background-color: #5bc0de !important;
+            }
         </style>
-        <div>Hello world</div>
-        <div id="myGrid" style="height: 1000px; width:100%;" class="ag-theme-alpine"></div>
+        <div class="functionBar">
+            <div class="but">
+                <select name="table" id="table" class="select">
+                    <option value="_user">user</option>
+                    <option value="product">product</option>
+                    <option value="order">order</option>
+                    <option value="pages">fanpage</option>
+                </select>
+                <button on-click="reload">Reload</button>
+                <button on-click="save()">Save</button>
+                <button on-click="onBtExport()">Export to Excel</button>
+            </div>
+        </div>
+        <div id="myGrid" style="height: 650px;" class="ag-theme-alpine"></div>
 
     </template>
 
-</dom-module>
+</dom-module> -->
 
 <script>
     (function () {
@@ -21,16 +48,50 @@
             is: 'change-aggrid',
             properties: {},
             created: function () {
-                console.log("create started!")
-                let shadow = this.shadowRoot;
+                // console.log("create started!")
                 let that = this;
-                this.pic = "this is a test";
+            },
+
+            ready: function () {
+                console.log("ready started!")
+                let that = this;
+
+                //Generate Table
+                document.querySelector('.select').addEventListener("click", (e) => {
+                    let type = document.querySelector('.select').value;
+                    // console.log("Generate Table type:", type);
+                    this.fetch(type);
+                });
+
+                //Reload button function
+                document.querySelector('.reload').addEventListener("click", (e) => {
+                    this.reload();
+                });
+
+                //Save button function
+                document.querySelector('.save').addEventListener("click", (e) => {
+                    this.save();
+                });
+
+                //Excel button function
+                document.querySelector('.excel').addEventListener("click", (e) => {
+                    console.log("Data to Excel:", this.result);
+                    if (this.result == undefined) {
+                        alert("no data selected!");
+                    } else {
+                        this.onBtExport(this.result);
+                    }
+                });
+            },
+
+            fetch: function (x) {
+                let that = this;
 
                 let url = 'https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController';
                 let params = {
                     "action": "searchData",
                     "index": "change",
-                    "type": "_user",
+                    "type": x,
                     "body": {
                         "query": {
                             "match_all": {
@@ -40,89 +101,336 @@
                 };
                 Polymer.postData(url, params).then(res => {
                     if (res.resolve.lenght !== 0) {
-                        console.log("res.resolve:", res.resolve);
-                        this.data = res.resolve;
-                        this.ag();
-                        
+                        for (i = 0; i < res.resolve.length; i++) {
+                            if (res.resolve[i].createTime) {
+                                var d = new Date(res.resolve[i].createTime);
+                                let day = d.getDate();
+                                let month = d.getMonth() + 1;
+                                let year = d.getFullYear();
+                                var ct = year + "-" + month + "-" + day;
+                                res.resolve[i].createTime = ct;
+                                // console.log("createTime:", ct);
+                            } else {
+                                var d = new Date(res.resolve[i].submitTime);
+                                let day = d.getDate();
+                                let month = d.getMonth() + 1;
+                                let year = d.getFullYear();
+                                var ct = year + "-" + month + "-" + day;
+                                res.resolve[i].submitTime = ct;
+                                // console.log("submitTime:", ct);
+                            }
+                        }
+                        let data = res.resolve;
+                        // console.log("res.resolve:", data);
+                        // gridOptions.api.setRowData(data);
+                        this.gen_ag(x, data);
+
                     } else {
                         alert("Error!");
                     }
                 });
             },
 
-            ready: function () {
-                console.log("ready started!")
-                console.log("data result:", this.data);
 
-                // let columnDefs = [
-                //     // { headerName: "Make", field: "make" },
-                //     // { headerName: "Model", field: "model" },
-                //     // { headerName: "Price", field: "price" },
-                //     // { headerName: "Model", field: "model" },
+            gen_ag: function (x, y) {
+                let that = this;
+                // console.log("resolve fetched:", y);
 
-                //     { headerName: "id", field: "id" },
-                //     { headerName: "username", field: "username" },
-                //     { headerName: "numberRate", field: "numberRate" },
-                //     { headerName: "goodsNum", field: "goodsNum" },
-                //     { headerName: "area", field: "area" },
-                //     { headerName: "email", field: "email" },
-                //     { headerName: "phone", field: "phone" },
-                //     { headerName: "password", field: "password" },
-                //     { headerName: "createTime", field: "createTime" },
-                //     { headerName: "isPromotionMsg", field: "isPromotionMsg" },
-                //     { headerName: "head", field: "head" },
-                //     { headerName: "likeProduct", field: "likeProduct" },
-                //     { headerName: "score", field: "score" },
-                //     { headerName: "history", field: "history" },
-                //     { headerName: "isAdmin", field: "isAdmin" },
-                //     { headerName: "token", field: "token" },
-                //     { headerName: "platform", field: "platform" },
-                //     { headerName: "banner", field: "banner" }
-                // ];
+                // clear previous grid if there is one
+                if (document.querySelector('.ag-root-wrapper')) {
+                    let toberemoved = document.querySelector('.ag-root-wrapper');
+                    toberemoved.remove();
+                }
 
-                // // specify the data
-                // var rowData = [
-                //     // { make: "Toyota", model: "Celica", price: 35000 },
-                //     // { make: "Ford", model: "Mondeo", price: 32000 },
-                //     // { make: "Porsche", model: "Boxter", price: 72000 },
-                //     {
-                //         "id": 88,
-                //         "username": "Moses Lee",
-                //         "numberRate": 26,
-                //         "goodsNum": 2,
-                //         "area": "油尖旺區",
-                //         "email": "moseslee714@gmail.com",
-                //         "phone": "69079261",
-                //         "password": "hi7be7of2",
-                //         "createTime": "1597213024718",
-                //         "isPromotionMsg": true,
-                //         "head": "https://www.gettv.hk/files/moseslee714@gmail.com/1597213321242.jpg",
-                //         "likeProduct": [],
-                //         "score": 5,
-                //         "history": [],
-                //         "isAdmin": false,
-                //         "token": "",
-                //         "platform": "facebook",
-                //         "banner": "https://www.gettv.hk/Website%20Design/profile%20page/img/profile%20banner/company-profile-banner.png"
-                //     }
-                // ];
+                // specify the columns
+                if (x == "_user") {
+                    var columnDefs = [
+                        { headerName: "id", field: "id", editable: false },
+                        { headerName: "username", field: "username" },
+                        { headerName: "numberRate", field: "numberRate", editable: false },
+                        { headerName: "goodsNum", field: "goodsNum", editable: false },
+                        { headerName: "area", field: "area" },
+                        { headerName: "email", field: "email" },
+                        { headerName: "phone", field: "phone" },//, cellEditor: 'numericCellEditor'
+                        { headerName: "password", field: "password" },
+                        { headerName: "createTime", field: "createTime", editable: false },
+                        {
+                            headerName: "isPromotionMsg", field: "isPromotionMsg",
+                            cellEditor: 'agSelectCellEditor',
+                            cellEditorParams: {
+                                values: ['true', 'false']
+                            }
+                        },
+                        { headerName: "head", field: "head", editable: false },
+                        { headerName: "likeProduct", field: "likeProduct", editable: false },
+                        { headerName: "score", field: "score" },//, cellEditor: 'numericCellEditor' 
+                        // { headerName: "history", field: "history" },
+                        {
+                            headerName: "isAdmin", field: "isAdmin",
+                            cellEditor: 'agSelectCellEditor',
+                            cellEditorParams: {
+                                values: ['true', 'false']
+                            }
+                        },
+                        // { headerName: "token", field: "token" },
+                        { headerName: "platform", field: "platform", editable: false },
+                        { headerName: "banner", field: "banner", editable: false }
+                    ];
+                    // console.log("user");
+                } else if (x == "product") {
+                    var columnDefs = [
+                        { headerName: "id", field: "id", editable: false },
+                        { headerName: "categories", field: "categories" },
+                        { headerName: "createTime", field: "createTime", editable: false },
+                        { headerName: "district", field: "district" },
+                        { headerName: "deliveryMethod", field: "deliveryMethod" },
+                        { headerName: "description", field: "description" },
+                        { headerName: "deliveryDesc", field: "deliveryDesc" },
+                        { headerName: "isFree", field: "isFree" },
+                        { headerName: "isNew", field: "isNew" },
+                        { headerName: "like", field: "like" },//, cellEditor: 'numericCellEditor' 
+                        { headerName: "ownerId", field: "ownerId", editable: false },
+                        { headerName: "productname", field: "productname" },
+                        { headerName: "pics", field: "pics" },
+                        { headerName: "price", field: "price" },//, cellEditor: 'numericCellEditor' 
+                        { headerName: "sellerMsg", field: "sellerMsg" },
+                        { headerName: "tags", field: "tags" },
+                        { headerName: "replyArray", field: "replyArray" },
+                        // { headerName: "_id", field: "_id", editable: false }
+                    ];
+                    // console.log("product");
+                } else if (x == "order") {
+                    var columnDefs = [
+                        { headerName: "id", field: "id", editable: false },
+                        { headerName: "msg", field: "msg", editable: false },
+                        { headerName: "productId", field: "productId", editable: false },
+                        { headerName: "buyerId", field: "buyerId", editable: false },
+                        { headerName: "status", field: "status" },
+                        { headerName: "submitTime", field: "submitTime", editable: false },
+                        // { headerName: "_id", field: "_id", editable: false }
+                    ];
+                    // console.log("order");
+                } else {
+                    //fanpage
+                    var columnDefs = [
+                        { headerName: "ownerId", field: "ownerId", editable: false },
+                        { headerName: "name", field: "name" },
+                        { headerName: "website", field: "website", editable: false },
+                        { headerName: "district", field: "district" },
+                        { headerName: "email", field: "email" },
+                        // { headerName: "tags", field: "tags"},
+                        { headerName: "id", field: "id", editable: false },
+                        { headerName: "adminId", field: "adminId" },
+                        { headerName: "head", field: "head", editable: false },
+                        { headerName: "goods", field: "goods", editable: false },
+                        { headerName: "alreadybuy", field: "alreadybuy", editable: false },
+                        { headerName: "score", field: "score" }, //, cellEditor: 'numericCellEditor' 
+                        // { headerName: "_id", field: "_id", editable: false }
+                    ];
+                    // console.log("fanpage");
+                }
 
-                // // let the grid know which columns and what data to use
-                // var gridOptions = {
-                //     columnDefs: columnDefs,
-                //     rowData: rowData
-                // };
+                // let the grid know which columns to use
+                var gridOptions = {
+                    columnDefs: columnDefs,
+                    // rowData: y,
+                    //set data editable as default
+                    defaultColDef: {
+                        editable: true,
+                        cellClass: 'stringType',
+                        sortable: true,
+                        filter: true
+                    },
+                    components: {
+                        // numericCellEditor: getNumericCellEditor(),
+                    },
+                    editType: 'fullRow',
+                    // rowData: getRowData(),
 
-                // // setup the grid after the page has finished loading
-                // document.addEventListener('DOMContentLoaded', function () {
-                //     var gridDiv = shadow.querySelector('#myGrid');
-                //     console.log("omg", gridDiv);
-                //     new agGrid.Grid(gridDiv, gridOptions);
-                // });
+                    onCellValueChanged: function (event) {
+                        console.log(
+                            'onCellValueChanged: ' + event.colDef.field + ' = ' + event.newValue
+                        );
+                        // console.log("omgomg:", event.data);
+                    },
+                    onRowValueChanged: function (event) {
+                        var data = event.data;
+                        //updated results in string
+                        console.log("Updated data:", data);
+                        that.ans = data;
+                    },
+
+                    excelStyles: [
+                        {
+                            id: 'stringType',
+                            dataType: 'string',
+                        }
+                    ]
+                };
+                // console.log("gridOptions", gridOptions);
+
+                //this.result is used to pass the content to Excel
+                this.result = gridOptions;
+
+                // lookup the container we want the Grid to use
+                var eGridDiv = document.querySelector('#myGrid');
+                // console.log("eGridDiv:", eGridDiv);
+
+                // create the grid passing in the div to use together with the columns & data we want to use
+                new agGrid.Grid(eGridDiv, gridOptions);
+                gridOptions.api.setRowData(y);
             },
-            ag:function() {
-                console.log("ag grid");
-                console.log("data result:", this.data);
+
+
+
+
+            //****************************************************************//
+            //************************ag grid functions*************************//
+            getNumericCellEditor: function () {
+                function isCharNumeric(charStr) {
+                    return !!/\d/.test(charStr);
+                }
+
+                function isKeyPressedNumeric(event) {
+                    var charCode = getCharCodeFromEvent(event);
+                    var charStr = String.fromCharCode(charCode);
+                    return isCharNumeric(charStr);
+                }
+
+                function getCharCodeFromEvent(event) {
+                    event = event || window.event;
+                    return typeof event.which === 'undefined' ? event.keyCode : event.which;
+                }
+
+                // function to act as a class
+                function NumericCellEditor() { }
+
+                // gets called once before the renderer is used
+                NumericCellEditor.prototype.init = function (params) {
+                    // we only want to highlight this cell if it started the edit, it is possible
+                    // another cell in this row started the edit
+                    this.focusAfterAttached = params.cellStartedEdit;
+
+                    // create the cell
+                    this.eInput = document.createElement('input');
+                    this.eInput.style.width = '100%';
+                    this.eInput.style.height = '100%';
+                    this.eInput.value = isCharNumeric(params.charPress)
+                        ? params.charPress
+                        : params.value;
+
+                    var that = this;
+                    this.eInput.addEventListener('keypress', function (event) {
+                        if (!isKeyPressedNumeric(event)) {
+                            that.eInput.focus();
+                            if (event.preventDefault) event.preventDefault();
+                        }
+                    });
+                };
+
+                // gets called once when grid ready to insert the element
+                NumericCellEditor.prototype.getGui = function () {
+                    return this.eInput;
+                };
+
+                // focus and select can be done after the gui is attached
+                NumericCellEditor.prototype.afterGuiAttached = function () {
+                    // only focus after attached if this cell started the edit
+                    if (this.focusAfterAttached) {
+                        this.eInput.focus();
+                        this.eInput.select();
+                    }
+                };
+
+                // returns the new value after editing
+                NumericCellEditor.prototype.isCancelBeforeStart = function () {
+                    return this.cancelBeforeStart;
+                };
+
+                // example - will reject the number if it contains the value 007
+                // - not very practical, but demonstrates the method.
+                NumericCellEditor.prototype.isCancelAfterEnd = function () { };
+
+                // returns the new value after editing
+                NumericCellEditor.prototype.getValue = function () {
+                    return this.eInput.value;
+                };
+
+                // when we tab onto this editor, we want to focus the contents
+                NumericCellEditor.prototype.focusIn = function () {
+                    var eInput = this.getGui();
+                    eInput.focus();
+                    eInput.select();
+                    console.log('NumericCellEditor.focusIn()');
+                };
+
+                // when we tab out of the editor, this gets called
+                NumericCellEditor.prototype.focusOut = function () {
+                    // but we don't care, we just want to print it for demo purposes
+                    console.log('NumericCellEditor.focusOut()');
+                };
+
+                return NumericCellEditor;
+            },
+
+
+
+
+
+
+            //*****************************External user functions********************************//
+            reload: function () {
+                let that = this;
+
+                let type = document.querySelector('.select').value;
+                // console.log("reload table type:", type);
+                this.fetch(type);
+            },
+
+            save: function () {
+                let that = this;
+                if (that.ans == undefined) {
+                    alert("Nothing to be updated!")
+                } else {
+                    let type = document.querySelector('.select').value;
+                    // console.log("type to be updated:", type);
+
+                    let resolve = that.ans;
+                    if (resolve.createTime) {
+                        delete resolve['createTime'];
+                    } else {
+                        delete resolve['submitTime'];
+                    }
+                    console.log("To be updated:", resolve);
+
+
+                    let id = that.ans.id;
+                    let url = 'https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController';
+                    let params2 = {
+                        "action": "addData",
+                        "index": "change",
+                        "type": type,
+                        "id": id,
+                        "body": resolve
+                    };
+                    // console.log("params2 Data to be updated:", params2);
+                    Polymer.postData(url, params2).then(res=>{
+                        if (res.code > 0) {
+                            console.log("database update successful!");
+                        } else {
+                            alert("database update fail!");
+                        }
+                    });
+
+                }
+            },
+
+            //Export to Excel
+            onBtExport: function (x) {
+                console.log("Excel content:");
+
+                //this.result is the data content 
+                x.api.exportDataAsExcel({});
             }
 
         });
