@@ -551,11 +551,10 @@
                         shadow.querySelector('#status1').id = "status";
                     }
                 }
-                if (all['isFanpage'] == false) {
-                    this.shadowRoot.querySelector('change-user-tag').loadData(ownerId, all['createTime']);
-                } else {
+                if (Boolean(all['isFanpage']) == true) {
                     this.shadowRoot.querySelector('change-user-tag').loadPage(all['fanpage'], all['createTime']);
-
+                } else {
+                    this.shadowRoot.querySelector('change-user-tag').loadData(ownerId, all['createTime']);
                 }
                 this.shadowRoot.querySelector('change-item-tag').loadTags(all['tags']);
                 if (user) {

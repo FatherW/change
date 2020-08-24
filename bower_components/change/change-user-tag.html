@@ -374,7 +374,7 @@
             },
             created: function() {
                 this.timeStr = '剛剛';
-
+                this.pageManager = new DataPackage('pages');
             },
 
 
@@ -402,9 +402,15 @@
                 this.timeStr = Polymer.parseTime(time);
                 let url = "/json/page-" + name + ".json";
                 Polymer.getContent(url).then(str => {
-                    page = JSON.parse(str);
-                    that.user.head = page.head;
-                });
+                        page = JSON.parse(str);
+                        that.user.head = page.head;
+                    },
+                    err => {
+                        that.dataManager.loadData(name).then(res => {
+                            page = JSON.parse(str);
+                            that.user.head = page.head;
+                        });
+                    });
 
 
             },
