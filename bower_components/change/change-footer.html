@@ -99,32 +99,33 @@
             properties: {},
             created: function() {
 
-                let basePath =  "template/" + Polymer.tid + "/_block/";
+                let basePath = "template/" + Polymer.tid + "/_block/";
+                console.log(basePath);
                 this.label = '頁尾';
                 this.menu = [{
-                            'text': '編輯',
-                            'event': 'edit',
-                            'source':this
-                        }];
+                    'text': '編輯',
+                    'event': 'edit',
+                    'source': this
+                }];
 
-                Polymer.getUserDataContent(basePath+'footer').then(html=>{
-                        this.innerHTML = `
+                Polymer.getUserDataContent(basePath + 'footer').then(html => {
+                    this.innerHTML = `
                             <footer id="footer" class="footer">
-                          `
-                                +html+
-                          `  
+                          ` +
+                        html +
+                        `  
                             </footer>
                         `;
-                });        
+                });
 
 
             },
-            edit(){
-                this.editor();  
+            edit() {
+                this.editor();
             },
             ready: function() {
                 document.addEventListener('areachange', e => {
-                  if (e.detail.isFree == true) {
+                    if (e.detail.isFree == true) {
                         document.querySelector('.footer').style.backgroundColor = "#4CAF50";
 
                     } else {
@@ -132,16 +133,16 @@
 
                     }
                 })
-                if (Polymer.editMode==="admin"){
-                    Polymer.getUserDataContent('template/change/_block/footer').then(html=>{
+                if (Polymer.editMode === "admin") {
+                    Polymer.getUserDataContent('template/change/_block/footer').then(html => {
                         let footer = document.createElement('footer');
-                        footer.setAttribute('id','footer');
-                        footer.setAttribute('class','footer');
+                        footer.setAttribute('id', 'footer');
+                        footer.setAttribute('class', 'footer');
                         footer.innerHTML = html;
                         this.innerHTML = '';
                         this.appendChild(footer);
-                        this.querySelectorAll('*').forEach(item=>{
-                            console.log('footer',item);
+                        this.querySelectorAll('*').forEach(item => {
+                            console.log('footer', item);
                             new defaultPackage(item);
                         });
                     });

@@ -5,6 +5,10 @@
 <link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
 <link rel="import" href="change-register.html">
 <link rel="import" href="change-reset.html">
+
+<meta name="google-signin-scope" content="profile email">
+<meta name="google-signin-client_id" content="755964351228-2emctcoq1o2nj5vpqitv4j28411jj7jk.apps.googleusercontent.com">
+
 <!-- <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com"> -->
 
 
@@ -13,6 +17,40 @@
 
     <template>
         <style>
+
+    #customBtn {
+      display: inline-block;
+      background: white;
+      color: #444;
+      width: 100%;
+      border-radius: 5px;
+      border: thin solid #888;
+      box-shadow: 1px 1px 1px grey;
+      white-space: nowrap;
+    }
+    #customBtn:hover {
+      cursor: pointer;
+    }
+    span.label {
+      font-family: serif;
+      font-weight: normal;
+    }
+    span.icon {
+      background: url('https://developers.google.com/identity/sign-in/g-normal.png') transparent 5px 50% no-repeat;
+      display: inline-block;
+      vertical-align: middle;
+      width: 42px;
+      height: 42px;
+    }
+    span.buttonText {
+      display: inline-block;
+      vertical-align: middle;
+      font-size: 14px;
+      font-weight: bold;
+      /* Use the Roboto font that is loaded in the <head> */
+    }
+
+
             .login-grid {
                 text-align: center;
                 display: grid;
@@ -144,7 +182,7 @@
         <div class="g-signin2" data-onsuccess="onSignIn"></div>
         <div class="login-grid">
             <span class="font-sizeh1">登入</span>
-            <div>
+            <!-- <div>
                 <button on-click="log" class="logoFacebook">
                     <img src="img/icon/Facebook.png" class="logoFacebook">&nbspFacebook
                 </button>
@@ -154,11 +192,31 @@
                     data-auto-logout-link="false" data-use-continue-as="false" data-width=""></div>
             </div>
             <div>
-                <button class="logoGoogle" on-click="google"><img src="img/icon/Google.png"
-                        class="logoGoogle">&nbspGoogle</button>
+                <div id="googlesignin">
+                    <slot> </slot>
+                </div>
 
-                <!-- <button class="logoGoogle"><img src="img/icon/Google.png" class="logoGoogle">&nbspGoogle</button> -->
+                <button class="logoGoogle"><img src="img/icon/Google.png" class="logoGoogle">&nbspGoogle</button>
+            </div> -->
+            <div>
+                <button on-click="log" class="logoFacebook">
+                    <img src="img/icon/Facebook.png" class="logoFacebook">&nbspFacebook
+                </button>
+
+                <div id="fb-root"></div>
+
             </div>
+            <div>
+                <!-- <div id="gSignIn" class="g-signin2" data-onsuccess="onSignIn"></div> -->
+                <div id="gSignInWrapper">
+                    <div id="customBtn" class="customGPlusSignIn">
+                      <span class="icon"></span>
+                      <span class="buttonText">Google</span>
+                    </div>
+                  </div>
+                <!-- <slot></slot> -->
+            </div>
+
             <div class="email">
                 <vaadin-email-field id="changeEmail1" placeholder="Email" name=" email"
                     error-message="Please enter a valid email address" required clear-button-visible>
@@ -195,6 +253,7 @@
 
             },
             created: function() {
+                // this.innerHTML = `<div class="g-signin2" data-onsuccess="onSignIn"></div>`;
 
                 this.userManager = new DataPackage('_user');
             },
@@ -208,19 +267,6 @@
             },
             ready: function() {
 
-
-
-                // FB.init({
-                //     appId: '711018846416860',
-                //     autoLogAppEvents: true,
-                //     xfbml: false,
-                //     version: 'v7.0',
-                //     status: true
-                // });
-
-
-
-
                 this.status = false;
                 let that = this;
                 this.shadowRoot.querySelector('#changePassword1').addEventListener("keypress", function(e) {
@@ -230,46 +276,70 @@
                     }
 
                 });
-                FB.getLoginStatus(function(response){
-                    console.log('FB',response);
-                    if (response.status==="connected"){
+                FB.getLoginStatus(function(response) {
+                    console.log('FB', response);
+                    if (response.status === "connected") {
                         //if we do have a non-null response.session, call FB.logout(),
                         //the JS method will log the user out of Facebook and remove any authorization cookies
-                    
-
                         that.log();
                     }
 
                     if (!response.session) {
                         // window.location = "/mysite/Login.aspx";
-                        
-                        
+                        var googleUser = {};
+
+                        gapi.load('auth2', function() {
+                            // Retrieve the singleton for the GoogleAuth library and set up the client.
+                            auth2 = gapi.auth2.init({
+                                client_id: '755964351228-2emctcoq1o2nj5vpqitv4j28411jj7jk.apps.googleusercontent.com',
+                                cookiepolicy: 'single_host_origin',
+                                // Request scopes in addition to 'profile' and 'email'
+                                //scope: 'additional_scope'
+                            });
+                            attachSignin(that.shadowRoot.querySelector('#customBtn'));
+                        });
+
+                        function attachSignin(element) {
+                            console.log(element.id);
+                            auth2.attachClickHandler(element, {},
+                                function onSignIn(googleUser) {
+                                    console.log("Signed in: " +
+                                        googleUser.getBasicProfile());
+                                    let name = googleUser.getBasicProfile().getName();
+                                    let email = googleUser.getBasicProfile().getEmail();
+                                    that.loginByThirdParty(name, email);
+                                    // _fb_register(name, email)
+                                },
+                                function(error) {
+                                    alert("Google登入需要先允許使用第三方Cookie");
+                                });
+                        }
+
                         return;
 
 
                     }
-                    // FB.logout(function(response){
-                    //         console.log('Logout',response);
-                    //     });
-
 
                 });
 
 
-
+                // this.shadowRoot.querySelector('#googlesignin').innerHTML = `<slot></slot>`
 
 
             },
-            _register(json){
+            attached: function() {
+
+            },
+            _register(json) {
                 let that = this;
-                console.log('Register',json);
+                console.log('Register', json);
                 // let user = new DataPackage("_user");
 
                 return new Promise(function(resolve, reject) {
-                    that.userManager.saveData(json['email'],json).then(res=>{
+                    that.userManager.saveData(json['email'], json).then(res => {
                         console.log('Resolve');
                         resolve();
-                    },err=>{
+                    }, err => {
                         console.log('Reject');
                         reject();
                     });
@@ -280,8 +350,8 @@
 
 
             google() {
-                document.querySelector('.g-signin2 .abcRioButtonContentWrapper').click();
 
+                document.querySelector('.g-signin2 .abcRioButtonContentWrapper').click();
             },
             log: function() {
                 let url = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
@@ -289,139 +359,71 @@
                 let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 let that = this;
 
-              
-                    // user is now logged out
-                    FB.login(function(response) {
-                        console.log("response", response);
-                        if (response.authResponse) {
-                            console.log('Welcome!  Fetching your information.... ');
-                            FB.api('/me', {
-                                fields: 'name, email'
-                            }, function(response) {
-                                console.log('Good to see you, ' + JSON.stringify(response) + '.' + response.email);
-                                let email = response.email;
-                                let name = response.name;
-                                let head = "http://graph.facebook.com/" + response.id + "/picture?type=normal";
 
-                                that.userManager.matchData({"email":email}).then(res=>{
-                                    // let all = res.resolve;
-                                        console.log(res);
-                                        let pw = generatePassword();
-                                        if (res.length)
-                                            that.logWithPasswd(email, res[0]['password']);
-                                        else {
-                                            that._fb_register(email).then(res=>{
-                                                that.logWithPasswd(email, '!@#$%^#$%');
-                                            });
-                                            // let json ={
-                                            //     'id': email,
-                                            //     'email': email,
-                                            //     'name': email,
-                                            //     'password': pw
-                                            // }
-                                            // that._register(json).then(res=>{
-                                            //     that.logWithPasswd(email, pw);
-                                            // });
-                                        }
-                                });
-                                // let param = {
-                                //     "action": "searchData",
-                                //     "index": "change",
-                                //     "type": "_user",
-                                //     "body": {
-                                //         "query": {
-                                //             "match": {
-                                //                 "email": email
-                                //             }
-                                //         }
-                                //     }
-                                // };
-                                // // FB.logout(function(response) {
-                                // //     // Person is now logged out
-                                // // });
-                                // Polymer.postData(link, param).then(res => {
-                                //     if (res.code > 0) {
-                                //         let all = res.resolve;
-                                //         console.log(res);
-                                //         let pw = generatePassword();
-                                //         if (all.length)
-                                //             that.logWithPasswd(email, all[0]['password']);
-                                //         else {
-                                //             // that._fb_register(email);
-                                //             let json ={
-                                //                 'email': email,
-                                //                 'name': email,
-                                //                 'password': pw
-                                //             }
-                                //             that._register(json).then(res=>{
-                                //                 that.logWithPasswd(email, pw);
-                                //             });
-                                //         }
+                // user is now logged out
+                FB.login(function(response) {
+                    console.log("response", response);
+                    if (response.authResponse) {
+                        console.log('Welcome!  Fetching your information.... ');
+                        FB.api('/me', {
+                            fields: 'name, email'
+                        }, function(response) {
+                            console.log('Good to see you, ' + JSON.stringify(response) + '.' + response.email);
+                            let email = response.email;
+                            let name = response.name;
+                            let head = "http://graph.facebook.com/" + response.id + "/picture?type=normal";
+
+                            that.loginByThirdParty(name, email);
+                            // let json = {
+                            //     'email': email
+                            // };
+                            // that.userManager.matchDataNosort(json).then(res => {
+                            //         // let all = res.resolve;
+                            //         console.log(res);
+                            //         let pw = generatePassword();
+                            //         if (res.length)
+                            //             that.logWithPasswd(email, res[0]['password']);
+                            //         else {
+                            //             that._fb_register(name, email).then(res => {
+                            //                 that.logWithPasswd(email, '!@#$%^#$%');
+                            //             });
+                            //         }
+                            //     },
+                            //     err => {
+                            //         console.log("error la change login");
+                            //     });
+
+                        });
+                    } else {
+                        console.log('User cancelled login or did not fully authorize.');
+                    }
+                }, {
+                    scope: 'email'
+                });
 
 
 
-                                //         // if (all.length == 0) {
-                                //         //     ////jump to resigter
-                                //         //     console.log("shoud go to regis");
-                                //         //     let platformcookie = {
-                                //         //         "platform": "facebook",
-                                //         //         "name": name,
-                                //         //         "email": email,
-                                //         //         "head": head
-                                //         //     };
-
-
-                                //         //     store.set("change-platform", platformcookie);
-                                //         //     let dialog = that.shadowRoot.querySelector('#registerpop');
-                                //         //     Polymer.popup(dialog, "change", "change-register", "45s%", "90%");
-                                //         // } else {
-                                //         //     // if (all[0].platform == "facebook") {
-
-                                //         //     that.logWithPasswd(email, all[0]['password']);
-                                //         //     // let loginparams = {
-                                //         //     //     "action": "login",
-                                //         //     //     "login": email,
-                                //         //     //     "password": all[0]['password']
-                                //         //     // };
-
-                                //         //     // Polymer.postData(url, loginparams).then(res => {
-                                //         //     //     if (res.code > 0) {
-                                //         //     //         let user = res.resolve;
-                                //         //     //         store.set('change-user', user);
-                                //         //     //         // location.reload();
-                                //         //     //     } else {
-                                //         //     //         alert('登入失敗');
-                                //         //     //     }
-                                //         //     // });
-
-                                //         //     // } else {
-                                //         //     //     alert("此帳戶的郵箱已在" + all[0].platform + "註冊，請重新登入");
-                                //         //     // }
-                                //         // }
-                                //     } else {
-                                //         console.log("打錯param");
-                                //     }
-                                // })
-
-
-                                // that.userManager.loadData(response.id).then(res => {
-                                //     console.log('Result', res);
-                                //     if (Object.keys(res).length === 0) {
-                                //         alert('你的Facebook Login還未註冊，要幫你註冊麼？');
-                                //         that._fb_register(response.id, response.name, response.email);
-                                //     }
-
-                                // });
+            },
+            loginByThirdParty(name, email) {
+                let that = this;
+                let json = {
+                    'email': email
+                };
+                that.userManager.matchDataNosort(json).then(res => {
+                        // let all = res.resolve;
+                        console.log(res);
+                        let pw = generatePassword();
+                        if (res.length)
+                            that.logWithPasswd(email, res[0]['password']);
+                        else {
+                            that._fb_register(name, email).then(res => {
+                                that.logWithPasswd(email, '!@#$%^#$%');
                             });
-                        } else {
-                            console.log('User cancelled login or did not fully authorize.');
                         }
-                    }, {
-                        scope: 'email'
+                    },
+                    err => {
+                        console.log("error la change login");
                     });
-
-
-              
             },
             checkLoginState: function() { // Called when a person is finished with the Login Button.
                 FB.getLoginStatus(function(response) { // See the onlogin handler
@@ -446,15 +448,16 @@
                 });
             },
 
-            _fb_register(email) {
+            _fb_register(name, email) {
                 let registerUrl = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
                 let params = {
                     "action": "changeregister",
-                    "username": email,
+                    "username": name,
                     "area": '全港',
                     "email": email,
                     "password": '!@#$%^#$%',
-                    "isPromotionMsg": false
+                    "isPromotionMsg": false,
+                    "platform": "Facebook"
                 };
                 console.log("Params", params);
                 return new Promise(function(resolve, reject) {
@@ -468,12 +471,12 @@
                         // });
 
                         if (res.code > 0) {
-                                resolve();
-                                // console.log(res);
+                            resolve();
+                            // console.log(res);
                             // this.fileManager = new AwsPackage(res.resolve);
                             // this.fileManager.saveFile('json/user-' + res.resolve.id + '.json', JSON.stringify(res.resolve));
 
-                        } else 
+                        } else
                             reject();
                     });
                 });
@@ -532,7 +535,7 @@
                             alert("用戶不存在，請註冊後登入");
                         }
                     } else {
-                        alert('登入失敗');
+                        // alert('登入失敗');
                     }
                 });
             }
@@ -560,5 +563,27 @@
             retVal += charset.charAt(Math.floor(Math.random() * n));
         }
         return retVal;
+    }
+
+    function onSignIn(googleUser) {
+        console.log("running google");
+        var profile = googleUser.getBasicProfile();
+        console.log("myprofile", profile);
+        let param = {
+            "platform": "Google",
+            "name": profile.getName(),
+            "email": profile.getEmail()
+        };
+        store.set("change-platform", param);
+        document.querySelector('.googleloginname').click();
+    }
+
+
+
+    function signOut() {
+        var auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut().then(function() {
+            console.log('User signed out.');
+        });
     }
 </script>

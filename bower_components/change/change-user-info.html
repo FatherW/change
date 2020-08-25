@@ -258,66 +258,86 @@
                 let mp = userBan.shadowRoot.querySelector('#mp').style.backgroundImage;
                 bannerSrc = mp.replace('url(', '').replace(')', '').replace(/\"/gi, "");
                 let headSrc = userBan.shadowRoot.querySelector('#dp').src;
+                console.log("omgomg", userBan);
+                console.log("omgomg1", bannerSrc);
+                console.log("omgomg2", headSrc);
 
                 let user = store.get('change-user') || null;
                 let loc = location.search;
+                console.log("Path", loc);
+                console.log("Length", loc.length);
                 let id = "";
                 for (var i = 1; i < loc.length; i++) {
                     console.log("Working");
                     id += loc[i];
                 }
+                console.log("ID", id);
+                console.log("UserID", user['_id'])
                 if (id == "") {
                     id = user['_id'];
                 }
-                if (id != user['_id']) {} else {
+                if (id != user['_id']) {
+                    alert('Cannot edit this user. Not your account!');
+                } else {
                     let shadow = this.shadowRoot;
                     let text = shadow.querySelector('#vb');
-                    if (this.edit == "編輯") {
-                        this.user.username = "<vaadin-text-field id='name1' value='" + name + "'></vaadin-text-field>";
-                        this.user.area = "<vaadin-select id='area1' value='" + area + "' label=''></vaadin-select>";
+                    if (text.innerHTML == "編輯") {
+                        let name = shadow.querySelector('#name').innerText;
+                        let email = shadow.querySelector('#email').innerText;
+                        let area = shadow.querySelector('#area').innerText;
+                        shadow.querySelector('#name').innerHTML = "<vaadin-text-field id='name1' value='" + name + "'></vaadin-text-field>";
+                        shadow.querySelector('#area').innerHTML = "<vaadin-select id='area1' value='" + area + "' label=''></vaadin-select>";
                         this.execute();
-                        this.user.email = "<vaadin-email-field id='email1' value='" + email + "'disabled></vaadin-text-field>";
-                        this.edit = "提交";
+                        shadow.querySelector('#email').innerHTML = "<vaadin-email-field id='email1' value='" + email + "'disabled></vaadin-text-field>";
+                        text.innerHTML = "提交";
                     } else {
-                        let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                        let name = shadow.querySelector('#name1').value;
-                        let area = shadow.querySelector('#area1').value;
-                        let email = shadow.querySelector('#email1').value;
+                        if (user != null) {
+                            let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                            let name = shadow.querySelector('#name1').value;
+                            let area = shadow.querySelector('#area1').value;
+                            let email = shadow.querySelector('#email1').value;
+                            console.log("User", user);
 
-                        let params = {
-                            "action": "addData",
-                            "index": "change",
-                            "type": "_user",
-                            "id": user['_id'],
-                            "body": {
-                                "email": email,
-                                "username": name,
-                                "area": area,
-                                "banner": bannerSrc,
-                                "head": headSrc
-                            }
-                        };
-                        Polymer.postData(url, params).then(res => {
-                            if (res.code > 0) {
-                                this.user.name = name;
-                                this.user.area = area;
-                                this.user.email = email;
-                                this.edit = "編輯";
-                                user['email'] = email;
-                                user['area'] = area;
-                                user['username'] = name;
-                                user['banner'] = bannerSrc;
-                                user['head'] = headSrc;
-                                store.set("change-user", user);
 
-                                this._saveJson();
-                            }
-                        })
+                            let params = {
+                                "action": "addData",
+                                "index": "change",
+                                "type": "_user",
+                                "id": user['_id'],
+                                "body": {
+                                    "email": email,
+                                    "username": name,
+                                    "area": area,
+                                    "banner": bannerSrc,
+                                    "head": headSrc
+                                }
+                            };
+                            Polymer.postData(url, params).then(res => {
+                                console.log(res);
+                                console.log(params);
+                                if (res.code > 0) {
+                                    shadow.querySelector('#name').innerHTML = name;
+                                    shadow.querySelector('#area').innerHTML = area;
+                                    shadow.querySelector('#email').innerHTML = email;
+                                    text.innerHTML = "編輯";
+                                    user['email'] = email;
+                                    user['area'] = area;
+                                    user['username'] = name;
+                                    user['banner'] = bannerSrc;
+                                    user['head'] = headSrc;
+                                    store.set("change-user", user);
+
+                                    this._saveJson();
+                                    //here is not yet saved to Json successfully, but we will save json everytime when refresh, so it still works
+                                }
+                            })
+                        } else {
+                            alert('Please login first');
+                        }
                     }
                 }
 
             },
-
 
             _saveJson: function() {
                 let url = "/json/user-" + this.id + ".json?id=" + new Date().getTime();

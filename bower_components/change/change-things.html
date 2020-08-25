@@ -551,7 +551,7 @@
                         shadow.querySelector('#status1').id = "status";
                     }
                 }
-                if (Boolean(all['isFanpage']) == true) {
+                if (all['isFanpage'] == true) {
                     this.shadowRoot.querySelector('change-user-tag').loadPage(all['fanpage'], all['createTime']);
                 } else {
                     this.shadowRoot.querySelector('change-user-tag').loadData(ownerId, all['createTime']);

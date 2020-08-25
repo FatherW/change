@@ -5,8 +5,9 @@
 <dom-module id="change-fanpage">
 
     <template>
-        <change-page-info id={{id}}></change-page-info>
         <change-pages-banner id={{id}}></change-pages-banner>
+
+        <change-page-info id={{id}}></change-page-info>
 
 
     </template>
@@ -24,6 +25,13 @@
 
             ready: function() {
                 this.id = this.getAttribute('id');
+
+                let shadow = this.shadowRoot;
+                shadow.querySelector('change-pages-banner').id = this.id;
+                shadow.querySelector('change-pages-banner').run();
+                shadow.querySelector('change-page-info').id = this.id;
+                shadow.querySelector('change-page-info').run();
+
             },
 
 
