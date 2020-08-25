@@ -3,79 +3,44 @@
 <head>
     <script src="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="/bower_components/dz-dazzle/dz-loader.html">
-    <link rel="import" href="/bower_components/change/change-header.html">
-    <link rel="import" href="/bower_components/change/change-footer.html">
-    <link rel="import" href="/bower_components/change/change-pages-banner.html">
-    <link rel="import" href="/bower_components/change/change-page-info.html">
-    <link rel="import" href="/bower_components/change/change-shop.html">
-    <link rel="stylesheet" href="/css/style3.css">
-    <link rel="stylesheet" href="kingdommin.css">
-    <link rel="stylesheet" href="kingdommin-master.css">
-    <style scope="change-footer">
-        li {
-            display: block;
-        }
-
-        .footer {
-            background-color: #F0846C;
-            color: white;
-            height: auto;
-            line-height: 1.5;
-        }
-
-        .fpanel1 {
-            width: 100%;
-            margin: 0 auto;
-            width: 100%;
-            margin: 0 auto;
-            display: grid;
-            grid-row-gap: 20px;
-            grid-column-gap: 15px;
-            grid-template-columns: 28% 28% 28%;
-            grid-template-rows: 50% 50%;
-        }
-
-        a.test {
-            color: white;
-            text-decoration: none;
-            font-size: 12px;
-            line-height: 30px;
-        }
-
-        #social {
-            display: flex;
-            justify-content: space-between;
-            margin: 0 auto;
-            text-align: center;
-            align-items: center;
-            display: inline-flex;
-            float: right;
-            grid-column: 1 / 5;
-            grid-row: 2 / 3;
-        }
-
-        .footer {
-            height: 300px;
-        }
-
-        @media (max-width: 768px) {
-            .footer {
-                display: none;
+    <dz-wrapper-head>
+        <link rel="import" href="/bower_components/change/change-header.html">
+        <link rel="import" href="bower_components/change/change-footer.html">
+        <link rel="import" href="bower_components/change/change-pages-banner.html">
+        <link rel="import" href="bower_components/change/change-page-info.html">
+        <link rel="import" href="bower_components/change/change-shop.html">
+        <link rel="stylesheet" href="css/style3.css">
+        <style scope="change-footer">
+            li {
+                display: block;
             }
-
+            
+            .footer {
+                background-color: #F0846C;
+                color: white;
+                height: auto;
+                line-height: 1.5;
+            }
+            
             .fpanel1 {
                 width: 100%;
                 margin: 0 auto;
-                padding-bottom: 10px;
                 width: 100%;
                 margin: 0 auto;
                 display: grid;
-                grid-row-gap: 10px;
+                grid-row-gap: 20px;
                 grid-column-gap: 15px;
-                grid-template-columns: repeat(3, 32%);
-                text-align: start;
+                grid-template-columns: 28% 28% 28%;
+                grid-template-rows: 50% 50%;
             }
-
+            
+            a.test {
+                color: white;
+                text-decoration: none;
+                font-size: 12px;
+                line-height: 30px;
+            }
+            
             #social {
                 display: flex;
                 justify-content: space-between;
@@ -84,39 +49,126 @@
                 align-items: center;
                 display: inline-flex;
                 float: right;
-                grid-column: 2 / 4;
+                grid-column: 1 / 5;
                 grid-row: 2 / 3;
             }
-
+            
             .footer {
-                height: 500px;
+                height: 300px;
             }
-
-        }
-    </style>
+            
+            @media (max-width: 768px) {
+                .footer {
+                    display: none;
+                }
+                .fpanel1 {
+                    width: 100%;
+                    margin: 0 auto;
+                    padding-bottom: 10px;
+                    width: 100%;
+                    margin: 0 auto;
+                    display: grid;
+                    grid-row-gap: 10px;
+                    grid-column-gap: 15px;
+                    grid-template-columns: repeat(3, 32%);
+                    text-align: start;
+                }
+                #social {
+                    display: flex;
+                    justify-content: space-between;
+                    margin: 0 auto;
+                    text-align: center;
+                    align-items: center;
+                    display: inline-flex;
+                    float: right;
+                    grid-column: 2 / 4;
+                    grid-row: 2 / 3;
+                }
+                .footer {
+                    height: 500px;
+                }
+            }
+        </style>
+    </dz-wrapper-head>
 </head>
 
 <body>
-    <change-header></change-header>
+    <dz-wrapper>
+        <change-header></change-header>
+        <style>
+            .container {
+                width: 90%;
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                grid-template-rows: auto auto auto;
+                grid-auto-rows: 50px;
+                grid-gap: 30px 30px;
+                padding: 2%;
+                margin-left: 6%;
+            }
+            
+            .item-1 {
+                grid-column: 1 / 3;
+                grid-row: 1 / 4;
+            }
+            
+            .item-2 {
+                width: 100%;
+                background-color: aliceblue;
+                background-position: center center;
+            }
+            /* . container[data-ratio="16:9"] {
+            padding-top: 56.25%;
+        } */
+            
+            .item-2[data-ratio="16:9"] {
+                padding-top: 56.25%;
+            }
+            
+            #ad_1 {
+                grid-column: 3 / 4;
+                grid-row: 1 / 2;
+                background-image: url("http://www.gettv.hk/img/item/1.jpg");
+            }
+            
+            #ad_2 {
+                grid-column: 3 / 4;
+                grid-row: 2 / 3;
+                background-image: url("http://www.gettv.hk/img/item/2.jpg");
+            }
+            
+            #ad_3 {
+                grid-column: 3 / 4;
+                grid-row: 3 / 4;
+                background-image: url("http://www.gettv.hk/img/item/3.jpg");
+            }
+            
+            .shop_panel2 {
+                padding: 0px;
+                padding-bottom: 30px;
+                padding-left: 3%;
+                padding-right: 3%;
+                width: 94%;
+                background-color: #FFFBF2;
+            }
+        </style>
 
-    <!---->
-    <change-pages-banner></change-pages-banner>
-    <div id="padding" style="background-color: #FFFBF2;">
-        <change-page-info></change-page-info>
-        <div class="shop_panel2">
-            <change-shop></change-shop>
+        <change-pages-banner></change-pages-banner>
+        <div id="padding" style="background-color: #FFFBF2;">
+            <change-page-info></change-page-info>
+            <div class="shop_panel2">
+                <change-shop></change-shop>
+            </div>
+
         </div>
-    </div>
-
-    <fanpage id="1597216767857" ownerId="74" name="國度事奉中心" website="kingdommin" district="油尖旺區" email="kingdomminenquiry@gmail.com" tags="國度事奉中心"></fanpage>
-    <!---->
-    
-    <change-footer></change-footer>
-
+        <fanpage id="1597216767857" ownerId="74" name="國度事奉中心" website="kingdommin" district="油尖旺區" email="kingdomminenquiry@gmail.com" tags="國度事奉中心"></fanpage>
+        <div class="container" data-ratio="16:9" id="1" name="xyz二手名牌特價手袋"></div>
+        <change-footer></change-footer>
+        <button class="googleloginname" style="display:none;">writegoogle</button>
+        <div class="g-signin2" data-onsuccess="onSignIn" style="display:none;">imgoogle</div>
+    </dz-wrapper>
+    <dz-wrapper-js>0</dz-wrapper-js>
     <dz-dazzle></dz-dazzle>
-
-    <button class="googleloginname" style="display:none;">writegoogle</button>
-    <div class="g-signin2" data-onsuccess="onSignIn" style="display:none;">imgoogle</div>
 </body>
 
 </html>

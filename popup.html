@@ -8,6 +8,10 @@
     <script src="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="/bower_components/dz-dazzle/dz-loader.html">
 
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -106,13 +110,14 @@
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <title>Home - Change</title>
-    <!-- <link rel="import" href="/bower_components/change/change-itemspecial.html">
-    <link rel="import" href="/bower_components/change/change-things.html"> -->
+    <link rel="import" href="/bower_components/change/change-itemspecial.html">
+    <link rel="import" href="/bower_components/change/change-things.html">
     <link rel="import" href="/bower_components/change/change-footer.html">
 
-    <!-- <link rel="import" href="/bower_components/change/change-edit-product.html?id=1597419840570">
+    <link rel="import" href="/bower_components/change/change-edit-product.html?id=1597419840570">
+    <link rel="import" href="/bower_components/change/change-itemspecial.html?id=1597419840570">
     <link rel="import" href="/bower_components/change/change-slidelist.html?id=1597419840570">
-    <link rel="import" href="/bower_components/change/change-in-item.html?id=1597419840570"> -->
+    <link rel="import" href="/bower_components/change/change-in-item.html?id=1597419840570">
     <link rel="import" href="/bower_components/change/change-user-panel.html?id=1597419840570">
     <link rel="import" href="/bower_components/change/change-header.html?id=1597419840571">
     <link rel="import" href="/bower_components/change/change-header2.html?id=1597419840571">
@@ -139,7 +144,7 @@
             document.querySelector('.googleloginname').click();
         }
 
-        
+        ;
 
         function signOut() {
             var auth2 = gapi.auth2.getAuthInstance();
@@ -148,7 +153,7 @@
             });
         }
 
-    
+        ;
 
         window.fbAsyncInit = function() {
             FB.init({
@@ -250,7 +255,23 @@
                 </div>
             </div>
         </change-header-nav2>
-       
+        <!-- <div>
+
+        <div class="topnav" id="myTopnav">
+
+
+                <a href="javascript:void(0);" style="font-size:15px;" id="mMenu" class="icon" onclick="myFunction()">☰</a>
+            <div class="dropdown"><button class="dropbtn"><eee>+ </eee>玩多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHp2q7-8rxD6C5WSM6HSKHVy">電玩資訊</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHroMg1NSo53ikWUYJqY3ciu">體育</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpusGeLqXMt--3g8Q6KOX7-">旅遊資訊</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHq9EW4xkU6Zvl5L0GF28NHY">本土好去處</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqYaIxqHfVL-dKZSpwuCOj9">綜藝遊戲</a></div></div><div class="dropdown"><button class="dropbtn"><eee>+ </eee>睇多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrrS-kA9Geb-_afII8MiEgw">動漫宅</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrBVwpn2MJxBGr1bgceTTlq">音樂才藝</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHorvLAkpj_avOxmp4SeQ1B3">演藝</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHp07hrMs8qOBRBf8rfxRtDS">搞笑短片</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrcBs1RWj6MiIAnRped1WwV">電影搜查</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrqxL1SxhKZZZIMM0PX8wXT">萌爆寵物</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpdieDtKi2rZd93q3wzYjOt">明星</a></div></div><div class="dropdown"><button class="dropbtn"><eee>+ </eee>知多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHptLxr__fSt0Cb8B5p5V_Me">探秘</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHp63PlSrikC0z2o9mEXc17j">時事新知</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpXYloxspfAwz0-z_iDrBmv">歷史故事</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpyTe5x7Yvm-pcjfq1MHURr">錢錢錢錢</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrdpxipNmduxT3BC054x6ZX">政治知識</a></div></div><div class="dropdown"><button class="dropbtn"><eee>+ </eee>食多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHoOiaow3zqgm13ePmK2Uns6">餐廳介紹</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpLdVeCRStJgC_Jejseegth">開懷帳飲</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHoO50IPbFhk4R2JjgEcq8rJ">食物知識</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrQ_VScdE-fDCK_RPpGGLXE">好煮意</a></div></div><div class="dropdown"><button class="dropbtn"><eee>+ </eee>識多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpFvp4QunyL9SmEaemp-F2x">教學短片</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrJXxwgsl5qy6SvK12dqUfE">小知識</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpMOgUlq5a92oMpyyn2wE1W">學術</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpPqwwverPDuzL8ahCSaeoq">學攝影</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpqT7uMApjA6eMTxYO0eUul">問答遊戲</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHoFlb6-NDX_27H6XGj2ScAO">學音樂</a></div></div><div class="dropdown"><button class="dropbtn"><eee>+ </eee>靚多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqK65-cEXt6znFOuU0GFduy">男仔</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHoOCWBkyXvoNa154feJNt5G">形象與健康</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqq2mSH1NL2_mBBiOHROJF6">女仔</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqXTFkx4Hmpozyy5bigYcnT">放鬆心情</a></div></div><div class="dropdown"><button class="dropbtn"><eee>+ </eee>愛多啲</button><div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpuvTypSCgCco7L1Vzsv_Gz">兩性關系</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqnGdWHNlP3tsmQCtLVGLRK">價值觀</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqke9FZGbEulMJMQSwzmyJi">親子關系</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpegFCTRdNbLQV14122E0wP">心靈健康</a></div></div></div>
+        </div>
+-->
+        <!-- <img src="img/icon/Facebook.png" class="logoFacebook"> -->
+
+        <div class="g-signin2" data-onsuccess="onSignIn">i mgoogle</div>
+        <div class="f-signin2" data-onsuccess="onSignIn"></div>
+
+
+
+
     </header>
 
     <!-- Slideshow container -->

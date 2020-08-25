@@ -54,19 +54,6 @@
                 FB.AppEvents.logPageView();
 
             };
-            /*
-                            (function (d, s, id) {
-                                var js, fjs = d.getElementsByTagName(s)[0];
-                                if (d.getElementById(id)) {
-                                    return;
-                                }
-                                js = d.createElement(s);
-                                js.id = id;
-                                js.src = "https://connect.facebook.net/en_US/sdk.js";
-                                fjs.parentNode.insertBefore(js, fjs);
-                            }(document, 'script', 'facebook-jssdk'));
-                        
-                            */
         </script>
         <style scope="change-footer">
             li {
@@ -147,9 +134,11 @@
                 }
             }
         </style>
+        <link rel="import" href="/bower_components/change/change-fanpage.html">
+        <link rel="import" href="/bower_components/change/change-shop.html">
         <link rel="import" href="/bower_components/change/change-header.html">
-        <link rel="import" href="bower_components/change/change-footer.html">
-        <link rel="import" href="bower_components/change/change-announcement.html">
+        <link rel="import" href="/bower_components/change/change-footer.html">
+        <link rel="import" href="/bower_components/change/change-announcement.html">
     </dz-wrapper-head>
 </head>
 
@@ -157,65 +146,12 @@
     <dz-wrapper>
 
         <change-header></change-header>
-        <style>
-            .container {
-                width: 90%;
-                display: grid;
-                grid-template-columns: 1fr 1fr 1fr;
-                grid-template-rows: auto auto auto;
-                grid-auto-rows: 50px;
-                grid-gap: 30px 30px;
-                padding: 2%;
-                margin-left: 6%;
-            }
-            
-            .item-1 {
-                grid-column: 1 / 3;
-                grid-row: 1 / 4;
-            }
-            
-            .item-2 {
-                width: 100%;
-                background-color: aliceblue;
-                background-position: center center;
-            }
-            /* . container[data-ratio="16:9"] {
-            padding-top: 56.25%;
-        } */
-            
-            .item-2[data-ratio="16:9"] {
-                padding-top: 56.25%;
-            }
-            
-            #ad_1 {
-                grid-column: 3 / 4;
-                grid-row: 1 / 2;
-                background-image: url("https://www.gettv.hk/img/item/1.jpg");
-            }
-            
-            #ad_2 {
-                grid-column: 3 / 4;
-                grid-row: 2 / 3;
-                background-image: url("https://www.gettv.hk/img/item/2.jpg");
-            }
-            
-            #ad_3 {
-                grid-column: 3 / 4;
-                grid-row: 3 / 4;
-                background-image: url("https://www.gettv.hk/img/item/3.jpg");
-            }
-        </style>
-        <div class="container" data-ratio="16:9">
-            <div class="item-1">可以先hide</div>
-            <div id="ad_1" class="item-2" data-ratio="16:9">廣告1</div>
-            <div id="ad_2" class="item-2" data-ratio="16:9">廣告2</div>
-            <div id="ad_3" class="item-2" data-ratio="16:9">廣告3</div>
-        </div>
-
+        <change-fanpage id="try2"></change-fanpage>
+        <change-shop></change-shop>
         <change-footer></change-footer>
-        <button class="googleloginname" style="display:none;">google login</button>
+        <change-announcement>FIXED ANNOUNCEMENT</change-announcement>
+        <button class="googleloginname" style="display:none;">writegoogle</button>
         <div class="g-signin2" data-onsuccess="onSignIn" style="display:none;">imgoogle</div>
-
     </dz-wrapper>
     <dz-wrapper-js></dz-wrapper-js>
     <dz-dazzle></dz-dazzle>
