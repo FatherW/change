@@ -1346,7 +1346,7 @@ change-announcement {
         display: grid;
         padding-left: 3%;
         width: 94%;
-        height: 100%;
+        height: auto;
         grid-row-gap: 15px;
         padding-bottom: 50px;
         grid-column-gap: 12px;

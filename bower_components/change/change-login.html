@@ -305,31 +305,37 @@
                                 function onSignIn(googleUser) {
                                     console.log("Signed in: " +
                                         googleUser.getBasicProfile());
-                                    let name = googleUser.getBasicProfile().getName();
-                                    let email = googleUser.getBasicProfile().getEmail();
-                                    that.loginByThirdParty(name, email);
+                                    var profile = googleUser.getBasicProfile();
+                                    console.log("myprofile", profile);
+                                    let param = {
+                                        "platform": "Google",
+                                        "name": profile.getName(),
+                                        "email": profile.getEmail(),
+                                        "head": profile.getImageUrl()
+                                    };
+                                    let name = profile.getName();
+                                    let email = profile.getEmail();
+                                    let head = profile.getImageUrl();
+
+                                    function signOut() {
+                                        var auth2 = gapi.auth2.getAuthInstance();
+                                        auth2.signOut().then(function() {
+                                            console.log('User signed out.');
+                                        });
+                                    };
+                                    that.loginByThirdParty('Google', name, email, head);
                                     // _fb_register(name, email)
                                 },
                                 function(error) {
                                     alert("Google登入需要先允許使用第三方Cookie");
                                 });
                         }
-
                         return;
-
-
                     }
 
                 });
-
-
-                // this.shadowRoot.querySelector('#googlesignin').innerHTML = `<slot></slot>`
-
-
             },
-            attached: function() {
 
-            },
             _register(json) {
                 let that = this;
                 console.log('Register', json);
@@ -355,7 +361,6 @@
             },
             log: function() {
                 let url = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
-                console.log("good");
                 let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 let that = this;
 
@@ -373,26 +378,7 @@
                             let name = response.name;
                             let head = "http://graph.facebook.com/" + response.id + "/picture?type=normal";
 
-                            that.loginByThirdParty(name, email);
-                            // let json = {
-                            //     'email': email
-                            // };
-                            // that.userManager.matchDataNosort(json).then(res => {
-                            //         // let all = res.resolve;
-                            //         console.log(res);
-                            //         let pw = generatePassword();
-                            //         if (res.length)
-                            //             that.logWithPasswd(email, res[0]['password']);
-                            //         else {
-                            //             that._fb_register(name, email).then(res => {
-                            //                 that.logWithPasswd(email, '!@#$%^#$%');
-                            //             });
-                            //         }
-                            //     },
-                            //     err => {
-                            //         console.log("error la change login");
-                            //     });
-
+                            that.loginByThirdParty('facebook', name, email, head);
                         });
                     } else {
                         console.log('User cancelled login or did not fully authorize.');
@@ -404,7 +390,7 @@
 
 
             },
-            loginByThirdParty(name, email) {
+            loginByThirdParty(platform, name, email, head) {
                 let that = this;
                 let json = {
                     'email': email
@@ -416,7 +402,7 @@
                         if (res.length)
                             that.logWithPasswd(email, res[0]['password']);
                         else {
-                            that._fb_register(name, email).then(res => {
+                            that._fb_register(platform, name, email, head).then(res => {
                                 that.logWithPasswd(email, '!@#$%^#$%');
                             });
                         }
@@ -448,7 +434,7 @@
                 });
             },
 
-            _fb_register(name, email) {
+            _fb_register(platform, name, email, head) {
                 let registerUrl = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
                 let params = {
                     "action": "changeregister",
@@ -457,7 +443,8 @@
                     "email": email,
                     "password": '!@#$%^#$%',
                     "isPromotionMsg": false,
-                    "platform": "Facebook"
+                    "platform": platform,
+                    'head': head
                 };
                 console.log("Params", params);
                 return new Promise(function(resolve, reject) {

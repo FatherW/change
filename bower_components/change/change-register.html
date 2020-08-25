@@ -312,17 +312,8 @@
                 console.log('点击了注册键');
                 let shadow = this.shadowRoot;
                 let that = this;
-                let platform;
-                let head;
-                let searchplatform = store.get("change-platform") || "gettv";
-                if (searchplatform.platform == "gettv") {
-                    //platform = "gettv";
-                    head = "http://www.gettv.hk/img/user_profile.png";
-                } else {
-                    platform = searchplatform['platform'];
-                    head = searchplatform.head;
-                }
-                console.log("heres are platform", platform);
+                let platform = "gettv";
+                let head = "http://www.gettv.hk/img/user_profile.png";
                 let uid = shadow.querySelector('#changeId1').value; //使用名稱
                 let area = shadow.querySelector('#changeArea1').value; //地區
                 let email = shadow.querySelector('#changeEmail1').value; //電郵地址
