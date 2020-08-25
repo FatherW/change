@@ -87,7 +87,7 @@
             #info1 {
                 width: 84%;
                 margin: 0 auto;
-                display: none;
+                /* display: none; */
             }
 
             #info2 {
@@ -141,24 +141,27 @@
 
                 <div id="info1">
                     <h5>專頁資料</h5>
-                    <p class="inf">名稱: <span class="infotext" id="name">
+                    <p class="inf">專頁ID:
+                        <vaadin-text-field style="ime-mode:disabled" id='pageid' pattern=".{1,}" title="Eight or more characters"></vaadin-text-field>
+                    </p>
+                    <p class="inf">名稱:
                             <vaadin-text-field id='name1'></vaadin-text-field>
-                        </span></p>
-                    <p class="inf">地區: <span class="infotext" id="area">
+                        </p>
+                    <p class="inf">地區: 
                             <vaadin-select id='area1' label=''></vaadin-select>
-                        </span></p>
-                    <p class="inf">電郵: <span class="infotext" id="email2">
+                        </p>
+                    <p class="inf">電郵: 
                             <vaadin-email-field id='email'>
                                 </vaadin-text-field>
-                        </span></p>
-                    <p class="inf hide">標籤: <span id="contact">
-                            <vaadin-text-field id='tag'></vaadin-text-field>
-                        </span></p>
-                    <p class="inf">網址: www.gettv.hk/{{pagename}}</p>
+                        </p>
+                    <p class="inf">網址: www.gettv.hk/
+                            <vaadin-text-field id='website2'></vaadin-text-field>
+                        </p>
                     <div style="display: inline-flex;">
-                        <vaadin-button class="handIn" on-click="handin">提交</vaadin-button>
+                        <vaadin-button class="handIn" on-click="check">提交</vaadin-button>
                         <vaadin-button on-click="cancelinfo1">取消</vaadin-button>
                     </div>
+                    <div>{{errmsg}}</div>
                 </div>
 
                 <div id="info2">
@@ -189,6 +192,7 @@
                 if (user == null) {
 
                 } else if (user.isAdmin) {
+
                     user["userBucket"] = "change.dazzle.website";
                     this.fileManager = new AwsPackage(user);
                     this.pageManager = new DataPackage('pages');
@@ -199,7 +203,7 @@
                 let shadow = this.shadowRoot;
                 let that = this;
 
-                shadow.querySelector('.hide').style.display = "none";
+                // shadow.querySelector('.hide').style.display = "none";
 
                 let user = store.get('change-user') || null;
                 if (user) {
@@ -215,10 +219,16 @@
                     }
                 }
                 that.vaadin_select();
-
-                let pagename = shadow.querySelector('#name1');
-                pagename.addEventListener('keyup', e => {
-                    that.pagename = pagename.value;
+                let checkid = shadow.querySelector('#pageid');
+                checkid.addEventListener('keyup', event => {
+                    for (i = 0; i < checkid.value.length; i++) {
+                        var c = checkid.value.substr(i, 1);
+                        var ts = escape(c);
+                        if (ts.substring(0, 2) == "%u") {
+                            checkid.value = "";
+                            alert("不能輸入中文/全角字符");
+                        }
+                    }
                 })
             },
             vaadin_select() {
@@ -282,6 +292,65 @@
                         root.appendChild(listBox);
                     };
                 });
+
+            },
+            check() {
+                let url = 'https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController';
+                let that = this;
+                let shadow = this.shadowRoot;
+                let pageid = shadow.querySelector('#pageid');
+                let pagename = shadow.querySelector('#name1');
+                let website = shadow.querySelector('#website2');
+                let pagedist = shadow.querySelector('#area1');
+                let pageemail = shadow.querySelector('#email');
+                this.fileManager.getFile(website.value).then(res => {
+                        alert('頁面已存在');
+                    },
+                    err => {
+                        let param = [{
+                            "match": {
+                                'pagename': pagename.value
+                            }
+                        }, {
+                            "match": {
+                                'website': website.value
+                            }
+                        }, {
+                            "match": {
+                                "id": pageid.value
+                            }
+                        }]
+
+                        let search = {
+                            "action": "searchData",
+                            "index": "change",
+                            "type": "pages",
+                            "body": {
+                                "query": {
+                                    "bool": {
+                                        "should": param
+                                    }
+                                }
+                            }
+                        };
+                        Polymer.postData(url, search).then(res => {
+                            let all = res.resolve;
+                            if (all.length > 0) {
+                                let errstore = [];
+                                all.forEach(item => {
+
+                                })
+
+
+                            } else {
+                                /////great
+                            }
+                        })
+
+                    })
+
+            },
+            checkconflict() {
 
             },
             handin: function() {
