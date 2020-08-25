@@ -104,7 +104,7 @@
 
 <script>
     //function for database
-    (function() {
+    (function () {
         Polymer({
             is: 'change-edit-bar',
             properties: {
@@ -117,7 +117,7 @@
                 }
             },
 
-            ready: function() {
+            ready: function () {
                 let shadow = this.shadowRoot;
                 let that = this;
                 let loc = location.search;
@@ -142,7 +142,8 @@
                 if (user) {
                     if (user['_id'] == uid || user.isAdmin == true) {
                         shadow.querySelector('#tbar').style.display = "block";
-                        this.shadowRoot.querySelector('#edi').href = "add-product.html?p" + this.id + "u" + uid;
+                        this.shadowRoot.querySelector('#edi').href = "add-product.html?p" + this.id +
+                            "u" + uid;
                     }
                 }
 
@@ -150,7 +151,7 @@
 
 
 
-            created: function() {
+            created: function () {
 
                 this.user = store.get('change-user') || null;
                 if (this.user) {
@@ -162,9 +163,9 @@
 
             },
 
-            _delete: function() {
+            _delete: function () {
                 console.log("DELETE FUNCTION IS WORKING")
-                    // GET THE ITEM ID FROM THE URL
+                // GET THE ITEM ID FROM THE URL
                 let loc = location.search;
                 let pid = "";
                 let posit = 0;
@@ -186,7 +187,8 @@
                 //CALL DELETE FUNCTION AS IN POSTMAN
                 let that = this;
                 let shadow = this.shadowRoot;
-                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let Url =
+                    "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 let params = {
                     "action": "deleteData",
                     "index": "change",
@@ -207,7 +209,7 @@
 
             },
 
-            _copy: function() {
+            _copy: function () {
 
                 //GENERATE UNIQUE TIME AS PRODUCT ID
                 let a = Date.now();
@@ -234,6 +236,8 @@
                 let url = "/json/product-" + pid + ".json?id=" + new Date().getTime();
                 Polymer.getContent(url).then(res => {
                     res = JSON.parse(res);
+                    console.log("copy json:", res)
+                    var savej = res;
                     let user = store.get("change-user") || null;
                     let temptime = user['_id'];
                     let tempid = user['goodsNum'].toString() + Math.floor(Math.random() * 10);
@@ -257,23 +261,42 @@
                     };
 
 
-                    let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
+                    let link =
+                        "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
 
                     //SEND THE ABOVE MESSAGE TO POSTMAN
                     Polymer.postData(link, params).then(res => {
                         console.log("CCC", params);
                         console.log("BBB", res.resolve);
                         if (res.code > 0) {
-                            let theid = res.resolve.id;
-                            let userid = res.resolve.ownerId;
+                            var theid = res.resolve.id;
+                            var userid = res.resolve.ownerId;
                             console.log("POST TO POSTMAN SUCCESS!");
                             // alert("POST TO POSTMAN SUCCESS!");
-                            location.replace("./add-product.html?p" + theid + "u" + userid);
+                            this.savejson(savej, theid, userid);
+
                         } else {
                             console.log("POST TO POSTMAN  FAILED!")
                         }
                     });
-                })
+                });
+
+
+            },
+
+            savejson: function (x, y, z) {
+                let that = this;
+                let user = store.get('change-user') || null;
+                this.fileManager = new AwsPackage(user);
+
+                // console.log("omg1:", x);
+                // console.log("omg2:", y);
+                // console.log("omg3:", z);
+
+                this.fileManager.saveFile('json/product-' + y + '.json', JSON.stringify(x)).then(res => {
+                    location.replace("./add-product.html?p" + y + "u" + z);
+                    // console.log("save copy JSON success!");
+                });
 
             }
         });

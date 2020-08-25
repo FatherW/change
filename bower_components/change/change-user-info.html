@@ -327,8 +327,11 @@
                                     user['head'] = headSrc;
                                     store.set("change-user", user);
 
+
                                     this._saveJson();
                                     //here is not yet saved to Json successfully, but we will save json everytime when refresh, so it still works
+                                    
+                                    // location.reload();
                                 }
                             })
                         } else {

@@ -775,7 +775,7 @@
                         }
                         let lenpic = res['pics'].length;
                         for (i3 = 0; i3 < lenpic; i3++) {
-                            shadow.querySelector('#div' + i3).style.backgroundImage = 'url(' + res2[0]["pics"][i3] + ')'
+                            shadow.querySelector('#div' + i3).style.backgroundImage = 'url(' + res["pics"][i3] + ')'
                         };
 
                     })
@@ -784,6 +784,7 @@
                     that.prodprice = '10';
                     //add mode
                 }
+
 
                 let url = "/json/user-" + user._id + ".json?id=" + new Date().getTime();
                 Polymer.getContent(url).then(res => {
@@ -1000,6 +1001,7 @@
                                     this.fileManager.saveFile('json/product-' + newproductid + '.json', JSON.stringify(res)).then(res => {
                                         location.replace("./edit-product.html?p" + newproductid + "u" + user['_id']);
                                     });
+
                                 })
                             }
                         });
