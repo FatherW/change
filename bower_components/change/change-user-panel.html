@@ -1,5 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
+<link rel="import" href="change-login.html">
 
 <link rel="import" href="change-register.html">
 
@@ -53,24 +54,80 @@
 </dom-module>
 
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-user-panel',
             properties: {},
-            created: function () {
-                Polymer.loadComponent('change','change-login');
+            created: function() {
+                // Polymer.loadComponent('change', 'change-login');
+                this.userManager = new DataPackage('_user');
+
+                // FB.getLoginStatus(function(response) {
+                //     console.log('FB', response);
+                //     if (response.status === "connected") {
+                //         //if we do have a non-null response.session, call FB.logout(),
+                //         //the JS method will log the user out of Facebook and remove any authorization cookies
+                //         that.log();
+                //     }
+
+                //     if (!response.session) {
+                //         // window.location = "/mysite/Login.aspx";
+                //         var googleUser = {};
+
+                //         gapi.load('auth2', function(){
+                //         // Retrieve the singleton for the GoogleAuth library and set up the client.
+                //         auth2 = gapi.auth2.init({
+                //             client_id: '755964351228-2emctcoq1o2nj5vpqitv4j28411jj7jk.apps.googleusercontent.com',
+                //             cookiepolicy: 'single_host_origin',
+                //             // Request scopes in addition to 'profile' and 'email'
+                //             //scope: 'additional_scope'
+                //         });
+                //             attachSignin(that.shadowRoot.querySelector('#customBtn'));
+                //         });
+
+                //         function attachSignin(element) {
+                //             console.log(element.id);
+                //             auth2.attachClickHandler(element, {},
+                //                 function(googleUser) {
+                //                     console.log("Signed in: " +
+                //                         googleUser.getBasicProfile());
+                //                     let name = googleUser.getBasicProfile().getName();
+                //                     let email = googleUser.getBasicProfile().getEmail();
+                //                         that.loginByThirdParty(name,email);
+                //                         // _fb_register(name, email)
+                //                 }, function(error) {
+                //                     alert(JSON.stringify(error, undefined, 2));
+                //                 });
+                //         }
+
+                //         return;
+
+
+                //     }
+
+                // });
+
+                
             },
-            _login: function () {
+            _login: function() {
                 let shadow = this.shadowRoot;
                 let that = this;
                 let user = store.get('change-user');
                 if (user == null) {
                     let dialog = shadow.querySelector('vaadin-dialog');
-                    Polymer.popup(dialog, "change", "change-login", "350px", "350px");
+                    let component = "change-login";
+                    let width="350px";
+                    let height = '350px';
+                    // let gSignIn = document.querySelector('#gSignIn').cloneNode(true);
+                    
+                    let popup = document.createElement('change-login');
+                    // popup.appendChild(gSignIn);
+                    popup.dialog = dialog;
+                    Polymer.componentPopup(popup,width,height);
                 }
             },
 
-            _register: function () {
+            _register: function() {
                 let shadow = this.shadowRoot;
                 let that = this;
                 let user = store.get('change-user');
@@ -81,7 +138,7 @@
                     store.set('change-user', null);
 
                     FB.logout(function(response) {
-                            console.log(response);
+                        console.log(response);
                     });
                     location.replace("/index.html");
 
@@ -96,65 +153,147 @@
                 let that = this;
                 let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 let platform = store.get('change-platform');
+
                 let email = platform['email'];
                 let name = platform['name'];
-                let param = {
-                    "action": "searchData",
-                    "index": "change",
-                    "type": "_user",
-                    "body": {
-                        "query": {
-                            "match": {
-                                "email": email
-                            }
-                        }
-                    }
-                };
-                Polymer.postData(link, param).then(res => {
-                    if (res.code > 0) {
-                        let all = res.resolve;
+                let head = platform['head'];
+                let json = {
+                    'email': email
+                }
+                that.userManager.matchDataNosort(json).then(res => {
+                        // let all = res.resolve;
                         console.log(res);
-                        if (all.length == 0) {
-                            ////jump to resigter
-                            console.log("shoud go to regis");
-                            let platformcookie = {
-                                "platform": "Google",
-                                "name": name,
-                                "email": email
-                            };
-                            store.set("change-platform", platformcookie);
-                            let dialog = that.shadowRoot.querySelector('#registerpop');
-                            Polymer.popup(dialog, "change", "change-register", "45s%", "90%");
-                        } else {
-                            if (all[0].platform == "Google") {
-
-                                let loginparams = {
-                                    "action": "login",
-                                    "login": email,
-                                    "platform": "Google"
-                                };
-
-                                Polymer.postData(url, loginparams).then(res => {
-                                    if (res.code > 0) {
-                                        let user = res.resolve;
-                                        store.set('change-user', user);
-                                        location.reload();
-                                    } else {
-                                        alert('登入失敗');
-                                    }
-                                });
-
-                            } else {
-                                alert("此帳戶的郵箱已在" + all[0].platform + "註冊，請重新登入");
-                            }
+                        let pw = generatePassword();
+                        if (res.length)
+                            that.logWithPasswd(email, res[0]['password']);
+                        else {
+                            that._google_register(name, email).then(res => {
+                                that.logWithPasswd(email, '!@#$%^#$%');
+                            });
+                            // let json ={
+                            //     'id': email,
+                            //     'email': email,
+                            //     'name': email,
+                            //     'password': pw
+                            // }
+                            // that._register(json).then(res=>{
+                            //     that.logWithPasswd(email, pw);
+                            // });
                         }
-                    } else {
-                        console.log("打錯param");
-                    }
-                })
+                    },
+                    err => {
+                        console.log("error la change login");
+                    });
+                // Polymer.postData(link, param).then(res => {
+                //     if (res.code > 0) {
+                //         let all = res.resolve;
+                //         console.log(res);
+                //         if (all.length == 0) {
+                //             ////jump to resigter
+                //             console.log("shoud go to regis");
+                //             let platformcookie = {
+                //                 "platform": "Google",
+                //                 "name": name,
+                //                 "email": email
+                //             };
+                //             store.set("change-platform", platformcookie);
+                //             let dialog = that.shadowRoot.querySelector('#registerpop');
+                //             Polymer.popup(dialog, "change", "change-register", "45s%", "90%");
+                //         } else {
+                //             if (all[0].platform == "Google") {
+
+                //                 let loginparams = {
+                //                     "action": "login",
+                //                     "login": email,
+                //                     "platform": "Google"
+                //                 };
+
+                //                 Polymer.postData(url, loginparams).then(res => {
+                //                     if (res.code > 0) {
+                //                         let user = res.resolve;
+                //                         store.set('change-user', user);
+                //                         location.reload();
+                //                     } else {
+                //                         alert('登入失敗');
+                //                     }
+                //                 });
+
+                //             } else {
+                //                 alert("此帳戶的郵箱已在" + all[0].platform + "註冊，請重新登入");
+                //             }
+                //         }
+                //     } else {
+                //         console.log("打錯param");
+                //     }
+                // })
 
             },
-            ready: function () {
+            logWithPasswd: function(uid, password) {
+
+                let loginUrl = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
+                let params = {
+                    "action": "login",
+                    "login": uid,
+                    "password": password
+                };
+                console.log("Login JSON", params);
+                Polymer.postData(loginUrl, params).then(res => {
+                    console.log("Login", res);
+                    if (res.code > 0) {
+                        console.log("Result1", res.resolve);
+                        console.log("Result2", res.resolve.length);
+                        if (res.resolve) {
+                            let user = res.resolve;
+                            // if (user.token == "" || user.token == null || user.token == undefined) {
+                            store.set('change-user', user);
+                            location.reload();
+                            // } else if (user.token == "1") {
+                            //     alert("你已經被取消了用戶資格");
+                            // } else {
+                            //     alert("請先進行電郵驗證");
+                            // }
+                        } else {
+                            alert("用戶不存在，請註冊後登入");
+                        }
+                    } else {
+                        // alert('登入失敗');
+                    }
+                });
+            },
+            _google_register(name, email) {
+                let registerUrl = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
+                let params = {
+                    "action": "changeregister",
+                    "username": name,
+                    "area": '全港',
+                    "email": email,
+                    "password": '!@#$%^#$%',
+                    "isPromotionMsg": false,
+                    "platform": "Google"
+                };
+                console.log("Params", params);
+                return new Promise(function(resolve, reject) {
+
+                    Polymer.postData(registerUrl, params).then(res => {
+                        // alert(res.text);
+                        console.log('Res', res);
+
+                        // that.userManager.getAllData().then(re => {
+                        //     console.log('Result', re);
+                        // });
+
+                        if (res.code > 0) {
+                            resolve();
+                            // console.log(res);
+                            // this.fileManager = new AwsPackage(res.resolve);
+                            // this.fileManager.saveFile('json/user-' + res.resolve.id + '.json', JSON.stringify(res.resolve));
+
+                        } else
+                            reject();
+                    });
+                });
+            },
+            ready: function() {
                 let user = store.get('change-user') || null;
 
                 if (user != null) {
@@ -166,8 +305,8 @@
                     let a = document.createElement('a');
                     let img = document.createElement('img');
                     let src = user['head'] || 'https://devshift.biz/wp-content/uploads/2017/04/profile-icon-png-898.png';
-                    a.setAttribute('href','/user.html?' + user['_id'] );
-                    img.setAttribute('src',src);
+                    a.setAttribute('href', '/user.html?' + user['_id']);
+                    img.setAttribute('src', src);
                     a.appendChild(img);
                     let login = this.shadowRoot.querySelector('#login');
                     login.innerHTML = '';
@@ -195,4 +334,14 @@
 
         });
     })();
+
+    function generatePassword() {
+        var length = 8,
+            charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+            retVal = "";
+        for (var i = 0, n = charset.length; i < length; ++i) {
+            retVal += charset.charAt(Math.floor(Math.random() * n));
+        }
+        return retVal;
+    }
 </script>

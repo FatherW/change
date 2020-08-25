@@ -126,13 +126,15 @@
                 product: Object
             },
             created: function() {
-
+                console.log('created');
                 this.user = store.get('change-user') || null;
                 if (this.user) {
                     this.fileManager = new AwsPackage(this.user);
                     this.dataManager = new DataPackage('_user');
                     this.prodManager = new DataPackage('product');
                     this.orderManager = new DataPackage('order');
+                    console.log('this.product', this.product);
+                    console.log('this.prodManager', this.prodManager);
                 }
 
 
@@ -173,11 +175,11 @@
                 }
 
                 let shadow = this.shadowRoot;
-                // this.loadUser(uid).then(user=>{
-                shadow.querySelector('#_changeicon').src = this.seller['head'];
-                shadow.querySelector('#owner').innerHTML = this.seller['username'];
-                shadow.querySelector('#time').innerHTML += this.seller['score']; + '( ' + this.seller['numberRate'] + ' )';
-                // });
+                this.loadUser(uid).then(user => {
+                    shadow.querySelector('#_changeicon').src = this.seller['head'];
+                    shadow.querySelector('#owner').innerHTML = this.seller['username'];
+                    shadow.querySelector('#time').innerHTML += this.seller['score']; + '( ' + this.seller['numberRate'] + ' )';
+                });
                 shadow.querySelector('#para').innerHTML = this.product['description'];
 
                 shadow.querySelector('#review').addEventListener("keypress", function(e) {
@@ -221,6 +223,7 @@
 
             },
             _postRequest: function() {
+                console.log('点击了送出按钮');
                 let shadow = this.shadowRoot;
                 let loc = location.search;
                 let html;
@@ -249,9 +252,16 @@
                     // this.fileManager = new Awspackage(buyer);
 
                     // Henry's Code
-                    this.saveOrder();
+                    console.log("omgomg:", JSON.stringify(this.product));
                     let to = this.seller['email'];
                     let html;
+
+                    if (this.product['isNew'] == true) {
+                        var status = "http://www.gettv.hk/img/icon/new-10.png";
+                    } else {
+                        var status = "http://www.gettv.hk/img/icon/second-hand-11.png";
+                    }
+                    console.log("status:", status);
 
                     let image = this.product['pics'][0];
                     let productname = this.product['productname'];
@@ -262,9 +272,10 @@
                     let deliveryMethod = this.product['deliveryMethod'];
                     let deliveryMethod2 = this.product['deliveryMethod'];
                     let token = "1sd895ndsd";
-
+                    this.saveOrder();
                     Polymer.getContent('/email-template/sendcontactemail.html').then(html => {
-                        html = html.replace("[[image]]", image);
+                        html = html.replace("[[image]]", "https://www.gettv.hk" + image);
+                        html = html.replace("[[status]]", status);
                         html = html.replace("[[productname]]", productname);
                         html = html.replace("[[sellerImage]]", sellerImage);
                         html = html.replace("[[sellerName]]", sellerName);
@@ -286,7 +297,10 @@
                 }
             },
             saveOrder() {
+                console.log("SAVEOEDER");
                 let arr = this.product['replyArray'];
+                console.log("arr", arr);
+
                 let id = 'order-' + this.product['id'] + '-' + arr.length;
                 let msg = this.shadowRoot.querySelector('#review').value;
                 let json = {

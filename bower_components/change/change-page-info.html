@@ -125,7 +125,7 @@
                 <div id="left">
                     <div id="info">
                         <h5>專頁資料</h5>
-                        <p class="inf">名稱: <span class="infotext" id="name">{{page.id}}</span></p>
+                        <p class="inf">名稱: <span class="infotext" id="name">{{page.name}}</span></p>
                         <p class="inf">地區: <span class="infotext" id="area">{{page.district}}</span></p>
                         <p class="inf">電郵: <span class="infotext" id="email">{{page.email}}</span></p>
                     </div>
@@ -166,31 +166,42 @@
 
             },
             ready: function() {
-                let shadow = this.shadowRoot;
-                let user = store.get('change-user') || null;
-                if (Boolean(user.isAdmin) == true) {
-                    shadow.querySelector("#right").style.display = "block";
-                }
-                let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                this.id = this.getAttribute('id');
-                let params = {
-                    "action": "getData",
-                    "index": "change",
-                    "type": "pages",
-                    "id": this.id
-                };
-                Polymer.postData(url, params).then(res => {
-                    if (res.code > 0) {
-                        let all = res.resolve;
-                        this.page = JSON.parse(all);
-                        document.querySelector('change-shop').pagetag(all['tags']);
 
-                    }
-                })
 
 
             },
+            run() {
+                let shadow = this.shadowRoot;
+                let user = store.get('change-user') || null;
+                if (user) {
+                    if (Boolean(user.isAdmin) == true) {
+                        shadow.querySelector("#right").style.display = "block";
+                    }
+                }
+                let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let params = {
+                    "action": "searchData",
+                    "index": "change",
+                    "type": "pages",
+                    "body": {
+                        "query": {
+                            "match": {
+                                "id": this.id
+                            }
+                        }
+                    }
+                }
+                console.log("iiiii", JSON.stringify(params));
+                Polymer.postData(url, params).then(res => {
+                    if (res.code > 0) {
 
+                        let all = res.resolve[0];
+                        this.page = all;
+                        document.querySelector('change-shop').pagetag(all['name']);
+
+                    }
+                })
+            },
 
             execute: function() {
                 let shadow = this.shadowRoot;
@@ -362,6 +373,9 @@
                 if (text.innerHTML == "編輯") {
                     let email = shadow.querySelector('#email').innerText;
                     let area = shadow.querySelector('#area').innerText;
+                    let name = shadow.querySelector('#name').innerText;
+
+                    shadow.querySelector('#name').innerHTML = "<vaadin-text-field id='pagename' value='" + name + "'></vaadin-text-field>";
                     shadow.querySelector('#email').innerHTML = "<vaadin-text-field id='name1' value='" + email + "'></vaadin-text-field>";
                     shadow.querySelector('#area').innerHTML = "<vaadin-select id='area1' value='" + area + "' label=''></vaadin-select>";
                     this.execute();
@@ -370,14 +384,17 @@
                     let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                     email = shadow.querySelector('#name1').value;
                     area = shadow.querySelector('#area1').value;
+                    pagename = shadow.querySelector('#name2').value
                     let params = {
                         "action": "addData",
                         "index": "change",
                         "type": "pages",
                         "id": this.id,
                         "body": {
+                            "name": pagename,
                             "email": email,
-                            "district": area
+                            "district": area,
+
                         }
                     };
                     Polymer.postData(url, params).then(res => {

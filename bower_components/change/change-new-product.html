@@ -593,18 +593,20 @@
                 this.product = prod;
                 // let a = res.resolve['price'];
                 // shadow.querySelector('#aaa').innerHTML = "$" + a;
-                if (!this.product['pics'])
-                    this.products['pics'] = ['./img/nopic.png'];
+                if (!this.product['pics']) {} else {
+                    if (!Array.isArray(this.product['pics']))
+                        this.product['pics'] = [this.product['pics']];
 
-                if (!Array.isArray(this.product['pics']))
-                    this.product['pics'] = [this.product['pics']];
-
-                for (qwe = 0; qwe < this.product['pics'].length; qwe++) {
-                    if (this.product['pics'][qwe]) {
-                        shadow.querySelector('#div' + qwe).style.backgroundImage = 'url(' + this.product['pics'][qwe] + ')';
-                        shadow.querySelector('#div' + qwe).style.visibility = "visible";
+                    for (qwe = 0; qwe < this.product['pics'].length; qwe++) {
+                        if (this.product['pics'][qwe]) {
+                            shadow.querySelector('#div' + qwe).style.backgroundImage = 'url(' + this.product['pics'][qwe] + ')';
+                            shadow.querySelector('#div' + qwe).style.visibility = "visible";
+                        }
                     }
                 }
+
+
+
                 if (prod.isFanpage || prod.isFanpage == true) {
 
                 }

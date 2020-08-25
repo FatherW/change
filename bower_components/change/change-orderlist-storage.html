@@ -114,6 +114,7 @@
                     }, err => {
                         this.prodManager.loadData(pid).then(prod => {
                             resolve(prod);
+                            // console.log("order oo:", prod);
                         });
                     });
                     // this.fileManager.getFile('json/product-' + pid + '.json').then(res => {
@@ -127,9 +128,11 @@
                 return new Promise(function(resolve, reject) {
                     Polymer.getContent('/json/order-' + pid + '.json?id=' + new Date().getTime()).then(res => {
                         resolve(JSON.parse(res));
+                        
                     }, err => {
                         this.orderManager.loadData(pid).then(prod => {
                             resolve(prod);
+                            // console.log("order oo2:", prod);
                         });
                     });
                     // this.fileManager.getFile('json/product-' + pid + '.json').then(res => {
@@ -148,7 +151,9 @@
                 let shadow = this.shadowRoot;
                 //*****************DETERMINE TO DISPLAY ORDERLIST STORAGE OR NOT*****************//
                 let user = store.get('change-user') || null;
-
+                // shadow.querySelector('.orderContainter').style.display = 'none';
+                let k = shadow.querySelector('change-order-list');
+                console.log("order1", k);
 
                 // let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 // let findBuyer = {

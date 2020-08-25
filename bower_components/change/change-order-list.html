@@ -214,6 +214,7 @@
                 return new Promise(function(resolve, reject) {
                     Polymer.getContent('/json/order-'+pid+'.json?id='+new Date().getTime()).then(res=>{
                         resolve(JSON.parse(res));
+                        // console.log("order omg:", res);
                     },err=>{
                         that.orderManager.loadData(pid).then(prod=>{
                             resolve(prod);
@@ -355,6 +356,8 @@
                     this.order=res; 
                     this.initOrder();
                     console.log('Order',this.order);
+                    // let k = document.querySelector('change-orderlist-storage');
+                    // console.log("order1", k);
                 });
 
                 // //*******HIDE BUTTONS IF IT IS BUYERS*******//

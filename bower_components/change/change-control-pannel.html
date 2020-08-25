@@ -301,11 +301,13 @@
                             alert('專頁已存在，請重新輸入');
                             pagename.value = "";
                         } else {
+                            let pageid = Date.now();
                             param = {
                                 "ownerId": user._id,
                                 "district": pagedist.value,
+                                "name": pagename.value,
                                 "email": pageemail.value,
-                                "id": pagename.value,
+                                "id": pageid,
                                 "adminId": [user.id],
                                 "head": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Windows_Settings_app_icon.png",
                                 "goods": 0,
@@ -314,16 +316,16 @@
                             }
                             that.pageManager.saveData(pagename.value, param).then(e => {
                                 this.fileManager.saveFile('json/page-' + pagename.value + '.json', JSON.stringify(param));
-                                that.fanpageGen(pagename.value)
+                                that.fanpageGen(pagename.value, pageid)
                             })
                         }
                     })
                 }
             },
-            fanpageGen(pagename) {
+            fanpageGen(pagename, pageid) {
                 let url = "/json/fanpage/fanPageTemplate.html?id=" + new Date().getTime();
                 Polymer.getContent(url).then(html => {
-                    let newFanpage = html.replace("[pageid]", pagename);
+                    let newFanpage = html.replace("[pageid]", pageid);
                     this.fileManager.saveHtml(pagename, newFanpage);
                     this.shadowRoot.querySelector('#info1').style.display = "none";
                     alert("成功新增專頁");
