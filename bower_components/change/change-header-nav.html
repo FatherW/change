@@ -167,7 +167,7 @@
             </div> -->
 
             <div class="topnav" id="myTopnav">
-                <a href="javascript:void(0);" style="font-size:15px;" class="icon">☰</a>
+                <a on-click="changeclass" style="font-size:15px;" class="icon">☰</a>
                 
                     <template is="dom-repeat" items="{{categories}}" as="category">
                         <div class="dropdown">
@@ -244,7 +244,7 @@
                 let dialog = shadow.querySelector('vaadin-dialog');
                 Polymer.popup(dialog, "change", "change-header-info", "85%", "85%");
             },
-            myFunction: function () {
+            changeclass: function () {
                 let shadow = this.shadowRoot;
                 var x = shadow.querySelector("#myTopnav");
                 if (x.className === "topnav") {
