@@ -194,7 +194,7 @@
             },
 
             // search:function(cats,tags,district,priceStart,priceEnd){
-            search(cats, tags, district, isNew, priceStart, priceEnd, isFree) {
+            search(cats, tags, district, isNew, priceStart, priceEnd, isFree,fanpage) {
 
                 let that = this;
                 let shadow = this.shadowRoot;
@@ -213,6 +213,19 @@
                         "isFree": isfree2
                     }
                 }];
+                             
+                ///fanpage
+                if(fanpage){
+                    Query.push({
+                            'term': {
+                                'ownerId': fanpage
+                            }
+                        })
+                }
+
+
+                ///isfree
+   
                 ////search the categoriews
                 let cateid = [];
                 if (cats != undefined || cats != null) {

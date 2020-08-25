@@ -239,6 +239,9 @@
                     },
                     "checkrange": {
                         "type": Boolean
+                    },
+                    "fanpage":{
+                        "type":String
                     }
                 },
                 created: function () {
@@ -252,6 +255,7 @@
                     this.initprice = 0;
                     this.isFree = false;
                     this.checkrange = false;
+                    this.fanpage = null;
                 },
                 addTags(val) {
 
@@ -260,7 +264,7 @@
                     myTags._addTag(val);
                 },
                 search() {
-                    this.shadowRoot.querySelector('change-in-item').search(this.categories, this.tags, this.district, this.isNew, this.priceStart, this.priceStop, this.isFree);
+                    this.shadowRoot.querySelector('change-in-item').search(this.categories, this.tags, this.district, this.isNew, this.priceStart, this.priceStop, this.isFree,this.fanpage);
                 },
 
                 run() {
@@ -339,8 +343,7 @@
                 },
                 pagetag(tag) {
                     console.log("the pagetag is", tag);
-                    this.tags.push(tag);
-                    this.addTags(tag);
+                    this.fanpage = tag;
                     this.search();
 
                 },

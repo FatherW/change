@@ -142,21 +142,22 @@
                 <div id="info1">
                     <h5>專頁資料</h5>
                     <p class="inf">專頁ID:
-                        <vaadin-text-field style="ime-mode:disabled" id='pageid' pattern=".{1,}" title="Eight or more characters"></vaadin-text-field>
+                        <vaadin-text-field style="ime-mode:disabled" id='pageid' pattern=".{1,}"
+                            title="Eight or more characters"></vaadin-text-field>
                     </p>
                     <p class="inf">名稱:
-                            <vaadin-text-field id='name1'></vaadin-text-field>
-                        </p>
-                    <p class="inf">地區: 
-                            <vaadin-select id='area1' label=''></vaadin-select>
-                        </p>
-                    <p class="inf">電郵: 
-                            <vaadin-email-field id='email'>
-                                </vaadin-text-field>
-                        </p>
+                        <vaadin-text-field id='name1'></vaadin-text-field>
+                    </p>
+                    <p class="inf">地區:
+                        <vaadin-select id='area1' label=''></vaadin-select>
+                    </p>
+                    <p class="inf">電郵:
+                        <vaadin-email-field id='email'>
+                            </vaadin-text-field>
+                    </p>
                     <p class="inf">網址: www.gettv.hk/
-                            <vaadin-text-field id='website2'></vaadin-text-field>
-                        </p>
+                        <vaadin-text-field id='website2'></vaadin-text-field>
+                    </p>
                     <div style="display: inline-flex;">
                         <vaadin-button class="handIn" on-click="check">提交</vaadin-button>
                         <vaadin-button on-click="cancelinfo1">取消</vaadin-button>
@@ -181,13 +182,13 @@
 </dom-module>
 
 <script>
-    (function() {
+    (function () {
         Polymer({
             is: 'change-control-pannel',
             properties: {},
 
 
-            created: function() {
+            created: function () {
                 let user = store.get('change-user') || null;
                 if (user == null) {
 
@@ -196,10 +197,11 @@
                     user["userBucket"] = "change.dazzle.website";
                     this.fileManager = new AwsPackage(user);
                     this.pageManager = new DataPackage('pages');
+                    this.userManager = new DataPackage('_user');
                 }
             },
 
-            ready: function() {
+            ready: function () {
                 let shadow = this.shadowRoot;
                 let that = this;
 
@@ -235,7 +237,7 @@
 
                 //SET AREA, DERLIVER METHOD, PRODUCT STATUS//
                 let shadow = this.shadowRoot;
-                customElements.whenDefined('vaadin-select').then(function() {
+                customElements.whenDefined('vaadin-select').then(function () {
                     const district = [{
                         name: '中西區'
                     }, {
@@ -275,14 +277,14 @@
                     }];
 
                     //AREA//
-                    shadow.querySelector('#area1').renderer = function(root) {
+                    shadow.querySelector('#area1').renderer = function (root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        district.forEach(function(item) {
+                        district.forEach(function (item) {
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
@@ -298,26 +300,26 @@
                 let url = 'https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController';
                 let that = this;
                 let shadow = this.shadowRoot;
-                let pageid = shadow.querySelector('#pageid');
-                let pagename = shadow.querySelector('#name1');
-                let website = shadow.querySelector('#website2');
-                let pagedist = shadow.querySelector('#area1');
-                let pageemail = shadow.querySelector('#email');
-                this.fileManager.getFile(website.value).then(res => {
-                        alert('頁面已存在');
-                    },
+                let pageid = shadow.querySelector('#pageid').value;
+                let pagename = shadow.querySelector('#name1').value;
+                let website = shadow.querySelector('#website2').value;
+                let pagedist = shadow.querySelector('#area1').value;
+                let pageemail = shadow.querySelector('#email').value;
+                this.fileManager.getFile(website).then(res => {
+                    alert('頁面已存在');
+                },
                     err => {
                         let param = [{
                             "match": {
-                                'pagename': pagename.value
+                                'pagename': pagename
                             }
                         }, {
                             "match": {
-                                'website': website.value
+                                'website': website
                             }
                         }, {
                             "match": {
-                                "id": pageid.value
+                                "id": pageid
                             }
                         }]
 
@@ -338,12 +340,19 @@
                             if (all.length > 0) {
                                 let errstore = [];
                                 all.forEach(item => {
+                                    if (item['id'] == pageid.value) errstore.push('專頁ID');
+                                    if (item['pagename'] == pagename.value) errstore.push('專頁名稱')
+                                    if (item['website'] == website.value) errstore.push('專頁網址');
 
+                                })
+                                errstore.forEach(str => {
+                                    that.errmsg += str + "已存在，請更改"
                                 })
 
 
                             } else {
                                 /////great
+                                that.handin(pagedist, pageemail, pageid, pagename, website);
                             }
                         })
 
@@ -353,43 +362,39 @@
             checkconflict() {
 
             },
-            handin: function() {
+            handin(district, email, id, pagename, website) {
                 let that = this;
                 let shadow = this.shadowRoot;
-                let pagename = shadow.querySelector('#name1');
-                let pagelink = shadow.querySelector('#website2');
-                let pagedist = shadow.querySelector('#area1');
-                let pageemail = shadow.querySelector('#email');
                 let user = store.get('change-user');
                 let param = {
-                    'name': pagename.value
-                };
-                if (pagename != "") {
-                    that.pageManager.matchDataNosort(param).then(res => {
-                        if (res.length > 0) {
-                            alert('專頁已存在，請重新輸入');
-                            pagename.value = "";
-                        } else {
-                            let pageid = Date.now();
-                            param = {
-                                "ownerId": user._id,
-                                "district": pagedist.value,
-                                "name": pagename.value,
-                                "email": pageemail.value,
-                                "id": pageid,
-                                "adminId": [user.id],
-                                "head": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Windows_Settings_app_icon.png",
-                                "goods": 0,
-                                "alreadybuy": 0,
-                                "score": 5,
-                            }
-                            that.pageManager.saveData(pagename.value, param).then(e => {
-                                this.fileManager.saveFile('json/page-' + pagename.value + '.json', JSON.stringify(param));
-                                that.fanpageGen(pagename.value, pageid)
-                            })
-                        }
-                    })
+                    "adminId": [user.id],
+                    "alreadybuy": 0,
+                    "district": district,
+                    "email": pageemail,
+                    "goods": 0,
+                    "head": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Windows_Settings_app_icon.png",
+                    "id": id,
+                    "ownerId": user._id,
+                    "pagename": pagename,
+                    "score": 5,
+                    "website": "www.gettv.hk/" + website
                 }
+                let param_toUser = {
+                    "id": id,
+                    "username": pagename,
+                    "area": district,
+                    "email": email,
+                    "head": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Windows_Settings_app_icon.png",
+                    "banner": "https://www.gettv.hk/Website%20Design/profile%20page/img/profile%20banner/company-profile-banner.png",
+                    
+                }
+                that.pageManager.saveData(id, param).then(e => {
+                    this.fileManager.saveFile('json/page-' + id + '.json', JSON.stringify(param));
+                    that.fanpageGen(pagename, id)
+                })
+
+
+
             },
             fanpageGen(pagename, pageid) {
                 let url = "/json/fanpage/fanPageTemplate.html?id=" + new Date().getTime();
@@ -400,17 +405,17 @@
                     alert("成功新增專頁");
                 })
             },
-            _addFanPage: function() {
+            _addFanPage: function () {
                 this.shadowRoot.querySelector('#info1').style.display = "block";
 
             },
 
-            cancelinfo1: function() {
+            cancelinfo1: function () {
                 this.shadowRoot.querySelector('#info1').style.display = "none";
 
             },
 
-            _disqualify: function() {
+            _disqualify: function () {
                 loc = location.search;
                 let uid = "";
                 for (i = 1; i < loc.length; i++) {
@@ -445,7 +450,7 @@
                 })
             },
 
-            _recovery: function() {
+            _recovery: function () {
                 console.log("recovery is working!")
                 loc = location.search;
                 let uid = "";
@@ -481,18 +486,18 @@
                 })
             },
 
-            _manageFanPage: function() {
+            _manageFanPage: function () {
                 this.shadowRoot.querySelector('#info2').style.display = "block";
             },
 
-            cancelinfo2: function() {
+            cancelinfo2: function () {
                 this.shadowRoot.querySelector('#info2').style.display = "none";
 
             },
 
 
 
-            _save: function() {
+            _save: function () {
                 console.log("updated mistakes count!")
 
                 let shadow = this.shadowRoot;
