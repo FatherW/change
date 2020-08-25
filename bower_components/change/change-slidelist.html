@@ -477,7 +477,7 @@
                         })
                     } else {
                         let value = "全新";
-
+                        let shop = document.querySelector('change-shop');
                         let papertag = document.querySelector('change-shop').shadowRoot.querySelector('paper-tags-input')._getTags();
                         document.querySelector('change-shop').shadowRoot.querySelector('paper-tags-input')._onTagItemRemove({
                             "detail": {
@@ -501,7 +501,7 @@
                         })
                     } else {
                         let value = "二手";
-
+                        let shop = document.querySelector('change-shop');
                         let papertag = document.querySelector('change-shop').shadowRoot.querySelector('paper-tags-input')._getTags();
                         document.querySelector('change-shop').shadowRoot.querySelector('paper-tags-input')._onTagItemRemove({
                             "detail": {
