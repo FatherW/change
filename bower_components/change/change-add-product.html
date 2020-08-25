@@ -785,7 +785,6 @@
                     //add mode
                 }
 
-
                 let url = "/json/user-" + user._id + ".json?id=" + new Date().getTime();
                 Polymer.getContent(url).then(res => {
                     res = JSON.parse(res);
@@ -1001,7 +1000,6 @@
                                     this.fileManager.saveFile('json/product-' + newproductid + '.json', JSON.stringify(res)).then(res => {
                                         location.replace("./edit-product.html?p" + newproductid + "u" + user['_id']);
                                     });
-
                                 })
                             }
                         });

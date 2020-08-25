@@ -42,6 +42,13 @@
 
 </dom-module> -->
 
+<!-- 
+    reference: dazzle.template 
+    component
+    backend 7.0 
+    dz-whole-grid
+-->
+
 <script>
     (function () {
         Polymer({
@@ -414,7 +421,7 @@
                         "body": resolve
                     };
                     // console.log("params2 Data to be updated:", params2);
-                    Polymer.postData(url, params2).then(res=>{
+                    Polymer.postData(url, params2).then(res => {
                         if (res.code > 0) {
                             console.log("database update successful!");
                         } else {
