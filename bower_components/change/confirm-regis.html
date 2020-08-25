@@ -51,6 +51,7 @@
 
             },
             created: function() {
+                let verifiedUser = store.get('change-user') || null;
                 let loc = location.search;
                 // let loc = "?token=1594953468686178216261";
                 let token = "";
