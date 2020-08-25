@@ -16,12 +16,9 @@
         <title>Home - Change</title>
         <link rel="stylesheet" href="css/style.css">
         <meta name="google-signin-scope" content="profile email">
-        <meta name="google-signin-client_id"
-            content="755964351228-2emctcoq1o2nj5vpqitv4j28411jj7jk.apps.googleusercontent.com">
+        <meta name="google-signin-client_id" content="755964351228-2emctcoq1o2nj5vpqitv4j28411jj7jk.apps.googleusercontent.com">
         <script src="https://apis.google.com/js/platform.js" async="" defer=""></script>
-        <script async="" defer="" crossorigin="anonymous"
-            src="https://connect.facebook.net/zh_HK/sdk.js#xfbml=1&amp;version=v7.0&amp;appId=711018846416860&amp;autoLogAppEvents=1"
-            nonce="NXzxnRL1"></script>
+        <script async="" defer="" crossorigin="anonymous" src="https://connect.facebook.net/zh_HK/sdk.js#xfbml=1&amp;version=v7.0&amp;appId=711018846416860&amp;autoLogAppEvents=1" nonce="NXzxnRL1"></script>
 
 
         <script>
@@ -38,14 +35,15 @@
                 document.querySelector('.googleloginname').click();
 
             };
+
             function signOut() {
                 var auth2 = gapi.auth2.getAuthInstance();
-                auth2.signOut().then(function () {
+                auth2.signOut().then(function() {
                     console.log('User signed out.');
                 });
             };
 
-            window.fbAsyncInit = function () {
+            window.fbAsyncInit = function() {
                 FB.init({
                     appId: '711018846416860',
                     cookie: true,
@@ -56,33 +54,32 @@
                 FB.AppEvents.logPageView();
 
             };
-/*
-                (function (d, s, id) {
-                    var js, fjs = d.getElementsByTagName(s)[0];
-                    if (d.getElementById(id)) {
-                        return;
-                    }
-                    js = d.createElement(s);
-                    js.id = id;
-                    js.src = "https://connect.facebook.net/en_US/sdk.js";
-                    fjs.parentNode.insertBefore(js, fjs);
-                }(document, 'script', 'facebook-jssdk'));
-            
-                */
-
+            /*
+                            (function (d, s, id) {
+                                var js, fjs = d.getElementsByTagName(s)[0];
+                                if (d.getElementById(id)) {
+                                    return;
+                                }
+                                js = d.createElement(s);
+                                js.id = id;
+                                js.src = "https://connect.facebook.net/en_US/sdk.js";
+                                fjs.parentNode.insertBefore(js, fjs);
+                            }(document, 'script', 'facebook-jssdk'));
+                        
+                            */
         </script>
         <style scope="change-footer">
             li {
                 display: block;
             }
-
+            
             .footer {
                 background-color: #F0846C;
                 color: white;
                 height: auto;
                 line-height: 1.5;
             }
-
+            
             .fpanel1 {
                 width: 100%;
                 margin: 0 auto;
@@ -94,14 +91,14 @@
                 grid-template-columns: 28% 28% 28%;
                 grid-template-rows: 50% 50%;
             }
-
+            
             a.test {
                 color: white;
                 text-decoration: none;
                 font-size: 12px;
                 line-height: 30px;
             }
-
+            
             #social {
                 display: flex;
                 justify-content: space-between;
@@ -113,16 +110,15 @@
                 grid-column: 1 / 5;
                 grid-row: 2 / 3;
             }
-
+            
             .footer {
                 height: 300px;
             }
-
+            
             @media (max-width: 768px) {
                 .footer {
                     display: none;
                 }
-
                 .fpanel1 {
                     width: 100%;
                     margin: 0 auto;
@@ -135,7 +131,6 @@
                     grid-template-columns: repeat(3, 32%);
                     text-align: start;
                 }
-
                 #social {
                     display: flex;
                     justify-content: space-between;
@@ -147,11 +142,9 @@
                     grid-column: 2 / 4;
                     grid-row: 2 / 3;
                 }
-
                 .footer {
                     height: 500px;
                 }
-
             }
         </style>
         <link rel="import" href="bower_components/change/change-add-product.html">
@@ -166,13 +159,12 @@
 
         <change-header></change-header>
         <change-add-product></change-add-product>
-        <div>
-            <change-footer></change-footer>
-            <change-announcement>FIXED ANNOUNCEMENT</change-announcement>
-        </div> <button class="googleloginname" style="display:none;">writegoogle</button>
+        <change-footer></change-footer>
+        <change-announcement>FIXED ANNOUNCEMENT</change-announcement>
+        <button class="googleloginname" style="display:none;">writegoogle</button>
         <div class="g-signin2" data-onsuccess="onSignIn" style="display:none;">imgoogle</div>
     </dz-wrapper>
-    <dz-wrapper-js>0</dz-wrapper-js>
+    <dz-wrapper-js></dz-wrapper-js>
     <dz-dazzle></dz-dazzle>
 </body>
 
