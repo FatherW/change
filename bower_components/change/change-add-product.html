@@ -564,7 +564,7 @@
                         <!--input box-->
                         <div class="inputbox">
                             <input type="number" id="price" name="priceHKD" placeholder="輸入商品價錢..."
-                                value={{prod.price}}>
+                                value={{prodprice}}>
                         </div>
                     </div>
                     <hr>
@@ -742,10 +742,12 @@
                 }
                 this.id = pid;
                 if (pid != "") {
+                    //edit mode
                     let url = "/json/product-" + pid + ".json?id=" + new Date().getTime();
                     Polymer.getContent(url).then(res => {
                         res = JSON.parse(res);
                         that.prod = res;
+                        this.prodprice  = res.price;
                         //SET PROPERTIES
                         this.CATE = res['categories'];
                         this.LIKE = res['like'];
@@ -779,8 +781,11 @@
                     })
                     this.next = pid;
                 } else {
-                    // that.prod.price = '10';
+                    that.prodprice = '10';
+                    //add mode
                 }
+
+                
                 let url = "/json/user-" + user._id + ".json?id=" + new Date().getTime();
                 Polymer.getContent(url).then(res => {
                     res = JSON.parse(res);
@@ -872,7 +877,8 @@
                     //Get value from deliveryDescription input box
                     let deldes = shadow.querySelector('#trans').value;
                     //*********GET INPUT PRODUCT VALUE ENDS HERE**************//
-                    if (categories == "") {
+                    if (categories == " ") {
+                        //now when categories is nth, it becomes "_", need to check this later!!
                         alert("請選擇分類!");
                     } else {
                         if (pname == "") {
@@ -901,6 +907,7 @@
                                         "isFanpage": isFanpage,
                                         "fanpage": fanpage
                                     };
+                                    // console.log("params:", params);
                                     that.saveproduct(params);
                                 } else {
                                     //*********EDIT PRODUCT MODE*************//
@@ -957,9 +964,13 @@
                 this.dialog.opened = false;
             },
             saveproduct(param) {
+                let user = store.get('change-user') || null;
                 let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
                 Polymer.postData(link, param).then(res => {
+                    console.log("omgomg", res);
                     var newproductid = res.resolve.id;
+                    console.log("omgomg1", newproductid);
+                    console.log("omgomgomg", user);
                     if (res.code > 0) {
                         let paramup = {
                             "action": "updateData",
@@ -974,13 +985,17 @@
                                 }
                             }
                         };
-                        let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                        Polymer.postData(Url, paramup).then(res => {
+                        console.log("omgomg2", paramup);
+                        let link2 = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                        Polymer.postData(link2, paramup).then(res => {
+                            console.log("omgomg3", res)
                             if (res.code > 0) {
                                 this.dataManager.loadData(newproductid).then(res => {
+                                    console.log("omgomg4", res);
                                     this.fileManager.saveFile('json/product-' + newproductid + '.json', JSON.stringify(res)).then(res => {
                                         location.replace("./edit-product.html?p" + newproductid + "u" + user['_id']);
                                     });
+                                    
                                 })
                             }
                         });
@@ -990,7 +1005,7 @@
                 });
             },
             editproduct(param) {
-
+                let user = store.get('change-user') || null;
                 //********UPDATE DATABASE***********//
                 let paramsDatabase = {
                     "action": "addData",
@@ -1190,7 +1205,9 @@
                 customElements.whenDefined('vaadin-menu-bar').then(function() {
                     const menu = shadow.querySelector('vaadin-menu-bar');
                     menu.addEventListener('item-selected', function(e) {
-                        this.prod.categories = e.detail.value.text;
+                        // this.prod.categories = e.detail.value.text;
+                        // this.CATE = e.detail.value.text;
+                        shadow.querySelector('span').textContent = e.detail.value.text;
                         this.CATE = e.detail.value.text;
                     });
 
