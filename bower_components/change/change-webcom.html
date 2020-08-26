@@ -217,7 +217,8 @@
 
                 Polymer.postData(emailUrl, json).then(res => {
                     if (res.code > 0) {
-                        alert('成功發送');
+                        // alert('成功發送');
+                        location.reload();
                     }
                 })
 
@@ -289,7 +290,7 @@
 
                         // // .......
                         this.sendmail('support@01power.net', to, '你有新的訊息', html);
-                        alert('電郵已發出');
+                        // alert('電郵已發出');
                         // location.reload();
 
                     });
