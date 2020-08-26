@@ -515,7 +515,7 @@
                     that.userdata(json);
                 }, err => {
                     that.dataManager.loadData(that.id).then(res => {
-                        console.log('Cannot read product', res);
+                        // console.log('Cannot read product', res);
                         that.userdata(res);
                     });
                 });

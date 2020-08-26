@@ -1120,7 +1120,7 @@
                     if (result.code < 0) {
                         resolve({});
                     } else {
-                        console.log(result.resolve);
+                        // console.log(result.resolve);
                         resolve(result.resolve);
                     }
                 });
@@ -1273,7 +1273,7 @@
     };
 
     Polymer.getContent = function(url) {
-        console.log("Query Url", url);
+        // console.log("Query Url", url);
 
         return new Promise(function(resolve, reject) {
             fetch(url)

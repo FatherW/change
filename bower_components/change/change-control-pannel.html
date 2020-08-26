@@ -2,6 +2,7 @@
 <link rel="import" href="../vaadin-text-field/vaadin-number-field.html">
 <link rel="import" href="../vaadin-select/vaadin-select.html">
 <link rel="import" href="../vaadin-button/vaadin-button.html">
+<link rel="import" href="change-icon.html">
 <dom-module id="change-control-pannel">
 
     <template>
@@ -143,7 +144,7 @@
                     <h5>專頁資料</h5>
                     <p class="inf">專頁ID:
                         <vaadin-text-field style="ime-mode:disabled" id='pageid' pattern=".{1,}"
-                            title="Eight or more characters"></vaadin-text-field>
+                            title="Eight or more characters"></vaadin-text-field>**不能更改
                     </p>
                     <p class="inf">名稱:
                         <vaadin-text-field id='name1'></vaadin-text-field>
@@ -165,15 +166,8 @@
                     <div>{{errmsg}}</div>
                 </div>
 
-                <div id="info2">
-                    <h5>搜尋專頁</h5>
-                    <p class="inf">專頁名稱: <span class="infotext" id="fpname">
-                            <vaadin-text-field id='fpname1'></vaadin-text-field>
-                        </span></p>
-                    <div style="display: inline-flex;">
-                        <vaadin-button class="search" on-click="search">搜尋</vaadin-button>
-                        <vaadin-button on-click="cancelinfo2">取消</vaadin-button>
-                    </div>
+                <div id="listPage">
+                    
                 </div>
             </div>
         </div>
@@ -182,13 +176,13 @@
 </dom-module>
 
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-control-pannel',
             properties: {},
 
 
-            created: function () {
+            created: function() {
                 let user = store.get('change-user') || null;
                 if (user == null) {
 
@@ -201,7 +195,7 @@
                 }
             },
 
-            ready: function () {
+            ready: function() {
                 let shadow = this.shadowRoot;
                 let that = this;
 
@@ -223,6 +217,7 @@
                 that.vaadin_select();
                 let checkid = shadow.querySelector('#pageid');
                 checkid.addEventListener('keyup', event => {
+                    if (event.code == "Enter") shadow.querySelector('#name1').focus();
                     for (i = 0; i < checkid.value.length; i++) {
                         var c = checkid.value.substr(i, 1);
                         var ts = escape(c);
@@ -232,12 +227,19 @@
                         }
                     }
                 })
+
+                let website = shadow.querySelector('#website2');
+                website.addEventListener('keyup', e => {
+                    if (e.code == "Enter") that.check();
+                })
+
+
             },
             vaadin_select() {
 
                 //SET AREA, DERLIVER METHOD, PRODUCT STATUS//
                 let shadow = this.shadowRoot;
-                customElements.whenDefined('vaadin-select').then(function () {
+                customElements.whenDefined('vaadin-select').then(function() {
                     const district = [{
                         name: '中西區'
                     }, {
@@ -277,14 +279,14 @@
                     }];
 
                     //AREA//
-                    shadow.querySelector('#area1').renderer = function (root) {
+                    shadow.querySelector('#area1').renderer = function(root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        district.forEach(function (item) {
+                        district.forEach(function(item) {
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
@@ -306,16 +308,12 @@
                 let pagedist = shadow.querySelector('#area1').value;
                 let pageemail = shadow.querySelector('#email').value;
                 this.fileManager.getFile(website).then(res => {
-                    alert('頁面已存在');
-                },
+                        alert('頁面已存在');
+                    },
                     err => {
                         let param = [{
                             "match": {
                                 'pagename': pagename
-                            }
-                        }, {
-                            "match": {
-                                'website': website
                             }
                         }, {
                             "match": {
@@ -339,19 +337,21 @@
                             let all = res.resolve;
                             if (all.length > 0) {
                                 let errstore = [];
+                                console.log("res", all);
                                 all.forEach(item => {
-                                    if (item['id'] == pageid.value) errstore.push('專頁ID');
+                                    if (item['id'] == pageid) errstore.push('專頁ID');
                                     if (item['pagename'] == pagename.value) errstore.push('專頁名稱')
-                                    if (item['website'] == website.value) errstore.push('專頁網址');
 
-                                })
+                                });
+                                that.errmsg = "";
                                 errstore.forEach(str => {
-                                    that.errmsg += str + "已存在，請更改"
+                                    that.errmsg += "[" + str + "] ，"
                                 })
-
+                                if (errstore) that.errmsg += "已存在，請更改";
 
                             } else {
                                 /////great
+                                console.log("fanpage could develop");
                                 that.handin(pagedist, pageemail, pageid, pagename, website);
                             }
                         })
@@ -359,9 +359,7 @@
                     })
 
             },
-            checkconflict() {
 
-            },
             handin(district, email, id, pagename, website) {
                 let that = this;
                 let shadow = this.shadowRoot;
@@ -370,52 +368,54 @@
                     "adminId": [user.id],
                     "alreadybuy": 0,
                     "district": district,
-                    "email": pageemail,
+                    "email": email,
                     "goods": 0,
                     "head": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Windows_Settings_app_icon.png",
                     "id": id,
-                    "ownerId": user._id,
                     "pagename": pagename,
                     "score": 5,
-                    "website": "www.gettv.hk/" + website
+                    "website": "www.gettv.hk/" + website,
+                    "banner": "https://www.gettv.hk/Website%20Design/profile%20page/img/profile%20banner/company-profile-banner.png"
                 }
                 let param_toUser = {
                     "id": id,
                     "username": pagename,
                     "area": district,
                     "email": email,
+                    "website": "www.gettv.hk/" + website,
+                    "isFanpage": true,
                     "head": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Windows_Settings_app_icon.png",
-                    "banner": "https://www.gettv.hk/Website%20Design/profile%20page/img/profile%20banner/company-profile-banner.png",
-                    
                 }
                 that.pageManager.saveData(id, param).then(e => {
                     this.fileManager.saveFile('json/page-' + id + '.json', JSON.stringify(param));
-                    that.fanpageGen(pagename, id)
+                    this.fileManager.saveFile('json/user-' + id + '.json', JSON.stringify(param_toUser));
+                    that.fanpageGen(website, id)
+                    alert("成功");
                 })
 
 
 
             },
-            fanpageGen(pagename, pageid) {
+            fanpageGen(website, pageid) {
                 let url = "/json/fanpage/fanPageTemplate.html?id=" + new Date().getTime();
                 Polymer.getContent(url).then(html => {
                     let newFanpage = html.replace("[pageid]", pageid);
-                    this.fileManager.saveHtml(pagename, newFanpage);
+                    this.fileManager.saveHtml(website, newFanpage);
                     this.shadowRoot.querySelector('#info1').style.display = "none";
                     alert("成功新增專頁");
                 })
             },
-            _addFanPage: function () {
+            _addFanPage: function() {
                 this.shadowRoot.querySelector('#info1').style.display = "block";
 
             },
 
-            cancelinfo1: function () {
+            cancelinfo1: function() {
                 this.shadowRoot.querySelector('#info1').style.display = "none";
 
             },
 
-            _disqualify: function () {
+            _disqualify: function() {
                 loc = location.search;
                 let uid = "";
                 for (i = 1; i < loc.length; i++) {
@@ -449,8 +449,7 @@
                     }
                 })
             },
-
-            _recovery: function () {
+            _recovery: function() {
                 console.log("recovery is working!")
                 loc = location.search;
                 let uid = "";
@@ -486,18 +485,32 @@
                 })
             },
 
-            _manageFanPage: function () {
+            _manageFanPage: function() {
+                let shadow = this.shadowRoot;
+                let list = shadow.querySelector('#listPage');
+                this.pageManager.getAllData().then(res => {
+                    res.forEach(item => {
+                        let user = document.createElement('change-icon');
+                        user.setAttribute('id', item.id)
+                        list.appendChild(user);
+                    })
+                })
+
+
+
+
+
                 this.shadowRoot.querySelector('#info2').style.display = "block";
             },
 
-            cancelinfo2: function () {
+            cancelinfo2: function() {
                 this.shadowRoot.querySelector('#info2').style.display = "none";
 
             },
 
 
 
-            _save: function () {
+            _save: function() {
                 console.log("updated mistakes count!")
 
                 let shadow = this.shadowRoot;

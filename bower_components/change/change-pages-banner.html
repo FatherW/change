@@ -19,7 +19,7 @@
 
             #offer {
                 margin: 0 auto;
-                width: 94%;
+                width: 100%;
                 display: flex;
                 padding: 10px 0;
                 height: auto;
@@ -128,7 +128,7 @@
                 <img id="dp" src={{page.head}} alt="DP" />
             </div>
             <div id="user" class="in">
-                <span id="Uname">{{page.name}}</span>
+                <span id="Uname">{{page.pagename}}</span>
                 <br />
                 <span id="check"></span>
             </div>
@@ -150,28 +150,23 @@
     </template>
 </dom-module>
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-pages-banner',
             properties: {
 
             },
-            created: function () {
+            created: function() {
 
             },
-            ready: function () {
+            ready: function() {
 
             },
             run() {
                 console.log("uuuu", this.id);
                 let url = '/json/page-' + this.id + '.json?id=' + new Date().getTime();
-                Polymer.getContent(user_url).then(res => {
+                Polymer.getContent(url).then(res => {
                     this.page = JSON.parse(res);
-                    shadow.querySelector('#dp').src = all['head'];
-
-
-
-
                 })
 
                 // let shadow = this.shadowRoot;

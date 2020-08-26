@@ -54,7 +54,7 @@
                 display: grid;
                 grid-template-columns: 2.5fr 1fr;
                 background-color: white;
-                width: 94%;
+                width: 100%;
                 margin: 0 auto;
             }
 
@@ -65,7 +65,6 @@
 
             #container {
                 float: left;
-                background-color: #FFFBF2;
                 width: 100%;
                 padding-top: 30px;
                 padding-bottom: 30px;
@@ -126,7 +125,7 @@
                     <div id="info">
                         <h5>專頁資料</h5>
                         <p class="inf">專頁id: <span class="infotext">{{page.id}}</span></p>
-                        <p class="inf">名稱: <span class="infotext" id="name">{{page.name}}</span></p>
+                        <p class="inf">名稱: <span class="infotext" id="name">{{page.pagename}}</span></p>
                         <p class="inf">地區: <span class="infotext" id="area">{{page.district}}</span></p>
                         <p class="inf">電郵: <span class="infotext" id="email">{{page.email}}</span></p>
                         <p class="inf">網址: <span class="infotext" id="website">{{page.website}}</span></p>
@@ -135,28 +134,32 @@
                 </div>
                 <div id="right" style="display: none;">
                     <div class="buttons">
-                        <vaadin-button id="vs1" style="margin-right: 10px;" on-click="setadmin">指派專頁管理員
+                        <vaadin-button on-click="website">{{siteEdit}}</vaadin-button>
+
+                        <vaadin-button id="vs1" style="margin:5px 10px;" on-click="setadmin">{{getadminId}}
                         </vaadin-button>
                         <vaadin-button id="vb" on-click="toggle">{{editText}}</vaadin-button>
+                    
+                    </div>
+                    <div id="info2">
+                        <h5 style="margin-left: 100px;">指派專頁管理員資料</h5>
+                        <p class="inf2">電郵: <span class="infotext" id="adminEmail">
+                                <vaadin-text-field id='getuserId'></vaadin-text-field>
+                            </span></p>
+                        <div style="display: inline-flex; margin-left: 100px;">
+                            <vaadin-button class="handIn" on-click="searchadmin">搜尋</vaadin-button>
+                            <vaadin-button id="adminAdd" on-click="addAdmin" style="margin-left: 20px;display: none;">確認</vaadin-button>
+                        </div>
+                        <div style="margin-left:100px">{{errmsg2}}</div>
                     </div>
                 </div>
             </div>
         </div>
-        <div id="info2">
-            <h5 style="margin-left: 100px;">指派專頁管理員資料</h5>
-            <p class="inf2">電郵: <span class="infotext" id="adminEmail">
-                    <vaadin-text-field id='Aemail'></vaadin-text-field>
-                </span></p>
-
-            <div style="display: inline-flex; margin-left: 100px;">
-                <vaadin-button id="vb" class="handIn" on-click="handin">提交</vaadin-button>
-                <vaadin-button id="vb" on-click="cancel" style="margin-left: 20px;">取消</vaadin-button>
-            </div>
-        </div>
+        
     </template>
 </dom-module>
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-page-info',
             properties: {
@@ -168,16 +171,37 @@
                 },
                 "page": {
                     "type": Array
+                },
+                "setadminState": {
+                    "type": Boolean
                 }
             },
-            created: function () {
+            created: function() {
+                let user = store.get('change-user') || null;
+                if (user == null) {
 
+                } else if (user.isAdmin) {
+
+                    user["userBucket"] = "change.dazzle.website";
+                    this.fileManager = new AwsPackage(user);
+                    this.pageManager = new DataPackage('pages');
+                    this.userManager = new DataPackage('_user');
+                    this.setadminState = false;
+                }
             },
-            ready: function () {
+            ready: function() {
                 this.editText = "編輯";
+                this.siteEdit = "更改網址";
+                this.getadminId = '指派專頁管理員';
+                let shadow = this.shadowRoot;
+                let searchadmin = shadow.querySelector('#getuserId');
+                searchadmin.addEventListener('keydown', e => {
+                    if (e.code == "Enter") this.searchadmin();
+                });
 
 
             },
+            ////run成個page
             run() {
                 let shadow = this.shadowRoot;
                 let user = store.get('change-user') || null;
@@ -187,40 +211,23 @@
                     }
                 }
                 let url = '/json/page-' + this.id + '.json?id=' + new Date().getTime();
-                Polymer.getContent(user_url).then(res => {
-                    this.page = JSON.parse(res);
-                    document.querySelector('change-shop').pagetag(this.id);
+                Polymer.getContent(url).then(res => {
+                        this.page = JSON.parse(res);
+                    })
+                    ////gen adminId
+                let root = shadow.querySelector('#info2');
+                let adminId = this.page['adminId'];
+                adminId.forEach(item => {
+                    let icon = document.createElement('change-icon');
+                    icon.setAttribute('id', item);
+                    root.appendChild(icon);
                 })
 
-
-
-                // let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                // let params = {
-                //     "action": "searchData",
-                //     "index": "change",
-                //     "type": "pages",
-                //     "body": {
-                //         "query": {
-                //             "match": {
-                //                 "id": this.id
-                //             }
-                //         }
-                //     }
-                // }
-                // console.log("iiiii", JSON.stringify(params));
-                // Polymer.postData(url, params).then(res => {
-                //     if (res.code > 0) {
-
-                //         let all = res.resolve[0];
-                //         this.page = all;
-
-                //     }
-                // })
             },
-
-            execute: function () {
+            /////gen vaadin select
+            execute: function() {
                 let shadow = this.shadowRoot;
-                customElements.whenDefined('vaadin-select').then(function () {
+                customElements.whenDefined('vaadin-select').then(function() {
                     const district = [{
                         id: '中西區',
                         name: '中西區'
@@ -276,14 +283,14 @@
                         id: '西貢區',
                         name: '西貢區'
                     }];
-                    shadow.querySelector('vaadin-select').renderer = function (root) {
+                    shadow.querySelector('vaadin-select').renderer = function(root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        district.forEach(function (item) {
+                        district.forEach(function(item) {
                             const vaadinItem = document.createElement('vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
@@ -294,113 +301,122 @@
                     };
                 });
             },
-
-            setadmin: function () {
+            ////顯示加入admin介面
+            setadmin: function() {
+                let that = this;
                 let shadow = this.shadowRoot;
-                // if (this.status == false) {
-                //     this.status = true;
-                //     shadow.querySelector('#shouldhide').style.display = 'block';
-                //     console.log()
-                // } else {
-                //     this.status = false;
-                //     shadow.querySelector('#shouldhide').style.display = 'none';
-                // }
-
-                this.shadowRoot.querySelector('#info2').style.display = "block";
+                this.getadminId = '指派專頁管理員';
+                let state = this.setadminState;
+                if (state == false) {
+                    state = true;
+                    shadow.querySelector('#info2').style.display = "block";
+                } else {
+                    state = false;
+                    shadow.querySelector('#info2').style.display = "none";
+                }
             },
 
-            handin() {
-                // console.log("handin is working!");
+            ////搜尋用戶是否存在
+            searchadmin() {
                 let shadow = this.shadowRoot;
-                let setAdminEmail = shadow.querySelector('#Aemail').value;
-                console.log("adminEmail:", setAdminEmail);
-
-                let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                let params = {
-                    "action": "searchData",
+                let id = shadow.querySelector('#getuserId').value;
+                let url = "json/user-" + id + ".json";
+                let button = shadow.querySelector('#adminAdd')
+                this.fileManager.getFile(url).then(res => {
+                    if (this.page['adminId'].indexOf(id) == -1) {
+                        // console.log("could add", this.page['adminId'].indexOf(id), id, this.page['adminId']);
+                        this.errmsg2 = "按確認以加入用戶(" + id + ")";
+                        this.newAdmin = id;
+                        button.style.display = "block";
+                    }
+                }, err => {
+                    button.style.display = "none";
+                    this.errmsg2 = "沒有此用戶";
+                })
+            },
+            ///加入用戶
+            addAdmin() {
+                let url = 'https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController';
+                let param = {
+                    "action": "updateData",
                     "index": "change",
-                    "type": "_user",
+                    "type": "pages",
+                    "id": this.id,
                     "body": {
                         "query": {
-                            "match": {
-                                "email": setAdminEmail
+                            "script": {
+                                "source": "ctx._source['adminId'].add('" + this.newAdmin + "')"
                             }
                         }
                     }
                 };
-                Polymer.postData(link, params).then(res => {
+                Polymer.postData(url, param).then(res => {
                     if (res.code > 0) {
-                        if (res.resolve.length !== 0) {
-                            let adminId = res.resolve[0].id;
-                            let fanpageId = document.querySelector('fanpage').id;
-                            //***GET ADMIN ARRAY***//
-                            let params1 = {
-                                "action": "getData",
-                                "index": "change",
-                                "type": "pages",
-                                "id": fanpageId
-                            };
-                            Polymer.postData(link, params1).then(res => {
-                                if (res.code > 0) {
-                                    let adminIdArray = res.resolve.adminId;
-                                    console.log("adminIdArray before:", adminIdArray);
-                                    adminIdArray.push(adminId);
-                                    console.log("adminIdArray after:", adminIdArray);
-
-                                    //***UPDATE ADMIN ARRAY***//
-                                    let params2 = {
-                                        "action": "addData",
-                                        "index": "change",
-                                        "type": "pages",
-                                        "id": fanpageId,
-                                        "body": {
-                                            "adminId": adminIdArray
-                                        }
-                                    };
-                                    Polymer.postData(link, params2).then(res => {
-                                        if (res.code > 0) {
-                                            alert("已成功加入");
-                                        } else {
-                                            alert("Err:cannot add input user as Fanpage Admin");
-                                        }
-                                    });
-
-                                } else {
-                                    alert("Err: no such Fanpage!")
-                                }
-                            });
-
-                        } else {
-                            alert("No such user!");
-                        }
+                        this.errmsg2 = "成功加入" + this.newAdmin;
                     }
-                });
-            },
+                })
 
+            },
             cancel() {
                 this.shadowRoot.querySelector('#info2').style.display = "none";
 
             },
 
-            toggle: function () {
+            toggle: function() {
                 let shadow = this.shadowRoot;
                 let that = this;
                 let text = this.editText;
                 if (text == "編輯") {
-                    shadow.querySelector('#name').innerHTML = "<vaadin-text-field id='pagename1' value={{page.id}}></vaadin-text-field>";
-                    shadow.querySelector('#area').innerHTML = "<vaadin-select id='area1' value={{page.district}} label=''></vaadin-select>";
-                    shadow.querySelector('#email').innerHTML = "<vaadin-text-field id='name1' value={{page.email}}></vaadin-text-field>";
-                    shadow.querySelector('#website').innerHTML = "<vaadin-text-field id='website1' value={{page.website}}></vaadin-text-field>";
+                    shadow.querySelector('#name').innerHTML = "<vaadin-text-field id='pagename1' value=" + this.page['pagename'] + "></vaadin-text-field>";
+                    shadow.querySelector('#area').innerHTML = "<vaadin-select id='area1' value=" + this.page['district'] + " label=''></vaadin-select>";
+                    shadow.querySelector('#email').innerHTML = "<vaadin-text-field id='name1' value=" + this.page['email'] + "></vaadin-text-field>";
                     this.execute();
                     text = "提交";
                 } else {
+                    text = "編輯";
                     that.check();
 
 
                 }
 
             },
-
+            website() {
+                console.log(this.siteEdit);
+                let that = this;
+                if (that.siteEdit == "更改網址") {
+                    console.log("good");
+                    that.shadowRoot.querySelector('#website').innerHTML = "<vaadin-text-field id='website1' value=" + this.page['website'] + "></vaadin-text-field>";
+                    that.siteEdit = "確認更改";
+                } else {
+                    console.log("bad");
+                    that.siteEdit = "更改網址";
+                    that.websitechanges();
+                }
+            },
+            websitechanges() {
+                let that = this;
+                let shadow = this.shadowRoot;
+                let website = shadow.querySelector('#website1').value;
+                if (website != this.page['website']) {
+                    this.fileManager.getFile(website).then(res => {
+                            alert('頁面已存在');
+                        },
+                        err => {
+                            that.fanpageGen(website, that.page['id']);
+                        })
+                } else {
+                    console.log("nth");
+                }
+            },
+            fanpageGen(website, pageid) {
+                let url = "/json/fanpage/fanPageTemplate.html?id=" + new Date().getTime();
+                Polymer.getContent(url).then(html => {
+                    let newFanpage = html.replace("[pageid]", pageid);
+                    this.fileManager.saveHtml(website, newFanpage);
+                    this.shadowRoot.querySelector('#info1').style.display = "none";
+                    alert("成功新增專頁");
+                })
+            },
             check() {
                 let url = 'https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController';
                 let that = this;
@@ -408,56 +424,52 @@
                 let pagename = shadow.querySelector('#pagename1').value
                 let email = shadow.querySelector('#name1').value;
                 let area = shadow.querySelector('#area1').value;
-                let website = shadow.querySelector('#website1').value;
-                this.fileManager.getFile(website).then(res => {
-                    alert('頁面已存在');
-                },
-                    err => {
-                        let param = [{
-                            "match": {
-                                'pagename': pagename
+
+                let param = [{
+                    "match": {
+                        'pagename': pagename
+                    }
+                }, {
+                    "match": {
+                        'website': website
+                    }
+
+                }]
+
+                let search = {
+                    "action": "searchData",
+                    "index": "change",
+                    "type": "pages",
+                    "body": {
+                        "query": {
+                            "bool": {
+                                "should": param
                             }
-                        }, {
-                            "match": {
-                                'website': website
-                            }
+                        }
+                    }
+                };
+                Polymer.postData(url, search).then(res => {
+                    let all = res.resolve;
+                    if (all.length > 0) {
+                        let errstore = [];
+                        all.forEach(item => {
+                            if (item['id'] == pageid.value) errstore.push('專頁ID');
+                            if (item['pagename'] == pagename.value) errstore.push('專頁名稱')
+                            if (item['website'] == website.value) errstore.push('專頁網址');
 
-                        }]
-
-                        let search = {
-                            "action": "searchData",
-                            "index": "change",
-                            "type": "pages",
-                            "body": {
-                                "query": {
-                                    "bool": {
-                                        "should": param
-                                    }
-                                }
-                            }
-                        };
-                        Polymer.postData(url, search).then(res => {
-                            let all = res.resolve;
-                            if (all.length > 0) {
-                                let errstore = [];
-                                all.forEach(item => {
-                                    if (item['id'] == pageid.value) errstore.push('專頁ID');
-                                    if (item['pagename'] == pagename.value) errstore.push('專頁名稱')
-                                    if (item['website'] == website.value) errstore.push('專頁網址');
-
-                                })
-                                errstore.forEach(str => {
-                                    that.errmsg += str + "已存在，請更改"
-                                })
-
-
-                            } else {
-                                /////great
-                                that.renewPageData();
-                            }
+                        })
+                        errstore.forEach(str => {
+                            that.errmsg += str + "已存在，請更改"
                         })
 
-                    })
+
+                    } else {
+                        /////great
+                        that.renewPageData();
+                    }
+                })
+
+
 
             },
             renewPageData() {
@@ -465,7 +477,6 @@
                 let pagename = shadow.querySelector('#pagename1').value
                 let email = shadow.querySelector('#name1').value;
                 let area = shadow.querySelector('#area1').value;
-                let website = shadow.querySelector('#website1').value;
                 let params = {
                     "action": "addData",
                     "index": "change",
@@ -475,7 +486,6 @@
                         "pagename": pagename,
                         "email": email,
                         "district": area,
-                        "website": website
                     }
                 };
                 Polymer.postData(url, params).then(res => {
@@ -483,7 +493,6 @@
                         shadow.querySelector('#name').innerHTML = pagename;
                         shadow.querySelector('#area').innerHTML = area;
                         shadow.querySelector('#email').innerHTML = email;
-                        shadow.querySelector('#website').innerHTML = website;
                         text = "編輯";
                     } else {
                         console.log("0421 , add data error")

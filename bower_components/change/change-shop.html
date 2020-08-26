@@ -194,6 +194,7 @@
 
         <div id="containall">
             <div id="leftele">
+                <div id="testing">555</div>
                 <change-slidelist></change-slidelist>
                 <change-mobileslide></change-mobileslide>
             </div>
@@ -212,7 +213,7 @@
 
 
     <script>
-        (function () {
+        (function() {
             Polymer({
                 is: 'change-shop',
                 properties: {
@@ -240,11 +241,11 @@
                     "checkrange": {
                         "type": Boolean
                     },
-                    "fanpage":{
-                        "type":String
+                    "fanpage": {
+                        "type": String
                     }
                 },
-                created: function () {
+                created: function() {
                     let that = this;
                     this.categories = [];
                     this.tags = [];
@@ -253,9 +254,10 @@
                     this.district = null;
                     this.isNew = [];
                     this.initprice = 0;
-                    this.isFree = false;
+                    this.isFree = null;
                     this.checkrange = false;
                     this.fanpage = null;
+                    console.log("changeshop");
                 },
                 addTags(val) {
 
@@ -264,7 +266,7 @@
                     myTags._addTag(val);
                 },
                 search() {
-                    this.shadowRoot.querySelector('change-in-item').search(this.categories, this.tags, this.district, this.isNew, this.priceStart, this.priceStop, this.isFree,this.fanpage);
+                    this.shadowRoot.querySelector('change-in-item').search(this.categories, this.tags, this.district, this.isNew, this.priceStart, this.priceStop, this.isFree, this.fanpage);
                 },
 
                 run() {
@@ -347,7 +349,7 @@
                     this.search();
 
                 },
-                ready: function () {
+                ready: function() {
                     let that = this;
                     let shadow = this.shadowRoot;
                     console.log("now shop");
@@ -467,14 +469,20 @@
                         this.search();
                     };
 
-                    
+                    let page = document.querySelector('change-fanpage');
+                    if (page) {
+                        this.pagetag(page.id);
+                    } else {
+                        alert('cant find page');
+                    }
+
                     // let paperTagsInput = shadow.querySelector('#myTags');
                     // let clearfix = paperTagsInput.shadowRoot.querySelector('.clearfix');
 
                     /*TESTING*/
                     // let tagItem = document.clearfix.querySelector('tag-item');
                     // console.log("TAGITEM",tagItem);
-  
+
                     // let shadow1 = tagItem.shadowRoot.querySelector('large');
                     // shadow.querySelector('.large').style.background = "white";
 

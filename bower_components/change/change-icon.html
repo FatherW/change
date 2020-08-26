@@ -31,6 +31,7 @@
 
             #usericon:hover {
                 background-color: lightgray;
+                cursor: pointer;
             }
 
 
@@ -41,7 +42,7 @@
             #delete{
                 background-color: transparent;
                 border:none;
-                background-image: url("./img/button_bg.svg");
+                background-image: url("/img/button_bg.svg");
                 width:20px;
                 height:20px;
                 background-repeat: no-repeat;
@@ -63,6 +64,7 @@
                 padding: 5px;
                 padding-bottom: 3px;
                 float: left;
+                padding-left: 100px;
                 
             }
 
@@ -70,7 +72,7 @@
             img#_changeicon {
                 width: 28px;
                 height: 28px;
-                border-radius: 9999999999999px;
+                border-radius: 100%;
             }
 
             /* #delete{
@@ -81,23 +83,22 @@
         
         </style>
 
-        <div id="usericon">
-            <a id="redu" href="#">
+        <div id="usericon" on-click="toFanpage">
             <div id="a1">
                 <img id="_changeicon" src={{user.head}}>
             </div>
             <div id="a2">
                 <div class="name" id="owner">{{user.username}}</div>
-                <div id="time">...</div>
+                <div id="time">{{user.id}}</div>
             </div>
-            </a>
+
+            <div id="a3">
+                <button id="delete" on-click="_reallydelete"></button>
+            </div>
+            <i class="fa fa-minus-circle remove-product shouldhide" on-click="_deleteproduct"></i>
                    
         </div>
 
-        <div id="a3">
-            
-            <button id="delete" on-click="_reallydelete"></button>
-        </div>
         
 
     </template>
@@ -222,7 +223,10 @@
                 })
 
 
-            }
+            },
+            toFanpage() {
+                if (this.user['isFanpage'] == true) location.href = this.user['website'];
+            },
         });
     })();
 </script>
