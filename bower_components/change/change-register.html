@@ -358,18 +358,7 @@
                                             console.log("Params", params);
                                             Polymer.postData(registerUrl, params).then(res => {
                                                 alert(res.text);
-                                                console.log("uuuuu", res);
-                                                if (res.code > 0) {
-                                                    if (platform == "Google") {
-                                                        this.google();
-                                                    } else if (platform == "facebook") {
-                                                        this.log();
-                                                    } else {
-                                                        //tbc
-                                                        // let cup = document.querySelector('change-user-panel');
-                                                        // console.log("cup", cup)
-                                                    }
-                                                }
+                                                console.log("uuuuu", res);                            
                                             });
                                         }
                                     }

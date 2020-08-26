@@ -99,7 +99,7 @@
             }
 
             header {
-                background-image: url(./img/background/3.jpg);
+                background-image: url("https://www.gettv.hk/img/background/3.jpg");
                 padding-top: 30px;
             }
 
@@ -188,7 +188,7 @@
             .outer {
                 margin: 0;
                 width: 100%;
-                background-image: url(./img/background/3.jpg);
+                background-image: url("https://www.gettv.hk/img/background/3.jpg");
                 padding-bottom: 50px;
             }
 
@@ -407,7 +407,7 @@
             .outer {
                 margin: 0;
                 width: 100%;
-                background-image: url(./img/background/3.jpg);
+                background-image: url("https://www.gettv.hk/img/background/3.jpg");
                 padding-bottom: 50px;
             }
 
@@ -755,6 +755,7 @@
                         this.OWNERID = res['ownerId'];
                         this.POSTSTATUS = res['postStatus'];
                         this.REPLYARRAY = res['replyArray'];
+                        this.ORDERLIST = res['orderlist'];
 
                         if (res['isNew'] == true) {
                             shadow.querySelector('#vs4').value = "全新";
@@ -934,7 +935,8 @@
                                         "like": this.LIKE,
                                         "ownerId": this.OWNERID,
                                         "postStatus": this.POSTSTATUS,
-                                        "replyArray": this.REPLYARRAY
+                                        "replyArray": this.REPLYARRAY,
+                                        "orderlist": this.ORDERLIST
                                     };
                                     console.log("JSON2WAYS", json2ways);
                                     that.editproduct(json2ways);

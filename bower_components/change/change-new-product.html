@@ -567,6 +567,11 @@
                 "id": {
                     "type": String
                 }
+
+                //For testing call SELLER from webcom
+                // "sellerid": {
+                //     "type": String
+                // }
             },
             created: function() {
                 console.log("Entered Created");
@@ -643,6 +648,10 @@
                     pid += loc[a];
                 }
                 console.log("pid", pid);
+
+                //For testing call SELLER from webcom
+                // this.SELLER = pid;
+
                 let that = this;
                 let shadow = this.shadowRoot;
 
