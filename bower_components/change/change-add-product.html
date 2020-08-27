@@ -835,12 +835,11 @@
                     var categories = shadow.querySelector('span').textContent;
                     //Get value from select box fanpage
                     var fanpage = shadow.querySelector('#fanPage').value;
-                    if (shadow.querySelector('#fanPage').value == "" || shadow.querySelector('#fanPage').value == undefined || shadow.querySelector('#fanPage').value == "沒有專頁可以選擇") {
-                        var isFanpage = false;
-                        fanpage = "";
+                    if (fanpage == "沒有專頁可以選擇" || fanpage == null) {
+                        var ownerId = user['id'];
                     } else {
-                        var isFanpage = true;
-                    };
+                        var ownerId = fanpage;
+                    }
                     //Get value from isFree button
                     let free = shadow.querySelector('#free').checked;
                     //Get Photos Array
@@ -875,9 +874,6 @@
                     //Get value from input tags
                     //**tags is refering to the arrayValue**//
                     let tags = shadow.querySelector('#myTags').tags;
-                    if (fanpage) {
-                        tags.push(fanpage);
-                    }
                     //Get value from deliveryDescription input box
                     let deldes = shadow.querySelector('#trans').value;
                     //*********GET INPUT PRODUCT VALUE ENDS HERE**************//
@@ -906,10 +902,8 @@
                                         "tag": tags,
                                         "deliveryDesc": deldes,
                                         "isNew": status,
-                                        "ownerId": user['_id'],
+                                        "ownerId": ownerid,
                                         "pics": this.pics,
-                                        "isFanpage": isFanpage,
-                                        "fanpage": fanpage
                                     };
                                     // console.log("params:", params);
                                     that.saveproduct(params);
@@ -929,8 +923,6 @@
                                         "isFree": free,
                                         "isNew": status,
                                         "pics": this.pics,
-                                        "isFanpage": isFanpage,
-                                        "fanpage": fanpage,
                                         "createTime": this.CREATETIME,
                                         "like": this.LIKE,
                                         "ownerId": this.OWNERID,
@@ -1153,12 +1145,12 @@
                 let parampage = {
                     "action": "searchData",
                     "index": "change",
-                    "type": "pages",
+                    "type": "_user",
                     "_source": "_id",
                     "body": {
                         "query": {
                             "match": {
-                                "adminId": this.user._id
+                                "adminId": this.user.id
 
                             }
                         }
@@ -1172,7 +1164,8 @@
                         let pagename = [];
                         res.resolve.forEach(item => {
                             pagename.push({
-                                name: item['_id']
+                                id: item['id'],
+                                name: item['pagename']
                             })
                         });
                         if (res.resolve.length == 0) {
