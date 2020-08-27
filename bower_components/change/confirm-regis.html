@@ -125,27 +125,34 @@
                     // console.log("loc:", token);
 
                     this.tokManager.loadData(token).then(res => {
-                        this.verifyTok(res);
+                        this.verifyTok(res); //tok res
                     });
                 });
             },
 
             verifyTok: function (x) {
+                //x = tok res
                 let res = x;
                 console.log("res:", res);
 
                 let now = Date.now();
                 // console.log("now:", now);
 
-                if (now < res['expireDate']) {
-                    console.log("this token is still valid!");
-                    this.statusTrue(res['userId'], res['id']);
-                } else {
-                    alert("This token is expired!");
+                if (res['type'] == "register") {
+                    if (now < res['expireDate']) {
+                        console.log("this token is still valid!");
+                        this.statusTrue(res['userId'], res['id']); //tok userId, tok id
+                    } else {
+                        alert("This token is expired!");
+                    }
+                }else {
+                    alert("this token is not used to verify registration!");
                 }
+
             },
 
             statusTrue: function (x, z) {
+                //x = tok userId, z = tok id
                 let y = {
                     "status": true
                 }
@@ -157,6 +164,7 @@
             },
 
             autoLogin: function (x) {
+                //x = tok id
                 console.log("autologin:", x);
                 let loginUrl =
                     "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";

@@ -1,0 +1,119 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="change-redir">
+
+
+    <template>
+
+        <style>
+            * {
+                color: black;
+                font-family: sans-serif, Microsoft JhengHei;
+            }
+
+            body {
+                overflow: hidden;
+            }
+
+            #content {
+                text-align: center;
+                margin: 0 auto;
+                height: 50px;
+            }
+
+            h1 {
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
+        </style>
+        <div id="content">
+            <h1>Loading...</h1>
+        </div>
+    </template>
+
+</dom-module>
+
+<script>
+    (function () {
+        Polymer({
+            is: 'change-redir',
+            properties: {
+
+            },
+            created: function () {
+                console.log("Created here:");
+            },
+            //for adding link to the user name connecting wth the databse
+            ready: function () {
+                console.log("READY HERE:");
+
+                //make sure dz-loader run first
+                document.addEventListener('dz-ready', e => {
+                    // console.log('uid',Polymer.uid);
+                    this.tokManager = new DataPackage('token');
+
+                    let loc = location.search;
+                    let token = "";
+                    for (i = 7; i < loc.length; i++) {
+                        token += loc[i]
+                    }
+                    // console.log("loc:", token);
+
+                    this.tokManager.loadData(token).then(res => {
+                        this.verifyTok(res); //tok res
+                    });
+                });
+            },
+
+            verifyTok: function (x) {
+                //x = tok res
+                let res = x;
+                console.log("res:", res);
+
+                let now = Date.now();
+                // console.log("now:", now);
+
+                if (res['type'] == "contactSeller") {
+                    if (now < res['expireDate']) {
+                        console.log("this token is still valid!");
+                        this.autoLogin(res['id'], res['userId'], res['pid']); //tok id, tok userId, tok pid
+                    } else {
+                        alert("This token is expired!");
+                    }
+                } else {
+                    alert("this token is not used to verify registration!");
+                }
+
+            },
+
+            autoLogin: function (x, y, z) {
+                //x = tok id, y = tok userId, z = tok pid
+                console.log("autologin:", x);
+                let loginUrl =
+                    "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
+                let params = {
+                    "action": "loginByToken",
+                    "token": x,
+                };
+                Polymer.postData(loginUrl, params).then(res => {
+                    console.log("loginByToken", res);
+                    if (res.code > 0) {
+                        let user = res.resolve;
+                        store.set('change-user', user);
+                        console.log("AUTO LOGIN SUCCESS!");
+                        this.redirect(y, z);//y = tok userId, z = tok pid
+                    } else {
+                        alert("ERR: AUTO LOGIN Fail!");
+                    }
+                });
+
+            },
+
+            redirect: function (a, b) {
+                console.log("userId", a);
+                console.log("pid", b);
+                location.replace("./edit-product.html?p" + b + "u" + a);
+            }
+        });
+    })();
+</script>

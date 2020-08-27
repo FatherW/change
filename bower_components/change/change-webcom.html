@@ -118,14 +118,14 @@
 </dom-module>
 
 <script>
-    (function() {
+    (function () {
         Polymer({
             is: 'change-webcom',
             properties: {
                 seller: Object,
                 product: Object
             },
-            created: function() {
+            created: function () {
                 console.log('created');
                 this.user = store.get('change-user') || null;
                 if (this.user) {
@@ -140,14 +140,15 @@
 
             },
             loadUser(uid) {
-                return new Promise(function(resolve, reject) {
-                    Polymer.getContent('/json/user-' + uid + '.json?id=' + new Date().getTime()).then(res => {
-                        resolve(JSON.parse(res));
-                    }, err => {
-                        this.userManager.loadData(uid).then(prod => {
-                            resolve(prod);
+                return new Promise(function (resolve, reject) {
+                    Polymer.getContent('/json/user-' + uid + '.json?id=' + new Date().getTime())
+                        .then(res => {
+                            resolve(JSON.parse(res));
+                        }, err => {
+                            this.userManager.loadData(uid).then(prod => {
+                                resolve(prod);
+                            });
                         });
-                    });
                     // this.fileManager.getFile('json/product-' + pid + '.json').then(res => {
                     //     let json = JSON.parse(res);
                     // });
@@ -156,7 +157,7 @@
 
             },
             //for adding link to the user name connecting wth the databse
-            ready: function() {
+            ready: function () {
                 let that = this;
                 let loc = location.search;
                 let pid = "";
@@ -178,11 +179,12 @@
                 this.loadUser(uid).then(user => {
                     shadow.querySelector('#_changeicon').src = this.seller['head'];
                     shadow.querySelector('#owner').innerHTML = this.seller['username'];
-                    shadow.querySelector('#time').innerHTML += this.seller['score']; + '( ' + this.seller['numberRate'] + ' )';
+                    shadow.querySelector('#time').innerHTML += this.seller['score']; + '( ' +
+                    this.seller['numberRate'] + ' )';
                 });
                 shadow.querySelector('#para').innerHTML = this.product['description'];
 
-                shadow.querySelector('#review').addEventListener("keypress", function(e) {
+                shadow.querySelector('#review').addEventListener("keypress", function (e) {
                     var key = e.which || e.keyCode || 0;
                     if (key === 13) {
                         that._postRequest();
@@ -223,7 +225,7 @@
                 })
 
             },
-            _postRequest: function() {
+            _postRequest: function () {
                 console.log('点击了送出按钮');
                 let shadow = this.shadowRoot;
                 let loc = location.search;
@@ -259,7 +261,11 @@
 
                     // Henry's Code
                     console.log("omgomg:", JSON.stringify(this.product));
+                    let pid = this.product['id'];
+                    let sid = this.seller['id'];
+                    console.log("this.seller id:", sid);
                     let to = this.seller['email'];
+                    console.log("seller email:", to);
                     let html;
 
                     if (this.product['isNew'] == true) {
@@ -277,7 +283,14 @@
                     let district = this.product['district'];
                     let deliveryMethod = this.product['deliveryMethod'];
                     let deliveryMethod2 = this.product['deliveryMethod'];
-                    let token = "1sd895ndsd";
+
+                    //GENERATE REG TOK
+                    var tok = Date.now();
+                    // console.log("tok:", tok);
+                    var expireDate = tok + 604800000; //604800000 = 1 week time in milliseconds
+                    // console.log("expireDate:", expireDate);
+                    this.contactToken(tok, sid, expireDate, pid);
+
                     this.saveOrder();
                     Polymer.getContent('/email-template/sendcontactemail.html').then(html => {
                         html = html.replace("[[image]]", "https://www.gettv.hk" + image);
@@ -290,18 +303,51 @@
                         html = html.replace("[[deliveryMethod]]", deliveryMethod);
                         html = html.replace("[[deliveryMethod2]]", deliveryMethod);
                         html = html.replace("[[contactinfo]]", contactinfo);
-                        html = html.replace("[[token]]", token);
+                        html = html.replace("[[token]]", tok);
 
 
                         // // .......
                         this.sendmail('support@01power.net', to, '你有新的訊息', html);
-                        // alert('電郵已發出');
-                        // location.reload();
+                        alert('電郵已發出');
+                        location.reload();
 
                     });
 
                 }
             },
+
+            contactToken: function (a, b, c, d) {
+                let shadow = this.shadowRoot;
+                let that = this;
+                let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                
+                // console.log("a:", a);
+                // console.log("b:", b);
+                // console.log("c:", c);
+                let param = {
+                    "action": "addData",
+                    "index": "change",
+                    "type": "token",
+                    "id": a,
+                    "body": {
+                        "id": a,
+                        "userId": b,
+                        "expireDate": c,
+                        "type": "contactSeller",
+                        "pid": d
+                    }
+                };
+                Polymer.postData(link, param).then(res=>{
+                    if (res.code>0){
+                        console.log("reg tok is generated!")
+                    } else {
+                        alert("fail to generate reg tok!");
+                    }
+                });
+
+
+            },
+
             saveOrder() {
                 console.log("SAVEOEDER");
                 let arr = this.product['replyArray'];
@@ -319,7 +365,8 @@
                 this.orderManager.saveData(id, json);
                 this.product['replyArray'].push(id);
                 this.prodManager.saveData(this.product['id'], this.product);
-                this.fileManager.saveFile('json/product-' + this.product['id'] + '.json', JSON.stringify(this.product));
+                this.fileManager.saveFile('json/product-' + this.product['id'] + '.json', JSON.stringify(
+                    this.product));
                 this.fileManager.saveFile('json/order-' + id + '.json', JSON.stringify(json));
 
             }
