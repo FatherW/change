@@ -336,20 +336,21 @@
                 });
             },
 
-            _register(json) {
-                let that = this;
-                console.log('Register', json);
-                // let user = new DataPackage("_user");
+            _register() {
+                Polymer.dzFire('close-login', {});
+                // let that = this;
+                // console.log('Register', json);
+                // // let user = new DataPackage("_user");
 
-                return new Promise(function(resolve, reject) {
-                    that.userManager.saveData(json['email'], json).then(res => {
-                        console.log('Resolve');
-                        resolve();
-                    }, err => {
-                        console.log('Reject');
-                        reject();
-                    });
-                });
+                // return new Promise(function(resolve, reject) {
+                //     that.userManager.saveData(json['email'], json).then(res => {
+                //         console.log('Resolve');
+                //         resolve();
+                //     }, err => {
+                //         console.log('Reject');
+                //         reject();
+                //     });
+                // });
 
 
             },
