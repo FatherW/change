@@ -158,7 +158,7 @@
 <script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
 <script async defer src="https://apis.google.com/js/platform.js"></script>
 <script>
-    (function() {
+    (function () {
         Polymer({
             is: 'change-register',
             properties: {
@@ -170,18 +170,21 @@
                 document.querySelector('.g-signin2 .abcRioButtonContentWrapper').click();
 
             },
-            log: function() {
-                let url = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
-                let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+            log: function () {
+                let url =
+                    "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
+                let link =
+                    "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 let that = this;
-                FB.login(function(response) {
+                FB.login(function (response) {
                     if (response.authResponse) {
                         FB.api('/me', {
                             fields: 'name, email'
-                        }, function(response) {
+                        }, function (response) {
                             let email = response.email;
                             let name = response.name;
-                            let head = "http://graph.facebook.com/" + response.id + "/picture?type=normal";
+                            let head = "http://graph.facebook.com/" + response.id +
+                                "/picture?type=normal";
                             let param = {
                                 "action": "searchData",
                                 "index": "change",
@@ -194,7 +197,7 @@
                                     }
                                 }
                             };
-                            FB.logout(function(response) {
+                            FB.logout(function (response) {
                                 // Person is now logged out
                             });
                             Polymer.postData(link, param).then(res => {
@@ -210,29 +213,40 @@
                                             "head": head
                                         };
 
-                                        store.set("change-platform", platformcookie);
-                                        let dialog = that.shadowRoot.querySelector('#registerpop');
-                                        Polymer.popup(dialog, "change", "change-register", "45s%", "90%");
+                                        store.set("change-platform",
+                                            platformcookie);
+                                        let dialog = that.shadowRoot
+                                            .querySelector('#registerpop');
+                                        Polymer.popup(dialog, "change",
+                                            "change-register", "45s%", "90%"
+                                            );
                                     } else {
                                         if (all[0].platform == "facebook") {
                                             let loginparams = {
                                                 "action": "login",
                                                 "login": email,
-                                                "password": all[0]['password']
+                                                "password": all[0][
+                                                    'password'
+                                                ]
                                             };
 
-                                            Polymer.postData(url, loginparams).then(res => {
-                                                if (res.code > 0) {
-                                                    let user = res.resolve;
-                                                    store.set('change-user', user);
-                                                    location.reload();
-                                                } else {
-                                                    alert('登入失敗');
-                                                }
-                                            });
+                                            Polymer.postData(url, loginparams)
+                                                .then(res => {
+                                                    if (res.code > 0) {
+                                                        let user = res
+                                                            .resolve;
+                                                        store.set(
+                                                            'change-user',
+                                                            user);
+                                                        location.reload();
+                                                    } else {
+                                                        alert('登入失敗');
+                                                    }
+                                                });
 
                                         } else {
-                                            alert("此帳戶的郵箱已在" + all[0].platform + "註冊，請重新登入");
+                                            alert("此帳戶的郵箱已在" + all[0].platform +
+                                                "註冊，請重新登入");
                                         }
                                     }
                                 } else {
@@ -257,13 +271,13 @@
                     scope: 'email'
                 });
             },
-            checkLoginState: function() { // Called when a person is finished with the Login Button.
-                FB.getLoginStatus(function(response) { // See the onlogin handler
+            checkLoginState: function () { // Called when a person is finished with the Login Button.
+                FB.getLoginStatus(function (response) { // See the onlogin handler
                     statusChangeCallback(response);
                 });
             },
 
-            statusChangeCallback: function(response) { // Called with the results from FB.getLoginStatus().
+            statusChangeCallback: function (response) { // Called with the results from FB.getLoginStatus().
                 console.log('statusChangeCallback');
                 console.log(response); // The current login status of the person.
                 if (response.status === 'connected') { // Logged into your webpage and Facebook.
@@ -273,15 +287,16 @@
                 }
             },
 
-            testAPI: function() { // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
+            testAPI: function () { // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
                 console.log('Welcome!  Fetching your information.... ');
-                FB.api('/me', function(response) {
+                FB.api('/me', function (response) {
                     console.log('Successful login for: ' + response);
                 });
             },
 
             _fb_register(id, name, email) {
-                let registerUrl = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
+                let registerUrl =
+                    "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
                 let params = {
                     "action": "changeregister",
                     "username": email,
@@ -308,13 +323,13 @@
                     }
                 });
             },
-            _register: function() {
+            _register: function () {
                 console.log('点击了注册键');
                 let shadow = this.shadowRoot;
                 let that = this;
                 let platform = "gettv";
                 let head = "http://www.gettv.hk/img/user_profile.png";
-                let uid = shadow.querySelector('#changeId1').value; //使用名稱
+                var uid = shadow.querySelector('#changeId1').value; //使用名稱
                 let area = shadow.querySelector('#changeArea1').value; //地區
                 let email = shadow.querySelector('#changeEmail1').value; //電郵地址
                 let phone = shadow.querySelector('#changePhone1').value; //電話
@@ -322,6 +337,16 @@
                 let cpass = shadow.querySelector('#pass2').value;
                 let promotion = shadow.querySelector('#optional').checked
                 let check = shadow.querySelector('#check').checked;
+
+                //GENERATE REG TOK
+                var tok = Date.now();
+                // console.log("tok:", tok);
+                var expireDate = tok + 604800000; //604800000 = 1 week time in milliseconds
+                // console.log("expireDate:", expireDate);
+                this.regToken(tok, email, expireDate);
+
+
+
                 if (uid === "") {
                     alert('使用名稱不可以為空');
                 } else {
@@ -353,7 +378,8 @@
                                                 "phone": phone,
                                                 "isPromotionMsg": promotion,
                                                 "platform": platform,
-                                                "head": head
+                                                "head": head,
+                                                "token": tok
                                             };
                                             console.log("Params", params);
                                             Polymer.postData(registerUrl, params).then(res => {
@@ -367,9 +393,41 @@
                         }
                     }
                 }
+
             },
 
-            login: function() {
+            regToken: function (a, b, c) {
+                let shadow = this.shadowRoot;
+                let that = this;
+                let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                
+                // console.log("a:", a);
+                // console.log("b:", b);
+                // console.log("c:", c);
+                let param = {
+                    "action": "addData",
+                    "index": "change",
+                    "type": "token",
+                    "id": a,
+                    "body": {
+                        "id": a,
+                        "userId": b,
+                        "expireDate": c,
+                        "type": "register"
+                    }
+                };
+                Polymer.postData(link, param).then(res=>{
+                    if (res.code>0){
+                        console.log("reg tok is generated!")
+                    } else {
+                        alert("fail to generate reg tok!");
+                    }
+                });
+
+
+            },
+
+            login: function () {
                 let shadow = this.shadowRoot;
                 let that = this;
                 let user = store.get('change-user');
@@ -377,13 +435,14 @@
                     let dialog = shadow.querySelector('vaadin-dialog#login');
                     Polymer.popup(dialog, "change", "change-login", "30%", "50%");
                 } else {
-                    this.shadowRoot.querySelector('#before').innerHTML = '<button id="register" on-click="_register">/ 註冊</button>< button id = "login" on - click="_login" > / 登入</button >';
+                    this.shadowRoot.querySelector('#before').innerHTML =
+                        '<button id="register" on-click="_register">/ 註冊</button>< button id = "login" on - click="_login" > / 登入</button >';
                     store.set('change-user', null);
                     location.reload();
                 }
             },
 
-            _login: function() {
+            _login: function () {
                 let shadow = this.shadowRoot;
                 let that = this;
                 let user = store.get('change-user') || null;
@@ -395,11 +454,12 @@
                 }
             },
 
-            ready: function() {
+            ready: function () {
                 let that = this;
                 let platform = store.get("change-platform") || "gettv";
                 if (platform != "gettv") {
-                    that.shadowRoot.querySelector('.font-sizeh1').innerHTML = "以" + platform['platform'] + "平台註冊";
+                    that.shadowRoot.querySelector('.font-sizeh1').innerHTML = "以" + platform[
+                        'platform'] + "平台註冊";
                     that.shadowRoot.querySelector('#changeId1').value = platform['name'];
                     that.shadowRoot.querySelector('#pass1').style.display = "none";
                     that.shadowRoot.querySelector('#pass2').style.display = "none";
@@ -411,7 +471,8 @@
 
                 }
 
-                let loginUrl = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let loginUrl =
+                    "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 let params = {
                     "action": "searchData",
                     "index": "change",
@@ -428,7 +489,7 @@
                     }
                 });
                 let shadow = this.shadowRoot;
-                customElements.whenDefined('vaadin-select').then(function() {
+                customElements.whenDefined('vaadin-select').then(function () {
                     const district = [{
                         id: '中西區',
                         name: '中西區'
@@ -484,15 +545,16 @@
                         id: '西貢區',
                         name: '西貢區'
                     }];
-                    shadow.querySelector('vaadin-select').renderer = function(root) {
+                    shadow.querySelector('vaadin-select').renderer = function (root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        district.forEach(function(item) {
-                            const vaadinItem = document.createElement('vaadin-item');
+                        district.forEach(function (item) {
+                            const vaadinItem = document.createElement(
+                            'vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
                             vaadinItem.setAttribute('value', item.id);
