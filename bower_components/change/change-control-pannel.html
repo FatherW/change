@@ -324,7 +324,7 @@
                         let search = {
                             "action": "searchData",
                             "index": "change",
-                            "type": "pages",
+                            "type": "_user",
                             "body": {
                                 "query": {
                                     "bool": {
@@ -347,7 +347,7 @@
                                 errstore.forEach(str => {
                                     that.errmsg += "[" + str + "] ，"
                                 })
-                                if (errstore) that.errmsg += "已存在，請更改";
+                                if (errstore.length > 0) that.errmsg += "已存在，請更改";
 
                             } else {
                                 /////great
@@ -374,23 +374,13 @@
                     "id": id,
                     "pagename": pagename,
                     "score": 5,
-                    "website": "www.gettv.hk/" + website,
-                    "banner": "https://www.gettv.hk/Website%20Design/profile%20page/img/profile%20banner/company-profile-banner.png"
-                }
-                let param_toUser = {
-                    "id": id,
-                    "username": pagename,
-                    "area": district,
-                    "email": email,
-                    "website": "www.gettv.hk/" + website,
-                    "isFanpage": true,
-                    "head": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Windows_Settings_app_icon.png",
-                }
-                that.pageManager.saveData(id, param).then(e => {
-                    this.fileManager.saveFile('json/page-' + id + '.json', JSON.stringify(param));
-                    this.fileManager.saveFile('json/user-' + id + '.json', JSON.stringify(param_toUser));
+                    "website": website,
+                    "banner": "https://www.gettv.hk/Website%20Design/profile%20page/img/profile%20banner/company-profile-banner.png",
+                    "isFanpage": true
+                };
+                that.userManager.saveData(id, param).then(e => {
+                    this.fileManager.saveFile('json/user-' + id + '.json', JSON.stringify(param));
                     that.fanpageGen(website, id)
-                    alert("成功");
                 })
 
 

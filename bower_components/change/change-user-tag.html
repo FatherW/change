@@ -348,7 +348,7 @@
             } */
         </style>
 
-        <div id="usericon">
+        <div id="usericon" href$="{{userUrl}}">
             <a id="redu" style="display: flex;">
                 <div id="a1">
                     <img id="_changeicon" src$={{user.head}}> 
@@ -390,29 +390,18 @@
                 this.timeStr = Polymer.parseTime(time);
                 Polymer.getContent(url).then(str => {
                     that.user = JSON.parse(str);
-                    that.name = that.user.username;
+                    let user = JSON.parse(str);
+                    if (user['isFanpage'] == true) {
+                        this.name = user['pagename'];
+                        this.userUrl = "/" + user['website'];
+                    } else {
+                        this.name = user['username'];
+                        this.userUrl = "/user.html?" + ownerId;
+
+                    }
                 });
 
                 // console.log('User Tag',id);
-            },
-            loadPage(name, time) {
-                let that = this;
-                console.log(name);
-                this.name = name;
-                this.timeStr = Polymer.parseTime(time);
-                let url = "/json/page-" + name + ".json";
-                Polymer.getContent(url).then(str => {
-                        page = JSON.parse(str);
-                        that.user.head = page.head;
-                    },
-                    err => {
-                        that.dataManager.loadData(name).then(res => {
-                            page = JSON.parse(str);
-                            that.user.head = page.head;
-                        });
-                    });
-
-
             },
 
 

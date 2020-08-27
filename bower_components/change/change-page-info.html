@@ -88,7 +88,7 @@
             .inf2 {
                 line-height: 2.5;
                 color: grey;
-                margin-left: 100px;
+                margin-left: 50px;
             }
 
             @media (max-width: 640px) {
@@ -128,7 +128,7 @@
                         <p class="inf">名稱: <span class="infotext" id="name">{{page.pagename}}</span></p>
                         <p class="inf">地區: <span class="infotext" id="area">{{page.district}}</span></p>
                         <p class="inf">電郵: <span class="infotext" id="email">{{page.email}}</span></p>
-                        <p class="inf">網址: <span class="infotext" id="website">{{page.website}}</span></p>
+                        <p class="inf">網址: www.gettv.hk/<span class="infotext" id="website">{{page.website}}</span></p>
                         {{errmsg}}
                     </div>
                 </div>
@@ -142,11 +142,11 @@
                     
                     </div>
                     <div id="info2">
-                        <h5 style="margin-left: 100px;">指派專頁管理員資料</h5>
+                        <h5 style="margin-left: 50px;">指派專頁管理員資料</h5>
                         <p class="inf2">電郵: <span class="infotext" id="adminEmail">
                                 <vaadin-text-field id='getuserId'></vaadin-text-field>
                             </span></p>
-                        <div style="display: inline-flex; margin-left: 100px;">
+                        <div style="display: inline-flex; margin-left: 50px;">
                             <vaadin-button class="handIn" on-click="searchadmin">搜尋</vaadin-button>
                             <vaadin-button id="adminAdd" on-click="addAdmin" style="margin-left: 20px;display: none;">確認</vaadin-button>
                         </div>
@@ -172,9 +172,6 @@
                 "page": {
                     "type": Array
                 },
-                "setadminState": {
-                    "type": Boolean
-                }
             },
             created: function() {
                 let user = store.get('change-user') || null;
@@ -210,7 +207,7 @@
                         shadow.querySelector("#right").style.display = "block";
                     }
                 }
-                let url = '/json/page-' + this.id + '.json?id=' + new Date().getTime();
+                let url = '/json/user-' + this.id + '.json?id=' + new Date().getTime();
                 Polymer.getContent(url).then(res => {
                         this.page = JSON.parse(res);
                     })
@@ -305,13 +302,11 @@
             setadmin: function() {
                 let that = this;
                 let shadow = this.shadowRoot;
-                this.getadminId = '指派專頁管理員';
-                let state = this.setadminState;
-                if (state == false) {
-                    state = true;
+                if (this.getadminId == '指派專頁管理員') {
+                    this.getadminId = "完成";
                     shadow.querySelector('#info2').style.display = "block";
                 } else {
-                    state = false;
+                    this.getadminId = '指派專頁管理員';
                     shadow.querySelector('#info2').style.display = "none";
                 }
             },
@@ -321,6 +316,7 @@
                 let shadow = this.shadowRoot;
                 let id = shadow.querySelector('#getuserId').value;
                 let url = "json/user-" + id + ".json";
+                console.log(url);
                 let button = shadow.querySelector('#adminAdd')
                 this.fileManager.getFile(url).then(res => {
                     if (this.page['adminId'].indexOf(id) == -1) {
@@ -340,7 +336,7 @@
                 let param = {
                     "action": "updateData",
                     "index": "change",
-                    "type": "pages",
+                    "type": "_user",
                     "id": this.id,
                     "body": {
                         "query": {
@@ -353,6 +349,15 @@
                 Polymer.postData(url, param).then(res => {
                     if (res.code > 0) {
                         this.errmsg2 = "成功加入" + this.newAdmin;
+
+                        this.userManager.loadData(this.id).then(res => {
+                            this.fileManager.saveFile('json/user-' + this.id + '.json', JSON.stringify(res));
+                            let root = this.shadowRoot.querySelector('#info2');
+                            let icon = document.createElement('change-icon');
+                            icon.setAttribute('id', this.newAdmin);
+                            root.appendChild(icon);
+
+                        });
                     }
                 })
 
@@ -365,15 +370,14 @@
             toggle: function() {
                 let shadow = this.shadowRoot;
                 let that = this;
-                let text = this.editText;
-                if (text == "編輯") {
+                if (this.editText == "編輯") {
                     shadow.querySelector('#name').innerHTML = "<vaadin-text-field id='pagename1' value=" + this.page['pagename'] + "></vaadin-text-field>";
                     shadow.querySelector('#area').innerHTML = "<vaadin-select id='area1' value=" + this.page['district'] + " label=''></vaadin-select>";
                     shadow.querySelector('#email').innerHTML = "<vaadin-text-field id='name1' value=" + this.page['email'] + "></vaadin-text-field>";
                     this.execute();
-                    text = "提交";
+                    this.editText = "提交";
                 } else {
-                    text = "編輯";
+                    this.editText = "編輯";
                     that.check();
 
 
@@ -384,13 +388,12 @@
                 console.log(this.siteEdit);
                 let that = this;
                 if (that.siteEdit == "更改網址") {
-                    console.log("good");
                     that.shadowRoot.querySelector('#website').innerHTML = "<vaadin-text-field id='website1' value=" + this.page['website'] + "></vaadin-text-field>";
                     that.siteEdit = "確認更改";
                 } else {
-                    console.log("bad");
                     that.siteEdit = "更改網址";
                     that.websitechanges();
+                    this.shadowRoot.querySelector('#website').innerHTML = this.page['website'];
                 }
             },
             websitechanges() {
@@ -418,85 +421,54 @@
                 })
             },
             check() {
-                let url = 'https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController';
                 let that = this;
                 let shadow = this.shadowRoot;
                 let pagename = shadow.querySelector('#pagename1').value
                 let email = shadow.querySelector('#name1').value;
                 let area = shadow.querySelector('#area1').value;
+                if (pagename != this.page['pagename']) {
 
-                let param = [{
-                    "match": {
-                        'pagename': pagename
-                    }
-                }, {
-                    "match": {
-                        'website': website
-                    }
-
-                }]
-
-                let search = {
-                    "action": "searchData",
-                    "index": "change",
-                    "type": "pages",
-                    "body": {
-                        "query": {
-                            "bool": {
-                                "should": param
-                            }
+                    let param = {
+                        "match": {
+                            'pagename': pagename
                         }
                     }
-                };
-                Polymer.postData(url, search).then(res => {
-                    let all = res.resolve;
-                    if (all.length > 0) {
-                        let errstore = [];
-                        all.forEach(item => {
-                            if (item['id'] == pageid.value) errstore.push('專頁ID');
-                            if (item['pagename'] == pagename.value) errstore.push('專頁名稱')
-                            if (item['website'] == website.value) errstore.push('專頁網址');
+                    this.userManager.matchDataNosort(param).then(res => {
+                        if (res.length > 0) {
+                            that.errmsg = "專頁名稱已存在，請更改"
 
-                        })
-                        errstore.forEach(str => {
-                            that.errmsg += str + "已存在，請更改"
-                        })
+                        } else {
+                            that.renewPageData();
+                        }
+                    }, err => {
+                        alert("error 444");
+                    })
+                } else {
+                    that.renewPageData();
 
-
-                    } else {
-                        /////great
-                        that.renewPageData();
-                    }
-                })
-
+                }
 
 
             },
             renewPageData() {
-                let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let shadow = this.shadowRoot;
                 let pagename = shadow.querySelector('#pagename1').value
                 let email = shadow.querySelector('#name1').value;
                 let area = shadow.querySelector('#area1').value;
                 let params = {
-                    "action": "addData",
-                    "index": "change",
-                    "type": "pages",
-                    "id": this.id,
-                    "body": {
-                        "pagename": pagename,
-                        "email": email,
-                        "district": area,
-                    }
+                    "pagename": pagename,
+                    "email": email,
+                    "district": area,
                 };
-                Polymer.postData(url, params).then(res => {
-                    if (res.code > 0) {
-                        shadow.querySelector('#name').innerHTML = pagename;
-                        shadow.querySelector('#area').innerHTML = area;
-                        shadow.querySelector('#email').innerHTML = email;
-                        text = "編輯";
-                    } else {
-                        console.log("0421 , add data error")
-                    }
+
+                this.userManager.saveData(this.id, params).then(res => {
+                    this.userManager.loadData(this.id).then(res => {
+                        this.fileManager.saveFile('json/user-' + this.id + '.json', JSON.stringify(res));
+
+                    })
+                    shadow.querySelector('#name').innerHTML = pagename;
+                    shadow.querySelector('#area').innerHTML = area;
+                    shadow.querySelector('#email').innerHTML = email;
                 })
 
             },
