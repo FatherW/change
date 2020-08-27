@@ -61,6 +61,7 @@
             created: function() {
                 // Polymer.loadComponent('change', 'change-login');
                 this.userManager = new DataPackage('_user');
+                this.fileManager = new AwsPackage(user);
 
 
             },
@@ -145,8 +146,7 @@
                     login.appendChild(a);
                     // this.shadowRoot.querySelector('#login').innerHTML = '<a href="/user.html?' + user['_id'] + '"><img src="' + user['head'] + '"></a>';
 
-                    this.fileManager = new AwsPackage(user);
-                    console.log("write access key and save JSON:", this.fileManager);
+                    console.log("uuuuu1", this.fileManager);
                     this.fileManager.saveFile('json/user-' + user['id'] + '.json', JSON.stringify(user));
                 }
 
