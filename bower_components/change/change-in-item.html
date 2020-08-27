@@ -194,7 +194,7 @@
             },
 
             // search:function(cats,tags,district,priceStart,priceEnd){
-            search(cats, tags, district, isNew, priceStart, priceEnd, isFree,fanpage) {
+            search(cats, tags, district, isNew, priceStart, priceEnd, isFree, fanpage) {
 
                 let that = this;
                 let shadow = this.shadowRoot;
@@ -213,19 +213,19 @@
                         "isFree": isfree2
                     }
                 }];
-                             
+
                 ///fanpage
-                if(fanpage){
+                if (fanpage) {
                     Query.push({
-                            'term': {
-                                'ownerId': fanpage
-                            }
-                        })
+                        'term': {
+                            'ownerId': fanpage
+                        }
+                    })
                 }
 
 
                 ///isfree
-   
+
                 ////search the categoriews
                 let cateid = [];
                 if (cats != undefined || cats != null) {
@@ -282,13 +282,8 @@
                 };
 
                 /////search the price range
-                if (priceEnd == undefined || priceEnd == null) {
-                    var fromprice = 0;
-                    var toprice = document.querySelector('change-shop').initprice;
-                } else {
-                    var fromprice = priceStart;
-                    var toprice = priceEnd;
-                };
+                var fromprice = priceStart;
+                var toprice = priceEnd;
 
                 //// the cate query
                 let paramcate = {
@@ -332,6 +327,8 @@
                         }
                     }
                 };
+                console.log("search price ", fromprice, toprice);
+
                 console.log(JSON.stringify(paramcate), "wwwwwwwwww", JSON.stringify(parammust));
                 Polymer.postData(url, paramcate).then(res => {
                     if (res.code > 0) {
@@ -360,17 +357,6 @@
                                     }
                                 };
                                 this.res = theans;
-                                let shop = document.querySelector('change-shop');
-                                let list = shop.shadowRoot.querySelector('change-slidelist');
-                                list.shadowRoot.querySelector('#renew').innerHTML = '<change-range></change-range>';
-                                let range_cookie = {
-                                    "query": theans,
-                                    "from": fromprice,
-                                    "to": toprice
-                                };
-                                store.set('change-range', range_cookie);
-                                list.shadowRoot.querySelector('change-range').new();
-
 
                                 if (toprice > 1 && isfree2 == false) {
                                     var price1 = [];
@@ -433,6 +419,16 @@
                                     }
                                     this.countitem += 8;
                                 }
+                                let shop = document.querySelector('change-shop');
+                                let list = shop.shadowRoot.querySelector('change-slidelist');
+                                list.shadowRoot.querySelector('#renew').innerHTML = '<change-range></change-range>';
+                                let range_cookie = {
+                                    "query": theans,
+                                    "from": fromprice,
+                                    "to": toprice
+                                };
+                                store.set('change-range', range_cookie);
+                                list.shadowRoot.querySelector('change-range').new();
 
                             }
                         })

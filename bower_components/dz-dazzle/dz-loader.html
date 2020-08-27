@@ -15,11 +15,11 @@
         constructor(user) {
             //        const user = window['user'] || store.get('user') || null;
             let that = this;
-            console.log(user);
+            // console.log(user);
             this.key = user["key"] || null;
             this.miscUrl =
                 "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/dazzleEditorMiscFunction";
-            console.log("AWS User", user);
+            // console.log("AWS User", user);
             this.bucket = user["userBucket"];
             this.user = user;
 

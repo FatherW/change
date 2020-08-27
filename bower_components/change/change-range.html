@@ -257,10 +257,8 @@ its values is > 50%. */
                     this.data1 = 0;
                     this.data2 = initprice;
                 }
-                let range_cookie = {
-                    "from": this.data1,
-                    "to": this.data2
-                };
+
+                console.log(this.data1, this.data2);
                 noUiSlider.create(rangeSlider, {
                     start: [this.data1, this.data2],
                     step: 1,

@@ -81,6 +81,10 @@
                 background-color: #7cd3da;
             }
 
+            change-icon {
+                margin: 10px;
+            }
+
             .save {
                 width: 50px;
             }
@@ -88,7 +92,7 @@
             #info1 {
                 width: 84%;
                 margin: 0 auto;
-                /* display: none; */
+                display: none;
             }
 
             #info2 {
@@ -102,6 +106,12 @@
                 margin-right: 30px;
             }
 
+            #listPage {
+                display: none;
+                grid-template-columns: repeat(4, 1fr);
+                grid-row-gap: 15px;
+                padding: 30px 40px;
+            }
 
             @media only screen and (max-width: 992px) {}
 
@@ -167,7 +177,7 @@
                 </div>
 
                 <div id="listPage">
-                    
+
                 </div>
             </div>
         </div>
@@ -231,6 +241,30 @@
                 let website = shadow.querySelector('#website2');
                 website.addEventListener('keyup', e => {
                     if (e.code == "Enter") that.check();
+                })
+                let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let list = shadow.querySelector('#listPage');
+                let param = {
+                    "action": "searchData",
+                    "index": "change",
+                    "type": "_user",
+                    "_source": "_id",
+                    "body": {
+                        "query": {
+                            "match": {
+                                "isFanpage": true
+                            }
+                        }
+                    }
+                }
+                Polymer.postData(url, param).then(res => {
+                    if (res.code > 0) {
+                        res.resolve.forEach(item => {
+                            let user = document.createElement('change-icon');
+                            user.setAttribute('id', item._id)
+                            list.appendChild(user);
+                        })
+                    }
                 })
 
 
@@ -324,7 +358,7 @@
                         let search = {
                             "action": "searchData",
                             "index": "change",
-                            "type": "pages",
+                            "type": "_user",
                             "body": {
                                 "query": {
                                     "bool": {
@@ -347,7 +381,7 @@
                                 errstore.forEach(str => {
                                     that.errmsg += "[" + str + "] ，"
                                 })
-                                if (errstore) that.errmsg += "已存在，請更改";
+                                if (errstore.length > 0) that.errmsg += "已存在，請更改";
 
                             } else {
                                 /////great
@@ -374,23 +408,13 @@
                     "id": id,
                     "pagename": pagename,
                     "score": 5,
-                    "website": "www.gettv.hk/" + website,
-                    "banner": "https://www.gettv.hk/Website%20Design/profile%20page/img/profile%20banner/company-profile-banner.png"
-                }
-                let param_toUser = {
-                    "id": id,
-                    "username": pagename,
-                    "area": district,
-                    "email": email,
-                    "website": "www.gettv.hk/" + website,
-                    "isFanpage": true,
-                    "head": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Windows_Settings_app_icon.png",
-                }
-                that.pageManager.saveData(id, param).then(e => {
-                    this.fileManager.saveFile('json/page-' + id + '.json', JSON.stringify(param));
-                    this.fileManager.saveFile('json/user-' + id + '.json', JSON.stringify(param_toUser));
+                    "website": website,
+                    "banner": "https://www.gettv.hk/Website%20Design/profile%20page/img/profile%20banner/company-profile-banner.png",
+                    "isFanpage": true
+                };
+                that.userManager.saveData(id, param).then(e => {
+                    this.fileManager.saveFile('json/user-' + id + '.json', JSON.stringify(param));
                     that.fanpageGen(website, id)
-                    alert("成功");
                 })
 
 
@@ -486,26 +510,12 @@
             },
 
             _manageFanPage: function() {
-                let shadow = this.shadowRoot;
-                let list = shadow.querySelector('#listPage');
-                this.pageManager.getAllData().then(res => {
-                    res.forEach(item => {
-                        let user = document.createElement('change-icon');
-                        user.setAttribute('id', item.id)
-                        list.appendChild(user);
-                    })
-                })
-
-
-
-
-
-                this.shadowRoot.querySelector('#info2').style.display = "block";
-            },
-
-            cancelinfo2: function() {
-                this.shadowRoot.querySelector('#info2').style.display = "none";
-
+                let listpage = this.shadowRoot.querySelector('#listpage');
+                if (listpage.style.display == "grid") {
+                    listpage.style.display = "none";
+                } else {
+                    listpage.style.display = "grid";
+                }
             },
 
 
