@@ -194,7 +194,6 @@
 
         <div id="containall">
             <div id="leftele">
-                <div id="testing">555</div>
                 <change-slidelist></change-slidelist>
                 <change-mobileslide></change-mobileslide>
             </div>
@@ -335,12 +334,12 @@
                     if (this.district == value) {
                         this.district = null;
                     }
-                    ///range
-                    let msgrange = "$" + this.priceStart + " - $" + this.priceStop;
-                    if (msgrange == value) {
-                        this.priceStart = 0;
-                        this.priceStop = this.initprice;
-                    }
+                    // ///range
+                    // let msgrange = "$" + this.priceStart + " - $" + this.priceStop;
+                    // if (msgrange == value) {
+                    //     this.priceStart = 0;
+                    //     this.priceStop = this.initprice;
+                    // }
                     this.search();
                 },
                 pagetag(tag) {
@@ -416,7 +415,7 @@
                         } else {
                             let value = "$" + this.priceStart + " - $" + this.priceStop;
                             console.log("1111111111", value)
-                            this.back(value);
+                                // this.back(value);
                             let papertag = this.shadowRoot.querySelector('paper-tags-input')._getTags();
                             deletetag = this.shadowRoot.querySelector('paper-tags-input')._onTagItemRemove({
                                 "detail": {
@@ -470,11 +469,8 @@
                     };
 
                     let page = document.querySelector('change-fanpage');
-                    if (page) {
-                        this.pagetag(page.id);
-                    } else {
-                        alert('cant find page');
-                    }
+                    if (page) this.pagetag(page.id);
+
 
                     // let paperTagsInput = shadow.querySelector('#myTags');
                     // let clearfix = paperTagsInput.shadowRoot.querySelector('.clearfix');
