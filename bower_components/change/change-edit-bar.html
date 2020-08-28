@@ -1,7 +1,7 @@
-<link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../vaadin-button/vaadin-button.html">
-<link rel="import" href="../vaadin-select/vaadin-select.html">
-<link rel="import" href="../vaadin-checkbox/vaadin-checkbox.html">
+<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/polymer/polymer.html">
+<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-button/vaadin-button.html">
+<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-select/vaadin-select.html">
+<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-checkbox/vaadin-checkbox.html">
 <link rel="import" href="change-status.html">
 
 <dom-module id="change-edit-bar">
@@ -104,7 +104,7 @@
 
 <script>
     //function for database
-    (function () {
+    (function() {
         Polymer({
             is: 'change-edit-bar',
             properties: {
@@ -117,7 +117,7 @@
                 }
             },
 
-            ready: function () {
+            ready: function() {
                 let shadow = this.shadowRoot;
                 let that = this;
                 let loc = location.search;
@@ -151,7 +151,7 @@
 
 
 
-            created: function () {
+            created: function() {
 
                 this.user = store.get('change-user') || null;
                 if (this.user) {
@@ -163,9 +163,9 @@
 
             },
 
-            _delete: function () {
+            _delete: function() {
                 console.log("DELETE FUNCTION IS WORKING")
-                // GET THE ITEM ID FROM THE URL
+                    // GET THE ITEM ID FROM THE URL
                 let loc = location.search;
                 let pid = "";
                 let posit = 0;
@@ -209,7 +209,7 @@
 
             },
 
-            _copy: function () {
+            _copy: function() {
 
                 //GENERATE UNIQUE TIME AS PRODUCT ID
                 let a = Date.now();
@@ -284,7 +284,7 @@
 
             },
 
-            savejson: function (x, y, z) {
+            savejson: function(x, y, z) {
                 let that = this;
                 let user = store.get('change-user') || null;
                 this.fileManager = new AwsPackage(user);
