@@ -254,7 +254,7 @@
 
                 let userInfo = document.querySelector('change-user-info');
                 let keyword = userInfo.shadowRoot.querySelector('#vb').innerHTML;
-                if (keyword == "提交" && user._id == this.id) {
+                if (keyword == "提交" && user['id'] == this.id) {
                     Polymer.popup(dialog, 'change', 'change-gallery', '90%', '90%');
                 } else {
                     console.log("Will not be able to open gallery!");

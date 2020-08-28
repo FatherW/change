@@ -160,7 +160,7 @@
                     id += loc[i];
                 }
                 this.id = id;
-                if (user == null || id != user['_id']) {
+                if (user == null || id != user['id']) {
                     shadow.querySelector('#right').style.display = 'none'; /*none*/
                 }
 
@@ -272,11 +272,11 @@
                     id += loc[i];
                 }
                 console.log("ID", id);
-                console.log("UserID", user['_id'])
+                console.log("UserID", user['id'])
                 if (id == "") {
-                    id = user['_id'];
+                    id = user['id'];
                 }
-                if (id != user['_id']) {
+                if (id != user['id']) {
                     alert('Cannot edit this user. Not your account!');
                 } else {
                     let shadow = this.shadowRoot;
@@ -303,7 +303,7 @@
                                 "action": "addData",
                                 "index": "change",
                                 "type": "_user",
-                                "id": user['_id'],
+                                "id": user['id'],
                                 "body": {
                                     "email": email,
                                     "username": name,
