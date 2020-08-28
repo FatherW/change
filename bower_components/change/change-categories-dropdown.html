@@ -1,4 +1,4 @@
-<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/polymer/polymer.html">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -275,7 +275,7 @@
 
 <script>
     //function for database
-    (function () {
+    (function() {
         Polymer({
             is: 'change-categories-dropdown',
             properties: {
@@ -291,11 +291,11 @@
                     "type": Number
                 }
             },
-            created: function () {
+            created: function() {
 
             },
 
-            ready: function () {
+            ready: function() {
                 //POSTMAN SEARCH DATA OF CAT.
                 let that = this;
                 let shadow = this.shadowRoot;
@@ -305,13 +305,11 @@
                     "index": "change",
                     "type": "categories",
                     "body": {
-                        "sort": [
-                            {
-                                "_id": {
-                                    "order": "asc"
-                                }
+                        "sort": [{
+                            "_id": {
+                                "order": "asc"
                             }
-                        ],
+                        }],
                         "query": {
                             "match": {
                                 "parent": "0"
@@ -324,7 +322,7 @@
                     // console.log("Length:",res.resolve.length);
                     if (res.code > 0) {
                         let maincate = [];
-                        
+
 
                         //SELECT CONTAINER
                         let cont = shadow.querySelector('#container');
@@ -336,7 +334,7 @@
                         //CREATE NAV-MENU (ul) ELEMENT AND SET THE ATTRIBUTES
                         let navMenuUl = document.createElement('ul')
                         navMenuUl.setAttribute('class', 'nav-menu')
-                        nav.appendChild(navMenuUl);     //append navMenuUl to nav
+                        nav.appendChild(navMenuUl); //append navMenuUl to nav
 
                         //CREATE OUTTER(li) ELEMENT AND SET THE ATTRIBUTES
                         let outli = document.createElement('li');
@@ -378,13 +376,11 @@
                                 "index": "change",
                                 "type": "categories",
                                 "body": {
-                                    "sort": [
-                                        {
-                                            "_id": {
-                                                "order": "asc"
-                                            }
+                                    "sort": [{
+                                        "_id": {
+                                            "order": "asc"
                                         }
-                                    ],
+                                    }],
                                     "query": {
                                         "match": {
                                             "parent": x
@@ -393,21 +389,20 @@
                                 }
                             };
                             Polymer.postData(Url, p).then(res => {
-                                for (var w = 0; w < res.resolve.length; w++){
+                                for (var w = 0; w < res.resolve.length; w++) {
                                     let catLiSub = document.createElement('li');
                                     let catASub = document.createElement('a');
                                     catASub.setAttribute('href', '#');
                                     catLiSub.appendChild(catASub);
                                     catASub.append(res.resolve[w]['name']);
-                                    
+
                                     ul3.appendChild(catLiSub);
                                 }
                             })
-                            
+
                         }
-                        
-                    }
-                    else {
+
+                    } else {
                         console.log("FAILED")
                     }
                 })
