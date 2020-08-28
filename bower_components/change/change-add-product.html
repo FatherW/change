@@ -1154,7 +1154,7 @@
                     "action": "searchData",
                     "index": "change",
                     "type": "_user",
-                    "_source": "id",
+                    "_source": "pagename",
                     "body": {
                         "query": {
                             "match": {
@@ -1169,10 +1169,11 @@
                 Polymer.postData(loginUrl, parampage).then(res => {
                     // console.log("BBB", usertokenId);
                     if (res.code > 0) {
+                        console.log('all fanpage,res.resolv',res.resolve);
                         let pagename = [];
                         res.resolve.forEach(item => {
                             pagename.push({
-                                id: item['id'],
+                                id: item['_id'],
                                 name: item['pagename']
                             })
                         });
