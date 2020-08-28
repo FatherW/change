@@ -139,7 +139,7 @@
                         <vaadin-button id="vs1" style="margin:5px 10px;" on-click="setadmin">{{getadminId}}
                         </vaadin-button>
                         <vaadin-button id="vb" on-click="toggle">{{editText}}</vaadin-button>
-                    
+
                     </div>
                     <div id="info2">
                         <h5 style="margin-left: 50px;">指派專頁管理員資料</h5>
@@ -148,18 +148,19 @@
                             </span></p>
                         <div style="display: inline-flex; margin-left: 50px;">
                             <vaadin-button class="handIn" on-click="searchadmin">搜尋</vaadin-button>
-                            <vaadin-button id="adminAdd" on-click="addAdmin" style="margin-left: 20px;display: none;">確認</vaadin-button>
+                            <vaadin-button id="adminAdd" on-click="addAdmin" style="margin-left: 20px;display: none;">確認
+                            </vaadin-button>
                         </div>
                         <div style="margin-left:100px">{{errmsg2}}</div>
                     </div>
                 </div>
             </div>
         </div>
-        
+
     </template>
 </dom-module>
 <script>
-    (function() {
+    (function () {
         Polymer({
             is: 'change-page-info',
             properties: {
@@ -173,7 +174,7 @@
                     "type": Array
                 },
             },
-            created: function() {
+            created: function () {
                 let user = store.get('change-user') || null;
                 if (user == null) {
 
@@ -186,7 +187,7 @@
                     this.setadminState = false;
                 }
             },
-            ready: function() {
+            ready: function () {
                 this.editText = "編輯";
                 this.siteEdit = "更改網址";
                 this.getadminId = '指派專頁管理員';
@@ -209,22 +210,24 @@
                 }
                 let url = '/json/user-' + this.id + '.json?id=' + new Date().getTime();
                 Polymer.getContent(url).then(res => {
-                        this.page = JSON.parse(res);
+                    this.page = JSON.parse(res);
+                    console.log("this page:", res);
+                    let root = shadow.querySelector('#info2');
+                    let adminId = this.page['adminId'];
+                    adminId.forEach(item => {
+                        let icon = document.createElement('change-icon');
+                        icon.setAttribute('id', item);
+                        root.appendChild(icon);
                     })
-                    ////gen adminId
-                let root = shadow.querySelector('#info2');
-                let adminId = this.page['adminId'];
-                adminId.forEach(item => {
-                    let icon = document.createElement('change-icon');
-                    icon.setAttribute('id', item);
-                    root.appendChild(icon);
                 })
+                ////gen adminId
+
 
             },
             /////gen vaadin select
-            execute: function() {
+            execute: function () {
                 let shadow = this.shadowRoot;
-                customElements.whenDefined('vaadin-select').then(function() {
+                customElements.whenDefined('vaadin-select').then(function () {
                     const district = [{
                         id: '中西區',
                         name: '中西區'
@@ -280,15 +283,16 @@
                         id: '西貢區',
                         name: '西貢區'
                     }];
-                    shadow.querySelector('vaadin-select').renderer = function(root) {
+                    shadow.querySelector('vaadin-select').renderer = function (root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        district.forEach(function(item) {
-                            const vaadinItem = document.createElement('vaadin-item');
+                        district.forEach(function (item) {
+                            const vaadinItem = document.createElement(
+                                'vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
                             vaadinItem.setAttribute('value', item.id);
@@ -299,7 +303,7 @@
                 });
             },
             ////顯示加入admin介面
-            setadmin: function() {
+            setadmin: function () {
                 let that = this;
                 let shadow = this.shadowRoot;
                 if (this.getadminId == '指派專頁管理員') {
@@ -332,7 +336,9 @@
             },
             ///加入用戶
             addAdmin() {
-                let url = 'https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController';
+                console.log("omg");
+                let url =
+                    'https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController';
                 let param = {
                     "action": "updateData",
                     "index": "change",
@@ -346,12 +352,14 @@
                         }
                     }
                 };
+                console.log("omg1", JSON.stringify(param));
                 Polymer.postData(url, param).then(res => {
                     if (res.code > 0) {
                         this.errmsg2 = "成功加入" + this.newAdmin;
 
                         this.userManager.loadData(this.id).then(res => {
-                            this.fileManager.saveFile('json/user-' + this.id + '.json', JSON.stringify(res));
+                            this.fileManager.saveFile('json/user-' + this.id + '.json', JSON
+                                .stringify(res));
                             let root = this.shadowRoot.querySelector('#info2');
                             let icon = document.createElement('change-icon');
                             icon.setAttribute('id', this.newAdmin);
@@ -367,19 +375,26 @@
 
             },
 
-            toggle: function() {
+            toggle: function () {
                 let shadow = this.shadowRoot;
                 let that = this;
+
+
+
                 if (this.editText == "編輯") {
-                    shadow.querySelector('#name').innerHTML = "<vaadin-text-field id='pagename1' value=" + this.page['pagename'] + "></vaadin-text-field>";
-                    shadow.querySelector('#area').innerHTML = "<vaadin-select id='area1' value=" + this.page['district'] + " label=''></vaadin-select>";
-                    shadow.querySelector('#email').innerHTML = "<vaadin-text-field id='name1' value=" + this.page['email'] + "></vaadin-text-field>";
+                    shadow.querySelector('#name').innerHTML =
+                        "<vaadin-text-field id='pagename1' value=" + this.page['pagename'] +
+                        "></vaadin-text-field>";
+                    shadow.querySelector('#area').innerHTML = "<vaadin-select id='area1' value=" + this
+                        .page['district'] + " label=''></vaadin-select>";
+                    shadow.querySelector('#email').innerHTML = "<vaadin-text-field id='name1' value=" +
+                        this.page['email'] + "></vaadin-text-field>";
                     this.execute();
                     this.editText = "提交";
                 } else {
                     this.editText = "編輯";
                     console.log(shadow.querySelector('#area1').value)
-                        // that.check();
+                    that.check();
 
 
                 }
@@ -389,7 +404,9 @@
                 console.log(this.siteEdit);
                 let that = this;
                 if (that.siteEdit == "更改網址") {
-                    that.shadowRoot.querySelector('#website').innerHTML = "<vaadin-text-field id='website1' value=" + this.page['website'] + "></vaadin-text-field>";
+                    that.shadowRoot.querySelector('#website').innerHTML =
+                        "<vaadin-text-field id='website1' value=" + this.page['website'] +
+                        "></vaadin-text-field>";
                     that.siteEdit = "確認更改";
                 } else {
                     that.siteEdit = "更改網址";
@@ -424,6 +441,7 @@
             check() {
                 let that = this;
                 let shadow = this.shadowRoot;
+
                 let pagename = shadow.querySelector('#pagename1').value
                 let email = shadow.querySelector('#name1').value;
                 let area = shadow.querySelector('#area1').value;
@@ -453,6 +471,16 @@
             },
             renewPageData() {
                 let shadow = this.shadowRoot;
+                //GET BANNER INFO//
+                let fanpage = document.querySelector('change-fanpage');
+                let pageBan = fanpage.shadowRoot.querySelector('change-pages-banner');
+                let mp = pageBan.shadowRoot.querySelector('#mp').style.backgroundImage;
+                bannerSrc = mp.replace('url(', '').replace(')', '').replace(/\"/gi, "");
+                let headSrc = pageBan.shadowRoot.querySelector('#dp').src;
+                console.log("omgomg", pageBan);
+                console.log("omgomg1", bannerSrc);
+                console.log("omgomg2", headSrc);
+
                 let pagename = shadow.querySelector('#pagename1').value
                 let email = shadow.querySelector('#name1').value;
                 let area = shadow.querySelector('#area1').value;
@@ -460,11 +488,15 @@
                     "pagename": pagename,
                     "email": email,
                     "district": area,
+                    "banner": bannerSrc,
+                    "head": headSrc
+
                 };
 
                 this.userManager.saveData(this.id, params).then(res => {
                     this.userManager.loadData(this.id).then(res => {
-                        this.fileManager.saveFile('json/user-' + this.id + '.json', JSON.stringify(res));
+                        this.fileManager.saveFile('json/user-' + this.id + '.json', JSON
+                            .stringify(res));
 
                     })
                     shadow.querySelector('#name').innerHTML = pagename;
