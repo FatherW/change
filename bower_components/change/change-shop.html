@@ -345,8 +345,6 @@
                 pagetag(tag) {
                     console.log("the pagetag is", tag);
                     this.fanpage = tag;
-                    this.search();
-
                 },
                 ready: function() {
                     let that = this;
@@ -462,14 +460,12 @@
                         subcat.forEach(item => {
                             this.categories.push(item);
                         });
-                        this.search();
                         store.set('change-cate', null);
-                    } else {
-                        this.search();
-                    };
+                    }
 
                     let page = document.querySelector('change-fanpage');
                     if (page) this.pagetag(page.id);
+                    this.search();
 
 
                     // let paperTagsInput = shadow.querySelector('#myTags');
