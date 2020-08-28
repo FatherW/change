@@ -15,11 +15,11 @@
         constructor(user) {
             //        const user = window['user'] || store.get('user') || null;
             let that = this;
-            // console.log(user);
+            console.log(user);
             this.key = user["key"] || null;
             this.miscUrl =
                 "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/dazzleEditorMiscFunction";
-            // console.log("AWS User", user);
+            console.log("AWS User", user);
             this.bucket = user["userBucket"];
             this.user = user;
 
@@ -53,6 +53,27 @@
                     resolve(result.resolve);
                 });
             });
+        }
+        listObjectVersions(key) {
+            let AWS = window["AWS"];
+            let that = this;
+            return new Promise(function(resolve, reject) {
+                var s3 = new AWS.S3();
+                var params = {
+                    Bucket: that.bucket,
+                    Prefix: key
+                        // Prefix: prefix
+                };
+                s3.listObjectVersions(params, function(err, data) {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(data.Versions);
+                    }
+                });
+            });
+
+
         }
 
         saveImageTags(id, tags) {
@@ -625,6 +646,7 @@
                 console.log(params);
                 s3.putObject(params, function(err, data) {
                     if (err) {
+                        console.log(err);
                         reject(err);
                     } else {
                         console.log(data);
@@ -914,7 +936,6 @@
                 });
             });
         }
-
         matchDataNosort(json) {
             let table = this.table;
             let that = this;
@@ -940,7 +961,6 @@
                 });
             });
         }
-
         saveData(id, data) {
             let table = this.table;
             let that = this;
@@ -1120,7 +1140,7 @@
                     if (result.code < 0) {
                         resolve({});
                     } else {
-                        // console.log(result.resolve);
+                        console.log(result.resolve);
                         resolve(result.resolve);
                     }
                 });
@@ -1261,19 +1281,19 @@
             fetch(url)
                 .then((response) => {
                     if (!response.ok) {
-                        resolve('');
+                        reject();
                     } else resolve(response.text());
                 })
                 .catch((error) => {
                     console.error("Error:", error);
                     // reject();
-                    resolve('');
+                    reject();
                 });
         });
     };
 
     Polymer.getContent = function(url) {
-        // console.log("Query Url", url);
+        console.log("Query Url", url);
 
         return new Promise(function(resolve, reject) {
             fetch(url)
@@ -1352,7 +1372,12 @@
 
     Polymer.componentPopup = function(component, width, height) {
 
-        let dialog = Polymer.dialog;
+        let dialog = component.dialog || null;
+
+        if (!dialog)
+            dialog = document.querySelector('dz-admin').shadowRoot.querySelector('vaadin-dialog');
+
+        console.log('Component Dialog', dialog);
         // let dialog = document.querySelector('vaadin-dialog');
         dialog.renderer = function(root, dialog) {
             // root.innerHTML = '<' + component + '></' + component + '>';
@@ -1382,6 +1407,7 @@
 
         this.editMode = editMode;
         Polymer.noElements = 0;
+        Polymer.elements = {};
         Polymer.history = [];
         Polymer.editing = false;
         Polymer.editor = false;
@@ -1405,21 +1431,24 @@
 
             // this.loadHtmlClass();
             this.loadComponent('dz-dazzle', 'dz-admin');
-            Polymer.loadUserComponents();
+            // Polymer.loadUserComponents();
             let elm = document.createElement('dz-wrapper');
 
             if (!document.querySelector('dz-wrapper')) {
 
-                Polymer.fileManager.getFile(Polymer.thisPage).then(html => {
+                document.body.innerHTML = '';
+                document.body.appendChild(elm);
+                elm.adminPageLoader();
 
-                    console.log('Polymer', Polymer.thisPage, html);
-                    document.body.innerHTML = '';
-                    document.body.appendChild(elm);
-                    elm.adminPageLoader();
 
-                }, err => {
-                    console.log('Cannot find');
-                })
+
+            } else {
+                elm.blankPageLoader();
+
+                // let html = document.body.innerHTML;
+                // if (!html){
+                //     document.body.appendChild(elm);
+                // }
 
             }
             // else {
@@ -1429,11 +1458,12 @@
 
         } else {
             this.uid =
-                Polymer.dzLicense["uid"];
+                Polymer.dzLicense["uid"] ||
+                document.querySelector("meta[uid]").getAttribute("uid");
             this.tid =
-                Polymer.dzLicense["tid"];
-
-            console.log('Admin', Polymer.uid);
+                Polymer.dzLicense["tid"] ||
+                document.querySelector("meta[tid]").getAttribute("tid") ||
+                this.uid;
             this.dataManager = new DataPackage("_info");
             this.userBucket = Polymer.dzLicense["userBucket"] || null;
             this.websiteUrl = location.hostname;
@@ -1445,23 +1475,26 @@
 
             let elm = document.createElement('dz-wrapper');
 
-            // Polymer.getContent(Polymer.thisPage).then(res=>{ },err=>{
-            //     document.body.appendChild(elm);
-            //     elm.pageLoader();
-            // });
+
+            let html = document.body.innerHTML;
+            html = html.trim();
+            if (!html) {
+                document.body.appendChild(elm);
+                elm.blankPageLoader();
+            }
         }
 
         if (Polymer.editMode === 'normal') {
             console.log('Load Normal Dazzle');
             Polymer.loadComponent("dz-dazzle", "dz-dazzle");
-            // let dzDazzle = document.createElement('dz-dazzle');
-            // document.body.appendChild(dzDazzle);
+            let dzDazzle = document.createElement('dz-dazzle');
+            document.body.appendChild(dzDazzle);
         } else {
 
-            // Polymer.loadComponent("dz-dazzle", "dz-admin");  
+            Polymer.loadComponent("dz-dazzle", "dz-admin");
 
-            // let dzAdmin = document.createElement('dz-admin');
-            // document.body.appendChild(dzAdmin);
+            let dzAdmin = document.createElement('dz-admin');
+            document.body.appendChild(dzAdmin);
         }
 
 
@@ -1472,7 +1505,7 @@
         // }
 
         // this.loadComponent("dz-dazzle", "dz-wrapper");
-            Polymer.dzFire('dz-ready',{});
+
 
     };
 
@@ -2248,6 +2281,22 @@
         });
     }
 
+
+    Polymer.getExternalContent = function(url) {
+        let miscFcUrl =
+            "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/dazzleEditorMiscFunction";
+        let params = {
+            url: url,
+            action: "grabPage",
+        };
+        let that = this;
+        return new Promise(function(resolve, reject) {
+            that.postData(miscFcUrl, params).then((result) => {
+                resolve(result.resolve);
+            });
+        });
+    };
+
     Polymer.export = function() {
         // let url = 'https://d25k6mzsu7mq5l.cloudfront.net/user-data/'+Polymer.uid+'/';
         console.log("Export")
@@ -2278,6 +2327,12 @@
         head.appendChild(link);
 
         html = '';
+
+
+
+
+
+
         Promise.all([
             Polymer.getUserDataContent(basePath + '/head'),
             Polymer.getUserDataContent(masterPath + '/head'),
@@ -2299,7 +2354,7 @@
             dzWrapper.querySelectorAll('[dzid]').forEach(item => {
                 item.removeAttribute('dzid');
             });
-            console.log('Dz Wrapper', dzWrapper.innerHTML);
+            console.log('History', dzWrapper);
             // html = dzWrapper.innerHTML;
 
             let dzWrapperHead = document.createElement('dz-wrapper-head');
@@ -2344,6 +2399,7 @@
             content = dom.outerHTML;
             // console.log("Export", content);
             // Polymer.fileManager.saveUserData("index.html", content);
+            console.log('History', Polymer.history);
             Polymer.fileManager.saveHtml(Polymer.thisPage, content);
             alert("匯出成功");
         });
@@ -2414,7 +2470,6 @@
         });
 
     };
-
     Polymer.parseTime = function(oldtime) {
         let _thetimenow = Date.now();
         let time = (_thetimenow - oldtime) / 1000;
