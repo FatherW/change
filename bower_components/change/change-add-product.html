@@ -795,8 +795,7 @@
 
                 that.vaadin_select();
 
-                //need to uncomment
-                // that.fanpage();
+                that.fanpage();
                 that.submenu();
 
                 //ENABLE & DISABLE PRICE
@@ -838,12 +837,12 @@
                     //Get value from select box fanpage
 
 
-                    // var fanpage = shadow.querySelector('#fanPage').value;
-                    // if (fanpage == "沒有專頁可以選擇" || fanpage == null) {
+                    var fanpage = shadow.querySelector('#fanPage').value;
+                    if (fanpage == "沒有專頁可以選擇" || fanpage == null) {
                     var ownerId = user['id'];
-                    // } else {
-                    //     var ownerId = fanpage;
-                    // }
+                    } else {
+                        var ownerId = fanpage;
+                    }
 
 
                     //Get value from isFree button
@@ -1147,69 +1146,69 @@
 
             },
 
-            //need to uncomment
-            // fanpage() {
-            //     let shadow = this.shadowRoot
-            //     let that = this;
-            //     let parampage = {
-            //         "action": "searchData",
-            //         "index": "change",
-            //         "type": "_user",
-            //         "_source": "id",
-            //         "body": {
-            //             "query": {
-            //                 "match": {
-            //                     "adminId": this.user.id
+            
+            fanpage() {
+                let shadow = this.shadowRoot
+                let that = this;
+                let parampage = {
+                    "action": "searchData",
+                    "index": "change",
+                    "type": "_user",
+                    "_source": "id",
+                    "body": {
+                        "query": {
+                            "match": {
+                                "adminId": this.user['id']
 
-            //                 }
-            //             }
-            //         }
-            //     };
-            //     let loginUrl = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-            //     console.log("fanpage json",JSON.stringify(parampage));
-            //     Polymer.postData(loginUrl, parampage).then(res => {
-            //         // console.log("BBB", usertokenId);
-            //         if (res.code > 0) {
-            //             let pagename = [];
-            //             res.resolve.forEach(item => {
-            //                 pagename.push({
-            //                     id: item['id'],
-            //                     name: item['pagename']
-            //                 })
-            //             });
-            //             if (res.resolve.length == 0) {
-            //                 pagename.push({
-            //                     name: "沒有專頁可以選擇"
-            //                 });
+                            }
+                        }
+                    }
+                };
+                let loginUrl = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                console.log("fanpage json",JSON.stringify(parampage));
+                Polymer.postData(loginUrl, parampage).then(res => {
+                    // console.log("BBB", usertokenId);
+                    if (res.code > 0) {
+                        let pagename = [];
+                        res.resolve.forEach(item => {
+                            pagename.push({
+                                id: item['id'],
+                                name: item['pagename']
+                            })
+                        });
+                        if (res.resolve.length == 0) {
+                            pagename.push({
+                                name: "沒有專頁可以選擇"
+                            });
 
-            //                 shadow.querySelector('#fanpage').value = "沒有專頁可以選擇";
-            //             }
-            //             customElements.whenDefined('vaadin-select').then(function() {
-            //                 const propage = pagename;
-            //                 shadow.querySelector('#fanPage').renderer = function(root) {
-            //                     // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
-            //                     if (root.firstChild) {
-            //                         return;
-            //                     }
-            //                     // Create the <vaadin-list-box>
-            //                     const listBox = document.createElement('vaadin-list-box');
-            //                     propage.forEach(function(item) {
-            //                         const vaadinItem = document.createElement('vaadin-item');
-            //                         vaadinItem.textContent = item.name;
-            //                         listBox.appendChild(vaadinItem);
-            //                         vaadinItem.setAttribute('value', item.name);
-            //                     });
-            //                     // update the content
-            //                     root.appendChild(listBox);
-            //                 };
-            //             });
+                            shadow.querySelector('#fanpage').value = "沒有專頁可以選擇";
+                        }
+                        customElements.whenDefined('vaadin-select').then(function() {
+                            const propage = pagename;
+                            shadow.querySelector('#fanPage').renderer = function(root) {
+                                // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
+                                if (root.firstChild) {
+                                    return;
+                                }
+                                // Create the <vaadin-list-box>
+                                const listBox = document.createElement('vaadin-list-box');
+                                propage.forEach(function(item) {
+                                    const vaadinItem = document.createElement('vaadin-item');
+                                    vaadinItem.textContent = item.name;
+                                    listBox.appendChild(vaadinItem);
+                                    vaadinItem.setAttribute('value', item.name);
+                                });
+                                // update the content
+                                root.appendChild(listBox);
+                            };
+                        });
 
-            //         } else {
-            //             alert("u");
-            //         }
-            //     })
+                    } else {
+                        alert("u");
+                    }
+                })
 
-            // },
+            },
             submenu() {
                 let shadow = this.shadowRoot;
                 customElements.whenDefined('vaadin-menu-bar').then(function() {
