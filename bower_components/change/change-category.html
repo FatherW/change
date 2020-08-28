@@ -1,7 +1,7 @@
-<link href="../polymer/polymer.html" rel="import">
-<link href="../dz-menu/css/style.html" rel="import" />
-<link rel="import" href="../vaadin-select/vaadin-select.html">
-<link rel="import" href="../vaadin-menu-bar/vaadin-menu-bar.html">
+<link href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/polymer/polymer.html" rel="import">
+<link href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/dz-menu/css/style.html" rel="import" />
+<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-select/vaadin-select.html">
+<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-menu-bar/vaadin-menu-bar.html">
 
 
 <dom-module id="change-category">
@@ -35,7 +35,7 @@
     </template>
 </dom-module>
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-category',
             properties: {
@@ -44,17 +44,17 @@
                 },
 
             },
-            created: function () {
+            created: function() {
                 // console.log('Created');
             },
-            ready: function () {
+            ready: function() {
                 //SUBCAT//
                 let that = this;
                 let shadow = this.shadowRoot;
 
-                customElements.whenDefined('vaadin-menu-bar').then(function () {
+                customElements.whenDefined('vaadin-menu-bar').then(function() {
                     const menu = shadow.querySelector('vaadin-menu-bar');
-                    menu.addEventListener('item-selected', function (e) {
+                    menu.addEventListener('item-selected', function(e) {
                         //Get ele value
                         // shadow.querySelector('span').textContent = JSON.stringify(e.detail.value.text);
                         shadow.querySelector('span').textContent = e.detail.value.text;
@@ -134,7 +134,7 @@
                                     }, {
                                         text: 'Balance Events'
                                     }]
-                                },]
+                                }, ]
                             };
 
                             g.push(h);
