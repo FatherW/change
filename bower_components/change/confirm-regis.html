@@ -1,4 +1,4 @@
-<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/polymer/polymer.html">
 
 <dom-module id="confirm-regis">
 
@@ -44,17 +44,17 @@
 </dom-module>
 
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'confirm-regis',
             properties: {
 
             },
-            created: function () {
+            created: function() {
                 console.log("Created here:");
             },
             //for adding link to the user name connecting wth the databse
-            ready: function () {
+            ready: function() {
                 console.log("READY HERE:");
 
                 //make sure dz-loader run first
@@ -76,7 +76,7 @@
                 });
             },
 
-            verifyTok: function (x) {
+            verifyTok: function(x) {
                 //x = tok res
                 let res = x;
                 console.log("res:", res);
@@ -91,13 +91,13 @@
                     } else {
                         alert("This token is expired!");
                     }
-                }else {
+                } else {
                     alert("this token is not used to verify registration!");
                 }
 
             },
 
-            statusTrue: function (x, z) {
+            statusTrue: function(x, z) {
                 //x = tok userId, z = tok id
                 let y = {
                     "status": true
@@ -109,7 +109,7 @@
                 });
             },
 
-            autoLogin: function (x) {
+            autoLogin: function(x) {
                 //x = tok id
                 console.log("autologin:", x);
                 let loginUrl =
