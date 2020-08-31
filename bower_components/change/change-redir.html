@@ -48,21 +48,21 @@
                 console.log("READY HERE:");
 
                 //make sure dz-loader run first
-                document.addEventListener('dz-ready', e => {
-                    // console.log('uid',Polymer.uid);
-                    this.tokManager = new DataPackage('token');
+                // document.addEventListener('dz-ready', e => {
+                // console.log('uid',Polymer.uid);
+                this.tokManager = new DataPackage('token');
 
-                    let loc = location.search;
-                    let token = "";
-                    for (i = 7; i < loc.length; i++) {
-                        token += loc[i]
-                    }
-                    // console.log("loc:", token);
+                let loc = location.search;
+                let token = "";
+                for (i = 7; i < loc.length; i++) {
+                    token += loc[i]
+                }
+                // console.log("loc:", token);
 
-                    this.tokManager.loadData(token).then(res => {
-                        this.verifyTok(res); //tok res
-                    });
+                this.tokManager.loadData(token).then(res => {
+                    this.verifyTok(res); //tok res
                 });
+                // });
             },
 
             verifyTok: function (x) {
@@ -76,7 +76,8 @@
                 if (res['type'] == "contactSeller") {
                     if (now < res['expireDate']) {
                         console.log("this token is still valid!");
-                        this.autoLogin(res['id'], res['userId'], res['pid']); //tok id, tok userId, tok pid
+                        this.autoLogin(res['id'], res['userId'], res[
+                        'pid']); //tok id, tok userId, tok pid
                     } else {
                         alert("This token is expired!");
                     }
@@ -101,7 +102,7 @@
                         let user = res.resolve;
                         store.set('change-user', user);
                         console.log("AUTO LOGIN SUCCESS!");
-                        this.redirect(y, z);//y = tok userId, z = tok pid
+                        this.redirect(y, z); //y = tok userId, z = tok pid
                     } else {
                         alert("ERR: AUTO LOGIN Fail!");
                     }
