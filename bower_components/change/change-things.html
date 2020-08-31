@@ -539,7 +539,7 @@
                     shadow.querySelector('#price').style.display = 'none';
                 };
                 let ownerId = all['ownerId'];
-                this.detailUrl = '/edit-product.html?p' + all['id'] + 'u' + ownerId;
+                this.detailUrl = '/edit-product.html?p' + all['id'];
                 // this.userUrl = "/user.html?" + ownerId;
                 // console.log('Link', this.detailUrl, this.userUrl);
                 if (all['isNew'] == true)
@@ -557,6 +557,12 @@
                     let boolean = user['isAdmin'] || null;
                     if (boolean || user['_id'] == all['ownerId']) {
                         shadow.querySelector('.shouldhide').style.visibility = 'visible';
+                    }
+                    if (user['adminId']) {
+                        if (user['adminId'].indexOf(user['id']) >= 0) {
+                            shadow.querySelector('.shouldhide').style.visibility = 'visible';
+
+                        }
                     }
 
                 }

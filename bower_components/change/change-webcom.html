@@ -155,7 +155,7 @@
                 });
 
 
-            },
+            }, 
             //for adding link to the user name connecting wth the databse
             ready: function() {
                 let that = this;
@@ -163,20 +163,11 @@
                 let pid = "";
                 let uid = "";
                 let posit = 0;
-                for (i = 1; i < loc.length; i++) {
-                    if (loc[i] == "u") {
-                        posit = i;
-                    };
+                for (i = 2; i < loc.length; i++) {
+                    pid+=loc[i];
                 };
-                for (a = 2; a < posit; a++) {
-                    pid += loc[a];
-                }
-                for (b = posit + 1; b < loc.length; b++) {
-                    uid += loc[b];
-                }
-
                 let shadow = this.shadowRoot;
-                this.loadUser(uid).then(user => {
+                this.loadUser(this.product['ownerId']).then(user => {
                     shadow.querySelector('#_changeicon').src = this.seller['head'];
                     shadow.querySelector('#owner').innerHTML = this.seller['username'];
                     shadow.querySelector('#time').innerHTML += this.seller['score']; + '( ' +
@@ -233,17 +224,8 @@
                 let pid = "";
                 let sellerid = "";
                 let posit = 0;
-                for (i = 1; i < loc.length; i++) {
-                    if (loc[i] == "u") {
-                        posit = i;
-                        break
-                    };
-                };
-                for (a = 2; a < posit; a++) {
-                    pid += loc[a];
-                };
-                for (b = posit + 1; b < loc.length; b++) {
-                    sellerid += loc[b];
+                for (i = 2; i < loc.length; i++) {
+                    pid+=loc[i]
                 };
                 let msg = shadow.querySelector('#review').value;
                 let id = Date.now();
