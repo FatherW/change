@@ -566,8 +566,8 @@
                 "id": {
                     "type": String
                 },
-                "uid":{
-                    "type":String
+                "uid": {
+                    "type": String
                 }
 
                 //For testing call SELLER from webcom
@@ -642,7 +642,7 @@
                 let pid = "";
                 let posit = 0;
                 for (i = 1; i < loc.length; i++) {
-                    pid+=loc[i]
+                    pid += loc[i]
                 };
 
                 //For testing call SELLER from webcom
@@ -653,7 +653,7 @@
 
                 this.loadProduct(pid).then(prod => {
                     console.log('Product', prod);
-                    this.uid = prod.['ownerId']
+                    this.uid = prod['ownerId']
                     this.initProduct(prod);
                 }, err => {
                     alert('不能載入資料');
@@ -808,7 +808,7 @@
                 let posit = 0;
                 let pid = "";
                 for (i = 1; i < loc.length; i++) {
-                    pid+=loc[i];
+                    pid += loc[i];
                 };
                 let uid = this.uid;
                 //**NEW USERS USE "id"
