@@ -487,7 +487,7 @@
                     <img class="head" src$="{{owner.head}}">
                 </div>
                 <div id="a2">
-                    <div class="name" id="owner">{{owner.username}}</div>
+                    <div class="name" id="owner">{{username}}</div>
                 </div>
             </div>
         </div>
@@ -525,7 +525,7 @@
     </div>
     <br>
     <div class="unib">
-        <!-- <span id="pn">產品名稱：儲物架</span> -->
+        {{product.description}}
     </div>
     <br>
 
@@ -543,8 +543,7 @@
     <div>
         <span class="bigsize">運輸：</span>
         <div class="deliveryDesc">
-            <p style="margin-bottom: 0px;"></p>
-        </div>
+            {{product.deliveryDesc}} </div>
 
 
     </div>
@@ -617,8 +616,8 @@
                 }
                 that.timeStr = that.loadUpdate(prod.createTime);
                 this.loadTags();
-                shadow.querySelector('.unib').innerHTML = this.product['description'];
-                shadow.querySelector('.deliveryDesc').innerHTML = this.product['deliveryDesc'];
+                // shadow.querySelector('.unib').innerHTML = this.product['description'];
+                // shadow.querySelector('.deliveryDesc').innerHTML = this.product['deliveryDesc'];
                 this.loadOwner();
                 if (this.user) {
                     let orderList = document.createElement('change-orderlist-storage');
@@ -922,11 +921,14 @@
 
             },
             loadPage(pageId) {
-                let pageManager = new DataPackage('pages');
-                pageManager.loadData(pageId).then(res => {
-                    this.pages = res;
-                    this.shadowRoot.querySelector('#userSite').setAttribute('href', this.pages['website']);
-                });
+                let that = this;
+                let url = "/json/user-" + userId + ".json?id=" + new Date().getTime();
+                Polymer.getContent(url).then(res => {
+                    that.owner = JSON.parse(res)
+                    that.username = that.owner['pagename']
+                    this.shadowRoot.querySelector('#userSite').setAttribute('href', that.owner['website']);
+
+                })
             },
             // ownerSite(){
             //     let isFanpage = this.product['isFanpage'] || null;
