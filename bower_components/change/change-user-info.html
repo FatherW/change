@@ -147,7 +147,8 @@
 
             },
             created: function() {
-
+                let user = store.get('change-user') || null;
+                if (user) this.fileManager = new AwsPackage(user);
             },
             ready: function() {
                 let loc = location.search;
@@ -331,7 +332,7 @@
 
                                     this._saveJson();
                                     //here is not yet saved to Json successfully, but we will save json everytime when refresh, so it still works
-                                    
+
                                     // location.reload();
                                 }
                             })
@@ -344,10 +345,11 @@
             },
 
             _saveJson: function() {
+                let that = this;
                 let url = "/json/user-" + this.id + ".json?id=" + new Date().getTime();
                 Polymer.getContent(url).then(res => {
                     res = JSON.parse(res);
-                    this.fileManager.saveFile('json/user-' + userJson.id + '.json', JSON.stringify(res));
+                    that.fileManager.saveFile('json/user-' + userJson.id + '.json', JSON.stringify(res));
                     alert("用戶資料已更新!");
 
                 });
