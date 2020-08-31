@@ -250,7 +250,7 @@
                     this.tags = [];
                     this.priceStart = 0;
                     this.priceStop = 1000000;
-                    this.district = null;
+                    this.district = [];
                     this.isNew = [];
                     this.initprice = 0;
                     this.isFree = null;
@@ -331,8 +331,12 @@
                         }
                     }
                     ////district
-                    if (this.district == value) {
-                        this.district = null;
+                    for (i = 0; i < this.district.length; i++) {
+                        if (this.district[i] == value) {
+                            posit = i;
+                            this.district.splice(posit, 1);
+                            break
+                        }
                     }
                     // ///range
                     // let msgrange = "$" + this.priceStart + " - $" + this.priceStop;
@@ -386,7 +390,7 @@
                         // let category = e.detail.category;
                         this.addTags(e.detail.district);
                         // this.tags.push(e.detail.district);
-                        this.district = e.detail.district;
+                        this.district.push(e.detail.district);
                         this.search();
                     });
                     document.addEventListener('select-range', e => {

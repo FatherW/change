@@ -274,11 +274,15 @@
 
                 /////search the district
                 if (district != undefined || district != null) {
-                    Query.push({
-                        'term': {
-                            'district': district
-                        }
-                    })
+                    if (district.length > 0) {
+                        district.forEach(item => {
+                            Query.push({
+                                'term': {
+                                    'district': district
+                                }
+                            });
+                        });
+                    };
                 };
 
                 /////search the price range
