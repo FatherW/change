@@ -558,6 +558,12 @@
                     if (boolean || user['_id'] == all['ownerId']) {
                         shadow.querySelector('.shouldhide').style.visibility = 'visible';
                     }
+                    if (user['adminId']) {
+                        if (user['adminId'].indexOf(user['id']) >= 0) {
+                            shadow.querySelector('.shouldhide').style.visibility = 'visible';
+
+                        }
+                    }
 
                 }
 
