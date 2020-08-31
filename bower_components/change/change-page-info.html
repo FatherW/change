@@ -208,8 +208,8 @@
                         shadow.querySelector("#right").style.display = "block";
                     }
                 }
-                let url = '/json/user-' + this.id + '.json?id=' + new Date().getTime();
-                Polymer.getContent(url).then(res => {
+                // let url = '/json/user-' + this.id + '.json?id=' + new Date().getTime();
+                this.userManager.loadData(this.id).then(res => {
                     this.page = JSON.parse(res);
                     console.log("this page:", res);
                     let root = shadow.querySelector('#info2');
