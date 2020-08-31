@@ -211,7 +211,7 @@
                 Polymer.postData(emailUrl, json).then(res => {
                     if (res.code > 0) {
                         // alert('成功發送');
-                        location.reload();
+                        // location.reload();
                     }
                 })
 
@@ -252,15 +252,16 @@
                     let html;
 
                     if (this.product['isNew'] == true) {
-                        var status = "http://www.gettv.hk/img/icon/new-10.png";
+                        var status = "https://www.gettv.hk/img/icon/new-10.png";
                     } else {
-                        var status = "http://www.gettv.hk/img/icon/second-hand-11.png";
+                        var status = "https://www.gettv.hk/img/icon/second-hand-11.png";
                     }
                     console.log("status:", status);
 
                     let image = this.product['pics'][0];
                     let productname = this.product['productname'];
                     let sellerImage = this.seller['head'];
+                    console.log("seller head:", sellerImage);
                     let sellerName = this.seller['username'];
                     let price = this.product['price'];
                     let district = this.product['district'];
@@ -279,7 +280,7 @@
                         html = html.replace("[[image]]", "https://www.gettv.hk" + image);
                         html = html.replace("[[status]]", status);
                         html = html.replace("[[productname]]", productname);
-                        html = html.replace("[[sellerImage]]", sellerImage);
+                        html = html.replace("[[sellerImage]]", "https://www.gettv.hk" + sellerImage);
                         html = html.replace("[[sellerName]]", sellerName);
                         html = html.replace("[[price]]", price);
                         html = html.replace("[[district]]", district);
@@ -288,12 +289,14 @@
                         html = html.replace("[[contactinfo]]", contactinfo);
                         html = html.replace("[[token]]", tok);
 
-
+                        console.log("html:", html)
                         // // .......
                         this.sendmail('support@01power.net', to, '你有新的訊息', html);
+<<<<<<< Updated upstream
+                        alert('電郵已發出');                        
+=======
                         alert('電郵已發出');
-                        location.reload();
-
+>>>>>>> Stashed changes
                     });
 
                 }

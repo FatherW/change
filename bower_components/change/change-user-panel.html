@@ -148,6 +148,7 @@
                     // this.shadowRoot.querySelector('#login').innerHTML = '<a href="/user.html?' + user['_id'] + '"><img src="' + user['head'] + '"></a>';
 
                     console.log("write access key and save JSON:", this.fileManager);
+                    console.log("user JSON:", JSON.stringify(user))
                     this.fileManager.saveFile('json/user-' + user['id'] + '.json', JSON.stringify(user));
                 }
 
