@@ -915,6 +915,7 @@
                 let url = "/json/user-" + userId + ".json?id=" + new Date().getTime();
                 Polymer.getContent(url).then(res => {
                     that.owner = JSON.parse(res)
+                    that.username = that.owner['username'];
                     this.shadowRoot.querySelector('#userSite').setAttribute('href', '/user.html?' + userId);
 
                 })

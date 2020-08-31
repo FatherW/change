@@ -511,6 +511,9 @@
                         console.log("Result2", res.resolve.length);
                         if (res.resolve) {
                             let user = res.resolve;
+                            if (user['status']==false){
+                                alert("你的帳號已被停用，請聯絡管理員")
+                            }else{
                             // if (user.token == "" || user.token == null || user.token == undefined) {
                             store.set('change-user', user);
                             location.reload();
@@ -519,6 +522,7 @@
                             // } else {
                             //     alert("請先進行電郵驗證");
                             // }
+                            }
                         } else {
                             alert("用戶不存在，請註冊後登入");
                         }

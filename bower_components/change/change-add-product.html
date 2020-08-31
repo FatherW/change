@@ -830,7 +830,7 @@
                 let shadow = this.shadowRoot;
                 shadow.querySelector('#save').innerHTML = '上存中...';
                 let user = store.get('change-user') || null;
-                if (user != null) {
+                if (user != null || user['status']==false) {
                     //*************GET INPUT PRODUCT VALUE*****************//
                     //Get value from select box categories
                     var categories = shadow.querySelector('span').textContent;
