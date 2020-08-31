@@ -80,18 +80,9 @@
                 let uid = "";
                 let that = this;
                 let posit = 0;
-                for (i = 1; i < loc.length; i++) {
-                    if (loc[i] == "u") {
-                        posit = i;
-                        break
-                    };
+                for (i = 2; i < loc.length; i++) {
+                    pid = +loc[i]
                 };
-                for (a = 2; a < posit; a++) {
-                    pid += loc[a];
-                };
-                for (i = posit + 1; i < loc.length; i++) {
-                    uid += loc[i];
-                }
 
                 this.prodManager = new DataPackage("product");
                 this.orderManager = new DataPackage("order");
