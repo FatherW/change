@@ -535,7 +535,7 @@
                     <!-- Right Product info -->
                     <div class="fullWidth">
                         <div class="custom-select">
-                            <vaadin-select id="vs4" placeholder="全新" style="width: 90px;"></vaadin-select>
+                            <vaadin-select id="vs4" value="全新" style="width: 90px;"></vaadin-select>
                         </div>
 
                         <div style="width: 100%;">
@@ -838,12 +838,12 @@
 
 
                     var fanpage = shadow.querySelector('#fanPage').value;
-                    if (fanpage == "#$%!@&^(ntw" || fanpage == null) {
+                    if (fanpage == "#$%!@&^(ntw" || fanpage == "") {
                         var ownerId = user['id'];
                     } else {
                         var ownerId = fanpage;
                     }
-
+                    console.log(ownerId, "ggggggg");
 
                     //Get value from isFree button
                     let free = shadow.querySelector('#free').checked;
@@ -884,13 +884,13 @@
                     //*********GET INPUT PRODUCT VALUE ENDS HERE**************//
                     if (categories == " ") {
                         //now when categories is nth, it becomes "_", need to check this later!!
-                        alert("請選擇分類!");
+                        that.textchange("請選擇分類!");
                     } else {
                         if (pname == "") {
-                            alert("請輸入商品標題!");
+                            that.textchange("請輸入商品標題!");
                         } else {
                             if (tags.length == 0) {
-                                alert("請輸入標籤!");
+                                that.textchange("請輸入標籤!");
                             } else {
                                 let loc = location.search;
                                 if (loc == "") {
@@ -943,7 +943,7 @@
                     }
 
                 } else {
-                    alert("請先登入");
+                    that.textchange("請先登入");
                 }
 
 
@@ -1006,7 +1006,7 @@
                             }
                         });
                     } else {
-                        alert(res.text);
+                        that.textchange(res.text);
                     }
                 });
             },
@@ -1309,6 +1309,10 @@
 
                 });
 
+            },
+            textchange(test) {
+                this.shadowRoot.querySelector('#save').innerHTML = '發佈上架';
+                alert(test);
             },
 
 
