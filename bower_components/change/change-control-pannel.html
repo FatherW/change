@@ -345,43 +345,28 @@
                         alert('頁面已存在');
                     },
                     err => {
-                        let param = [{
-                            "match": {
-                                'pagename': pagename
-                            }
-                        }, {
+                        let param = {
                             "match": {
                                 "id": pageid
                             }
-                        }]
-
-                        let search = {
-                            "action": "searchData",
-                            "index": "change",
-                            "type": "_user",
-                            "body": {
-                                "query": {
-                                    "bool": {
-                                        "should": param
-                                    }
-                                }
-                            }
                         };
-                        Polymer.postData(url, search).then(res => {
-                            let all = res.resolve;
+
+                        this.userManager.matchDataNosort(param).then(res => {
+                            let all = res;
                             if (all.length > 0) {
                                 let errstore = [];
-                                console.log("res", all);
-                                all.forEach(item => {
-                                    if (item['id'] == pageid) errstore.push('專頁ID');
-                                    if (item['pagename'] == pagename.value) errstore.push('專頁名稱')
+                                that.errmsg = "專頁ID已存在，請更改";
+                                // console.log("res", all);
+                                // all.forEach(item => {
+                                //     if (item['id'] == pageid) errstore.push('專頁ID');
+                                //     if (item['pagename'] == pagename.value) errstore.push('專頁名稱')
 
-                                });
-                                that.errmsg = "";
-                                errstore.forEach(str => {
-                                    that.errmsg += "[" + str + "] ，"
-                                })
-                                if (errstore.length > 0) that.errmsg += "已存在，請更改";
+                                // });
+                                // that.errmsg = "";
+                                // errstore.forEach(str => {
+                                //     that.errmsg += "[" + str + "] ，"
+                                // })
+                                // if (errstore.length > 0) that.errmsg += "已存在，請更改";
 
                             } else {
                                 /////great
