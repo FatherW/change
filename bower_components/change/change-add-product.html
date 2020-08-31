@@ -729,17 +729,9 @@
                 let pid = "";
                 let posit = 0;
                 let uid = "";
-                for (i = 1; i < loc.length; i++) {
-                    if (loc[i] == "u") {
-                        posit = i;
-                    };
+                for (i = 2; i < loc.length; i++) {
+                    pid += loc[i]
                 };
-                for (a = 2; a < posit; a++) {
-                    pid += loc[a];
-                }
-                for (c = posit + 1; c < loc.length; c++) {
-                    uid += loc[c];
-                }
                 this.id = pid;
                 if (pid != "") {
                     //edit mode
@@ -830,7 +822,7 @@
                 let shadow = this.shadowRoot;
                 shadow.querySelector('#save').innerHTML = '上存中...';
                 let user = store.get('change-user') || null;
-                if (user != null || user['status']==false) {
+                if (user != null || user['status'] == false) {
                     //*************GET INPUT PRODUCT VALUE*****************//
                     //Get value from select box categories
                     var categories = shadow.querySelector('span').textContent;
@@ -999,7 +991,7 @@
                                 this.dataManager.loadData(newproductid).then(res => {
                                     console.log("omgomg4", res);
                                     this.fileManager.saveFile('json/product-' + newproductid + '.json', JSON.stringify(res)).then(res => {
-                                        location.replace("./edit-product.html?p" + newproductid + "u" + user['id']);
+                                        location.replace("./edit-product.html?p" + newproductid);
                                     });
 
                                 })
