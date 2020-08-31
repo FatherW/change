@@ -160,7 +160,7 @@
     </template>
 </dom-module>
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-page-info',
             properties: {
@@ -174,7 +174,7 @@
                     "type": Array
                 },
             },
-            created: function () {
+            created: function() {
                 let user = store.get('change-user') || null;
                 if (user == null) {
 
@@ -187,7 +187,7 @@
                     this.setadminState = false;
                 }
             },
-            ready: function () {
+            ready: function() {
                 this.editText = "編輯";
                 this.siteEdit = "更改網址";
                 this.getadminId = '指派專頁管理員';
@@ -210,24 +210,24 @@
                 }
                 // let url = '/json/user-' + this.id + '.json?id=' + new Date().getTime();
                 this.userManager.loadData(this.id).then(res => {
-                    this.page = JSON.parse(res);
-                    console.log("this page:", res);
-                    let root = shadow.querySelector('#info2');
-                    let adminId = this.page['adminId'];
-                    adminId.forEach(item => {
-                        let icon = document.createElement('change-icon');
-                        icon.setAttribute('id', item);
-                        root.appendChild(icon);
+                        this.page = JSON.parse(res);
+                        console.log("this page:", res);
+                        let root = shadow.querySelector('#info2');
+                        let adminId = this.page['adminId'];
+                        adminId.forEach(item => {
+                            let icon = document.createElement('change-icon');
+                            icon.setAttribute('id', item);
+                            root.appendChild(icon);
+                        })
                     })
-                })
-                ////gen adminId
+                    ////gen adminId
 
 
             },
             /////gen vaadin select
-            execute: function () {
+            execute: function() {
                 let shadow = this.shadowRoot;
-                customElements.whenDefined('vaadin-select').then(function () {
+                customElements.whenDefined('vaadin-select').then(function() {
                     const district = [{
                         id: '中西區',
                         name: '中西區'
@@ -283,14 +283,14 @@
                         id: '西貢區',
                         name: '西貢區'
                     }];
-                    shadow.querySelector('vaadin-select').renderer = function (root) {
+                    shadow.querySelector('vaadin-select').renderer = function(root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        district.forEach(function (item) {
+                        district.forEach(function(item) {
                             const vaadinItem = document.createElement(
                                 'vaadin-item');
                             vaadinItem.textContent = item.name;
@@ -303,7 +303,7 @@
                 });
             },
             ////顯示加入admin介面
-            setadmin: function () {
+            setadmin: function() {
                 let that = this;
                 let shadow = this.shadowRoot;
                 if (this.getadminId == '指派專頁管理員') {
@@ -375,7 +375,7 @@
 
             },
 
-            toggle: function () {
+            toggle: function() {
                 let shadow = this.shadowRoot;
                 let that = this;
 
@@ -445,27 +445,27 @@
                 let pagename = shadow.querySelector('#pagename1').value
                 let email = shadow.querySelector('#name1').value;
                 let area = shadow.querySelector('#area1').value;
-                if (pagename != this.page['pagename']) {
+                // if (pagename != this.page['pagename']) {
 
-                    let param = {
-                        "match": {
-                            'pagename': pagename
-                        }
-                    }
-                    this.userManager.matchDataNosort(param).then(res => {
-                        if (res.length > 0) {
-                            that.errmsg = "專頁名稱已存在，請更改"
+                //     let param = {
+                //         "match": {
+                //             'pagename': pagename
+                //         }
+                //     }
+                //     this.userManager.matchDataNosort(param).then(res => {
+                //         if (res.length > 0) {
+                //             that.errmsg = "專頁名稱已存在，請更改"
 
-                        } else {
-                            that.renewPageData();
-                        }
-                    }, err => {
-                        alert("error 444");
-                    })
-                } else {
-                    that.renewPageData();
+                //         } else {
+                //             that.renewPageData();
+                //         }
+                //     }, err => {
+                //         alert("error 444");
+                //     })
+                // } else {
+                that.renewPageData();
 
-                }
+                // }
 
 
             },

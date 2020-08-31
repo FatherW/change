@@ -155,7 +155,7 @@
                 });
 
 
-            }, 
+            },
             //for adding link to the user name connecting wth the databse
             ready: function() {
                 let that = this;
@@ -164,7 +164,7 @@
                 let uid = "";
                 let posit = 0;
                 for (i = 2; i < loc.length; i++) {
-                    pid+=loc[i];
+                    pid += loc[i];
                 };
                 let shadow = this.shadowRoot;
                 this.loadUser(this.product['ownerId']).then(user => {
@@ -225,7 +225,7 @@
                 let sellerid = "";
                 let posit = 0;
                 for (i = 2; i < loc.length; i++) {
-                    pid+=loc[i]
+                    pid += loc[i]
                 };
                 let msg = shadow.querySelector('#review').value;
                 let id = Date.now();
@@ -290,13 +290,9 @@
                         html = html.replace("[[token]]", tok);
 
                         console.log("html:", html)
-                        // // .......
+                            // // .......
                         this.sendmail('support@01power.net', to, '你有新的訊息', html);
-<<<<<<< Updated upstream
-                        alert('電郵已發出');                        
-=======
                         alert('電郵已發出');
->>>>>>> Stashed changes
                     });
 
                 }
