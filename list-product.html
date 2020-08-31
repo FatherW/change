@@ -328,8 +328,581 @@
 
             <div class="shop_panel">
                 <change-shop>
-                    <div class="clear"></div>
-                    <div class="more"></div>
+
+                    <style>
+                        * {
+                            font-family: sans-serif, 微軟正黑體;
+                        }
+                        
+                        #containall {
+                            width: 100%;
+                            display: flex;
+                        }
+                        
+                        .clear {
+                            clear: both;
+                        }
+                        
+                        change-in-item {
+                            -webkit-box-shadow: 1px 0px 8px 0px rgba(50, 49, 56, 0.2);
+                            -moz-box-shadow: 1px 0px 8px 0px rgba(50, 49, 56, 0.2);
+                            box-shadow: 1px 0px 8px 0px rgba(50, 49, 56, 0.2);
+                        }
+                        
+                        .catbutton {
+                            background-color: lightgrey;
+                            text-align: center;
+                            padding-left: 13px;
+                            padding-right: 13px;
+                            border: none;
+                            width: auto;
+                            height: 30px;
+                            border-radius: 15px;
+                        }
+                        
+                        a:link,
+                        a:visited {
+                            text-decoration: none;
+                            color: black;
+                        }
+                        
+                        a:hover {
+                            text-decoration: none;
+                        }
+                        
+                        #miniimg {
+                            width: 30px;
+                            height: 30px;
+                        }
+                        
+                        .shouldblock2 {
+                            display: inline;
+                        }
+                        
+                        .leftele {
+                            float: left;
+                            color: black;
+                            margin-left: 8px;
+                            border: none
+                        }
+                        
+                        .leftele2 {
+                            float: left;
+                            border: none;
+                        }
+                        
+                        .rightele {
+                            float: left;
+                        }
+                        
+                        .rightele2 {
+                            float: right;
+                        }
+                        
+                        .shouldblock {
+                            display: flow-root;
+                        }
+                        
+                        #leftele {
+                            float: left;
+                            width: 20%;
+                            min-width: 235px;
+                            margin-top: 50px;
+                        }
+                        
+                        #rightele {
+                            width: 100%;
+                            float: left;
+                            margin-top: 50px;
+                            border: 'none';
+                            margin-left: 50px;
+                        }
+                        
+                        .valuebar1 {
+                            padding-top: 8px;
+                            padding-left: 15px;
+                            text-align: left;
+                            width: 50%;
+                            font-size: 9px;
+                            height: 30px
+                        }
+                        
+                        .valuebar2 {
+                            padding-top: 8px;
+                            padding-right: 15px;
+                            text-align: right;
+                            width: 50%;
+                            font-size: 9px;
+                            height: 30px
+                        }
+                        
+                        .slidebar1 {
+                            padding-top: 8px;
+                            padding-bottom: 15px;
+                            height: 50px;
+                        }
+                        
+                        #cong {
+                            background-color: white;
+                            font-size: larger;
+                        }
+                        
+                        .largebar {
+                            width: 50px;
+                            height: 70px;
+                        }
+                        
+                        .slider-labels {
+                            margin-top: 10px;
+                        }
+                        
+                        #viewingcat {
+                            display: block;
+                        }
+                        
+                        body {
+                            margin: none;
+                        }
+                        
+                        change-mobileslide {
+                            display: none;
+                        }
+                        
+                        @media (max-width: 1292px) {
+                            .things-grid-middle-mobile {
+                                grid-template-columns: repeat(2, 1fr);
+                            }
+                        }
+                        
+                        @media only screen and (max-width: 940px) {}
+                        
+                        @media only screen and (max-width: 768px) {
+                            #containall {
+                                display: block;
+                            }
+                            #rightele {
+                                margin-top: 0;
+                                border: 'none';
+                                margin-left: 0;
+                            }
+                            change-slidelist {
+                                display: none;
+                            }
+                            change-mobileslide {
+                                display: block;
+                            }
+                        }
+                    </style>
+
+                    <div id="containall">
+                        <div id="leftele">
+                            <change-slidelist>
+                                <div id="slidelistall">
+                                    <style>
+                                        * {
+                                            font-family: sans-serif, 微軟正黑體;
+                                        }
+                                        
+                                        change-in-item {
+                                            -webkit-box-shadow: 1px 0px 8px 0px rgba(50, 49, 56, 0.2);
+                                            -moz-box-shadow: 1px 0px 8px 0px rgba(50, 49, 56, 0.2);
+                                            box-shadow: 1px 0px 8px 0px rgba(50, 49, 56, 0.2);
+                                        }
+                                        
+                                        .catbutton {
+                                            background-color: lightgrey;
+                                            text-align: center;
+                                            padding-left: 13px;
+                                            padding-right: 13px;
+                                            border: none;
+                                            width: auto;
+                                            height: 30px;
+                                            border-radius: 15px;
+                                        }
+                                        
+                                        a:link,
+                                        a:visited {
+                                            text-decoration: none;
+                                            color: black;
+                                        }
+                                        
+                                        a:hover {
+                                            text-decoration: none;
+                                        }
+                                        
+                                        #miniimg {
+                                            width: 30px;
+                                            height: 30px;
+                                        }
+                                        /* .address td{
+                                position:relative;
+                            }
+                            .address #miniimg{
+                                position:absolute;
+                                top:10px;
+                            } */
+                                        
+                                        .address {
+                                            display: grid;
+                                            width: 97%;
+                                            height: 100%;
+                                            grid-row-gap: 0px;
+                                            padding: 5px;
+                                            grid-column-gap: 0px;
+                                            grid-row-gap: 0px;
+                                            grid-template-columns: 2fr 8fr;
+                                            background-color: white;
+                                        }
+                                        
+                                        .shouldblock2 {
+                                            display: inline;
+                                        }
+                                        
+                                        .leftele {
+                                            float: left;
+                                            color: black;
+                                            margin-left: 8px;
+                                            border: none
+                                        }
+                                        
+                                        .leftele2 {
+                                            float: left;
+                                            border: none;
+                                        }
+                                        
+                                        .rightele {
+                                            float: left;
+                                        }
+                                        
+                                        .rightele2 {
+                                            float: right;
+                                        }
+                                        
+                                        .shouldblock {
+                                            display: flow-root;
+                                        }
+                                        
+                                        #leftele {
+                                            float: left;
+                                            width: 18%;
+                                            min-width: 220px;
+                                            margin-top: 50px;
+                                            margin-right: 30px;
+                                        }
+                                        
+                                        #rightele {
+                                            width: 70%;
+                                        }
+                                        
+                                        #containall {
+                                            width: 100%;
+                                        }
+                                        
+                                        .valuebar1 {
+                                            padding-top: 8px;
+                                            padding-left: 15px;
+                                            text-align: left;
+                                            width: 50%;
+                                            font-size: 9px;
+                                            height: 30px
+                                        }
+                                        
+                                        .valuebar2 {
+                                            padding-top: 8px;
+                                            padding-right: 15px;
+                                            text-align: right;
+                                            width: 50%;
+                                            font-size: 9px;
+                                            height: 30px
+                                        }
+                                        
+                                        .slidebar1 {
+                                            padding-top: 8px;
+                                            padding-bottom: 15px;
+                                            height: 50px;
+                                        }
+                                        
+                                        #cong {
+                                            background-color: white;
+                                            font-size: larger;
+                                        }
+                                        
+                                        .largebar {
+                                            width: 50px;
+                                            height: 70px;
+                                        }
+                                        
+                                        .table1 {
+                                            padding-bottom: 10px;
+                                            width: 100%;
+                                            min-width: 200px;
+                                            box-sizing: 1px 10px;
+                                            background-color: white;
+                                            box-shadow: gray;
+                                            margin-bottom: 30px;
+                                            -webkit-box-shadow: 1px 0px 8px 0px rgba(50, 49, 56, 0.2);
+                                            -moz-box-shadow: 1px 0px 8px 0px rgba(50, 49, 56, 0.2);
+                                            box-shadow: 1px 0px 8px 0px rgba(50, 49, 56, 0.2);
+                                        }
+                                        
+                                        td {
+                                            padding-left: 25px;
+                                            font-size: 13px;
+                                        }
+                                        
+                                        .titlecolor {
+                                            background-color: #F0846C;
+                                            color: white;
+                                            text-align: center;
+                                            width: 100%;
+                                            min-width: 200px;
+                                            font-size: 12px;
+                                            height: 50px;
+                                            border: none;
+                                        }
+                                        
+                                        .tags {
+                                            width: 100px;
+                                            border: none;
+                                            padding: 5px;
+                                            font-size: 9px;
+                                            height: 50px;
+                                        }
+                                        
+                                        #isnew1,
+                                        #isnew2 {
+                                            height: 40px;
+                                        }
+                                        
+                                        .box {
+                                            text-align: right;
+                                            padding-right: 7px;
+                                            height: 40px;
+                                        }
+                                        
+                                        #loc {
+                                            height: 50px;
+                                            width: 100px;
+                                            border: white;
+                                            text-align: right;
+                                            padding-right: 7px;
+                                            font-size: 13px;
+                                        }
+                                        
+                                        .mybutton {
+                                            box-shadow: inset 0px 0px 10px 1px #cf866c;
+                                            background-color: #d0451b;
+                                            border-radius: 16px;
+                                            border: 2px solid #942911;
+                                            display: inline-block;
+                                            align-items: center;
+                                            cursor: pointer;
+                                            color: #ffffff;
+                                            font-family: Arial;
+                                            margin-left: 100px;
+                                            font-size: 12px;
+                                            padding: 7px 30px;
+                                            margin-top: 5px;
+                                            text-decoration: none;
+                                            text-shadow: 0px 0px 0px #854629;
+                                        }
+                                        
+                                        .mybutton:hover {
+                                            background-color: #bc3315;
+                                        }
+                                        
+                                        .mybutton:active {
+                                            position: relative;
+                                            top: 1px;
+                                            border: white;
+                                        }
+                                        
+                                        .hidetb {
+                                            float: right;
+                                            background-image: url("./img/button_bg.svg");
+                                            width: 30px;
+                                            height: 30px;
+                                            border: none;
+                                            background-color: transparent;
+                                        }
+                                        
+                                        .hidetb:active {
+                                            outline: none;
+                                        }
+                                        
+                                        .showtb {
+                                            display: block;
+                                        }
+                                        /* .hiddentb{
+                                display: none;
+                            } */
+                                        
+                                        #loc2 {
+                                            padding: 5px;
+                                            text-align: center;
+                                        }
+                                        
+                                        .inlist {
+                                            font-size: 9px;
+                                            text-align: center;
+                                            margin: 6px
+                                        }
+                                        
+                                        .container {
+                                            width: 90%;
+                                        }
+                                        
+                                        #toptitle {
+                                            font-size: 25px;
+                                            /* margin-left: 10px; */
+                                            font-weight: 900;
+                                            text-align: initial;
+                                        }
+                                        
+                                        body {
+                                            margin: none;
+                                        }
+                                        
+                                        #pricerange {
+                                            display: block
+                                        }
+                                        
+                                        @media (max-width: 940px) {
+                                            #toptitle {
+                                                text-align: center;
+                                            }
+                                        }
+                                    </style>
+
+                                    <div id="toptitle">篩選</div>
+                                    <div class="panel_wrapper">
+
+                                        <table class="table1">
+
+                                            <tbody>
+                                                <tr>
+                                                    <th class="titlecolor" colspan="2">分類</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <change-category></change-category>
+                                                    </td>
+                                                </tr>
+
+
+
+
+                                            </tbody>
+                                        </table>
+
+                                        <table class="table1">
+
+                                            <tbody>
+                                                <tr>
+                                                    <th class="titlecolor" colspan="2">配件標籤
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <td style="
+                                padding: 0px;
+                            ">
+                                                        <div class="address">
+                                                            <img id="miniimg" src="./Website%20Design/listing%20page/img/symbol/listing_page-03.png">
+
+                                                            <vaadin-text-field id="inputTags" on-keydown="_addTags" placeholder="請輸入標籤" style="width: 90%;"></vaadin-text-field>
+                                                            <paper-tags-input width="100%" id="myTags" style="display:none;"></paper-tags-input>
+                                                        </div>
+
+                                                    </td>
+
+
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+
+
+                                        <table class="table1">
+                                            <tbody>
+                                                <tr>
+                                                    <th class="titlecolor">地點</th>
+                                                </tr>
+                                                <tr>
+                                                    <td style="
+                                padding: 0px;
+                            ">
+                                                        <div class="address">
+                                                            <img id="miniimg" src="./Website%20Design/listing%20page/img/symbol/location.png">
+                                                            <change-district></change-district>
+                                                        </div>
+
+                                                    </td>
+
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                        <table class="table1">
+                                            <tbody>
+                                                <tr>
+                                                    <th class="titlecolor" colspan="2">商品狀況</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>全新</td>
+                                                    <td class="box"><input type="checkbox" name="stat" id="isnew1"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>二手</td>
+                                                    <td class="box"><input type="checkbox" name="stat" id="isnew2"></td>
+
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+
+                                        <div id="pricerange">
+
+                                            <table class="table1">
+
+                                                <tr>
+                                                    <th class="titlecolor" colspan="2">價錢範圍</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <div id="renew">
+                                                            <change-range></change-range>
+                                                        </div>
+                                                    </td>
+
+                                                </tr>
+
+                                            </table>
+
+
+                                        </div>
+                                        <button class="titlecolor" id="searchbutt">搜尋</button></div>
+
+                                </div>
+                            </change-slidelist>
+                            <change-mobileslide></change-mobileslide>
+                        </div>
+                        <!-- <div style="width: 20px;height: 20px;"><button on-click="run"> try</button></div> -->
+                        <div id="rightele">
+                            <div class="initemtitle" id="viewingcat">你正在瀏覽的分類
+                                <paper-tags-input width="100%" id="myTags">
+                                </paper-tags-input>
+                            </div>
+                            <change-in-item>
+
+                                <div id="changeitemall">
+                                    <div class="container">
+                                        Loading...<img src="https://www.gettv.hk/img/loading.gif">
+                                    </div>
+                                </div>
+
+                            </change-in-item>
+                        </div>
+                    </div>
                 </change-shop>
 
             </div>
