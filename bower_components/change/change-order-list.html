@@ -126,42 +126,42 @@
 
         <!-- INFO ON THE LEFT -->
         <!-- <template is="dom-if" if="[[permitted]]"> -->
-            <div class="holder" id="containall">
+        <div class="holder" id="containall">
 
-                <div class="in">
-                    <img id="a1" src$="{{buyer.head}}" alt="">
-                </div>
-                <div id="a2" class="in">
-                    <div class="name">{{buyer.username}}</div>
-                    <div id="time">{{ago}}</div>
-                    <div id="message" style="overflow: hidden;">{{order.msg}}</div>
-                </div>
-    
-                <!-- BUTTONS ON THE RIGHT -->
-                <template  is="dom-if" if="{{readOnly()}}">
-                    <div class="in buttons hide1">
-                        <button id="info" on-click="buyerinfo">查看賣家信息</button>
-                        <button class="pointer" style="background: #f0f0f0; border-color: black;" on-click="buyerinfo">
-                            <svg class="search" viewBox="0 0 24 24" style="height: 15px;">
-                                <title>Search Icon</title>
-                                <path fill="#57585a"
-                                    d="M15.618 17.032a9 9 0 1 1 1.414-1.414l5.675 5.675a1 1 0 0 1-1.414 1.414l-5.675-5.675zm-.701-2.05a1.017 1.017 0 0 1 .065-.065 7 7 0 1 0-.066.066z">
-                                </path>
-                            </svg>
-                        </button>
-                    </div>
-                    <div class="in buttons hide2">
-                        <button class="accept" on-click="accept">接受</button>
-                        <button class="accept2" on-click="accept">✔</button>
-                    </div>
-                    <div class="in buttons hide3">
-                        <button class="reject" on-click="reject">拒絕</button>
-                        <button class="reject2" on-click="reject">X</button>
-                    </div>
-                </template>
-
+            <div class="in">
+                <img id="a1" src$="{{buyer.head}}" alt="">
             </div>
-    
+            <div id="a2" class="in">
+                <div class="name">{{buyer.username}}</div>
+                <div id="time">{{ago}}</div>
+                <div id="message" style="overflow: hidden;">{{order.msg}}</div>
+            </div>
+
+            <!-- BUTTONS ON THE RIGHT -->
+            <template is="dom-if" if="{{readOnly()}}">
+                <div class="in buttons hide1">
+                    <button id="info" on-click="buyerinfo">查看賣家信息</button>
+                    <button class="pointer" style="background: #f0f0f0; border-color: black;" on-click="buyerinfo">
+                        <svg class="search" viewBox="0 0 24 24" style="height: 15px;">
+                            <title>Search Icon</title>
+                            <path fill="#57585a"
+                                d="M15.618 17.032a9 9 0 1 1 1.414-1.414l5.675 5.675a1 1 0 0 1-1.414 1.414l-5.675-5.675zm-.701-2.05a1.017 1.017 0 0 1 .065-.065 7 7 0 1 0-.066.066z">
+                            </path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="in buttons hide2">
+                    <button class="accept" on-click="accept">接受</button>
+                    <button class="accept2" on-click="accept">✔</button>
+                </div>
+                <div class="in buttons hide3">
+                    <button class="reject" on-click="reject">拒絕</button>
+                    <button class="reject2" on-click="reject">X</button>
+                </div>
+            </template>
+
+        </div>
+
         <!-- </template> -->
 
     </template>
@@ -169,7 +169,7 @@
 </dom-module>
 
 <script>
-    (function() {
+    (function () {
         Polymer({
             is: 'change-order-list',
             properties: {
@@ -181,29 +181,33 @@
                 },
                 "product": Object
             },
-            created: function() {
+            created: function () {
                 this.dataManager = new DataPackage('order');
                 this.userManager = new DataPackage('_user');
                 this.orderManager = new DataPackage('order');
                 this.prodManager = new DataPackage('product');
+
                 this.user = store.get('change-user') || null;
+                if (this.user) {
+                    this.fileManager = new AwsPackage(this.user);
+                }
             },
-            readOnly(){
-                console.log('Read Only',this.product['ownerId'],this.user['id']);
+            readOnly() {
+                console.log('Read Only', this.product['ownerId'], this.user['id']);
                 if (this.product['ownerId'] != this.user['id'])
                     return false;
-                else    
+                else
                     return true;
             },
-            initOrder(){
-                this.loadUser(this.order['buyerId']).then(res=>{
-                    this.buyer = res; 
+            initOrder() {
+                this.loadUser(this.order['buyerId']).then(res => {
+                    this.buyer = res;
                     // this.loadProduct(this.order['productId']).then(res=>{
                     //     this.product = res; 
                     //     this.isPermitted();
                     // });             
-                    console.log('Buyer',this.buyer);
-                    this.ago = this.timeAgo(this.order['submitTime']);   
+                    console.log('Buyer', this.buyer);
+                    this.ago = this.timeAgo(this.order['submitTime']);
                 });
                 this.isPermitted();
 
@@ -211,59 +215,65 @@
             },
             loadOrder(pid) {
                 let that = this;
-                return new Promise(function(resolve, reject) {
-                    Polymer.getContent('/json/order-'+pid+'.json?id='+new Date().getTime()).then(res=>{
-                        resolve(JSON.parse(res));
-                        // console.log("order omg:", res);
-                    },err=>{
-                        that.orderManager.loadData(pid).then(prod=>{
-                            resolve(prod);
+                return new Promise(function (resolve, reject) {
+                    Polymer.getContent('/json/order-' + pid + '.json?id=' + new Date().getTime())
+                        .then(res => {
+                            resolve(JSON.parse(res));
+                            // console.log("order omg:", res);
+                        }, err => {
+                            that.orderManager.loadData(pid).then(prod => {
+                                resolve(prod);
+                            });
                         });
-                    });
                     // this.fileManager.getFile('json/product-' + pid + '.json').then(res => {
                     //     let json = JSON.parse(res);
                     // });
                 });
-                
+
 
             },
             loadProduct(pid) {
                 let that = this;
-                return new Promise(function(resolve, reject) {
-                    Polymer.getContent('/json/product-'+pid+'.json?id='+new Date().getTime()).then(res=>{
-                        resolve(JSON.parse(res));
-                    },err=>{
-                        that.prodManager.loadData(pid).then(prod=>{
-                            resolve(prod);
+                return new Promise(function (resolve, reject) {
+                    Polymer.getContent('/json/product-' + pid + '.json?id=' + new Date().getTime())
+                        .then(res => {
+                            resolve(JSON.parse(res));
+                        }, err => {
+                            that.prodManager.loadData(pid).then(prod => {
+                                resolve(prod);
+                            });
                         });
-                    });
                     // this.fileManager.getFile('json/product-' + pid + '.json').then(res => {
                     //     let json = JSON.parse(res);
                     // });
                 });
-                
+
 
             },
             loadUser(pid) {
                 let that = this;
-                return new Promise(function(resolve, reject) {
-                    Polymer.getContent('/json/user-'+pid+'.json?id='+new Date().getTime()).then(res=>{
-                        resolve(JSON.parse(res));
-                    },err=>{
-                        that.userManager.loadData(pid).then(prod=>{
-                            resolve(prod);
+                return new Promise(function (resolve, reject) {
+                    Polymer.getContent('/json/user-' + pid + '.json?id=' + new Date().getTime())
+                        .then(res => {
+                            resolve(JSON.parse(res));
+                        }, err => {
+                            that.userManager.loadData(pid).then(prod => {
+                                resolve(prod);
+                            });
                         });
-                    });
                     // this.fileManager.getFile('json/product-' + pid + '.json').then(res => {
                     //     let json = JSON.parse(res);
                     // });
                 });
-                
+
 
             },
 
 
-            accept: function() {
+            accept: function () {
+                let that = this;
+                let shadow = this.shadowRoot;
+
                 let loc = location.search;
                 let pid = "";
                 let uid = "";
@@ -278,52 +288,137 @@
                     pid += loc[a];
                 }
 
-                this.dataManager.saveData(this.id,{
-                        "status": "處理中"
-                    }).then(res=>{
-                        console.log("postdata to postman successfully!")
-                    });
+                console.log("accept this.order:", this.order);
+                console.log("accept buyerId:", this.order['buyerId']);
+
 
                 //POSTDATA TO LAMBDA
                 let json = {
                     "action": "sendOrderEmail",
-                    "uid": this.buyerId,
+                    "uid": this.order['buyerId'],
                     "pid": pid,
                     "oid": this.id
                 };
 
-                let urlL = 'https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc';
+                console.log("accept JSON:", json);
+                let urlL =
+                    'https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc';
                 Polymer.postData(urlL, json).then(res => {
+                    console.log("MiscFc res:", res)
                     if (res.code > 0) {
-                        Polymer.postData(url, param).then(res => {
-                            if (res.code > 0) {
-                                console.log("傳到email了")
+
+
+                        console.log("傳到email了")
+                        //accept and remove Array
+                        this.shadowRoot.querySelector('#containall').innerHTML =
+                            "<H1>已聯絡賣家</H1>";
+                        console.log("accept id:", this.id);
+                        console.log("accept product res:", this.pRes)
+                        let str = this.pRes['replyArray'];
+                        let paramchange = {
+                            "action": "updateData",
+                            "index": "change",
+                            "type": "product",
+                            "id": pid,
+                            "body": {
+                                "query": {
+                                    "script": {
+                                        "source": "ctx._source['replyArray'].remove(" +
+                                            str.indexOf(this
+                                                .id) + ")"
+                                    }
+                                }
                             }
-                        })
+                        };
+
+                        console.log("accept param:", JSON.stringify(
+                            paramchange));
+                        let URL =
+                            "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                        Polymer.postData(URL, paramchange).then(res => {
+                            if (res.code > 0) {
+                                this.UpdateProductJson(pid);
+                            } else {
+                                alert(
+                                    "Err: cannot remove database replyArray!");
+                            }
+                        });
+
+
                     } else {
                         console.log("發送失敗")
                     }
                 })
-                this.shadowRoot.querySelector('#containall').innerHTML = "<H1>已聯絡賣家</H1>";
+
             },
 
-            buyerinfo: function() {
+            buyerinfo: function () {
                 let theurl = '/user?' + this.buyerId;
                 location.href = theurl;
 
             },
 
-            reject: function() {
+            reject: function () {
                 let that = this;
                 let shadow = this.shadowRoot;
+                let URL =
+                    "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
 
-                this.dataManager.removeData(this.id).then(res=>{
+                let loc = location.search;
+                let pid = "";
+                let uid = "";
+                let posit = 0;
+                for (i = 1; i < loc.length; i++) {
+                    if (loc[i] == "u") {
+                        posit = i;
+                        break
+                    };
+                };
+                for (a = 2; a < posit; a++) {
+                    pid += loc[a];
+                }
+
+                console.log("reject id:", this.id);
+                console.log("reject product res:", this.pRes)
+                let str = this.pRes['replyArray'];
+                let paramchange = {
+                    "action": "updateData",
+                    "index": "change",
+                    "type": "product",
+                    "id": pid,
+                    "body": {
+                        "query": {
+                            "script": {
+                                "source": "ctx._source['replyArray'].remove(" + str.indexOf(this
+                                    .id) + ")"
+                            }
+                        }
+                    }
+                };
+
+                console.log("reject param:", JSON.stringify(paramchange));
+                Polymer.postData(URL, paramchange).then(res => {
+                    if (res.code > 0) {
+                        this.UpdateProductJson(pid);
+                    } else {
+                        alert("Err: cannot remove database replyArray!");
+                    }
+                });
+            },
+
+            UpdateProductJson: function (productId) {
+                let that = this;
+                let shadow = this.shadowRoot;
+                this.prodManager.loadData(productId).then(res => {
+                    console.log("res:", res);
+                    this.fileManager.saveFile('json/product-' + productId + '.json', JSON
+                        .stringify(res));
                     console.log("Deleted Successfully");
                     shadow.querySelector('#containall').remove();
                 });
             },
 
-            timeAgo(time){
+            timeAgo(time) {
                 let str;
                 let _thetimenow = Date.now();
                 var comparetime = (_thetimenow - time) / 1000;
@@ -332,31 +427,48 @@
                 } else if (comparetime / 60 < 60) {
                     str = Math.floor(comparetime / 60) + "分鐘前"
                 } else if (comparetime / 60 / 60 < 24) {
-                   str = Math.floor(comparetime / 60 / 60) + "小時前"
+                    str = Math.floor(comparetime / 60 / 60) + "小時前"
                 } else if (comparetime / 60 / 60 / 24 < 7) {
-                    str= Math.floor(comparetime / 60 / 60 / 24) + "日前"
+                    str = Math.floor(comparetime / 60 / 60 / 24) + "日前"
                 } else if (comparetime / 60 / 60 / 24 / 7 < 30) {
                     str = Math.floor(comparetime / 60 / 60 / 24 / 7) + "星期前"
                 } else if (comparetime / 60 / 60 / 24 / 7 / 30 < 365) {
-                    str= Math.floor(comparetime / 60 / 60 / 24 / 30) + "月前"
+                    str = Math.floor(comparetime / 60 / 60 / 24 / 30) + "月前"
                 }
-                console.log('Time',time,str);
+                console.log('Time', time, str);
                 return str;
 
             },
-            ready: function() {
+            ready: function () {
                 this.id = this.getAttribute('id');
-
-
-                // search for "order" data in postman
                 let that = this;
                 let shadow = this.shadowRoot;
-                   // this.id = this.getAttribute('id');
-                   console.log('Order ID',this.id);  
-                this.loadOrder(this.id).then(res=>{
-                    this.order=res; 
+
+                let loc = location.search;
+                let pid = "";
+                let uid = "";
+                let posit = 0;
+                for (i = 1; i < loc.length; i++) {
+                    if (loc[i] == "u") {
+                        posit = i;
+                        break
+                    };
+                };
+                for (a = 2; a < posit; a++) {
+                    pid += loc[a];
+                }
+
+                console.log('Order ID', this.id);
+                this.loadOrder(this.id).then(res => {
+                    this.order = res;
                     this.initOrder();
-                    console.log('Order',this.order);
+                    console.log('Order', this.order);
+                    // let k = document.querySelector('change-orderlist-storage');
+                    // console.log("order1", k);
+                });
+
+                this.loadProduct(pid).then(res => {
+                    this.pRes = res;
                     // let k = document.querySelector('change-orderlist-storage');
                     // console.log("order1", k);
                 });
@@ -388,21 +500,21 @@
                 // };
 
             },
-            isPermitted(){
+            isPermitted() {
                 let user = store.get('change-user') || null;
                 let buyerId = this.order['buyerId'] || 0;
                 let permitted = true;
                 if (!user)
                     permitted = false;
 
-                if (this.product['ownerId']=== user['id'])
+                if (this.product['ownerId'] === user['id'])
                     return;
 
                 if (user['id'] === buyerId)
                     return;
                 else
                     this.remove();
-                console.log('Fanspage',this.product['isFanpage']);
+                console.log('Fanspage', this.product['isFanpage']);
                 // For fansPage admin permission
                 // if (this.product['isFanpage'])
                 //     checkFansAdmin();

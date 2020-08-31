@@ -942,7 +942,7 @@
             loadOwner() {
                 let o = this.product['ownerId'];
                 let isFanpage = this.product['isFanpage'] || null;
-                console.log('is Fan Page', isFanpage);
+                // console.log('is Fan Page', isFanpage);
                 if (!isFanpage || isFanpage == false)
                     this.loadUser(o);
                 else
