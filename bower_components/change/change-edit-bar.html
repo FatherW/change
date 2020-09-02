@@ -124,29 +124,24 @@
                 let pid = "";
                 let uid = "";
                 let posit = 0;
-                for (i = 1; i < loc.length; i++) {
-                    if (loc[i] == "u") {
-                        posit = i;
-                        break
-                    };
+                for (i = 2; i < loc.length; i++) {
+                    pid+=loc[i]
                 };
-                for (a = 2; a < posit; a++) {
-                    pid += loc[a];
-                }
-                for (c = posit + 1; c < loc.length; c++) {
-                    uid += loc[c];
-                }
-                console.log("Edit Bar ID", pid);
-                this.id = pid;
+            
                 let user = store.get('change-user') || null;
-                //Check whether login or not (not login -> hide)
-                if (user) {
-                    if (user['_id'] == uid || user.isAdmin == true) {
+
+                Polymer.getContent('/json/product-' + pid + '.json?id=' + new Date().getTime()).then(res=>{
+                    res= JSON.parse(res);
+                    if(res.ownerId == user['id'] || user.isAdmin == true){
                         shadow.querySelector('#tbar').style.display = "block";
                         this.shadowRoot.querySelector('#edi').href = "add-product.html?p" + this.id +
                             "u" + uid;
                     }
-                }
+                })
+                console.log("Edit Bar ID", pid);
+                this.id = pid;
+                //Check whether login or not (not login -> hide)
+           
 
             },
 
@@ -170,14 +165,10 @@
                 let loc = location.search;
                 let pid = "";
                 let posit = 0;
-                for (i = 1; i < loc.length; i++) {
-                    if (loc[i] == "u") {
-                        posit = i;
-                    };
+                for (i = 2; i < loc.length; i++) {
+                    pid+=loc[i]
                 };
-                for (a = 2; a < posit; a++) {
-                    pid += loc[a];
-                }
+                
                 //STORED PRODUCT ID
                 console.log("ID", pid);
 
@@ -220,14 +211,9 @@
                 let loc = location.search;
                 let pid = "";
                 let posit = 0;
-                for (i = 1; i < loc.length; i++) {
-                    if (loc[i] == "u") {
-                        posit = i;
-                    };
+                for (i = 2; i < loc.length; i++) {
+                    pid+=loc[i]
                 };
-                for (a = 2; a < posit; a++) {
-                    pid += loc[a];
-                }
                 //STORED PRODUCT ID
                 console.log("ID", pid);
 

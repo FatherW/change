@@ -1017,7 +1017,7 @@
                     if (res.code > 0) {
                         this.dataManager.loadData(this.id).then(res => {
                             this.fileManager.saveFile('json/product-' + this.id + '.json', JSON.stringify(res)).then(res => {
-                                location.replace("./edit-product.html?p" + this.id + "u" + user['id']);
+                                location.replace("./edit-product.html?p" + this.id );
                             });
                         })
                     }
@@ -1175,7 +1175,6 @@
                                 id: "#$%!@&^(ntw"
                             });
 
-                            shadow.querySelector('#fanpage').value = "沒有專頁可以選擇";
                         }
                         customElements.whenDefined('vaadin-select').then(function() {
                             const propage = pagename;
