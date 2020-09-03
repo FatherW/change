@@ -9,7 +9,7 @@
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-menu-bar/vaadin-menu-bar.html">
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-dialog/vaadin-dialog.html">
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/dz-file-management/dz-sub-img-stock.html">
+<link rel="import" href="../dz-file-management/dz-sub-img-stock.html">
 <link rel="import" href="change-dropzone-file.html">
 <link rel="import" href="change-gallery.html">
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/dz-file-management/change-photo-stock.html">
@@ -501,7 +501,7 @@
             <div class="change-new-product-container">
                 <div class="left-pics">
                     <!-- 5pics -->
-                    <div id="div0" class="bigPic productImg" on-click="_uploadFile">
+                    <div id="div0" class="bigPic productImg" data-id="0" on-click="_uploadFile">
                         <!-- <img src$="{{pics[0]}}" style="width:100%"/> -->
 
                     </div>
@@ -509,10 +509,10 @@
 
                         <!-- GG get Array Pic from Database -->
                         <div class="consmall">
-                            <div id="div1" class="productImg" on-click="_uploadFile"></div>
-                            <div id="div2" class="productImg" on-click="_uploadFile"></div>
-                            <div id="div3" class="productImg" on-click="_uploadFile"></div>
-                            <div id="div4" class="productImg" on-click="_uploadFile"></div>
+                            <div id="div1" class="productImg" data-id="1" on-click="_uploadFile"></div>
+                            <div id="div2" class="productImg" data-id="2" on-click="_uploadFile"></div>
+                            <div id="div3" class="productImg" data-id="3" on-click="_uploadFile"></div>
+                            <div id="div4" class="productImg" data-id="4" on-click="_uploadFile"></div>
                         </div>
                         <div class="buttons u">
                             <!-- <button id="upload" on-click="_uploadFile">上載圖片</button> -->
@@ -802,6 +802,15 @@
                     }
                 });
 
+                // Add image selected function 
+                shadow.querySelectorAll('.productImg').forEach(item=>{
+                    item.selected = function(url,originUrl,smallUrl){
+                        item.style.backgroundImage = 'url(' + url + ')';
+                        Polymer.activeElement = null;
+                        shadow.querySelector('vaadin-dialog').opened = false;
+                    }
+                });
+
 
             },
 
@@ -946,13 +955,15 @@
             _uploadFile: function(e) {
                 let shadow = this.shadowRoot;
                 let that = this;
+                let elm = e.target;
                 this.pics = [];
                 let dialog = shadow.querySelector('vaadin-dialog');
                 this.dialog = dialog;
                 this.curElm = e.path[0];
-
+                Polymer.activeElement = elm;
                 let dzPopup = document.createElement('dz-sub-img-stock');
                 dzPopup.subUserId = this.user['id'];
+                dzPopup.subUser = this.user;
                 dzPopup.dialog = this.shadowRoot.querySelector('vaadin-dialog');
                 Polymer.componentPopup(dzPopup,'90%','90%');
 

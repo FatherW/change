@@ -5,7 +5,6 @@
 	class imgPackage {
 		constructor(elm){
 			// super();
-			console.log('Custom IMG',elm);
 			elm.label = '圖片';
 
 
@@ -47,10 +46,40 @@
 			elm.menu.forEach(item=>{
 				item.source = elm;
 			});
-			elm.selected = function(url){
+
+
+			elm.selected = function(url,orgUrl='',smallUrl=''){
 				// elm.setAttribute('src',url);
+				let rect = elm.getBoundingClientRect();
+				console.log('Rect',rect);
+				let width = rect.width;
+				let height = rect.height;
+				
+				if (width<500 && smallUrl)
+					url = smallUrl;
+
+				if (width>800 && orgUrl)
+					url = orgUrl;
+
 				elm.addAttributeChange('src',url);
-				elm.addAttributeChange('srcset',url);
+				let str= url+' 800w';
+				let size = "(max-width:800px) 800px";
+				if (smallUrl){
+					str = smallUrl+' '+'500w,'+str;
+					size = "(max-width:500px) 500px,"+size;
+				}
+
+				if (orgUrl) {
+					str = orgUrl+' '+','+str;
+					size = "(min-width:800px) 100%,"+size;
+				}
+
+				
+
+				elm.addAttributeChange('srcset',str);
+				elm.addAttributeChange('size',size);
+				elm.addStyleChange('width',width+'px');
+				elm.addStyleChange('height',height+'px');
 				Polymer.activeElement =null;
 				let dzAdmin = document.querySelector('dz-admin');
 				dzAdmin.closeDialog();
@@ -78,13 +107,30 @@
 				let json = {
 					folder: 'dz-file-management',
 					component: 'dz-img-stock',
-					width: '90%',
-					height: '90%',
+					width: '100%',
+					height: '100%',
 					source: elm
 				};
 				Polymer.dzFire('dz-popup',{detail: json});
 			
 			}
+
+			elm.dataUpdate = function(){
+				let field;
+				if (!elm.hasAttribute('dz-data'))
+					return;
+				else
+					field = elm.getAttribute('dz-data');			
+				if (!elm.dataModel)
+					return;
+				
+				console.log('Data Update',elm.dataModel,field);
+				elm.addAttributeChange('src',elm.dataModel[field]);
+				elm.addAttributeChange('srcset',elm.dataModel[field]);
+
+			}
+
+
 			// this.eventListener(elm);
 		}
 	}

@@ -2,7 +2,7 @@
 <link rel="import" href="../vaadin-button/vaadin-button.html">
 <link rel="import" href="../vaadin-tabs/vaadin-tabs.html">
 <link rel="import" href="../iron-pages/iron-pages.html">
-<link rel="import" href="../dz-dropzone/dz-dropzone-by-tags.html">
+<link rel="import" href="../dz-dropzone/dz-custom-dropzone.html">
 <link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="../paper-tags-input/paper-tags-input.html">
 <link rel="import" href="../dz-file-management/css/style.html">
@@ -12,7 +12,7 @@
 <link rel="import" href="css/style.html">
 
 
-<dom-module id="dz-file-management3">
+<dom-module id="dz-upload">
 
 
     <template>
@@ -69,20 +69,12 @@
                     <span class="example-spacer"></span>
                     <!-- <vaadin-button theme="success" id="dz-upload">上載</vaadin-button>
                     <vaadin-button theme="contrast" id="dz-buy">購買</vaadin-button> -->
-                    <vaadin-button theme="primary" id="dz-refresh">更新</vaadin-button>
+                    <vaadin-button theme="primary" id="dz-refresh" on-click="close">關閉</vaadin-button>
                 </mat-toolbar-row>
             </mat-toolbar>
         </h1>
-
-
-
-
-        <dz-dropzone-by-tags></dz-dropzone-by-tags>
-
-
-
-
-
+        <dz-custom-dropzone></dz-custom-dropzone>
+        <p style="padding:20px;"><b>注意：</b>上載之檔案由於處理需時，檔案上載後不能即使使用。建議三至五分鐘後，再選取，或按更新直至檔案出現為止。</p>
 
     </template>
     </template>
@@ -94,7 +86,7 @@
 
 
         Polymer({
-            is: 'dz-file-management3',
+            is: 'dz-upload',
             properties: {
                 icon: {
                     type: String,
@@ -114,7 +106,10 @@
             created: function() {
                 console.log("Created");
                 this.user = store.get('user') || null;
-                this.fileManager = Polymer.fileManager;
+                if (this.user)
+                    this.fileManager = Polymer.fileManager;
+                else if (this.subUser)
+                    this.fileManager = new AwsPackage(this.subUser);
                 this.tags = [];
             },
 
@@ -143,11 +138,10 @@
             },
 
             ready: function() {
-                console.log("Ready");
-                this.searchTags();
-                this.renew();
-                console.log("Ready2");
-
+              let dzDropZone = this.shadowRoot.querySelector('dz-custom-dropzone');
+              dzDropZone.user =  this.subUser;      
+            //   if (this.subUser)
+            //       dzDropZone.subUserId = Polymer.subUser['id'];       
             },
             renew() {
                 console.log("RENEW");
@@ -253,6 +247,9 @@
                 console.log('Polymer', Polymer._curElm, Key);
                 Polymer._curElm.setAttribute('src', Key);
                 shadow.closeDialog();
+            },
+            close(){
+                this.dialog.opened = false;
             },
             postData: function(url, data) {
                 // Default options are marked with *

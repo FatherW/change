@@ -61,18 +61,18 @@
 
 			}
 
-			// elm.edit = function(){
-			// 	let json = {
-			// 		folder: 'dz-file-management',
-			// 		component: 'dz-img-stock',
-			// 		width: '90%',
-			// 		height: '90%',
-			// 		source: elm
-			// 	};
-			// 	Polymer.dzFire('dz-popup',{detail: json});
-			
-			// }
-			// this.eventListener(elm);
+			elm.dataUpdate = function(){
+				let field;
+				if (!elm.hasAttribute('dz-data'))
+					return;
+				else
+					field = elm.getAttribute('dz-data');			
+				if (!elm.dataModel)
+					return;
+				elm.addPropertyChange('innerHTML',elm.dataModel[field]);
+			}
+
+			// elm.dataUpdate();
 		}
 	}
 

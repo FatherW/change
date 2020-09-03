@@ -1,6 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
 <script src="https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/js/dropzone.js"></script>
-<dom-module id="dz-dropzone">
+<dom-module id="dz-image-dropzone">
 
 	<template>
 		<style>
@@ -458,14 +458,11 @@
 
 
 	Polymer({
-		is: 'dz-dropzone',
+		is: 'dz-image-dropzone',
 		properties: {
       tags:{
         type:Array,
         value:[]
-      },
-      subUserId:{
-        type:String
       }
 		},
 
@@ -507,20 +504,22 @@
 				accept: function(file,done){
 					let name;
 					if (file.fullPath !== undefined)
-	  				name = file.fullPath;
+					name = file.fullPath;
 					else
-  					name = file.name;
-          name = Polymer.fileManager.changeFilename(name);
+					name = file.name;
           // file.s3upload = that.aws.myManagedUpload(name,file); 
-          if (that.subUserId)
-            that.tags.push(that.subUserId);
           console.log('Tags',that.tags,file);
-          Polymer.fileManager.saveMyImage(name,file).then(id=>{
-            console.log('ID',id);
-            that.saveImageTags(id,that.tags);
-          
-          });
-					file.s3upload = that.fileManager.myManagedUpload(name,file);              
+          if (this.fileManager.checkImage(file.name)){
+            Polymer.fileManager.saveMyImage(file).then(id=>{
+              console.log('ID',id);
+              that.saveImageTags(id,that.tags);
+            
+            });
+            file.s3upload = that.fileManager.myManagedUpload(name,file);            
+          } else {
+            alert('檔案格式不符');
+          }
+  
 					done();
 				}
 				});

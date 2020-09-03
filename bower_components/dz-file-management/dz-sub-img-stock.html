@@ -8,11 +8,12 @@
 <link rel="import" href="../dz-file-management/css/style.html">
 <link rel="import" href="../dz-file-management/dz-image-item.html">
 <link rel="import" href="../dz-file-management/dz-image-toolbar.html">
+<link rel="import" href="../dz-file-management/dz-upload.html">
 
 <link rel="import" href="css/style.html">
 
 
-<dom-module id="dz-img-stock">
+<dom-module id="dz-sub-img-stock">
 
 
     <template>
@@ -108,9 +109,9 @@
                     <span class="example-spacer"></span>
                     <!-- <vaadin-button theme="success" id="dz-upload">上載</vaadin-button>
                     <vaadin-button theme="contrast" id="dz-buy">購買</vaadin-button> -->
-                    <vaadin-button theme="primary" id="selectdelete">批量刪除</vaadin-button>
-                    <vaadin-button theme="primary" id="dz-refresh">更新</vaadin-button>
-                    <vaadin-button on-click="select">關閉</vaadin-button>
+                    <vaadin-button theme="primary" id="dz-upload" on-click="_upload">上載</vaadin-button>
+                    <vaadin-button theme="primary" id="dz-refresh" on-click="renew">更新</vaadin-button>
+                    <vaadin-button on-click="close">關閉</vaadin-button>
                 </mat-toolbar-row>
             </mat-toolbar>
         </h1>
@@ -125,14 +126,7 @@
 
             </div>
         </div>
-
-
-
-
-
-
-
-    </template>
+        <vaadin-dialog></vaadin-dialog>
     </template>
 </dom-module>
 
@@ -142,8 +136,14 @@
 
 
         Polymer({
-            is: 'dz-img-stock',
+            is: 'dz-sub-img-stock',
             properties: {
+                subUserId:{
+                    type:String
+                },
+                user:{
+                    type:Object
+                },
                 icon: {
                     type: String,
                     value: 'add'
@@ -164,9 +164,13 @@
 
             created: function() {
                 console.log("Created");
-                this.user = store.get('user') || null;
-                this.fileManager = Polymer.fileManager;
+                let that = this;
+                // this.user = store.get('user') || null;
+                console.log('Stock User',this.user);
                 this.tags = [];
+                document.addEventListener('file-upload',e=>{
+                    that.renew();
+                });
 
             },
 
@@ -196,10 +200,15 @@
 
             ready: function() {
                 console.log("Ready");
+                this.fileManager = new AwsPackage(this.subUser);
                 this.searchTags();
                 this.renew();
                 console.log("Ready2");
-
+                if (!this.subUserId){
+                    alert('請先登入, 或聯絡管理員');
+                    Polymer.closeDialog();
+                }
+                
                 let deletebutton = this.shadowRoot.querySelector('#selectdelete');
                 deletebutton.addEventListener('click', e => {
                     if (deletebutton.innerHTML == "批量刪除") {
@@ -224,16 +233,23 @@
                 console.log("RENEW");
                 let that = this;
                 let shadow = this.shadowRoot;
+                let tags = [];
+                let subUser = store.get('subUser') || null;
+
+                // console.log(this.tags);
+                tags = this.tags;
+                if (subUser)
+                    tags.push(this.subUser['id']);
                 shadow.querySelector('#dz-imageList').innerHTML = '';
                 let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/dazzleEditorMiscFunction";
 
                 params = {
                     "action": "listMyGalleryByTags",
                     "uid": Polymer.uid,
-                    "tags": this.tags
+                    "tags": tags
                 }
                 console.log('params', params);
-                Polymer.fileManager.postData(url, params).then(res => {
+                Polymer.postData(url, params).then(res => {
                     let images = res.resolve;
                     console.log('Images', images);
                     images.forEach(item => {
@@ -253,7 +269,7 @@
                 elm.item = item;
                 bar.setAttribute('gid', item['gid']);
                 elm.addEventListener('click', e => {
-                    // that.select(elm.gid);
+                    that.select(elm.gid);
                     // elm.selected = !elm.selected;
                     // if (elm.selected)
                     // 	elm.classList.add('selected');
@@ -287,6 +303,9 @@
                 });
 
             },
+            close(){
+                this.dialog.opened = false;
+            },
             fileType(Key) {
                 let ext = "file";
                 if (Key.indexOf('.') > -1)
@@ -307,14 +326,29 @@
 
                 return 'file';
             },
-            select(gid) {
-                let shadow = document.querySelector('dz-admin');
+            _upload(){
+                // console.log('E Upload');
+				// Polymer.activeElement = elm;
+				// let json = {
+				// 	folder: 'dz-file-management',
+				// 	component: 'dz-file-management3',
+				// 	width: '800px',
+				// 	height: '400px',
+				// 	source: elm
+				// };
+				// Polymer.dzFire('dz-popup',{detail: json});
 
-                // let Key = "https://designerrrr-output.s3-ap-northeast-1.amazonaws.com/images/" + Polymer.uid + "/large-web/" + gid + ".jpg";
-                // console.log('Polymer', Polymer._curElm, Key);
-                // Polymer._curElm.setAttribute('src', Key);
-                shadow.closeDialog();
-            }
+                let dialog = this.shadowRoot.querySelector('vaadin-dialog');
+                let dzPopup = document.createElement('dz-upload');     
+                dzPopup.dialog = dialog;
+                dzPopup.subUser = this.user;
+                Polymer.componentPopup(dzPopup,'800px','400px');
+				
+            },
+            // select(gid) {
+            //     let shadow = document.querySelector('dz-admin');
+            //     this.dialog.opened = false;
+            // }
 
 
 

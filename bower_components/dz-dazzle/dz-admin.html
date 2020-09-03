@@ -7,6 +7,8 @@
 <link rel="import" href="../dz-fab-menu/dz-dashboard.html">
 <link rel="import" href="../dz-dazzle/dz-submenu.html">
 <link rel="import" href="default-package/default-package.html">
+<!-- <link rel="import" href="dz-message-box.html"> -->
+
 
 
 
@@ -83,8 +85,20 @@
                 // this.loadMenu();
                 Polymer.dialog = this.shadowRoot.querySelector('vaadin-dialog');
                 this.eventListener();
+
+                // Polymer.fileManager.getFile(Polymer.thisPage).then(html => {
+                //         console.log("have page");
+                //     }, err => {
+                //         let popup = document.createElement('dz-message-box');
+                //         popup.msg = '建立新頁面';
+                //         Polymer.componentPopup(popup, '400px', '500px');
+                //         console.log("finish pop");
+                //     })
+                //     // Polymer.dzElementFire(window,'load',{});
+
+
             },
-          
+
             contextRender(menu) {
                 let that = this;
                 const shadow = document.querySelector('dz-wrapper');
@@ -278,131 +292,146 @@
 
                 document.addEventListener('keydown', e => {
                     console.log('Key Down', e);
-                        switch (e.code) {
-                            case 'Escape':
-                                switch (that.mode) {
-                                    case 'preview':
-                                        that.mode = 'context';
-                                        shadow.querySelector('dz-dashboard').removeAttribute('hide');
-                                        shadow.querySelector('[dz-panel]').removeAttribute('dz-panel');
+                    switch (e.code) {
+                        case 'Escape':
+                            switch (that.mode) {
+                                case 'preview':
+                                    that.mode = 'context';
+                                    shadow.querySelector('dz-dashboard').removeAttribute('hide');
+                                    shadow.querySelector('[dz-panel]').removeAttribute('dz-panel');
+                                    break;
+
+                                case 'context':
+                                    that.mode = 'preview';
+                                    shadow.querySelector('dz-dashboard').setAttribute('hide', '');
+                                    break;
+
+                                case 'edit':
+
+                                    break;
+
+                            }
+
+
+                            break;
+
+
+                        case 'ArrowUp':
+                            that.level++;
+                            that.curElm.removeAttribute('dz-panel');
+                            that.curElm = that.path[that.level];
+                            that.curElm.setAttribute('dz-panel', '');
+
+                            e.preventDefault();
+                            e.stopPropagation();
+                            break;
+                        case 'ArrowDown':
+                            that.level--;
+                            that.curElm.removeAttribute('dz-panel');
+                            that.curElm = that.path[that.level];
+                            that.curElm.setAttribute('dz-panel', '');
+                            e.preventDefault();
+                            e.stopPropagation();
+                            break;
+
+                        case 'KeyC':
+                            if (e.ctrlKey) {
+                                console.log('Copy', e);
+                                Polymer.dzElementFire(Polymer.activeElement, 'copy', {});
+                            }
+                            break;
+
+
+                        case 'KeyU':
+                            if (e.ctrlKey) {
+                                console.log('Copy', e);
+                                Polymer.dzElementFire(Polymer.activeElement, 'paste-before', {});
+                            }
+                            break;
+
+
+                        case 'KeyV':
+                            if (e.ctrlKey) {
+                                console.log('Copy', e);
+                                Polymer.dzElementFire(Polymer.activeElement, 'paste-after', {});
+                            }
+                            break;
+
+
+                        case 'KeyH':
+                            console.log('Hidden');
+                            let isHide = this.hide || null;
+                            if (!isHide){
+                                this.hide = true;
+                                Polymer.activeElement.setAttribute('dz-hide','');
+                            } else {
+                                document.querySelectorAll('[dz-hide]').forEach(item=>{
+                                    item.removeAttribute('dz-hide');
+                                });
+                                this.hide = false;
+                            }
+
+                        break;
+                        case 'KeyZ':
+                            if (e.ctrlKey) {
+                                console.log('Undo', Polymer.history);
+                                let json = Polymer.history.pop();
+                                let elm = document.querySelector('[dzid="' + json.dzid + '"]');
+                                let shadow = Polymer.shadowDOM.querySelector('[dzid="' + json.dzid + '"]');
+                                let body;
+                                console.log('All', json.action, json.body, json.dzid);
+                                switch (json.action) {
+                                    case 'style':
+                                        body = json.json;
+                                        for (var k in body) {
+                                            elm.style[k] = body[k];
+                                            shadow.style[k] = body[k];
+                                        }
+
                                         break;
 
-                                    case 'context':
-                                        that.mode = 'preview';
-                                        shadow.querySelector('dz-dashboard').setAttribute('hide', '');
+                                    case 'property':
+                                        body = json.json;
+                                        for (var k in body) {
+                                            elm[k] = body[k];
+                                            shadow[k] = body[k];
+                                        }
+
                                         break;
 
-                                    case 'edit':
+                                    case 'attribute':
+                                        body = json.json;
+                                        for (var k in body) {
+                                            elm.setAttribute(k, body[k]);
+                                            shadow.setAttribute(k, body[k]);
+                                        }
 
                                         break;
 
+                                    case 'tree':
+                                        // console.log('InnerHTML',json.body.innerHTML);
+                                        elm.innerHTML = json.body;
+                                        shadow.innerHTML = json.body;
+                                        elm.querySelectorAll('*').forEach(item => {
+                                            new defaultPackage(item);
+                                        });
+
+                                        // elm = body;
+                                        break;
                                 }
 
-
-                                break;
-
-
-                            case 'ArrowUp':
-                                that.level++;
-                                that.curElm.removeAttribute('dz-panel');
-                                that.curElm = that.path[that.level];
-                                that.curElm.setAttribute('dz-panel', '');
-
-                                e.preventDefault();
-                                e.stopPropagation();
-                                break;
-                            case 'ArrowDown':
-                                that.level--;
-                                that.curElm.removeAttribute('dz-panel');
-                                that.curElm = that.path[that.level];
-                                that.curElm.setAttribute('dz-panel', '');
-                                e.preventDefault();
-                                e.stopPropagation();
-                                break;
-
-                            case 'KeyC':
-                                if (e.ctrlKey){
-                                        console.log('Copy',e);
-                                        Polymer.dzElementFire(Polymer.activeElement,'copy',{});
-                                }
+                            }
                             break;
 
-
-                            case 'KeyU':
-                                if (e.ctrlKey){
-                                        console.log('Copy',e);
-                                        Polymer.dzElementFire(Polymer.activeElement,'paste-before',{});
-                                }
+                        case 'Backspace':
+                        case 'Delete':
+                            if (!Polymer.editing)
+                                Polymer.dzElementFire(Polymer.activeElement, 'delete', {});
                             break;
 
+                    }
 
-                            case 'KeyV':
-                                if (e.ctrlKey){
-                                        console.log('Copy',e);
-                                        Polymer.dzElementFire(Polymer.activeElement,'paste-after',{});
-                                }
-                            break;
 
-                            case 'KeyZ':
-                                if (e.ctrlKey){
-                                        console.log('Undo',Polymer.history);                                        
-                                        let json = Polymer.history.pop();
-                                        let elm = document.querySelector('[dzid="'+json.dzid+'"]');
-                                        let shadow = Polymer.shadowDOM.querySelector('[dzid="'+json.dzid+'"]');
-                                        let body;
-                                        console.log('All',json.action,json.body,json.dzid);     
-                                        switch(json.action){
-                                            case 'style':
-                                                body = json.json;
-                                                for (var k in body){
-                                                    elm.style[k] = body[k];
-                                                    shadow.style[k] = body[k];
-                                                }
-
-                                            break;
-
-                                            case 'property':
-                                                body = json.json;
-                                                for (var k in body){
-                                                    elm[k] = body[k];
-                                                    shadow[k] = body[k];
-                                                }
-
-                                            break;
-                                        
-                                            case 'attribute':
-                                                body = json.json;
-                                                for (var k in body){
-                                                    elm.setAttribute(k , body[k]);
-                                                    shadow.setAttribute(k , body[k]);
-                                                }
-
-                                            break;
-
-                                            case 'tree':
-                                                // console.log('InnerHTML',json.body.innerHTML);
-                                                elm.innerHTML = json.body;
-                                                shadow.innerHTML = json.body;
-                                                elm.querySelectorAll('*').forEach(item=>{
-                                                    new defaultPackage(item);
-                                                });
-
-                                                // elm = body;
-                                            break;
-                                        }         
-
-                                }
-                            break;
-
-                            case 'Backspace':
-                            case 'Delete':
-                                if (!Polymer.editing)
-                                    Polymer.dzElementFire(Polymer.activeElement,'delete',{});
-                            break;
-
-                        }
-
-                    
 
                     if (that.mode === "edit") {
                         switch (e.code) {

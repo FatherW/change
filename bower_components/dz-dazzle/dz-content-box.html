@@ -12,17 +12,27 @@
                 height:auto;
             }
         </style>
-         <template is="dom-if" if="{{isHtml()}}">
+        		<style include="main-styles"></style>
+
+         <!-- <template is="dom-if" if="{{isHtml()}}">
                 <dz-editor value$="{{value}}">
                 </dz-editor>
           </template>
           <template is="dom-if" if="{{!isHtml()}}">
             <vaadin-text-area value$="{{value}}">
             </vaadin-text-area>
-          </template>
-
-        <vaadin-button on-click="cancel">取消</vaadin-button>
-        <vaadin-button on-click="confirm">確認</vaadin-button>
+          </template> -->
+          <mat-toolbar class="mat-toolbar mat-primary mat-toolbar-multiple-rows" color="primary">
+            <mat-toolbar-row class="mat-toolbar-row">
+                <span></span>
+                <span class="example-spacer"></span>
+                <vaadin-button on-click="cancel">取消</vaadin-button>
+                <vaadin-button on-click="save">確認</vaadin-button>        
+    
+            </mat-toolbar-row>
+        </mat-toolbar>
+        <vaadin-text-area value$="{{value}}">
+        </vaadin-text-area>
 	</template>
 	
 
@@ -44,9 +54,7 @@
 		created:function() {
             // Polymer.loadComponent('vaadin-text-field','vaadin-text-area');
         },
-        cancel(){
-            Polymer.closeDialog();
-        },
+
         confirm(){
 
             let editor= this.shadowRoot.querySelector('dz-editor') || null;
@@ -57,10 +65,11 @@
             // else
             //     this.source.innerHTML = textarea.value;
             
-            if (this.isHtml())
-                html = editor.innerHTML;
-            else
-                html = textarea.value;
+            // if (this.isHtml())
+            //     html = editor.innerHTML;
+            // else
+            
+            html = textarea.value;
             
             this.source.addPropertyChange('innerHTML',html);
             console.log('Confirm',editor);

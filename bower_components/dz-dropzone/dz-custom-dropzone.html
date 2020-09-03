@@ -1,6 +1,8 @@
 <link rel="import" href="../polymer/polymer.html">
 <script src="https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/js/dropzone.js"></script>
-<dom-module id="dz-dropzone">
+
+
+<dom-module id="dz-custom-dropzone">
 
 	<template>
 		<style>
@@ -458,7 +460,7 @@
 
 
 	Polymer({
-		is: 'dz-dropzone',
+		is: 'dz-custom-dropzone',
 		properties: {
       tags:{
         type:Array,
@@ -470,11 +472,57 @@
 		},
 
 		created:function() {
-			this.user =Polymer.user || null;
-			console.log('Drop Zone',this.user);
-			 this.fileManager = Polymer.fileManager;
-			 
+
+      this.getUrl = "https://0mx3cqjlkh.execute-api.ap-northeast-1.amazonaws.com/default/getPresignedURL";
+
+
+      this.tags =[];
 		},
+    accept(file){
+			let name;
+      let that = this;
+
+      this.user =store.get('user') || store.get('subUser') || null;
+			console.log('Drop Zone',this.user,store.get('user'),store.get('subUser'));
+
+      if (this.user)
+  			 this.fileManager = new AwsPackage(this.user);
+      if (store.get('subUser'))
+        this.subUser = store.get('subUser') || null;
+
+      let getUrl = "https://0mx3cqjlkh.execute-api.ap-northeast-1.amazonaws.com/default/getPresignedURL";
+					if (file.fullPath !== undefined)
+	  				name = file.fullPath;
+					else
+  					name = file.name;
+          name = that.fileManager.changeFilename(name);
+          // file.s3upload = that.aws.myManagedUpload(name,file); 
+
+          if (that.subUser)
+            that.tags.push(that.subUser['id']);
+
+          console.log('Tags',that.tags,file, that.subUser);
+          // let params = {
+          //   'bucket': this.user['userBucket'],
+          //   'key': 'files/'+this.user['id']+'/'+name
+          // }
+          // Polymer.postData(getUrl,params).then(res=>{
+          //     console.log('Result',res);
+          // });
+
+
+          that.fileManager.saveMyImage(name,file).then(id=>{
+            console.log('ID',id);
+            that.saveImageTags(id,that.tags);
+          
+          });
+					file.s3upload = that.fileManager.myManagedUpload(name,file);  
+          window.setTimeout(function(){
+            Polymer.dzFire('file-upload',{});
+          },5000);
+
+
+    },
 		ready:function(){
       let s = this.shadowRoot; 
 			let demoUpload = s.querySelector('#demo-upload');
@@ -505,22 +553,10 @@
 					}
 				},
 				accept: function(file,done){
-					let name;
-					if (file.fullPath !== undefined)
-	  				name = file.fullPath;
-					else
-  					name = file.name;
-          name = Polymer.fileManager.changeFilename(name);
-          // file.s3upload = that.aws.myManagedUpload(name,file); 
-          if (that.subUserId)
-            that.tags.push(that.subUserId);
-          console.log('Tags',that.tags,file);
-          Polymer.fileManager.saveMyImage(name,file).then(id=>{
-            console.log('ID',id);
-            that.saveImageTags(id,that.tags);
-          
-          });
-					file.s3upload = that.fileManager.myManagedUpload(name,file);              
+		   
+          that.accept(file);
+
+
 					done();
 				}
 				});

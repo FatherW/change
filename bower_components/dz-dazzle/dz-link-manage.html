@@ -213,6 +213,7 @@
 		// console.log('Active Element',activeElement);
 		let link = this.shadowRoot.querySelector('#myLink').value;
 		this.source.selected(link);
+		Polymer.closeDialog();
 
     },
         popup(folder,component,width,height){

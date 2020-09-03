@@ -1,0 +1,82 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<script>
+	
+	class sectionPackage {
+		constructor(elm){
+			// super();
+			let basePath =  "template/" + Polymer.tid + "/_block/";
+			elm.label = '專塊';
+			elm.menu = [{
+                        'text': '儲存為母版',
+                        'event': 'saveAsMaster'
+                    },{
+                        'text': '使用母版',
+                        'event': 'import'
+                    }];
+
+			elm.menu.forEach(item=>{
+				item.source = elm;
+			});
+
+
+
+			elm.loadMaster = function(id){
+				
+				if (id)
+					Polymer.getUserDataContent(id).then(html=>{
+						console.log('Section',elm,elm.shadowElm,html);
+						elm.innerHTML = html;
+						let dzid = elm.getAttribute('dzid');
+						let shadow = Polymer.getShadowItem(dzid) || null;
+						if (!shadow)
+							console.log('No Shadow');
+						let i=0;
+						elm.querySelectorAll('*').forEach(item=>{
+								new defaultPackage(item);
+						});
+						shadow.innerHTML = elm.innerHTML;
+						elm.shadowElm = shadow;
+						// console.log('Header',Polymer.shadowDOM,document.querySelector('dz-wrapper'));
+						console.log('Header Init',shadow,elm,dzid);
+						elm.addPropertyChange('innerHTML',html.innerHTML);
+					},err=>{
+
+					});
+			}
+		
+
+			if (elm.id)
+				elm.loadMaster(elm.id);
+			
+
+			elm.saveAsMaster = function(){
+				let id;
+				if (!elm.id)
+					return;
+				else	
+					id = elm.id;
+				
+				let dummy = elm.shadowElm.cloneNode(true);
+				dummy.querySelectorAll('[dzid]').forEach(item=>{
+					item.removeAttribute('dzid');
+				});
+
+				Polymer.fileManager.saveUserData(basePath+id,dummy.innerHTML);
+			}
+			elm.import = function(){
+				let id = prompt("請輸入欲import 的區塊");
+				elm.loadMaster(id);
+			}
+
+			
+			document.addEventListener('save',e=>{
+				elm.saveAsMaster();
+			});
+
+		
+		}
+	}
+  
+
+</script>

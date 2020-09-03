@@ -1,0 +1,63 @@
+<link rel="import" href="../polymer/polymer.html">
+<dom-module id="dz-news-feed">
+	<template>
+	<slot></slot>
+	</template>
+</dom-module>
+
+<script>
+
+(function() {
+
+
+	Polymer({
+		is: 'dz-news-feed',
+		created:function() {
+			this.label = "新聞列表";
+			this.menu =[
+				{
+					"text": "匯入新聞",
+					"event":'import',
+					"source":this
+				},
+				{
+					"text": "編輯顯示",
+					"event":'display',
+					"source":this
+				},
+			];
+			this.tid = this.getAttribute('tid');
+		},
+		import(){
+
+		},
+		display(){
+
+		},
+		getNews(){
+			let src = this.getAttribute('src');
+			Polymer.getExternalContent(src).then(html=>{
+				console.log('Content',html);
+				let elm = document.createElement('html');
+				elm.innerHTML = html;
+				this.title = elm.querySelector('meta[property="og:title"]').getAttribute('content');
+				this.image = elm.querySelector('meta[property="og:image"]').getAttribute('content');
+				this.url = elm.querySelector('meta[property="og:url"]').getAttribute('content');
+				this.description = elm.querySelector('meta[property="og:description"]').getAttribute('content');
+			});
+		},
+		getTemplate(id){
+			Polymer.getUserDataContent('dz-news-feed/'+id).then(thml=>{
+
+			});
+		},		
+		ready() {
+			// this.src = this.getAttribute('src');
+			this.getNews();
+				
+		},
+	});
+
+})();
+
+</script>

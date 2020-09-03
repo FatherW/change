@@ -62,6 +62,7 @@
                 // Polymer.loadComponent('change', 'change-login');
                 this.userManager = new DataPackage('_user');
                 let user = store.get('change-user') || null;
+                store.set('subUser',user);
                 if (user) this.fileManager = new AwsPackage(user);
                 Polymer.parseTime = function(oldtime) {
                     let _thetimenow = Date.now();
