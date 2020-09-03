@@ -36,7 +36,8 @@
 			});
 
 			
-			elm.selected = function(url){
+			elm.selected = function(url,orgUrl='',smallUrl=''){
+                // let url = "https://designerrrr-output.s3-ap-northeast-1.amazonaws.com/images/" + Polymer.uid + "/original/" + gid + ".jpg";
 				elm.changeBg(url);
 			}
 			elm.updateContent = function(html){
@@ -66,8 +67,21 @@
 				Polymer.dialog.width = '90%';
 				Polymer.dialog.height = '90%';
 				let dzCodeEditor =document.createElement('dz-code-editor');
-				let html = elm.innerHTML;
+				let html;
+				let dummy = elm.shadowElm.cloneNode(true);
+				dummy.querySelectorAll('[dzid]').forEach(item=>{
+					item.removeAttribute('dzid');
+				});
+				console.log('Dummy',dummy);
+				html = dummy.innerHTML;
 				dzCodeEditor.html = html;
+				dzCodeEditor.save = function(){
+					console.log('Save HTML');
+					let html = dzCodeEditor.editor.getValue();
+					elm.addPropertyChange('innerHTML',html);
+					elm.parentElement.initChildren();
+				}
+
 				Polymer.componentPopup(dzCodeEditor,'90%','90%');
 
 			}
@@ -93,7 +107,7 @@
 
 				let imgStock = document.createElement('dz-img-stock');
 				imgStock.source = elm;
-				Polymer.componentPopup(imgStock);
+				Polymer.componentPopup(imgStock,'100%','100%');
 			}
 
 			elm.bgStyle = function(){

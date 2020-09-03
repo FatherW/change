@@ -1,0 +1,60 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="..//dz-content-box.html">
+<script>
+
+	class stylePackage {
+		constructor(elm){
+						
+			elm.isMaster = elm.hasAttribute('dz-master');
+			elm.label ="樣式-"+elm.dzid;
+			elm.type = "style";
+			
+			if (elm.hasAttribute('src'))
+				Polymer.getContent(elm.getAttribute('src')).then(html=>{
+					elm.innerHTML = html;
+				});
+			elm.dropBox('css');
+
+			// elm.dataUpdate();
+
+			elm.isAbsolute = function(src){
+			
+				if (src.indexOf("//")>-1)
+					return true;
+				else
+					return false;
+			}
+			elm.edit = function(){
+					let dzid = elm.getAttribute('dzid');
+					let dzPopup = document.createElement('dz-content-box');
+					let dialog = document.querySelector('dz-settings').shadowRoot.querySelector('vaadin-dialog');
+
+					let src = elm.getAttribute('src') || 'css/'+elm.dzid+'.css';
+					dzPopup.value = elm.innerHTML;
+					dzPopup.dialog = dialog;
+					dzPopup.cancel = function(){
+						dialog.opened = false;
+					}
+					dzPopup.save = function(){
+						let textarea= this.shadowRoot.querySelector('vaadin-text-area') || null;
+						let html;
+						html = textarea.value;
+						elm.setAttribute('src',src);
+						elm.innerHTML = html;
+						Polymer.fileManager.saveFile(src,html);
+						dialog.opened = false;
+					}
+						Polymer.componentPopup(dzPopup,'90%','90%');
+			
+
+			}
+		}
+
+
+
+	}
+
+
+  
+
+</script>

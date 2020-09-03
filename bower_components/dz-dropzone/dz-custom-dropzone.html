@@ -1,6 +1,8 @@
 <link rel="import" href="../polymer/polymer.html">
 <script src="https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/js/dropzone.js"></script>
-<dom-module id="dz-dropzone">
+
+
+<dom-module id="dz-custom-dropzone">
 
 	<template>
 		<style>
@@ -458,7 +460,7 @@
 
 
 	Polymer({
-		is: 'dz-dropzone',
+		is: 'dz-custom-dropzone',
 		properties: {
       tags:{
         type:Array,
@@ -470,11 +472,44 @@
 		},
 
 		created:function() {
-			this.user =Polymer.user || null;
+
+      this.getUrl = "https://0mx3cqjlkh.execute-api.ap-northeast-1.amazonaws.com/default/getPresignedURL";
+			this.user =Polymer.subUser || null;
 			console.log('Drop Zone',this.user);
 			 this.fileManager = Polymer.fileManager;
-			 
+			 this.tags =[];
 		},
+    accept(file){
+			let name;
+      let that = this;
+      let getUrl = "https://0mx3cqjlkh.execute-api.ap-northeast-1.amazonaws.com/default/getPresignedURL";
+					if (file.fullPath !== undefined)
+	  				name = file.fullPath;
+					else
+  					name = file.name;
+          name = Polymer.fileManager.changeFilename(name);
+          // file.s3upload = that.aws.myManagedUpload(name,file); 
+
+          if (Polymer.subUser)
+            that.tags.push(Polymer.subUser['id']);
+
+          console.log('Tags',that.tags,file, Polymer.subUser);
+          let params = {
+            'bucket': this.user['userBucket'],
+            'key': 'files/'+this.user['id']+'/'+name
+          }
+          Polymer.postData(getUrl,params).then(res=>{
+              console.log('Result',res);
+          });
+
+
+          Polymer.fileManager.saveMyImage(name,file).then(id=>{
+            console.log('ID',id);
+            that.saveImageTags(id,that.tags);
+          
+          });
+					file.s3upload = that.fileManager.myManagedUpload(name,file);      
+    },
 		ready:function(){
       let s = this.shadowRoot; 
 			let demoUpload = s.querySelector('#demo-upload');
@@ -505,22 +540,10 @@
 					}
 				},
 				accept: function(file,done){
-					let name;
-					if (file.fullPath !== undefined)
-	  				name = file.fullPath;
-					else
-  					name = file.name;
-          name = Polymer.fileManager.changeFilename(name);
-          // file.s3upload = that.aws.myManagedUpload(name,file); 
-          if (that.subUserId)
-            that.tags.push(that.subUserId);
-          console.log('Tags',that.tags,file);
-          Polymer.fileManager.saveMyImage(name,file).then(id=>{
-            console.log('ID',id);
-            that.saveImageTags(id,that.tags);
-          
-          });
-					file.s3upload = that.fileManager.myManagedUpload(name,file);              
+		   
+          that.accept(file);
+
+
 					done();
 				}
 				});

@@ -126,7 +126,7 @@
 				let elm = e.target;
 				let tagName = elm.tagName || 'default';
 				let subMenu = elm.menu;				
-				console.log('Submenu',subMenu);
+				console.log('Submenu',elm,elm.label, subMenu);
 				let layer = [];
 				
 				let x = e.clientX;
@@ -172,7 +172,7 @@
 							let event = e.detail.value.event;
 							let source = e.detail.value.source;
 							Polymer.activeElement = source;
-							console.log('Event',e,source,event);	
+							console.log('Event',e);	
 							menu.style.display='none';
 							Polymer.editing = true;
 							// Polymer.dzFire(tagName.toLowerCase()+'-'+event,{'detail': {'source':elm}});
@@ -208,11 +208,12 @@
 		newListener(){
 			const shadow = document.querySelector('dz-wrapper');
 			let that = this;
-			shadow.addEventListener('contextmenu',e=>{
-				// let submenu=document.querySelector('dz-admin').shadowRoot.querySelector('dz-submenu');
-				that.loadMenu(e);
-				e.preventDefault();
-			});
+			
+			// shadow.addEventListener('contextmenu',e=>{
+			// 	// let submenu=document.querySelector('dz-admin').shadowRoot.querySelector('dz-submenu');
+			// 	that.loadMenu(e);
+			// 	e.preventDefault();
+			// });
 
 
  			shadow.addEventListener('dblclick', e => {

@@ -3,7 +3,7 @@
 <link rel="import" href="../vaadin-select/vaadin-select.html">
 <link rel="import" href="../file-management/css/style.html">
 <dom-module id="dz-message-box">
-	<template>
+    <template>
         <style include="main-styles"></style>
         <style>
             :host{
@@ -33,86 +33,85 @@
                         <vaadin-item>_default</vaadin-item>
                       </vaadin-list-box>
                     </template>
-                  </vaadin-select>
-                  <vaadin-button on-click="_importPage">匯入頁面</vaadin-button>
-                  <vaadin-text-field label="欲匯入的網址" id="importUrl"></vaadin-text-field>
-                <vaadin-button on-click="_importUrl">匯入網址</vaadin-button>
-             </div>
- 
-	</template>
-	
+    </vaadin-select>
+    <vaadin-button on-click="_importPage">匯入頁面</vaadin-button>
+    <vaadin-text-field label="欲匯入的網址" id="importUrl"></vaadin-text-field>
+    <vaadin-button on-click="_importUrl">匯入網址</vaadin-button>
+    </div>
+
+    </template>
+
 
 </dom-module>
 
 <script>
-
-(function() {
-
+    (function() {
 
 
-	Polymer({
-		is: 'dz-message-box',
-		properties: {
-            msg: String,
-            title: String
-		},
 
-		created:function() {
-            // Polymer.loadComponent('vaadin-text-field','vaadin-text-area');
-        },
-        cancel(){
-            Polymer.closeDialog();
-        },
-        confirm(){
-            Polymer.closeDialog();
-        },
-        ready(){
-            this.shadowRoot.querySelector('#msg').innerHTML = this.msg;
-        },
-        isHtml(text){
-            var htmlArray = $.parseHTML(text);
-            var isHtml = htmlArray.filter(function(e){ return e instanceof HTMLElement;}).length;
-            console.log('Is HTML',isHtml);
-            return isHtml;
-        },
-        _importUrl(){
-            let that = this;    
-            let importUrl = this.shadowRoot.querySelector('#importUrl').value;
-            Polymer.import(importUrl);
-            this.remainSec = 10;
-            this.shadowRoot.querySelector('#countdown').style.display="block";
+        Polymer({
+            is: 'dz-message-box',
+            properties: {
+                msg: String,
+                title: String
+            },
 
-            
-            window.setInterval(function() {
-                
-                that.remainSec--;
-                console.log('sec',that.remainSec);
-                if (that.remainSec==0)
-                    location.reload();
-            }, 1000);
-
-        },
-        _importPage(){
-            let importPage = this.shadowRoot.querySelector('#importPage').value;
-            let that = this;
-            Polymer.fileManager.copyPage(importPage,Polymer.thisPage);
-            // this.shadowRoot.querySelector('#msg').innerHTML = "<h2 style='color:red;'>匯入成功，30秒後新的頁面就出現啦！</h2><p>餘下<span id='sec'>30</span>秒...</p>";
-            this.remainSec = 10;
-            this.shadowRoot.querySelector('#countdown').style.display="block";
-            window.setInterval(function() {
-                
-                that.remainSec--;
-                console.log('sec',that.remainSec);
-                if (that.remainSec==0)
-                    location.reload();
-            }, 1000);
+            created: function() {
+                Polymer.loadComponent('vaadin-text-field', 'vaadin-text-area');
+            },
+            cancel() {
+                Polymer.closeDialog();
+            },
+            confirm() {
+                Polymer.closeDialog();
+            },
+            ready() {
+                this.shadowRoot.querySelector('#msg').innerHTML = this.msg;
+            },
+            isHtml(text) {
+                var htmlArray = $.parseHTML(text);
+                var isHtml = htmlArray.filter(function(e) {
+                    return e instanceof HTMLElement;
+                }).length;
+                console.log('Is HTML', isHtml);
+                return isHtml;
+            },
+            _importUrl() {
+                let that = this;
+                let importUrl = this.shadowRoot.querySelector('#importUrl').value;
+                Polymer.import(importUrl);
+                this.remainSec = 10;
+                this.shadowRoot.querySelector('#countdown').style.display = "block";
 
 
-        }
+                window.setInterval(function() {
 
-	});
+                    that.remainSec--;
+                    console.log('sec', that.remainSec);
+                    if (that.remainSec == 0)
+                        location.reload();
+                }, 1000);
 
-})();
+            },
+            _importPage() {
+                let importPage = this.shadowRoot.querySelector('#importPage').value;
+                let that = this;
+                Polymer.fileManager.copyPage(importPage, Polymer.thisPage);
+                // this.shadowRoot.querySelector('#msg').innerHTML = "<h2 style='color:red;'>匯入成功，30秒後新的頁面就出現啦！</h2><p>餘下<span id='sec'>30</span>秒...</p>";
+                this.remainSec = 10;
+                this.shadowRoot.querySelector('#countdown').style.display = "block";
+                window.setInterval(function() {
+
+                    that.remainSec--;
+                    console.log('sec', that.remainSec);
+                    if (that.remainSec == 0)
+                        location.reload();
+                }, 1000);
 
 
+            }
+
+        });
+
+    })();
 </script>

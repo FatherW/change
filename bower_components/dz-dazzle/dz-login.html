@@ -1210,6 +1210,12 @@
                 let fileManager = new DataPackage('token');
                 let registerUrl = "https://d8fz9pfue5.execute-api.ap-northeast-1.amazonaws.com/prod/newMiscDazzleFunction";
                 let errMsg = shadow.querySelector('#errMessage');
+                input1.addEventListener('focus', e => {
+                    let target = e.target;
+                    errMsg.innerHTML = "";
+                    target.style.color = "white";
+
+                });
                 input1.addEventListener("blur", function(event) {
                     let target = event.target;
                     let uid = target.value;

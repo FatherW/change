@@ -953,6 +953,8 @@
 
                 let dzPopup = document.createElement('dz-sub-img-stock');
                 dzPopup.subUserId = this.user['id'];
+                dzPopup.user = this.user;
+                console.log('User',this.user);
                 dzPopup.dialog = this.shadowRoot.querySelector('vaadin-dialog');
                 Polymer.componentPopup(dzPopup,'90%','90%');
 

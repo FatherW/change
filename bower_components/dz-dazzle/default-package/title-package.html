@@ -1,0 +1,58 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="..//dz-content-box.html">
+<script>
+
+	class titlePackage {
+		constructor(elm){
+						
+			elm.isMaster = elm.hasAttribute('dz-master');
+			elm.label ="網頁標題";
+
+			elm.dropBox('meta');
+
+			// elm.dataUpdate();
+
+
+			elm.dropBox = function(type){
+				if (elm.isMaster)
+					Polymer.mSheets[type].push(elm);
+				else
+					Polymer.bSheets[type].push(elm);
+			}
+
+			elm.isAbsolute = function(src){
+				
+				if (src.indexOf("//")>-1)
+					return true;
+				else
+					return false;
+			}
+			elm.edit = function(){
+				console.log('Edit');
+					let dzid = elm.getAttribute('dzid');
+					let dialog = document.querySelector('dz-settings').shadowRoot.querySelector('vaadin-dialog');
+					let dzPopup = document.createElement('dz-content-box');
+					dzPopup.dialog = dialog;
+					dzPopup.value = elm.innerHTML;
+					dzPopup.cancel = function(){
+						dialog.opened = false;
+					}
+					dzPopup.save = function(){
+						let textarea= this.shadowRoot.querySelector('vaadin-text-area') || null;
+						let html;
+						html = textarea.value;
+						elm.innerHTML = html;
+						dialog.opened = false;
+					}
+					Polymer.componentPopup(dzPopup,'90%','90%');
+			}
+		}
+
+		
+
+	}
+
+
+  
+
+</script>

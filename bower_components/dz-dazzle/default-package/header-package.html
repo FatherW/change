@@ -4,7 +4,6 @@
 	class headerPackage {
 		constructor(elm){
 			// super();
-			console.log('Custom a',elm);
 			let basePath =  "template/" + Polymer.tid + "/_block/";
 			
 			if (elm.id)
@@ -16,17 +15,7 @@
 						console.log('No Shadow');
 					let i=0;
 					elm.querySelectorAll('*').forEach(item=>{
-						// if (!item.hasAttribute('dzid')){
-							// item.setAttribute('dzid',dzid+'-'+i);
 							new defaultPackage(item);
-							// // i++;
-							// dzid = item.getAttribute('dzid');
-							// if (dzid)
-							// 	Polymer.shadowDOM.querySelector('[dzid="'+dzid+'"]').outerHTML = item.outerHTML;
-							// else	
-							// 	console.log('No dzid',item);
-							// Polymer.setShadowItem(dzid,item);
-						// }
 					});
 					shadow.innerHTML = elm.innerHTML;
 					// console.log('Header',Polymer.shadowDOM,document.querySelector('dz-wrapper'));
@@ -49,12 +38,13 @@
 
 			elm.saveAsMaster = function(){
 				let id;
+
 				if (!elm.id)
-					id = prompt("請輸入母版ID");
+					return;
 				else	
 					id = elm.id;
 				
-				let dummy = elm;
+				let dummy = this.shadowElm.cloneNode(true);
 				dummy.querySelectorAll('[dzid]').forEach(item=>{
 					item.removeAttribute('dzid');
 				});
@@ -101,6 +91,19 @@
 			elm.edit = function(){
 				elm.editor();
 			}
+
+			elm.dataUpdate = function(){
+				let field;
+				if (!elm.hasAttribute('dz-data'))
+					return;
+				else
+					field = elm.getAttribute('dz-data');			
+				if (!elm.dataModel)
+					return;
+				elm.addPropertyChange('innerHTML',elm.dataModel[field]);
+			}
+
+			// elm.dataUpdate();
 		}
 	}
 
@@ -123,6 +126,22 @@
 
 				// elm.outerHTML = dzEditor.outerHTML;
 			}
+
+		
+			elm.dataUpdate = function(){
+				let field;
+				if (!elm.hasAttribute('dz-data'))
+					return;
+				else
+					field = elm.getAttribute('dz-data');			
+				if (!elm.dataModel)
+					return;
+				elm.addPropertyChange('innerHTML',elm.dataModel[field]);
+			}
+
+
+			// elm.dataUpdate();
+
 		}
 	}
 
@@ -143,6 +162,19 @@
 			elm.edit = function(){
 				elm.editor();
 			}
+			
+			elm.dataUpdate = function(){
+				let field;
+				if (!elm.hasAttribute('dz-data'))
+					return;
+				else
+					field = elm.getAttribute('dz-data');			
+				if (!elm.dataModel)
+					return;
+				elm.addPropertyChange('innerHTML',elm.dataModel[field]);
+			}
+
+			// elm.dataUpdate();
 		}
 	}
 
@@ -162,6 +194,19 @@
 			elm.edit = function(){
 				elm.editor();
 			}
+		
+			elm.dataUpdate = function(){
+				let field;
+				if (!elm.hasAttribute('dz-data'))
+					return;
+				else
+					field = elm.getAttribute('dz-data');			
+				if (!elm.dataModel)
+					return;
+				elm.addPropertyChange('innerHTML',elm.dataModel[field]);
+			}
+
+			// elm.dataUpdate();
 		}
 	}
 
@@ -182,6 +227,20 @@
 			elm.edit = function(){
 				elm.editor();
 			}
+			
+			elm.dataUpdate = function(){
+				let field;
+				if (!elm.hasAttribute('dz-data'))
+					return;
+				else
+					field = elm.getAttribute('dz-data');			
+				if (!elm.dataModel)
+					return;
+				elm.addPropertyChange('innerHTML',elm.dataModel[field]);
+			}
+
+
+			// elm.dataUpdate();
 		}
 	}
 
@@ -202,6 +261,20 @@
 			elm.edit = function(){
 				elm.editor();
 			}
+			
+			elm.dataUpdate = function(){
+				let field;
+				if (!elm.hasAttribute('dz-data'))
+					return;
+				else
+					field = elm.getAttribute('dz-data');			
+				if (!elm.dataModel)
+					return;
+				elm.addPropertyChange('innerHTML',elm.dataModel[field]);
+			}
+
+
+			// elm.dataUpdate();
 		}
 	}
 

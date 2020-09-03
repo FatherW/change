@@ -104,8 +104,10 @@
             _select(callback) {
                 let activeElm = Polymer.activeElement;
                 console.log('Click',this.src,activeElm);
-
-                activeElm.selected(this.src);
+				let url = "https://designerrrr-output.s3-ap-northeast-1.amazonaws.com/images/" + Polymer.uid + "/large-web/" + this.gid + ".jpg";	
+				let originUrl = "https://designerrrr-output.s3-ap-northeast-1.amazonaws.com/images/" + Polymer.uid + "/original/" + this.gid + ".jpg";	
+				let smallUrl = "https://designerrrr-output.s3-ap-northeast-1.amazonaws.com/images/" + Polymer.uid + "/medium-web/" + this.gid + ".jpg";	
+                activeElm.selected(url,originUrl,smallUrl);
                 document.querySelector('dz-admin').closeDialog();
                 
                 // this.selected = !this.selected;

@@ -7,7 +7,14 @@
 <link rel="import" href="div-package.html">
 <link rel="import" href="span-package.html">
 <link rel="import" href="header-package.html">
+<link rel="import" href="section-package.html">
 <link rel="import" href="footer-package.html">
+<link rel="import" href="meta-package.html">
+<link rel="import" href="link-package.html">
+<link rel="import" href="script-package.html">
+<link rel="import" href="style-package.html">
+<link rel="import" href="title-package.html">
+
 
 <script>
 		Polymer.menuLabel = {
@@ -69,7 +76,10 @@
 				// console.log('Header',Polymer.noElements,elm);
 				if (!elm.hasAttribute('dzid')) 
 					elm.setAttribute('dzid',Polymer.noElements);
-				
+
+				elm.dzid = elm.getAttribute('dzid');
+				Polymer.elements[elm.dzid] = elm;
+
 				// var observer = new MutationObserver(function(mutations) {
 				// 	mutations.forEach(function(mutation) {
 				// 		if (mutation.type == "attributes") {
@@ -83,133 +93,79 @@
 				// });
 
 				elm.mode = 'nav';
+			
 				// Event Listener
-				// elm.addEventListener('contextmenu',e=>{
-				// 	let submenu=document.querySelector('dz-admin').shadowRoot.querySelector('dz-submenu');
-				// 	submenu.loadMenu(e);
-				// 	e.preventDefault();
-				// });
+				elm.addEventListener('contextmenu',e=>{
+					console.log('Context Menu',elm);
+					let submenu=document.querySelector('dz-admin').shadowRoot.querySelector('dz-submenu');
+					if (e.path[0]===elm)
+						submenu.loadMenu(e);
+					e.preventDefault();
+				});
 
-				if (Polymer.editMode==="admin"){
 
-
-					elm.addEventListener('mouseenter', e => {
-						if (!Polymer.editor)
-							Polymer.editing = false;
-						if (elm.mode==='nav'){
-							document.querySelectorAll('[dz-panel]').forEach(item=>{
-								item.removeAttribute('dz-panel');
-							});
-							elm.setAttribute('dz-panel', '');	
-							Polymer.activeElement = elm;	
-						}
-
-					});
-
-					elm.addEventListener('mouseout', e => {			
-						if (elm.mode==='nav')			
-							elm.removeAttribute('dz-panel', '');
-					});
-
-					elm.addEventListener('mouseover', e => {
-						// elm.setAttribute('dz-panel', '');		
-					});
-
-					elm.addEventListener('blur', e => {
-						// elm.setAttribute('dz-panel', '');		
+				elm.addEventListener('mouseenter', e => {
+					// console.log('Mouse Enter',elm);
+					if (!Polymer.editor)
+						Polymer.editing = false;
+					if (elm.mode==='nav'){
 						document.querySelectorAll('[dz-panel]').forEach(item=>{
 							item.removeAttribute('dz-panel');
 						});
-					});
+						elm.setAttribute('dz-panel', '');	
+						Polymer.activeElement = elm;	
+					}
 
-					elm.addEventListener('mouseleave', e => {				
-						// elm.removeAttribute('dz-panel', '');
-					});
+				});
 
-					elm.addEventListener('click',e=>{
-						let submenu=document.querySelector('dz-admin').shadowRoot.querySelector('dz-submenu');
-						submenu.hideMenu(e);
+				elm.addEventListener('mouseout', e => {			
+					// console.log('Mouse Out',elm);
 
-						document.querySelectorAll('[dz-panel]').forEach(item=>{
-							item.removeAttribute('dz-panel');
-						});
+					if (elm.mode==='nav')			
+						elm.removeAttribute('dz-panel', '');
+				});
+
+				elm.addEventListener('mouseover', e => {
+					// elm.setAttribute('dz-panel', '');		
+				});
+
+				elm.addEventListener('blur', e => {
+					// elm.setAttribute('dz-panel', '');		
+					document.querySelectorAll('[dz-panel]').forEach(item=>{
+						item.removeAttribute('dz-panel');
 					});
-					// specify Package
-		
-				}
-			let tagName = elm.tagName;
+				});
+
+				elm.addEventListener('mouseleave', e => {				
+					// elm.removeAttribute('dz-panel', '');
+				});
+
+				elm.addEventListener('click',e=>{
+					let submenu=document.querySelector('dz-admin').shadowRoot.querySelector('dz-submenu');
+					submenu.hideMenu(e);
+
+					document.querySelectorAll('[dz-panel]').forEach(item=>{
+						item.removeAttribute('dz-panel');
+					});
+				});
+				// specify Package
+				let tagName = elm.tagName;
 				let div;
-				switch(tagName){
-					case 'IMG':
-						new imgPackage(elm);
-					break;
-
-					case 'A':
-						new aPackage(elm);
-					break;
-
-					case 'P':
-						new pPackage(elm);
-					break;
-
-					case 'DIV':
-						new divPackage(elm);
-					break;
-
-					case 'H1':
-						new h1Package(elm);
-					break;
-					
-					case 'H2':
-						new h2Package(elm);
-					break;
-					
-					case 'H3':
-						new h3Package(elm);
-					break;
-
-					case 'H4':
-						new h4Package(elm);
-					break;
-
-					case 'H5':
-						new h5Package(elm);
-					break;
-
-					case 'H6':
-						new h6Package(elm);
-					break;
-
-					case 'B':
-						new bPackage(elm);
-					break;
-					
-					case 'SPAN':
-						new spanPackage(elm);
-					break;
-
-					case 'HEADER':
-						new headerPackage(elm);
-					break;
-
-					case 'FOOTER':
-						new footerPackage(elm);
-					break;
-
-					case 'LI':
-						new liPackage(elm);
-					break;
-
-					default:
-
-					break;
-				}
+				// console.log('Tag',tagName);
+		
 				elm.initChildren = function(){
+					console.log('Init Children');
 					elm.querySelectorAll('*').forEach(item=>{
 						new defaultPackage(item);
 					});
 				}
-
+				elm.initDataChildren = function(model){
+					elm.querySelectorAll('[dz-data]').forEach(item=>{
+						console.log('Data Update',item,model);
+						item.dataModel = model;
+						item.dataUpdate();
+					});
+				}
 				elm.editor = function(){
 
 					var htmlText = elm.innerHTML;
@@ -229,6 +185,17 @@
 						let dzPopup = window.document.createElement('dz-content-box');
 						dzPopup.value = elm.innerHTML;
 						dzPopup.source = elm;
+						dzPopup.cancel = function(){
+							Polymer.closeDialog();
+						}
+						dzPopup.save = function(){
+							let textarea= this.shadowRoot.querySelector('vaadin-text-area') || null;
+							let html;
+							html = textarea.value;
+							elm.addPropertyChange('innerHTML',html);
+							Polymer.closeDialog();
+						}
+
 						// dzPopup.innerHTML = elm.innerHTML;
 						width +=100;
 						height +=200;
@@ -245,7 +212,12 @@
 
 					}
 				}
-
+				elm.dropBox = function(type){
+					if (elm.isMaster)
+						Polymer.mSheets[type].push(elm);
+					else
+						Polymer.bSheets[type].push(elm);
+				}
 				elm.addStyleChange=function(property,value){
 					console.log('Add Change');
 					
@@ -306,7 +278,6 @@
 						console.log('No Shadow');					
 						
 					elm[property] = value;
-					elm.initChildren();
 					// console.log('Change',elm.changeList);
 					console.log('Change',elm,shadow);
 					Polymer.history.push({
@@ -334,25 +305,24 @@
 
 				elm.addEventListener('paste-before',e=>{
 					let coping = Polymer.clipBoard;
-					// Polymer.history.push({
-					// 	'action':'tree',
-					// 	'dzid':elm.parentElement.getAttribute('dzid'),
-					// 	'body': elm.parentElement.innerHTML
-					// });
+					Polymer.history.push({
+						'action':'tree',
+						'dzid':elm.parentElement.getAttribute('dzid'),
+						'body': elm.parentElement.innerHTML
+					});
 					elm.parentElement.insertBefore(coping, elm);
-					elm.parentElement.addPropertyChange('innerHTML',elm.parentElement.innerHTML);
 				});
 
 				elm.addEventListener('paste-after',e=>{
 					console.log('I paste after');
 					let coping = Polymer.clipBoard;
-					// Polymer.history.push({
-					// 	'action':'tree',
-					// 	'dzid':elm.parentElement.getAttribute('dzid'),
-					// 	'body': elm.parentElement.innerHTML
-					// });					
+					Polymer.history.push({
+						'action':'tree',
+						'dzid':elm.parentElement.getAttribute('dzid'),
+						'body': elm.parentElement.innerHTML
+					});					
 					insertAfter(coping, elm);
-					elm.parentElement.addPropertyChange('innerHTML',elm.parentElement.innerHTML);
+
 				});
 				elm.addEventListener('tree-update',e=>{
 					elm.querySelectorAll('*').forEach(item=>{
@@ -373,6 +343,98 @@
 					elm.remove();					
 				});
 
+
+
+				switch(tagName){
+					case 'IMG':
+						new imgPackage(elm);
+					break;
+
+					case 'A':
+						new aPackage(elm);
+					break;
+
+					case 'P':
+						console.log('Tag');
+						new pPackage(elm);
+					break;
+
+					case 'DIV':
+						new divPackage(elm);
+					break;
+
+					case 'H1':
+						new h1Package(elm);
+					break;
+					
+					case 'H2':
+						new h2Package(elm);
+					break;
+					
+					case 'H3':
+						new h3Package(elm);
+					break;
+
+					case 'H4':
+						new h4Package(elm);
+					break;
+
+					case 'H5':
+						new h5Package(elm);
+					break;
+
+					case 'H6':
+						new h6Package(elm);
+					break;
+
+					case 'B':
+						new bPackage(elm);
+					break;
+					
+					case 'SPAN':
+						new spanPackage(elm);
+					break;
+
+					case 'HEADER':
+						new headerPackage(elm);
+					break;
+
+					case 'FOOTER':
+						new footerPackage(elm);
+					break;
+
+					case 'LI':
+						new liPackage(elm);
+					break;
+
+					case 'SECTION':
+						new sectionPackage(elm);
+					break;
+
+					case 'TITLE':
+						new titlePackage(elm);
+					break;
+
+					case 'META':
+						new metaPackage(elm);
+					break;
+
+					case 'LINK':
+						new linkPackage(elm);
+					break;
+
+					case 'STYLE':
+						new stylePackage(elm);
+					break;
+
+					case 'SCRIPT':
+						new scriptPackage(elm);
+					break;
+
+
+					default:
+					break;
+				}
 			}	
 
 

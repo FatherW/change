@@ -51,16 +51,16 @@ class dzCodeEditor extends Polymer.Element {
         this.html = html;
     }
 
-    save(that){
+    // save(that){
 
-            // let editor = this.shadowRoot.querySelector('#editor').editor;
-            let html = that.editor.getValue();
-            console.log('Active Element',Polymer.activeElement);
-            // Polymer.activeElement.innerHTML = html;
-            Polymer.activeElement.addPropertyChange('innerHTML',html);
-            Polymer.closeDialog();
+    //         // let editor = this.shadowRoot.querySelector('#editor').editor;
+    //         let html = that.editor.getValue();
+    //         console.log('Active Element',Polymer.activeElement);
+    //         // Polymer.activeElement.innerHTML = html;
+    //         Polymer.activeElement.addPropertyChange('innerHTML',html);
+    //         Polymer.closeDialog();
 
-    }
+    // }
     ready(){
         super.ready();
         let menu = this.shadowRoot.querySelector('vaadin-menu-bar');
@@ -89,18 +89,24 @@ class dzCodeEditor extends Polymer.Element {
     render(){
         
     }
-
     close(){
-        Polymer.closeDialog();  
+        Polymer.closeDialog();
     }
+
     init(){
         console.log('My HTML',this,this.html);
                 let editor = this.shadowRoot.querySelector('#editor').editor;
+                // var beautify = ace.require("ace/ext/beautify"); // get reference to extension
+                
                 this.editor = editor;
                 let that = this;
                 editor.setOptions({
                     maxLines: Infinity
                 });
+                // editor.setTheme("ace/theme/monokai");
+
+
+                editor.session.setMode("ace/mode/html");
 
                     var heightUpdateFunction = function() {
 
@@ -126,6 +132,7 @@ class dzCodeEditor extends Polymer.Element {
                     // the size again
                     editor.getSession().on('change', heightUpdateFunction);
                     editor.setValue(that.html);
+                    
     }
 
     

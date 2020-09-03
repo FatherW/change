@@ -5,7 +5,6 @@
 	class liPackage {
 		constructor(elm){
 			// super();
-			console.log('Custom a',elm);
 			elm.label = '列表示素';
 			elm.menu = [{
 				'text':'編輯',
@@ -45,6 +44,19 @@
 			elm.edit = function(){
 				elm.editor();
 			}
+
+			
+			elm.dataUpdate = function(){
+				let field;
+				if (!elm.hasAttribute('dz-data'))
+					return;
+				else
+					field = elm.getAttribute('dz-data');			
+				if (!elm.dataModel)
+					return;
+				elm.addPropertyChange('innerHTML',elm.dataModel[field]);
+			}
+
 
 			// elm.edit = function(){
 			// 	let json = {

@@ -107,7 +107,11 @@
                     let dialog = shadow.querySelector('vaadin-dialog');
                     Polymer.popup(dialog, "change", "change-login", "350px", "400px");
 
+                } else {
+                    Polymer.subUser = user;
+                    Polymer.subUser['root']  = 'change';
                 }
+
             },
 
             _register: function() {

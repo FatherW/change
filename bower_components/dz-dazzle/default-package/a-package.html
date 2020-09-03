@@ -35,11 +35,11 @@
 				// 	}
 				// });
 				// elm.setAttribute('href',url);
-				console.log('Url',url);
+				console.log('History',Polymer.shadowDOM);
 				elm.addAttributeChange('href',url);
 				Polymer.activeElement = null;
-				let dzAdmin = document.querySelector('dz-admin');
-				dzAdmin.closeDialog();
+					Polymer.closeDialog();
+			
 			}
 
 			elm.jump = function(){
@@ -79,6 +79,19 @@
 				// dzAdmin.popup('dz-dazzle', 'dz-link-manage', '800px', '580px');
 			}
 			// this.eventListener(elm);
+		
+			elm.dataUpdate = function(){
+				let field;
+				if (!elm.hasAttribute('dz-data'))
+					return;
+				else
+					field = elm.getAttribute('dz-data');			
+				if (!elm.dataModel)
+					return;
+				elm.addAttributeChange('href',elm.dataModel[field]);
+			}
+
+			// elm.dataUpdate();
 		}
 	}
 
