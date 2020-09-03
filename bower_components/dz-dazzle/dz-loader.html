@@ -920,10 +920,7 @@
                     query: {
                         match: json,
                     },
-                },
-                sort: [{
-                    updated: "desc"
-                }],
+                }
             };
             console.log("Params", params);
             return new Promise(function(resolve, reject) {

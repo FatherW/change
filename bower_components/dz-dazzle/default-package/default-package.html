@@ -90,50 +90,54 @@
 				// 	e.preventDefault();
 				// });
 
+				if (Polymer.editMode==="admin"){
 
-				elm.addEventListener('mouseenter', e => {
-					if (!Polymer.editor)
-						Polymer.editing = false;
-					if (elm.mode==='nav'){
+
+					elm.addEventListener('mouseenter', e => {
+						if (!Polymer.editor)
+							Polymer.editing = false;
+						if (elm.mode==='nav'){
+							document.querySelectorAll('[dz-panel]').forEach(item=>{
+								item.removeAttribute('dz-panel');
+							});
+							elm.setAttribute('dz-panel', '');	
+							Polymer.activeElement = elm;	
+						}
+
+					});
+
+					elm.addEventListener('mouseout', e => {			
+						if (elm.mode==='nav')			
+							elm.removeAttribute('dz-panel', '');
+					});
+
+					elm.addEventListener('mouseover', e => {
+						// elm.setAttribute('dz-panel', '');		
+					});
+
+					elm.addEventListener('blur', e => {
+						// elm.setAttribute('dz-panel', '');		
 						document.querySelectorAll('[dz-panel]').forEach(item=>{
 							item.removeAttribute('dz-panel');
 						});
-						elm.setAttribute('dz-panel', '');	
-						Polymer.activeElement = elm;	
-					}
-
-				});
-
-				elm.addEventListener('mouseout', e => {			
-					if (elm.mode==='nav')			
-						elm.removeAttribute('dz-panel', '');
-				});
-
-				elm.addEventListener('mouseover', e => {
-					// elm.setAttribute('dz-panel', '');		
-				});
-
-				elm.addEventListener('blur', e => {
-					// elm.setAttribute('dz-panel', '');		
-					document.querySelectorAll('[dz-panel]').forEach(item=>{
-						item.removeAttribute('dz-panel');
 					});
-				});
 
-				elm.addEventListener('mouseleave', e => {				
-					// elm.removeAttribute('dz-panel', '');
-				});
-
-				elm.addEventListener('click',e=>{
-					let submenu=document.querySelector('dz-admin').shadowRoot.querySelector('dz-submenu');
-					submenu.hideMenu(e);
-
-					document.querySelectorAll('[dz-panel]').forEach(item=>{
-						item.removeAttribute('dz-panel');
+					elm.addEventListener('mouseleave', e => {				
+						// elm.removeAttribute('dz-panel', '');
 					});
-				});
-				// specify Package
-				let tagName = elm.tagName;
+
+					elm.addEventListener('click',e=>{
+						let submenu=document.querySelector('dz-admin').shadowRoot.querySelector('dz-submenu');
+						submenu.hideMenu(e);
+
+						document.querySelectorAll('[dz-panel]').forEach(item=>{
+							item.removeAttribute('dz-panel');
+						});
+					});
+					// specify Package
+		
+				}
+			let tagName = elm.tagName;
 				let div;
 				switch(tagName){
 					case 'IMG':

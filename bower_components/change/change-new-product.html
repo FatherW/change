@@ -10,6 +10,8 @@
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-dialog/vaadin-dialog.html">
 
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/change/change-dropzone-file.html">
+
+
 <link rel="import" href="./change-buy.html">
 <link rel="import" href="./change-webcom.html">
 <link rel="import" href="./change-picslide.html">
@@ -19,6 +21,9 @@
 <link rel="import" href="change-edit-bar.html">
 <link rel="import" href="change-user-tag.html">
 
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.4.2/jquery.fancybox.min.css">
+<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.4.2/jquery.fancybox.min.js"></script>
 
 
 <dom-module id="change-new-product">
@@ -415,9 +420,9 @@
                 }
             }
         </style>
-
+        <!-- <a data-fancybox="gallery" href="http://www.gettv.hk/img/WX20200513-110548@2x.png"><img src="http://www.gettv.hk/img/WX20200513-110548@2x.png"></a> -->
         <div class="top-banner">
-            <img id="banner3" src="http://www.gettv.hk/img/WX20200513-110548@2x.png">
+            <img id="banner3" src="http://www.gettv.hk/img/WX20200513-110548@2x.png" data-animation-effect="true" href="http://www.gettv.hk/img/WX20200513-110548@2x.png">
             <!-- ./img/WX20200513-110548@2x.png -->
         </div>
 
@@ -608,6 +613,8 @@
                         if (this.product['pics'][qwe]) {
                             shadow.querySelector('#div' + qwe).style.backgroundImage = 'url(' + this.product['pics'][qwe] + ')';
                             shadow.querySelector('#div' + qwe).style.visibility = "visible";
+                            shadow.querySelector('#div' + qwe).setAttribute('data-animation-effect',true);
+                            shadow.querySelector('#div' + qwe).setAttribute('href',this.product['pics'][qwe]);
                         }
                     }
                 }
@@ -637,6 +644,16 @@
                 }
             },
             ready: function() {
+                let div0 = this.shadowRoot.querySelector('#div0');
+                let div1 = this.shadowRoot.querySelector('#div1');
+                let div2 = this.shadowRoot.querySelector('#div2');
+                let div3 = this.shadowRoot.querySelector('#div3');
+                let div4 = this.shadowRoot.querySelector('#div4');
+                $(div0).fancybox();
+                $(div1).fancybox();
+                $(div2).fancybox();
+                $(div3).fancybox();
+                $(div4).fancybox();
                 console.log("Entered Ready");
                 let loc = location.search;
                 let pid = "";
