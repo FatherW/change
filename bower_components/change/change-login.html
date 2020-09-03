@@ -377,7 +377,7 @@
                             console.log('Good to see you, ' + JSON.stringify(response) + '.' + response.email);
                             let email = response.email;
                             let name = response.name;
-                            let head = "http://graph.facebook.com/" + response.id + "/picture?type=normal";
+                            let head = "https://graph.facebook.com/" + response.id + "/picture?type=normal";
 
                             that.loginByThirdParty('facebook', name, email, head);
                         });
@@ -394,23 +394,39 @@
             loginByThirdParty(platform, name, email, head) {
                 let that = this;
                 let json = {
-                    'email': email
+                    'id': email
                 };
-                that.userManager.matchDataNosort(json).then(res => {
+                that.userManager.loadData(email).then(res=>{
+                // that.userManager.matchDataNosort(json).then(res => {
                         // let all = res.resolve;
                         console.log(res);
                         let pw = generatePassword();
-                        if (res.length)
-                            that.logWithPasswd(email, res[0]['password']);
-                        else {
+                        if (Object.keys(res).length) {
+                            that.logWithPasswd(email, res['password']);
+                            // data attribute doesn't exist
+                        } else {
                             that._fb_register(platform, name, email, head).then(res => {
                                 that.logWithPasswd(email, '!@#$%^#$%');
                             });
                         }
+                        // if (res.length)
+                        //     that.logWithPasswd(email, res[0]['password']);
+                        // else {
+                        //     that._fb_register(platform, name, email, head).then(res => {
+                        //         that.logWithPasswd(email, '!@#$%^#$%');
+                        //     });
+                        // }
                     },
                     err => {
                         console.log("error la change login");
                     });
+                    function isEmpty(obj) {
+                        for(var prop in obj) {
+                            if(obj.hasOwnProperty(prop)) {
+                            return false;
+                            }
+                        }
+                    }
             },
             checkLoginState: function() { // Called when a person is finished with the Login Button.
                 FB.getLoginStatus(function(response) { // See the onlogin handler
@@ -436,47 +452,101 @@
             },
 
             _fb_register(platform, name, email, head) {
+
+                // {
+                //                 "id": email,
+                //                 "username": username,
+                //                 "area": area,
+                //                 "email": email,
+                //                 "phone": phone,
+                //                 "password": password,
+                //                 "createTime": now,
+                //                 "head": head,
+
+                //             }
+
+                let now = new Date().getTime();
                 let registerUrl = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
-                let params = {
-                    "action": "changeregister",
+                let user = {
                     "username": name,
-                    "area": '全港',
-                    "email": email,
-                    "password": '!@#$%^#$%',
-                    "isPromotionMsg": false,
-                    "platform": platform,
-                    'head': head
+                        "area": '全港',
+                        "email": email,
+                        "password": '!@#$%^#$%',
+                        "isPromotionMsg": false,
+                        "platform": platform,
+                        'head': head,
+                        "numberRate": 0,
+                        "goodsNum": 0,
+                        "createTime": now,
+                        "isPromotionMsg": false,
+                        "likeProduct": [],
+                        "score": 5,
+                        "history": [],
+                        "isAdmin": false,
+                        "isFanpage": false,
+                        "platform": platform,
+                        "banner": "https://www.gettv.hk/Website%20Design/profile%20page/img/profile%20banner/company-profile-banner.png",
+                        "status": true                    
                 };
-                console.log("Params", params);
+                let that = this;
                 return new Promise(function(resolve, reject) {
 
-                    Polymer.postData(registerUrl, params).then(res => {
-                        // alert(res.text);
-                        console.log('Res', res);
-
-                        // that.userManager.getAllData().then(re => {
-                        //     console.log('Result', re);
-                        // });
-
-                        if (res.code > 0) {
-                            resolve();
-                            // console.log(res);
-                            // this.fileManager = new AwsPackage(res.resolve);
-                            // this.fileManager.saveFile('json/user-' + res.resolve.id + '.json', JSON.stringify(res.resolve));
-
-                        } else
-                            reject();
+                    that.userManager.saveData(email,user).then(res=>{
+                        resolve();
+                    },err=>{
+                        reject();
                     });
                 });
+                // let params = {
+                //     "action": "changeregister",
+                //     "id": email,
+                //     "user":{
+                //         "username": name,
+                //         "area": '全港',
+                //         "email": email,
+                //         "password": '!@#$%^#$%',
+                //         "isPromotionMsg": false,
+                //         "platform": platform,
+                //         'head': head,
+                //         "numberRate": 0,
+                //         "goodsNum": 0,
+                //         "createTime": now,
+                //         "isPromotionMsg": false,
+                //         "likeProduct": [],
+                //         "score": 5,
+                //         "history": [],
+                //         "isAdmin": false,
+                //         "isFanpage": false,
+                //         "platform": platform,
+                //         "banner": "https://www.gettv.hk/Website%20Design/profile%20page/img/profile%20banner/company-profile-banner.png",
+                //         "status": false
+                //     }
+
+                // };
+                // console.log("Params", params);
+                // return new Promise(function(resolve, reject) {
+
+                //     Polymer.postData(registerUrl, params).then(res => {
+                //         // alert(res.text);
+                //         console.log('Res', res);
+
+                //         // that.userManager.getAllData().then(re => {
+                //         //     console.log('Result', re);
+                //         // });
+
+                //         if (res.code > 0) {
+                //             resolve();
+                //             // console.log(res);
+                //             // this.fileManager = new AwsPackage(res.resolve);
+                //             // this.fileManager.saveFile('json/user-' + res.resolve.id + '.json', JSON.stringify(res.resolve));
+
+                //         } else
+                //             reject();
+                //     });
+                // });
             },
 
-            // _register: function() {
-            //     console.log('Register');
-            //     let shadow = this.shadowRoot;
-            //     let that = this;
-            //     let dialog = shadow.querySelector('vaadin-dialog');
-            //     Polymer.popup(dialog, "change", "change-register", "40%", "90%");
-            // },
+
 
             _login: function() {
                 let shadow = this.shadowRoot;
@@ -511,17 +581,17 @@
                         console.log("Result2", res.resolve.length);
                         if (res.resolve) {
                             let user = res.resolve;
-                            if (user['status']==false){
+                            if (user['status'] == false) {
                                 alert("你的帳號已被停用，請聯絡管理員")
-                            }else{
-                            // if (user.token == "" || user.token == null || user.token == undefined) {
-                            store.set('change-user', user);
-                            location.reload();
-                            // } else if (user.token == "1") {
-                            //     alert("你已經被取消了用戶資格");
-                            // } else {
-                            //     alert("請先進行電郵驗證");
-                            // }
+                            } else {
+                                // if (user.token == "" || user.token == null || user.token == undefined) {
+                                store.set('change-user', user);
+                                location.reload();
+                                // } else if (user.token == "1") {
+                                //     alert("你已經被取消了用戶資格");
+                                // } else {
+                                //     alert("請先進行電郵驗證");
+                                // }
                             }
                         } else {
                             alert("用戶不存在，請註冊後登入");

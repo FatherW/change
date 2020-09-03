@@ -158,7 +158,7 @@
 <script async defer src="https://connect.facebook.net/en_US/sdk.js"></script>
 <script async defer src="https://apis.google.com/js/platform.js"></script>
 <script>
-    (function () {
+    (function() {
         Polymer({
             is: 'change-register',
             properties: {
@@ -170,17 +170,44 @@
                 document.querySelector('.g-signin2 .abcRioButtonContentWrapper').click();
 
             },
-            log: function () {
+
+            created: function() {
+
+                this.pageManager = new DataPackage('pages');
+                this.userManager = new DataPackage('_user');
+                Polymer.sendEmail = function(to, subject, content) {
+                    return new Promise(function(resolve, reject) {
+                        let url = "https://e57jikxilj.execute-api.ap-northeast-1.amazonaws.com/prod/";
+                        let parma = {
+                            "from": "support@01power.net",
+                            "to": to,
+                            "subject": subject,
+                            "html": content
+                        };
+                        Polymer.postData(url, parma).then(res => {
+                            if (res.code > 0) {
+                                console.log("666");
+                                resolve("chenggongle");
+                            } else {
+                                console.log("error la");
+                            }
+                        })
+                    });
+
+                };
+            },
+
+            log: function() {
                 let url =
                     "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
                 let link =
                     "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 let that = this;
-                FB.login(function (response) {
+                FB.login(function(response) {
                     if (response.authResponse) {
                         FB.api('/me', {
                             fields: 'name, email'
-                        }, function (response) {
+                        }, function(response) {
                             let email = response.email;
                             let name = response.name;
                             let head = "http://graph.facebook.com/" + response.id +
@@ -197,7 +224,7 @@
                                     }
                                 }
                             };
-                            FB.logout(function (response) {
+                            FB.logout(function(response) {
                                 // Person is now logged out
                             });
                             Polymer.postData(link, param).then(res => {
@@ -219,7 +246,7 @@
                                             .querySelector('#registerpop');
                                         Polymer.popup(dialog, "change",
                                             "change-register", "45s%", "90%"
-                                            );
+                                        );
                                     } else {
                                         if (all[0].platform == "facebook") {
                                             let loginparams = {
@@ -271,13 +298,13 @@
                     scope: 'email'
                 });
             },
-            checkLoginState: function () { // Called when a person is finished with the Login Button.
-                FB.getLoginStatus(function (response) { // See the onlogin handler
+            checkLoginState: function() { // Called when a person is finished with the Login Button.
+                FB.getLoginStatus(function(response) { // See the onlogin handler
                     statusChangeCallback(response);
                 });
             },
 
-            statusChangeCallback: function (response) { // Called with the results from FB.getLoginStatus().
+            statusChangeCallback: function(response) { // Called with the results from FB.getLoginStatus().
                 console.log('statusChangeCallback');
                 console.log(response); // The current login status of the person.
                 if (response.status === 'connected') { // Logged into your webpage and Facebook.
@@ -287,9 +314,9 @@
                 }
             },
 
-            testAPI: function () { // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
+            testAPI: function() { // Testing Graph API after login.  See statusChangeCallback() for when this call is made.
                 console.log('Welcome!  Fetching your information.... ');
-                FB.api('/me', function (response) {
+                FB.api('/me', function(response) {
                     console.log('Successful login for: ' + response);
                 });
             },
@@ -323,7 +350,36 @@
                     }
                 });
             },
-            _register: function () {
+            sendMail: function(email,token){
+
+
+                let html= '<!DOCTYPE html>' +
+                '<html lang="en">' +
+
+                '<body style="width: 640px; margin: 0 auto;">' +
+                '<div class="getChange-logo">' +
+                '<img src="https://www.gettv.hk/img/logo/Change.png" class="logo" style="height: 74px; width: auto;">' +
+                '</div>' +
+
+                '<hr>' +
+
+                '<div style="width: 95%; margin: 0 auto;">' +
+                '<p style="font-family: sans-serif, Microsoft JhengHei;">歡迎成為 Get TV - Get Change平台用戶</p>' +
+                '<p style="font-family: sans-serif, Microsoft JhengHei;">只需點擊以下連結即可註冊：</p>' +
+                '<p style="font-family: sans-serif, Microsoft JhengHei;">https://www.gettv.hk/register.html?token=' + token + '</p>' +
+                '</div>' +
+
+                '<hr>' +
+                '</body>' +
+
+                '</html>';
+
+                Polymer.sendEmail("support@01power.net",email,html);
+
+
+            },
+
+            _register: function() {
                 console.log('点击了注册键');
                 let shadow = this.shadowRoot;
                 let that = this;
@@ -368,24 +424,41 @@
                                         if (check !== true) {
                                             alert('請同意私隱條款');
                                         } else {
-                                            let registerUrl = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
-                                            let params = {
-                                                "action": "changeregister",
-                                                "username": uid,
-                                                "area": area,
-                                                "email": email,
-                                                "password": pass,
-                                                "phone": phone,
-                                                "isPromotionMsg": promotion,
-                                                "platform": platform,
-                                                "head": head,
-                                                "token": tok
-                                            };
-                                            console.log("Params", params);
-                                            Polymer.postData(registerUrl, params).then(res => {
-                                                alert(res.text);
-                                                console.log("uuuuu", res);                            
-                                            });
+                                            that.userManager.loadData(email).then(res => {
+                                                if (res.code < 0) {
+                                                    let user = {
+                                                        "username": uid,
+                                                            "area": area,
+                                                            "email": email,
+                                                            "password": pass,
+                                                            "phone": phone,
+                                                            "isPromotionMsg": promotion,
+                                                            "platform": platform,
+                                                            "head": head,
+                                                            "numberRate": 0,
+                                                            "goodsNum": 0,
+                                                            "createTime": now,
+                                                            "isPromotionMsg": false,
+                                                            "likeProduct": [],
+                                                            "score": 5,
+                                                            "history": [],
+                                                            "isAdmin": false,
+                                                            "isFanpage": false,
+                                                            "banner": "https://www.gettv.hk/Website%20Design/profile%20page/img/profile%20banner/company-profile-banner.png",
+                                                            "status": false,
+                                                            "token": tok
+                                                    };
+                                                    that.userManager.saveData(email,user).then(res2=>{
+                                                        alert(res.text);
+                                                        console.log("uuuuu", res);
+                                                        that.sendMail(email,tok);
+                                                    });
+                                                    
+                                                } else {
+                                                    alert("電郵已被註冊")
+                                                }
+                                            })
+
                                         }
                                     }
                                 }
@@ -396,11 +469,11 @@
 
             },
 
-            regToken: function (a, b, c) {
+            regToken: function(a, b, c) {
                 let shadow = this.shadowRoot;
                 let that = this;
                 let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                
+
                 // console.log("a:", a);
                 // console.log("b:", b);
                 // console.log("c:", c);
@@ -416,8 +489,8 @@
                         "type": "register"
                     }
                 };
-                Polymer.postData(link, param).then(res=>{
-                    if (res.code>0){
+                Polymer.postData(link, param).then(res => {
+                    if (res.code > 0) {
                         console.log("reg tok is generated!")
                     } else {
                         alert("fail to generate reg tok!");
@@ -427,7 +500,7 @@
 
             },
 
-            login: function () {
+            login: function() {
                 let shadow = this.shadowRoot;
                 let that = this;
                 let user = store.get('change-user');
@@ -442,7 +515,7 @@
                 }
             },
 
-            _login: function () {
+            _login: function() {
                 let shadow = this.shadowRoot;
                 let that = this;
                 let user = store.get('change-user') || null;
@@ -454,7 +527,7 @@
                 }
             },
 
-            ready: function () {
+            ready: function() {
                 let that = this;
                 let platform = store.get("change-platform") || "gettv";
                 if (platform != "gettv") {
@@ -489,7 +562,7 @@
                     }
                 });
                 let shadow = this.shadowRoot;
-                customElements.whenDefined('vaadin-select').then(function () {
+                customElements.whenDefined('vaadin-select').then(function() {
                     const district = [{
                         id: '中西區',
                         name: '中西區'
@@ -545,16 +618,16 @@
                         id: '西貢區',
                         name: '西貢區'
                     }];
-                    shadow.querySelector('vaadin-select').renderer = function (root) {
+                    shadow.querySelector('vaadin-select').renderer = function(root) {
                         // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
                         if (root.firstChild) {
                             return;
                         }
                         // Create the <vaadin-list-box>
                         const listBox = document.createElement('vaadin-list-box');
-                        district.forEach(function (item) {
+                        district.forEach(function(item) {
                             const vaadinItem = document.createElement(
-                            'vaadin-item');
+                                'vaadin-item');
                             vaadinItem.textContent = item.name;
                             listBox.appendChild(vaadinItem);
                             vaadinItem.setAttribute('value', item.id);
