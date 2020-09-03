@@ -9,6 +9,7 @@
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-menu-bar/vaadin-menu-bar.html">
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-dialog/vaadin-dialog.html">
+<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/dz-file-management/dz-sub-img-stock.html">
 <link rel="import" href="change-dropzone-file.html">
 <link rel="import" href="change-gallery.html">
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/dz-file-management/change-photo-stock.html">
@@ -676,6 +677,7 @@
             },
             created: function() {
                 let user = store.get('change-user') || null;
+                this.user = user;
                 let shadow = this.shadowRoot;
                 this.bigPic = "http://change.dazzle.website.s3.amazonaws.com/files/1/1591944377549.jpeg";
                 this.pics = [];
@@ -949,8 +951,12 @@
                 this.dialog = dialog;
                 this.curElm = e.path[0];
 
-                // Polymer.popup(dialog, "change", "change-dropzone-file", "60%", "50%");
-                Polymer.popup(dialog, 'change', 'change-gallery', '90%', '90%');
+                let dzPopup = document.createElement('dz-sub-img-stock');
+                dzPopup.subUserId = this.user['id'];
+                dzPopup.dialog = this.shadowRoot.querySelector('vaadin-dialog');
+                Polymer.componentPopup(dzPopup,'90%','90%');
+
+                // Polymer.popup(dialog, 'change', 'change-gallery', '90%', '90%');
                 // console.log('saved', bucket)
             },
 

@@ -63,7 +63,40 @@
                 this.userManager = new DataPackage('_user');
                 let user = store.get('change-user') || null;
                 if (user) this.fileManager = new AwsPackage(user);
+                Polymer.parseTime = function(oldtime) {
+                    let _thetimenow = Date.now();
+                    let time = (_thetimenow - oldtime) / 1000;
+                    let sec = 60;
+                    let min = sec * 60;
+                    let hour = min * 24;
+                    let day = hour * 7;
+                    let week = hour * 30;
+                    let month = hour * 365;
+                    switch (true) {
+                        case (time < sec):
+                            return "剛剛";
+                            break;
+                        case (time < min):
+                            return Math.floor(time / sec) + "分鐘";
+                            break
+                        case (time < hour):
+                            return Math.floor(time / min) + "小時";
+                            break
+                        case (time < day):
+                            return Math.floor(time / hour) + "日";
+                            break
+                        case (time < week):
+                            return Math.floor(time / day) + "星期";
+                            break
+                        case (time < month):
+                            return Math.floor(time / week) + "月";
+                            break
+                        case (time > month):
+                            return Math.floor(time / month) + "年";
+                            break
+                    }
 
+                }
 
             },
             _login: function() {
@@ -139,7 +172,7 @@
                     let a = document.createElement('a');
                     let img = document.createElement('img');
                     let src = user['head'] || 'https://devshift.biz/wp-content/uploads/2017/04/profile-icon-png-898.png';
-                    a.setAttribute('href', '/user.html?' + user['id']);
+                    a.setAttribute('href', '/user.html');
                     img.setAttribute('src', src);
                     a.appendChild(img);
                     let login = this.shadowRoot.querySelector('#login');

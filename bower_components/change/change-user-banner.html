@@ -179,6 +179,7 @@
 
 
                 let user = store.get('change-user') || null;
+                this.user= user;
                 if (user !== null) {
                     this.fileManager = new AwsPackage(user);
                 }
@@ -209,26 +210,29 @@
                 for (var i = 1; i < loc.length; i++) {
                     id += loc[i];
                 }
-                this.id = id;
-                if (id != "") {
-                    let url = "/json/user-" + id + ".json?id=" + new Date().getTime();
-                    Polymer.getContent(url).then(res => {
-                        res = JSON.parse(res);
-                        that.user = res;
-                        this.score = Math.round(res.score * 10) / 10;
-                        let counthistory = res.history || 0;
-                        that.history = counthistory.length;
-                        let bgImg = res['banner'] || "https://www.gettv.hk/Website%20Design/profile%20page/img/profile%20banner/company-profile-banner.png";
-                        shadow.querySelector('#mp').style.backgroundImage = "url('" + bgImg + "')";
-                        let t = res['createTime'];
-                        this.regisDate = Polymer.parseTime(t);
+                
+                
+                id = this.user['id'];
 
-                    }, err => {
-                        alert('沒有此用戶');
-                    })
-                } else {
-                    alert('沒有此用戶 請先登入');
-                }
+                    if (id){
+                        let url = "/json/user-" + id + ".json?id=" + new Date().getTime();
+                        Polymer.getContent(url).then(res => {
+                            res = JSON.parse(res);
+                            that.user = res;
+                            this.score = Math.round(res.score * 10) / 10;
+                            let counthistory = res.history || 0;
+                            that.history = counthistory.length;
+                            let bgImg = res['banner'] || "https://www.gettv.hk/Website%20Design/profile%20page/img/profile%20banner/company-profile-banner.png";
+                            shadow.querySelector('#mp').style.backgroundImage = "url('" + bgImg + "')";
+                            let t = res['createTime'];
+                            this.regisDate = Polymer.parseTime(t);
+
+                        }, err => {
+                            alert('沒有此用戶');
+                        })
+                    } else {
+                        alert('請先登入');
+                    }
 
             },
 
