@@ -129,10 +129,11 @@
             }
         </style>
 
-        <div id="mp" type="banner" on-click="_uploadFile"></div>
+        <div id="mp" type="banner" on-click="_uploadFile" style$="background-image:url({{user.banner}})">
+        </div>
         <div id="offer">
             <div class="in">
-                <img id="dp" type="profile" on-click="_uploadFile" src={{user.head}}>
+                <img id="dp" type="profile" on-click="_uploadFile" src$={{user.head}}>
                 <!-- src="img/symbol/s5.png" -->
             </div>
             <vaadin-dialog></vaadin-dialog>
@@ -148,11 +149,11 @@
                 </div>
                 <div class="in buttons">
                     <h6>購買數</h6>
-                    <span class="ret" id="buy">{{history}}</span>
+                    <span class="ret" id="buy">{{user.history.length}}</span>
                 </div>
                 <div class="in buttons" id="threeWords">
                     <h6>平均評分</h6>
-                    <span class="ret" id="rate">{{score}}</span>
+                    <span class="ret" id="rate">{{user.numberRate}}</span>
                 </div>
             </div>
 
@@ -167,7 +168,14 @@
             properties: {
                 "id": {
                     'type': String
+                },
+                "createStr": {
+                    "type": String
                 }
+            },
+            regTime() {
+                console.log('TIme',Polymer.parseTime(this.user['createTime']));
+                this.createStr = Polymer.parseTime(this.user['createTime']);
             },
             created: function() {
                 let shadow = this.shadowRoot;
@@ -179,7 +187,29 @@
 
 
                 let user = store.get('change-user') || null;
-                this.user= user;
+                id = document.head.querySelector('meta[name=user-id]').getAttribute('content') || this.user['id'];
+
+                let url = "https://www.gettv.hk/json/user-" + id + ".json?id=" + new Date().getTime();
+                Polymer.getContent(url).then(res => {
+                   console.log('Find JSON');
+                    let json = JSON.parse(res);
+                    this.user = json;
+                    console.log('User JSON',this.user);
+                    this.regisDate = "剛剛";
+                    let t = this.user['createTime'] || new Date().getTime();
+                    if (t)
+                        this.regisDate = Polymer.parseTime(t);                  
+    
+                    this.score = Math.round(res.score * 10) / 10;
+                    this.user['history']  = this.user['history'] || [];
+                    this.user['banner'] = this.user['banner'] || "https://www.gettv.hk/Website%20Design/profile%20page/img/profile%20banner/company-profile-banner.png";
+                    // shadow.querySelector('#mp').style.backgroundImage = "url('" + bgImg + "')";
+ 
+                    // this.regTime();                    
+                }, err => {
+                    alert('沒有此用戶');
+                })
+
                 if (user !== null) {
                     this.fileManager = new AwsPackage(user);
                 }
@@ -205,35 +235,9 @@
             ready: function() {
                 let that = this;
                 let shadow = this.shadowRoot;
-                let loc = location.search;
                 let id = "";
-                for (var i = 1; i < loc.length; i++) {
-                    id += loc[i];
-                }
+                id = document.head.querySelector('meta[name=user-id]').getAttribute('content') || this.user['id'];
                 
-                
-                id = this.user['id'];
-
-                    if (id){
-                        let url = "/json/user-" + id + ".json?id=" + new Date().getTime();
-                        Polymer.getContent(url).then(res => {
-                            res = JSON.parse(res);
-                            that.user = res;
-                            this.score = Math.round(res.score * 10) / 10;
-                            let counthistory = res.history || 0;
-                            that.history = counthistory.length;
-                            let bgImg = res['banner'] || "https://www.gettv.hk/Website%20Design/profile%20page/img/profile%20banner/company-profile-banner.png";
-                            shadow.querySelector('#mp').style.backgroundImage = "url('" + bgImg + "')";
-                            let t = res['createTime'];
-                            this.regisDate = Polymer.parseTime(t);
-
-                        }, err => {
-                            alert('沒有此用戶');
-                        })
-                    } else {
-                        alert('請先登入');
-                    }
-
             },
 
             getAllPics() {
@@ -255,10 +259,11 @@
                 this.dialog = dialog;
                 this.curElm = e.path[0];
                 let user = store.get('change-user') || null;
-
+                id = document.head.querySelector('meta[name=user-id]').getAttribute('content') || null;
                 let userInfo = document.querySelector('change-user-info');
-                let keyword = userInfo.shadowRoot.querySelector('#vb').innerHTML;
-                if (keyword == "提交" && user['id'] == this.id) {
+                // let keyword = userInfo.shadowRoot.querySelector('#vb').innerHTML;
+                console.log('User',user['id'],id);
+                if (user['id'] == id) {
                     Polymer.popup(dialog, 'change', 'change-gallery', '90%', '90%');
                 } else {
                     console.log("Will not be able to open gallery!");

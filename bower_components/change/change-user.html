@@ -113,11 +113,17 @@
                 //     id += loc[i];
                 // }
                 let user = store.get('change-user') || null;
+
+                id = document.head.querySelector('meta[name=user-id]').getAttribute('content') || null;
+
                 if (!user) {
                     alert('請先登入');
-                    location.href="index.html";
-                } else 
-                    id = user['id'];
+                    location.href="index.html";                    
+                } else if (id != user['id']) {
+                    this.style.display="none";
+                }
+ 
+
                 let param = [];
                 if (id != "") {
                     /////search my product

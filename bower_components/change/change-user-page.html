@@ -1,0 +1,89 @@
+﻿<link href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/polymer/polymer.html" rel="import">
+<link rel="import" href="./change-user-banner.html">
+<link rel="import" href="./change-control-pannel.html">
+<link rel="import" href="./change-user-info.html">
+<link rel="import" href="./change-user.html">
+<dom-module id="change-user-page">
+    <template>
+        <style include="icon-styles"></style>
+        <style>
+            * {
+                font-family: sans-serif, Microsoft JhengHei;
+
+            }
+
+            #status {
+                width: 15px;
+                height: 15px;
+                background-color: rgb(242, 253, 55);
+                border-radius: 100%;
+            }
+
+         
+            #prods {
+                margin-left: 8%;
+                margin-right: 2%;
+                margin-top: 2%;
+                padding-top: 1%;
+                padding-left: 2%;
+                padding-right: 2%;
+                padding-bottom: 2%;
+                width: 80%;
+                background-color: white;
+                display: inline-block;
+                float: left;
+            }
+
+            #add {
+                display: inline-block;
+                width: 6%;
+                position: relative;
+                padding-top: 14%;
+            }
+
+            #container {
+                float: left;
+                background-color: #FFFBF2;
+                width: 100%;
+                padding-bottom: 30px;
+            }
+
+            @media (max-width: 640px) {
+                #prods {
+                    margin-left: 0%;
+                    margin-right: 0%;
+                    margin-top: 0%;
+                    padding: 0%;
+                    width: 100%;
+                    background-color: white;
+                    display: inline-block;
+                    float: left;
+                }
+            }
+        </style>
+     <div class="container">
+        <change-user-banner></change-user-banner>
+        <change-control-pannel></change-control-pannel>
+        <change-user-info></change-user-info>
+        <change-user></change-user>
+    </div>
+    </template>
+</dom-module>
+<script>
+    (function() {
+        Polymer({
+            is: 'change-user-page',
+            properties: {
+
+            },
+            created: function() {
+
+            },
+            ready: function() {
+              
+            },
+
+           
+        });
+    })();
+</script>
