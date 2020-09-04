@@ -5,6 +5,9 @@
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-text-field/vaadin-email-field.html">
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-text-field/vaadin-number-field.html">
+<link rel="import" href="change-control-pannel.html">
+<link rel="import" href="change-user.html">
+
 <dom-module id="change-user-info">
     <template>
         <style include="icon-styles"></style>
@@ -57,14 +60,6 @@
                 height: auto;
             } */
 
-            .grid-container {
-                display: grid;
-                grid-template-columns: 2.5fr 1fr;
-                background-color: white;
-                width: 84%;
-                margin: 0 auto;
-            }
-
             h5 {
                 font-size: 1em;
                 color: black;
@@ -87,14 +82,7 @@
             }
 
             @media (max-width: 640px) {
-                .grid-container {
-                    display: block;
-                    height: 340px;
-                    width: 100%;
-                    margin: 0px;
-                    padding: 0px;
-                    margin-bottom: 10px;
-                }
+            
 
                 #container {
                     padding-top: 0;
@@ -241,38 +229,39 @@
             }
         </style>
 
-        <div id="mp" type="banner" on-click="_uploadFile" style$="background-image:url({{user.banner}})">
-        </div>
-        <div id="offer">
-            <div class="in">
-                <img id="dp" type="profile" on-click="_uploadFile" src$={{user.head}}>
-                <!-- src="img/symbol/s5.png" -->
-            </div>
-            <vaadin-dialog></vaadin-dialog>
-            <div id="user" class="in">
-                <span id="Uname">{{user.username}}</span>
-                <br />
-                <span id="check"> 註冊日期:{{regisDate}}前</span>
-            </div>
-            <div id="buttonM">
-                <div class="in buttons">
-                    <h6>上貨數</h6>
-                    <span class="ret" id="gNum">{{user.goodsNum}}</span>
-                </div>
-                <div class="in buttons">
-                    <h6>購買數</h6>
-                    <span class="ret" id="buy">{{user.history.length}}</span>
-                </div>
-                <div class="in buttons" id="threeWords">
-                    <h6>平均評分</h6>
-                    <span class="ret" id="rate">{{user.numberRate}}</span>
-                </div>
-            </div>
-
-        </div>
-        <change-control-pannel></change-control-pannel>
+      
 
         <div id="container">
+            <div id="mp" type="banner" on-click="_uploadFile" style$="background-image:url({{user.banner}})">
+            </div>
+            <div id="offer">
+                <div class="in">
+                    <img id="dp" type="profile" on-click="_uploadFile" src$={{user.head}}>
+                    <!-- src="img/symbol/s5.png" -->
+                </div>
+                <vaadin-dialog></vaadin-dialog>
+                <div id="user" class="in">
+                    <span id="Uname">{{user.username}}</span>
+                    <br />
+                    <span id="check"> 註冊日期:{{regisDate}}前</span>
+                </div>
+                <div id="buttonM">
+                    <div class="in buttons">
+                        <h6>上貨數</h6>
+                        <span class="ret" id="gNum">{{user.goodsNum}}</span>
+                    </div>
+                    <div class="in buttons">
+                        <h6>購買數</h6>
+                        <span class="ret" id="buy">{{user.history.length}}</span>
+                    </div>
+                    <div class="in buttons" id="threeWords">
+                        <h6>平均評分</h6>
+                        <span class="ret" id="rate">{{user.numberRate}}</span>
+                    </div>
+                </div>
+    
+            </div>
+            <change-control-pannel></change-control-pannel>
             <div class="grid-container">
                 <div id="left">
                     <div id="info">
@@ -294,7 +283,10 @@
                     </div>
                 </div>
             </div>
+            <change-user></change-user>
         </div>
+       
+
     </template>
 </dom-module>
 <script>
