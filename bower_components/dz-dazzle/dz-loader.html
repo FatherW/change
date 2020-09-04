@@ -4,14 +4,95 @@
 
 <script>
    
+//    store.clearAll();
+//    console.log(store.get('user'),store.get('editMode'));
     const getLicense = async() => {
         const response = await fetch("dz-license");
         const json = await response.text();
         console.log("License", json, JSON.parse(json));
     };
 
-    let url =
-        "https://d25k6mzsu7mq5l.cloudfront.net/user-data/dnamatch/template/dnamatch/component.json";
+    Polymer.dzInit = function() {
+        // this.loadComponent("dz-dazzle", "dz-wrapper");
+
+        let editMode = store.get("editMode") || "normal";
+        let elm;
+        let thisPage =
+            decodeURIComponent(location.pathname).substring(
+                location.pathname.indexOf("/") + 1
+            ) || "index.html";
+
+        this.editMode = editMode;
+        Polymer.noElements = 0;
+        Polymer.elements = {};
+        Polymer.history = [];
+        Polymer.editing = false;
+        Polymer.editor = false;
+
+        if (editMode === "admin") {
+            let user = store.get("user") || null;
+            console.log('User', user);
+            user['userBucket'] = Polymer.dzLicense['userBucket'];
+            this.fileManager = new AwsPackage(user);
+            this.dataManager = new DataPackage("_info");
+            this.user = user;
+            this.tid = Polymer.dzLicense["tid"];
+            this.uid = this.user["uid"];
+            this.userBucket = Polymer.dzLicense["userBucket"];
+            this.websiteUrl = this.user["websiteUrl"] || "//" + this.userBucket + "/";
+            this.userType = Polymer.dzLicense["userType"] || "normal";
+            this.thisPage = thisPage;
+            this.loadComponent('dz-dazzle', 'dz-admin');
+            let elm = document.createElement('dz-wrapper');
+
+            if (!document.querySelector('dz-wrapper')) {
+                document.body.innerHTML = '';
+                document.body.appendChild(elm);
+                elm.adminPageLoader();
+            } 
+
+        } else {
+            this.uid =
+                Polymer.dzLicense["uid"];
+            this.tid =
+                Polymer.dzLicense["tid"] || this.uid;
+            this.dataManager = new DataPackage("_info");
+            this.userBucket = Polymer.dzLicense["userBucket"] || null;
+            this.websiteUrl = location.hostname;
+            this.thisPage = thisPage;
+            this.userType = Polymer.dzLicense["userType"] || "normal";
+            this.loadComponent("dz-dazzle", "dz-dazzle");
+
+            let elm = document.createElement('dz-wrapper');
+
+
+            let html = document.body.innerHTML;
+            html = html.trim();
+            if (!html) {
+                document.body.appendChild(elm);
+            }
+        }
+
+        if (Polymer.editMode === 'normal') {
+            console.log('Load Normal Dazzle');
+            Polymer.loadComponent("dz-dazzle", "dz-dazzle");
+            let dzDazzle = document.createElement('dz-dazzle');
+            document.body.appendChild(dzDazzle);
+        } else {
+
+            Polymer.loadComponent("dz-dazzle", "dz-admin");
+
+            let dzAdmin = document.createElement('dz-admin');
+            document.body.appendChild(dzAdmin);
+        }
+      
+
+    };
+
+
+    // let url =
+    //     "https://d25k6mzsu7mq5l.cloudfront.net/user-data/dnamatch/template/dnamatch/component.json";
+
     Polymer.getContent(url).then((html) => {
         console.log("Test Content", html);
     });

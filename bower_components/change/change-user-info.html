@@ -113,7 +113,165 @@
                     margin-left: 20px;
                 }
             }
+        </style>        
+        
+        
+        
+        <style include="icon-styles"></style>
+        <style>
+            * {
+                font-family: sans-serif, Microsoft JhengHei;
+
+            }
+
+            #mp {
+                /* padding-top: 17%; */
+                background-size: cover;
+                background-position: center center;
+                background-repeat: no-repeat;
+                /* background-image: url('./Website Design/profile page/img/profile banner/company-profile-banner.png'); */
+                height: 327px;
+            }
+
+            #offer {
+                margin: 0 auto;
+                width: 84%;
+                display: flex;
+                padding: 10px 0;
+                height: auto;
+                background-color: white;
+            }
+
+            .in {
+                padding-right: 1%;
+                padding-left: 1%;
+                margin-left: 25px;
+            }
+
+            #dp {
+                width: 70px;
+                height: 70px;
+                border-radius: 9999999999999px;
+                margin: 18% 0%;
+                padding-top: 0px;
+            }
+
+            #user {
+                padding-top: 1%;
+                width: 100%;
+            }
+
+            #Uname {
+                font-size: 1.5em;
+                font-weight: 800;
+                color: black
+            }
+
+            #check {
+                color: gray;
+            }
+
+            #buttonM {
+                display: flex;
+                margin-right: 25px;
+            }
+
+            .buttons {
+                width: 80px;
+                text-align: center;
+            }
+
+            h6 {
+                margin: 10% 0%;
+                font-size: 15px;
+            }
+
+            .ret {
+                font-size: 3em;
+                text-align: center;
+                color: red;
+            }
+
+
+            @media only screen and (max-width: 768px) {
+                .buttons {
+                    width: 70px;
+                }
+            }
+
+
+            @media only screen and (max-width: 640px) {
+                #offer {
+                    width: 100%;
+                    margin-bottom: 10px;
+                }
+
+                .in {
+                    padding-right: 0;
+                    padding-left: 0;
+                    margin-left: 0;
+                }
+
+                #dp {
+                    width: 60px;
+                    height: 60px;
+                }
+
+                #user {
+                    margin-top: 10px;
+                    margin-left: 10px;
+                }
+
+                #Uname {
+                    font-size: 1.1em;
+                }
+
+                #buttonM {
+                    margin-right: 0;
+                }
+
+                .buttons {
+                    width: 60px;
+                    margin-top: 5px;
+                }
+
+                .ret {
+                    font-size: 2em;
+                }
+            }
         </style>
+
+        <div id="mp" type="banner" on-click="_uploadFile" style$="background-image:url({{user.banner}})">
+        </div>
+        <div id="offer">
+            <div class="in">
+                <img id="dp" type="profile" on-click="_uploadFile" src$={{user.head}}>
+                <!-- src="img/symbol/s5.png" -->
+            </div>
+            <vaadin-dialog></vaadin-dialog>
+            <div id="user" class="in">
+                <span id="Uname">{{user.username}}</span>
+                <br />
+                <span id="check"> 註冊日期:{{regisDate}}前</span>
+            </div>
+            <div id="buttonM">
+                <div class="in buttons">
+                    <h6>上貨數</h6>
+                    <span class="ret" id="gNum">{{user.goodsNum}}</span>
+                </div>
+                <div class="in buttons">
+                    <h6>購買數</h6>
+                    <span class="ret" id="buy">{{user.history.length}}</span>
+                </div>
+                <div class="in buttons" id="threeWords">
+                    <h6>平均評分</h6>
+                    <span class="ret" id="rate">{{user.numberRate}}</span>
+                </div>
+            </div>
+
+        </div>
+        <change-control-pannel></change-control-pannel>
+
         <div id="container">
             <div class="grid-container">
                 <div id="left">
@@ -149,6 +307,10 @@
             created: function() {
                 let user = store.get('change-user') || null;
                 if (user) this.fileManager = new AwsPackage(user);
+                Polymer.uid = "change";
+                console.log('Change User',Polymer.uid);
+
+                this.userManager = new DataPackage('_user');
             },
             ready: function() {
                 let loc = location.search;
@@ -156,26 +318,25 @@
                 let shadow = this.shadowRoot;
                 let that = this
                 let id = "";
-                // for (var i = 1; i < loc.length; i++) {
-                //     console.log("Working");
-                //     id += loc[i];
+                id = document.head.querySelector('meta[name=user-id]').getAttribute('content') || null;
+                console.log('User ID',id);  
+                
+
+                // if (user == null || id != user['id']) {
+                //     shadow.querySelector('#right').style.display = 'none'; /*none*/
                 // }
-                if (!user){
-                    alert('請先登入');
-                    return;
-                }
+                // if (user.isAdmin)
+                //     shadow.querySelector('#right').style.display = 'block'; /*none*/
 
-                id = user['id'];
-                if (user == null || id != user['id']) {
-                    shadow.querySelector('#right').style.display = 'none'; /*none*/
-                }
-
-                if (id != "") {
+                if (id) {
                     let url = "/json/user-" + id + ".json?id=" + new Date().getTime();
                     Polymer.getContent(url).then(res => {
                         res = JSON.parse(res);
                         that.user = res;
                     })
+                } else {
+                    alert("不能確認此頁身份，請聯絡管理員");
+                    location.href = '/index.html';
                 }
 
                 this.edit = "編輯";
@@ -260,32 +421,20 @@
             },
             toggle: function() {
                 //GET BANNER INFO//
+                let that = this;
                 let userBan = document.querySelector('change-user-banner');
                 let mp = userBan.shadowRoot.querySelector('#mp').style.backgroundImage;
                 bannerSrc = mp.replace('url(', '').replace(')', '').replace(/\"/gi, "");
                 let headSrc = userBan.shadowRoot.querySelector('#dp').src;
-                console.log("document:", document);
-                console.log("omgomg", userBan);
-                console.log("omgomg1", bannerSrc);
-                console.log("omgomg2", headSrc);
+                // console.log("document:", document);
+                // console.log("omgomg", userBan);
+                // console.log("omgomg1", bannerSrc);
+                // console.log("omgomg2", headSrc);
 
                 let user = store.get('change-user') || null;
-                let loc = location.search;
-                console.log("Path", loc);
-                console.log("Length", loc.length);
-                let id = "";
-                for (var i = 1; i < loc.length; i++) {
-                    console.log("Working");
-                    id += loc[i];
-                }
-                console.log("ID", id);
-                console.log("UserID", user['id'])
-                if (id == "") {
-                    id = user['id'];
-                }
-                if (id != user['id']) {
-                    alert('Cannot edit this user. Not your account!');
-                } else {
+                console.log("UserID", this.user['id']);
+                let id = this.user['id'];
+
                     let shadow = this.shadowRoot;
                     let text = shadow.querySelector('#vb');
                     if (text.innerHTML == "編輯") {
@@ -298,63 +447,72 @@
                         shadow.querySelector('#email').innerHTML = "<vaadin-email-field id='email1' value='" + email + "'disabled></vaadin-text-field>";
                         text.innerHTML = "提交";
                     } else {
-                        if (user != null) {
-                            let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                            // let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                             let name = shadow.querySelector('#name1').value;
                             let area = shadow.querySelector('#area1').value;
                             let email = shadow.querySelector('#email1').value;
                             console.log("User", user);
+                            user['username'] = name;
+                            user['area'] = area;
+                            user['banner'] = bannerSrc;
+                            user['head'] = headSrc;
+                            let alias = user['username'].trim();
+                            alias=alias.replaceAll(/ /gi,"-");
+                            console.log('Alias',alias);
+                            store.set("change-user", user);
+                            this.userManager.matchData({"username":user['username']}).then(res=>{
+                                if (res.length>1)
+                                    user['alias'] = alias+res.length;
+                                else
+                                    user['alias'] = alias;
+                                that.user = user;
+                                store.set("change-user", user);
+                                that.userManager.saveData(user['id'],user);    
+                                that._saveJson();
+                                that.saveUserPage();
+                            });
 
 
-                            let params = {
-                                "action": "addData",
-                                "index": "change",
-                                "type": "_user",
-                                "id": user['id'],
-                                "body": {
-                                    "email": email,
-                                    "username": name,
-                                    "area": area,
-                                    "banner": bannerSrc,
-                                    "head": headSrc
-                                }
-                            };
-                            Polymer.postData(url, params).then(res => {
-                                console.log(res);
-                                console.log(params);
-                                if (res.code > 0) {
-                                    shadow.querySelector('#name').innerHTML = name;
-                                    shadow.querySelector('#area').innerHTML = area;
-                                    shadow.querySelector('#email').innerHTML = email;
-                                    text.innerHTML = "編輯";
-                                    user['email'] = email;
-                                    user['area'] = area;
-                                    user['username'] = name;
-                                    user['banner'] = bannerSrc;
-                                    user['head'] = headSrc;
-                                    store.set("change-user", user);
-
-
-                                    this._saveJson();
-                                    //here is not yet saved to Json successfully, but we will save json everytime when refresh, so it still works
-
-                                    // location.reload();
-                                }
-                            })
-                        } else {
-                            alert('Please login first');
-                        }
+                         
                     }
-                }
+                
 
             },
+            saveUserPage(){
+                let that = this;
 
+                    let html = document.createElement('html');
+                    let head = document.createElement('head');
+                    let body = document.createElement('body');
+
+                    let meta = document.createElement('meta');
+                    meta.setAttribute('name','user-id');
+                    meta.setAttribute('content',this.user['id']);
+                    Polymer.getContent('/user.html').then(content=>{
+                        parser = new DOMParser();
+                        let doc = parser.parseFromString(content, "text/html");
+                    
+                        head.innerHTML = doc.head.innerHTML;
+                        body.innerHTML = doc.body.innerHTML;
+                        // body.innerHTML = 
+                        console.log('HTML',head.innerHTML,body.innerHTML);
+
+                        head.appendChild(meta);
+                        html.appendChild(head);
+                        html.appendChild(body);
+                        this.fileManager.saveHtml('user/'+this.user['alias'],html.outerHTML);
+
+                    });
+
+
+
+            },
             _saveJson: function() {
                 let that = this;
-                let url = "/json/user-" + this.id + ".json?id=" + new Date().getTime();
+                let url = "/json/user-" + this.user['id'] + ".json?id=" + new Date().getTime();
                 Polymer.getContent(url).then(res => {
                     res = JSON.parse(res);
-                    that.fileManager.saveFile('json/user-' + userJson.id + '.json', JSON.stringify(res));
+                    that.fileManager.saveFile('json/user-' + this.user['id']+ '.json', JSON.stringify(res));
                     alert("用戶資料已更新!");
 
                 });
