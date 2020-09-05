@@ -9,10 +9,8 @@
 
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-dialog/vaadin-dialog.html">
 
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/change/change-dropzone-file.html">
-
-
-<link rel="import" href="./change-buy.html">
+<link rel="import" href="./change-dropzone-file.html">
+<!-- <link rel="import" href="./change-buy.html"> -->
 <link rel="import" href="./change-webcom.html">
 <link rel="import" href="./change-picslide.html">
 <link rel="import" href="./change-orderlist-storage.html">
@@ -658,9 +656,12 @@
                 let loc = location.search;
                 let pid = "";
                 let posit = 0;
-                for (i = 2; i < loc.length; i++) {
-                    pid += loc[i]
-                };
+                // for (i = 2; i < loc.length; i++) {
+                //     pid += loc[i]
+                // };
+
+                pid = document.head.querySelector('meta[name=product-id]').getAttribute('content') || null;
+
 
                 //For testing call SELLER from webcom
                 // this.SELLER = pid;
@@ -804,17 +805,13 @@
 
             },
             loadProduct(pid) {
+                let that = this;
                 return new Promise(function(resolve, reject) {
-                    Polymer.getContent('/json/product-' + pid + '.json?id=' + new Date().getTime()).then(res => {
-                        resolve(JSON.parse(res));
-                    }, err => {
-                        this.dataManager.loadData(pid).then(prod => {
-                            resolve(prod);
-                        });
+                    that.dataManager.getDataByCache(pid).then(res=>{
+                            resolve(res);
+                    },err=>{
+                        reject();
                     });
-                    // this.fileManager.getFile('json/product-' + pid + '.json').then(res => {
-                    //     let json = JSON.parse(res);
-                    // });
                 });
 
 

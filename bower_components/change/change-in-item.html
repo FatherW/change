@@ -1,5 +1,6 @@
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/polymer/polymer.html">
+
 <!-- <link rel="import" href="change-like2.html"> -->
+<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="change-things.html">
 
 
@@ -121,6 +122,16 @@
                 .botbutton {
                     margin-bottom: 50px;
                 }
+                .svg {
+                    background-image: url('/img/loading.svg');
+                    position: relative;
+                    background-size: 30px;
+                    background-position: center center;
+                    background-repeat: no-repeat;
+                    width: 100%;
+
+                }
+
             }
         </style>
 
@@ -527,8 +538,10 @@
                             }
                         }
                     };
-                    // console.log("JSON", this.query);
                     Polymer.postData(goodsUrl, params).then(res => {
+                        console.log("My Product", res);
+
+
                         if (res.code > 0) {
 
                             ////display change-in-item

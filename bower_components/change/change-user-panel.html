@@ -1,8 +1,9 @@
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/polymer/polymer.html">
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-dialog/vaadin-dialog.html">
-<link rel="import" href="change-login.html">
+<link rel="import" href="../polymer/polymer-element.html">
+<!-- <link rel="import" href="../polymer/lib/utils/import-href.html"> -->
 
-<link rel="import" href="change-register.html">
+<!-- <link rel="import" href="./change-login.html"> -->
+<!-- <link rel="import" href="./change-register.html">  -->
 
 <dom-module id="change-user-panel">
 
@@ -54,16 +55,25 @@
 </dom-module>
 
 <script>
-    (function() {
-        Polymer({
-            is: 'change-user-panel',
-            properties: {},
-            created: function() {
+   window.Change = window.Change || {};
+class changeUserPanel extends Polymer.Element {
+	static get is() {
+          return 'change-user-panel';
+	}
+
+	constructor() {
                 // Polymer.loadComponent('change', 'change-login');
+        super();
+                // Polymer.importHref('/bower_components/change/change-login.html');
+                // Polymer.importHref('/bower_components/change/change-register.html');
+
+
+                
                 this.userManager = new DataPackage('_user');
                 let user = store.get('change-user') || null;
                 store.set('subUser',user);
-                if (user) this.fileManager = new AwsPackage(user);
+                if (user) 
+                    this.fileManager = new AwsPackage(user);
                 Polymer.parseTime = function(oldtime) {
                     let _thetimenow = Date.now();
                     let time = (_thetimenow - oldtime) / 1000;
@@ -99,29 +109,40 @@
 
                 }
 
-            },
-            _login: function() {
+
+    }
+
+    _login= function() {
+
+            Polymer.loadComponent('change','change-login');
                 let shadow = this.shadowRoot;
                 let that = this;
                 let user = store.get('change-user');
-                if (user == null) {
+                if (!user) {
                     let dialog = shadow.querySelector('vaadin-dialog');
-                    Polymer.popup(dialog, "change", "change-login", "350px", "400px");
+                    let dzPopup = document.createElement('change-login');
+                    dzPopup.dialog = dialog;
+                    Polymer.componentPopup(dzPopup,'350px','400px');
+                    // Polymer.popup(dialog, "change", "change-login", "350px", "400px");
 
                 } else {
                     Polymer.subUser = user;
                     Polymer.subUser['root']  = 'change';
                 }
 
-            },
+            }
 
-            _register: function() {
+            _register= function() {
+                Polymer.loadComponent('change','change-register');
                 let shadow = this.shadowRoot;
                 let that = this;
                 let user = store.get('change-user');
                 if (user == null) {
                     let dialog = shadow.querySelector('vaadin-dialog#register');
-                    Polymer.popup(dialog, "change", "change-register", "400px", "600px");
+                    dzPopup.dialog = dialog;
+                    Polymer.componentPopup(dzPopup,'400px','600px');
+   
+                    // Polymer.popup(dialog, "change", "change-register", "400px", "600px");
                 } else {
                     store.set('change-user', null);
 
@@ -132,8 +153,8 @@
 
 
                 }
-            },
-            logWithPasswd: function(uid, password) {
+            }
+            logWithPasswd= function(uid, password) {
 
                 let loginUrl = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
                 let params = {
@@ -164,8 +185,10 @@
                         // alert('登入失敗');
                     }
                 });
-            },
-            ready: function() {
+            }
+            
+            ready() {
+                super.ready();
                 let user = store.get('change-user') || null;
 
                 if (user != null) {
@@ -177,7 +200,7 @@
                     let a = document.createElement('a');
                     let img = document.createElement('img');
                     let src = user['head'] || 'https://devshift.biz/wp-content/uploads/2017/04/profile-icon-png-898.png';
-                    a.setAttribute('href', '/user.html');
+                    a.setAttribute('href', '/user/'+user['alias']);
                     img.setAttribute('src', src);
                     a.appendChild(img);
                     let login = this.shadowRoot.querySelector('#login');
@@ -185,9 +208,9 @@
                     login.appendChild(a);
                     // this.shadowRoot.querySelector('#login').innerHTML = '<a href="/user.html?' + user['_id'] + '"><img src="' + user['head'] + '"></a>';
 
-                    console.log("write access key and save JSON:", this.fileManager);
-                    console.log("user JSON:", JSON.stringify(user))
-                    this.fileManager.saveFile('json/user-' + user['id'] + '.json', JSON.stringify(user));
+                    // console.log("write access key and save JSON:", this.fileManager);
+                    console.log("user JSON:", JSON.stringify(user));
+                    // this.fileManager.saveFile('json/user-' + user['id'] + '.json', JSON.stringify(user));
                 }
 
 
@@ -209,8 +232,10 @@
                 })
             }
 
-        });
-    })();
+}
+customElements.define('change-user-panel', changeUserPanel);
+
+window.Change.changeUserPanel = changeUserPanel;
 
     function generatePassword() {
         var length = 8,

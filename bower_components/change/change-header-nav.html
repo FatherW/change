@@ -1,4 +1,4 @@
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/polymer/polymer.html">
+
 
 <dom-module id="change-header-nav">
     <template>
@@ -158,13 +158,6 @@
 
 
         <div>
-            <!-- <div class="topnav" id="myTopnav">
-
-
-                <a href="javascript:void(0);" style="font-size:15px;" class="icon" on-click="myFunction">&#9776;</a>
-
-
-            </div> -->
 
             <div class="topnav" id="myTopnav">
                 <a on-click="changeclass" style="font-size:15px;" class="icon">☰</a>
@@ -180,9 +173,6 @@
                                 <template is="dom-repeat" items="{{category.children}}" as="item">
                                         <a href$="/list-product.html?cate={{item}}">{{item}}</a>
                                     </template>
-                                  
-                                <!-- <a href="list-product.html?cate=%E9%9B%BB%E5%AD%90%E5%99%A8%E6%9D%90">電子器材</a><a href="list-product.html?cate=%E6%89%8B%E6%A9%9F%E5%8F%8A%E5%B9%B3%E6%9D%BF%E9%A1%9E">手機及平板類</a><a href="list-product.html?cate=%E6%89%8B%E6%8F%90%E9%9B%BB%E8%85%A6">手提電腦</a><a href="list-product.html?cate=%E6%A1%8C%E4%B8%8A%E4%B8%BB%E6%A9%9F">桌上主機</a> -->
-                            
                             </div> 
                          </div>
                     </template>

@@ -1,7 +1,7 @@
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/polymer/polymer.html">
 <link rel="import" href="change-like.html">
 <link rel="import" href="change-things.html">
 
+<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-button/vaadin-button.html">
 
 
 <dom-module id="change-itemspecial">
@@ -350,6 +350,18 @@
                     background-color: white;
                 }
             }
+
+            .svg {
+                background-image: url('/img/loading.svg');
+                position: relative;
+                background-size: 30px;
+                background-position: center center;
+                background-repeat: no-repeat;
+                width: 100%;
+                min-height:30px;
+
+            }
+
         </style>
 
 
@@ -361,7 +373,7 @@
             <text x="5" y="17" fill="white">最新商品</text>
         </svg>
 
-        <div class="things-grid things-grid-small-mobile things-grid-middle-mobile" id="blank"></div>
+        <div class="things-grid things-grid-small-mobile things-grid-middle-mobile svg" id="blank"></div>
 
         <div style="text-align: center; padding-bottom: 10px;">
             <vaadin-button on-click="displaymore" style="cursor: pointer;">更多</vaadin-button>
@@ -477,6 +489,7 @@
 
                             shadow.querySelector(".things-grid").innerHTML = current;
                         }
+                        shadow.querySelector('.things-grid').classList.remove('svg');
                         this.countitem = 8;
 
                     } else {

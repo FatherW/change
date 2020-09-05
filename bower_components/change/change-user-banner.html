@@ -67,6 +67,7 @@
             .buttons {
                 width: 80px;
                 text-align: center;
+                display:block;
             }
 
             h6 {
@@ -128,36 +129,7 @@
                 }
             }
         </style>
-
-        <div id="mp" type="banner" on-click="_uploadFile" style$="background-image:url({{user.banner}})">
-        </div>
-        <div id="offer">
-            <div class="in">
-                <img id="dp" type="profile" on-click="_uploadFile" src$={{user.head}}>
-                <!-- src="img/symbol/s5.png" -->
-            </div>
-            <vaadin-dialog></vaadin-dialog>
-            <div id="user" class="in">
-                <span id="Uname">{{user.username}}</span>
-                <br />
-                <span id="check"> 註冊日期:{{regisDate}}前</span>
-            </div>
-            <div id="buttonM">
-                <div class="in buttons">
-                    <h6>上貨數</h6>
-                    <span class="ret" id="gNum">{{user.goodsNum}}</span>
-                </div>
-                <div class="in buttons">
-                    <h6>購買數</h6>
-                    <span class="ret" id="buy">{{user.history.length}}</span>
-                </div>
-                <div class="in buttons" id="threeWords">
-                    <h6>平均評分</h6>
-                    <span class="ret" id="rate">{{user.numberRate}}</span>
-                </div>
-            </div>
-
-        </div>
+<slot></slot>
 
     </template>
 </dom-module>
@@ -184,41 +156,44 @@
                 this.pics[0] = this.bigPic;
                 console.log("Created Add Product");
                 this.dataManager = new DataPackage('product');
-
+                this.userManager = new DataPackage("_user");
 
                 let user = store.get('change-user') || null;
                 id = document.head.querySelector('meta[name=user-id]').getAttribute('content') || this.user['id'];
 
-                let url = "https://www.gettv.hk/json/user-" + id + ".json?id=" + new Date().getTime();
-                Polymer.getContent(url).then(res => {
-                   console.log('Find JSON');
-                    let json = JSON.parse(res);
-                    this.user = json;
-                    console.log('User JSON',this.user);
-                    this.regisDate = "剛剛";
-                    let t = this.user['createTime'] || new Date().getTime();
-                    if (t)
-                        this.regisDate = Polymer.parseTime(t);                  
-    
-                    this.score = Math.round(res.score * 10) / 10;
-                    this.user['history']  = this.user['history'] || [];
-                    this.user['banner'] = this.user['banner'] || "https://www.gettv.hk/Website%20Design/profile%20page/img/profile%20banner/company-profile-banner.png";
-                    // shadow.querySelector('#mp').style.backgroundImage = "url('" + bgImg + "')";
- 
-                    // this.regTime();                    
-                }, err => {
-                    alert('沒有此用戶');
-                })
 
-                if (user !== null) {
-                    this.fileManager = new AwsPackage(user);
-                }
+
+                // let url = "https://www.gettv.hk/json/user-" + id + ".json?id=" + new Date().getTime();
+                // Polymer.getContent(url).then(res => {
+                //    console.log('Find JSON');
+                //     let json = JSON.parse(res);
+                //     this.user = json;
+                //     console.log('User JSON',this.user);
+                //     this.regisDate = "剛剛";
+                //     let t = this.user['createTime'] || new Date().getTime();
+                //     if (t)
+                //         this.regisDate = Polymer.parseTime(t);                  
+    
+                //     this.score = Math.round(res.score * 10) / 10;
+                //     this.user['history']  = this.user['history'] || [];
+                //     this.user['banner'] = this.user['banner'] || "https://www.gettv.hk/Website%20Design/profile%20page/img/profile%20banner/company-profile-banner.png";
+                //     // shadow.querySelector('#mp').style.backgroundImage = "url('" + bgImg + "')";
+ 
+                //     // this.regTime();                    
+                // }, err => {
+                //     alert('沒有此用戶');
+                // })
+
+                // if (user !== null) {
+                //     this.fileManager = new AwsPackage(user);
+                // }
 
 
                 document.addEventListener('upload-success', e => {
                     let src = e.detail['Key'];
                     this.curElm.setAttribute('src', src);
                 });
+                
                 document.addEventListener('select-image', e => {
                     let Key = e.detail['Key'];
                     let type = this.curElm.getAttribute('type') || 'banner';

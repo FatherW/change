@@ -1,10 +1,8 @@
 <link rel="import" href="../polymer/polymer.html" />
 <script src="https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/js/store-2.0.12.min.js"></script>
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.734.0/aws-sdk.min.js" integrity="sha512-ZiXSRxKII4IaQGqnvP+75mQX1CX4ei4Z4AEZm14Bbw+825VaITIKuGFyazhWdA2UsaOARc2f03BPpeJ1D67WuQ==" crossorigin="anonymous"></script> -->
-<script src="https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/js/aws-sdk-2.83.0.min.js"></script>
 <link rel="stylesheet" href="https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/css/font-awesome-4.7.0.min.css" />
-<link rel="import" href="./default-package/default-package.html">
-<link rel="import" href="dz-wrapper.html" />
+
 <!-- <link rel="import" href="dz-wrapper-head.html" /> -->
 <!-- <link rel="import" href="dz-wrapper-js.html" /> -->
 
@@ -36,9 +34,7 @@
             window["AWS"] = AWS;
             this.AWS = AWS;
             console.log("AWS", AWS);
-            this.getFile(thisPage).then((html) => {
-                that.thisPageContent = html;
-            });
+
         }
         getExternalContent(url) {
             let miscFcUrl =
@@ -206,6 +202,7 @@
             const fileref = document.createElement("script");
             fileref.setAttribute("type", "text/javascript");
             fileref.setAttribute("src", url);
+            fileref.setAttribute('type','module');
             document.getElementsByTagName("head")[0].appendChild(fileref);
         }
 
@@ -770,6 +767,8 @@
         constructor(table) {
             this.dbUrl =
                 "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+            this.signUrl = "https://0mx3cqjlkh.execute-api.ap-northeast-1.amazonaws.com/default/getPresignedURL";
+
             this.uid = Polymer.uid;
             this.table = table || "_info";
             // if (!table){
@@ -929,6 +928,48 @@
                     }
                 });
             });
+        }
+
+        getDataByCache(id){
+            let key = this.table + '-' +id;
+            let cache = store.get(key) || null;
+            console.log('Cache',cache,id);
+            let path = "json/"+this.table+"-"+id+'.json';
+            let that = this;
+            let user = Polymer.user || Polymer.subUser || null;
+            let json;
+            let fileManager;
+
+
+
+            return new Promise(function(resolve, reject) {
+
+                if (cache)
+                        resolve(cache);
+                    else {
+                        Polymer.getUserDataContent(path).then(str=>{
+                                json = JSON.parse(str);
+                                store.set(key,json);
+                                console.log('Save Cache',store.get(key),key,id);
+
+                                resolve(json);
+                            }, err => {
+                                that.loadData(id).then(res => {
+                                    // console.log('Cannot read product', res);
+                                    if (user){
+                                        fileManager = new AwsPackage(user);
+                                        fileManager.saveUserData(path,JSON.stringify(res));
+                                    }
+
+                                    store.set(key,json);
+                                    resolve(res);
+                                });
+                            });
+                    }
+                });                        
+                
+
+
         }
 
         matchData(json) {
@@ -1289,6 +1330,14 @@
             });
         }
     };
+    
+    
+    Polymer.noElements = 0;
+    Polymer.elements = {};
+    Polymer.history = [];
+    Polymer.editing = false;
+    Polymer.editor = false;
+    
     Polymer.getUserDataContent = function(path) {
         let url =
             "https://d25k6mzsu7mq5l.cloudfront.net/user-data/" +

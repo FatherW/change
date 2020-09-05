@@ -1,4 +1,4 @@
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/polymer/polymer.html">
+
 <link rel="import" href="./change-user-panel.html">
 <!-- <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/dz-dazzle/css/medium-editor.html"> -->
 
@@ -8,7 +8,142 @@
 
 
         <style>
-            .index-grid {
+            
+
+.index-grid {
+    display: grid;
+                  grid-template-columns: 180px auto  100px 150px;
+                  grid-template-rows: 74px;
+                  grid-auto-rows: 50px;
+  }
+  
+  .logo {
+    background-image: url('https://www.gettv.hk/img/logo/Change.png');
+                  background-position: center center;
+                  background-repeat: no-repeat;
+                  background-size: contain;
+  }
+  
+  .topWrap {
+    background: none;
+                  border: none;
+                  height: 75px;
+  }
+  
+  .paid {
+    background: #F0846C;
+                  border: none;
+                  color: white;
+                  height: 41px;
+                  margin-top: 16px;
+                  width: 90%;
+                  border-radius: 3px;
+                  cursor: pointer;
+                  outline: none;
+  }
+  
+  .pointer {
+    cursor: pointer;
+                  border: none;
+                  background: #efefef;
+  }
+  
+  .s {
+    background: #efefef;
+                  height: 41px;
+                  margin-top: 7px;
+                  border: none;
+                  border-right: none;
+  }
+  
+  .input-group1 {
+    background: none;
+                  height: 40px;
+                  margin-top: 16px;
+                  width: 80%;
+                  border-color: black;
+                  padding-left: 5px;
+  }
+  
+  .custom-select {
+    padding-top: 9px;
+  }
+  
+  .full {
+    width: 97%;
+                  padding-left: 3%;
+                  background-color: white;
+  }
+  
+  .search {
+    grid-column: 4 / 5;
+                  grid-row: 1 / 2;
+  }
+  
+  #searchmain {
+    background: #efefef;
+                  border: none;
+  }
+  
+  @media only screen and (max-width: 768px) {
+  change-user-panel {
+    display: none;
+  }
+  
+  .index-grid-md {
+    display: grid;
+                      grid-template-columns: 1px auto 50px 100px 50px;
+                      grid-template-rows: 74px;
+                      grid-auto-rows: 50px;
+                      height: 62px;
+  }
+  
+  .custom-select {
+    grid-column: 1 / 2;
+                      grid-row: 1 / 2;
+  }
+  
+  .input {
+    grid-column: 2 / 3;
+                      grid-row: 1 / 2;
+  }
+  
+  .input-group1 {
+    margin-left: 0;
+                      width: 98%;
+  }
+  
+  .search {
+    grid-column: 3 / 4;
+                      grid-row: 1 / 2;
+  }
+  
+  .logo {
+    grid-column: 4 / 5;
+                      grid-row: 1 / 2;
+                      background-image: url('/img/logo/Change.png');
+                      background-position: center center;
+                      background-repeat: no-repeat;
+                      background-size: contain;
+  }
+  
+  .paid {
+    display: none;
+  }
+  
+  change-user-panel {
+    grid-column: 5 / 6;
+                      grid-row: 1 / 2;
+  }
+  
+  .topWrap {
+    background: none;
+                      border: none;
+                      height: 75px;
+  }
+  
+  }
+            /* .index-grid {
                 display: grid;
                 grid-template-columns: 180px 1px auto 50px 100px 150px;
                 grid-template-rows: 74px;
@@ -147,40 +282,30 @@
                     height: 75px;
                 }
 
-            }
+            } */
         </style>
-        <div class="full">
-            <div class="index-grid index-grid-md">
+   <div class="full">
+    <div class="index-grid index-grid-md">
 
-                <a class="logo" href="/getchange.html">
-                </a>
+        <a class="logo" href="/getchange.html">
+        </a>
 
-                    <div class="custom-select">
-
-                        <div class="l"></div>
-                    </div>
-                    <div class="input">
-                        <input id="searchmain" class="input-group1" type="text" placeholder="&nbsp搜索">
-                    </div>
-                    <div class="search">
-                        <button class="pointer"
-                            style="margin-top: 16px; height: 42px; background: #f0f0f0; border-color: black;"
-                            on-click="searchlist">
-                            <svg class="search" viewBox="0 0 24 24" style=" width: 25px; height: 15px;">
-                                <title>Search Icon</title>
-                                <path fill="#57585a"
-                                    d="M15.618 17.032a9 9 0 1 1 1.414-1.414l5.675 5.675a1 1 0 0 1-1.414 1.414l-5.675-5.675zm-.701-2.05a1.017 1.017 0 0 1 .065-.065 7 7 0 1 0-.066.066z">
-                                </path>
-                            </svg>
-                        </button>
-                    </div>
+            
             <div>
-            <button class="paid" id="areachange">收費區</button>
-        </div>
-                <change-user-panel>
-                    <div><button class="topWrap">/ 註冊</button><button class="topWrap">/ 登入</button></div>
-                </change-user-panel>
-            </div>
+<div class="input">
+                <input id="searchmain" type="text" placeholder="&nbsp;搜索" class="input-group1">
+            </div></div>
+            
+    <div>
+    <button class="paid" id="areachange">收費區</button>
+</div>
+        <change-user-panel>
+            <div><button class="topWrap">/ 註冊</button><button class="topWrap">/ 登入</button></div>
+        </change-user-panel>
+    </div>
+
+
+</div>
 
 
     </template>

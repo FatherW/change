@@ -1440,3 +1440,156 @@ change-announcement {
 }
 
 
+
+
+.index-grid {
+    display: grid;
+    grid-template-columns: 180px auto 100px 150px;
+    grid-template-rows: 74px;
+    grid-auto-rows: 50px;
+}
+
+.logo {
+    background-image: url('https://www.gettv.hk/img/logo/Change.png');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.topWrap {
+    background: none;
+    border: none;
+    height: 75px;
+}
+
+.paid {
+    background: #F0846C;
+    border: none;
+    color: white;
+    height: 41px;
+    margin-top: 16px;
+    width: 90%;
+    border-radius: 3px;
+    cursor: pointer;
+    outline: none;
+}
+
+.pointer {
+    cursor: pointer;
+    border: none;
+    background: #efefef;
+}
+
+.s {
+    background: #efefef;
+    height: 41px;
+    margin-top: 7px;
+    border: none;
+    border-right: none;
+
+}
+
+.input-group1 {
+    background: none;
+    height: 40px;
+    margin-top: 16px;
+    width: 80%;
+    border-color: black;
+    padding-left: 5px;
+}
+
+.custom-select {
+    padding-top: 9px;
+}
+
+.full {
+    width: 97%;
+    padding-left: 3%;
+    background-color: white;
+}
+
+.search {
+
+    grid-column: 4 / 5;
+    grid-row: 1 / 2;
+
+
+}
+
+#searchmain {
+    background: #efefef;
+    border: none;
+}
+
+@media only screen and (max-width: 768px) {
+
+    change-user-panel {
+        display: none;
+    }
+
+
+    .index-grid-md {
+        display: grid;
+        grid-template-columns: auto 50px 100px 50px;
+        grid-template-rows: 74px;
+        grid-auto-rows: 50px;
+        height: 62px;
+    }
+
+    .custom-select {
+        grid-column: 1 / 2;
+        grid-row: 1 / 2;
+    }
+
+    .input {
+        grid-column: 2 / 3;
+        grid-row: 1 / 2;
+    }
+
+    .input-group1 {
+        margin-left: 0;
+        width: 98%;
+    }
+
+    .search {
+        grid-column: 3 / 4;
+        grid-row: 1 / 2;
+    }
+
+    .logo {
+        grid-column: 4 / 5;
+        grid-row: 1 / 2;
+        background-image: url("/img/logo/Change.png");
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+
+    .paid {
+        display: none;
+    }
+
+    change-user-panel {
+        grid-column: 5 / 6;
+        grid-row: 1 / 2;
+    }
+
+    .topWrap {
+        background: none;
+        border: none;
+        height: 75px;
+    }
+
+}
+
+.svg {
+    background-image: url('/img/loading.svg');
+    position: relative;
+    background-size: 30px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    width: 100%;
+    min-height:30px;
+
+}
+

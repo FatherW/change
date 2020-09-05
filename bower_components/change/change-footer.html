@@ -111,6 +111,15 @@
                     'source': this
                 }];
 
+
+
+            },
+            edit() {
+                this.editor();
+            },
+            ready: function() {
+                let basePath = "template/change/_block/";
+                Polymer.uid = 'change';
                 Polymer.getUserDataContent(basePath + 'footer').then(html => {
                     console.log('Footer',html);
                     this.innerHTML = `
@@ -123,15 +132,6 @@
                         document.querySelector('.footer').style.backgroundColor = "#F0846C";
 
                 });
-
-
-            },
-            edit() {
-                this.editor();
-            },
-            ready: function() {
-                let basePath = "template/change/_block/";
-
 
                 document.addEventListener('areachange', e => {
                     if (e.detail.isFree == true) {

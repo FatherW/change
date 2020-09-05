@@ -1,10 +1,7 @@
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/polymer/polymer.html">
 <link rel="import" href="change-like.html">
-<link rel="import" href="change-confirm.html">
-<link rel="import" href="change-in-item.html">
 <link rel="import" href="change-user-tag.html">
 <link rel="import" href="change-item-tag.html">
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-dialog/vaadin-dialog.html">
+<!-- <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-dialog/vaadin-dialog.html"> -->
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/dz-dazzle/css/medium-editor.html">
 
 
@@ -65,7 +62,7 @@
             .jumpeditproduct2 {
                 border: none;
                 border-radius: 5px;
-                background-image: url(./img/delete.png);
+                background-image: url(/img/delete.png);
                 background-size: contain;
                 height: 25px;
                 width: 25px;
@@ -266,7 +263,7 @@
             }
 
             .svg {
-                background-image: url('./img/loading.svg');
+                background-image: url('/img/loading.svg');
                 position: relative;
                 background-size: 30px;
                 background-position: center center;
@@ -295,7 +292,7 @@
                 background-position: center center;
                 /* background-repeat: no-repeat; */
                 margin: 1%;
-                background-image: url(./img/channel_banner/1.jpg);
+                background-image: url(/img/channel_banner/1.jpg);
                 background-repeat: no-repeat;
 
             }
@@ -414,10 +411,10 @@
             </div>
             <a href$="{{detailUrl}}">
                 <div class="productname2" id="productname">
-                    {{res.productname}}
+                    {{product.productname}}
 
                 </div>
-                <div id="price" class="price"> ${{res.price}}
+                <div id="price" class="price"> ${{product.price}}
                 </div>
 
             </a>
@@ -477,30 +474,71 @@
 
                 this.dataManager = new DataPackage('product');
                 this.user = store.get('change-user') || null;
+                if (this.user)
+                    this.fileManager = new AwsPackage(this.user);
+            },
+            saveProductPage(){
+                let that = this;
+                    let alias = this.product['productname'].trim();
+                    alias=alias.replace(/ /gi,"-");
+                    this.product['alias'] = alias;
+                    this.detailUrl =  '/product/' + this.product['alias'];
+                    let html = document.createElement('html');
+                    let head = document.createElement('head');
+                    let body = document.createElement('body');
+
+                    let meta = document.createElement('meta');
+                    meta.setAttribute('name','product-id');
+                    meta.setAttribute('content',this.id);
+                    Polymer.getContent('/product.html').then(content=>{
+                        parser = new DOMParser();
+                        let doc = parser.parseFromString(content, "text/html");
+                    
+                        head.innerHTML = doc.head.innerHTML;
+                        body.innerHTML = doc.body.innerHTML;
+                        // body.innerHTML = 
+                        console.log('HTML',head.innerHTML,body.innerHTML);
+
+                        head.appendChild(meta);
+                        html.appendChild(head);
+                        html.appendChild(body);
+                        console.log('Save Product',this.product);
+                        store.set('product-'+this.id+'.json',this.product);
+                        this.dataManager.saveData(this.id,this.product);
+                        this.fileManager.saveUserData('json/product-'+this.id+'.json',JSON.stringify(this.product));
+                        this.fileManager.saveHtml('product/'+this.product['alias'],html.outerHTML);
+                    });
+
+
 
             },
             _reallydelete: function() {
                 let that = this;
                 let shadow = this.shadowRoot;
-                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                let param = {
-                    "action": "deleteData",
-                    "index": "change",
-                    "type": "product",
-                    "id": this.id
-                };
-                Polymer.postData(Url, param).then(res => {
-                    if (res.code > 0) {
-                        shadow.querySelector('#deleteall').style.display = "none";
-                    }
-                })
+                this.dataManager.removeData(this.id).then(res=>{
+                    this.remove();
+                    // shadow.querySelector('#deleteall').style.display = "none";
+                });
+                // let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                // let param = {
+                //     "action": "deleteData",
+                //     "index": "change",
+                //     "type": "product",
+                //     "id": this.id
+                // };
+                // Polymer.postData(Url, param).then(res => {
+                //     if (res.code > 0) {
+                //         shadow.querySelector('#deleteall').style.display = "none";
+                //     }
+                // })
             },
 
             _deleteproduct: function() {
                 let that = this;
                 let shadow = this.shadowRoot;
                 let dialog = shadow.querySelector('#tempqqq' + this.id);
-                Polymer.popup(dialog, "change", "change-confirm", "30%", "50%");
+                Polymer.loadComponent('change','change-confirm');
+                Polymer.popup(dialog, "change", "change-confirm", "30%", "200px");
             },
             ready: function() {
                 this.id = this.getAttribute('id');
@@ -508,17 +546,28 @@
                 let that = this;
                 var json;
                 let url = "/json/product-" + this.id + ".json?id=" + new Date().getTime();
-                Polymer.getContent(url).then(str => {
-                    json = JSON.parse(str);
-                    that.res = json;
-                    // console.log("zzzzzz1", json);
-                    that.userdata(json);
-                }, err => {
-                    that.dataManager.loadData(that.id).then(res => {
-                        // console.log('Cannot read product', res);
-                        that.userdata(res);
-                    });
+                let path = "json/product-"+this.id+'.json';
+
+                this.dataManager.getDataByCache(this.id).then(res=>{
+                    this.product = res;
+                    // this.saveProductPage();
+                    this.userdata(res);
                 });
+//                 Polymer.getUserDataContent(path).then(str=>{
+// //                Polymer.getContent(url).then(str => {
+   
+//                     json = JSON.parse(str);
+//                     console.log('Success ',json);
+//                     that.res = json;
+//                     // console.log("zzzzzz1", json);
+//                     that.userdata(json);
+//                 }, err => {
+//                     that.dataManager.loadData(that.id).then(res => {
+//                         // console.log('Cannot read product', res);
+//                         that.userdata(res);
+//                         that.fileManager.saveUserData(path,JSON.stringify(res));
+//                     });
+//                 });
 
             },
 
@@ -533,13 +582,20 @@
                     this.pics = all['pics'];
 
                 if (!this.pics)
-                    this.pics = './img/nopic.png';
+                    this.pics = '/img/nopic.png';
 
                 if (all['isFree'] == true) {
                     shadow.querySelector('#price').style.display = 'none';
                 };
                 let ownerId = all['ownerId'];
-                this.detailUrl = '/edit-product.html?p' + all['id'];
+                
+                console.log('Alias',all['alias']);
+                if (! all['alias']) {
+                    this.saveProductPage();
+                }
+                else
+                   this.detailUrl = '/product/'+all['alias'];
+
                 // this.userUrl = "/user.html?" + ownerId;
                 // console.log('Link', this.detailUrl, this.userUrl);
                 if (all['isNew'] == true)

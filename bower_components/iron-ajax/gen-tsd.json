@@ -1,7 +1,0 @@
-{
-  "autoImport": {
-    "./iron-request.js": [
-      "IronRequestElement"
-    ]
-  }
-}

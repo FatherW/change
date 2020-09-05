@@ -1,0 +1,114 @@
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../dz-dazzle/dz-library.html" />
+<link rel="import" href="../dz-dazzle/dz-dazzle.html" />
+<link rel="import" href="../vaadin-dialog/vaadin-dialog.html" />
+<!-- <script src="https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/js/aws-sdk-2.83.0.min.js" type="module"></script> -->
+<script src="/js/aws-sdk-2.747.0.min.js"></script>
+
+<link rel="import" href="/bower_components/change/change-header.html">
+<link rel="import" href="/bower_components/change/change-footer.html">
+<link rel="import" href="/bower_components/change/change-user-panel.html">
+
+<!-- <link rel="import" href="/bower_components/change/change-user-panel.html">
+<link rel="import" href="/bower_components/change/change-header2.html">
+<link rel="import" href="/bower_components/change/change-footer.html">
+<link rel="import" href="/bower_components/change/change-announcement.html"> -->
+
+<dom-module id="change-loader"> </dom-module>
+
+<script>
+   let dzLicense = {
+        "uid":"change",
+        "tid":"change",
+        "userBucket":"change.dazzle.website",
+        "expiryDate":"Mar 25 2021",
+        "userType":"normal",
+        "token":"",
+        "init":false,
+        "local":"true",
+    };
+    let subUser = store.get('change-user') || null;
+    store.set('subUser',subUser);
+    // if (subUser)
+    //     Polymer.loadScript("https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/js/aws-sdk-2.83.0.min.js");
+    Polymer.dzLicense = dzLicense;
+    Polymer.uid = dzLicense['uid'];
+    store.set('dzLicense', Polymer.dzLicense);
+
+
+    Polymer.uid = 'change';
+
+
+        let editMode = store.get("editMode") || "normal";
+        let elm;
+        let thisPage =
+            decodeURIComponent(location.pathname).substring(
+                location.pathname.indexOf("/") + 1
+            ) || "index.html";
+
+        Polymer.editMode = editMode;
+        let user = store.get('user') || null;
+
+        if (user)
+            Polymer.loadScript("https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/js/aws-sdk-2.83.0.min.js");
+
+        Polymer.subUser = store.get('subUser') || null;
+
+        if (editMode === "admin") {
+            Polymer.loadComponent('dz-dazzle','dz-wrapper');
+            let user = store.get("user") || null;
+            console.log('User', user);
+            user['userBucket'] = Polymer.dzLicense['userBucket'];
+            Polymer.fileManager = new AwsPackage(user);
+            Polymer.dataManager = new DataPackage("_info");
+            Polymer.user = user;
+            Polymer.tid = Polymer.dzLicense["tid"];
+            Polymer.uid = Polymer.user["uid"];
+            Polymer.userBucket = Polymer.dzLicense["userBucket"];
+            Polymer.websiteUrl = Polymer.user["websiteUrl"] || "//" + Polymer.userBucket + "/";
+            Polymer.userType = Polymer.dzLicense["userType"] || "normal";
+            Polymer.thisPage = thisPage;
+            Polymer.loadComponent('dz-dazzle', 'dz-admin');
+
+            // Is it really need dz-wrapper?
+            let elm = document.createElement('dz-wrapper');
+            if (!document.querySelector('dz-wrapper')) {
+                document.body.innerHTML = '';
+                document.body.appendChild(elm);
+                elm.adminPageLoader();
+            } 
+
+        } else {
+            Polymer.uid =
+                Polymer.dzLicense["uid"];
+            Polymer.tid =
+                Polymer.dzLicense["tid"] || Polymer.uid;
+            Polymer.dataManager = new DataPackage("_info");
+            Polymer.userBucket = Polymer.dzLicense["userBucket"] || null;
+            Polymer.websiteUrl = location.hostname;
+            Polymer.thisPage = thisPage;
+            Polymer.userType = Polymer.dzLicense["userType"] || "normal";
+            // Polymer.loadComponent("dz-dazzle", "dz-dazzle");
+
+            let elm = document.createElement('dz-wrapper');
+            let html = document.body.innerHTML;
+            html = html.trim();
+            if (!html) {
+                document.body.appendChild(elm);
+            }
+        }
+
+        if (Polymer.editMode === 'normal') {
+            console.log('Load Normal Dazzle');
+            // Polymer.loadComponent("dz-dazzle", "dz-dazzle");
+            let dzDazzle = document.createElement('dz-dazzle');
+            document.body.appendChild(dzDazzle);
+        } else {
+
+            Polymer.loadComponent("dz-dazzle", "dz-admin");
+
+            let dzAdmin = document.createElement('dz-admin');
+            document.body.appendChild(dzAdmin);
+        }
+      
+</script>
