@@ -1,0 +1,164 @@
+<html><head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <script src="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="/bower_components/change/change-loader.html">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
+        <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <title>Home - Change</title>
+        <link rel="stylesheet" href="css/style.css">
+        <meta name="google-signin-scope" content="profile email">
+        <meta name="google-signin-client_id" content="755964351228-2emctcoq1o2nj5vpqitv4j28411jj7jk.apps.googleusercontent.com">
+        <script src="https://apis.google.com/js/platform.js" async="" defer=""></script>
+        <script async="" defer="" crossorigin="anonymous" src="https://connect.facebook.net/zh_HK/sdk.js#xfbml=1&amp;version=v7.0&amp;appId=711018846416860&amp;autoLogAppEvents=1" nonce="NXzxnRL1"></script>
+
+
+        <script>function onSignIn(googleUser) {
+  console.log("running google");
+  var profile = googleUser.getBasicProfile();
+  console.log("myprofile", profile);
+  let param = {
+    "platform": "Google",
+    "name": profile.getName(),
+    "email": profile.getEmail()
+  };
+  store.set("change-platform", param);
+  document.querySelector('.googleloginname').click();
+}
+
+;
+
+function signOut() {
+  var auth2 = gapi.auth2.getAuthInstance();
+  auth2.signOut().then(function () {
+    console.log('User signed out.');
+  });
+}
+
+;
+
+window.fbAsyncInit = function () {
+  FB.init({
+    appId: '711018846416860',
+    cookie: true,
+    xfbml: true,
+    version: '7.0'
+  });
+  FB.AppEvents.logPageView();
+};
+/*
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {
+            return;
+        }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+     */</script>
+        <style scope="change-footer">
+            li {
+                display: block;
+            }
+            
+            .footer {
+                background-color: #F0846C;
+                color: white;
+                height: auto;
+                line-height: 1.5;
+            }
+            
+            .fpanel1 {
+                width: 100%;
+                margin: 0 auto;
+                width: 100%;
+                margin: 0 auto;
+                display: grid;
+                grid-row-gap: 20px;
+                grid-column-gap: 15px;
+                grid-template-columns: 28% 28% 28%;
+                grid-template-rows: 50% 50%;
+            }
+            
+            a.test {
+                color: white;
+                text-decoration: none;
+                font-size: 12px;
+                line-height: 30px;
+            }
+            
+            #social {
+                display: flex;
+                justify-content: space-between;
+                margin: 0 auto;
+                text-align: center;
+                align-items: center;
+                display: inline-flex;
+                float: right;
+                grid-column: 1 / 5;
+                grid-row: 2 / 3;
+            }
+            
+            .footer {
+                height: 300px;
+            }
+            
+            @media (max-width: 768px) {
+                .footer {
+                    display: none;
+                }
+                .fpanel1 {
+                    width: 100%;
+                    margin: 0 auto;
+                    padding-bottom: 10px;
+                    width: 100%;
+                    margin: 0 auto;
+                    display: grid;
+                    grid-row-gap: 10px;
+                    grid-column-gap: 15px;
+                    grid-template-columns: repeat(3, 32%);
+                    text-align: start;
+                }
+                #social {
+                    display: flex;
+                    justify-content: space-between;
+                    margin: 0 auto;
+                    text-align: center;
+                    align-items: center;
+                    display: inline-flex;
+                    float: right;
+                    grid-column: 2 / 4;
+                    grid-row: 2 / 3;
+                }
+                .footer {
+                    height: 500px;
+                }
+            }
+        </style>
+        <link rel="import" href="/bower_components/change/change-new-product.html">
+        <link rel="import" href="/bower_components/change/change-edit-bar.html">
+        <link rel="import" href="/bower_components/change/change-order-list.html">
+        <link rel="import" href="/bower_components/change/change-orderlist-storage.html">
+        <link rel="import" href="/bower_components/change/change-itemspecial.html">
+        <link rel="import" href="/bower_components/change/change-slidelist.html">
+        <link rel="import" href="/bower_components/change/change-in-item.html">
+<meta name="product-id" content="36"></head><body>
+    <dz-wrapper>
+
+        <change-header></change-header>
+        <change-new-product></change-new-product>
+        <change-footer></change-footer>
+        <button class="googleloginname" style="display:none;">google login</button>
+        <div class="g-signin2" data-onsuccess="onSignIn" style="display:none;">imgoogle</div>
+    </dz-wrapper>
+    <dz-dazzle></dz-dazzle>
+
+
+</body></html>

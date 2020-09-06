@@ -943,7 +943,15 @@
             // save Cookie
             store.set(key,data);
             // save Database
-            this.saveData(id,data);
+            let that = this;
+            return new Promise(function(resolve, reject) {
+                that.saveData(id,data).then(res=>{
+                    resolve();
+                },err=>{
+                    reject();
+                });
+            });
+
         }
 
         getDataByCache(id){
@@ -1462,7 +1470,7 @@
     Polymer.loadComponent = function(cat, id) {
         let local = this.dzLicense["local"] || false;
         let base;
-        if (local === "true") base = "";
+        if (local === "true") base = "/";
         else base = "https://d25k6mzsu7mq5l.cloudfront.net/";
 
         let html =

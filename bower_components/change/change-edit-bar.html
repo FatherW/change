@@ -1,7 +1,4 @@
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/polymer/polymer.html">
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-button/vaadin-button.html">
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-select/vaadin-select.html">
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-checkbox/vaadin-checkbox.html">
+
 <link rel="import" href="change-status.html">
 
 <dom-module id="change-edit-bar">
@@ -88,7 +85,7 @@
             <div id="tbar">
                 <div class="containerB">
                     <div class="buttonL">
-                        <a id="edi" href="#"><button id="edit">編輯</button></a>
+                        <button id="edit" on-click="_edit">編輯</button>
                         <change-status></change-status>
                     </div>
 
@@ -124,80 +121,88 @@
                 let pid = "";
                 let uid = "";
                 let posit = 0;
-                for (i = 2; i < loc.length; i++) {
-                    pid+=loc[i]
-                };
+                
+                pid = document.head.querySelector('meta[name=product-id]').getAttribute('content') || null;
             
                 let user = store.get('change-user') || null;
-
-                Polymer.getContent('/json/product-' + pid + '.json?id=' + new Date().getTime()).then(res=>{
-                    res= JSON.parse(res);
-                    if(res.ownerId == user['id'] || user.isAdmin == true){
-                        shadow.querySelector('#tbar').style.display = "block";
-                        this.shadowRoot.querySelector('#edi').href = "add-product.html?p" + this.id +
-                            "u" + uid;
-                    }
-                })
-                console.log("Edit Bar ID", pid);
                 this.id = pid;
+
+                this.prodManager.getDataByCache(pid).then(res=>{
+                    this.product = res;
+                    this.reAlias();
+                    if (user)
+                        if(res.ownerId == user['id'] || user.isAdmin == true){
+                            shadow.querySelector('#tbar').style.display = "block";
+                        }
+                });
+
+                console.log("Edit Bar ID", pid);
                 //Check whether login or not (not login -> hide)
            
 
             },
+            generateNewId(){
+                let no = new Date().getTime() % 10000;
+                let str; 
+                this.fileManager.listFile('product/').then(res=>{
+                    this.newId = String(no) + String(res.length +1);
+                });
+            },
 
+            reAlias(){
+                let alias = this.product['productname'];
+                alias = alias.replace(/^\s+|\s+$/gm,'')
+                alias = alias.replace(/ /gm,'-');
+                alias = alias.replace(/\//gm,'-');
 
-
+                this.prodManager.matchData({"productname":this.product['productname']}).then(res=>{
+                    if (res.length>1)
+                        this.product['alias'] = alias+res.length;
+                    else
+                        this.product['alias'] = alias;                    
+                    
+                    console.log('Change Alias');
+                });
+            },
             created: function() {
 
                 this.user = store.get('change-user') || null;
                 if (this.user) {
                     this.fileManager = new AwsPackage(this.user);
-                    this.dataManager = new DataPackage('_user');
-                    this.prodManager = new DataPackage('product');
-
+                    this.generateNewId();
                 }
+                
+                this.dataManager = new DataPackage('_user');
+                this.prodManager = new DataPackage('product');
+                
+
 
             },
+            _edit: function(){
+                let user = Polymer.subUser;
 
+                   
+                let product = this.product;
+                store.set('new-product-id',product['id']);
+                store.set('new-product',product);
+                location.replace("/add-product.html");
+
+            },
             _delete: function() {
-                console.log("DELETE FUNCTION IS WORKING")
-                    // GET THE ITEM ID FROM THE URL
-                let loc = location.search;
-                let pid = "";
-                let posit = 0;
-                for (i = 2; i < loc.length; i++) {
-                    pid+=loc[i]
-                };
-                
-                //STORED PRODUCT ID
-                console.log("ID", pid);
-
                 //GET USER ID
                 let user = store.get("change-user") || null;
                 let tempid = user['_id'];
 
-                //CALL DELETE FUNCTION AS IN POSTMAN
-                let that = this;
-                let shadow = this.shadowRoot;
-                let Url =
-                    "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                let params = {
-                    "action": "deleteData",
-                    "index": "change",
-                    "type": "product",
-                    "id": pid
-                }
-
-                //SEND THE ABOVE MESSAGE TO POSTMAN
-                Polymer.postData(Url, params).then(res => {
+                this.prodManager.removeData(this.id).then(res=>{
                     console.log("check:", res.code);
                     if (res.code > 0) {
                         //alert("STATUS: DELETE SUCCESSFUL");
-                        location.replace("./user.html?" + user['_id']);
+                        alert('已刪除貨品');
+                        location.replace("/index.html");
                     } else {
-                        alert("STATUS: DELETE UNSUCCESSFUL");
+                        alert("不能刪除貨品");
                     }
-                })
+                });
 
             },
 
@@ -205,68 +210,108 @@
 
                 //GENERATE UNIQUE TIME AS PRODUCT ID
                 let a = Date.now();
-                console.log("Timestamp", a);
+                let user = Polymer.subUser;
 
-                // GET THE ITEM ID FROM THE URL
-                let loc = location.search;
-                let pid = "";
-                let posit = 0;
-                for (i = 2; i < loc.length; i++) {
-                    pid+=loc[i]
-                };
-                //STORED PRODUCT ID
-                console.log("ID", pid);
+                   
+                let product = this.product;
 
+                
+                product['id'] = this.newId;
+                product['ownerId'] = user['id'];
+                product['postStatus'] = false;
+                store.set('new-product-id',product['id']);
+                store.set('new-product',product);
+                location.replace("/add-product.html");
+
+                // this.dataManager.saveDataWithCache(product['id'],product).then(res=>{
+                //     location.replace("/add-product.html");
+                // })
+                    // let params = {
+                    //     "action": "addproduct",
+                    //     "categories": res.categories,
+                    //     "sellerMsg": res.sellerMsg,
+                    //     "productname": res.productname,
+                    //     "price": parseInt(res.price),
+                    //     "district": res.district,
+                    //     "deliveryMethod": res.deliveryMethod,
+                    //     "descrip": res.description,
+                    //     "tag": res.tags,
+                    //     "deliveryDesc": res.deliveryDesc,
+                    //     "isNew": Boolean(res.isNew),
+                    //     "ownerId": res.ownerId,
+                    //     "pics": res.pics
+                    // };
+
+
+                    // let link =
+                    //     "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
+
+                    // //SEND THE ABOVE MESSAGE TO POSTMAN
+                    // Polymer.postData(link, params).then(res => {
+                    //     console.log("CCC", params);
+                    //     console.log("BBB", res.resolve);
+                    //     if (res.code > 0) {
+                    //         var theid = res.resolve.id;
+                    //         var userid = res.resolve.ownerId;
+                    //         console.log("POST TO POSTMAN SUCCESS!");
+                    //         // alert("POST TO POSTMAN SUCCESS!");
+                    //         this.savejson(savej, theid, userid);
+
+                    //     } else {
+                    //         console.log("POST TO POSTMAN  FAILED!")
+                    //     }
+                    // });
+                
                 //CALL GETDATA FUNCTION AS IN POSTMAN
-                let that = this;
-                let shadow = this.shadowRoot;
-                let url = "/json/product-" + pid + ".json?id=" + new Date().getTime();
-                Polymer.getContent(url).then(res => {
-                    res = JSON.parse(res);
-                    console.log("copy json:", res)
-                    var savej = res;
-                    let user = store.get("change-user") || null;
-                    let temptime = user['_id'];
-                    let tempid = user['goodsNum'].toString() + Math.floor(Math.random() * 10);
-                    var thenewid = "" + temptime.toString() + tempid;
+                // let that = this;
+                // let shadow = this.shadowRoot;
+                // let url = "/json/product-" + pid + ".json?id=" + new Date().getTime();
+                // Polymer.getContent(url).then(res => {
+                //     res = JSON.parse(res);
+                //     console.log("copy json:", res)
+                //     var savej = res;
+                //     let user = store.get("change-user") || null;
+                //     let temptime = user['_id'];
+                //     let tempid = user['goodsNum'].toString() + Math.floor(Math.random() * 10);
+                //     var thenewid = "" + temptime.toString() + tempid;
 
 
-                    let params = {
-                        "action": "addproduct",
-                        "categories": res.categories,
-                        "sellerMsg": res.sellerMsg,
-                        "productname": res.productname,
-                        "price": parseInt(res.price),
-                        "district": res.district,
-                        "deliveryMethod": res.deliveryMethod,
-                        "descrip": res.description,
-                        "tag": res.tags,
-                        "deliveryDesc": res.deliveryDesc,
-                        "isNew": Boolean(res.isNew),
-                        "ownerId": res.ownerId,
-                        "pics": res.pics
-                    };
+                //     let params = {
+                //         "action": "addproduct",
+                //         "categories": res.categories,
+                //         "sellerMsg": res.sellerMsg,
+                //         "productname": res.productname,
+                //         "price": parseInt(res.price),
+                //         "district": res.district,
+                //         "deliveryMethod": res.deliveryMethod,
+                //         "descrip": res.description,
+                //         "tag": res.tags,
+                //         "deliveryDesc": res.deliveryDesc,
+                //         "isNew": Boolean(res.isNew),
+                //         "ownerId": res.ownerId,
+                //         "pics": res.pics
+                //     };
 
 
-                    let link =
-                        "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
+                //     let link =
+                //         "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
 
-                    //SEND THE ABOVE MESSAGE TO POSTMAN
-                    Polymer.postData(link, params).then(res => {
-                        console.log("CCC", params);
-                        console.log("BBB", res.resolve);
-                        if (res.code > 0) {
-                            var theid = res.resolve.id;
-                            var userid = res.resolve.ownerId;
-                            console.log("POST TO POSTMAN SUCCESS!");
-                            // alert("POST TO POSTMAN SUCCESS!");
-                            this.savejson(savej, theid, userid);
+                //     //SEND THE ABOVE MESSAGE TO POSTMAN
+                //     Polymer.postData(link, params).then(res => {
+                //         console.log("CCC", params);
+                //         console.log("BBB", res.resolve);
+                //         if (res.code > 0) {
+                //             var theid = res.resolve.id;
+                //             var userid = res.resolve.ownerId;
+                //             console.log("POST TO POSTMAN SUCCESS!");
+                //             // alert("POST TO POSTMAN SUCCESS!");
+                //             this.savejson(savej, theid, userid);
 
-                        } else {
-                            console.log("POST TO POSTMAN  FAILED!")
-                        }
-                    });
-                });
+                //         } else {
+                //             console.log("POST TO POSTMAN  FAILED!")
+                //         }
+                //     });
+                // });
 
 
             },

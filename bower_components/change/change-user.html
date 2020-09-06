@@ -3,7 +3,7 @@
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-tabs/vaadin-tabs.html">
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="./change-in-item.html">
-<link rel="import" href="./change-addprod-butt.html">
+<!-- <link rel="import" href="./change-addprod-butt.html"> -->
 <dom-module id="change-user">
     <template>
         <style include="icon-styles"></style>
@@ -100,7 +100,7 @@
 
             },
             created: function() {
-
+                this.dataManager = new DataPackage('_user');
             },
             ready: function() {
                 let loc = location.search;
@@ -117,10 +117,7 @@
 
                 id = document.head.querySelector('meta[name=user-id]').getAttribute('content') || null;
 
-                if (!user) {
-                    alert('請先登入');
-                    location.href="index.html";                    
-                } else if (id != user['id']) {
+                if (!user|| id != user['id']) {
                     this.style.display="none";
                 }
  
@@ -141,11 +138,9 @@
                     shadow.querySelector('#mp')._showMyGoods();
 
                     ///search fav product
-                    let userurl = "/json/user-" + id + ".json";
-                    Polymer.getContent(userurl).then(str => {
-                        let jsonlike = JSON.parse(str)
-                        shadow.querySelector('#fav').displayitem(jsonlike['likeProduct']);
-                    })
+                    this.dataManager.getDataByCache(id).then(res=>{
+                        shadow.querySelector('#fav').displayitem(res['likeProduct']);
+                    });
 
 
                     ////search my buyed product

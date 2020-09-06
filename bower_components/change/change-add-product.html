@@ -541,11 +541,11 @@
                     <div class="userinfo">
                         <div id="usericon">
                             <div id="a1">
-                                <img id="gand" src={{user.head}}>
+                                <img id="gand" src={{owner.head}}>
                                 <!-- ./img/user_profile.png -->
                             </div>
                             <div id="a2">
-                                <div class="name" id="owner">{{user.username}}</div>
+                                <div class="name" id="owner">{{owner.username}}</div>
                             </div>
                         </div>
                     </div>
@@ -564,7 +564,7 @@
                     <div class="loca" style="display: flex;">
                         <div id="location"></div>
                         <div style="margin-top: 11px; margin-left: 12px;">
-                            <vaadin-select id="vs2" placeholder="選擇地區" value={{user.area}}></vaadin-select>
+                            <vaadin-select id="vs2" placeholder="選擇地區" value={{owner.area}}></vaadin-select>
                         </div>
                     </div>
 
@@ -667,14 +667,32 @@
             },
             created: function() {
                 let user = store.get('change-user') || null;
+                if (!user){
+                    alert("請先登入");
+                    location.href = "/index.html";
+                } else
+                    this.fileManager = new AwsPackage(user);
+                    
                 this.user = user;
                 let shadow = this.shadowRoot;
                 this.bigPic = "http://change.dazzle.website.s3.amazonaws.com/files/1/1591944377549.jpeg";
                 this.pics = [];
                 this.pics[0] = this.bigPic;
                 this.dataManager = new DataPackage('product');
+                this.userManager = new DataPackage('_user');
                 // this.fileManager = new AwsPackage(user);
 
+                this.id = store.get('new-product-id') || null;
+                
+
+                this.product = store.get('new-product') || {"id": this.id};
+                if (!this.id)
+                    this.generateNewId();
+                if (this.product['productname'])
+                    this.reAlias();
+    
+                console.log('New ID',this.id,this.product);
+                
                 document.addEventListener('select-image', e => {
                     let Key = e.detail['Key'];
                     // this.pics.push(Key);
@@ -684,7 +702,31 @@
                     this.closeDialog();
                 });
 
+                
+
                 //CREATED ENDS HERE//
+            },
+            reAlias(){
+                let alias = this.product['productname'];
+                alias = alias.replace(/^\s+|\s+$/gm,'')
+                alias = alias.replace(/ /gm,'-');
+                alias = alias.replace(/\//gm,'-');
+
+                this.dataManager.matchData({"productname":this.product['productname']}).then(res=>{
+                    if (res.length>1)
+                        this.product['alias'] = alias+res.length;
+                    else
+                        this.product['alias'] = alias;                    
+                    
+                    console.log('Change Alias');
+                });
+            },
+            generateNewId(){
+                let no = new Date().getTime() % 10000;
+                let str; 
+                this.fileManager.listFile('product/').then(res=>{
+                    this.newId = String(no) + String(res.length +1);
+                });
             },
 
 
@@ -719,18 +761,21 @@
                 let that = this;
                 let shadow = this.shadowRoot;
                 let loc = location.search;
-                let pid = "";
+                let pid = this.id;
                 let posit = 0;
                 let uid = "";
-                for (i = 2; i < loc.length; i++) {
-                    pid += loc[i]
-                };
-                this.id = pid;
-                if (pid != "") {
+                
+                // for (i = 2; i < loc.length; i++) {
+                //     pid += loc[i]
+                // };
+                // pid = document.head.querySelector('meta[name=product-id]').getAttribute('content') || null;
+                
+
+                if (pid) {
                     //edit mode
-                    let url = "/json/product-" + pid + ".json?id=" + new Date().getTime();
-                    Polymer.getContent(url).then(res => {
-                        res = JSON.parse(res);
+
+                        // res = JSON.parse(res);
+                        res = this.product;
                         that.prod = res;
                         this.prodprice = res.price;
                         //SET PROPERTIES
@@ -763,20 +808,17 @@
                         for (i3 = 0; i3 < lenpic; i3++) {
                             shadow.querySelector('#div' + i3).style.backgroundImage = 'url(' + res["pics"][i3] + ')'
                         };
-
-                    })
+                        this.userManager.getDataByCache(this.product['ownerId']).then(res=>{
+                            this.owner = res;
+                        });
                     this.next = pid;
                 } else {
-                    that.prodprice = '10';
                     //add mode
+                    this.prodprice = '10';
+                    this.owner = this.user;
                 }
 
-
-                let url = "/json/user-" + user.id + ".json?id=" + new Date().getTime();
-                Polymer.getContent(url).then(res => {
-                    res = JSON.parse(res);
-                    that.user = res;
-                });
+                // this.userManager.getDataByCache()
 
                 that.vaadin_select();
 
@@ -802,6 +844,12 @@
                     }
                 });
 
+                shadow.querySelector('#pname').addEventListener('blur',e=>{
+                    let name = e.target.value;
+                    console.log('Name',name);
+                    that.product['productname'] = name;
+                    that.reAlias();
+                });
 
             },
 
@@ -886,11 +934,7 @@
                             if (tags.length == 0) {
                                 that.textchange("請輸入標籤!");
                             } else {
-                                let loc = location.search;
-                                if (loc == "") {
-                                    //******ADD PRODUCT MODE************//
-                                    let params = {
-                                        "action": "addproduct",
+                                let params = {
                                         "categories": categories,
                                         "sellerMsg": sellerContact,
                                         "productname": pname,
@@ -903,35 +947,59 @@
                                         "isNew": status,
                                         "ownerId": ownerId,
                                         "pics": this.pics,
-                                    };
-                                    // console.log("params:", params);
-                                    that.saveproduct(params);
-                                } else {
-                                    //*********EDIT PRODUCT MODE*************//
-                                    let json2ways = {
-                                        "id": this.id,
-                                        "categories": categories,
-                                        "sellerMsg": sellerContact,
-                                        "productname": pname,
-                                        "price": parseFloat(price),
-                                        "district": district,
-                                        "deliveryMethod": method,
-                                        "description": pdes,
-                                        "tags": tags,
-                                        "deliveryDesc": deldes,
-                                        "isFree": free,
-                                        "isNew": status,
-                                        "pics": this.pics,
-                                        "createTime": this.CREATETIME,
-                                        "like": this.LIKE,
-                                        "ownerId": this.OWNERID,
-                                        "postStatus": this.POSTSTATUS,
-                                        "replyArray": this.REPLYARRAY,
-                                        "orderlist": this.ORDERLIST
-                                    };
-                                    console.log("JSON2WAYS", json2ways);
-                                    that.editproduct(json2ways);
+                                };
+                                for (let k in params){
+                                    this.product[k] = params[k];
                                 }
+                                this._save();
+
+
+                                // let loc = location.search;
+                                // if (loc == "") {
+                                //     //******ADD PRODUCT MODE************//
+                                //     let params = {
+                                //         "action": "addproduct",
+                                //         "categories": categories,
+                                //         "sellerMsg": sellerContact,
+                                //         "productname": pname,
+                                //         "price": parseFloat(price),
+                                //         "district": district,
+                                //         "deliveryMethod": method,
+                                //         "descrip": pdes,
+                                //         "tag": tags,
+                                //         "deliveryDesc": deldes,
+                                //         "isNew": status,
+                                //         "ownerId": ownerId,
+                                //         "pics": this.pics,
+                                //     };
+                                //     // console.log("params:", params);
+                                //     that.saveproduct(params);
+                                // } else {
+                                //     //*********EDIT PRODUCT MODE*************//
+                                //     let json2ways = {
+                                //         "id": this.id,
+                                //         "categories": categories,
+                                //         "sellerMsg": sellerContact,
+                                //         "productname": pname,
+                                //         "price": parseFloat(price),
+                                //         "district": district,
+                                //         "deliveryMethod": method,
+                                //         "description": pdes,
+                                //         "tags": tags,
+                                //         "deliveryDesc": deldes,
+                                //         "isFree": free,
+                                //         "isNew": status,
+                                //         "pics": this.pics,
+                                //         "createTime": this.CREATETIME,
+                                //         "like": this.LIKE,
+                                //         "ownerId": this.OWNERID,
+                                //         "postStatus": this.POSTSTATUS,
+                                //         "replyArray": this.REPLYARRAY,
+                                //         "orderlist": this.ORDERLIST
+                                //     };
+                                //     console.log("JSON2WAYS", json2ways);
+                                //     that.editproduct(json2ways);
+                                // }
                             }
                         }
                     }
@@ -967,6 +1035,49 @@
                 // let dialog = shadow.querySelector('vaadin-dialog');
                 this.dialog.opened = false;
             },
+            saveProductPage(){
+                let that = this;
+                    let html = document.createElement('html');
+                    let head = document.createElement('head');
+                    let body = document.createElement('body');
+
+                    let meta = document.createElement('meta');
+                    meta.setAttribute('name','product-id');
+                    meta.setAttribute('content',this.id);
+                    Polymer.getContent('/product.html').then(content=>{
+                        parser = new DOMParser();
+                        let doc = parser.parseFromString(content, "text/html");
+                    
+                        head.innerHTML = doc.head.innerHTML;
+                        body.innerHTML = doc.body.innerHTML;
+                        // body.innerHTML = 
+                        console.log('HTML',head.innerHTML,body.innerHTML);
+
+                        head.appendChild(meta);
+                        html.appendChild(head);
+                        html.appendChild(body);
+                        console.log('Save Product',this.product);
+                        // this.dataManager.saveData(this.id,this.product);
+                        // this.fileManager.saveUserData('json/product-'+this.id+'.json',JSON.stringify(this.product));
+                        this.fileManager.saveHtml('product/'+this.product['alias'],html.outerHTML);
+                    });
+            },
+            _save(){
+                this.dataManager.saveDataWithCache(this.product['id'],this.product).then(res=>{
+                    this.addUserGoods(this.product['ownerId']);
+                    this.saveProductPage();
+                    console.log('成功儲存');
+                });
+            },
+            addUserGoods(uid){
+                let userManager = new DataPackage("_user");
+                let that = this;
+                this.userManager.getDataByCache(uid).then(res=>{
+                    res['goodsNum']++;
+                    that.userManager.saveDataWithCache(uid,res);
+                });
+            },
+
             saveproduct(param) {
                 let user = store.get('change-user') || null;
                 let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";

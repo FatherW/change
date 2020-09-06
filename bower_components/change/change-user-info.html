@@ -314,16 +314,16 @@
 
                         <!-- <vaadin-button id="vb" on-click="toggle">{{edit}}</vaadin-button> -->
                         <template is="dom-if" if="{{isOwn()}}">
-                            <a href="/add-product.html">
-                                <vaadin-button id="ap" style="margin-right: 10px;">新增貨品</vaadin-button>
-                            </a>
+                            <!-- <a href="/add-product.html"> -->
+                            <vaadin-button id="ap" style="margin-right: 10px;" on-click="_add">新增貨品</vaadin-button>
+                            <!-- </a> -->
                             <vaadin-button id="sb" on-click="save">儲存</vaadin-button>
                         </template>
                         
                     </div>
                 </div>
             </div>
-            <change-user></change-user>
+            <!-- <change-user></change-user> -->
         </div>
        
 
@@ -358,6 +358,17 @@
                 else
                     return false;                
             },
+
+            _add: function(){
+                let user = Polymer.subUser;
+
+                   
+                let product = {};
+                store.set('new-product-id',null);
+                store.set('new-product',product);
+                location.replace("/add-product.html");
+
+            },
             ready: function() {
                 let loc = location.search;
                 let user = store.get('change-user') || null;
@@ -375,18 +386,18 @@
                 // if (user.isAdmin)
                 //     shadow.querySelector('#right').style.display = 'block'; /*none*/
 
-                if (!id){
-                    alert('未能確認身份, 請聯絡管理員');
-                    location.href = "/index.html";
-                }
+                // if (!id){
+                //     alert('未能確認身份, 請聯絡管理員');
+                //     location.href = "/index.html";
+                // }
 
                 this.userManager.getDataByCache(id).then(res=>{
                     this.user = res;
                     this.renew();
                 },
                 err=>{
-                    alert("不能確認此頁身份，請聯絡管理員");
-                    location.href = '/index.html';
+                    // alert("不能確認此頁身份，請聯絡管理員");
+                    // location.href = '/index.html';
                 });
 
 
