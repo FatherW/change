@@ -18,53 +18,51 @@
         <script async="" defer="" crossorigin="anonymous" src="https://connect.facebook.net/zh_HK/sdk.js#xfbml=1&amp;version=v7.0&amp;appId=711018846416860&amp;autoLogAppEvents=1" nonce="NXzxnRL1"></script>
 
 
-        <script>
-            function onSignIn(googleUser) {
-                console.log("running google");
-                var profile = googleUser.getBasicProfile();
-                console.log("myprofile", profile);
-                let param = {
-                    "platform": "Google",
-                    "name": profile.getName(),
-                    "email": profile.getEmail()
-                };
-                store.set("change-platform", param);
-                document.querySelector('.googleloginname').click();
+        <script>function onSignIn(googleUser) {
+  console.log("running google");
+  var profile = googleUser.getBasicProfile();
+  console.log("myprofile", profile);
+  let param = {
+    "platform": "Google",
+    "name": profile.getName(),
+    "email": profile.getEmail()
+  };
+  store.set("change-platform", param);
+  document.querySelector('.googleloginname').click();
+}
 
-            };
+;
 
-            function signOut() {
-                var auth2 = gapi.auth2.getAuthInstance();
-                auth2.signOut().then(function() {
-                    console.log('User signed out.');
-                });
-            };
+function signOut() {
+  var auth2 = gapi.auth2.getAuthInstance();
+  auth2.signOut().then(function () {
+    console.log('User signed out.');
+  });
+}
 
-            window.fbAsyncInit = function() {
-                FB.init({
-                    appId: '711018846416860',
-                    cookie: true,
-                    xfbml: true,
-                    version: '7.0'
-                });
+;
 
-                FB.AppEvents.logPageView();
-
-            };
-            /*
-                (function (d, s, id) {
-                    var js, fjs = d.getElementsByTagName(s)[0];
-                    if (d.getElementById(id)) {
-                        return;
-                    }
-                    js = d.createElement(s);
-                    js.id = id;
-                    js.src = "https://connect.facebook.net/en_US/sdk.js";
-                    fjs.parentNode.insertBefore(js, fjs);
-                }(document, 'script', 'facebook-jssdk'));
-
-                */
-        </script>
+window.fbAsyncInit = function () {
+  FB.init({
+    appId: '711018846416860',
+    cookie: true,
+    xfbml: true,
+    version: '7.0'
+  });
+  FB.AppEvents.logPageView();
+};
+/*
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {
+            return;
+        }
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+     */</script>
         <style scope="change-footer">
             li {
                 display: block;
@@ -151,16 +149,12 @@
         <link rel="import" href="/bower_components/change/change-itemspecial.html">
         <link rel="import" href="/bower_components/change/change-slidelist.html">
         <link rel="import" href="/bower_components/change/change-in-item.html">
-<meta name="product-id" content="141"></head><body>
-    <dz-wrapper>
-
+<meta name="product-id" content="96"></head><body>
         <change-header></change-header>
         <change-new-product></change-new-product>
         <change-footer></change-footer>
         <button class="googleloginname" style="display:none;">google login</button>
         <div class="g-signin2" data-onsuccess="onSignIn" style="display:none;">imgoogle</div>
-    </dz-wrapper>
-    <dz-dazzle></dz-dazzle>
-
+<dz-dazzle></dz-dazzle>
 
 </body></html>

@@ -538,6 +538,8 @@
                             </div>
                         </div>
                     </div>
+                    <!-- <change-user-tag id$="{{owner._id}}"></change-user-tag> -->
+
                     <div class="userinfo">
                         <div id="usericon">
                             <div id="a1">
@@ -686,8 +688,14 @@
                 
 
                 this.product = store.get('new-product') || {"id": this.id};
-                if (!this.id)
+                if (!this.id){
                     this.generateNewId();
+                    this.product['ownerId'] = this.user['id'];
+                    this.userManager.getDataByCache(this.product['ownerId']).then(res=>{
+                        this.owner = res;
+                    });
+                }
+
                 if (this.product['productname'])
                     this.reAlias();
     
@@ -945,7 +953,7 @@
                                         "tag": tags,
                                         "deliveryDesc": deldes,
                                         "isNew": status,
-                                        "ownerId": ownerId,
+                                        // "ownerId": ownerId,
                                         "pics": this.pics,
                                 };
                                 for (let k in params){
@@ -1063,10 +1071,15 @@
                     });
             },
             _save(){
+                // console.log('Product',this.product);
+        
+
                 this.dataManager.saveDataWithCache(this.product['id'],this.product).then(res=>{
                     this.addUserGoods(this.product['ownerId']);
                     this.saveProductPage();
-                    console.log('成功儲存');
+                    console.log('Product',this.product);
+                    alert('成功儲存');
+                    location.href="/product/"+this.product['alias'];
                 });
             },
             addUserGoods(uid){

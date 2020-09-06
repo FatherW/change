@@ -348,8 +348,8 @@
             } */
         </style>
 
-        <div id="usericon" href$="{{userUrl}}">
-            <a id="redu" style="display: flex;">
+        <div id="usericon">
+            <a id="redu" style="display: flex;"  href$="{{userUrl}}">
                 <div id="a1">
                     <img id="_changeicon" src$={{user.head}}> 
                 </div>
@@ -373,33 +373,47 @@
 
             },
             created: function() {
+                console.log('User Tags');
                 this.timeStr = '剛剛';
                 this.pageManager = new DataPackage('pages');
+                this.userManager = new DataPackage('_user');
             },
 
 
 
             ready: function() {
-
+                this.id = this.getAttribute('id');
+                this.loadData();
             },
-            loadData(id, time) {
+            loadData(id,time) {
                 let that = this;
                 let s = this.ShadowRoot;
-                this.id = id;
-                let url = "/json/user-" + this.id + ".json";
-                this.timeStr = Polymer.parseTime(time);
-                Polymer.getContent(url).then(str => {
-                    that.user = JSON.parse(str);
-                    let user = JSON.parse(str);
-                    if (user['isFanpage'] == true) {
-                        this.name = user['pagename'];
-                        this.userUrl = "/" + user['website'];
-                    } else {
-                        this.name = user['username'];
-                        this.userUrl = "/user.html?" + user['id'];
+                this.userManager.getDataByCache(id).then(user=>{
+                    this.name = user['username'];
+                    this.user = user;
+                    if (user['alias'])  
+                        this.userUrl = "/user/"+user['alias'];
+                    else
+                        this.userUrl = "/user.html?"+user['id'];
 
-                    }
+                    this.timeStr = Polymer.parseTime(time);
+                    console.log('User Tags',user);
+                    this.$.render();
                 });
+                // let url = "/json/user-" + this.id + ".json";
+                // this.timeStr = Polymer.parseTime(time);
+                // Polymer.getContent(url).then(str => {
+                //     that.user = JSON.parse(str);
+                //     let user = JSON.parse(str);
+                //     if (user['isFanpage'] == true) {
+                //         this.name = user['pagename'];
+                //         this.userUrl = "/" + user['website'];
+                //     } else {
+                //         this.name = user['username'];
+                //         this.userUrl = "/user.html?" + user['id'];
+
+                //     }
+                // });
 
                 // console.log('User Tag',id);
             },

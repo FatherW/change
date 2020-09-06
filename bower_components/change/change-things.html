@@ -390,7 +390,7 @@
         <div id="deleteall">
             <div style="display: flex; width:100%; position:relative;">
                 <a style="width: 90%;" >
-                    <change-user-tag></change-user-tag>
+                    <change-user-tag id$="{{product.ownerId}}"></change-user-tag>
                 </a>
                 <div class="shouldhide" style="display:flex;visibility: hidden;align-self: center;">
                     <!-- <button class="jumpeditproduct2" on-click="_deleteproduct"></button> -->
@@ -497,15 +497,12 @@
                         head.innerHTML = doc.head.innerHTML;
                         body.innerHTML = doc.body.innerHTML;
                         // body.innerHTML = 
-                        console.log('HTML',head.innerHTML,body.innerHTML);
+                        // console.log('HTML',head.innerHTML,body.innerHTML);
 
                         head.appendChild(meta);
                         html.appendChild(head);
                         html.appendChild(body);
                         console.log('Save Product',this.product);
-                        store.set('product-'+this.id+'.json',this.product);
-                        this.dataManager.saveData(this.id,this.product);
-                        this.fileManager.saveUserData('json/product-'+this.id+'.json',JSON.stringify(this.product));
                         this.fileManager.saveHtml('product/'+this.product['alias'],html.outerHTML);
                     });
 
@@ -549,6 +546,7 @@
                 let path = "json/product-"+this.id+'.json';
 
                 this.dataManager.getDataByCache(this.id).then(res=>{
+                    console.log('Things',res['productname'],res['id']);
                     this.product = res;
                     // this.saveProductPage();
                     this.userdata(res);
@@ -591,7 +589,7 @@
                 
                 console.log('Alias',all['alias']);
                 if (! all['alias']) {
-                    this.saveProductPage();
+                    // this.saveProductPage();
                 }
                 else
                    this.detailUrl = '/product/'+all['alias'];

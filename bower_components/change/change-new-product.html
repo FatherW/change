@@ -474,8 +474,8 @@
         <span id="pn" class="store">{{product.productname}}</span>
     </div>
     </div>
-
-    <a id="userSite" href="#">
+    <change-user-tag id$="{{product.ownerId}}"></change-user-tag>
+    <!-- <a id="userSite" href$="{{userAlias}}">
         <div class="userinfo">
             <div id="usericon">
                 <div id="a1">
@@ -486,7 +486,7 @@
                 </div>
             </div>
         </div>
-    </a>
+    </a> -->
 
 
 
@@ -825,7 +825,7 @@
                 console.log("CURRENT PRODUCT OWNER", uid);
                 if (user == null) {
                     alert("請先登入!");
-                } else if (user['id'] == uid || user['_id'] == uid) {
+                } else if (user['id'] == uid) {
                     alert("不能留言自己貨物!");
                 } else {
                     console.log('contacting seller');
@@ -834,7 +834,8 @@
                     let popup = document.createElement('change-webcom');
                     popup.seller = this.owner;
                     popup.product = this.product;
-                    this.componentPopup(popup, '500px', '400px');
+                    popup.dialog = this.shadowRoot.querySelector('vaadin-dialog');
+                    Polymer.componentPopup(popup, '500px', '400px');
 
                     // Polymer.popup(dialog, "change", "change-webcom", "500px", "400px");
                     console.log("end process in contact seller");
@@ -894,40 +895,36 @@
             loadOrder(pid) {
                 let that = this;
                 return new Promise(function(resolve, reject) {
-                    Polymer.getContent('/json/order-' + pid + '.json?id=' + new Date().getTime()).then(res => {
-                        resolve(JSON.parse(res));
-                    }, err => {
-                        that.orderManager.loadData(pid).then(prod => {
-                            resolve(prod);
-                        });
+                    that.orderManager.getDataByCache(pid).then(res=>{
+                        resolve(res);
                     });
-                    // this.fileManager.getFile('json/product-' + pid + '.json').then(res => {
-                    //     let json = JSON.parse(res);
-                    // });
                 });
 
 
             },
             loadUser(userId) {
+                
                 let that = this;
-                let url = "/json/user-" + userId + ".json?id=" + new Date().getTime();
-                Polymer.getContent(url).then(res => {
-                    that.owner = JSON.parse(res)
+                let shadow = this.shadowRoot;
+                this.userManager.getDataByCache(userId).then(res=>{
+                    that.owner = res;
                     that.username = that.owner['username'];
-                    this.shadowRoot.querySelector('#userSite').setAttribute('href', '/user.html?' + userId);
-
-                })
+                    if (res['alias'])
+                        that.userAlias = '/user/'+res['alias'];
+                    else    
+                        that.userAlias = '/user.html?'+res['id'];
+                    shadow.querySelector('change-user-tag').loadData(res['id'],res['createTime']);
+                });
+            
 
             },
             loadPage(pageId) {
                 let that = this;
-                let url = "/json/user-" + userId + ".json?id=" + new Date().getTime();
-                Polymer.getContent(url).then(res => {
-                    that.owner = JSON.parse(res)
-                    that.username = that.owner['pagename']
-                    this.shadowRoot.querySelector('#userSite').setAttribute('href', that.owner['website']);
-
-                })
+                this.userManager.getDataByCache(pageId).then(res=>{
+                    that.owner = res;
+                    that.username = that.owner['pagename'];
+                   
+                });
             },
             // ownerSite(){
             //     let isFanpage = this.product['isFanpage'] || null;

@@ -41,11 +41,22 @@
                 display: inline-flex;
             }
         </style>
-
-        <div id="before" class="logining" part="login">
-            <button id="register" on-click="_register">/ 註冊</button>
-            <button id="login" on-click="_login">/ 登入</button>
-        </div>
+        <template is="dom-if" if="{{isLogin()}}">
+            <div id="before" class="logining" part="login">
+                <button id="register" on-click="_logout">/ 登出</button>
+                <button id="login">
+                    <a href$="{{profileUrl}}">
+                        <img src$="{{profilePic}}" />
+                    </a>
+                </button>
+            </div>            
+        </template>
+        <template is="dom-if" if="{{!isLogin()}}">
+            <div id="before" class="logining" part="login">
+                <button id="register" on-click="_register">/ 註冊</button>
+                <button id="login" on-click="_login">/ 登入</button>
+            </div>
+        </template>
         <vaadin-dialog id="register"></vaadin-dialog>
         <vaadin-dialog id="registerpop"></vaadin-dialog>
 
@@ -71,45 +82,84 @@ class changeUserPanel extends Polymer.Element {
                 
                 this.userManager = new DataPackage('_user');
                 let user = store.get('change-user') || null;
-                store.set('subUser',user);
-                if (user) 
-                    this.fileManager = new AwsPackage(user);
-                Polymer.parseTime = function(oldtime) {
-                    let _thetimenow = Date.now();
-                    let time = (_thetimenow - oldtime) / 1000;
-                    let sec = 60;
-                    let min = sec * 60;
-                    let hour = min * 24;
-                    let day = hour * 7;
-                    let week = hour * 30;
-                    let month = hour * 365;
-                    switch (true) {
-                        case (time < sec):
-                            return "剛剛";
-                            break;
-                        case (time < min):
-                            return Math.floor(time / sec) + "分鐘";
-                            break
-                        case (time < hour):
-                            return Math.floor(time / min) + "小時";
-                            break
-                        case (time < day):
-                            return Math.floor(time / hour) + "日";
-                            break
-                        case (time < week):
-                            return Math.floor(time / day) + "星期";
-                            break
-                        case (time < month):
-                            return Math.floor(time / week) + "月";
-                            break
-                        case (time > month):
-                            return Math.floor(time / month) + "年";
-                            break
-                    }
+                console.log('Change User',user);
+                if (user) {
+                    // this.userManager.getDataByCache(user['_id']).then(res=>{
+                    //     store.set('subUser',res); 
 
+                    this.user = user;
+                    this.fileManager = new AwsPackage(user);
+
+                    this.profilePic = this.user['head'] || 'https://devshift.biz/wp-content/uploads/2017/04/profile-icon-png-898.png';
+
+                    if (!this.user['alias'])
+                        this.reAlias();
+                    else                        
+                        this.profileUrl = '/user/'+user['alias'];
+
+                            // this.profileUrl = '/user.html?'+user['_id'];
+                    // });
                 }
 
 
+        
+
+
+    }
+    reAlias(){
+        let alias = this.user['username'];
+        console.log('Alias',alias,this.user);
+        alias = alias.replace(/^\s+|\s+$/gm,'')
+        alias = alias.replace(/ /gm,'-');
+        alias = alias.replace(/\//gm,'-');
+
+        this.userManager.matchData({"username":this.user['username']}).then(res=>{
+            if (res.length>1)
+                this.user['alias'] = alias+res.length;
+            else
+                this.user['alias'] = alias;   
+
+            this.profileUrl = '/user/'+this.user['alias'];
+            this.userManager.saveData(this.user['id'],this.user);       
+            this.saveUserPage();          
+            console.log('Change Alias');
+        });
+    }
+    saveUserPage(){
+        let that = this;
+
+        let html = document.createElement('html');
+        let head = document.createElement('head');
+        let body = document.createElement('body');
+
+        let meta = document.createElement('meta');
+        meta.setAttribute('name','user-id');
+        meta.setAttribute('content',this.user['id']);
+        Polymer.getContent('/user.html').then(content=>{
+            let parser = new DOMParser();
+            let doc = parser.parseFromString(content, "text/html");
+        
+            head.innerHTML = doc.head.innerHTML;
+            body.innerHTML = doc.body.innerHTML;
+            // body.innerHTML = 
+            console.log('HTML',head.innerHTML,body.innerHTML);
+
+            head.appendChild(meta);
+            html.appendChild(head);
+            html.appendChild(body);
+            this.fileManager.saveHtml('user/'+this.user['alias'],html.outerHTML);
+        });
+
+
+
+    }
+    _logout = function(){
+        // store.set('change-user', null);
+        store.clearAll();
+        FB.logout(function(response) {
+            console.log(response);
+        });
+        location.replace("/index.html");
     }
 
     _login= function() {
@@ -187,31 +237,59 @@ class changeUserPanel extends Polymer.Element {
                 });
             }
             
-            ready() {
-                super.ready();
+            isLogin(){
                 let user = store.get('change-user') || null;
-
-                if (user != null) {
-                    console.log("current user cookie", user);
+                if (user)
+                    return true;
+                else
+                    return false;
+            }
+            initUser(user){
+                console.log("current user cookie", user);
                     this.shadowRoot.querySelector('#register').innerHTML = ' / 登出';
                     if (user['head'] == "") {
-                        user['head'] = "./img/head.svg";
+                        user['head'] = "/img/head.svg";
                     }
                     let a = document.createElement('a');
                     let img = document.createElement('img');
                     let src = user['head'] || 'https://devshift.biz/wp-content/uploads/2017/04/profile-icon-png-898.png';
-                    a.setAttribute('href', '/user/'+user['alias']);
+                    if (user['alias'])
+                        a.setAttribute('href', '/user/'+user['alias']);
+                    else
+                        a.setAttribute('href', '/user.html?'+user['id']);
+                    
                     img.setAttribute('src', src);
                     a.appendChild(img);
                     let login = this.shadowRoot.querySelector('#login');
                     login.innerHTML = '';
                     login.appendChild(a);
-                    // this.shadowRoot.querySelector('#login').innerHTML = '<a href="/user.html?' + user['_id'] + '"><img src="' + user['head'] + '"></a>';
-
-                    // console.log("write access key and save JSON:", this.fileManager);
                     console.log("user JSON:", JSON.stringify(user));
-                    // this.fileManager.saveFile('json/user-' + user['id'] + '.json', JSON.stringify(user));
-                }
+            }
+            ready() {
+                super.ready();
+                let user = store.get('change-user') || null;
+
+                // if (user) {
+                //     console.log("current user cookie", user);
+                //     this.shadowRoot.querySelector('#register').innerHTML = ' / 登出';
+                //     if (user['head'] == "") {
+                //         user['head'] = "/img/head.svg";
+                //     }
+                //     let a = document.createElement('a');
+                //     let img = document.createElement('img');
+                //     let src = user['head'] || 'https://devshift.biz/wp-content/uploads/2017/04/profile-icon-png-898.png';
+                //     if (user['alias'])
+                //         a.setAttribute('href', '/user/'+user['alias']);
+                //     else
+                //         a.setAttribute('href', '/user.html?'+user['id']);
+                    
+                //     img.setAttribute('src', src);
+                //     a.appendChild(img);
+                //     let login = this.shadowRoot.querySelector('#login');
+                //     login.innerHTML = '';
+                //     login.appendChild(a);
+                //     console.log("user JSON:", JSON.stringify(user));
+                // }
 
 
                 let s = this.shadowRoot;

@@ -323,7 +323,7 @@
                     </div>
                 </div>
             </div>
-            <!-- <change-user></change-user> -->
+            <change-user></change-user>
         </div>
        
 
@@ -345,7 +345,14 @@
                 Polymer.uid = "change";
                 console.log('Change User',Polymer.uid);
                 let id = document.head.querySelector('meta[name=user-id]').getAttribute('content') || null;
-                this.id = id;
+                if (id)
+                    this.id = id;
+                else {
+                    console.log('No id');
+                    let arr = location.pathname.split("?");
+                    console.log('ID',arr[1]);
+                    this.id = arr[1];
+                }
                 this.userManager = new DataPackage('_user');
             },
             isOwn(){
@@ -353,6 +360,7 @@
                     return false;
                     
                 console.log('Is Own',this.id,Polymer.subUser['id']);
+                
                 if (this.id == Polymer.subUser['id'] || Polymer.subUser.isAdmin)
                     return true;
                 else
@@ -393,6 +401,8 @@
 
                 this.userManager.getDataByCache(id).then(res=>{
                     this.user = res;
+                    this.user['']
+                    console.log('User Info',this.user);
                     this.renew();
                 },
                 err=>{
@@ -505,19 +515,22 @@
 
 
             },
-            reAlias(){
+            reAlias(i){
                 let alias = this.user['username'];
                 alias = alias.replace(/^\s+|\s+$/gm,'')
                 alias = alias.replace(/ /gm,'-');
                 alias = alias.replace(/\//gm,'-');
-
-                this.userManager.matchData({"username":this.user['username']}).then(res=>{
-                    if (res.length>1)
-                        this.user['alias'] = alias+res.length;
-                    else
+                if (i>0)
+                    alias = alias+'-'+i;
+                this.userManager.matchData({"alias":alias}).then(res=>{
+                    if (!res.length)
                         this.user['alias'] = alias;                    
-                    store.set("change-user", user);
-                    console.log('Change Alias');
+                    else{
+                        i++;
+                        this.reAlias(i);
+                    }
+
+                    console.log('Change Alias',res,res.length);
                 });
             },
             _uploadFile: function(e) {
@@ -640,9 +653,11 @@
                     // this.user['banner'] = this.$.mp.style.backgroundImage;
                     // this.user['head'] = this.$.dp.getAttribute('src');
                     this.userManager.saveDataWithCache(this.id,this.user);
+                    store.set('change-user',this.user);
                     this.saveUserPage();
                     alert('成功儲存');
-                    this.$.render();
+                    location.reload();
+                    // this.$.render();
                     // location.reload();
 //                    console.log('This User',this.user);
             },
@@ -657,7 +672,7 @@
                     meta.setAttribute('name','user-id');
                     meta.setAttribute('content',this.user['id']);
                     Polymer.getContent('/user.html').then(content=>{
-                        parser = new DOMParser();
+                        let parser = new DOMParser();
                         let doc = parser.parseFromString(content, "text/html");
                     
                         head.innerHTML = doc.head.innerHTML;
