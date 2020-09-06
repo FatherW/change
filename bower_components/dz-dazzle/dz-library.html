@@ -929,6 +929,22 @@
                 });
             });
         }
+        saveDataWithCache(id,data){
+            let user = Polymer.user || Polymer.subUser || null;
+            let key = this.table + '-' +id;
+            let path = "json/"+this.table+"-"+id+'.json';
+            let fileManager;
+
+            // Save Cache JSON
+            if (user){
+                fileManager = new AwsPackage(user);
+                fileManager.saveUserData(path,JSON.stringify(data));
+            }
+            // save Cookie
+            store.set(key,data);
+            // save Database
+            this.saveData(id,data);
+        }
 
         getDataByCache(id){
             let key = this.table + '-' +id;
@@ -936,9 +952,7 @@
             console.log('Cache',cache,id);
             let path = "json/"+this.table+"-"+id+'.json';
             let that = this;
-            let user = Polymer.user || Polymer.subUser || null;
             let json;
-            let fileManager;
 
 
 
@@ -946,22 +960,15 @@
 
                 if (cache)
                         resolve(cache);
-                    else {
+                else {
                         Polymer.getUserDataContent(path).then(str=>{
                                 json = JSON.parse(str);
                                 store.set(key,json);
-                                console.log('Save Cache',store.get(key),key,id);
-
                                 resolve(json);
                             }, err => {
                                 that.loadData(id).then(res => {
                                     // console.log('Cannot read product', res);
-                                    if (user){
-                                        fileManager = new AwsPackage(user);
-                                        fileManager.saveUserData(path,JSON.stringify(res));
-                                    }
-
-                                    store.set(key,json);
+                                    that.saveDataWithCache(id,res);
                                     resolve(res);
                                 });
                             });

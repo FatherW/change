@@ -193,7 +193,7 @@
                     let src = e.detail['Key'];
                     this.curElm.setAttribute('src', src);
                 });
-                
+
                 document.addEventListener('select-image', e => {
                     let Key = e.detail['Key'];
                     let type = this.curElm.getAttribute('type') || 'banner';
@@ -226,26 +226,6 @@
                 });
             },
 
-            _uploadFile: function(e) {
-                let shadow = this.shadowRoot;
-                let that = this;
-                this.pics = [];
-                let dialog = shadow.querySelector('vaadin-dialog');
-                this.dialog = dialog;
-                this.curElm = e.path[0];
-                let user = store.get('change-user') || null;
-                id = document.head.querySelector('meta[name=user-id]').getAttribute('content') || null;
-                let userInfo = document.querySelector('change-user-info');
-                // let keyword = userInfo.shadowRoot.querySelector('#vb').innerHTML;
-                console.log('User',user['id'],id);
-                if (user['id'] == id) {
-                    Polymer.popup(dialog, 'change', 'change-gallery', '90%', '90%');
-                } else {
-                    console.log("Will not be able to open gallery!");
-                }
-
-                // console.log('saved', bucket)
-            },
 
             closeDialog() {
                 // let dialog = shadow.querySelector('vaadin-dialog');

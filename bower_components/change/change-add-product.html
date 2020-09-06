@@ -1,21 +1,11 @@
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/polymer/polymer.html">
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-text-field/vaadin-email-field.html">
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-text-field/vaadin-password-field.html">
+
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-checkbox/vaadin-checkbox.html">
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-text-field/vaadin-text-area.html">
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-text-field/vaadin-number-field.html">
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-select/vaadin-select.html">
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/paper-tags-input/paper-tags-input.html">
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-menu-bar/vaadin-menu-bar.html">
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-dialog/vaadin-dialog.html">
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/dz-file-management/dz-sub-img-stock.html">
-<link rel="import" href="change-dropzone-file.html">
-<link rel="import" href="change-gallery.html">
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/dz-file-management/change-photo-stock.html">
+<!-- <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/dz-file-management/dz-sub-img-stock.html"> -->
 <link rel="stylesheet" href="">
 <link href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/dz-menu/css/style.html" rel="import" />
-<link rel="import" href="change-subcat.html">
 
 
 <dom-module id="change-add-product">
@@ -683,7 +673,8 @@
                 this.pics = [];
                 this.pics[0] = this.bigPic;
                 this.dataManager = new DataPackage('product');
-                this.fileManager = new AwsPackage(user);
+                // this.fileManager = new AwsPackage(user);
+
                 document.addEventListener('select-image', e => {
                     let Key = e.detail['Key'];
                     // this.pics.push(Key);
@@ -961,6 +952,7 @@
                 this.dialog = dialog;
                 this.curElm = e.path[0];
                 Polymer.activeElement = elm;
+                Polymer.loadComponent('dz-file-management','dz-sub-img-stock');
                 let dzPopup = document.createElement('dz-sub-img-stock');
                 dzPopup.subUserId = this.user['id'];
                 dzPopup.subUser = this.user;
