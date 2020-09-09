@@ -1,0 +1,96 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-button/vaadin-button.html">
+<link rel="import" href="../vaadin-tabs/vaadin-tabs.html">
+<link rel="import" href="../iron-pages/iron-pages.html">
+
+
+<dom-module id="jitpo-tabs">
+
+
+    <template>
+        <style>
+            vaadin-tabs{
+                margin:0 auto;
+                max-width:900px;
+            }
+        </style>
+        <div style="width:auto; margin:0 auto;">
+            <vaadin-tabs selected="{{page}}">
+                <vaadin-tab>序言</vaadin-tab>
+                <vaadin-tab>甚麼是優勢模式</vaadin-tab>
+                <vaadin-tab>甚麼是優勢</vaadin-tab>
+                <vaadin-tab>甚麼是優勢評估</vaadin-tab>
+                <vaadin-tab>復元行動計劃</vaadin-tab>
+                <vaadin-tab>甚麼是個人良藥</vaadin-tab>
+                <vaadin-tab>甚麼是「天然資源」</vaadin-tab>
+            </vaadin-tabs>
+            
+        </div>
+          <iron-pages selected="[[page]]">
+            <page>
+                <slot name="序言"></slot>
+
+            </page>
+            <page>
+                <slot name="甚麼是優勢模式"></slot>
+            </page>
+            <page>
+                <slot name="甚麼是優勢"></slot>
+            </page>
+            <page> 
+                <slot name="甚麼是優勢評估"></slot>
+
+            </page>
+            <page> 
+                <slot name="復元行動計劃"></slot>
+
+            </page>
+            
+            <page> 
+                <slot name="甚麼是個人良藥"></slot>
+
+            </page>
+
+            <page> 
+                <slot name="甚麼是「天然資源」"></slot>
+
+            </page>
+
+          </iron-pages>
+    </template>
+
+
+</dom-module>
+
+<script>
+
+(function() {
+
+
+
+	Polymer({
+		is: 'jitpo-tabs',
+		properties: {
+		
+		},
+
+		created:function() {
+            Polymer.getContent('template/'+Polymer.tid+'/JITPO-TABS/html').then(html=>{
+              this.innerHTML = html;
+            });
+
+            document.addEventListener('save',e=>{
+                console.log('Jitpo Tab',this.innerHTML);
+                Polymer.fileManager.saveFile('template/'+Polymer.tid+'/JITPO-TABS/html',this.innerHTML);
+            });
+
+        },
+		ready:function() {
+		},
+		renew(){
+
+		}
+    });
+})();
+
+</script>

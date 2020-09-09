@@ -44,6 +44,7 @@ class dzWrapper extends Polymer.Element {
             'html':[],
             'meta':[]
         }
+        console.log('Dz Wrapper');
     }
 
     getPath(nature,type){
@@ -139,6 +140,8 @@ class dzWrapper extends Polymer.Element {
     }
 
     adminPageLoader(){
+        console.log('Dz Dazzle Admin');
+
         let basePath = "template/" + Polymer.tid + "/" + Polymer.thisPage ;
         Polymer.getContent(Polymer.thisPage).then(html=>{
             // let elm = document.createRange().createContextualFragment(html);

@@ -1,0 +1,184 @@
+<link rel="import" href="../polymer/polymer.html">
+
+
+<!--
+A material design [Floating Action Button with Speed Dial](https://www.google.com/design/spec/components/buttons-floating-action-button.html#buttons-floating-action-button-transitions)
+
+### Styling
+
+Style                                                   | Description
+------------------------------------------------        | ------------
+--paper-fab-speed-dial-background                       | The background color of the Floating Action Button
+--paper-fab-speed-dial-keyboard-focus-background        | The background color of the Floating Action Button when focused
+--paper-fab-speed-dial-background-close                 | The background color of the Floating Action Button when opened
+--paper-fab-speed-dial-keyboard-focus-background-close  | The background color of the Floating Action Button when opened and focused
+--paper-fab-speed-dial-position                         | The type of positioning method used for the Floating Action Button (default: absolute)
+--paper-fab-speed-dial-right                            | Margin to the right of the screen (default: 16px)
+--paper-fab-speed-dial-bottom                           | Margin to the bottom of the screen (default: 16px)
+
+### Example
+
+```html
+<paper-fab-speed-dial>
+<paper-fab-speed-dial-action icon="icons:content-copy">Copy</paper-fab-speed-dial-action>
+<paper-fab-speed-dial-action icon="icons:print">Print</paper-fab-speed-dial-action>
+</paper-fab-speed-dial>
+```
+
+@demo demo/index.html
+-->
+<dom-module id="dz-login">
+
+	<template>
+
+		<style>
+			:host {
+				width:640px;
+				height:800px;
+			}
+			#dz-logo[_ngcontent-xxm-c0]{position:fixed;right:0;bottom:0;width:100px;height:30px;background-image:url(http://dazzle.website/image/lgo.png);background-size:100% auto;background-repeat:no-repeat;cursor:pointer;z-index:99999}eco-fab-speed-dial-trigger[_ngcontent-xxm-c0] > button[_ngcontent-xxm-c0]{background-color:#2196f3}smart-grid[_ngcontent-xxm-c0]{width:100%;height:auto}#dz-logo[_ngcontent-xxm-c0]:hover{opacity:.8}.dz-outline[_ngcontent-xxm-c0]{outline:#2196f3 solid 1px}mat-dialog-container[_ngcontent-xxm-c0]{padding:0!important}mat-dialog-title[_ngcontent-xxm-c0]{margin:0}eco-fab-speed-dial-trigger[_ngcontent-xxm-c0]   button[_ngcontent-xxm-c0]{background-color:#3f51b5!important}.example-icon[_ngcontent-xxm-c0]{padding:0 14px}.example-spacer[_ngcontent-xxm-c0]{-webkit-box-flex:1;flex:1 1 auto}.dw[_ngcontent-xxm-c0]{-webkit-animation:2s fade;animation:2s fade;box-sizing:border-box;-webkit-column-gap:0;-moz-column-gap:0;column-gap:0;position:relative}.dw[_ngcontent-xxm-c0]   *[_ngcontent-xxm-c0]{box-sizing:border-box}.dw__fcs-crtn[_ngcontent-xxm-c0]{background-color:#000;bottom:0;display:none;left:0;opacity:.75;position:fixed;right:0;top:0;z-index:2}@media (min-width:768px){.dw[_ngcontent-xxm-c0]{-webkit-column-count:4;-moz-column-count:4;column-count:4}.dw-pnl[_ngcontent-xxm-c0]{-webkit-column-break-inside:avoid;-moz-column-break-inside:avoid;break-inside:avoid}}@media (min-width:992px){.dw[_ngcontent-xxm-c0]{-webkit-column-count:6;-moz-column-count:6;column-count:6}}@media (min-width:1500px){.dw[_ngcontent-xxm-c0]{-webkit-column-count:8;-moz-column-count:8;column-count:8}}.dw-pnl[_ngcontent-xxm-c0]{margin:0;padding:5px}.dw-pnl--fcs[_ngcontent-xxm-c0]{position:relative}.dw-pnl--fcs[_ngcontent-xxm-c0]:hover{z-index:3}.dw-pnl--fcs[_ngcontent-xxm-c0]:hover ~ .dw__fcs-crtn[_ngcontent-xxm-c0]{display:block}.dw-pnl--pls[_ngcontent-xxm-c0]{-webkit-transform-style:preserve-3d;transform-style:preserve-3d;-webkit-perspective:1000;perspective:1000;transition:-webkit-transform .25s ease 0s;-webkit-transition:-webkit-transform .25s;transition:transform .25s ease 0s;transition:transform .25s ease 0s,-webkit-transform .25s ease 0s}.dw-pnl--pls[_ngcontent-xxm-c0]:hover{-webkit-transform:scale(1.02);transform:scale(1.02)}.dw-pnl__cntnt[_ngcontent-xxm-c0]{border-radius:10px;overflow:hidden;padding:20px;width:100%}.dw-flp[_ngcontent-xxm-c0]{-webkit-perspective:1000;perspective:1000}.dw-flp[_ngcontent-xxm-c0]:hover   .dw-flp__cntnt[_ngcontent-xxm-c0]{-webkit-transform:rotateY(180deg);transform:rotateY(180deg)}.dw-flp--sm[_ngcontent-xxm-c0]{height:200px}.dw-flp--md[_ngcontent-xxm-c0]{height:300px}.dw-flp--lg[_ngcontent-xxm-c0]{height:400px}.dw-flp__pnl[_ngcontent-xxm-c0]{-webkit-backface-visibility:hidden;backface-visibility:hidden;border-radius:10px;height:100%;left:0;overflow:visible;padding:20px;position:absolute;top:0;width:100%}.dw-flp__pnl--frnt[_ngcontent-xxm-c0]{-webkit-transform:rotateY(0);transform:rotateY(0);z-index:2}.dw-flp__pnl--bck[_ngcontent-xxm-c0]{-webkit-transform:rotateY(180deg);transform:rotateY(180deg)}.dw-flp__cntnt[_ngcontent-xxm-c0]{height:100%;overflow:visible;position:relative;-webkit-transform-style:preserve-3d;transform-style:preserve-3d;-webkit-transition:.25s;transition:.25s}.dw-clstr[_ngcontent-xxm-c0]{display:-webkit-box;display:flex;padding:0}@media (max-width:430px){.dw-clstr--vrt[_ngcontent-xxm-c0]{-webkit-box-orient:vertical;-webkit-box-direction:normal;flex-direction:column}}.dw-clstr--hrz[_ngcontent-xxm-c0]{-webkit-box-orient:vertical;-webkit-box-direction:normal;flex-direction:column}.dw-clstr__sgmnt[_ngcontent-xxm-c0]{display:-webkit-box;display:flex;-webkit-box-flex:1;flex:1 1 auto}.dw-clstr__sgmnt--rw[_ngcontent-xxm-c0]{display:-webkit-box;display:flex}@media (max-width:430px){.dw-clstr__sgmnt--rw[_ngcontent-xxm-c0]{-webkit-box-orient:vertical;-webkit-box-direction:normal;flex-direction:column}}.dw-clstr__sgmnt--clmn[_ngcontent-xxm-c0]{-webkit-box-orient:vertical;-webkit-box-direction:normal;flex-direction:column}@media (min-width:430px){.dw-clstr__sgmnt--hlf[_ngcontent-xxm-c0]{flex-basis:50%}.dw-clstr__sgmnt--qrt[_ngcontent-xxm-c0]{flex-basis:25%}}*[_ngcontent-xxm-c0]{box-sizing:border-box}.tx--left[_ngcontent-xxm-c0]{text-align:left}.tx--right[_ngcontent-xxm-c0]{text-align:right}.tx--center[_ngcontent-xxm-c0]{text-align:center}body[_ngcontent-xxm-c0]{font-family:"Open Sans",sans-serif}h3[_ngcontent-xxm-c0]{margin-top:0}.bd--black[_ngcontent-xxm-c0]{border:4px solid #000}.bg--black[_ngcontent-xxm-c0]{background-color:#000}.tx--black[_ngcontent-xxm-c0]{color:#000}.bd--red[_ngcontent-xxm-c0]{border:4px solid #e74c3c}.bg--red[_ngcontent-xxm-c0]{background-color:#e74c3c}.tx--red[_ngcontent-xxm-c0]{color:#e74c3c}.bd--blue[_ngcontent-xxm-c0]{border:4px solid #1e8bc3}.bg--blue[_ngcontent-xxm-c0]{background-color:#1e8bc3}.tx--blue[_ngcontent-xxm-c0]{color:#1e8bc3}.bd--green[_ngcontent-xxm-c0]{border:4px solid #26a65b}.bg--green[_ngcontent-xxm-c0]{background-color:#26a65b}.tx--green[_ngcontent-xxm-c0]{color:#26a65b}.bd--grey[_ngcontent-xxm-c0]{border:4px solid #6c7a89}.bg--grey[_ngcontent-xxm-c0]{background-color:#6c7a89}.tx--grey[_ngcontent-xxm-c0]{color:#6c7a89}.bd--purple[_ngcontent-xxm-c0]{border:4px solid #8e44ad}.bg--purple[_ngcontent-xxm-c0]{background-color:#8e44ad}.tx--purple[_ngcontent-xxm-c0]{color:#8e44ad}.bd--white[_ngcontent-xxm-c0]{border:4px solid #ecf0f1}.bg--white[_ngcontent-xxm-c0]{background-color:#ecf0f1}.tx--white[_ngcontent-xxm-c0]{color:#ecf0f1}img[_ngcontent-xxm-c0]{max-height:300px}img.dw-flp__pnl[_ngcontent-xxm-c0], img.dw-pnl__cntnt[_ngcontent-xxm-c0]{padding:0}img.dw-flp__pnl[_ngcontent-xxm-c0]{max-height:100%}@-webkit-keyframes fade{from{opacity:0}to{opacity:1}}@keyframes fade{from{opacity:0}to{opacity:1}}
+			.mat-dialog-container{display:block;padding:24px;border-radius:4px;box-sizing:border-box;overflow:auto;outline:0;width:100%;height:100%;min-height:inherit;max-height:inherit}@media (-ms-high-contrast:active){.mat-dialog-container{outline:solid 1px}}.mat-dialog-content{display:block;margin:0 -24px;padding:0 24px;max-height:65vh;overflow:auto;-webkit-overflow-scrolling:touch}.mat-dialog-title{margin:0 0 20px;display:block}.mat-dialog-actions{padding:8px 0;display:flex;flex-wrap:wrap;min-height:52px;align-items:center;margin-bottom:-24px}.mat-dialog-actions[align=end]{justify-content:flex-end}.mat-dialog-actions[align=center]{justify-content:center}.mat-dialog-actions .mat-button-base+.mat-button-base{margin-left:8px}[dir=rtl] .mat-dialog-actions .mat-button-base+.mat-button-base{margin-left:0;margin-right:8px}
+			.mat-icon{background-repeat:no-repeat;display:inline-block;fill:currentColor;height:24px;width:24px;position:absolute;right:10px;top:27%}[hidden]{display:none}button.select-template{position:absolute;right:0;top:0;margin:8px 12px}.loading{width:50px;height:50px;margin:10px auto}.loading img{width:100%}.mat-form-field-wrapper{position:relative;border-bottom:1px solid #fff;padding-bottom:5px}.mat-form-field{display:inline-block;position:relative;text-align:left;width:100%}.login-wrap .closeButton{position:absolute;right:10px;top:10px;z-index:20;color:#fff}.mat-fab.mat-warn,.mat-flat-button.mat-warn,.mat-mini-fab.mat-warn,.mat-raised-button.mat-warn{background-color:#f44336}.loginDialog{width:425px}:focus{outline:0}*,:after,:before{box-sizing:border-box}.clearfix:after,.clearfix:before{content:"";display:table}.clearfix:after{clear:both;display:block}a{color:inherit;text-decoration:none}.login-wrap{width:100%;margin:auto;min-width:100%;max-width:100%;min-height:680px;position:relative;background:url(https://dazzle-template.s3.amazonaws.com/cdn6.0/images/dazzleLoginBg.jpg) center no-repeat;box-shadow:0 12px 15px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.19)}.login-html{width:100%;height:100%;position:absolute;padding:40px 30px 25px;background:rgba(40,57,101,.9)}.login-html .sign-in-htm,.login-html .sign-up-htm{top:0;left:0;right:0;bottom:0;position:absolute;-webkit-transform:rotateY(180deg);transform:rotateY(180deg);-webkit-backface-visibility:hidden;backface-visibility:hidden;-webkit-transition:.4s linear;transition:all .4s linear}.login-form .group .check,.login-html .sign-in,.login-html .sign-up{display:none}.login-form .group .button,.login-form .group .label,.login-html .tab{text-transform:uppercase}.login-html .tab{font-size:22px;padding-bottom:5px;margin:0 15px 10px 0;display:inline-block;border-bottom:2px solid transparent}.login-html .sign-in:checked+.tab,.login-html .sign-up:checked+.tab{color:#fff;border-color:#1161ee}.login-form{min-height:345px;position:relative;-webkit-perspective:1000px;perspective:1000px;-webkit-transform-style:preserve-3d;transform-style:preserve-3d;font-size:20px;color:#fff}.login-form .group{margin-bottom:15px;position:relative}.login-form .group .button,.login-form .group .input,.login-form .group .label{width:100%;color:#fff;display:block}.login-form .group .button,.login-form .group .input{border:none;padding:15px 20px;border-radius:25px;background:rgba(255,255,255,.1)}.login-form .group input[data-type=password]{text-security:circle;-webkit-text-security:circle}.login-form .group .label{color:#fff;font-size:20px}.login-form .group .button{background:#1161ee}.login-form .group .button:hover:enabled{background:#496dff}.login-form .group .button:disabled{background:rgba(198,203,200,.64)}.login-form .group label .icon{width:15px;height:15px;border-radius:2px;position:relative;display:inline-block;background:rgba(255,255,255,.1)}.login-form .group label .icon:after,.login-form .group label .icon:before{content:"";width:10px;height:2px;background:#fff;position:absolute;-webkit-transition:.2s ease-in-out;transition:all .2s ease-in-out 0s}.login-form .group label .icon:before{left:3px;width:5px;bottom:6px;-webkit-transform:scale(0) rotate(0);transform:scale(0) rotate(0)}.login-form .group label .icon:after{top:6px;right:0;-webkit-transform:scale(0) rotate(0);transform:scale(0) rotate(0)}.login-form .group .check:checked+label{color:#fff}.login-form .group .check:checked+label .icon{background:#1161ee}.login-form .group .check:checked+label .icon:before{-webkit-transform:scale(1) rotate(45deg);transform:scale(1) rotate(45deg)}.login-form .group .check:checked+label .icon:after{-webkit-transform:scale(1) rotate(-45deg);transform:scale(1) rotate(-45deg)}.login-html .sign-in:checked+.tab+.sign-up+.tab+.login-form .sign-in-htm,.login-html .sign-up:checked+.tab+.login-form .sign-up-htm{-webkit-transform:rotate(0);transform:rotate(0)}.hr{height:2px;margin:60px 0 50px;background:rgba(255,255,255,.2)}.foot-lnk{text-align:center}
+		
+			.login-wrap {
+				width: 480px;
+				margin: auto;
+				min-width: 100%;
+				max-width: 100%;
+				min-height: 680px;
+				position: relative;
+				background: url(https://dazzle-template.s3.amazonaws.com/cdn6.0/images/dazzleLoginBg.jpg) center no-repeat;
+				box-shadow: 0 12px 15px 0 rgba(0,0,0,.24), 0 17px 50px 0 rgba(0,0,0,.19);
+			}
+			.login-html {
+				width: 100%;
+				height: 100%;
+				position: absolute;
+				padding: 40px 30px 25px;
+				background: rgba(40,57,101,.9);
+			}
+		</style>
+		<div class="login-wrap"><div class="login-html">
+			<input checked="" class="sign-in" id="login" name="tab" type="radio">
+			<label class="tab" for="login">登入</label>
+			<input class="sign-up" id="register" name="tab" type="radio"><label class="tab" for="register">註冊</label><div class="login-form"><div class="sign-in-htm">
+			<div class="ng-pristine ng-untouched ng-invalid" novalidate="">
+				<div><div class="group"><input aria-invalid="false" class="input ng-pristine ng-untouched ng-empty ng-invalid" id="uid" formcontrolname="uid" placeholder="用戶ID" type="text"></div></div><!----><div><div class="group">
+				<input id="password" aria-invalid="false" class="input ng-pristine ng-untouched ng-empty ng-invalid" formcontrolname="password" placeholder="密碼" type="password"></div></div><!----><p>
+			<button color="warn" mat-raised-button="" on-click="_login" class="mat-raised-button mat-button-base mat-warn" style="
+			border: none;
+			padding: 5px 10px;
+			color: white;
+			font-size: 14px;
+		"><span class="mat-button-wrapper">登入</span><div class="mat-button-ripple mat-ripple" matripple=""></div><div class="mat-button-focus-overlay"></div></button>
+			
+		</p></div></div></div></div></div>
+		<!-- <iron-ajax id="ajax"
+			auto url = "https://37nolo3390.execute-api.ap-northeast-1.amazonaws.com/prod"
+			params = '{"uid":"dnamatch", "password":"phy3math4", "type": "loginByUidPasswrd"}'
+			handle-as = "json"
+			on-response = "handleResponse"
+		>
+		</iron-ajax> -->
+
+	</template>
+</dom-module>
+
+<script>
+
+(function() {
+
+
+
+	Polymer({
+		is: 'dz-login',
+		properties: {
+			
+		},
+
+		created:function() {
+			this.loadScript("https://d25k6mzsu7mq5l.cloudfront.net/cdn7.2/js/data.common.js");
+			this.thisPage = decodeURIComponent(window.location.pathname).substring(window.location.pathname.indexOf('/') + 1) || 'index.html';
+		},
+		_login:function(){
+			console.log('Login');
+			let shadow = this.shadowRoot;
+			let that = this;
+			let uid = shadow.querySelector('#uid').value;
+			let password = shadow.querySelector('#password').value;
+			let fileManager = new DataPackage('token');
+			let loginUrl = "https://37nolo3390.execute-api.ap-northeast-1.amazonaws.com/prod";
+			let params = {
+				"uid": uid,
+				"password": password,
+				"type": "loginByUidPassword"
+			};
+			this.postData(loginUrl,params).then(res=>{
+				if (res.code>0){
+					let uid = res.resolve['uid'];
+					let user = res.resolve;
+					user['thisPage'] = this.thisPage;
+					store.set('user',res.resolve);
+					store.set('editMode','admin');
+					store.set('thisPage',this.thisPage);
+					let token = that.generatePassword();
+					// fileManager.saveToken(uid,token,user).then(data=>{
+					// 	console.log('Token',data);
+						location.reload();
+						// location.href = "/dz-admin/index.html#"+token;
+					// });
+
+				} else {
+					alert('登入錯誤');
+				}
+
+
+			});
+		},
+		handleResponse:function(response){
+				console.log('Response',response);
+		},
+		generatePassword:function() {
+			var length = 16,
+				charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+				retVal = "";
+			for (var i = 0, n = charset.length; i < length; ++i) {
+				retVal += charset.charAt(Math.floor(Math.random() * n));
+			}
+			return retVal;
+		},
+		loadScript:function(url){
+			const fileref=document.createElement('script');    
+			fileref.setAttribute("type","text/javascript");
+			fileref.setAttribute("src", url+"?id="+new Date().getTime());
+			document.getElementsByTagName("head")[0].appendChild(fileref);
+		},
+		postData:function(url, data) {
+			// Default options are marked with *
+			console.log('Post Data');
+			return new Promise(function (resolve, reject) {
+				fetch(url, {
+					body: JSON.stringify(data), // must match 'Content-Type' header
+					cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+					credentials: 'same-origin', // include, same-origin, *omit
+					headers: {
+					'user-agent': 'Mozilla/4.0 MDN Example',
+					'content-type': 'application/json'
+					},
+					method: 'POST', // *GET, POST, PUT, DELETE, etc.
+					mode: 'cors', // no-cors, cors, *same-origin
+					redirect: 'follow', // manual, *follow, error
+					referrer: 'no-referrer', // *client, no-referrer
+				})
+				.then(response => {
+					resolve(response.json());
+				}) // parses response to JSON
+			});
+			
+		}
+	});
+
+})();
+
+
+</script>

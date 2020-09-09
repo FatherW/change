@@ -532,7 +532,7 @@
                         <div style="width: 100%;">
                             <!--input box-->
                             <div class="inputbox">
-                                <input type="text" id="pname" value={{prod.productname}} name="firstname"
+                                <input type="text" id="pname" value$="{{product.productname}}" name="firstname"
                                     placeholder="輸入商品標題...">
                                 <!-- maxlength="14" -->
                             </div>
@@ -619,6 +619,7 @@
 
             </div>
         </div>
+        <change-orderlist-storage></change-orderlist-storage>
 
     </template>
 
@@ -667,6 +668,37 @@
                 }
 
             },
+            checkAlias(){
+                if (!this.product['alias']) {
+                    console.log('Check Alias',this.product);
+                    this.changeAlias(this.product['productname']);
+                } else {
+                    console.log('Check Alias',this.product);
+                    return;
+                }
+            },
+            _changeAlias(){
+                this.changeAlias(this.product['productname']);
+            },
+            changeAlias(name){
+                let that = this;
+                console.log('Alias',name);
+                this.fileManager.listFile('product/'+name).then(res=>{
+                    console.log('Alias',res.length,name);
+                    if (res.length === 0) {
+                        that.product['alias'] = name;
+                        that.product['productname'] = name;
+                        console.log('Change Alias',that.product);
+
+                        // this.saveProductPage();
+                    } else{
+                        let name2 = prompt('貨品名稱已被使用，請再填一個吧',name);
+                        if (!name2)
+                            return;
+                        that.changeAlias(name2);
+                    }
+                });          
+            },
             created: function() {
                 let user = store.get('change-user') || null;
                 if (!user){
@@ -683,57 +715,73 @@
                 this.dataManager = new DataPackage('product');
                 this.userManager = new DataPackage('_user');
                 // this.fileManager = new AwsPackage(user);
-
-                this.id = store.get('new-product-id') || null;
+      
                 
+                let id = store.get('new-product-id') || 0;
+                let model =  {
+                    "id":id,
+                    "categories": "",
+                    "sellerMsg": "",
+                    "productname": "",
+                    "price": 10,
+                    "district": "",
+                    "deliveryMethod": "面交",
+                    "descrip": "",
+                    "tag": [],
+                    "deliveryDesc": "",
+                    "isNew": true,
+                    "ownerId": this.user['id'],
+                    "pics": ["http://change.dazzle.website.s3.amazonaws.com/files/1/1591944377549.jpeg"],
+                    'alias': ''
+            };
 
-                this.product = store.get('new-product') || {"id": this.id};
-                if (!this.id){
+                this.product = store.get('new-product') || model;
+                console.log('Before New ID',this.id,this.product);
+                if (!id){
+                    console.log('New Product');
                     this.generateNewId();
-                    this.product['ownerId'] = this.user['id'];
+                    this.mode ='add';
                     this.userManager.getDataByCache(this.product['ownerId']).then(res=>{
                         this.owner = res;
                     });
+                } else {
+                    this.mode = 'edit';
+                    // this.reAlias(0);
                 }
 
-                if (this.product['productname'])
-                    this.reAlias();
-    
-                console.log('New ID',this.id,this.product);
-                
-                document.addEventListener('select-image', e => {
-                    let Key = e.detail['Key'];
-                    // this.pics.push(Key);
-                    this.curElm.style.backgroundImage = 'url(' + Key + ')';
-                    // console.log('Select Image', e, this.pics);
-                    this.getAllPics();
-                    this.closeDialog();
-                });
 
+    
+                console.log('New ID',this.id, this.product);
                 
+                this.fileManager.listFile('product/').then(res=>{
+                    this.noProduct = res.length+1;
+                });
 
                 //CREATED ENDS HERE//
             },
-            reAlias(){
+            reAlias(i){
                 let alias = this.product['productname'];
                 alias = alias.replace(/^\s+|\s+$/gm,'')
                 alias = alias.replace(/ /gm,'-');
                 alias = alias.replace(/\//gm,'-');
-
-                this.dataManager.matchData({"productname":this.product['productname']}).then(res=>{
-                    if (res.length>1)
-                        this.product['alias'] = alias+res.length;
-                    else
+                if (i>0)
+                    alias = alias+'-'+i;
+                this.dataManager.matchData({"alias":alias}).then(res=>{
+                    if (!res.length)
                         this.product['alias'] = alias;                    
-                    
-                    console.log('Change Alias');
+                    else{
+                        i++;
+                        this.reAlias(i);
+                    }
+                    console.log('Change Alias',res,res.length);
                 });
             },
             generateNewId(){
                 let no = new Date().getTime() % 10000;
                 let str; 
+                let that = this;
                 this.fileManager.listFile('product/').then(res=>{
-                    this.newId = String(no) + String(res.length +1);
+                    this.product['id'] = String(no) + String(res.length +1);
                 });
             },
 
@@ -772,12 +820,13 @@
                 let pid = this.id;
                 let posit = 0;
                 let uid = "";
+                let res = this.product;
                 
                 // for (i = 2; i < loc.length; i++) {
                 //     pid += loc[i]
                 // };
                 // pid = document.head.querySelector('meta[name=product-id]').getAttribute('content') || null;
-                
+                console.log('PID',pid);
 
                 if (pid) {
                     //edit mode
@@ -785,15 +834,15 @@
                         // res = JSON.parse(res);
                         res = this.product;
                         that.prod = res;
-                        this.prodprice = res.price;
+                        this.prodprice = res.price || 10;
                         //SET PROPERTIES
-                        this.CATE = res['categories'];
-                        this.LIKE = res['like'];
-                        this.CREATETIME = res['createTime'];
-                        this.OWNERID = res['ownerId'];
-                        this.POSTSTATUS = res['postStatus'];
-                        this.REPLYARRAY = res['replyArray'];
-                        this.ORDERLIST = res['orderlist'];
+                        this.CATE = res['categories'] || "";
+                        this.LIKE = res['like'] || 0;
+                        this.CREATETIME = res['createTime'] || new Date().getTime();
+                        this.OWNERID = res['ownerId'] || this.user['id'];
+                        this.POSTSTATUS = res['postStatus'] || true;
+                        this.REPLYARRAY = res['replyArray'] || [];
+                        this.ORDERLIST = res['orderlist'] || [];
 
                         if (res['isNew'] == true) {
                             shadow.querySelector('#vs4').value = "全新";
@@ -852,12 +901,13 @@
                     }
                 });
 
-                shadow.querySelector('#pname').addEventListener('blur',e=>{
-                    let name = e.target.value;
-                    console.log('Name',name);
-                    that.product['productname'] = name;
-                    that.reAlias();
-                });
+                // shadow.querySelector('#pname').addEventListener('blur',e=>{
+                //     let name = e.target.value;
+                //     console.log('Name',name);
+                //     this.product['productname'] = name;
+                //     this.product['alias'] = name;
+                //     this.changeAlias(name);
+                // });
 
             },
 
@@ -874,26 +924,29 @@
             },
 
             _saveData: function() {
-
+                console.log('Product',this.product);
 
                 let that = this;
                 let shadow = this.shadowRoot;
+
+
+
+            
                 shadow.querySelector('#save').innerHTML = '上存中...';
-                let user = store.get('change-user') || null;
-                if (user != null || user['status'] == false) {
+
                     //*************GET INPUT PRODUCT VALUE*****************//
                     //Get value from select box categories
                     var categories = shadow.querySelector('span').textContent;
                     //Get value from select box fanpage
 
 
-                    var fanpage = shadow.querySelector('#fanPage').value;
-                    if (fanpage == "#$%!@&^(ntw" || fanpage == "") {
-                        var ownerId = user['id'];
-                    } else {
-                        var ownerId = fanpage;
-                    }
-                    console.log(ownerId, "ggggggg");
+                    // var fanpage = shadow.querySelector('#fanPage').value;
+                    // if (fanpage == "#$%!@&^(ntw" || fanpage == "") {
+                    //     var ownerId = user['id'];
+                    // } else {
+                    //     var ownerId = fanpage;
+                    // }
+                    // console.log(ownerId, "ggggggg");
 
                     //Get value from isFree button
                     let free = shadow.querySelector('#free').checked;
@@ -932,90 +985,46 @@
                     //Get value from deliveryDescription input box
                     let deldes = shadow.querySelector('#trans').value;
                     //*********GET INPUT PRODUCT VALUE ENDS HERE**************//
+                  
+
                     if (categories == " ") {
-                        //now when categories is nth, it becomes "_", need to check this later!!
                         that.textchange("請選擇分類!");
-                    } else {
-                        if (pname == "") {
-                            that.textchange("請輸入商品標題!");
-                        } else {
-                            if (tags.length == 0) {
-                                that.textchange("請輸入標籤!");
-                            } else {
-                                let params = {
-                                        "categories": categories,
-                                        "sellerMsg": sellerContact,
-                                        "productname": pname,
-                                        "price": parseFloat(price),
-                                        "district": district,
-                                        "deliveryMethod": method,
-                                        "descrip": pdes,
-                                        "tag": tags,
-                                        "deliveryDesc": deldes,
-                                        "isNew": status,
-                                        // "ownerId": ownerId,
-                                        "pics": this.pics,
-                                };
-                                for (let k in params){
-                                    this.product[k] = params[k];
-                                }
-                                this._save();
-
-
-                                // let loc = location.search;
-                                // if (loc == "") {
-                                //     //******ADD PRODUCT MODE************//
-                                //     let params = {
-                                //         "action": "addproduct",
-                                //         "categories": categories,
-                                //         "sellerMsg": sellerContact,
-                                //         "productname": pname,
-                                //         "price": parseFloat(price),
-                                //         "district": district,
-                                //         "deliveryMethod": method,
-                                //         "descrip": pdes,
-                                //         "tag": tags,
-                                //         "deliveryDesc": deldes,
-                                //         "isNew": status,
-                                //         "ownerId": ownerId,
-                                //         "pics": this.pics,
-                                //     };
-                                //     // console.log("params:", params);
-                                //     that.saveproduct(params);
-                                // } else {
-                                //     //*********EDIT PRODUCT MODE*************//
-                                //     let json2ways = {
-                                //         "id": this.id,
-                                //         "categories": categories,
-                                //         "sellerMsg": sellerContact,
-                                //         "productname": pname,
-                                //         "price": parseFloat(price),
-                                //         "district": district,
-                                //         "deliveryMethod": method,
-                                //         "description": pdes,
-                                //         "tags": tags,
-                                //         "deliveryDesc": deldes,
-                                //         "isFree": free,
-                                //         "isNew": status,
-                                //         "pics": this.pics,
-                                //         "createTime": this.CREATETIME,
-                                //         "like": this.LIKE,
-                                //         "ownerId": this.OWNERID,
-                                //         "postStatus": this.POSTSTATUS,
-                                //         "replyArray": this.REPLYARRAY,
-                                //         "orderlist": this.ORDERLIST
-                                //     };
-                                //     console.log("JSON2WAYS", json2ways);
-                                //     that.editproduct(json2ways);
-                                // }
-                            }
-                        }
+                        return;
+                    }   
+                    if (pname == "") {
+                        that.textchange("請輸入商品標題!");
+                        return;
                     }
+                    if (tags.length == 0) {
+                        that.textchange("請輸入標籤!");
+                        return;
+                    }
+                    
 
-                } else {
-                    that.textchange("請先登入");
-                }
+                    let params = {
+                            "categories": categories,
+                            "sellerMsg": sellerContact,
+                            "productname": pname,
+                            "price": parseFloat(price),
+                            "district": district,
+                            "deliveryMethod": method,
+                            "descrip": pdes,
+                            "tag": tags,
+                            "deliveryDesc": deldes,
+                            "isNew": status,
+                            // "ownerId": ownerId,
+                            "pics": this.pics,
+                            "createTime": new Date().getTime(),
+                            "isFree": free,
+                            "postStatus":true
+                    };
+                    for (let k in params){
+                        this.product[k] = params[k];
+                    }
+                    this._save();
 
+
+            
 
             },
 
@@ -1071,15 +1080,21 @@
                     });
             },
             _save(){
-                // console.log('Product',this.product);
-        
-
+                // this.checkAlias();
+                console.log('Product',this.product);
+                let alias = this.product['productname'];
+                alias = alias.replace(/^\s+|\s+$/gm,'')
+                alias = alias.replace(/ /gm,'-');
+                alias = alias.replace(/\//gm,'-');
+                alias = alias+'-'+ this.noProduct;
+                this.product['alias'] = alias;
                 this.dataManager.saveDataWithCache(this.product['id'],this.product).then(res=>{
-                    this.addUserGoods(this.product['ownerId']);
+                    if (this.mode=="add")
+                        this.addUserGoods(this.product['ownerId']);
                     this.saveProductPage();
                     console.log('Product',this.product);
                     alert('成功儲存');
-                    location.href="/product/"+this.product['alias'];
+                    // location.href="/getchange.html";
                 });
             },
             addUserGoods(uid){

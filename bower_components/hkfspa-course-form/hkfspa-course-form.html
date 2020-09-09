@@ -1,0 +1,319 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<script src="https://d25k6mzsu7mq5l.cloudfront.net/cdn7.2/js/dazzle.common.js"></script>
+<dom-module id="hkfspa-course-form">
+  <!-- <link rel="import" type="css" href="https://www.w3schools.com/w3css/4/w3.css"> -->
+  
+  <template strip-whitespace>  
+  <style>
+    @import "icon.css";
+
+
+
+    #myTopnav {
+        position: absolute;
+        padding-right: 50px;
+        top: 88px;
+        width: 600px;
+        right: 0px;
+    }
+    ul.subsubmenu {
+    position: absolute;
+    list-style: none;
+    left: -105px;
+    width: auto;
+    background: #66cccc;
+    top: 10px;
+    text-align: center;
+    padding: 10px 15px;
+    border-radius: 10px;
+    display: none;
+    opacity: 0.7;
+}
+
+
+
+
+ul.subsubmenu li a {
+    color:#333;
+}
+ul.subsubmenu li a:hover {
+    /* background-color: white;
+    color:#66cccc; */
+    color:white;
+}
+
+
+
+.icon {
+    font-size: 20px;
+    padding: 5px;
+    position: absolute;
+    right: 45px;
+    top: -6px;
+}
+
+
+
+
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.topnav .icon {
+  display: none;
+}
+ @media only screen and (min-width: 640px) {
+     
+      .icon {
+        position:relative;
+      }
+       /* .submenu{
+            display: block;
+            position: relative !important;
+            right: 0px;
+            width: 120px !important;
+            text-align: center;
+        } */
+      .submenu .desktop{
+        display:none !important;
+      }
+} 
+
+@media only screen and (max-width: 640px) {
+      .desktop {
+        display:none !important;
+      }
+      .icon {
+        position:absolute;
+        right:0px;
+      }
+      .submenu {
+        top:20px;
+        right:0px !important;
+      }
+      .submenu .desktop{
+        display:list-item !important;
+      }
+}
+
+        ul.submenu {
+            list-style: none;
+            line-height: 30px;
+            position: absolute;
+            right: 0px;
+            background-color: rgba(255,255,255,0.7);
+            z-index: 3;
+            text-align: center;
+            border: 2px solid #66cccc;
+            padding: 10px 0px;
+            border-radius: 15px;
+            font-size: 16px;
+            width:auto;
+        }
+
+        a {
+          text-decoration:none;
+          font-family:"Playfair Display";
+        }
+
+        a:hover{
+          color:white;
+        }
+      
+
+        .submenu a:hover {
+            color: white;
+        }
+
+        
+        .Header-nav-inner a.Header-nav-item{
+          color:rgba(82,82,82,.7);
+          border-radius:15px;
+          margin:0 .618em;
+          display: inline-block;
+          vertical-align: middle;
+          transition: color 170ms ease-in-out, background-color 170ms ease-in-out;
+          font-weight: 400;
+          font-style: normal;
+          font-size: 16px;
+          letter-spacing: .2em;
+          text-transform: uppercase;
+          white-space: nowrap;
+          line-height: 1em;
+          padding: 10px 15px;
+           font-family:"Playfair Display";
+        }
+        .Header-nav-inner a.Header-nav-item:hover{
+            background-color:#66cccc;
+            padding: 10px 15px;
+            color:white;
+        }
+        .icon {
+            font-size: 20px;
+            padding: 5px;
+            position: absolute;
+            right: 0px;
+            top: 0px;
+            border-radius: 6px;
+            padding-left: 9px;
+        }
+        .submenu .icon {
+          display:none;
+        }
+        .icon:hover{
+           color:#66cccc;
+        }
+ 
+ 
+#myTopnav {
+    position: absolute;
+    padding-right: 50px;
+    top: 88px;
+    width: auto;
+    right: 30px;
+}
+.icon {
+    font-size: 20px;
+    padding: 5px;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+}
+
+#faq:hover .subsubmenu {
+    display: block;
+}
+
+
+    </style>
+    <div class="Header-nav-inner" id="myTopnav">
+         <a href="about.html" class="Header-nav-item desktop" >關於我們</a>
+         <a href="professional.html" class="Header-nav-item desktop">專業服務</a>
+         <a href="index.html#news" class="Header-nav-item desktop">最新消息</a>
+          <a href="register.html" class="Header-nav-item"  style="
+              padding: 10px 15px;
+              background: #ff3399;
+              border-radius: 15px;
+              color: white;
+          ">立即登記</a>
+        <div class="icon abc" on-click="click">
+          <i class="fa fa-bars"></i>
+           <ul class="submenu" status="close" style="display: none;">
+                <li class="desktop"><a href="about.html"  class="Header-nav-item">關於我們</a></li>
+                <li  class="desktop"><a href="professional.html"  class="Header-nav-item">專業服務</a></li>
+                <li  class="desktop"><a href="index.html#news"  class="Header-nav-item">最新消息</a></li>
+                <li id="faq"><a  class="Header-nav-item" >常見問題</a>
+                  <ul class="subsubmenu">
+                        <li><a href="配對原理">配對原理</a></li>
+                        <li><a href="配對流程">配對流程</a></li>
+                        <li><a href="配對對象">配對對象</a></li>
+                        <li><a href="其他問題">其他問題</a></li>
+                  </ul>
+                </li>
+                <li><a href="專家分享"  class="Header-nav-item">專家分享</a></li>
+                <li><a href="媒體報導"  class="Header-nav-item">媒體報導</a></li>
+                <li><a href="聯絡我們"  class="Header-nav-item">聯絡我們</a></li>
+               
+          </ul>
+        </div>
+       
+      </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'dz-menu',
+      properties: {
+      
+      },
+      ready:function() {
+        // super.ready();
+
+        let editMode = store.get('editMode') || 'normal';
+        let user = store.get('user') || null;
+        let fileManager;  
+        const shadow = this.shadowRoot;
+          let style = document.createElement('style');
+          getContent('https://d25k6mzsu7mq5l.cloudfront.net/bower_components/dz-menu/icon.css').then(html=>{
+                style.innerHTML = html;
+                shadow.appendChild(style);
+          });
+
+          getContent('https://d25k6mzsu7mq5l.cloudfront.net/bower_components/dz-menu/body_js').then(js=>{
+            let elm = document.createRange().createContextualFragment(js);
+            shadow.appendChild(elm);
+          });
+
+        shadow.querySelectorAll('*').forEach(e=>{
+              // console.log(e,window.getComputedStyle(e));
+        });
+      
+        if (editMode==="admin"){
+          // fileManager = new AwsPackage(user);
+          // fileManager.getFile('template/'+window['tid']+'/DZ-MENU/_header/html').then(html=>{
+          //         shadow.innerHTML = html;
+          // });
+          
+          
+          // console.log('Polymer User',this.template());
+          // document.addEventListener('save',e=>{
+          //   const shadow = this.shadowRoot;
+          //   console.log('Content',shadow.innerHTML);
+          //   // fileManager.saveUserData('DZ-MENU/_header/html',shadow.innerHTML);
+          //   fileManager.saveFile('template/'+window['tid']+'/DZ-MENU/_header/html',shadow.innerHTML);
+            
+          // });
+        }
+
+
+      },
+      
+      click: function(e) {
+          console.log('Click',e);
+          const target = this.shadowRoot.querySelector('.submenu');
+          // console.log(this,shadow.querySelector('.submenu'));
+          if (target.getAttribute('status') ==="close") {
+              target.style.display="block";
+              target.setAttribute('status','open');
+          } else {
+              target.style.display="none";
+              target.setAttribute('status','close');
+          }
+
+       
+      },
+
+    });
+  </script>
+</dom-module>

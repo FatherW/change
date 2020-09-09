@@ -1,0 +1,79 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<script>
+
+	class liPackage {
+		constructor(elm){
+			// super();
+			elm.label = '列表示素';
+			elm.menu = [{
+				'text':'編輯',
+				'event':'edit',
+				'source':elm
+			},{
+				'text':'複製至上',
+				'event':'pasteAfter',
+				'source':elm
+			},{
+				'text':'複製至下',
+				'event':'pasteBefore',
+				'source':elm
+			}];
+
+
+			// elm.menu.forEach(item=>{
+			// 	item.source = elm;
+			// });
+			elm.pasteAfter = function(){
+				Polymer.dzElementFire(elm,'copy',{});
+				Polymer.dzElementFire(elm,'paste-after',{});
+
+			}
+			elm.pasteBefore = function(){
+				Polymer.dzElementFire(elm,'copy',{});
+				Polymer.dzElementFire(elm,'paste-before',{});
+			}
+			elm.selected = function(url){
+				elm.changeBg(url);
+			}
+
+			elm.changeBg = function(url){
+				elm.style.backgroundImage = 'url('+url+')';
+			}
+
+			elm.edit = function(){
+				elm.editor();
+			}
+
+			
+			elm.dataUpdate = function(){
+				let field;
+				if (!elm.hasAttribute('dz-data'))
+					return;
+				else
+					field = elm.getAttribute('dz-data');			
+				if (!elm.dataModel)
+					return;
+				elm.addPropertyChange('innerHTML',elm.dataModel[field]);
+			}
+
+
+			// elm.edit = function(){
+			// 	let json = {
+			// 		folder: 'dz-file-management',
+			// 		component: 'dz-img-stock',
+			// 		width: '90%',
+			// 		height: '90%',
+			// 		source: elm
+			// 	};
+			// 	Polymer.dzFire('dz-popup',{detail: json});
+			
+			// }
+			// this.eventListener(elm);
+		}
+	}
+
+
+  
+
+</script>

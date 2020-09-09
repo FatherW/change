@@ -1,0 +1,99 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="..//dz-content-box.html">
+<script>
+
+	class linkPackage {
+		constructor(elm){
+			
+			let rel=elm.getAttribute('rel');
+			let href= elm.getAttribute('href') || null;
+			elm.isMaster = elm.hasAttribute('dz-master');
+			elm.type="link";
+			
+			switch(rel){
+				case 'stylesheet':
+				if (href)
+					elm.label ="樣式("+href+")";
+				else
+					elm.label ="樣式-"+elm.dzid;
+					elm.dropBox('css');
+				break;
+
+				case 'import':
+					elm.label ="組件-"+elm.dzid;
+					elm.dropBox('component');
+				break;
+
+				case 'dns-prefetch':
+				case 'alternate':
+				case 'shortlink':	
+					elm.label ="標籤-"+elm.dzid;
+					elm.dropBox('meta');
+				break;
+
+				default:
+					elm.label ="樣式-"+elm.dzid;
+					elm.dropBox('css');
+				break;
+			
+			}
+			// elm.dataUpdate();
+		}
+
+		dropBox = function(type){
+			if (elm.isMaster)
+				Polymer.mSheets[type].push(elm);
+			else
+				Polymer.bSheets[type].push(elm);
+		}
+
+		isAbsoluteHref = function(){
+			let href = elm.getAttribute('href') || null;
+			if (!href)
+				return 'invalid';
+			if (href.indexOf("//")>-1)
+				return 'absolute';
+			else
+				return 'relative';
+		}
+		edit = function(){
+			if (elm.isAbsoluteHref!='relative') {
+				let download = confirm('這檔案為遠端檔案，要下載來編輯麼？');
+				let copyright = confirm('注意！這檔案或受版權保障，請確保已獲授權。要繼續下載麼?');
+				if (download && copyright){
+					let href = elm.getAttribute('href');
+					let a = new URL(href);
+					Polymer.fileManager.getExternalContent(href).then(html=>{
+							console.log('Path Name',a.pathname);
+					});
+				}
+			} else {
+				
+				let href = elm.getAttribute('href');
+				let dialog = document.querySelector('dz-settings').shadowRoot.querySelector('vaadin-dialog');
+				Polymer.getContent(href).then(html=>{
+					let dzPopup = document.createElement('dz-content-box');
+					dzPopup.value = html;
+					dzPopup.dialog = dialog;
+					dzPopup.cancel = function(){
+						dialog.opened = false;
+					}
+
+					dzPopup.save = function(){
+						let textarea= this.shadowRoot.querySelector('vaadin-text-area') || null;
+						let html;
+						html = textarea.value;
+						Polymer.fileManager.saveFile(href,html);
+						dialog.opened = false;
+					}
+					Polymer.componentPopup(dzPopup,'90%','90%');
+				});
+			}
+		}
+
+	}
+
+
+  
+
+</script>

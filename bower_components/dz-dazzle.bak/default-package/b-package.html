@@ -1,0 +1,50 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<script>
+
+	class bPackage {
+		constructor(elm){
+			// super();
+			console.log('Custom a',elm);
+			elm.label = '粗體';
+			elm.menu = [];
+
+
+			elm.menu.forEach(item=>{
+				item.source = elm;
+			});
+			
+			elm.selected = function(url){
+				elm.changeBg(url);
+			}
+
+			elm.changeBg = function(url){
+				elm.style.backgroundImage = 'url('+url+')';
+			}
+
+			elm.edit = function(){
+				let html = elm.outerHTML;
+				let dzEditor = document.createElement('dz-editor');
+				dzEditor.innerHTML = html;
+				elm.outerHTML = dzEditor.outerHTML;
+			}
+
+			// elm.edit = function(){
+			// 	let json = {
+			// 		folder: 'dz-file-management',
+			// 		component: 'dz-img-stock',
+			// 		width: '90%',
+			// 		height: '90%',
+			// 		source: elm
+			// 	};
+			// 	Polymer.dzFire('dz-popup',{detail: json});
+			
+			// }
+			// this.eventListener(elm);
+		}
+	}
+
+
+  
+
+</script>

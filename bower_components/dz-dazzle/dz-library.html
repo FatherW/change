@@ -1357,6 +1357,10 @@
     Polymer.editing = false;
     Polymer.editor = false;
     
+   
+
+   
+
     Polymer.getUserDataContent = function(path) {
         let url =
             "https://d25k6mzsu7mq5l.cloudfront.net/user-data/" +
@@ -2589,6 +2593,80 @@
                     console.log("error la");
                 }
             })
+        });
+
+    };
+
+    Polymer.loadPage = function(){
+     
+        console.log('Dz Dazzle Admin');
+        Polymer.loadComponent('dz-dazzle','default-package/default-package');
+        let basePath = "template/" + Polymer.tid + "/" + Polymer.thisPage ;
+        
+        Polymer.getContent(Polymer.thisPage).then(html=>{
+        
+
+            let parser = new DOMParser();
+            let elm = parser.parseFromString(html, "text/html");
+            console.log('Elm',elm);
+
+            let body = elm.querySelector('body');
+            let head = elm.querySelector('head');
+            head.querySelectorAll('[dz-head]').forEach(item=>{item.remove();});
+            let bodyJs ='';
+            this.pageHead = head.innerHTML;
+            // this.pageHtmlClass = elm.querySelector('html').getAttribute('class') || '';
+            // document.querySelector('html').setAttribute('class',this.pageHtmlClass);
+        
+            this.pageHtmlClass = elm.querySelector('html').getAttribute('class') || '';
+            this.pageBodyClass = body.getAttribute('class') || '';
+
+            body.querySelectorAll('style').forEach(item=>{
+                bodyJs += item.outerHTML;
+                item.remove();
+            });
+
+            body.querySelectorAll('script').forEach(item=>{
+                bodyJs += item.outerHTML;
+                item.remove();
+            });
+
+            this.shadowHtml = body.innerHTML;
+
+            
+        
+
+
+            document.addEventListener('save',e=>{
+                this.save();
+            });
+
+            this.pageBodyJs =  bodyJs;
+            document.body.innerHTML = body.innerHTML;
+
+            this.querySelectorAll('*').forEach(item=>{
+                        new defaultPackage(item);
+            });
+            Polymer.shadowDOM = this.cloneNode(true);
+            console.log('History',Polymer.shadowDOM,this);
+
+
+
+            window.setTimeout(function(){
+                // let dzBody=document.createElement('dz-wrapper-js');
+                elm = document.createRange().createContextualFragment(bodyJs);
+                // dzBody.appendChild(elm);
+                // dzHead.appendChild(elm);
+                document.body.appendChild(elm);
+                // body.appendChild(dzBody);           
+
+            },3000);
+            
+
+            // let dzAdmin = document.createElement('dz-admin');
+            // document.body.appendChild(dzAdmin);
+            
+            Polymer.dzElementFire(window,'load',{});
         });
 
     };

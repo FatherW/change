@@ -93,7 +93,7 @@ class changeUserPanel extends Polymer.Element {
                     this.profilePic = this.user['head'] || 'https://devshift.biz/wp-content/uploads/2017/04/profile-icon-png-898.png';
 
                     if (!this.user['alias'])
-                        this.reAlias();
+                        this.reAlias(0);
                     else                        
                         this.profileUrl = '/user/'+user['alias'];
 
@@ -106,25 +106,24 @@ class changeUserPanel extends Polymer.Element {
 
 
     }
-    reAlias(){
+    reAlias(i){
         let alias = this.user['username'];
-        console.log('Alias',alias,this.user);
         alias = alias.replace(/^\s+|\s+$/gm,'')
         alias = alias.replace(/ /gm,'-');
         alias = alias.replace(/\//gm,'-');
-
-        this.userManager.matchData({"username":this.user['username']}).then(res=>{
-            if (res.length>1)
-                this.user['alias'] = alias+res.length;
-            else
-                this.user['alias'] = alias;   
-
-            this.profileUrl = '/user/'+this.user['alias'];
-            this.userManager.saveData(this.user['id'],this.user);       
-            this.saveUserPage();          
-            console.log('Change Alias');
+        if (i>0)
+            alias = alias+'-'+i;
+        this.userManager.matchData({"alias":alias}).then(res=>{
+            if (!res.length)
+                this.user['alias'] = alias;                    
+            else{
+                i++;
+                this.reAlias(i);
+            }
+            console.log('Change Alias',res,res.length);
         });
     }
+
     saveUserPage(){
         let that = this;
 

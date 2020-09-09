@@ -1,0 +1,791 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-button/vaadin-button.html">
+<link rel="import" href="../vaadin-menu-bar/vaadin-menu-bar.html">
+<link rel="import" href="../vaadin-tabs/vaadin-tabs.html">
+<link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
+<link rel="import" href="../vaadin-context-menu/vaadin-context-menu.html">
+
+<link rel="import" href="../vaadin-accordion/vaadin-accordion.html">
+<link rel="import" href="../iron-pages/iron-pages.html">
+<link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
+<!-- <link rel="import" href="../ace-widget/ace-widget.html"> -->
+<link rel="import" href="../dz-dazzle/dz-code-editor.html">
+<link rel="import" href="dz-recovery.html">
+
+<!-- <link rel="import" href="dz-status.html">
+<script src="https://d25k6mzsu7mq5l.cloudfront.net/ace9/src-nonconflict/ace.js"></script> -->
+
+
+<!-- <link rel="import" href="../paper-tabs/paper-tabs.html">
+<link rel="import" href="../paper-tabs/paper-tab.html"> -->
+
+
+<!-- <script type="module">
+	import '@polymer/iron-lazy-pages/iron-lazy-pages.js';
+	import '@polymer/paper-tabs/paper-tabs.js';
+	import '@polymer/paper-tabs/paper-tab.js';
+  </script> -->
+
+
+<!-- <link rel="import" href="../valle-speed-dial/valle-speed-dial.html">
+<link rel="import" href="../paper-fab-speed-dial/paper-fab-speed-dial-action.html">
+<link rel="import" href="../iron-icons/iron-icons.html"> -->
+
+<dom-module id="dz-settings">
+
+    <template>
+		<style include="main-styles"></style>
+		<style include="labs-styles"></style>
+        <style include="masonry-styles"></style>
+        
+		<style>
+
+            vaadin-context-menu{
+                width:20%;
+                float:left;
+            }
+            vaadin-context-menu.link, vaadin-context-menu.url{
+                width:100%;
+                float:left;
+            }
+
+
+            :host {
+                --_lumo-button-background-color: white;
+                
+            }
+            vaadin-button{
+                margin:10px;
+            }
+                 #editor { 
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                }
+
+            page{
+                position:relative;
+            }
+
+            iron-pages {
+                height: auto;
+            }
+			paper-tags-input {
+				width: 80%;
+			}
+
+			.selected {
+				outline: 10px solid #293575;
+			}
+
+			#inputTags {
+				padding: 20px;
+			}
+            vaadin-text-area{
+                width:100%;
+                height:640px;
+            }
+
+		
+		</style>
+
+		<h1 class="mat-dialog-title" mat-dialog-title="" id="mat-dialog-title-1">
+			<mat-toolbar class="mat-toolbar mat-primary mat-toolbar-multiple-rows" color="primary">
+				<mat-toolbar-row class="mat-toolbar-row">
+					<span>頁面設定</span>
+                    <span class="example-spacer"></span>
+    
+                    <vaadin-button theme="success" id="dz-upload">匯入新頁 (收費)</vaadin-button>
+                    <vaadin-button theme="success" id="dz-upload">SEO 優化 (收費)</vaadin-button>
+                    <vaadin-button theme="success" id="dz-upload" on-click="_recovery">回復</vaadin-button>
+                    <vaadin-button theme="contrast" id="dz-buy">所有頁生成</vaadin-button>
+                    <vaadin-button theme="contrast" on-click="save">本頁生成</vaadin-button>
+				</mat-toolbar-row>
+			</mat-toolbar>
+		</h1>
+
+
+		<content>
+            <!-- <dz-status></dz-status> -->
+
+            <!-- <vaadin-button theme="success" id="dz-upload">本頁架構設定</vaadin-button>
+            <vaadin-button theme="contrast" id="dz-buy">本頁內容編輯</vaadin-button>
+            <vaadin-button theme="contrast" id="dz-buy">本頁script編輯</vaadin-button> -->
+
+            <vaadin-accordion>
+                <vaadin-accordion-panel>
+                    <div slot="summary">標題及Meta 標籤</div>
+                    <vaadin-tabs  selected="{{page1}}">
+                        <vaadin-tab>本頁</vaadin-tab>
+                        <vaadin-tab>共用</vaadin-tab>
+                    </vaadin-tabs>
+                    <iron-pages selected="[[page1]]">
+                        <page>
+                            <template is="dom-repeat" items="[[bSheets.meta]]">
+
+                                <vaadin-context-menu class$="{{item.type}}">
+                                    <template>
+                                        <vaadin-list-box>
+                                            <vaadin-item on-click="_edit">更新內容</vaadin-item>
+                                            <vaadin-item on-click="_originEdit">編輯原文</vaadin-item>
+                                            <vaadin-item on-click="_delete">刪除</vaadin-item>
+                                            <vaadin-item on-click="_moveMaster">搬至共用</vaadin-item>
+                                        </vaadin-list-box>                                  </vaadin-list-box>
+                                    </template>
+                                <vaadin-button on-click="_edit" id$="{{item.dzid}}">{{item.label}}</vaadin-button>
+                                </vaadin-context-menu>
+                            </template>
+                            <!-- <vaadin-text-area id="bMeta"></vaadin-text-area> -->
+                        </page>
+                        <page>
+                            <!-- <vaadin-button>標題</vaadin-button>
+                            <vaadin-button>ICON</vaadin-button>
+                            <vaadin-button>連結</vaadin-button>
+                            <vaadin-button>描述</vaadin-button> -->
+                            
+                            <template is="dom-repeat" items="[[mSheets.meta]]">
+                                <vaadin-context-menu class$="{{item.type}}">
+                                    <template>
+                                        <vaadin-list-box>
+                                            <vaadin-item on-click="_edit">更新內容</vaadin-item>
+                                            <vaadin-item on-click="_originEdit">編輯原文</vaadin-item>
+                                            <vaadin-item on-click="_delete">刪除</vaadin-item>
+                                            <vaadin-item on-click="_moveMaster">搬至共用</vaadin-item>
+                                        </vaadin-list-box>
+                                    </template>
+                                <vaadin-button on-click="_edit" id$="{{item.dzid}}">{{item.label}}</vaadin-button>
+                                </vaadin-context-menu>
+                            </template>
+
+                            <!-- <vaadin-text-area id="mMeta"></vaadin-text-area> -->
+                        </page>
+                    </iron-pages>
+                </vaadin-accordion-panel>
+                <vaadin-accordion-panel>
+                    <div slot="summary">樣式檔案(Style)</div>
+                        <vaadin-tabs  selected="{{page2}}">
+                            <vaadin-tab>本頁</vaadin-tab>
+                            <vaadin-tab>共用</vaadin-tab>
+                        </vaadin-tabs>
+                        <iron-pages selected="[[page2]]">
+                            <page>
+                                <template is="dom-repeat" items="[[bSheets.css]]">
+                                    <vaadin-context-menu class$="{{item.type}}">
+                                        <template>
+                                            <vaadin-list-box>
+                                                <vaadin-item on-click="_edit">更新內容</vaadin-item>
+                                                <vaadin-item on-click="_originEdit">編輯原文</vaadin-item>
+                                                <vaadin-item on-click="_delete">刪除</vaadin-item>
+                                                <vaadin-item on-click="_moveMaster">搬至共用</vaadin-item>
+                                            </vaadin-list-box>
+                                        </template>
+                                        <vaadin-button on-click="_edit" id$="{{item.dzid}}">{{item.label}}</vaadin-button>
+                                    </vaadin-context-menu>
+                                </template>
+                                <!-- <vaadin-text-area id="bCss"></vaadin-text-area> -->
+                            </page>
+                            <page>
+                                <template is="dom-repeat" items="[[mSheets.css]]">
+                                    <vaadin-context-menu class$="{{item.type}}">
+                                        <template>
+                                            <vaadin-list-box>
+                                                <vaadin-item on-click="_edit">更新內容</vaadin-item>
+                                                <vaadin-item on-click="_originEdit">編輯原文</vaadin-item>
+                                                <vaadin-item on-click="_delete">刪除</vaadin-item>
+                                                <vaadin-item on-click="_moveMaster">搬至共用</vaadin-item>
+                                            </vaadin-list-box>
+                                        </template>
+                                        <vaadin-button on-click="_edit" id$="{{item.dzid}}">{{item.label}}</vaadin-button>
+                                    </vaadin-context-menu>
+                                </template>
+                                <!-- <vaadin-text-area id="mCss"></vaadin-text-area> -->
+                            </page>
+                        </iron-pages>
+                </vaadin-accordion-panel>
+                <vaadin-accordion-panel>
+                    <div slot="summary">預設腳本(Head Script)</div>
+                    <vaadin-tabs  selected="{{page3}}">
+                        <vaadin-tab>本頁</vaadin-tab>
+                        <vaadin-tab>共用</vaadin-tab>
+                    </vaadin-tabs>
+                    <iron-pages selected="[[page3]]">
+                        <page>
+                            <template is="dom-repeat" items="[[bSheets.js]]">
+                                <vaadin-context-menu class$="{{item.type}}">
+                                    <template>
+                                      <vaadin-list-box>
+                                        <vaadin-item on-click="_edit">更新內容</vaadin-item>
+                                        <vaadin-item on-click="_originEdit">編輯原文</vaadin-item>
+                                        <vaadin-item on-click="_delete">刪除</vaadin-item>
+                                        <vaadin-item on-click="_moveMaster">搬至共用</vaadin-item>
+                                    </vaadin-list-box>
+                                    </template>
+                                    <vaadin-button on-click="_edit" id$="{{item.dzid}}">{{item.label}}</vaadin-button>
+                                    </vaadin-context-menu>
+                            </template>
+                            <!-- <vaadin-text-area id="bJs"></vaadin-text-area> -->
+                        </page>
+                        <page>
+                            <template is="dom-repeat" items="[[mSheets.js]]">
+                                <vaadin-context-menu class$="{{item.type}}">
+                                    <template>
+                                        <vaadin-list-box>
+                                            <vaadin-item on-click="_edit">更新內容</vaadin-item>
+                                            <vaadin-item on-click="_originEdit">編輯原文</vaadin-item>
+                                            <vaadin-item on-click="_delete">刪除</vaadin-item>
+                                            <vaadin-item on-click="_moveMaster">搬至共用</vaadin-item>
+                                        </vaadin-list-box>
+                                    </template>
+                                    <vaadin-button on-click="_edit" id$="{{item.dzid}}">{{item.label}}</vaadin-button>
+                                </vaadin-context-menu>
+                            </template>
+                            <!-- <vaadin-text-area id="mJs"></vaadin-text-area> -->
+                        </page>
+                    
+                    </iron-pages>
+                </vaadin-accordion-panel>
+                <vaadin-accordion-panel>
+                    <div slot="summary">內文腳本(Body Script)</div>
+                    <vaadin-tabs  selected="{{page4}}">
+                        <vaadin-tab>本頁</vaadin-tab>
+                        <vaadin-tab>共用</vaadin-tab>
+                    </vaadin-tabs>
+                    <iron-pages selected="[[page4]]">
+                        <page>
+                            <template is="dom-repeat" items="[[bSheets.body_js]]">
+                                <vaadin-context-menu class$="{{item.type}}">
+                                    <template>
+                                        <vaadin-list-box>
+                                            <vaadin-item on-click="_edit">更新內容</vaadin-item>
+                                            <vaadin-item on-click="_originEdit">編輯原文</vaadin-item>
+                                            <vaadin-item on-click="_delete">刪除</vaadin-item>
+                                            <vaadin-item on-click="_moveMaster">搬至共用</vaadin-item>
+                                        </vaadin-list-box>
+                                    </template>
+                                <vaadin-button on-click="_edit" id$="{{item.dzid}}">{{item.label}}</vaadin-button>
+                                    </vaadin-context-menu>
+                            </template>
+                            <!-- <vaadin-text-area id="bBodyJs"></vaadin-text-area> -->
+                        </page>
+                        <page>
+                            <template is="dom-repeat" items="[[mSheets.body_js]]">
+                                <vaadin-context-menu class$="{{item.type}}">
+                                    <template>
+                                        <vaadin-list-box>
+                                            <vaadin-item on-click="_edit">更新內容</vaadin-item>
+                                            <vaadin-item on-click="_originEdit">編輯原文</vaadin-item>
+                                            <vaadin-item on-click="_delete">刪除</vaadin-item>
+                                            <vaadin-item on-click="_moveMaster">搬至共用</vaadin-item>
+                                        </vaadin-list-box>
+                                    </template>
+                                    <vaadin-button on-click="_edit" id$="{{item.dzid}}">{{item.label}}</vaadin-button>
+                                </vaadin-context-menu>
+                            </template>
+                            <!-- <vaadin-text-area id="mBodyJs"></vaadin-text-area> -->
+                        </page>
+                    </iron-pages>                
+                </vaadin-accordion-panel>
+                <vaadin-accordion-panel>
+                    <div slot="summary">組件(Components))</div>
+                    <vaadin-tabs  selected="{{page5}}">
+                        <vaadin-tab>本頁</vaadin-tab>
+                        <vaadin-tab>共用</vaadin-tab>
+                    </vaadin-tabs>
+                    <iron-pages selected="[[page5]]">
+                        <page>
+                            <vaadin-button>dz-news-item</vaadin-button>
+                            <vaadin-button>dz-form</vaadin-button>
+                            <vaadin-button>dz-ads</vaadin-button>
+                            <vaadin-button>dz-user-login</vaadin-button>
+                        </page>
+                        <page>
+                            <vaadin-button>dz-news-item</vaadin-button>
+                            <vaadin-button>dz-form</vaadin-button>
+                            <vaadin-button>dz-ads</vaadin-button>
+                            <vaadin-button>dz-user-login</vaadin-button>
+                        </page>
+                    </iron-pages>
+                </vaadin-accordion-panel>
+                <vaadin-accordion-panel>
+                    <div slot="summary">內文(HTML))</div>
+                    <vaadin-tabs  selected="{{page6}}">
+                        <vaadin-tab>本頁</vaadin-tab>
+                        <vaadin-tab>共用</vaadin-tab>
+                    </vaadin-tabs>
+                    <iron-pages selected="[[page6]]">
+                        <page>
+                            <vaadin-button>編輯</vaadin-button>
+                        </page>
+                        <page>
+                            <vaadin-button>Body Class</vaadin-button>
+                            <vaadin-button>Html Class</vaadin-button>
+                            <vaadin-button>頁首(header)</vaadin-button>
+                            <vaadin-button>頁尾(footer)</vaadin-button>
+                        </page>
+                    </iron-pages>
+                </vaadin-accordion-panel>
+            </vaadin-accordion>
+            <vaadin-dialog id="popup"></vaadin-dialog>
+
+
+
+		</content>
+
+
+
+	</template>
+</dom-module>
+
+<script>
+    (function() {
+
+
+
+        Polymer({
+            is: 'dz-settings',
+            properties: {
+                icon: {
+                    type: String,
+                    value: 'add'
+                },
+                opened: {
+                    type: Boolean,
+                    notify: true
+                },
+                disabled: {
+                    type: Boolean,
+                    value: false
+                },
+                withBackdrop: Boolean,
+            },
+            _recovery(){
+                let dzRecovery = document.createElement('dz-recovery');
+                Polymer.componentPopup(dzRecovery,'480px','640px');
+            },
+            created: function() {
+                this.fileManager = Polymer.fileManager;
+                this.status = true;
+                this.pageHead = document.querySelector('dz-wrapper').pageHead;
+                this.pageBodyJs = document.querySelector('dz-wrapper').pageBodyJs;
+
+                let dummy = Polymer.shadowDOM.cloneNode(true);
+                dummy.querySelectorAll('[dzid]').forEach(item=>{
+                    item.removeAttribute('dzid');
+                });
+                this.pageHtml = dummy.innerHTML;
+
+                this.mMeta = '';
+                this.bMeta = '';
+                this.mCss = '';
+                this.bCss = '';
+                this.mJs = '';
+                this.bJs = '';
+                this.mBodyJs = '';
+                this.bBodyJs = '';
+                this.mCom = '';
+                this.bCom = ''
+                this.mHtml = '';
+                this.bHtml ='';
+                this.sheets ={};
+                this.sheets['meta']=[
+                    {
+                        'label':'Hi',
+                        'dzid':1
+                    },
+                    {
+                        'label':'Hi2',
+                        'dzid':2
+                    },
+                ]
+                this.digest();
+            },
+
+            _edit(e){
+                let elm = e.target;
+                console.log('Click',e,elm,elm.id,Polymer.elements[elm.id]);
+                let item= Polymer.elements[elm.id];
+                item.edit();
+            },
+            integrate(){
+                this.mMeta = this.getTextArea('mMeta').value;
+                this.bMeta = this.getTextArea('bMeta').value;
+                this.mCss = this.getTextArea('mCss').value;
+                this.bCss = this.getTextArea('bCss').value;
+                this.mJs = this.getTextArea('mJs').value;
+                this.bJs = this.getTextArea('bJs').value;
+                this.mBodyJs = this.getTextArea('mBodyJs').value;
+                this.bBodyJs = this.getTextArea('bBodyJs').value;
+                this.mCom = '';
+                this.bCom = '';
+                
+                let mHead = this.mMeta + this.mCss+ this.mJs;
+                let head = document.createElement('div');
+                head.innerHTML = mHead;
+                head.querySelectorAll('*').forEach(item=>{
+                    item.setAttribute('dz-master','');
+                });
+                this.pageHead = head.innerHTML + this.bMeta + this.bCss + this.bJs;
+                
+               
+                // for mBodyJs
+                head.innerHTML = this.mBodyJs ;
+                head.querySelectorAll('*').forEach(item=>{
+                    item.setAttribute('dz-master','');
+                });
+                this.pageBodyJs = head.innerHTML + this.bBodyJs;
+
+                this.pageHtml = this.getTextArea('bHtml').value;
+
+                console.log('Body JS',this.mBodyJs,this.pageBodyJs);
+
+            },
+            digest(){
+                // let parser = new DOMParser();
+                // let elm = parser.parseFromString(this.pageHead, "text/html");
+                // let elm = document.createElement('div');
+                // elm.innerHTML = this.pageHead;
+                let elm;
+                elm = document.createRange().createContextualFragment(this.pageHead);
+                elm.querySelectorAll('*').forEach(item=>{
+                    console.log('Element',item);
+                       new defaultPackage(item); 
+                });
+
+                elm = document.createRange().createContextualFragment(this.pageBodyJs);
+                elm.querySelectorAll('*').forEach(item=>{
+                    console.log('Element',item);
+                        item.isBodyJs = true;
+                       new defaultPackage(item); 
+                });
+
+                console.log('Sheets',Polymer.mSheets,Polymer.bSheets);
+
+                this.mSheets = Polymer.mSheets;
+                this.bSheets = Polymer.bSheets;
+            },
+
+            // digest: function(){
+            //     this.mCssSheets =[];
+            //     this.bCssSheets =[];
+            //     this.mJsSheets =[];
+            //     this.bJsSheets=[];
+            //     this.mComSheets=[];
+            //     this.bComSheets=[];
+
+            //     console.log('Page',this.pageHead,this.pageBodyJs);
+            //     let head = document.createElement('div');
+            //     head.innerHTML = this.pageHead;
+            //     head.querySelectorAll('[dz-head]').forEach(item=>{
+            //         item.remove();
+            //     });
+            //     head.querySelectorAll('*').forEach(item=>{
+            //         let tagName = item.tagName || null;
+            //         console.log('Tag name',tagName);
+            //         switch (tagName){
+            //             case 'TITLE':
+            //             case 'META':
+            //                 if (item.hasAttribute('dz-master'))
+            //                     this.mMeta += item.outerHTML +"\n";
+            //                 else
+            //                     this.bMeta += item.outerHTML+"\n";
+            //             break;
+
+            //             case 'SCRIPT':
+            //                 if (item.hasAttribute('dz-master')){
+            //                     if (this.getAttribute('src'))
+            //                         this.mJsSheets.push(this.getAttribute('src'));
+            //                     this.mJs += item.outerHTML+"\n";
+            //                 }
+            //                 else {
+            //                     if (this.getAttribute('src'))
+            //                         this.bJsSheets.push(this.getAttribute('src'));
+            //                     this.bJs += item.outerHTML+"\n";
+            //                 }
+            //             break;
+
+            //             case 'STYLE':
+            //                 if (item.hasAttribute('dz-master'))
+            //                     this.mCss += item.outerHTML+"\n";
+            //                 else
+            //                     this.bCss += item.outerHTML+"\n";
+            //             break;
+
+            //             case 'LINK':
+            //                 if (item.getAttribute('rel')==="stylesheet") {
+            //                     if (item.hasAttribute('dz-master')) {
+            //                         if (this.getAttribute('href'))
+            //                             this.mCssSheets.push(this.getAttribute('href'));
+            //                         this.mCss += item.outerHTML+"\n";
+            //                     }
+            //                     else {
+            //                         if (this.getAttribute('href'))
+            //                             this.bCssSheets.push(this.getAttribute('href'));
+            //                         this.bCss += item.outerHTML+"\n";
+            //                     }
+            //                 } else if (item.getAttribute('rel'==="import")){
+            //                     if (item.hasAttribute('dz-master')){
+            //                         if (this.getAttribute('href'))
+            //                             this.mComSheets.push(this.getAttribute('href'));
+            //                         this.mCom += item.outerHTML+"\n";                                    
+            //                     } 
+            //                     else{
+            //                         if (this.getAttribute('href'))
+            //                             this.bComSheets.push(this.getAttribute('href'));
+            //                         this.bCom += item.outerHTML+"\n";
+            //                     }
+
+            //                 } else {
+            //                     if (item.hasAttribute('dz-master'))
+            //                         this.mMeta += item.outerHTML+"\n";
+            //                     else
+            //                         this.bMeta += item.outerHTML+"\n";
+            //                 }
+            //             break;
+
+            //             default:
+            //                 if (item.hasAttribute('dz-master'))
+            //                     this.mMeta += item.outerHTML+"\n";
+            //                 else
+            //                     this.bMeta += item.outerHTML+"\n";
+            //             break;
+
+            //         }
+            //         console.log('Sheet',this.mCssSheets,this.bCssSheets);
+
+            //     });
+
+            //     let body =document.createElement('div');
+            //     body.innerHTML = this.pageBodyJs;
+            //     body.querySelectorAll('*').forEach(item=>{
+            //         let tagName = item.tagName || null;
+            //         switch(tagName){
+            //             case 'SCRIPT':
+            //                 if (item.hasAttribute('dz-master'))
+            //                     this.mBodyJs += item.outerHTML+"\n";
+            //                 else
+            //                     this.bBodyJs += item.outerHTML+"\n";
+            //             break;
+
+            //             case 'STYLE':
+            //                 if (item.hasAttribute('dz-master'))
+            //                     this.mCss += item.outerHTML+"\n";
+            //                 else
+            //                     this.bCss += item.outerHTML+"\n";
+            //             break;
+
+            //             case 'LINK':
+            //                 if (item.hasAttribute('dz-master'))
+            //                     this.mCss += item.outerHTML+"\n";
+            //                 else
+            //                     this.bCss += item.outerHTML+"\n";
+                        
+            //             break;
+            //         }
+
+            //     });
+
+
+            //     console.log('Meta',this.mMeta,this.bMeta,this.mBodyJs,this.bBodyJs);
+            // },
+
+
+            // changeEditor(that){
+            //     console.log('Status',that);
+            //     // let that = this;
+                
+            //     let basePath =   "template/" + Polymer.tid + '/'+Polymer.thisPage;
+            //     let masterPath =   "template/" + Polymer.tid + '/_master';
+            //     let path;
+            //     if (that.status)
+            //         path = basePath;
+            //     else
+            //         path = masterPath;
+
+            //     Polymer.getUserDataContent(path+'/html').then(html=>{
+            //         that.shadowRoot.querySelector('#body').setAttribute('status', that.status);
+            //         that.shadowRoot.querySelector('#body').editor.setValue(html);
+            //         // that.bodyEditor.editor.setValue(html);
+            //     });
+            //     Polymer.getUserDataContent(path+'/head').then(html=>{
+            //         that.shadowRoot.querySelector('#head').setAttribute('status', that.status);
+            //         that.shadowRoot.querySelector('#head').editor.setValue(html);
+            //         // that.headEditor.editor.setValue(html);
+            //     });
+            //     Polymer.getUserDataContent(path+'/css').then(html=>{
+            //         that.shadowRoot.querySelector('#css').setAttribute('status', that.status);
+            //         that.shadowRoot.querySelector('#css').editor.setValue(html);
+            //         // that.cssEditor.editor.setValue(html);
+            //     });
+            //     Polymer.getUserDataContent(path+'/body_js').then(html=>{
+            //         // console.log('Body JS',html);
+            //         that.shadowRoot.querySelector('#js').setAttribute('status', that.status);
+            //         that.shadowRoot.querySelector('#js').editor.setValue(html);
+            //         // that.bodyJsEditor.editor.setValue(html);
+            //     });
+
+            // },
+             changeEditor(){
+                console.log('Status',that);
+                let that = this;
+                
+                that.shadowRoot.querySelector('#head').editor.setValue(this.pageHead);
+                that.shadowRoot.querySelector('#body').editor.setValue(this.html);
+                that.shadowRoot.querySelector('#js').editor.setValue(this.pageBodyJs);
+            },
+
+            resizeEditor(bodyEditor){
+                let editor = bodyEditor.editor;
+                editor.setOptions({
+                    maxLines: Infinity
+                });
+
+                    var heightUpdateFunction = function() {
+
+                        // http://stackoverflow.com/questions/11584061/
+                        var newHeight =
+                                editor.getSession().getScreenLength()
+                                * editor.renderer.lineHeight
+                                + editor.renderer.scrollBar.getWidth();
+
+                        bodyEditor.style.height = newHeight.toString() + "px";
+                    
+                        // $('#editor-section').height(newHeight.toString() + "px");
+
+                        // This call is required for the editor to fix all of
+                        // its inner structure for adapting to a change in size
+                        editor.resize();
+                    };
+
+                    // Set initial size to match initial content
+                    heightUpdateFunction();
+
+                    // Whenever a change happens inside the ACE editor, update
+                    // the size again
+                    editor.getSession().on('change', heightUpdateFunction);
+            },
+            save(that){
+                    
+                console.log('Saved',status);
+
+                // // let that = this;
+                // let basePath =   "template/" + Polymer.tid + '/'+Polymer.thisPage;
+                // let masterPath =   "template/" + Polymer.tid + '/_master';
+                // let path;
+                // if (that.status)
+                //     path = basePath;
+                // else
+                //     path = masterPath;
+
+                // let bodyEditor = that.shadowRoot.querySelector('#body');
+                // let headEditor = that.shadowRoot.querySelector('#head');
+                // let cssEditor = that.shadowRoot.querySelector('#css');
+                // let bodyJsEditor = that.shadowRoot.querySelector('#js');
+                // // Polymer.saveDataContent(path+'/html',bodyEditor.editorValue);
+                // // Polymer.saveDataContent(path+'/head',headEditor.editorValue);
+                // console.log('css',that.shadowRoot);
+                // Polymer.fileManager.saveUserData(path+'/head',headEditor.editorValue);
+                // Polymer.fileManager.saveUserData(path+'/css',cssEditor.editorValue);
+                // Polymer.fileManager.saveUserData(path+'/html',bodyEditor.editorValue);
+                // Polymer.fileManager.saveUserData(path+'/body_js',bodyJsEditor.editorValue);
+                // Polymer.saveDataContent(path+'/body_js',bodyJsEditor.editorValue);
+            },
+
+            import(){
+                let url = prompt('請輸入欲匯入網站之網址.');
+
+                if (url){
+                    alert('注意！！ 網頁的圖片及文字受到版權保障，設確保對方同意下方作抓取。請抓取網頁後，自行更換相關內容。如有投訴，本平台有權要求客戶將此網頁下架');
+                    Polymer.import(url);
+                    alert('新網頁已匯入成功，重新整理將能顯示新一頁');
+
+                }
+
+
+            },
+            ready(){
+                let that = this;
+                let dzWrapper=document.querySelector('dz-wrapper'); 
+                this.dzWrapper = dzWrapper;
+                
+                // let mMeta = this.mSheets['meta'].forEach(item=>{
+                //     let dzid = item.dzid;
+                //     let button = this.shadowRoot.querySelector('#'+dzid);
+                //     button.menu = [{
+                //         'text': '更新內容',
+                //         'event': 'update'
+                //     }, {
+                //         'text': '編輯原文',
+                //         'event': 'edit'
+                //     }, {
+                //         'text': '刪除',
+                //         'event': 'delete'
+                //     }, {
+                //         'text': '搬至共用/本頁',
+                //         'event': 'move'
+                //     }];
+                //     button.update =function(e){
+                //         this._edit(e);
+                //     };
+                //     button.delete = function(e){
+                //         Polymer.elements[e.target.dzid].remove();
+                //     }
+                    
+                //     button.edit = function(e){
+                //         let value = Polymer.elements[e.target.dzid].outerHTML;
+                //         let dzPopup = document.createElement('dz-content-box');
+                //         let dialog = this.shadowRoot.querySelector('vaadin-dialog');
+                //         dzPopup.dialog = dialog;
+                //         dzPopup.value = value;
+                //         dzPopup.cancel = function(){
+                //             dialog.opened = false;
+                //         }
+                //         dzPopup.save = function(){
+                //             let textarea= this.shadowRoot.querySelector('vaadin-text-area') || null;
+                //             let html;
+                //             Polymer.elements[e.target.dzid].outerHTML = textarea.value;
+                //             this.digest();
+                //             dialog.opened = false;
+                //         }
+                //     }
+
+                //     button.addEventListener('contextmenu',e=>{
+                //         console.log('Context Menu',elm);
+                //         let submenu=document.querySelector('dz-admin').shadowRoot.querySelector('dz-submenu');
+                //         submenu.loadMenu(e);
+                //         e.preventDefault();
+                //     });
+				// });
+ 
+            },
+
+            getTextArea(name){
+                return this.shadowRoot.querySelector('#'+name);
+            },
+            save(){
+                // this.pageHead = this.dzHeadEditor.editor.getValue();   
+                // this.dzWrapper.pageHead = this.pageHead;
+
+                this.integrate();
+
+                this.dzWrapper.pageHead = this.pageHead;
+                this.dzWrapper.pageHtml = this.pageHtml;
+                this.dzWrapper.pageBodyJs = this.pageBodyJs;    
+
+                Polymer.shadowDOM.innerHTML = this.pageHtml;
+               
+
+                let answer = confirm("儲存將會匯出整頁，並重新載入，確認嗎？");
+                if (answer)
+                    Polymer.dzFire('save',{});
+                window.setTimeout(function(){
+                    location.reload();
+                },1000);    
+                // this.dzWrapper.renewHtml();   
+            }
+
+        });
+
+    })();
+</script>

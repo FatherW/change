@@ -1,0 +1,43 @@
+<link href="../polymer/polymer.html" rel="import">
+<link href="../dz-menu/css/style.html" rel="import" />
+<dom-module id="change-addprod-butt">
+    <template>
+        <style>
+            .svg-circleplus {
+                height: 40px;
+                stroke: #F0846C;
+            }
+            line{
+                stroke: white;
+            }
+
+            @media (max-width: 640px) {
+                #container {
+                    display: none;
+                }
+            }
+        </style>
+        <div id="container">
+            <svg on-click="goto" class="svg-circleplus" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="45" fill="#F0846C" stroke-width="7.5"></circle>
+                <line x1="32.5" y1="50" x2="67.5" y2="50" stroke-width="5"></line>
+                <line x1="50" y1="32.5" x2="50" y2="67.5" stroke-width="5"></line>
+            </svg>
+        </div>
+    </template>
+</dom-module>
+<script>
+    (function() {
+        Polymer({
+            is: 'change-addprod-butt',
+            properties: {},
+            created: function() {
+
+            },
+            ready: function() {},
+            goto: function() {
+                location.replace("../add-product.html");
+            }
+        });
+    })();
+</script>

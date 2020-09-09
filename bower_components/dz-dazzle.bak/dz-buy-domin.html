@@ -1,0 +1,92 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../vaadin-button/vaadin-button.html">
+
+
+
+<dom-module id="dz-buy-domain">
+
+    <template>
+        <div style="display: inline;">檢查網域:<vaadin-text-field id="checkdomain" placeholder="輸入網絡"></vaadin-text-field>
+        </div>
+        <vaadin-button on-click="check">{{checktext}}</vaadin-button>
+        <vaadin-button id="ableToBuy" disabled>可購買</vaadin-button>
+        <div id="contentchange"></div>
+    </template>
+</dom-module>
+
+<script>
+    (function() {
+
+
+
+        Polymer({
+            is: 'dz-buy-domain',
+            properties: {
+
+            },
+
+            created: function() {
+
+            },
+            ready: function() {
+                let shadow = this.shadowRoot;
+                let checkfield = shadow.querySelector('#checkdomain');
+                let contentchange = shadow.querySelector('#contentchange');
+
+                checkfield.addEventListener('focusout', e => {
+                    if (checkfield.value != "") {
+                        this.check();
+                    }
+                })
+
+                checkfield.addEventListener('keydown', e => {
+                    contentchange.innerHTML = "";
+                    if (e.code == "Enter" && checkfield.value != "") {
+                        this.check();
+                    }
+                })
+
+                this.checktext = "查詢";
+            },
+            check() {
+                let shadow = this.shadowRoot;
+                let domain = shadow.querySelector('#checkdomain');
+                let button = shadow.querySelector('#ableToBuy');
+                let contentchange = shadow.querySelector("#contentchange");
+
+                let url = "https://j96d5s2sme.execute-api.ap-northeast-1.amazonaws.com/prod/check";
+                let param = {
+                    "action": "checkDomainAvailability",
+                    "domain": domain.value
+                };
+
+
+                if (this.checktext == "更改") {
+                    this.checktext = "查詢";
+                    domain.readonly = false;
+                } else {
+
+
+                    Polymer.postData(url, param).then(res => {
+                        console.log(JSON.stringify(res));
+
+                        if (res.code == 21) {
+                            button.disabled = false;
+                            domain.readonly = true;
+                            this.checktext = "更改";
+                            contentchange.innerHTML = "域名可使用";
+                        } else {
+                            contentchange.innerHTML = "域名不可用"
+                            button.disabled = true;
+
+                        }
+                    })
+
+                }
+            },
+
+        });
+
+    })();
+</script>

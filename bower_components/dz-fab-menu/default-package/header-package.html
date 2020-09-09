@@ -1,0 +1,282 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<script>
+	class headerPackage {
+		constructor(elm){
+			// super();
+			let basePath =  "template/" + Polymer.tid + "/_block/";
+			
+			if (elm.id)
+				Polymer.getUserDataContent(basePath+elm.id).then(html=>{
+					elm.innerHTML = html;
+					let dzid = elm.getAttribute('dzid');
+					let shadow = Polymer.getShadowItem(dzid) || null;
+					if (!shadow)
+						console.log('No Shadow');
+					let i=0;
+					elm.querySelectorAll('*').forEach(item=>{
+							new defaultPackage(item);
+					});
+					shadow.innerHTML = elm.innerHTML;
+					// console.log('Header',Polymer.shadowDOM,document.querySelector('dz-wrapper'));
+					console.log('Header Init',shadow,elm,dzid);
+					// elm.addPropertyChange('innerHTML',html.innerHTML);
+				});
+
+			elm.label = '頁首';
+			elm.menu = [{
+                        'text': '儲存為母版',
+                        'event': 'saveAsMaster'
+                    },{
+                        'text': '使用母版',
+                        'event': 'import'
+                    }];
+
+			elm.menu.forEach(item=>{
+				item.source = elm;
+			});
+
+			elm.saveAsMaster = function(){
+				let id;
+				if (!elm.id)
+					id = prompt("請輸入母版ID");
+				else	
+					id = elm.id;
+				
+				let dummy = this.shadowElm.cloneNode(true);
+				dummy.querySelectorAll('[dzid]').forEach(item=>{
+					item.removeAttribute('dzid');
+				});
+
+				Polymer.fileManager.saveUserData(basePath+id,dummy.innerHTML);
+				alert('儲存');				
+			}
+			elm.import = function(){
+				let id = prompt("請輸入欲使用母版ID");
+				Polymer.getUserDataContent(basePath+id).then(html=>{
+					elm.innerHTML = html;
+					elm.id = id;
+				});
+			}
+		
+			document.addEventListener('save',e=>{
+				let html;
+				let dummy = elm.cloneNode(true);
+				dummy.querySelectorAll('[dzid]').forEach(item=>{
+					item.removeAttribute('dzid');
+				});
+				// dummy.removeAttribute('dzid');
+				html = dummy.innerHTML;
+				Polymer.fileManager.saveUserData(basePath+elm.id, html);  
+			});
+
+		
+		}
+	}
+	class h1Package {
+		constructor(elm){
+			// super();
+			console.log('Custom a',elm);
+			elm.label = '標題一';
+			elm.menu = [{
+                        'text': '編輯',
+                        'event': 'edit'
+                    }];
+
+			elm.menu.forEach(item=>{
+				item.source = elm;
+			});
+
+			elm.edit = function(){
+				elm.editor();
+			}
+
+			elm.dataUpdate = function(){
+				let field;
+				if (!elm.hasAttribute('dz-data'))
+					return;
+				else
+					field = elm.getAttribute('dz-data');			
+				if (!elm.dataModel)
+					return;
+				elm.addPropertyChange('innerHTML',elm.dataModel[field]);
+			}
+
+			// elm.dataUpdate();
+		}
+	}
+
+	class h2Package {
+		constructor(elm){
+			// super();
+			console.log('Custom a',elm);
+			elm.label = '標題二';
+			elm.menu = [{
+                        'text': '編輯',
+                        'event': 'edit'
+                    }];
+
+			elm.menu.forEach(item=>{
+				item.source = elm;
+			});
+
+			elm.edit = function(){
+				elm.editor();
+
+				// elm.outerHTML = dzEditor.outerHTML;
+			}
+
+		
+			elm.dataUpdate = function(){
+				let field;
+				if (!elm.hasAttribute('dz-data'))
+					return;
+				else
+					field = elm.getAttribute('dz-data');			
+				if (!elm.dataModel)
+					return;
+				elm.addPropertyChange('innerHTML',elm.dataModel[field]);
+			}
+
+
+			// elm.dataUpdate();
+
+		}
+	}
+
+	class h3Package {
+		constructor(elm){
+			// super();
+			console.log('Custom a',elm);
+			elm.label = '標題三';
+			elm.menu = [{
+                        'text': '編輯',
+                        'event': 'edit'
+                    }];
+
+			elm.menu.forEach(item=>{
+				item.source = elm;
+			});
+
+			elm.edit = function(){
+				elm.editor();
+			}
+			
+			elm.dataUpdate = function(){
+				let field;
+				if (!elm.hasAttribute('dz-data'))
+					return;
+				else
+					field = elm.getAttribute('dz-data');			
+				if (!elm.dataModel)
+					return;
+				elm.addPropertyChange('innerHTML',elm.dataModel[field]);
+			}
+
+			// elm.dataUpdate();
+		}
+	}
+
+	class h4Package {
+		constructor(elm){
+			// super();
+			console.log('Custom a',elm);
+			elm.label = '標題四';
+			elm.menu = [{
+                        'text': '編輯',
+                        'event': 'edit'
+                    }];
+
+			elm.menu.forEach(item=>{
+				item.source = elm;
+			});
+			elm.edit = function(){
+				elm.editor();
+			}
+		
+			elm.dataUpdate = function(){
+				let field;
+				if (!elm.hasAttribute('dz-data'))
+					return;
+				else
+					field = elm.getAttribute('dz-data');			
+				if (!elm.dataModel)
+					return;
+				elm.addPropertyChange('innerHTML',elm.dataModel[field]);
+			}
+
+			// elm.dataUpdate();
+		}
+	}
+
+	class h5Package {
+		constructor(elm){
+			// super();
+			console.log('Custom a',elm);
+			elm.label = '標題五';
+			elm.menu = [{
+                        'text': '編輯',
+                        'event': 'edit'
+                    }];
+
+			elm.menu.forEach(item=>{
+				item.source = elm;
+			});
+
+			elm.edit = function(){
+				elm.editor();
+			}
+			
+			elm.dataUpdate = function(){
+				let field;
+				if (!elm.hasAttribute('dz-data'))
+					return;
+				else
+					field = elm.getAttribute('dz-data');			
+				if (!elm.dataModel)
+					return;
+				elm.addPropertyChange('innerHTML',elm.dataModel[field]);
+			}
+
+
+			// elm.dataUpdate();
+		}
+	}
+
+	class h6Package {
+		constructor(elm){
+			// super();
+			console.log('Custom a',elm);
+			elm.label = '標題六';
+			elm.menu = [{
+                        'text': '編輯',
+                        'event': 'edit'
+                    }];
+
+			elm.menu.forEach(item=>{
+				item.source = elm;
+			});
+
+			elm.edit = function(){
+				elm.editor();
+			}
+			
+			elm.dataUpdate = function(){
+				let field;
+				if (!elm.hasAttribute('dz-data'))
+					return;
+				else
+					field = elm.getAttribute('dz-data');			
+				if (!elm.dataModel)
+					return;
+				elm.addPropertyChange('innerHTML',elm.dataModel[field]);
+			}
+
+
+			// elm.dataUpdate();
+		}
+	}
+
+  
+
+</script>

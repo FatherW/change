@@ -80,10 +80,8 @@
                 let uid = "";
                 let that = this;
                 let posit = 0;
-                for (i = 2; i < loc.length; i++) {
-                    pid = +loc[i]
-                };
-
+        
+                pid = document.head.querySelector('meta[name=product-id]').getAttribute('content') || null;
                 this.prodManager = new DataPackage("product");
                 this.orderManager = new DataPackage("order");
 

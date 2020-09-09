@@ -278,7 +278,7 @@
                     if (response.status === "connected") {
                         //if we do have a non-null response.session, call FB.logout(),
                         //the JS method will log the user out of Facebook and remove any authorization cookies
-                        that.log();
+                        // that.log();
                     }
 
                     if (!response.session) {
@@ -484,7 +484,8 @@
                         "isFanpage": false,
                         "platform": platform,
                         "banner": "https://www.gettv.hk/Website%20Design/profile%20page/img/profile%20banner/company-profile-banner.png",
-                        "status": true                    
+                        "status": true,
+                        "alias":"_me"                    
                 };
                 let that = this;
                 return new Promise(function(resolve, reject) {

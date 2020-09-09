@@ -1,6 +1,7 @@
 <link rel="import" href="../polymer/polymer.html" />
 <link rel="import" href="../dz-dazzle/dz-library.html" />
-<link rel="import" href="../dz-dazzle/dz-dazzle.html" />
+<!-- <link rel="import" href="../dz-dazzle/dz-dazzle.html" /> -->
+
 <link rel="import" href="../vaadin-dialog/vaadin-dialog.html" />
 <!-- <script src="https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/js/aws-sdk-2.83.0.min.js" type="module"></script> -->
 <script src="/js/aws-sdk-2.747.0.min.js"></script>
@@ -30,88 +31,83 @@
         "local":"true",
     };
     let subUser = store.get('change-user') || null;
+    let editMode = store.get("editMode") || "normal";
+    let elm;
+    let thisPage =
+        decodeURIComponent(location.pathname).substring(
+            location.pathname.indexOf("/") + 1
+        ) || "index.html";
+        
     store.set('subUser',subUser);
     console.log('Sub User',subUser);
     // if (subUser)
     //     Polymer.loadScript("https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/js/aws-sdk-2.83.0.min.js");
     Polymer.dzLicense = dzLicense;
     Polymer.uid = dzLicense['uid'];
+    Polymer.tid = dzLicense["tid"];
+    Polymer.userBucket = dzLicense["userBucket"];
+    Polymer.userType = Polymer.dzLicense["userType"] || "normal";
+    Polymer.thisPage = thisPage;
     store.set('dzLicense', Polymer.dzLicense);
 
 
-    Polymer.uid = 'change';
+    
 
 
-        let editMode = store.get("editMode") || "normal";
-        let elm;
-        let thisPage =
-            decodeURIComponent(location.pathname).substring(
-                location.pathname.indexOf("/") + 1
-            ) || "index.html";
 
         Polymer.editMode = editMode;
         let user = store.get('user') || null;
+        if (user){
+            user['userBucket'] = Polymer.dzLicense['userBucket'];
+            user['tid'] = Polymer.dzLicense['tid'];
+        } else {
+            user = dzLicense;
+            store.set('user',user);
+        }
 
-        // if (user)
-        //     Polymer.loadScript("https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/js/aws-sdk-2.83.0.min.js");
+
+if (subUser)
+    Polymer.fileManager = new AwsPackage(subUser);
+else if (user)
+    Polymer.fileManager = new AwsPackage(user);
+
+console.log('User',subUser,user,Polymer.fileManager);
 
         Polymer.subUser = store.get('subUser') || null;
+        console.log('Edit Mode',editMode);
 
         if (editMode === "admin") {
-            Polymer.loadComponent('dz-dazzle','dz-wrapper');
-            let user = store.get("user") || null;
-            console.log('User', user);
-            user['userBucket'] = Polymer.dzLicense['userBucket'];
+
             Polymer.fileManager = new AwsPackage(user);
             Polymer.dataManager = new DataPackage("_info");
             Polymer.user = user;
-            Polymer.tid = Polymer.dzLicense["tid"];
-            Polymer.uid = Polymer.user["uid"];
-            Polymer.userBucket = Polymer.dzLicense["userBucket"];
             Polymer.websiteUrl = Polymer.user["websiteUrl"] || "//" + Polymer.userBucket + "/";
-            Polymer.userType = Polymer.dzLicense["userType"] || "normal";
-            Polymer.thisPage = thisPage;
-            Polymer.loadComponent('dz-dazzle', 'dz-admin');
-
-            // Is it really need dz-wrapper?
-            let elm = document.createElement('dz-wrapper');
-            if (!document.querySelector('dz-wrapper')) {
-                document.body.innerHTML = '';
-                document.body.appendChild(elm);
-                elm.adminPageLoader();
-            } 
-
-        } else {
-            Polymer.uid =
-                Polymer.dzLicense["uid"];
-            Polymer.tid =
-                Polymer.dzLicense["tid"] || Polymer.uid;
-            Polymer.dataManager = new DataPackage("_info");
-            Polymer.userBucket = Polymer.dzLicense["userBucket"] || null;
-            Polymer.websiteUrl = location.hostname;
-            Polymer.thisPage = thisPage;
-            Polymer.userType = Polymer.dzLicense["userType"] || "normal";
-            // Polymer.loadComponent("dz-dazzle", "dz-dazzle");
-
-            let elm = document.createElement('dz-wrapper');
-            let html = document.body.innerHTML;
-            html = html.trim();
-            if (!html) {
-                document.body.appendChild(elm);
-            }
-        }
-
-        if (Polymer.editMode === 'normal') {
-            console.log('Load Normal Dazzle');
-            // Polymer.loadComponent("dz-dazzle", "dz-dazzle");
-            let dzDazzle = document.createElement('dz-dazzle');
-            document.body.appendChild(dzDazzle);
-        } else {
+            Polymer.loadPage();
 
             Polymer.loadComponent("dz-dazzle", "dz-admin");
-
             let dzAdmin = document.createElement('dz-admin');
             document.body.appendChild(dzAdmin);
+
+
+        } else {
+            Polymer.dataManager = new DataPackage("_info");
+            Polymer.websiteUrl = location.hostname;
+
+            // Load dz-dazzle Component
+            Polymer.loadComponent("dz-dazzle", "dz-dazzle");
+            let dzDazzle = document.createElement('dz-dazzle');
+            document.body.appendChild(dzDazzle);
+
+
+            // let elm = document.createElement('dz-wrapper');
+            // let html = document.body.innerHTML;
+            // html = html.trim();
+            // if (!html) {
+            //     document.body.appendChild(elm);
+            // }
         }
+
+
+
       
 </script>

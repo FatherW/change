@@ -155,7 +155,16 @@
                 this.userManager = new DataPackage("_user");
 
                 let user = store.get('change-user') || null;
-                id = document.head.querySelector('meta[name=user-id]').getAttribute('content') || this.user['id'];
+                let elm = document.head.querySelector('meta[name=user-id]');
+                let id;
+                if (elm)
+                    id = elm.getAttribute('content');
+                else if (user)
+                    id = user['id'];
+                else {
+                    // alert('用戶未登入或不能讀取用戶資料');
+                    location.href="/index.html";
+                }
 
 
 
@@ -205,10 +214,7 @@
 
             ready: function() {
                 let that = this;
-                let shadow = this.shadowRoot;
-                let id = "";
-                id = document.head.querySelector('meta[name=user-id]').getAttribute('content') || this.user['id'];
-                
+                let shadow = this.shadowRoot;                
             },
 
             getAllPics() {

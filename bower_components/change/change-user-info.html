@@ -293,9 +293,11 @@
                         <h5>賣家資料</h5>
                         <template is="dom-if" if="{{isOwn()}}">
 
-                            <p class="inf">名稱: <vaadin-text-field id="name1" value$="[[user.username]]"></vaadin-text-field></p>
+                            <p class="inf">名稱: <vaadin-text-field id="name1" value$="[[user.username]]"></vaadin-text-field>                            
+                            <vaadin-button id="ap" style="margin-right: 10px;" on-click="_changeAlias">建立用戶頁</vaadin-button></p>
                             <p class="inf">地區: <vaadin-select id="area1" value$="{{user.area}}"></vaadin-select></p>
                             <p class="inf">電郵: <vaadin-email-field id="email1" value$="{{user.email}}" disabled></vaadin-email-field></p>
+                            <p class="inf">用戶頁: <vaadin-text-field id="profile1" style="min-width:350px;" value$="https://www.gettv.hk/user/{{user.alias}}" disabled></vaadin-text-field></p>
                             <!-- <p class="inf">電話: <span class="infotext" id="contact"></span></p> -->
                         </template>
 
@@ -303,6 +305,7 @@
                             <p class="inf">名稱: <span class="infotext" id="name">{{user.username}}</span></p>
                             <p class="inf">地區: <span class="infotext" id="area">{{user.area}}</span></p>
                             <p class="inf">電郵: <span class="infotext" id="email">{{user.email}}</span></p>
+                            <p class="inf">用戶頁: <span class="infotext" id="profile">https://www.gettv.hk/user/{{user.alias}}</span></p>
                             <!-- <p class="inf">電話: <span class="infotext" id="contact"></span></p> -->
                         </template>
 
@@ -341,18 +344,28 @@
             },
             created: function() {
                 let user = store.get('change-user') || null;
-                if (user) this.fileManager = new AwsPackage(user);
+                console.log('Change Info',user,Polymer.subUser);
+                if (user) this.fileManager = new AwsPackage(Polymer.subUser);
                 Polymer.uid = "change";
                 console.log('Change User',Polymer.uid);
-                let id = document.head.querySelector('meta[name=user-id]').getAttribute('content') || null;
-                if (id)
-                    this.id = id;
+                let elm = document.head.querySelector('meta[name=user-id]');
+                let id;
+                if (elm)
+                    id = elm.getAttribute('content');
+                else if (user)
+                    id = user['id'];
                 else {
-                    console.log('No id');
-                    let arr = location.pathname.split("?");
-                    console.log('ID',arr[1]);
-                    this.id = arr[1];
+                    alert('用戶未登入或不能讀取用戶資料');
+                    location.href="/index.html";
                 }
+
+                this.id = id;
+                // else {
+                //     console.log('No id');
+                //     let arr = location.pathname.split("?");
+                //     console.log('ID',arr[1]);
+                //     this.id = arr[1];
+                // }
                 this.userManager = new DataPackage('_user');
             },
             isOwn(){
@@ -372,8 +385,8 @@
 
                    
                 let product = {};
-                store.set('new-product-id',null);
-                store.set('new-product',product);
+                // store.set('new-product-id',null);
+                // store.set('new-product',product);
                 location.replace("/add-product.html");
 
             },
@@ -383,10 +396,10 @@
                 this.subUser = user;
                 let shadow = this.shadowRoot;
                 let that = this
-                let id = "";
-                id = document.head.querySelector('meta[name=user-id]').getAttribute('content') || null;
-                console.log('User ID',id);  
-                this.id = id;
+                // let id = "";
+                // // // id = document.head.querySelector('meta[name=user-id]').getAttribute('content') || user['id'];
+                // // console.log('User ID',id);  
+                // this.id = id;
 
                 // if (user == null || id != user['id']) {
                 //     shadow.querySelector('#right').style.display = 'none'; /*none*/
@@ -399,9 +412,8 @@
                 //     location.href = "/index.html";
                 // }
 
-                this.userManager.getDataByCache(id).then(res=>{
+                this.userManager.loadData(this.id).then(res=>{
                     this.user = res;
-                    this.user['']
                     console.log('User Info',this.user);
                     this.renew();
                 },
@@ -424,8 +436,10 @@
                 this.score = Math.round(this.user.score * 10) / 10;
                 this.user['history']  = this.user['history'] || [];
                 this.user['banner'] = this.user['banner'] || "https://www.gettv.hk/Website%20Design/profile%20page/img/profile%20banner/company-profile-banner.png";
-                this.reAlias();
                 this.execute();
+                this.checkAlias();
+                // if (!this.user['alias'])
+                //     this.reAlias(0);
 
             },
             execute: function() {
@@ -508,12 +522,54 @@
                     // });
                 });
 
-                shadow.querySelector('#name1').addEventListener('blur',e=>{
-                    this.reAlias();
-                });
+                // shadow.querySelector('#name1').addEventListener('blur',e=>{
+                //     this.reAlias(0);
+                // });
                 
 
 
+            },
+            checkAlias(){
+                if (!this.user['alias']) {
+                    let cfm = confirm('你還未有用戶頁網址，要開嗎?');
+                    if (cfm)
+                        this.changeAlias(this.user['username']);
+                } else {
+                    Polymer.getContent('/user/'+this.user['alias']).then(res=>{
+                        return;
+                    },err=>{
+                        this.saveUserPage();
+                    });
+                }
+
+            },
+            _changeAlias(){
+                this.changeAlias(this.user['username']);
+            },
+            changeAlias(name){
+                
+                Polymer.getContent('/user/'+name).then(res=>{
+                    let name2 = prompt('路徑已被人使用，建議在名稱後加數字作為路徑',name);
+                    this.changeAlias(name2);
+                },err=>{
+                    this.user['alias'] = name;
+                    // this.saveUserPage();
+                    this.save();
+                    // this.$.profile1.render();
+                    // alert('更新用戶頁成功');
+                });
+                // let alias = this.user['alias'] || this.user['username'] || null;
+                // alias = alias.replace(/^\s+|\s+$/gm,'')
+                // alias = alias.replace(/ /gm,'-');
+                // alias = alias.replace(/\//gm,'-');                
+                // this.userManager.matchData({"alias":alias}).then(res=>{
+                //     if (res.length>1) {
+                //         this.canSave = false;
+                //         let cfm = alert('閣下用戶名稱已被使用，請即改名, 否則不能儲存');
+                //     }
+                //     else
+                //         this.canSave = true;
+                // });
             },
             reAlias(i){
                 let alias = this.user['username'];
@@ -529,7 +585,6 @@
                         i++;
                         this.reAlias(i);
                     }
-
                     console.log('Change Alias',res,res.length);
                 });
             },
@@ -653,7 +708,7 @@
                     // this.user['banner'] = this.$.mp.style.backgroundImage;
                     // this.user['head'] = this.$.dp.getAttribute('src');
                     this.userManager.saveDataWithCache(this.id,this.user);
-                    store.set('change-user',this.user);
+                    // store.set('change-user',this.user);
                     this.saveUserPage();
                     alert('成功儲存');
                     location.reload();

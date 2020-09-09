@@ -1,0 +1,101 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../dz-link-manage.html">
+<script>
+
+	class aPackage {
+		constructor(elm){
+			// super();
+			elm.label = '連結';
+
+
+			elm.menu = [{
+                        'text': '編輯',
+                        'event': 'edit'
+                    },{
+                        'text': '編輯連結',
+                        'event': 'editLink'
+                    }, {
+                        'text': '跳到該頁',
+                        'event': 'jump'
+                    }, {
+                        'text': '上載',
+                        'event': 'upload'
+                    }];
+
+
+			elm.menu.forEach(item=>{
+				item.source = elm;
+			});
+			
+			elm.selected = function(url){
+				// Polymer.changeList.push({
+				// 	'element':elm,
+				// 	'attribute': {
+				// 		'href':url
+				// 	}
+				// });
+				// elm.setAttribute('href',url);
+				console.log('History',Polymer.shadowDOM);
+				elm.addAttributeChange('href',url);
+				Polymer.activeElement = null;
+					Polymer.closeDialog();
+			
+			}
+
+			elm.jump = function(){
+				location.href = elm.getAttribute('href');
+			}
+			
+			elm.upload = function(){
+				Polymer.activeElement = elm;
+				console.log('E Upload');
+				let json = {
+					folder: 'dz-file-management',
+					component: 'dz-file-management3',
+					width: '800px',
+					height: '400px',
+					source: elm
+				};
+				Polymer.dzFire('dz-popup',{detail: json});
+				
+			}
+			elm.edit = function(){
+
+				elm.editor();
+			}
+
+			elm.editLink = function(){
+
+				let dzPopup = window.document.createElement('dz-link-manage');
+				dzPopup.source = elm;
+				let width = '800px';
+				let height = '580px';
+				Polymer.componentPopup(dzPopup,width,height);
+
+
+
+				// Polymer.activeElement = elm;
+				// let dzAdmin = document.querySelector('dz-admin');
+				// dzAdmin.popup('dz-dazzle', 'dz-link-manage', '800px', '580px');
+			}
+			// this.eventListener(elm);
+		
+			elm.dataUpdate = function(){
+				let field;
+				if (!elm.hasAttribute('dz-data'))
+					return;
+				else
+					field = elm.getAttribute('dz-data');			
+				if (!elm.dataModel)
+					return;
+				elm.addAttributeChange('href',elm.dataModel[field]);
+			}
+
+			// elm.dataUpdate();
+		}
+	}
+
+
+  
+
+</script>

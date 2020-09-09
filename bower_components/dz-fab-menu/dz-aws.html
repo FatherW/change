@@ -1,0 +1,491 @@
+<link rel="import" href="../polymer/polymer.html">
+<!-- <script src="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/webcomponentsjs/webcomponents-lite.js"></script> -->
+<script src="https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/js/aws-sdk-2.83.0.min.js"></script>
+
+
+<dom-module id="dz-aws">
+
+</dom-module>
+
+<script>
+
+(function() {
+
+
+
+	Polymer({
+		is: 'dz-aws',
+		properties: {
+			
+		},
+
+		created:function() {
+			// super.ready();
+			this.user = store.get('user') || null;
+			let that = this;
+			this.editMode = store.get('editMode') || 'normal';
+			
+			this.thisPage = document.querySelector('dz-page').thisPage;
+
+			if (this.editMode==="admin"){
+				this.key = this.user['key'] || null;
+				this.bucket = this.user['userBucket'];
+        
+				AWS.config = new AWS.Config();
+				if (this.key){
+					AWS.config.accessKeyId = this.key['AccessKeyId'];
+					AWS.config.secretAccessKey = this.key['SecretAccessKey'];
+					AWS.config.sessionToken = this.key['SessionToken'];
+					AWS.config.region = 'ap-northeast-1';   
+				}
+				this.AWS = AWS;
+			}
+
+			this.miscUrl = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/dazzleEditorMiscFunction";
+			console.log('AWS User',this.user);
+        	
+
+    
+            
+
+		},
+
+		grabPage(url){
+				let that = this;
+				let params = {
+					"action":"grabPage",
+					"url":url
+				}
+				console.log('Grab URL',url);
+				return new Promise(function (resolve, reject) {
+					
+					that.postData(that.miscUrl,params).then((result)=> {
+						console.log(result);
+						if (result.code < 0) {
+							resolve({});
+						} else {
+							resolve(result.resolve);
+						}
+					});
+				});
+			},
+
+			saveImage(url,path){
+				let that = this;
+				let params = {
+					"action":"saveImage",
+					"url":url,
+					"bucket":this.bucket,
+					"path":path
+				}
+				return new Promise(function (resolve, reject) {
+					
+					that.postData(that.miscUrl,params).then((result)=> {
+						console.log(result);
+						if (result.code < 0) {
+							resolve({});
+						} else {
+							resolve(result.resolve);
+						}
+					});
+				});
+			},
+			getData(url, data) {
+				// Default options are marked with *
+				let newUrl = url+'?'+data;
+				return new Promise(function (resolve, reject) {
+				fetch(newUrl, {
+					// body: JSON.stringify(data), // must match 'Content-Type' header
+					// cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+					// credentials: 'same-origin', // include, same-origin, *omit
+					headers: {
+					'x-product': 'DazzleStock',
+					'x-api-key': 'd9b126638ff44a84a0145c89a8c8ee01'
+					},
+					mode: 'no-cors', // no-cors, cors, *same-origin
+
+					method: 'GET', // *GET, POST, PUT, DELETE, etc.
+					// mode: 'cors', // no-cors, cors, *same-origin
+					// redirect: 'follow', // manual, *follow, error
+					// referrer: 'no-referrer', // *client, no-referrer
+				})
+				.then(response => {
+					resolve(response);
+				}) // parses response to JSON
+				});
+				
+			},
+
+			postData(url, data) {
+				// Default options are marked with *
+				
+				return new Promise(function (resolve, reject) {
+				fetch(url, {
+					body: JSON.stringify(data), // must match 'Content-Type' header
+					cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+					credentials: 'same-origin', // include, same-origin, *omit
+					headers: {
+					'user-agent': 'Mozilla/4.0 MDN Example',
+					'content-type': 'application/json'
+					},
+					method: 'POST', // *GET, POST, PUT, DELETE, etc.
+					mode: 'cors', // no-cors, cors, *same-origin
+					redirect: 'follow', // manual, *follow, error
+					referrer: 'no-referrer', // *client, no-referrer
+				})
+				.then(response => {
+					resolve(response.json());
+				}) // parses response to JSON
+				});
+				
+			},
+			parseThisPage(html){
+				let parser = new DOMParser();
+				let doc = parser.parseFromString(html, "text/html");
+				//this.document = doc;
+				return doc;
+				// console.log('Parse',doc);
+			},
+
+    loadScript(url){
+        const fileref=document.createElement('script');    
+        fileref.setAttribute("type","text/javascript");
+        fileref.setAttribute("src", url);
+        document.getElementsByTagName("head")[0].appendChild(fileref);
+      },
+    
+      myManagedUpload(key,body){
+        let tags = key.split("/");
+        let AWS = this.AWS;
+        tags.pop();
+        
+        const json = {
+            Bucket: this.bucket,
+            Key: 'files/'+key,
+            Body: body
+        };
+            console.log(json);
+        const s3 = new AWS.S3();
+        console.log(AWS);
+        return s3.upload(json);
+        // return s3.ManagedUpload(json);
+      },
+      listAllFiles(){
+        // const bucket = this.user.myUser['userBucket'];
+        // const bucket = this.user.myUser['userBucket'];
+        let AWS = window['AWS'];
+        let that = this;
+        return new Promise(function (resolve, reject) {
+            
+                var s3 = new AWS.S3();
+                var params = {
+                    Bucket: that.bucket,
+                    Delimiter: '/'
+                    // Prefix: prefix
+                };
+                s3.listObjects(params, function (err, data) {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(data.Contents);
+                    }
+                });
+        });
+    },
+    
+      listFile(prefix){
+        // const bucket = this.user.myUser['userBucket'];
+        // const bucket = this.user.myUser['userBucket'];
+        let AWS = window['AWS'];
+        let that = this;
+        return new Promise(function (resolve, reject) {
+            
+                var s3 = new AWS.S3();
+                var params = {
+                    Bucket: that.bucket,
+                    Prefix: prefix
+                };
+                s3.listObjects(params, function (err, data) {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(data.Contents);
+                    }
+                });
+        });
+    },
+    
+      saveMyImage(file,subowner='null') {
+        console.log(file);
+        let AWS = this.AWS;
+                // console.log(this.user);
+        const uid = this.user.myUser['uid'];
+        console.log(uid);
+        //    if (!subowner)
+        //        subowner=''
+            const s3 = new AWS.S3();
+            
+            // const oldFilename = encodeURIComponent(file.name);
+            // const fileExtansion = oldFilename.split('.').pop();
+            const oldFilename = file.name;
+            const fileExtansion = 'jpg';
+            const newId = 'id' + new Date().getTime()
+            const newFilename =  newId + '.jpg';
+            const params = {
+                Bucket: "designerrrr",
+                Key: "images/" + uid + "/" + newFilename,
+                ContentType: file.type,
+                Body: file,
+                Metadata: {
+                    "newVersion": "new",
+                    "gid": newId,
+                    "owner_id": uid,
+                    "original_name": oldFilename,
+                    "galleryType": "photo",
+    //                "subowner": subowner
+                }
+    
+            };
+      //      console.log('Sub-owner',subowner);
+            // if (subowner !='')
+            //         params.Metadata['subowner'] = subowner;
+            return new Promise(function (resolve, reject) {
+                s3.putObject(params, function (err, data) {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve({
+                            "oldFilename": oldFilename,
+                            "newFilename": newFilename,
+                            "fileExtansion": fileExtansion,
+                            "fileType": file.type
+                        });
+                    }
+                });
+            });
+    },
+    
+    isBucketExist(bucket){
+        let AWS = this.AWS;
+        return new Promise(function (resolve, reject) {
+        
+            let s3 = new AWS.S3();
+            
+            let params = {
+                Bucket: bucket
+            };
+            s3.headBucket(params, function(err, data) {
+                if (err) resolve(false); // an error occurred
+                else     resolve(true);           // successful response
+            });
+        });
+    },
+    
+    copyFile(copySource, key) {
+        let AWS = this.AWS;
+        let bucket = this.bucket;
+        return new Promise(function (resolve, reject) {
+            var s3 = new AWS.S3();
+            var params = {
+                Bucket: bucket,
+                Key: key,
+                CopySource: encodeURIComponent(copySource)
+            }
+            s3.copyObject(params, function (err, data) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(data);
+                }
+            });
+        });
+    },
+    
+    copyFolder(src, dest){
+        let that = this;
+        let bucket = this.bucket;
+        let AWS = this.AWS;
+        return new Promise(function (resolve, reject) {
+            var s3 = new AWS.S3();
+            var params = {
+                Bucket: bucket,
+                Prefix: src
+            };
+            s3.listObjects(params, function (err, data) {
+                if (err) 
+                    reject();
+    
+                console.log('Data',data);
+                var count = 0;
+                data.Contents.forEach(function (content) {
+    
+                    var str = content.Key;
+                    str = str.replace(src,dest);
+    
+                    that.getFile(content.Key).then(function(data2){
+                        console.log('Data2',data2);
+                        that.saveFile(str,data2).then(function(data3){
+                            count++;
+                            console.log('Count',count);
+                            console.log(data.Contents.length);
+                            if (count == data.Contents.length)
+                                resolve(data3);
+                        },function(){
+                            reject();
+                        });
+                    },function(){
+                        reject();
+                    });
+    
+                });
+            });
+        });
+    },
+    saveUserData(key,string){
+        let AWS = this.AWS;
+        // console.log(window['AWS'],this.AWS);
+        let bucket = 'dazzle-template';
+        return new Promise(function (resolve, reject) {
+            let s3 = new AWS.S3();
+    
+            let params = {
+                Bucket: bucket,
+                Key: 'user-data/'+window['uid']+'/'+key,
+                Body: string,
+                ContentType:'text/html'
+            }
+            let ext;
+            if (key.indexOf('.')>-1)
+                ext = key.substr(key.lastIndexOf('.') + 1);
+            else
+                ext = '';
+            if (ext === 'css') {
+                params.ContentType = 'text/css';
+            } else if (ext === 'less') {
+                params.ContentType = 'text/css';
+            } else if (ext === 'js') {
+                params.ContentType = 'application/javascript';
+            } else if (ext === 'json') {
+                params.ContentType = 'application/json';
+            } else if (ext === 'jpg') {
+                params.ContentType = 'image/jpeg';
+            } else if (ext === 'jpeg') {
+                params.ContentType = 'image/jpeg';
+            } else if (ext === 'png') {
+                params.ContentType = 'image/png';
+            } else if (ext === 'gif') {
+                params.ContentType = 'image/gif';
+            } else if (ext === 'html') {
+                params.ContentType = 'text/html';
+            } else {
+                params.ContentType='text/html';
+            }
+            console.log('User Data',params);
+            s3.putObject(params, function (err, data) {
+                if (err) {
+                    console.log(err);
+                    reject(err);
+                } else {
+                    console.log(data);
+                    resolve(data);
+                }
+            });
+        });
+    },
+      saveFile(key, string) {
+        let AWS = this.AWS;
+        // console.log(window['AWS'],this.AWS);
+        let bucket = this.bucket;
+        return new Promise(function (resolve, reject) {
+            let s3 = new AWS.S3();
+    
+            let params = {
+                Bucket: bucket,
+                Key: key,
+                Body: string,
+                ContentType:'text/html'
+            }
+            let ext;
+            if (key.indexOf('.')>-1)
+                ext = key.substr(key.lastIndexOf('.') + 1);
+            else
+                ext = '';
+            if (ext === 'css') {
+                params.ContentType = 'text/css';
+            } else if (ext === 'less') {
+                params.ContentType = 'text/css';
+            } else if (ext === 'js') {
+                params.ContentType = 'application/javascript';
+            } else if (ext === 'json') {
+                params.ContentType = 'application/json';
+            } else if (ext === 'jpg') {
+                params.ContentType = 'image/jpeg';
+            } else if (ext === 'jpeg') {
+                params.ContentType = 'image/jpeg';
+            } else if (ext === 'png') {
+                params.ContentType = 'image/png';
+            } else if (ext === 'gif') {
+                params.ContentType = 'image/gif';
+            } else if (ext === 'html') {
+                params.ContentType = 'text/html';
+            } else {
+                params.ContentType='text/html';
+            }
+            console.log(params);
+            s3.putObject(params, function (err, data) {
+                if (err) {
+                    console.log(err);
+                    reject(err);
+                } else {
+                    console.log(data);
+                    resolve(data);
+                }
+            });
+        });
+    },
+    getContent(url){
+        console.log('Query Url',url);
+        return new Promise(function (resolve, reject) {
+          fetch(url,{
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            mode: 'no-cors'})
+          .then(response=> 
+            resolve(response.text())
+            ).catch(error => {
+              console.error('Error:', error);
+              reject();
+            })
+        });
+    
+      },
+    getFile(key) {
+			let that = this;
+			let AWS = this.AWS;
+			let bucket = this.bucket;
+			// let AWS = window['AWS'];
+		
+			// console.log(window,window['AWS']);
+			return new Promise(function (resolve, reject) {
+				let s3 = new AWS.S3();
+				let params = {
+					Bucket: bucket,
+					Key: key,
+					ResponseExpires: new Date().getTime()
+				};
+				console.log('Get File',params);
+				s3.getObject(params, function (err, data) {
+					console.log('Data',params,data);
+					if (err) {
+						reject(err);
+					} else {
+						resolve(data.Body.toString());
+					}
+				});
+			});
+	}
+  
+
+	});
+})();
+
+</script>

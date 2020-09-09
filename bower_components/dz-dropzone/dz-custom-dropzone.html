@@ -485,8 +485,10 @@
       this.user =store.get('user') || store.get('subUser') || null;
 			console.log('Drop Zone',this.user,store.get('user'),store.get('subUser'));
 
-      if (this.user)
-  			 this.fileManager = new AwsPackage(this.user);
+      // if (this.user)
+  		// 	 this.fileManager = new AwsPackage(this.user);
+      this.fileManager = Polymer.fileManager;
+      
       if (store.get('subUser'))
         this.subUser = store.get('subUser') || null;
 

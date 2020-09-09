@@ -1,0 +1,106 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="..//dz-content-box.html">
+<script>
+
+	class scriptPackage {
+		constructor(elm){
+			
+			let src=elm.getAttribute('src') || null;
+			
+			elm.isMaster = elm.hasAttribute('dz-master');
+			if (!src)
+				elm.type ="inline";
+			else
+				elm.type="url";
+
+			if (src)
+				elm.label ="腳本("+src+")";
+			else
+				elm.label ="腳本-"+elm.dzid;
+
+			if (elm.isBodyJs)
+				elm.dropBox('body_js');
+			else
+				elm.dropBox('js');
+			
+
+			// elm.dataUpdate();
+
+
+		elm.dropBox = function(type){
+			if (elm.isMaster)
+				Polymer.mSheets[type].push(elm);
+			else
+				Polymer.bSheets[type].push(elm);
+		}
+
+		elm.isAbsolute = function(src){
+			
+			if (src.indexOf("//")>-1)
+				return true;
+			else
+				return false;
+		}
+		elm.edit = function(){
+			let dzid = elm.getAttribute('dzid');
+			let dialog = document.querySelector('dz-settings').shadowRoot.querySelector('vaadin-dialog');
+
+			if (!elm.hasAttribute('src')){
+				let dzPopup = document.createElement('dz-content-box');
+				dzPopup.value = elm.innerHTML;
+				dzPopup.dialog = dialog;
+				dzPopup.save = function(){
+					let textarea= this.shadowRoot.querySelector('vaadin-text-area') || null;
+					let html;
+					html = textarea.value;
+					elm.setAttribute('src','js/'+elm.dzid+'.js');
+					elm.innerHTML = html;
+					Polymer.fileManager.saveFile('js/'+elm.dzid+'.js',html);
+					dialog.opened = false;
+				}
+					Polymer.componentPopup(dzPopup,'90%','90%');
+			}
+			else {
+				let src = elm.getAttribute('src');
+				if (elm.isAbsolute(src)) {
+					let download = confirm('這檔案為遠端檔案，要下載來編輯麼？');
+					let copyright = confirm('注意！這檔案或受版權保障，請確保已獲授權。要繼續下載麼?');
+					if (download && copyright){
+						let href = elm.getAttribute('src');
+						let a = new URL(href);
+						Polymer.fileManager.getExternalContent(href).then(html=>{
+								console.log('Path Name',a.pathname);
+						});
+					}
+				} else {
+					
+					let src = elm.getAttribute('src');
+					Polymer.getContent(src).then(html=>{
+						let dzPopup = document.createElement('dz-content-box');
+						dzPopup.value = html;
+						dzPopup.dialog = dialog;
+						dzPopup.cancel = function(){
+							dialog.opened = false;
+						}
+						dzPopup.save = function(){
+							let textarea= this.shadowRoot.querySelector('vaadin-text-area') || null;
+							let html;
+							html = textarea.value;
+							Polymer.fileManager.saveFile(src,html);
+							dialog.opened = false;
+						}
+						Polymer.componentPopup(dzPopup,'90%','90%');
+					});
+				}
+			}	
+
+		}
+
+		}
+
+	}
+
+
+  
+
+</script>

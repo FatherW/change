@@ -1,0 +1,115 @@
+﻿<link href="../polymer/polymer.html" rel="import">
+<link href="../dz-menu/css/style.html" rel="import" />
+<dom-module id="change-like2">
+    <template>
+        <style>
+            #toggle-heart{
+                position: absolute;
+                left: -100vw;
+            }
+
+            [for = toggle-heart] {
+                color: lightskyblue;
+                font-size: 2em;
+                cursor: pointer;
+            }
+
+            [id = "toggle-heart"]:checked + label{
+                color: red;
+            }
+        </style>
+        <style include="icon-styles"></style>
+        <div id="container">
+            <input on-click="addCount" id="toggle-heart" type="checkbox" />
+            <label for="toggle-heart">❤</label>
+            <span id="likes">0</span> likes.
+        </div>
+    </template>
+</dom-module>
+<script>
+    (function() {
+        Polymer({
+            is: 'change-like2',
+            properties: {
+                like: {
+                    "type": Object
+                },
+                id: {
+                    "type": String
+                },
+                status: {
+                    "type": Boolean
+                }
+            },
+            created: function() {
+                // console.log('Created');
+                // Check User like or not.and set the status
+            },
+            ready: function() {
+
+
+                // Polymer.postData(Url, like2).then(res => {
+                //     if (res.code > 0) {
+                //         let thelikes = res.resolve;
+                //         shadow.querySelector('#likes').innerHTML = thelikes['like'];
+                //     }
+                // });
+
+
+
+
+
+            },
+
+
+            _changecontent: function() {
+                this.id = this.getAttribute('id');
+                console.log("this.id is equalto: ", this.id);
+
+                console.log("this.like is:", this.like)
+
+                let that = this;
+                let shadow = this.shadowRoot;
+                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+
+                let like2 = store.get('change-like') || null;
+                console.log("the cokkies in like is : ", like2)
+                shadow.querySelector('#likes').innerHTML = this.id;
+            },
+
+
+            addCount: function() {
+                let that = this;
+                let shadow = this.shadowRoot;
+                let URL = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+
+                if (this.status) {
+                    this.like--;
+                    this.status = false;
+                } else {
+                    this.like++;
+                    this.status = true;
+                }
+                let parama = {
+                    "action": "addData",
+                    "index": "change",
+                    "type": "order",
+                    "id": this.id,
+                    "body": {
+                        "like": this.like,
+                    }
+                };
+                Polymer.postData(URL, parama).then(res => {
+                    if (res.code > 0) {
+                        console.log('Success');
+                        console.log(parama);
+                        shadow.querySelector('#likes').innerText = this.like;
+                    }
+                })
+            },
+
+        });
+
+
+    })();
+</script>

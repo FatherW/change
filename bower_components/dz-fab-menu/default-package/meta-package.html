@@ -1,0 +1,109 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="..//dz-content-box.html">
+<script>
+
+	class metaPackage {
+		constructor(elm){
+			
+			let name=elm.getAttribute('name') || null;
+			let property=elm.getAttribute('property') || null;
+			
+			elm.isMaster = elm.hasAttribute('dz-master');
+			elm.label ="標籤-"+elm.dzid;
+			if (name){
+				switch(name){
+				
+					case 'twitter:card':
+						elm.label="標籤(Twitter:card)";
+					break;
+
+					case 'twitter:title':
+						elm.label="標籤(Twitter:標題)";
+					break;
+
+					case 'twitter:description':
+						elm.label="標籤(Twitter:描述)";
+					break;
+
+					case 'twitter:image':
+						elm.label="標籤(Twitter:圖片)";
+					break;
+
+					case 'generator':
+						elm.label="生成器";
+					break;
+
+					case 'google-site-verification':
+					break;
+
+					default:
+						elm.label="標籤("+name+")";
+					break;
+				}
+			}
+
+			if (property){
+				switch(property){
+					case 'og:type':
+						elm.label= "Open Graph類型";
+					break;
+					case 'og:title':
+						elm.label= "Open 標題";
+					break;
+					case 'og:description':
+						elm.label= "Open Graph描述";
+					break;
+					case 'og:url':
+						elm.label= "Open Graph連結";
+					break;
+					case 'og:site_name':
+						elm.label= "Open Graph站名";
+					break;
+					case 'og:image':
+						elm.label= "Open Graph簡圖";
+					break;
+					case 'og:image:secure_url':
+						elm.label= "Open Graph加密簡圖";
+					break;
+				}
+			}
+			
+
+			elm.dropBox('meta');
+
+			elm.edit = function(){
+				let dzPopup = document.createElement('dz-content-box');
+				let dialog = document.querySelector('dz-settings').shadowRoot.querySelector('vaadin-dialog');
+
+				dzPopup.value = elm.getAttribute('content');
+				dzPopup.dialog = dialog;
+
+				dzPopup.cancel = function(){
+					dialog.opened = false;
+				}
+
+				dzPopup.save = function(){
+					let textarea= this.shadowRoot.querySelector('vaadin-text-area') || null;
+					let html;
+					html = textarea.value;
+					elm.setAttribute('content',html);
+					dialog.opened = false;
+				}
+				Polymer.componentPopup(dzPopup,'400px','100px');
+					
+				
+			}
+		}
+
+	
+
+	
+
+	
+
+	}
+
+
+  
+
+</script>

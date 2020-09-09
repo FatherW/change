@@ -1,0 +1,421 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="change-like2.html">
+<link rel="import" href="change-.html">
+
+
+
+<dom-module id="change-itemspecial">
+    <template>
+        <style>
+
+            a:link{
+                text-decoration:none;
+                color:black;
+            }
+
+            button:hover{
+                background-color:#d9d9d9;
+             
+            }            
+
+
+            .titlebutton{                
+                border-spacing: 50px;
+            }
+           
+            .catbutton{
+                background-color: #f9f9f9;
+                text-align: center;
+                padding-left:13px;
+                padding-right:13px;
+                border:none;
+                width:110px;
+                height:30px;
+                border-radius: 15px;
+
+            }
+
+
+
+            #container{
+                padding-top: 10px;
+            }
+
+            .itemsall{
+                padding:50px;
+                width: 150px;
+                height:150px;
+                background-repeat: no-repeat;
+
+            }
+          
+
+            .profile-finger {
+				width: 100%;
+			}
+
+            change-like{
+                width: 15px;
+                height: 15px;
+            }
+
+			.profile-grid {
+				width: 84%;
+				padding-left: 8%;
+				padding-right: 8%;
+				display: grid;
+				grid-row-gap: 20px;
+				grid-column-gap: 15px;
+				grid-template-columns: 100%;
+				grid-template-rows: 1fr 2fr 4fr;
+				background-color: cornsilk;
+				padding-top: 20px;
+				padding-bottom: 20px;
+			}
+
+			.short-profile-grid {
+				display: grid;
+				grid-column-gap: 15px;
+				grid-template-columns: 59% 12% 12% 12%;
+				background-color: white;
+				border: 2px solid gainsboro;
+				padding: 30px;
+				padding-left: 4%;
+				padding-right: 4%;
+			}
+
+			.detail-profile-grid {
+				display: grid;
+				grid-row-gap: 10px;
+				grid-template-rows: 2fr 1fr 1fr 1fr 1fr;
+				background-color: white;
+				border: 2px solid gainsboro;
+				padding: 20px;
+				padding-left: 4%;
+				padding-right: 4%;
+			}
+
+			.things-profile {
+				background-color: white;
+				border: 2px solid gainsboro;
+			}
+
+
+            #a1,
+            #a2 {
+                display: inline-block;
+                font-size: 15px;
+            }
+
+            #a3 {
+                float: right;
+            }
+
+            .button {
+                margin-left: 4%;
+                margin-right: 4%;
+                margin-top: 41px;
+            }
+            .buttonGray {
+				width: 150px;
+				background-color: gray;
+				color: black;
+				border-radius: 2px;
+				height: 30px;
+				font-size: 16px;
+				margin-right: 10px;
+			}
+
+			#left1 {
+				float: left;
+			}
+
+			#left2 {
+				float: left;
+			}
+
+			#left3 {
+				float: left;
+			}
+
+			#right1 {
+				float: right;
+			}
+
+			#right2 {
+				float: right;
+				padding-top: 4px;
+			}
+
+			#right3 {
+				float: right;
+			}
+
+			#right4 {
+				float: right;
+				padding-top: 4px;
+			}
+
+
+            .things-grid {
+                display: grid;
+                width: 98%;
+                height: 100%;
+                grid-row-gap: 15px;
+                padding-bottom:50px;
+                grid-column-gap: 10px;
+                grid-row-gap: 40px;
+                grid-template-columns: repeat(5, 1fr);
+                background-color: white;}
+
+            change-item {
+                width: 100%;
+
+            }
+
+            svg.title_tags {
+                width: 100%;
+                height: 30px;
+                padding-top:10px;
+
+            }
+
+            svg.s_title_tags {
+                margin: 5px;
+                height: 15px;
+                width: 80px;
+                border-radius: 2px;
+                padding-top:10px;
+           
+
+            }
+
+            change-things {
+                border: 0px solid gainsboro;
+                /* padding: 16px; */
+                height:100%;
+                width:100%;
+            }
+
+            /* .itemspic{
+                width:200px;
+                height:180px;
+                padding-top:20px;
+                background-size: contain;
+                background-position: center;
+                text-align: center;
+                background-repeat: no-repeat;
+                align-items: center;
+
+            } */
+
+            .img {
+                width: 270px;
+                height: 230px;
+                background-size: contain;
+                background-position:center center;
+                /* background-repeat: no-repeat; */
+                margin: 1%;
+                background-image: url(http://change.dazzle.website/img/channel_banner/1.jpg);
+                background-repeat:no-repeat;
+
+            }
+
+            .time{
+                font-size: 6px;
+            }
+
+            .circle {
+                margin: 5px;
+                height: 20px;
+                width: 20px;
+
+
+            }
+
+            .price{
+                font-size:13px;
+                padding-top: 10px;
+                padding-bottom:10px;
+
+            }
+
+            .name{
+                font-size: 13px;
+            }
+
+            .small{
+                font-size: 15px;
+
+            }
+
+            #usericon{
+                height:40px;
+            }
+            .initemtitle{          
+                
+                font-size: 25px;
+                margin-left: 10px;
+                font-weight: 900;
+            }
+
+            .productname2{
+                font-size: 15px;
+                font-weight: 600;
+                margin-top:10px;
+
+            }
+        </style>
+
+
+
+<div class="titlebutton"></div>
+
+
+<div class="things-grid" id="blank"></div>
+
+    </template>
+
+</dom-module>
+
+<script>
+    (function() {
+
+
+
+        Polymer({
+            is: 'change-itemspecial',
+            properties: {
+                "data": {
+                    "type": Object
+                },
+
+                "allquery": {
+                    "type": Array
+
+                },
+
+
+
+
+            },
+
+            created: function() {
+
+            },
+            ready: function() {
+
+                let that = this;
+                let shadow = this.shadowRoot;
+
+                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let param = {
+                    "action": "searchData",
+                    "index": "change",
+                    "type": "product",
+                    "body": {
+                        "query": {
+                            "match_all": {}
+                        }
+
+                    }
+                };
+
+                let paramdistrict = {
+                    "action": "searchData",
+                    "index": "change",
+                    "type": "categories",
+                    "body": {
+                        "sort": [{
+                            "_id": {
+                                "order": "asc"
+                            }
+                        }],
+                        "query": {
+                            "match": {
+                                "parent": "0"
+                            }
+                        }
+                    }
+                };
+
+                Polymer.postData(Url, paramdistrict).then(res => {
+                    if (res.code > 0) {
+                        let cat = res.resolve;
+                        let current = "";
+
+                        for (var i = 0; i < cat.length; i++) {
+                            current = current + "<button class=\"catbutton\" id=\"cat_" + i + "\" on-click=\"jumppage()\">車與地產</button> &nbsp; &nbsp; &nbsp;"
+
+                        }
+                        current = "<button  id=\"cat_all\" on-click=\"jumppage()\"><a href=\"change.dazzle.website/list-product.html\">所有類別<a></button> &nbsp; &nbsp; &nbsp;";
+
+                        shadow.querySelector('.titlebutton').innerHTML = current;
+
+                        for (var i = 0; i < cat.length; i++) {
+                            shadow.querySelector('#cat_' + i).innerHTML = "<a href=\"list-product.html\">" + cat[i]['name'] + "</a>";
+                        }
+                    };
+
+                });
+
+                Polymer.postData(Url, param).then(res => {
+                    if (res.code > 0) {
+                        console.log("Result", res);
+                        let prods = res.resolve;
+                        console.log("Price", prods[1]['price']);
+
+                        var storeId = [];
+                        for (var i = 0; i < prods.length; i++) {
+                            let theidis = prods[i]['_id'];
+
+                            storeId.push(theidis)
+                            console.log("all the id is", theidis);
+
+                        };
+
+
+                        for (var i = 0; i < prods.length; i++) {
+                            let current = shadow.querySelector('.things-grid').innerHTML;
+                            current = current +
+                                "<change-things id=\"" + storeId[i] + "\"></change-things>";
+
+                            shadow.querySelector(".things-grid").innerHTML = current;
+
+
+
+
+
+
+                            if (i == 1) {
+                                console.log("Price,new=", prods[i]['price']);
+
+                            }
+                        }
+
+                    } else {
+                        alert("error");
+                    }
+                    console.log('test');
+
+                })
+
+
+
+            },
+
+            jumppage: function() {
+                href = "change.dazzle.website"
+            },
+
+
+
+
+
+
+        });
+
+
+
+    })();
+</script>

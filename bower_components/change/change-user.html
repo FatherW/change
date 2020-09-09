@@ -115,7 +115,16 @@
                 // }
                 let user = store.get('change-user') || null;
 
-                id = document.head.querySelector('meta[name=user-id]').getAttribute('content') || null;
+                let elm = document.head.querySelector('meta[name=user-id]');
+        
+                if (elm)
+                    id = elm.getAttribute('content');
+                else if (user)
+                    id = user['id'];
+                else {
+                    // alert('用戶未登入或不能讀取用戶資料');
+                    location.href="/index.html";
+                }
 
                 if (!user|| id != user['id']) {
                     this.style.display="none";

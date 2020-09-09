@@ -1,0 +1,420 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="change-like2.html">
+<link rel="import" href="change-in-item.html">
+
+
+<dom-module id="change-things">
+    <template>
+        <style>
+            
+            a:link,
+            a:visited{
+                text-decoration:none;
+                color:black;
+            }
+
+            a:hover{
+                text-decoration:none;
+                
+            }
+
+            #container{
+                padding-top: 10px;
+            }
+
+            .itemsall{
+                padding:50px;
+                width: 150px;
+                height:150px;
+                background-repeat: no-repeat;
+
+            }
+
+
+            .profile-finger {
+				width: 100%;
+			}
+
+            change-like{
+                width: 15px;
+                height: 15px;
+            }
+
+			.profile-grid {
+				width: 84%;
+				padding-left: 8%;
+				padding-right: 8%;
+				display: grid;
+				grid-row-gap: 20px;
+				grid-column-gap: 15px;
+				grid-template-columns: 100%;
+				grid-template-rows: 1fr 2fr 4fr;
+				background-color: cornsilk;
+				padding-top: 20px;
+				padding-bottom: 20px;
+			}
+
+			.short-profile-grid {
+				display: grid;
+				grid-column-gap: 15px;
+				grid-template-columns: 59% 12% 12% 12%;
+				background-color: white;
+				border: 2px solid gainsboro;
+				padding: 30px;
+				padding-left: 4%;
+				padding-right: 4%;
+			}
+
+			.detail-profile-grid {
+				display: grid;
+				grid-row-gap: 10px;
+				grid-template-rows: 2fr 1fr 1fr 1fr 1fr;
+				background-color: white;
+				border: 2px solid gainsboro;
+				padding: 20px;
+				padding-left: 4%;
+				padding-right: 4%;
+			}
+
+			.things-profile {
+				background-color: white;
+				border: 2px solid gainsboro;
+			}
+
+
+            #a1,
+            #a2 {
+                display: inline-block;
+                font-size: 15px;
+                margin-left:5px;
+            }
+
+            #a3 {
+                float: right;
+            }
+
+
+            #usericon:hover{
+                background-color: lightgray;
+            }
+            
+
+            .button {
+                margin-left: 4%;
+                margin-right: 4%;
+                margin-top: 41px;
+            }
+            .buttonGray {
+				width: 150px;
+				background-color: gray;
+				color: black;
+				border-radius: 2px;
+				height: 30px;
+				font-size: 16px;
+				margin-right: 10px;
+			}
+
+			#left1 {
+				float: left;
+			}
+
+			#left2 {
+				float: left;
+			}
+
+			#left3 {
+				float: left;
+			}
+
+			#right1 {
+				float: right;
+			}
+
+			#right2 {
+				float: right;
+				padding-top: 4px;
+			}
+
+			#right3 {
+				float: right;
+			}
+
+			#right4 {
+				float: right;
+				padding-top: 4px;
+			}
+
+
+            .things-grid {
+				display: grid;
+                width: 100%;
+                height:100%;
+                grid-row-gap: 15px;
+				padding:50px;
+				grid-column-gap: 50px;
+                grid-row-gap: 40px;
+				grid-template-columns: repeat(4, 1fr);
+                background-color: white;
+                -webkit-box-shadow: 0px 0px 11px 1px rgba(50,49,56,1);
+                -moz-box-shadow: 0px 0px 11px 1px rgba(50,49,56,1);
+                box-shadow: 0px 0px 11px 1px rgba(50,49,56,1);
+
+			}
+            change-item {
+                width: 100%;
+
+            }
+
+            svg.title_tags {
+                width: 100%;
+                height: 30px;
+                padding-top:10px;
+
+            }
+
+            svg.s_title_tags {
+                margin: 5px;
+                height: 16px;
+                width: 60px;
+                border-radius: 2px;
+                padding-top:10px;
+                font-size:80%;
+
+            }
+
+            change-things {
+                border: 0px solid gainsboro;
+
+                height:100%;
+                width:100%;
+            }
+
+            #pics{
+                background-image:url(http://change.dazzle.website/img/channel_banner/1.jpg);
+                position: relative;
+                background-size: cover;
+                background-repeat: no-repeat;
+                width: 100%;
+                padding-top: 75%; /* 4:3 Aspect Ratio */
+                background-position: center center;
+            }
+
+            .img {
+                width: 270px;
+                height: 230px;
+                background-size: contain;
+                background-position:center center;
+                /* background-repeat: no-repeat; */
+                margin: 1%;
+                background-image: url(http://change.dazzle.website/img/channel_banner/1.jpg);
+                background-repeat:no-repeat;
+
+            }
+
+            .time{
+                font-size: 6px;
+            }
+
+            .circle {
+                margin: 5px;
+                height: 20px;
+                width: 20px;
+
+
+            }
+
+            .price{
+                font-size:13px;
+                padding-top: 10px;
+                padding-bottom:10px;
+
+            }
+
+            .name{
+                font-size: 13px;
+            }
+
+            .small{
+                font-size: 15px;
+
+            }
+
+            #usericon{
+                height:40px;
+                margin-bottom:12px;
+                margin-top:12px;
+                border-radius: 6px;
+                padding-top: 3px;
+                padding-bottom:3px;
+            }
+            .initemtitle{
+
+                font-size: 25px;
+                margin-left: 10px;
+                font-weight: 900;
+            }
+
+            .productname2{
+                font-size: 15px;
+                font-weight: 600;
+                margin-top:10px;
+
+
+            }
+
+        </style>
+
+            <a href="">
+                <div id="usericon">
+                    <div id="a1">
+                        <img src="http://change.dazzle.website/img/user_profile.png">
+                    </div>
+                    <div id="a2">
+                        <div class="name" id="owner">1234</div>
+                        <div class="time">兩分鐘前</div>
+                    </div>
+                    
+                </div> 
+            </a>
+            <a href="">
+            <div id="pics">
+                
+            </div> 
+            </a>
+                <svg class="s_title_tags">
+                    <polygon points="0,0 40,0 30,16 0,16" style="fill:#6AA64F;stroke:#6AA64F;stroke-width:0"></polygon>
+                    <text x="3" y="12" fill="white" id="isNew" >全新</text>
+                </svg>
+            <div class="productname2" id="productname">
+                頸鏈 的士
+            </div>
+            <div id="price" class="price">
+                $$140</div>
+            <change-item-tag>
+                <change-tag class="small" id="description">车舆地产</change-tag>
+                <div class="clear"></div>
+            </change-item-tag>
+            <change-like2 id="temp"></change-like2>
+            <div class="clear"></div>
+        
+
+
+
+
+
+    </template>
+</dom-module>
+<script>
+    (function() {
+        Polymer({
+            is: 'change-things',
+            properties: {
+                like: {
+                    "type": Object
+                },
+                id: {
+                    "type": String
+                },
+                status: {
+                    "type": Boolean
+                }
+            },
+            created: function() {
+                // console.log('Created');
+                // Check User like or not.and set the status
+            },
+            ready: function() {
+                this.id = this.getAttribute('id');
+                let that = this;
+                let shadow = this.shadowRoot;
+
+
+                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let param = {
+                    "action": "getData",
+                    "index": "change",
+                    "type": "product",
+                    "id": this.id
+                };
+
+
+                store.set('change-like', param);
+
+                Polymer.postData(Url, param).then(res => {
+
+                    if (res.code > 0) {
+
+                        let all = res.resolve;
+                        shadow.querySelector("#productname").innerHTML = all['productname'];
+
+                        shadow.querySelector('#price').innerHTML = "HKD$" + all['price'];
+                        shadow.querySelector('#description').innerHTML = all['description'];
+                        let thenew = ""
+                        if (all['isNew'] == true) {
+                            thenew = "<polygon points=\"0,0 40,0 30,16 0,16\" style=\"fill:#6AA64F;stroke:#6AA64F;stroke-width:0\"></polygon><text x=\"3\" y=\"12\" fill=\"white\" id=\"isNew\" >全新</text>"
+
+                        } else {
+                            thenew = "<polygon points=\"0,0 55,0 45,16 0,16\" style=\"fill:#E84D4D;stroke:#E84D4D;stroke-width:0\"></polygon><text x=\"3\" y=\"12\" fill=\"white\" id=\"isNew\" >已使用</text>"
+                        }
+                        shadow.querySelector('.s_title_tags').innerHTML = thenew;
+                        // shadow.querySelector('#isNew').innerHTML = thenew;
+                        if (all['pics']) {
+                            if (typeof(all['pics']) === 'string') {
+                                shadow.querySelector('#pics').style.backgroundImage = "url(" + all['pics'] + ")";
+
+                            } else {
+                                shadow.querySelector('#pics').style.backgroundImage = "url(" + all['pics'][0] + ")";
+
+                            }
+                        } else {
+                            shadow.querySelector('#pics').style.backgroundImage = "url('http://change.dazzle.website/img/default.png')";
+                        };
+                        if (all['like']) {
+                            shadow.querySelector('#temp').id = all['like'];
+
+                        } else {
+                            shadow.querySelector('#temp').id = "0";
+
+                        }
+                        shadow.querySelector('change-like2')._changecontent();
+
+                        let findid = all['ownerId'];
+                        let idparam = {
+                            "action": "searchData",
+                            "index": "change",
+                            "type": "_user",
+                            "body": {
+                                "query": {
+                                    "match": {
+                                        "_id": this.id
+                                    }
+                                }
+                            }
+                        };
+                        Polymer.postData(Url, idparam).then(res => {
+                            if (res.code > 0) {
+                                // shadow.querySelector('#owner').innerHTML = res.resolve[0]['username'];
+                            }
+                        });
+
+
+
+
+
+
+
+                    }
+                })
+
+
+            },
+
+
+
+
+            addCount: function() {
+
+            },
+        });
+    })();
+</script>

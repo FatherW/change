@@ -1,0 +1,582 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-text-field/vaadin-email-field.html">
+<link rel="import" href="../vaadin-text-field/vaadin-password-field.html">
+<link rel="import" href="../vaadin-checkbox/vaadin-checkbox.html">
+<link rel="import" href="../vaadin-text-field/vaadin-text-area.html">
+<link rel="import" href="../vaadin-text-field/vaadin-number-field.html">
+<link href="../dz-menu/css/style.html" rel="import" />
+
+
+<dom-module id="change-new-product">
+
+    <template>
+        <style include="icon-styles"></style>
+        <style>
+            hr {
+                max-width: 100px;
+                margin-left: 0;
+                margin-bottom: 10px;
+            }
+
+            .change-new-product-container {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .left-pics {
+                width: 690px;
+                height: 450px;
+                background-color: white;
+                margin-top: 30px;
+                margin-left: 100px;
+                border-style: solid;
+                border-color: grey;
+            }
+
+            .right-product {
+                width: 100;
+                height: 1050px;
+                background-color: white;
+                margin-top: 30px;
+                margin-left: 100px;
+            }
+
+            .bigPic {
+                height: 430px;
+                background-image: url(http://change.dazzle.website/Website%20Design/product%20page/img/product%20preview/001.jpg);
+                background-size: contain;
+                background-repeat: no-repeat;
+                margin-top: 10px;
+                margin-left: 120px;
+            }
+
+            .consmall {
+                float: left;
+                width: 150px;
+                height: 100px;
+                border-style: solid;
+                border-color: grey;
+                margin-top: 40px;
+                margin-left: 2px;
+                margin-right: 15px;
+
+            }
+
+            #div1,
+            #div2,
+            #div3,
+            #div4 {
+
+                width: 130px;
+                height: 96px;
+                background-image: url(http://change.dazzle.website/img/item/1.jpg);
+                background-size: contain;
+                background-repeat: no-repeat;
+                margin-left: 25px;
+                margin-top: 2px;
+
+            }
+
+            .fullWidth {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            #head {
+                background-image: url(http://change.dazzle.website/img/symbol/s5.png);
+                width: 60px;
+                height: 60px;
+                background-size: cover;
+                grid-column-start: 1;
+                grid-column-end: 2;
+                grid-row-start: 1;
+                grid-row-end: 3;
+
+            }
+
+            .yaqzaan {
+                float: left;
+            }
+            
+            svg.new {
+                margin: 5px;
+                height: 32px;
+                width: 80px;
+                border-radius: 2px;
+                display: inline-block;
+            }
+
+            .store {
+                font-size: 23px;
+                display: inline-block;
+                padding-top: 10px;
+            }
+
+            .checked {
+                color: orange;
+            }
+
+            .dollar {
+                font-size: 2em;
+            }
+
+
+            #location {
+                width: 30px;
+                height: 30px;
+                background-image: url(http://change.dazzle.website/img/icon/location.png);
+                background-size: cover;
+                display: inline-block;
+            }
+
+            .b1 {
+                display: inline-block;
+                margin-left: 10px;
+            }
+
+            #delivery {
+                width: 30px;
+                height: 30px;
+                background-image: url(http://change.dazzle.website/img/icon/delivery.png);
+                background-size: cover;
+                display: inline-block;
+            }
+
+            .b2 {
+                display: inline-block;
+                margin-left: 10px;
+            }
+
+            .quan {
+                font-size: 20px;
+                display: inline-block;
+            }
+
+            .control {
+                display: inline-block;
+            }
+
+            .storage {
+                display: inline-block;
+                font-size: 20px;
+                margin-left: 10px;
+            }
+
+            #buy {
+                background-color: lightcoral;
+                width: 140px;
+                height: 45px;
+                border-radius: 3px;
+                color: white;
+                border: none;
+                font-size: large;
+            }
+
+            #cart {
+                background-color: grey;
+                width: 140px;
+                height: 45px;
+                border-radius: 3px;
+                color: white;
+                border: none;
+                font-size: large;
+            }
+
+            .b3 {
+                margin-top: 10px;
+            }
+
+            .bigsize {
+                font-size: 25px;
+                background-image: url(http://change.dazzle.website/img/);
+                margin-top: 70px;
+            }
+
+            .tag {
+                display: inline-block;
+            }
+
+            .button {
+                display: inline-block;
+            }
+
+            .myButton {
+                background: linear-gradient(to bottom, #ededed 5%, #dfdfdf 100%);
+                background-color: #ededed;
+                border-radius: 28px;
+                border: 1px solid #dcdcdc;
+                display: inline-block;
+                cursor: pointer;
+                color: black;
+                font-family: Arial;
+                font-size: 17px;
+                padding: 0px 20px;
+                text-decoration: none;
+                text-shadow: 0px 1px 0px #ffffff;
+            }
+
+            .myButton:hover {
+                background: linear-gradient(to bottom, #dfdfdf 5%, #ededed 100%);
+                background-color: #dfdfdf;
+            }
+
+            .myButton:active {
+                position: relative;
+                top: 1px;
+            }
+
+
+
+            #username {
+                display: inline-block;
+            }
+
+            .userinfo {
+                display: inline-grid;
+                grid-template-columns: 1fr 2fr;
+                grid-template-rows: 50% 50%;
+            }
+
+            .user {
+                width: 100px;
+                height: 100px;
+            }
+
+            #t1 {
+                margin-left: 350px;
+            }
+
+            .myButton1 {
+                box-shadow: inset 0px 1px 0px 0px #f29c93;
+                background: linear-gradient(to bottom, #fe1a00 5%, #ce0100 100%);
+                background-color: #fe1a00;
+                border-radius: 3px;
+                border: 1px solid #d83526;
+                display: inline-block;
+                cursor: pointer;
+                color: #ffffff;
+                font-family: Arial;
+                font-size: 13px;
+                padding: 6px 24px;
+                text-decoration: none;
+                text-shadow: 0px 1px 0px #b23e35;
+            }
+
+            .myButton1:hover {
+                background: linear-gradient(to bottom, #ce0100 5%, #fe1a00 100%);
+                background-color: #ce0100;
+            }
+
+            .myButton1:active {
+                position: relative;
+                top: 1px;
+            }
+
+        </style>
+        <style>
+            /* 父元素，因为~符号只能匹配下面的兄弟节点，所以使用弹性盒的倒序改变五角星的排列方式 */
+            .box {
+                width: 266px;
+                height: 27px;
+                margin: 0 auto;
+                display: flex;
+                flex-direction: row-reverse;
+                justify-content: space-between;
+            }
+
+            /* 隐藏单选 */
+            input {
+                display: none;
+            }
+
+            /* 五角星默认样式 */
+            input[type="radio"]+label>svg>path {
+                d: path("M27.500,1.501 L36.069,16.899 L53.497,20.217 L41.365,33.051 L43.567,50.499 L27.500,43.032 L11.433,50.499 L13.635,33.051 L1.503,20.217 L18.931,16.899 L27.500,1.501 ");
+                stroke-width: 1px;
+                fill: none;
+                stroke: #333;
+            }
+
+            /* 移入，点击选中的元素和下面的元素变为实心 */
+            input[type="radio"]+label:hover>svg>path,
+            input[type="radio"]+label:hover~input[type="radio"]+label>svg>path,
+            input[type="radio"]:checked+label>svg>path,
+            input[type="radio"]:checked~input[type="radio"]+label>svg>path {
+                stroke-width: 0px;
+                fill: #f00;
+            }
+        </style>
+
+        <div class="change-new-product-container">
+            <div class="left-pics">
+                <!-- 这里放图片 -->
+                <div class="bigPic">大图</div>
+                <div style="height: 100px;">
+                    <div class="consmall">
+                        <div id="div1">图1</div>
+                    </div>
+                    <div class="consmall">
+                        <div id="div2">图2</div>
+                    </div>
+                    <div class="consmall">
+                        <div id="div3">图3</div>
+                    </div>
+                    <div class="consmall">
+                        <div id="div4">图4</div>
+                    </div>
+                </div>
+            </div>
+            <div class="right-product">
+                <!-- 这里放右边的产品资料 -->
+                <div class="fullWidth">
+                    <div class="yaqzaan" style="display: inline-block;">
+                        <svg class="new">
+                            <polygon points="0,0 80,0 60,32 0,32" style="fill:#6AA64F;stroke:#6AA64F;stroke-width:0">
+                            </polygon>
+                            <text class="n o" x="6" y="23" fill="white" style="font-size:20px;">全新</text>
+                        </svg>
+
+                    </div>
+                    <div style="display: inline-block;">
+                        <span id="pn" class="store">儲物架</span>
+                    </div>
+                </div>
+                <div class="userinfo">
+                    <div id="head"></div>
+                    <div id="username">yyyds</div>
+                    <div id="ratings">
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span>
+                    </div>
+                    <!-- <div class="box">
+                        <input type="radio" id="one" name="check">
+                        <label for="one">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                width="56.5px" height="53.5px">
+                                <path />
+                            </svg>
+                        </label>
+                        <input type="radio" id="two" name="check">
+                        <label for="two">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                width="56.5px" height="53.5px">
+                                <path />
+                            </svg>
+                        </label>
+                        <input type="radio" id="three" name="check">
+                        <label for="three">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                width="56.5px" height="53.5px">
+                                <path />
+                            </svg>
+                        </label>
+                        <input type="radio" id="four" name="check">
+                        <label for="four">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                width="56.5px" height="53.5px">
+                                <path />
+                            </svg>
+                        </label>
+                        <input type="radio" id="five" name="check" checked>
+                        <label for="five">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                width="56.5px" height="53.5px">
+                                <path />
+                            </svg>
+                        </label>
+                    </div> -->
+                </div>
+                <div class="dollar" id="aaa">HKD$1105</div>
+
+                <hr>
+
+                <div>
+                    <div id="location"></div>
+                    <p id="dis" class="b1">香港 中區</p>
+                </div>
+
+
+                <div>
+                    <div id="delivery"></div>
+                    <p class="b2">郵寄</p>
+                </div>
+
+                <hr>
+
+                <div>
+                    <div class="quan">數量</div>
+                    <vaadin-number-field value="1" min="1" max="10" has-controls class="control"></vaadin-number-field>
+                    <div class="storage">(存庫: 12)</div>
+                </div>
+
+                <br>
+                <button id="buy">直接購買</button>
+                <button id="cart">加入購物車</button>
+                <div class="b3">1小时前 刊登於家居生活</div>
+                <br>
+
+                <div class="bigsize">
+                    <span>產品資料:</span>
+                </div>
+                <br>
+                <div class="unib">
+                    <span id="pn">產品名稱：儲物架</span>
+                </div>
+                <br>
+
+                <div class="unib">
+                    <span>產品尺寸 185x130x30(cm)</span>
+                </div>
+                <br>
+
+                <div>
+                    <span>買家留言 可作書櫃 書架 置物櫃 置物架 儲物櫃 儲物架等用途</span>
+                </div>
+                <br>
+
+                <div>
+                    <div class="tag">
+                        <span> 標籤： </span>
+                    </div>
+                    <div class="button">
+                        <a id="t" href="#" class="myButton">可愛</a>
+                        <a href="#" class="myButton">日系</a>
+                    </div>
+                </div>
+                <br>
+                <hr>
+
+                <div>
+                    <span class="bigsize">運輸：</span>
+                    <p style="margin-bottom: 0px;"><span>可郵寄或順豐快遞</span></p>
+
+                </div>
+                <br>
+                <hr>
+
+                <div>
+                    <div>
+                        <span class="bigsize">賣家資料：</span>
+                    </div>
+                    <div style="display: inline-block;">
+                        <span>
+                            <p>發布者：YYDS</p>
+                            <div>
+                                <p style="display: inline-block">評價: </p>
+                                <div id="ratings" style="display: inline-block">
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star checked"></span>
+                                    <span class="fa fa-star"></span>
+                                    <span class="fa fa-star"></span>
+                                </div>
+                            </div>
+                            <p>查看賣家資料</p>
+                        </span>
+                    </div>
+                    <div id="t1" style="display: inline-block;">
+                        <div>
+                            <img class="user" src="http://change.dazzle.website/img/head.png" alt="user">
+                        </div>
+                        <div style="margin-left: 15px;">
+                            <a href="#" class="myButton1">對話</a>
+                        </div>
+                    </div>
+                </div>
+                <br>
+
+
+            </div>
+
+        </div>
+
+    </template>
+
+</dom-module>
+
+<script>
+    (function () {
+        Polymer({
+            is: 'change-new-product',
+            properties: {
+                "id": {
+                    "type":String
+                }
+            },
+            created: function () {
+
+            },
+            ready: function () {
+                let that = this;
+                let shadow = this.shadowRoot;
+                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                let params = {
+                    "action": "getData",
+                    "index": "change",
+                    "type": "product",
+                    "id": "14"
+                }
+
+                Polymer.postData(Url, params).then(res => {
+                    console.log("Result", res);
+                    if (res.code > 0) {
+                        let a = res.resolve['price'];
+                        console.log("Price", a);
+                        shadow.querySelector('#aaa').innerHTML = "HKD$" + a;
+                        let b = res.resolve['pics'];
+                        console.log("Pics", b);
+                        shadow.querySelector('.bigPic').style.backgroundImage = 'url(' + b +')';
+                        let c = res.resolve['productname'];
+                        console.log("Productname", c);
+                        shadow.querySelector('#pn').innerHTML = c;
+                        let d = res.resolve['tags'];
+                        console.log("Tags", d);
+                        shadow.querySelector('#t').innerHTML = d;
+                        
+
+
+                        let f = res.resolve['isNew'];
+                        console.log("New", f)
+                        if(f == true){
+                            shadow.querySelector('.n').innerText = "全新";
+                        } else{
+                            shadow.querySelector('.o').innerHTML = "二手";
+                        }
+                        
+                        let g = res.resolve['district'];
+                        console.log("District", g);
+                        shadow.querySelector('#dis').innerHTML = g;
+                    } else {
+                        alert("fail")
+                    }
+                })
+
+            },
+
+            // _test: function() {
+
+            //     Polymer.postData(Url, params).then(res => {
+            //         if (res.code > 0) {
+            //             console.log(res.resolve);
+            //             // "id": "5"
+            //                 // let user = res.resolve;
+            //                 // user['thisPage'] = this.thisPage;
+            //                 // store.set('user', res.resolve);
+            //                 // store.set('editMode', 'admin');
+            //                 // store.set('thisPage', this.thisPage);
+            //                 // location.reload();
+            //             console.log('success');
+            //         } else {
+            //             alert('fail');
+            //         }
+            //     });
+
+
+            //            },
+
+        });
+    })();
+</script>

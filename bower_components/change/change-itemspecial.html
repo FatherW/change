@@ -463,6 +463,8 @@
                     }
                 };
 
+                console.log('Item Params',param);
+
                 Polymer.postData(Url, param).then(res => {
                     if (res.code > 0) {
                         let prods = res.resolve;

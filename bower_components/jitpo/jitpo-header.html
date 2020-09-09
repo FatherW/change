@@ -1,0 +1,62 @@
+<link rel="import" href="../polymer/polymer.html">
+
+
+
+<dom-module id="jitpo-header">
+
+
+   
+</dom-module>
+
+<script>
+
+(function() {
+
+
+
+	Polymer({
+		is: 'jitpo-header',
+		properties: {
+		
+		},
+
+		created:function() {
+            let that = this;
+            Polymer.getContent('template/'+Polymer.tid+'/_dz-block/_header/html?id='+new Date().getTime()).then(html=>{
+
+                console.log('Header',html);
+                  this.innerHTML = html;
+                  let button = this.querySelector('#submenu-button');
+                  button.addEventListener('click',e=>{
+
+                        console.log('Click',e.target);
+                        // console.log('Hidden',sidebar.hidden);          
+                        // sidebar.hidden = !sidebar.hidden;            
+                        that.submenu = !that.submenu;
+                        console.log('submenu',submenu,that.submenu);
+                        if (that.submenu)
+                            submenu.style.display='none';
+                        else
+                            submenu.style.display="block";
+                  });
+            });
+        },
+
+		ready:function() {
+            let that = this;
+            let submenu = this.querySelector('#submenu');
+            let button = this.querySelector('#submenu-button');
+
+ 
+            document.addEventListener('save',e=>{
+                    let path = 'template/'+Polymer.tid+'/_dz-block/_header/html';
+                    Polymer.fileManager.saveFile(path,that.innerHTML);
+            });
+		},
+		renew(){
+
+		}
+    });
+})();
+
+</script>

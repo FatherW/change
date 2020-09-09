@@ -1,0 +1,153 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-button/vaadin-button.html?id=sdfljsldkf">
+<link rel="import" href="../vaadin-menu-bar/vaadin-menu-bar.html">
+<link rel="import" href="../vaadin-date-picker/vaadin-date-picker.html">
+<link rel="import" href="../vaadin-time-picker/vaadin-time-picker.html">
+<link rel="import" href="../iron-pages/iron-pages.html">
+<link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
+<!-- <link rel="import" href="../ace-widget/ace-widget.html"> -->
+<link rel="import" href="../dz-dazzle/dz-code-editor.html">
+
+<!-- <link rel="import" href="dz-status.html">
+<script src="https://d25k6mzsu7mq5l.cloudfront.net/ace9/src-nonconflict/ace.js"></script> -->
+
+
+<!-- <link rel="import" href="../paper-tabs/paper-tabs.html">
+<link rel="import" href="../paper-tabs/paper-tab.html"> -->
+
+
+<!-- <script type="module">
+	import '@polymer/iron-lazy-pages/iron-lazy-pages.js';
+	import '@polymer/paper-tabs/paper-tabs.js';
+	import '@polymer/paper-tabs/paper-tab.js';
+  </script> -->
+
+
+<!-- <link rel="import" href="../valle-speed-dial/valle-speed-dial.html">
+<link rel="import" href="../paper-fab-speed-dial/paper-fab-speed-dial-action.html">
+<link rel="import" href="../iron-icons/iron-icons.html"> -->
+
+<dom-module id="dz-recovery">
+
+    <template>
+		<style include="main-styles"></style>
+		<style include="labs-styles"></style>
+        <style include="masonry-styles"></style>
+        
+		<style>
+            :host {
+                --_lumo-button-background-color: white;
+                
+            }
+            vaadin-button{
+                margin:10px;
+            }
+                 #editor { 
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                }
+
+            page{
+                position:relative;
+            }
+
+            iron-pages {
+                height: 800px;
+            }
+			paper-tags-input {
+				width: 80%;
+			}
+
+			.selected {
+				outline: 10px solid #293575;
+			}
+
+			#inputTags {
+				padding: 20px;
+			}
+            vaadin-text-area{
+                width:100%;
+                height:640px;
+            }
+
+		
+		</style>
+
+		<h1 class="mat-dialog-title" mat-dialog-title="" id="mat-dialog-title-1">
+			<mat-toolbar class="mat-toolbar mat-primary mat-toolbar-multiple-rows" color="primary">
+				<mat-toolbar-row class="mat-toolbar-row">
+					<span>回復設定</span>
+                    <span class="example-spacer"></span>
+    
+                    <vaadin-button theme="success" on-click="_recovery">回復</vaadin-button>
+                    <vaadin-button theme="success" on-click="_cancel">取消</vaadin-button>
+				</mat-toolbar-row>
+			</mat-toolbar>
+		</h1>
+
+
+		<content>
+            <vaadin-date-picker id="recoveryDate" label="回復日期"></vaadin-date-picker>
+            <vaadin-time-picker id="recoveryTime" label="回復時間 (hh:mm)"></vaadin-time-picker>
+		</content>
+
+
+
+	</template>
+</dom-module>
+
+<script>
+    (function() {
+
+
+
+        Polymer({
+            is: 'dz-recovery',
+            properties: {
+              
+            },
+
+            created: function() {
+              
+            },
+            _recovery(){
+
+                // Polymer.fileManager.listObjectVersions('index.html').then(res=>{
+                //     console.log('Result',res);
+                // });
+                    let str,date,time;
+                    date= this.shadowRoot.querySelector('#recoveryDate').value;
+                    time= this.shadowRoot.querySelector('#recoveryTime').value;
+                    str = date+"T"+time;
+                    console.log('Time',Date.parse(str));
+                    console.log('Time',Date.parse(str).toString());
+                    let recoveryUrl = "https://h04gpr7yqi.execute-api.ap-northeast-1.amazonaws.com/prod/";
+                    let params = {
+                        "action":'dz64RecoveryPage',
+                        'bucket': Polymer.userBucket,
+                        'page': Polymer.thisPage,
+                        'recoveryTime': Date.parse(str)
+                    };
+                    Polymer.postData(recoveryUrl,params).then(res=>{
+                        console.log('Result',res);
+                        if (res.code>0){
+                            alert('成功回復');
+                        }
+                    });
+
+            },
+            _cancel(){
+                Polymer.closeDialog();
+            },
+            ready(){
+               
+            },
+
+
+        });
+
+    })();
+</script>

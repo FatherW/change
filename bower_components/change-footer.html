@@ -1,0 +1,123 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="change-footer">
+
+    <template>
+
+        <style>
+            li{
+                display: block;
+            }
+            .footer {
+                background-color: #F0846C;
+                color: white;
+                height: auto;
+                line-height: 1.5;
+            }
+
+            .fpanel1 {
+                width: 100%;
+                margin: 0 auto;
+                padding-bottom: 30px;
+                width: 100%;
+                margin: 0 auto;
+                padding-bottom: 30px;
+                display: grid;
+                grid-row-gap: 20px;
+                grid-column-gap: 15px;
+                grid-template-columns: 33% 33% 33%;
+                grid-template-rows: 50% 50%;
+            }
+
+            a.test {
+                color: white;
+                text-decoration: none;
+                font-size: 12px;
+                line-height:30px;
+            }
+
+            @media (min-width: 992px) {
+
+                .fpanel1-md {
+                    width: 100%;
+                    margin: 0 auto;
+                    padding-bottom: 30px;
+                    width: 100%;
+                    margin: 0 auto;
+                    padding-bottom: 30px;
+                    display: grid;
+                    grid-row-gap: 20px;
+                    grid-column-gap: 15px;
+                    grid-template-columns: repeat(5, 19%);
+                }
+            }
+        </style>
+
+        <footer class="footer">
+            <div>
+                <div class="fpanel1 fpanel1-md">
+                    <div>
+                        <ul>
+                            <li><a href="#" class="test" style="font-size: large;">關於我們</a></li>
+                            <li><a href="https://www.youtube.com/channel/UCCd5rMzWWFZEfb-yjj63O2w" class="test">Youtube</a></li>
+                            <li><a href="https://www.facebook.com/gettvhk/" class="test">Facebook</a></li>
+                            <li><a href="https://www.instagram.com/hkgettv/" class="test">Instagram</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul>
+                            <li><a href="#" class="test" style="font-size: large;">幫助中心</a></li>
+                            <li><a href="#" class="test">問題反映</a></li>
+                            <li><a href="#" class="test">使用條款</a></li>
+                            <li><a href="#" class="test">隱私政策</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul>
+                            <li><a href="#" class="test" style="font-size: large;">最新消息</a></li>
+                            <li><a href="#" class="test">活動</a></li>
+                            <li><a href="#" class="test">推廣</a></li>
+                            <li><a href="#" class="test">頻道龍虎榜</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul>
+                            <li><a href="#" class="test" style="font-size: large;">品牌合作</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul>
+                            <li><a href="#" class="test" style="font-size: large;">頻道</a></li>
+                            <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrywYfDOzAjc0rA89VGqpa5" class="test">玩多啲</a></li>
+                            <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpNTw4BXAyEyyMMkhl5XcR2" class="test">睇多啲</a></li>
+                            <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqykeagwZRZwfEyOuTCYF7a" class="test">知多啲</a></li>
+                            <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpzSn5NOnJiIiGwWvIwR3jj" class="test">食多啲</a></li>
+                            <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqC1OITdb_QGz18JPmmj8a5" class="test">識多啲</a></li>
+                            <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHon14MDeHFMa9qXMo7zW92T" class="test">靚多啲</a></li>
+                            <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrhER3oQUYbz8wnmCv1VUBw" class="test">愛多啲</a></li>
+                            <li><a href="#" class="test">Get Change</a></li>
+                        </ul>
+                    </div>
+                    
+                </div>
+            </div>
+        </footer>
+
+
+    </template>
+
+</dom-module>
+
+<script>
+    (function() {
+        Polymer({
+            is: 'change-footer',
+            properties: {},
+            created: function() {},
+            ready: function() {},
+
+
+
+        });
+    })();
+</script>
