@@ -96,42 +96,46 @@
                 // });
 
             },
-            loadProduct(pid) {
-                return new Promise(function(resolve, reject) {
-                    Polymer.getContent('/json/product-' + pid + '.json?id=' + new Date().getTime()).then(res => {
-                        console.log('Orders', res);
-                        resolve(JSON.parse(res));
-                    }, err => {
-                        this.prodManager.loadData(pid).then(prod => {
-                            resolve(prod);
-                            // console.log("order oo:", prod);
-                        });
-                    });
-                    // this.fileManager.getFile('json/product-' + pid + '.json').then(res => {
-                    //     let json = JSON.parse(res);
-                    // });
-                });
+            // loadProduct(pid) {
+            //     let that = this;
+            //     return new Promise(function(resolve, reject) {
+            //         that.prodManager(pid).then(res=>{
+            //             resolve(res);
+            //         });
+            //         Polymer.getContent('/json/product-' + pid + '.json?id=' + new Date().getTime()).then(res => {
+            //             console.log('Orders', res);
+            //             resolve(JSON.parse(res));
+            //         }, err => {
+            //             this.prodManager.loadData(pid).then(prod => {
+            //                 resolve(prod);
+            //                 // console.log("order oo:", prod);
+            //             });
+            //         });
+            //         // this.fileManager.getFile('json/product-' + pid + '.json').then(res => {
+            //         //     let json = JSON.parse(res);
+            //         // });
+            //     });
 
 
-            },
-            loadOrder(pid) {
-                return new Promise(function(resolve, reject) {
-                    Polymer.getContent('/json/order-' + pid + '.json?id=' + new Date().getTime()).then(res => {
-                        resolve(JSON.parse(res));
+            // },
+            // loadOrder(pid) {
+            //     return new Promise(function(resolve, reject) {
+            //         Polymer.getContent('/json/order-' + pid + '.json?id=' + new Date().getTime()).then(res => {
+            //             resolve(JSON.parse(res));
 
-                    }, err => {
-                        this.orderManager.loadData(pid).then(prod => {
-                            resolve(prod);
-                            // console.log("order oo2:", prod);
-                        });
-                    });
-                    // this.fileManager.getFile('json/product-' + pid + '.json').then(res => {
-                    //     let json = JSON.parse(res);
-                    // });
-                });
+            //         }, err => {
+            //             this.orderManager.loadData(pid).then(prod => {
+            //                 resolve(prod);
+            //                 // console.log("order oo2:", prod);
+            //             });
+            //         });
+            //         // this.fileManager.getFile('json/product-' + pid + '.json').then(res => {
+            //         //     let json = JSON.parse(res);
+            //         // });
+            //     });
 
 
-            },
+            // },
 
 
             ready: function() {

@@ -271,7 +271,7 @@
                 background-position: center center;
                 /* background-repeat: no-repeat; */
                 margin: 1%;
-                background-image: url("../../img/channel_banner/1.jpg");
+                background-image: url("/img/channel_banner/1.jpg");
                 background-repeat: no-repeat;
 
             }
@@ -383,12 +383,14 @@
 
             ready: function() {
                 this.id = this.getAttribute('id');
+                console.log('User Tag',this.id);
                 this.loadData();
             },
-            loadData(id,time) {
+            loadData() {
                 let that = this;
                 let s = this.ShadowRoot;
-                this.userManager.getDataByCache(id).then(user=>{
+                let time = new Date().getTime();
+                this.userManager.getDataByCache(this.id).then(user=>{
                     this.name = user['username'];
                     this.user = user;
                     if (user['alias'])  
@@ -400,22 +402,7 @@
                     console.log('User Tags',user);
                     this.$.render();
                 });
-                // let url = "/json/user-" + this.id + ".json";
-                // this.timeStr = Polymer.parseTime(time);
-                // Polymer.getContent(url).then(str => {
-                //     that.user = JSON.parse(str);
-                //     let user = JSON.parse(str);
-                //     if (user['isFanpage'] == true) {
-                //         this.name = user['pagename'];
-                //         this.userUrl = "/" + user['website'];
-                //     } else {
-                //         this.name = user['username'];
-                //         this.userUrl = "/user.html?" + user['id'];
-
-                //     }
-                // });
-
-                // console.log('User Tag',id);
+              
             },
 
 

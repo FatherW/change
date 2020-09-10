@@ -548,7 +548,6 @@
     </div>
     </div>
 
-
     </template>
 
 </dom-module>
@@ -593,6 +592,7 @@
                 let shadow = this.shadowRoot;
 
                 this.product = prod;
+                console.log('Product',this.product);
                 // let a = res.resolve['price'];
                 // shadow.querySelector('#aaa').innerHTML = "$" + a;
                 if (!this.product['pics']) {} else {
@@ -619,19 +619,24 @@
                 // shadow.querySelector('.unib').innerHTML = this.product['description'];
                 // shadow.querySelector('.deliveryDesc').innerHTML = this.product['deliveryDesc'];
                 this.loadOwner();
-                if (this.user) {
+
+                // if (this.product[''])
+
+                // if (this.user) {
                     let orderList = document.createElement('change-orderlist-storage');
                     orderList.orders = this.product['replyArray'];
                     this.product['replyArray'].forEach(item => {
+                        console.log('Order Item',item); 
                         let listItem = document.createElement('change-order-list');
                         listItem.id = item;
                         listItem.product = this.product;
                         listItem.setAttribute('id', item);
                         orderList.appendChild(listItem);
                     });
-                    shadow.appendChild(orderList);
+                    if (this.product['replyArray'].length>0)
+                       shadow.appendChild(orderList);
 
-                }
+                // }
             },
             ready: function() {
                 let div0 = this.shadowRoot.querySelector('#div0');
@@ -669,131 +674,6 @@
                     alert('不能載入資料');
                 });
 
-                // let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                // let params = {
-                //     "action": "getData",
-                //     "index": "change",
-                //     "type": "product",
-                //     "id": pid
-                // }
-                // let user = store.get('change-user') || null;
-                // if (user) {
-                //     shadow.querySelector('#contact').style.visibility = "visible";
-                // }
-
-                // Polymer.postData(Url, params).then(res => {
-                //     console.log("Result", res);
-                //     if (res.code > 0) {
-                //         let a = res.resolve['price'];
-                //         shadow.querySelector('#aaa').innerHTML = "$" + a;
-                //         let b = res.resolve['pics'];
-                //         let imglen = [];
-                //         for (qwe = 0; qwe < b.length; qwe++) {
-                //             if (b[qwe] == "") {
-                //                 shadow.querySelector('#div' + qwe).style.visibility = "hidden";
-
-                //             } else {
-                //                 imglen.push(b[qwe])
-                //             }
-                //         }
-                //         let lenb = imglen.length;
-                //         for (q22 = 0; q22 < lenb; q22++) {
-                //             shadow.querySelector('#div' + q22).style.backgroundImage = 'url(' + imglen[q22] + ')';
-                //         };
-
-                //         let c = res.resolve['productname'];
-                //         shadow.querySelector('#pn').innerHTML = c;
-
-                //         //get and pass tag data
-                //         let itemtag = "";
-                //         for (count = 0; count < res.resolve['tags'].length; count++) {
-                //             itemtag += '<button id=\"tagbutton\">' + '<a href="list-product.html?tag=' + encodeURIComponent(res.resolve['tags'][count]) + '">' + res.resolve['tags'][count] + "</a></button>";
-                //         }
-                //         shadow.querySelector('#t').innerHTML = itemtag;
-
-                //         //get and pass description data
-                //         let description = res.resolve['description'];
-                //         shadow.querySelector('.unib').innerHTML = description;
-
-                //         //get and pass seller message data
-                //         // let sellerMsg = res.resolve['sellerMsg'];
-                //         // shadow.querySelector('.sMes').innerHTML = sellerMsg;
-
-                //         //get and pass deliveryDesc data
-                //         let deliveryDesc = res.resolve['deliveryDesc'];
-                //         shadow.querySelector('.deliveryDesc').innerHTML = deliveryDesc;
-
-                //         //DETERMIN WHETHER IT IS UPLOADED BY FANPAGE OR USERS & GET BACK REQUIRED NAME, HEAD AND LINK
-                //         let o = res.resolve['ownerId'];
-                //         let isFanpage = res.resolve['isFanpage'];
-                //         if (isFanpage == true) {
-                //             shadow.querySelector('#owner').innerHTML = res.resolve['fanpage'];
-                //             let parampage = {
-                //                 "action": "searchData",
-                //                 "index": "change",
-                //                 "type": "pages",
-                //                 "body": {
-                //                     "query": {
-                //                         "match": {
-                //                             "name": res.resolve['fanpage']
-                //                         }
-                //                     }
-                //                 }
-                //             };
-                //             Polymer.postData(Url, parampage).then(res => {
-                //                 shadow.querySelector('.head').src = res.resolve[0]['head'];
-                //                 this.link = "/" + res.resolve[0]['website'];
-                //             });
-                //         } else {
-                //             let p = {
-                //                 "action": "searchData",
-                //                 "index": "change",
-                //                 "type": "_user",
-                //                 "body": {
-                //                     "query": {
-                //                         "match": {
-                //                             "_id": o
-                //                         }
-                //                     }
-                //                 }
-                //             };
-                //             Polymer.postData(Url, p).then(res => {
-                //                 if (res.code > 0) {
-                //                     let un = res.resolve[0]['username'];
-                //                     shadow.querySelector('#owner').innerHTML = un;
-                //                     shadow.querySelector('.head').src = res.resolve[0]['head'];
-                //                     this.link = "/user.html?" + res.resolve[0]['id'];
-                //                 }
-                //             });
-
-                //         };
-
-
-
-                //         // let f = res.resolve['isNew'];
-                //         // if (f == true) {
-                //         //     shadow.querySelector('.n').innerText = "全新";
-                //         // } else {
-                //         //     shadow.querySelector('.o').innerHTML = "二手";
-                //         // }
-                //         let thenew = ""
-                //         if (res.resolve['isNew'] == true) {
-                //             thenew = "<polygon points=\"0,0 80,0 60,32 0,32\" style=\"fill:#ebbd35;stroke:#ebbd35;stroke-width:0\"></polygon><text x=\"6\" y=\"23\" fill=\"white\" id=\"isNew\" >全新</text>"
-
-                //         } else {
-                //             thenew = "<polygon points=\"0,0 80,0 60,32 0,32\" style=\"fill:#7cd3da;stroke:#7cd3da;stroke-width:0\"></polygon><text x=\"6\" y=\"23\" fill=\"white\" id=\"isNew\" >二手</text>"
-                //         }
-                //         shadow.querySelector('.new').innerHTML = thenew;
-
-                //         let g = res.resolve['district'];
-                //         shadow.querySelector('#dis').innerHTML = g;
-
-                //         let h = res.resolve['deliveryMethod'];
-                //         shadow.querySelector('#dm').innerHTML = h;
-                //     } else {
-                //         alert("fail");
-                //     }
-                // })
 
             },
             loadProduct(pid) {
@@ -835,7 +715,7 @@
                     popup.seller = this.owner;
                     popup.product = this.product;
                     popup.dialog = this.shadowRoot.querySelector('vaadin-dialog');
-                    Polymer.componentPopup(popup, '500px', '400px');
+                    Polymer.componentPopup(popup, '500px', '800px');
 
                     // Polymer.popup(dialog, "change", "change-webcom", "500px", "400px");
                     console.log("end process in contact seller");
