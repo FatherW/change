@@ -271,7 +271,7 @@
 
                         console.log("html:", html)
                             // // .......
-                        this.sendmail('support@01power.net', to, '你有新的訊息', html);
+                        Polymer.sendmail('support@01power.net', to, '你有新的訊息', html);
                         alert('電郵已發出');
                         this.dialog.opened = false;
                     });
@@ -324,8 +324,8 @@
                     "sellerId": this.product['ownerId'],
                     "id": id,
                     "msg": msg,
-                    "submitTime": new Date().getTime()
-
+                    "submitTime": new Date().getTime(),
+                    "status":"求貨中"  
                 };
                 this.orderManager.saveDataWithCache(id, json);
                 this.product['replyArray'].push(id);

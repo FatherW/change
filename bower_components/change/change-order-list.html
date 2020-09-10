@@ -165,6 +165,10 @@
                 </div>
             </template>
 
+         
+
+
+
          </div>
          </template>
 
@@ -202,6 +206,11 @@
             },
             readOnly() {
                 console.log('Read Only', this.product['ownerId'], this.user['id']);
+
+                if (this.product['isPurchase'])
+                    return false;
+                // if (this.order['status'] ==="接受求貨")
+                //     return false;
                 if (this.user.isAdmin)
                     return true;
 
@@ -210,17 +219,7 @@
                 else
                     return true;
             },
-            initOrder() {
-                this.orderManager.getDataByCache(this.id).then(res=>{
-                    this.buyer = res;
-                    console.log('Buyer', this.buyer);
-                    this.ago = this.timeAgo(this.order['submitTime']);
-                
-                });
-                this.isPermitted();
-
-
-            },
+           
 
             isShow(){
                 if (this.user.isAdmin)
@@ -234,7 +233,7 @@
                 return false;
             },
 
-
+          
             accept: function() {
                 let that = this;
                 let shadow = this.shadowRoot;
@@ -253,9 +252,13 @@
                     // let to = that.seller['email'];
                     let subject = "賣家已經接受你的訂單-"+that.order['id'];
                     let token = 1234;
+                    let replyArr = [];
                     Polymer.getContent('/email-template/sendorderemail.html').then(html=>{
                         console.log('Buyer',that.buyer,that.product);
-
+                        let pic = that.product['pics'][0];
+                        if (pic[0]=="/")
+                            pic = "https://www.gettv.hk"+pic;
+                            console.log('Pic',pic);
                         content = html;
                         content = content.replace('[[orderID]]',that.order['id']);
                         content = content.replace('[[productName]]',that.product['productname']);
@@ -270,6 +273,15 @@
                         Polymer.sendEmail(that.seller['email'], subject, content); 
                         Polymer.sendEmail(that.buyer['email'], subject, content); 
                         Polymer.sendEmail("henry@01power.net", subject, content); 
+
+                        // Update Order and Product
+                        that.product['replyArray'] = [that.order['id']];
+                        that.product['isPurchase'] = true;
+                        that.prodManager.saveDataWithCache(that.product['id'],that.product);
+                        that.order['status'] = '接受求貨';
+                        console.log('Order',that.order);
+                        that.orderManager.saveDataWithCache(that.order['id'],that.order);
+                        alert('已接受求貨，買家及賣家均會收到訂單電郵');
                         this.dialog.opened = false;
                     });
 
@@ -372,10 +384,11 @@
                         this.product = product;
                     });
                     this.shadowRoot.querySelector('change-user-tag').loadData(this.order['buyerId'],this.order['submitTime']);
+                    // if (this.order['status']==="接受求貨") {
+                    //     this.shadowRoot.querySelector('.status').style.display="block";
+                    //     this.shadowRoot.querySelector('.status').innerHTML = "已接受此訂單";
+                    // }
                     
-                    // this.userManager.getDataByCache(this.buyer['id']).then(user=>{
-
-                    // });
                 });
      
                 // console.log('Order ID', this.id);

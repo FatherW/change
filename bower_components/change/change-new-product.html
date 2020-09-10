@@ -252,6 +252,16 @@
                 font-size: large;
                 margin-top: 52px;
             }
+            #purchase {
+                background-color: red;
+                width: 140px;
+                height: 45px;
+                border-radius: 3px;
+                color: white;
+                border: none;
+                font-size: large;
+                margin-top: 52px;
+            }
 
             .b3 {
                 margin-top: 20px;
@@ -509,7 +519,12 @@
     </div>
     <hr>
     <br>
-    <button id="contact" on-click="_findseller">聯絡賣家</button>
+    <template is="dom-if" if="{{!product.isPurchase}}">
+        <button id="contact" on-click="_findseller">聯絡賣家</button>
+    </template>
+    <template is="dom-if" if="{{product.isPurchase}}">
+        <button id="purchase">已出售</button>
+    </template>
     <vaadin-dialog id="seller"></vaadin-dialog>
 
     <div class="b3">刊登於 {{timeStr}}</div>
