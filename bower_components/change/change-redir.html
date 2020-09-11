@@ -1,4 +1,5 @@
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/polymer/polymer.html">
+<script type="text/javascript" src="/bower_components/crypto-js/crypto-js.js"></script>
 
 <dom-module id="change-redir">
 
@@ -53,17 +54,61 @@
                 this.tokManager = new DataPackage('token');
 
                 let loc = location.search;
-                let token = "";
-                for (i = 7; i < loc.length; i++) {
-                    token += loc[i]
-                }
+                console.log('token',loc);
+                let token = loc.substring(1);
                 // console.log("loc:", token);
 
-                this.tokManager.loadData(token).then(res => {
-                    this.verifyTok(res); //tok res
+                Polymer.decryptToken(token).then(res=>{
+                    console.log('Res',res);
+                    let alias = '/product/'+res['product']['alias'];
+                    let login = res['seller']['email'];
+                    let passwd = res['seller']['password'];
+                    console.log('Decript',alias,login,passwd);
+                    this.alias = alias;
+
+                    this.logWithPasswd(login,passwd);
+                    // location.href = alias;
                 });
+                // this.tokManager.loadData(token).then(res => {
+                //     // this.verifyTok(res); //tok res
+                //     console.log('Res',res);
+                //     let ciphertext = res.ciphertext;
+                //     Polymer.dec
+                // });
+
                 // });
             },
+            logWithPasswd: function(uid, password) {
+                let that = this;
+                let loginUrl = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
+                let params = {
+                    "action": "login",
+                    "login": uid,
+                    "password": password
+                };
+                console.log("Login JSON", params);
+                Polymer.postData(loginUrl, params).then(res => {
+                    console.log("Login", res);
+                    if (res.code > 0) {
+                        console.log("Result1", res.resolve);
+                        console.log("Result2", res.resolve.length);
+                        if (res.resolve) {
+                            let user = res.resolve;
+                            if (user['status'] == false) {
+                                alert("你的帳號已被停用，請聯絡管理員")
+                            } else {
+                                // if (user.token == "" || user.token == null || user.token == undefined) {
+                                store.set('change-user', user);
+                                location.href = that.alias;
+                            }
+                        } else {
+                            alert("用戶不存在，請註冊後登入");
+                        }
+                    } else {
+                        // alert('登入失敗');
+                    }
+                });
+            },   
 
             verifyTok: function (x) {
                 //x = tok res

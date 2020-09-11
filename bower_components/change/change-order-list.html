@@ -1,6 +1,10 @@
 <!-- <link rel="import" href="change-orderlist-storage.html">
 <link rel="import" href="change-user-tag.html"> -->
 <link rel="import" href="change-message.html">
+<script type="text/javascript" src="/bower_components/crypto-js/crypto-js.js"></script>
+<script type="text/javascript">
+    
+</script> 
 <dom-module id="change-order-list">
     <template>
         <style>
@@ -201,6 +205,7 @@
                 if (this.user) {
                     this.fileManager = new AwsPackage(this.user);
                 }
+       
 
                 // this.isPermitted();
             },
@@ -251,7 +256,13 @@
 
                     // let to = that.seller['email'];
                     let subject = "賣家已經接受你的訂單-"+that.order['id'];
-                    let token = 1234;
+                    let json = {
+                        "order":that.order,
+                        "seller":that.seller,
+                        "buyer":that.buyer,
+                        "product":that.product
+                    }
+                    let token = Polymer.encryptToken(json);
                     let replyArr = [];
                     Polymer.getContent('/email-template/sendorderemail.html').then(html=>{
                         console.log('Buyer',that.buyer,that.product);
@@ -262,7 +273,7 @@
                         content = html;
                         content = content.replace('[[orderID]]',that.order['id']);
                         content = content.replace('[[productName]]',that.product['productname']);
-                        content = content.replace('[[pic]]',that.product['pics'][0]);
+                        content = content.replace('[[pic]]',pic);
                         content = content.replace('[[sellerName]]',that.seller['username']);
                         content = content.replace('[[district]]',that.product['district']);
                         content = content.replace('[[price]]',that.product['price']);
@@ -273,7 +284,7 @@
                         Polymer.sendEmail(that.seller['email'], subject, content); 
                         Polymer.sendEmail(that.buyer['email'], subject, content); 
                         Polymer.sendEmail("henry@01power.net", subject, content); 
-
+                        Polymer.sendEmail("gettv@gmail.com", subject, content); 
                         // Update Order and Product
                         that.product['replyArray'] = [that.order['id']];
                         that.product['isPurchase'] = true;
@@ -281,6 +292,7 @@
                         that.order['status'] = '接受求貨';
                         console.log('Order',that.order);
                         that.orderManager.saveDataWithCache(that.order['id'],that.order);
+
                         alert('已接受求貨，買家及賣家均會收到訂單電郵');
                         this.dialog.opened = false;
                     });

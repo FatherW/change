@@ -20,6 +20,55 @@
 <dom-module id="change-loader"> </dom-module>
 
 <script>
+// Get TV global function
+        Polymer.encryptToken =function(json){
+                // Generate token
+                let length = 15;
+                var token           = '';
+                var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                var charactersLength = characters.length;
+                for ( var i = 0; i < length; i++ ) {
+                    token += characters.charAt(Math.floor(Math.random() * charactersLength));
+                }
+
+                let tokenManager = new DataPackage("token");
+                // let json = {
+                //         "id": id,
+                //         "orderID": this.order,
+                //         "seller": this.seller,
+                //         "buyer": this.user,
+                //         "product": this.product
+                // } 
+                // this.tokenManager.saveDataWithCache(id,json);
+
+                var ciphertext = CryptoJS.AES.encrypt(JSON.stringify(json),token).toString();
+                console.log('Cipher',ciphertext);
+                tokenManager.saveData(token,{'ciphertext': ciphertext});
+
+                return token;
+               
+            };
+
+        Polymer.decryptToken = function(id){
+
+                let tokenManager = new DataPackage("token");
+                return new Promise(function(resolve, reject) {
+                    tokenManager.loadData(id).then(res=>{
+                        let ciphertext = res.ciphertext;
+                        // Decrypt
+                        console.log('Ciphertext',ciphertext);
+                        var bytes  = CryptoJS.AES.decrypt(ciphertext, id);
+                        var decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+                        resolve(decryptedData);
+                    },err=>{
+                        reject();
+                    });
+                });
+            };
+
+
+    // Get TV License and Initialization
+
    let dzLicense = {
         "uid":"change",
         "tid":"change",
@@ -75,6 +124,9 @@ console.log('User',subUser,user,Polymer.fileManager);
 
         Polymer.subUser = store.get('subUser') || null;
         console.log('Edit Mode',editMode);
+
+
+// Load Admin mode and Normal mode Dazzle's component
 
         if (editMode === "admin") {
 

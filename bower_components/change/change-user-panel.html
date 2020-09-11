@@ -93,7 +93,7 @@ class changeUserPanel extends Polymer.Element {
                     this.profilePic = this.user['head'] || 'https://devshift.biz/wp-content/uploads/2017/04/profile-icon-png-898.png';
 
                     if (!this.user['alias'])
-                        this.reAlias(0);
+                        this.profileUrl = "/user/_me";
                     else                        
                         this.profileUrl = '/user/'+user['alias'];
 

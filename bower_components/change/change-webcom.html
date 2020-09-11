@@ -1,4 +1,5 @@
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-text-field/vaadin-text-area.html">
+<script type="text/javascript" src="/bower_components/crypto-js/crypto-js.js"></script>
 <dom-module id="change-webcom">
 
 
@@ -129,7 +130,7 @@
                 this.user = store.get('change-user') || null;
                 if (this.user) {
                     this.fileManager = new AwsPackage(this.user);
-                    this.dataManager = new DataPackage('_user');
+                    this.userManager = new DataPackage('_user');
                     this.prodManager = new DataPackage('product');
                     this.orderManager = new DataPackage('order');
                     console.log('this.product', this.product);
@@ -142,13 +143,7 @@
             //for adding link to the user name connecting wth the databse
             ready: function() {
                 let that = this;
-                let loc = location.search;
-                let pid = "";
-                let uid = "";
-                let posit = 0;
-                for (i = 2; i < loc.length; i++) {
-                    pid += loc[i];
-                };
+           
                 let shadow = this.shadowRoot;
                 this.userManager.getDataByCache(this.product['ownerId']).then(user=>{
                     this.seller = user;
@@ -253,63 +248,89 @@
                     // console.log("tok:", tok);
                     var expireDate = tok + 604800000; //604800000 = 1 week time in milliseconds
                     // console.log("expireDate:", expireDate);
-                    this.contactToken(tok, to, expireDate, pid);
+
+                    // this.contactToken(tok, to, expireDate, pid);
+                    let id = this.generateToken(15);
+                    // this.encryptData(id);
+                    let json = {
+                        "order":this.order,
+                        "seller":this.seller,
+                        "buyer": this.user,
+                        "product":this.product,
+                        "createTime": new Date().getTime()
+                    }
+                    let token = Polymer.encryptToken(json);
 
                     this.saveOrder();
+                    console.log('Seller Image',sellerImage);
                     Polymer.getContent('/email-template/sendcontactemail.html').then(html => {
-                        html = html.replace("[[image]]", "https://www.gettv.hk" + image);
+                        if (image[0]==="/")
+                            image = "https://www.gettv.hk" + image;
+                        if (sellerImage[0]==="/")
+                            sellerImage = "https://www.gettv.hk" + sellerImage;
+
+                        html = html.replace("[[image]]", image);
                         html = html.replace("[[status]]", status);
                         html = html.replace("[[productname]]", productname);
-                        html = html.replace("[[sellerImage]]", "https://www.gettv.hk" + sellerImage);
+                        html = html.replace("[[sellerImage]]", sellerImage);
                         html = html.replace("[[sellerName]]", sellerName);
                         html = html.replace("[[price]]", price);
                         html = html.replace("[[district]]", district);
                         html = html.replace("[[deliveryMethod]]", deliveryMethod);
                         html = html.replace("[[deliveryMethod2]]", deliveryMethod);
                         html = html.replace("[[contactinfo]]", contactinfo);
-                        html = html.replace("[[token]]", tok);
+                        html = html.replace("[[token]]", token);
 
-                        console.log("html:", html)
-                            // // .......
-                        Polymer.sendmail('support@01power.net', to, '你有新的訊息', html);
+                        console.log("html:", token);
+                        Polymer.sendEmail( to, '你有新的訊息', html);
+                        // Polymer.sendEmail("henry@01power.net", '你有新的訊息', html);
                         alert('電郵已發出');
                         this.dialog.opened = false;
                     });
 
                 }
             },
-
-            contactToken: function(a, b, c, d) {
-                let shadow = this.shadowRoot;
-                let that = this;
-                let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-
-                // console.log("a:", a);
-                // console.log("b:", b);
-                // console.log("c:", c);
-                let param = {
-                    "action": "addData",
-                    "index": "change",
-                    "type": "token",
-                    "id": a,
-                    "body": {
-                        "id": a,
-                        "userId": b,
-                        "expireDate": c,
-                        "type": "contactSeller",
-                        "pid": d
+           
+            generateToken(length) {
+                    var result           = '';
+                    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                    var charactersLength = characters.length;
+                    for ( var i = 0; i < length; i++ ) {
+                        result += characters.charAt(Math.floor(Math.random() * charactersLength));
                     }
-                };
-                Polymer.postData(link, param).then(res => {
-                    if (res.code > 0) {
-                        console.log("reg tok is generated!")
-                    } else {
-                        alert("fail to generate reg tok!");
-                    }
-                });
-
-
+                    return result;
             },
+            // contactToken: function(a, b, c, d) {
+            //     let shadow = this.shadowRoot;
+            //     let that = this;
+            //     let link = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+
+            //     // console.log("a:", a);
+            //     // console.log("b:", b);
+            //     // console.log("c:", c);
+            //     let param = {
+            //         "action": "addData",
+            //         "index": "change",
+            //         "type": "token",
+            //         "id": a,
+            //         "body": {
+            //             "id": a,
+            //             "userId": b,
+            //             "expireDate": c,
+            //             "type": "contactSeller",
+            //             "pid": d
+            //         }
+            //     };
+            //     Polymer.postData(link, param).then(res => {
+            //         if (res.code > 0) {
+            //             console.log("reg tok is generated!")
+            //         } else {
+            //             alert("fail to generate reg tok!");
+            //         }
+            //     });
+
+
+            // },
 
             saveOrder() {
                 console.log("SAVEOEDER");

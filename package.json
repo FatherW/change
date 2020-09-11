@@ -19,6 +19,7 @@
   "dependencies": {
     "@google-web-components/google-signin": "^3.0.1",
     "@granite-elements/ace-widget": "^2.2.7-b1",
-    "@polymer/iron-icons": "^3.0.1"
+    "@polymer/iron-icons": "^3.0.1",
+    "jsonwebtoken": "^8.5.1"
   }
 }
