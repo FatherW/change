@@ -384,6 +384,10 @@
                 this.query = query;
                 console.log('Search',JSON.stringify(searchParams));
                 let panel = shadow.querySelector('#blank');
+                let shop = document.querySelector('change-shop');
+                let list = shop.shadowRoot.querySelector('change-slidelist');
+                list.shadowRoot.querySelector('#renew').innerHTML = '<change-range></change-range>';
+
                 panel.innerHTML = '';
                 Polymer.postData(url, searchParams).then(res => {
                         console.log(res);
@@ -404,11 +408,21 @@
                                         price = item['price'];
                                 });
                                 that.initMaxPrice = price;
-                                Polymer.dzFire('change-price-range',{
-                                    "detail": {
-                                        "max": that.initMaxPrice
-                                    }
-                                })
+
+
+
+                                let range_cookie = {
+                                    "query": res.resolve,
+                                    "from": 0,
+                                    "to": that.initMaxPrice
+                                };
+                                store.set('change-range', range_cookie);
+                                list.shadowRoot.querySelector('change-range').new();
+                                // Polymer.dzFire('change-price-range',{
+                                //     "detail": {
+                                //         "max": that.initMaxPrice
+                                //     }
+                                // })
                                 
                             }
                         }

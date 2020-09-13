@@ -215,7 +215,6 @@ its values is > 50%. */
                 this.query = [];
 
 
-
             },
             test: function() {
                 console.log("great");
@@ -223,9 +222,12 @@ its values is > 50%. */
             ready: function() {
                 let that = this;
                 let shadow = this.shadowRoot;
-                document.addEventListener('change-price-range').then(e=>{
+
+                document.addEventListener('change-price-range',function(e) {
                     // that.new();
                     let maxPrice = e.detail.max;
+                    console.log('Change Price Range',maxPrice);
+
                     var rangeSlider = shadow.querySelector('#slider-range');
                     var moneyFormat = wNumb({
                         decimals: 0,
@@ -240,12 +242,15 @@ its values is > 50%. */
                     }
 
                     console.log(this.data1, this.data2);
+                    
+
+                    // noUiSlider.destroy();
                     noUiSlider.create(rangeSlider, {
                         start: [this.data1, this.data2],
                         step: 1,
                         range: {
                             'min': [0],
-                            'max': [that.maxPrice]
+                            'max': [maxPrice]
                         },
                         format: moneyFormat,
                         connect: true
