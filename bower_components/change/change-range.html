@@ -221,7 +221,57 @@ its values is > 50%. */
                 console.log("great");
             },
             ready: function() {
+                let that = this;
+                let shadow = this.shadowRoot;
+                document.addEventListener('change-price-range').then(e=>{
+                    // that.new();
+                    let maxPrice = e.detail.max;
+                    var rangeSlider = shadow.querySelector('#slider-range');
+                    var moneyFormat = wNumb({
+                        decimals: 0,
+                        thousand: ',',
+                        prefix: ''
+                    });
 
+
+                    if (this.data2 == null || this.data2 == undefined || this.data2 == 1) {
+                        this.data1 = 0;
+                        this.data2 = maxPrice;
+                    }
+
+                    console.log(this.data1, this.data2);
+                    noUiSlider.create(rangeSlider, {
+                        start: [this.data1, this.data2],
+                        step: 1,
+                        range: {
+                            'min': [0],
+                            'max': [that.maxPrice]
+                        },
+                        format: moneyFormat,
+                        connect: true
+                    });
+
+
+
+                    // Set visual min and max values and also update value hidden form inputs
+                    rangeSlider.noUiSlider.on('update', function(values, handle) {
+                        shadow.querySelector('#slider-range-value1').innerHTML = values[0];
+                        shadow.querySelector('#slider-range-value2').innerHTML = values[1];
+                        // console.log('Change');
+                    });
+
+                    rangeSlider.noUiSlider.on('change', function(values, handle) {
+                        Polymer.dzFire('select-range', {
+                            'detail': {
+                                'start': values[0],
+                                'end': values[1]
+                            }
+                        })
+                        var event = new CustomEvent('close-item-dialog', {});
+                        document.dispatchEvent(event);
+                        console.log('Change');
+                    });
+                });
             },
             new: function() {
                 let that = this;
@@ -291,7 +341,7 @@ its values is > 50%. */
                     console.log('Change');
                 });
 
-
+             
             },
 
 

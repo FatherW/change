@@ -262,7 +262,10 @@
                     myTags._addTag(val);
                 },
                 search() {
-                    this.shadowRoot.querySelector('change-in-item').search(this.categories, this.tags, this.district, this.isNew, this.priceStart, this.priceStop, this.isFree, this.fanpage);
+                    // this.shadowRoot.querySelector('change-in-item').search(this.categories, this.tags, this.district, this.isNew, this.priceStart, this.priceStop, this.isFree, this.fanpage);
+                    
+                    
+                    this.panel._search();
                 },
 
                 run() {
@@ -350,10 +353,14 @@
                 ready: function() {
                     let that = this;
                     let shadow = this.shadowRoot;
+                    let panel = shadow.querySelector('change-in-item');
+                    this.panel = panel;
+                    this.sidePanel = shadow.querySelector('change-slidelist');
+
                     console.log("now shop");
                     document.addEventListener('areachange', e => {
                         this.isFree = e.detail.isFree;
-                        this.search()
+                        this.search();
                     })
 
                     let value;
@@ -361,6 +368,7 @@
                         value = e.detail.tags;
                         this.addTags(value);
                         this.tags.push(value);
+                        this.panel.tags = this.tags;
                         this.search();
 
                     });
@@ -381,13 +389,16 @@
                         let category = e.detail.category;
                         this.addTags(category);
                         this.categories.push(category);
-                        this.search();
+                        panel.categories = this.categories;
+                        panel.search();
+                        // this.search();
                     });
                     document.addEventListener('select-district', e => {
                         // let category = e.detail.category;
                         this.addTags(e.detail.district);
                         // this.tags.push(e.detail.district);
                         this.district.push(e.detail.district);
+                        this.panel.districts = this.district;
                         this.search();
                     });
                     document.addEventListener('select-range', e => {
@@ -428,6 +439,8 @@
                         this.priceStop = parseInt(storemaxprice.join("").toString());
                         let msgrange = "$" + this.priceStart + " - $" + this.priceStop;
                         this.addTags(msgrange);
+                        this.panel.minPrice = this.priceStart;
+                        this.panel.maxPrice = this.priceStop; 
                         this.search();
 
 
