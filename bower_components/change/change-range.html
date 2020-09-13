@@ -276,10 +276,20 @@ its values is > 50%. */
                 rangeSlider.noUiSlider.on('update', function(values, handle) {
                     shadow.querySelector('#slider-range-value1').innerHTML = values[0];
                     shadow.querySelector('#slider-range-value2').innerHTML = values[1];
-
+                    // console.log('Change');
                 });
 
-
+                rangeSlider.noUiSlider.on('change', function(values, handle) {
+                    Polymer.dzFire('select-range', {
+                        'detail': {
+                            'start': values[0],
+                            'end': values[1]
+                        }
+                    })
+                    var event = new CustomEvent('close-item-dialog', {});
+                    document.dispatchEvent(event);
+                    console.log('Change');
+                });
 
 
             },

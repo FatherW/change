@@ -1,6 +1,9 @@
 
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-checkbox/vaadin-checkbox.html">
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-select/vaadin-select.html">
+<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-text-field/vaadin-number-field.html">
+<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-text-field/vaadin-text-area.html">
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/paper-tags-input/paper-tags-input.html">
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-menu-bar/vaadin-menu-bar.html">
 <!-- <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/dz-file-management/dz-sub-img-stock.html"> -->
@@ -12,6 +15,9 @@
     <template>
         <style include="icon-styles"></style>
         <style>
+            .inputbox{
+                padding:0px 5px;
+            }
             *,
             p,
             span {
@@ -266,7 +272,6 @@
             }
 
             #pname {
-                margin-top: 4px;
                 width: 80%;
             }
 
@@ -467,15 +472,16 @@
                     <div class="container">
                         <vaadin-menu-bar class="cat"></vaadin-menu-bar>
                         <p class="result"> : </p>
-                        <span>{{prod.categories}}</span>
+                        <input type="text" id="categories" value="{{product.categories}}" disabled
+                        placeholder="選擇產品類別">
                     </div>
 
                     <div class="fanpage">
-                        <vaadin-select id="fanPage" placeholder="専頁" value={{prod.fanpage}}></vaadin-select>
+                        <vaadin-select id="fanPage" placeholder="専頁" value={{product.fanpage}}></vaadin-select>
                     </div>
 
                     <vaadin-checkbox-group label="Label" theme="vertical" id="secondlabel">
-                        <vaadin-checkbox theme="custom" value="1" id="free" checked={{prod.isFree}}>是否免費區
+                        <vaadin-checkbox theme="custom" value="1" id="free" checked={{product.isFree}}>是否免費區
                         </vaadin-checkbox>
                     </vaadin-checkbox-group>
 
@@ -491,18 +497,17 @@
             <div class="change-new-product-container">
                 <div class="left-pics">
                     <!-- 5pics -->
-                    <div id="div0" class="bigPic productImg" data-id="0" on-click="_uploadFile">
-                        <!-- <img src$="{{pics[0]}}" style="width:100%"/> -->
+
+                    <div id="div0" class="bigPic productImg" data-id="0" on-click="_uploadFile" style$="background-image:url({{bigPic}})">
 
                     </div>
                     <div style="height: 100px;">
-
                         <!-- GG get Array Pic from Database -->
                         <div class="consmall">
-                            <div id="div1" class="productImg" data-id="1" on-click="_uploadFile"></div>
-                            <div id="div2" class="productImg" data-id="2" on-click="_uploadFile"></div>
-                            <div id="div3" class="productImg" data-id="3" on-click="_uploadFile"></div>
-                            <div id="div4" class="productImg" data-id="4" on-click="_uploadFile"></div>
+                            <div id="div1" class="productImg" data-id="1" on-click="_uploadFile" style$="background-image:url({{pic1}})"></div>
+                            <div id="div2" class="productImg" data-id="2" on-click="_uploadFile" style$="background-image:url({{pic2}})"></div>
+                            <div id="div3" class="productImg" data-id="3" on-click="_uploadFile" style$="background-image:url({{pic3}})"></div>
+                            <div id="div4" class="productImg" data-id="4" on-click="_uploadFile" style$="background-image:url({{pic4}})"></div>
                         </div>
                         <div class="buttons u">
                             <!-- <button id="upload" on-click="_uploadFile">上載圖片</button> -->
@@ -516,8 +521,8 @@
                         </div>
                         <!-- TEXT AREA-->
                         <div class="inputbox">
-                            <textarea id="sContact" name="sellerContact" rows="15" placeholder="填寫你的聯絡資料等等"
-                                value={{prod.sellerMsg}}></textarea>
+                            <vaadin-text-area id="sContact" name="sellerContact" rows="15" placeholder="填寫你的聯絡資料等等" field="sellerMsg"
+                                value="{{product.sellerMsg}}"></vaadin-text-area>
                         </div>
                     </div>
                 </div>
@@ -532,8 +537,8 @@
                         <div style="width: 100%;">
                             <!--input box-->
                             <div class="inputbox">
-                                <input type="text" id="pname" value$="{{product.productname}}" name="firstname"
-                                    placeholder="輸入商品標題...">
+                                <vaadin-text-field type="text" id="pname" value="{{product.productname}}" name="firstname"  field="productname"
+                                    placeholder="輸入商品標題..."> </vaadin-text-field>
                                 <!-- maxlength="14" -->
                             </div>
                         </div>
@@ -556,8 +561,8 @@
                         <div class="dollar"><b style="font-size: 30px; color: black;">$</b></div>
                         <!--input box-->
                         <div class="inputbox">
-                            <input type="number" id="price" name="priceHKD" placeholder="輸入商品價錢..."
-                                value={{prodprice}}>
+                            <vaadin-number-field  id="price" name="priceHKD" placeholder="輸入商品價錢..."  field="price"
+                                value={{product.price}}> </vaadin-number-field>
                         </div>
                     </div>
                     <hr>
@@ -566,7 +571,7 @@
                     <div class="loca" style="display: flex;">
                         <div id="location"></div>
                         <div style="margin-top: 11px; margin-left: 12px;">
-                            <vaadin-select id="vs2" placeholder="選擇地區" value={{owner.area}}></vaadin-select>
+                            <vaadin-select id="vs2" placeholder="選擇地區" value="{{product.district}}"></vaadin-select>
                         </div>
                     </div>
 
@@ -575,7 +580,7 @@
                     <div class="del" style="display: flex;">
                         <div id="delivery"></div>
                         <div style="margin-top: 11px; margin-left: 12px;">
-                            <vaadin-select id="vs3" placeholder="選擇發送方法" value={{prod.deliveryMethod}}></vaadin-select>
+                            <vaadin-select id="vs3" placeholder="選擇發送方法" value="{{product.deliveryMethod}}"></vaadin-select>
                         </div>
                     </div>
 
@@ -588,8 +593,8 @@
                         </div>
                         <!--typing box-->
                         <div class="inputbox">
-                            <textarea id="pdes" value={{prod.description}} name="productdescription" rows="12"
-                                placeholder="輸入商品描述..."></textarea>
+                            <vaadin-text-area id="pdes"  field="description" value="{{product.description}}" name="productdescription" rows="12"
+                                placeholder="輸入商品描述..."></vaadin-text-area>
                         </div>
                     </div>
 
@@ -600,7 +605,7 @@
 
                         <!--Henry version-->
                         <vaadin-text-field id="inputTags" on-keydown="_addTags"></vaadin-text-field>
-                        <paper-tags-input width="100%" id="myTags"></paper-tags-input>
+                        <paper-tags-input width="100%" id="myTags" tags="{{product.tags}}"></paper-tags-input>
 
                     </div>
                     <hr>
@@ -609,8 +614,8 @@
                         <div style="margin-top: 20px; margin-bottom: 30px;"><span class="bigsize">運輸：</span></div>
                         <!--input box-->
                         <div class="inputbox">
-                            <textarea id="trans" value={{prod.deliveryDesc}} name="transportation" rows="6"
-                                placeholder="輸入物流資料..."></textarea>
+                            <vaadin-text-area  field="deliveryDesc" id="trans" value="{{product.deliveryDesc}}" name="transportation" rows="6"
+                                placeholder="輸入物流資料..."></vaadin-text-area>
                         </div>
 
                     </div>
@@ -627,47 +632,47 @@
 
 <script>
     //function for database
-    (function() {
-        Polymer({
-            is: 'change-add-product',
-            properties: {
-                "id": {
-                    "type": String
-                },
 
-                "valueArray": {
-                    "type": Array
-                },
 
-                "CATE": {
-                    "type": String
-                },
+    class changeAddProduct extends Polymer.Element {
+        static get is() {
+            return 'change-add-product';
+        }
+        static get properties() {
+                return {
+                    id:{
+                        "type":String
+                    },
+                    valueArray:{
+                        type: Array
+                    },
+                    product: {
+                        type: Object,
+                        value: function() {
+                            return {};
+                        }
+                    }
+                }
+            }
 
-                next: {
-                    "type": Number
-                },
+            // Observe the name sub-property on the user object
+            static get observers() {
+                return [
+                    'productNameChanged(product.productname)'
+                ]
+            }
 
-                "LIKE": {
-                    "type": String
-                },
-
-                "OWNERID": {
-                    "type": String
-                },
-
-                "CREATETIME": {
-                    "type": String
-                },
-
-                "POSTSTATUS": {
-                    "type": Boolean
-                },
-
-                "REPLYARRAY": {
-                    "type": Array
+            productNameChanged(name) {
+                console.log('Change');
+                if (name) {
+                console.log('new name: ' + name);
+                } else {
+                console.log('name is undefined');
                 }
 
-            },
+            }
+            
+            
             checkAlias(){
                 if (!this.product['alias']) {
                     console.log('Check Alias',this.product);
@@ -676,10 +681,11 @@
                     console.log('Check Alias',this.product);
                     return;
                 }
-            },
+            }
             _changeAlias(){
                 this.changeAlias(this.product['productname']);
-            },
+            }
+
             changeAlias(name){
                 let that = this;
                 console.log('Alias',name);
@@ -698,8 +704,10 @@
                         that.changeAlias(name2);
                     }
                 });          
-            },
-            created: function() {
+            }
+
+            constructor() {
+                super();
                 let user = store.get('change-user') || null;
                 if (!user){
                     alert("請先登入");
@@ -717,9 +725,8 @@
                 // this.fileManager = new AwsPackage(user);
       
                 
-                let id = store.get('new-product-id') || 0;
+                let id = store.get('new-product-id') || null;
                 let model =  {
-                    "id":id,
                     "categories": "",
                     "sellerMsg": "",
                     "productname": "",
@@ -730,23 +737,32 @@
                     "tag": [],
                     "deliveryDesc": "",
                     "isNew": true,
+                    "isFree": false,
                     "ownerId": this.user['id'],
                     "pics": ["http://change.dazzle.website.s3.amazonaws.com/files/1/1591944377549.jpeg"],
                     'alias': '',
+                    "postStatus":false,
                     "isPurchase": false
             };
 
-                this.product = store.get('new-product') || model;
-                console.log('Before New ID',this.id,this.product);
+                // this.product = store.get('new-product') || model;
+                // console.log('Before New ID',this.id,this.product);
                 if (!id){
                     console.log('New Product');
+                    this.product = model;
                     this.generateNewId();
                     this.mode ='add';
-                    this.userManager.getDataByCache(this.product['ownerId']).then(res=>{
-                        this.owner = res;
-                    });
+                    this.initProduct();
+                    // this.userManager.getDataByCache(this.product['ownerId']).then(res=>{
+                    //     this.owner = res;
+                    // });
                 } else {
                     this.mode = 'edit';
+                    this.dataManager.getDataByCache(id).then(res=>{
+                        this.product = res;
+                        this.initProduct();
+                        console.log('Product',this.product);
+                    });
                     // this.reAlias(0);
                 }
 
@@ -759,7 +775,8 @@
                 });
 
                 //CREATED ENDS HERE//
-            },
+            }
+
             reAlias(i){
                 let alias = this.product['productname'];
                 alias = alias.replace(/^\s+|\s+$/gm,'')
@@ -776,7 +793,8 @@
                     }
                     console.log('Change Alias',res,res.length);
                 });
-            },
+            }
+
             generateNewId(){
                 let no = new Date().getTime() % 10000;
                 let str; 
@@ -784,7 +802,7 @@
                 this.fileManager.listFile('product/').then(res=>{
                     this.product['id'] = String(no) + String(res.length +1);
                 });
-            },
+            }
 
 
             reNewPic(src) {
@@ -796,7 +814,7 @@
                     i++;
                 });
 
-            },
+            }
 
             //Henery added//
             _addTags(e) {
@@ -809,10 +827,98 @@
                     this.shadowRoot.querySelector('#inputTags').value = "";
                 }
                 //console.log("arrayResult:", myTags.tags);
-            },
+            }
 
+            initProduct(){
+    //edit mode
+                    let res;                   
+                   // res = JSON.parse(res);
+                   res = this.product;
+                   this.userManager.getDataByCache(this.product['ownerId']).then(res=>{
+                       this.owner = res;
+                   });  
+                this.bigPic = this.product.pics[0] || "https://www.gettv.hk/img/nopic.png";
+                this.pic1 = this.product.pics[1] || "https://www.gettv.hk/img/nopic.png";
+                this.pic2 = this.product.pics[2] || "https://www.gettv.hk/img/nopic.png";
+                this.pic3 = this.product.pics[3] || "https://www.gettv.hk/img/nopic.png";
+                this.pic4 = this.product.pics[4] || "https://www.gettv.hk/img/nopic.png";
+                if (!this.price)
+                   this.price = 10;
+                
+                this.shadowRoot.querySelector('#vs4').addEventListener('change',e=>{
+                    console.log('Value',e.target.value);
+                    switch(e.target.value){
+                        case '全新':
+                            this.product.isNew = true;
+                        break;
 
-            ready: function() {
+                        case '二手':
+                            this.product.isNew = false;
+                        break;
+                    }
+                });
+                // this.shadowRoot.querySelectorAll('vaadin-text-field').forEach(elm=>{
+                //     elm.addEventListener('change',e=>{
+                //         console.log('Change');
+                //         let field = elm.getAttribute('field');
+                //         this.product[field] = elm.value;
+                //     });
+                // });
+                // this.shadowRoot.querySelectorAll('vaadin-text-area').forEach(elm=>{
+                //     elm.addEventListener('change',e=>{
+                //         console.log('Change');
+                //         let field = elm.getAttribute('field');
+                //         this.product[field] = elm.value;
+                //     });
+                // });
+
+                // if (typeof(this.product['tags']) == "string") {
+                //     shadow.querySelector('#myTags').tags = [this.product['tags']];
+                // } else {
+                //     shadow.querySelector('#myTags').tags = this.product['tags'];
+
+                // }
+
+                //    console.log('Edit Mode',res);
+
+                //    this.prod = res;
+                //    this.prodprice = res.price || 10;
+                   //SET PROPERTIES
+
+                //    this.CATE = res['categories'] || "";
+                //    this.LIKE = res['like'] || 0;
+                //    this.CREATETIME = res['createTime'] || new Date().getTime();
+                //    this.OWNERID = res['ownerId'] || this.user['id'];
+                //    this.POSTSTATUS = res['postStatus'] || true;
+                //    this.REPLYARRAY = res['replyArray'] || [];
+                //    this.ORDERLIST = res['orderlist'] || [];
+                   console.log('Edit Mode',res);
+
+                //    if (res['isNew'] == true) {
+                //        shadow.querySelector('#vs4').value = "全新";
+
+                //    } else {
+                //        shadow.querySelector('#vs4').value = "二手";
+
+                //    }
+                //    console.log('Edit Mode',res);
+
+                //    if (res['price'] != 0) {
+                //        shadow.querySelector('#free').checked = false;
+                //    }
+
+       
+                   // let lenpic = res['pics'].length;
+                   // console.log('PICS',res['pics']);
+                   // for (i3 = 0; i3 < lenpic; i3++) {
+                   //     shadow.querySelector('#div' + i3).style.backgroundImage = 'url(' + res["pics"][i3] + ')'
+                   // };
+
+            //    this.next = pid;
+            }
+
+            ready() {
+                super.ready();
                 let user = store.get('change-user') || null;
                 this.user = user;
                 let that = this;
@@ -829,52 +935,13 @@
                 // pid = document.head.querySelector('meta[name=product-id]').getAttribute('content') || null;
                 console.log('PID',pid);
 
-                if (pid) {
-                    //edit mode
-
-                        // res = JSON.parse(res);
-                        res = this.product;
-                        that.prod = res;
-                        this.prodprice = res.price || 10;
-                        //SET PROPERTIES
-                        this.CATE = res['categories'] || "";
-                        this.LIKE = res['like'] || 0;
-                        this.CREATETIME = res['createTime'] || new Date().getTime();
-                        this.OWNERID = res['ownerId'] || this.user['id'];
-                        this.POSTSTATUS = res['postStatus'] || true;
-                        this.REPLYARRAY = res['replyArray'] || [];
-                        this.ORDERLIST = res['orderlist'] || [];
-
-                        if (res['isNew'] == true) {
-                            shadow.querySelector('#vs4').value = "全新";
-
-                        } else {
-                            shadow.querySelector('#vs4').value = "二手";
-
-                        }
-                        if (res['price'] != 0) {
-                            shadow.querySelector('#free').checked = false;
-                        }
-                        if (typeof(res['tags']) == "string") {
-                            shadow.querySelector('#myTags').tags = [res['tags']];
-
-                        } else {
-                            shadow.querySelector('#myTags').tags = res['tags'];
-
-                        }
-                        let lenpic = res['pics'].length;
-                        for (i3 = 0; i3 < lenpic; i3++) {
-                            shadow.querySelector('#div' + i3).style.backgroundImage = 'url(' + res["pics"][i3] + ')'
-                        };
-                        this.userManager.getDataByCache(this.product['ownerId']).then(res=>{
-                            this.owner = res;
-                        });
-                    this.next = pid;
-                } else {
-                    //add mode
-                    this.prodprice = '10';
-                    this.owner = this.user;
-                }
+                // if (this.mode==="edit") {
+                
+                // } else {
+                //     //add mode
+                //     this.prodprice = '10';
+                //     this.owner = this.user;
+                // }
 
                 // this.userManager.getDataByCache()
 
@@ -899,6 +966,9 @@
                         item.style.backgroundImage = 'url(' + url + ')';
                         Polymer.activeElement = null;
                         shadow.querySelector('vaadin-dialog').opened = false;
+                        let index = parseInt(item.getAttribute('data-id'));
+                        that.product['pics'][index] = url;
+
                     }
                 });
 
@@ -910,7 +980,7 @@
                 //     this.changeAlias(name);
                 // });
 
-            },
+            }
 
 
             getAllPics() {
@@ -922,114 +992,135 @@
                     console.log('Src', src);
                     this.pics.push(src);
                 });
-            },
+            }
 
-            _saveData: function() {
+            dataPostProcess(){
+                let myTags = this.shadowRoot.querySelector('#myTags');
+                this.product['tags'] = myTags.tags;
                 console.log('Product',this.product);
 
+            }
+
+            condition(){
+
+                if (!this.product.categories) 
+                    return false;
+                
+                if (!this.product.productname)
+                    return false;
+
+                if (!this.product.tags.length)
+                    return false;
+            
+                return true;
+            }
+
+            _saveData() {
+                console.log('Product',this.product);
+                
+
+                if (!this.condition())
+                    return false;
+                
                 let that = this;
                 let shadow = this.shadowRoot;
-
-
-
-            
                 shadow.querySelector('#save').innerHTML = '上存中...';
 
-                    //*************GET INPUT PRODUCT VALUE*****************//
-                    //Get value from select box categories
-                    var categories = shadow.querySelector('span').textContent;
-                    //Get value from select box fanpage
+                this.product['postStatus'] = true;
+                this._save();            
+                // Check Fans Page
+                // .......
+
+                // 
 
 
-                    // var fanpage = shadow.querySelector('#fanPage').value;
-                    // if (fanpage == "#$%!@&^(ntw" || fanpage == "") {
-                    //     var ownerId = user['id'];
+                
+
+
+
+                    // //*************GET INPUT PRODUCT VALUE*****************//
+                    // //Get value from select box categories
+                    // var categories = shadow.querySelector('span').textContent;
+                    // //Get value from select box fanpage
+
+
+                    // // var fanpage = shadow.querySelector('#fanPage').value;
+                    // // if (fanpage == "#$%!@&^(ntw" || fanpage == "") {
+                    // //     var ownerId = user['id'];
+                    // // } else {
+                    // //     var ownerId = fanpage;
+                    // // }
+                    // // console.log(ownerId, "ggggggg");
+
+                    // //Get value from isFree button
+                    // let free = shadow.querySelector('#free').checked;
+                    // //Get Photos Array
+                    // this.getAllPics();
+                    // //Get value from seller message
+                    // let sellerContact = shadow.querySelector('#sContact').value;
+                    // //Get value from select box NewOld
+                    // var myselect = shadow.querySelector("#vs4");
+                    // var newOld = myselect.value;
+                    // if (newOld == "二手") {
+                    //     var status = Boolean(0);
                     // } else {
-                    //     var ownerId = fanpage;
+                    //     var status = Boolean(1);
                     // }
-                    // console.log(ownerId, "ggggggg");
+                    // //Get value from productName input box
+                    // let pname = shadow.querySelector('#pname').value;
 
-                    //Get value from isFree button
-                    let free = shadow.querySelector('#free').checked;
-                    //Get Photos Array
-                    this.getAllPics();
-                    //Get value from seller message
-                    let sellerContact = shadow.querySelector('#sContact').value;
-                    //Get value from select box NewOld
-                    var myselect = shadow.querySelector("#vs4");
-                    var newOld = myselect.value;
-                    if (newOld == "二手") {
-                        var status = Boolean(0);
-                    } else {
-                        var status = Boolean(1);
-                    }
-                    //Get value from productName input box
-                    let pname = shadow.querySelector('#pname').value;
+                    // //Get value from price input box
+                    // let price = shadow.querySelector('#price').value;
 
-                    //Get value from price input box
-                    let price = shadow.querySelector('#price').value;
+                    // //Get value from select box district
+                    // var myselect = shadow.querySelector("#vs2");
+                    // var district = myselect.value;
 
-                    //Get value from select box district
-                    var myselect = shadow.querySelector("#vs2");
-                    var district = myselect.value;
+                    // //Get value from select box deliveryMethod
+                    // var myselect = shadow.querySelector("#vs3");
+                    // var method = myselect.value;
 
-                    //Get value from select box deliveryMethod
-                    var myselect = shadow.querySelector("#vs3");
-                    var method = myselect.value;
+                    // //Get value from productDescription input box
+                    // let pdes = shadow.querySelector('#pdes').value;
 
-                    //Get value from productDescription input box
-                    let pdes = shadow.querySelector('#pdes').value;
-
-                    //Get value from input tags
-                    //**tags is refering to the arrayValue**//
-                    let tags = shadow.querySelector('#myTags').tags;
-                    //Get value from deliveryDescription input box
-                    let deldes = shadow.querySelector('#trans').value;
-                    //*********GET INPUT PRODUCT VALUE ENDS HERE**************//
+                    // //Get value from input tags
+                    // //**tags is refering to the arrayValue**//
+                    // let tags = shadow.querySelector('#myTags').tags;
+                    // //Get value from deliveryDescription input box
+                    // let deldes = shadow.querySelector('#trans').value;
+                    // //*********GET INPUT PRODUCT VALUE ENDS HERE**************//
                   
 
-                    if (categories == " ") {
-                        that.textchange("請選擇分類!");
-                        return;
-                    }   
-                    if (pname == "") {
-                        that.textchange("請輸入商品標題!");
-                        return;
-                    }
-                    if (tags.length == 0) {
-                        that.textchange("請輸入標籤!");
-                        return;
-                    }
                     
 
-                    let params = {
-                            "categories": categories,
-                            "sellerMsg": sellerContact,
-                            "productname": pname,
-                            "price": parseFloat(price),
-                            "district": district,
-                            "deliveryMethod": method,
-                            "descrip": pdes,
-                            "tag": tags,
-                            "deliveryDesc": deldes,
-                            "isNew": status,
-                            // "ownerId": ownerId,
-                            "pics": this.pics,
-                            "createTime": new Date().getTime(),
-                            "isFree": free,
-                            "postStatus":true
-                    };
-                    for (let k in params){
-                        this.product[k] = params[k];
-                    }
-                    this._save();
+                    // let params = {
+                    //         "categories": categories,
+                    //         "sellerMsg": sellerContact,
+                    //         "productname": pname,
+                    //         "price": parseFloat(price),
+                    //         "district": district,
+                    //         "deliveryMethod": method,
+                    //         "descrip": pdes,
+                    //         "tag": tags,
+                    //         "deliveryDesc": deldes,
+                    //         "isNew": status,
+                    //         // "ownerId": ownerId,
+                    //         "pics": this.pics,
+                    //         "createTime": new Date().getTime(),
+                    //         "isFree": free,
+                    //         "postStatus":true
+                    // };
+                    // for (let k in params){
+                    //     this.product[k] = params[k];
+                    // }
+                    // this._save();
 
 
             
 
-            },
+            }
 
-            _uploadFile: function(e) {
+            _uploadFile(e) {
                 let shadow = this.shadowRoot;
                 let that = this;
                 let elm = e.target;
@@ -1047,12 +1138,12 @@
 
                 // Polymer.popup(dialog, 'change', 'change-gallery', '90%', '90%');
                 // console.log('saved', bucket)
-            },
+            }
 
             closeDialog() {
                 // let dialog = shadow.querySelector('vaadin-dialog');
                 this.dialog.opened = false;
-            },
+            }
             saveProductPage(){
                 let that = this;
                     let html = document.createElement('html');
@@ -1063,7 +1154,7 @@
                     meta.setAttribute('name','product-id');
                     meta.setAttribute('content',this.id);
                     Polymer.getContent('/product.html').then(content=>{
-                        parser = new DOMParser();
+                        let parser = new DOMParser();
                         let doc = parser.parseFromString(content, "text/html");
                     
                         head.innerHTML = doc.head.innerHTML;
@@ -1079,16 +1170,19 @@
                         // this.fileManager.saveUserData('json/product-'+this.id+'.json',JSON.stringify(this.product));
                         this.fileManager.saveHtml('product/'+this.product['alias'],html.outerHTML);
                     });
-            },
+            }
             _save(){
                 // this.checkAlias();
                 console.log('Product',this.product);
+
+                // Re Alias and save Product Page
                 let alias = this.product['productname'];
                 alias = alias.replace(/^\s+|\s+$/gm,'')
                 alias = alias.replace(/ /gm,'-');
                 alias = alias.replace(/\//gm,'-');
                 alias = alias+'-'+ this.noProduct;
                 this.product['alias'] = alias;
+
                 this.dataManager.saveDataWithCache(this.product['id'],this.product).then(res=>{
                     if (this.mode=="add")
                         this.addUserGoods(this.product['ownerId']);
@@ -1097,7 +1191,7 @@
                     alert('成功儲存');
                     // location.href="/getchange.html";
                 });
-            },
+            }
             addUserGoods(uid){
                 let userManager = new DataPackage("_user");
                 let that = this;
@@ -1105,73 +1199,8 @@
                     res['goodsNum']++;
                     that.userManager.saveDataWithCache(uid,res);
                 });
-            },
+            }
 
-            saveproduct(param) {
-                let user = store.get('change-user') || null;
-                let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
-                Polymer.postData(link, param).then(res => {
-                    console.log("omgomgomg", res);
-                    if (res.code < 0) {
-                        console.log("omgomg", JSON.stringify(res.reject));
-                    }
-                    var newproductid = res.resolve.id;
-                    console.log("omgomg1", newproductid);
-                    console.log("omgomgomg", user);
-                    if (res.code > 0) {
-                        let paramup = {
-                            "action": "updateData",
-                            "index": "change",
-                            "type": "_user",
-                            "id": user['id'],
-                            "body": {
-                                "query": {
-                                    "script": {
-                                        "source": "ctx._source['goodsNum']+=1"
-                                    }
-                                }
-                            }
-                        };
-                        console.log("omgomg2", paramup);
-                        let link2 = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                        Polymer.postData(link2, paramup).then(res => {
-                            console.log("omgomg3", res)
-                            if (res.code > 0) {
-                                this.dataManager.loadData(newproductid).then(res => {
-                                    console.log("omgomg4", res);
-                                    this.fileManager.saveFile('json/product-' + newproductid + '.json', JSON.stringify(res)).then(res => {
-                                        location.replace("./edit-product.html?p" + newproductid);
-                                    });
-
-                                })
-                            }
-                        });
-                    } else {
-                        that.textchange(res.text);
-                    }
-                });
-            },
-            editproduct(param) {
-                let user = store.get('change-user') || null;
-                //********UPDATE DATABASE***********//
-                let paramsDatabase = {
-                    "action": "addData",
-                    "index": "change",
-                    "type": "product",
-                    "id": this.id,
-                    "body": param
-                };
-                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                Polymer.postData(Url, paramsDatabase).then(res => {
-                    if (res.code > 0) {
-                        this.dataManager.loadData(this.id).then(res => {
-                            this.fileManager.saveFile('json/product-' + this.id + '.json', JSON.stringify(res)).then(res => {
-                                location.replace("./edit-product.html?p" + this.id );
-                            });
-                        })
-                    }
-                });
-            },
             vaadin_select() {
                 let shadow = this.shadowRoot;
                 //SET AREA, DERLIVER METHOD, PRODUCT STATUS//
@@ -1285,7 +1314,7 @@
                     };
                 });
 
-            },
+            }
 
 
             fanpage() {
@@ -1350,112 +1379,95 @@
                     }
                 })
 
-            },
+            }
             submenu() {
                 let shadow = this.shadowRoot;
+                let that = this;
                 customElements.whenDefined('vaadin-menu-bar').then(function() {
                     const menu = shadow.querySelector('vaadin-menu-bar');
+                    // menu.items = [
+                    //     {
+                    //         text: 'Project',
+                    //         children: [
+                    //         {text: 'Users',
+                    //             children: [{text: 'List'}, {text: 'Add'}]
+                    //         },
+                    //         {text: 'Billing',
+                    //             children: [{text: 'Invoices'}, {text: 'Balance Events'}]
+                    //         },
+                    //         ]
+                    //     },
+                    //     {
+                    //         text: 'Account',
+                    //         children: [
+                    //         {text: 'Edit Profile'},
+                    //         {text: 'Privacy Settings'}
+                    //         ]
+                    //     },
+                    //     {text: 'Sign Out'}
+                    // ];
+
                     menu.addEventListener('item-selected', function(e) {
                         // this.prod.categories = e.detail.value.text;
                         // this.CATE = e.detail.value.text;
-                        shadow.querySelector('span').textContent = e.detail.value.text;
-                        this.CATE = e.detail.value.text;
+                        that.product.categories = e.detail.value.text;
+                        that.notifyPath('product.categories');
+                        // shadow.querySelector('span').textContent = e.detail.value.text;
+                        // this.CATE = e.detail.value.text;
                     });
 
                     let c = {};
                     let arr = [];
                     let g = [];
                     let childarr = [];
-                    let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                    let params = {
-                        "action": "searchData",
-                        "index": "change",
-                        "type": "categories",
-                        "body": {
-                            "sort": [{
-                                "_id": {
-                                    "order": "asc"
-                                }
-                            }],
-                            "query": {
-                                "match_all": {}
+
+                    // let catManager = new DataPackage('categories');
+                  
+                    Polymer.getUserDataContent('json/category.json').then(content=>{
+                        let json = JSON.parse(content);
+                        console.log('JSON',json);
+                        json.forEach(item=>{
+                            let cat; 
+                            let subArr=[];
+                            item.children.forEach(subcat=>{
+                                subArr.push({
+                                   'text':subcat
+                                });
+                            });
+                            cat = {
+                                'text':item.name,
+                                'children':subArr
                             }
-                        }
-                    };
-                    Polymer.postData(url, params).then(res => {
-                        if (res.code > 0) {
-                            let a = res.resolve;
-                            let arrchild = [];
-
-
-                            for (i = 0; i < a.length; i++) {
-                                if (a[i].parent == 0) {
-                                    let b = a[i].name;
-                                    // generate childarr
-                                    for (x = 0; x < a.length; x++) {
-                                        if (a[i].id == a[x].parent) {
-                                            let j = a[x].name;
-                                            let k = {
-                                                "text": j
-                                            };
-                                            childarr.push(k);
-                                        }
-                                    }
-                                    let c = {
-                                        "text": b,
-                                        "children": childarr
-                                    };
-                                    arr.push(c);
-                                    childarr = [];
-
-
-                                    let id = a[i].id;
-
-
-                                }
-
-                            }
-                            let h = {
-
-                                text: 'Project',
-                                children: [{
-                                    text: 'Users',
-                                    children: [{
-                                        text: 'List'
-                                    }, {
-                                        text: 'Add'
-                                    }]
-                                }, {
-                                    text: 'Billing',
-                                    children: [{
-                                        text: 'Invoices'
-                                    }, {
-                                        text: 'Balance Events'
-                                    }]
-                                }, ]
-                            };
-
-                            g.push(h);
-                        }
-
+                            arr.push(cat);
+                        });
+                        let h = {
+                            text: '請選擇分類',
+                            children: arr
+                        };
+                        menu.items = [h];
                     });
-                    let i = [];
-                    let h = {
-                        text: '請選擇分類',
-                        children: arr
-                    };
-
-                    menu.items = [h];
-
                 });
 
-            },
+            }
             textchange(test) {
                 this.shadowRoot.querySelector('#save').innerHTML = '發佈上架';
                 alert(test);
-            },
+            }
 
 
-        });
-    })();
+
+    
+    }
+
+    customElements.define('change-add-product', changeAddProduct);
+
+    // (function() {
+    //     Polymer({
+    //         is: 'change-add-product',
+ 
+           
+
+
+    //     });
+    // })();
 </script>

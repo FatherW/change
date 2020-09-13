@@ -184,7 +184,7 @@
                    
                 let product = this.product;
                 store.set('new-product-id',product['id']);
-                store.set('new-product',product);
+                // store.set('new-product',product);
                 location.replace("/add-product.html");
 
             },
@@ -197,6 +197,7 @@
                     console.log("check:", res.code);
                     if (res.code > 0) {
                         //alert("STATUS: DELETE SUCCESSFUL");
+
                         alert('已刪除貨品');
                         location.replace("/index.html");
                     } else {
@@ -220,98 +221,10 @@
                 product['ownerId'] = user['id'];
                 product['postStatus'] = false;
                 store.set('new-product-id',product['id']);
-                store.set('new-product',product);
+                this.prodManager.saveDataWithCache(product['id'],product);
+                // store.set('new-product',product);
                 location.replace("/add-product.html");
 
-                // this.dataManager.saveDataWithCache(product['id'],product).then(res=>{
-                //     location.replace("/add-product.html");
-                // })
-                    // let params = {
-                    //     "action": "addproduct",
-                    //     "categories": res.categories,
-                    //     "sellerMsg": res.sellerMsg,
-                    //     "productname": res.productname,
-                    //     "price": parseInt(res.price),
-                    //     "district": res.district,
-                    //     "deliveryMethod": res.deliveryMethod,
-                    //     "descrip": res.description,
-                    //     "tag": res.tags,
-                    //     "deliveryDesc": res.deliveryDesc,
-                    //     "isNew": Boolean(res.isNew),
-                    //     "ownerId": res.ownerId,
-                    //     "pics": res.pics
-                    // };
-
-
-                    // let link =
-                    //     "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
-
-                    // //SEND THE ABOVE MESSAGE TO POSTMAN
-                    // Polymer.postData(link, params).then(res => {
-                    //     console.log("CCC", params);
-                    //     console.log("BBB", res.resolve);
-                    //     if (res.code > 0) {
-                    //         var theid = res.resolve.id;
-                    //         var userid = res.resolve.ownerId;
-                    //         console.log("POST TO POSTMAN SUCCESS!");
-                    //         // alert("POST TO POSTMAN SUCCESS!");
-                    //         this.savejson(savej, theid, userid);
-
-                    //     } else {
-                    //         console.log("POST TO POSTMAN  FAILED!")
-                    //     }
-                    // });
-                
-                //CALL GETDATA FUNCTION AS IN POSTMAN
-                // let that = this;
-                // let shadow = this.shadowRoot;
-                // let url = "/json/product-" + pid + ".json?id=" + new Date().getTime();
-                // Polymer.getContent(url).then(res => {
-                //     res = JSON.parse(res);
-                //     console.log("copy json:", res)
-                //     var savej = res;
-                //     let user = store.get("change-user") || null;
-                //     let temptime = user['_id'];
-                //     let tempid = user['goodsNum'].toString() + Math.floor(Math.random() * 10);
-                //     var thenewid = "" + temptime.toString() + tempid;
-
-
-                //     let params = {
-                //         "action": "addproduct",
-                //         "categories": res.categories,
-                //         "sellerMsg": res.sellerMsg,
-                //         "productname": res.productname,
-                //         "price": parseInt(res.price),
-                //         "district": res.district,
-                //         "deliveryMethod": res.deliveryMethod,
-                //         "descrip": res.description,
-                //         "tag": res.tags,
-                //         "deliveryDesc": res.deliveryDesc,
-                //         "isNew": Boolean(res.isNew),
-                //         "ownerId": res.ownerId,
-                //         "pics": res.pics
-                //     };
-
-
-                //     let link =
-                //         "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
-
-                //     //SEND THE ABOVE MESSAGE TO POSTMAN
-                //     Polymer.postData(link, params).then(res => {
-                //         console.log("CCC", params);
-                //         console.log("BBB", res.resolve);
-                //         if (res.code > 0) {
-                //             var theid = res.resolve.id;
-                //             var userid = res.resolve.ownerId;
-                //             console.log("POST TO POSTMAN SUCCESS!");
-                //             // alert("POST TO POSTMAN SUCCESS!");
-                //             this.savejson(savej, theid, userid);
-
-                //         } else {
-                //             console.log("POST TO POSTMAN  FAILED!")
-                //         }
-                //     });
-                // });
 
 
             },

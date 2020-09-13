@@ -1,11 +1,6 @@
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/polymer/polymer.html">
-
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/dz-dazzle/dz-block.html">
 <link rel="import" href="./change-in-item.html">
-<link rel="import" href="change-like2.html">
 <link rel="import" href="change-mobileslide.html">
 <link rel="import" href="./change-slidelist.html">
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-accordion/vaadin-accordion.html">
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/paper-tags-input/paper-tags-input.html">
 
 <dom-module id="change-shop">
@@ -199,7 +194,9 @@
             </div>
             <!-- <div style="width: 20px;height: 20px;"><button on-click="run"> try</button></div> -->
             <div id="rightele">
-                <div class="initemtitle" id="viewingcat">你正在瀏覽的分類 <paper-tags-input width="100%" id="myTags">
+                <div class="initemtitle" id="viewingcat">
+                    <h2>你正在瀏覽的分類</h2> 
+                    <paper-tags-input width="100%" id="myTags">
                     </paper-tags-input>
                 </div>
                 <change-in-item></change-in-item>
