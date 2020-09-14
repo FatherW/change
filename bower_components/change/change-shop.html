@@ -196,8 +196,31 @@
             <div id="rightele">
                 <div class="initemtitle" id="viewingcat">
                     <h2>你正在瀏覽的分類</h2> 
+                    <!-- <template is="dom-if" if="{{catTags.length}}">
+                        <paper-tags-input width="100%" id="myCats" tags="{{catTags}}">
+                        </paper-tags-input>
+                    </template>
+                    <template is="dom-if" if="{{myTags.length}}">
+                        <paper-tags-input width="100%" id="myTags" tags="{{myTags}}">
+                        </paper-tags-input>
+                    </template>
+                    <template is="dom-if" if="{{myDistricts.length}}">
+                        <paper-tags-input width="100%" id="myTags" tags="{{myDistricts}}">
+                        </paper-tags-input>
+                    </template>
+                    <template is="dom-if" if="{{myStatus.length}}">
+                        <paper-tags-input width="100%" id="myTags" tags="{{myStatus}}">
+                        </paper-tags-input>
+                    </template>
+                    <template is="dom-if" if="{{priceRange.length}}">
+                        <paper-tags-input width="100%" id="priceRange" tags="{{priceRange}}">
+                        </paper-tags-input>
+                    </template> -->
+
                     <paper-tags-input width="100%" id="myTags">
                     </paper-tags-input>
+                    
+
                 </div>
                 <change-in-item></change-in-item>
             </div>
@@ -253,6 +276,7 @@
                     this.isFree = null;
                     this.checkrange = false;
                     this.fanpage = null;
+                    this.oldTags =[];
                     console.log("changeshop");
                 },
                 addTags(val) {
@@ -260,6 +284,8 @@
                     let myTags = this.shadowRoot.querySelector('#myTags');
                     // let val = this.shadowRoot.querySelector('#inputTags').value;
                     myTags._addTag(val);
+                    this.oldTags.push(val);
+
                 },
                 search() {
                     // this.shadowRoot.querySelector('change-in-item').search(this.categories, this.tags, this.district, this.isNew, this.priceStart, this.priceStop, this.isFree, this.fanpage);
@@ -279,73 +305,74 @@
 
                     });
                 },
-                back(value) {
-                    let papertag = this.shadowRoot.querySelector('paper-tags-input')._getTags();
+                
+                // back(value) {
+                //     let papertag = this.shadowRoot.querySelector('paper-tags-input')._getTags();
 
-                    console.log(papertag, "nnnnnnnnnnn", papertag.indexOf(value));
+                //     console.log(papertag, "nnnnnnnnnnn", papertag.indexOf(value));
 
-                    ///cookie
-                    let cate = store.get('change-cate') || null;
-                    if (cate) {
-                        if (value == cate.main) {
-                            this.categories.splice(0, cate.sub.length);
-                        }
-                    }
+                //     ///cookie
+                //     let cate = store.get('change-cate') || null;
+                //     if (cate) {
+                //         if (value == cate.main) {
+                //             this.categories.splice(0, cate.sub.length);
+                //         }
+                //     }
 
-                    let posit = 99999;
-                    ////categories
-                    for (i = 0; i < this.categories.length; i++) {
-                        if (this.categories[i] == value) {
-                            posit = i;
-                            this.categories.splice(posit, 1);
-                            break
-                        }
-                    }
-                    ////tags
-                    for (i = 0; i < this.tags.length; i++) {
-                        if (this.tags[i] == value) {
-                            posit = i;
-                            this.tags.splice(posit, 1);
-                            break
-                        }
-                    }
+                //     let posit = 99999;
+                //     ////categories
+                //     for (i = 0; i < this.categories.length; i++) {
+                //         if (this.categories[i] == value) {
+                //             posit = i;
+                //             this.categories.splice(posit, 1);
+                //             break
+                //         }
+                //     }
+                //     ////tags
+                //     for (i = 0; i < this.tags.length; i++) {
+                //         if (this.tags[i] == value) {
+                //             posit = i;
+                //             this.tags.splice(posit, 1);
+                //             break
+                //         }
+                //     }
 
 
-                    ////isNew
-                    for (i = 0; i < this.isNew.length; i++) {
-                        if (this.isNew[i] == value) {
-                            posit = i;
-                            this.isNew.splice(posit, 1);
-                            var statnew1 = this.shadowRoot.querySelector('change-slidelist').shadowRoot.querySelector('#isnew1').checked;
-                            var statnew2 = this.shadowRoot.querySelector('change-slidelist').shadowRoot.querySelector('#isnew2').checked;
-                            console.log("the value222", value);
-                            if (value == "全新") {
-                                console.log('access2');
+                //     ////isNew
+                //     for (i = 0; i < this.isNew.length; i++) {
+                //         if (this.isNew[i] == value) {
+                //             posit = i;
+                //             this.isNew.splice(posit, 1);
+                //             var statnew1 = this.shadowRoot.querySelector('change-slidelist').shadowRoot.querySelector('#isnew1').checked;
+                //             var statnew2 = this.shadowRoot.querySelector('change-slidelist').shadowRoot.querySelector('#isnew2').checked;
+                //             console.log("the value222", value);
+                //             if (value == "全新") {
+                //                 console.log('access2');
 
-                                this.shadowRoot.querySelector('change-slidelist').shadowRoot.querySelector('#isnew1').checked = Boolean(false);
-                            } else {
-                                console.log("access");
-                                this.shadowRoot.querySelector('change-slidelist').shadowRoot.querySelector('#isnew2').checked = Boolean(false);
-                            }
-                            break
-                        }
-                    }
-                    ////district
-                    for (i = 0; i < this.district.length; i++) {
-                        if (this.district[i] == value) {
-                            posit = i;
-                            this.district.splice(posit, 1);
-                            break
-                        }
-                    }
-                    // ///range
-                    // let msgrange = "$" + this.priceStart + " - $" + this.priceStop;
-                    // if (msgrange == value) {
-                    //     this.priceStart = 0;
-                    //     this.priceStop = this.initprice;
-                    // }
-                    this.search();
-                },
+                //                 this.shadowRoot.querySelector('change-slidelist').shadowRoot.querySelector('#isnew1').checked = Boolean(false);
+                //             } else {
+                //                 console.log("access");
+                //                 this.shadowRoot.querySelector('change-slidelist').shadowRoot.querySelector('#isnew2').checked = Boolean(false);
+                //             }
+                //             break
+                //         }
+                //     }
+                //     ////district
+                //     for (i = 0; i < this.district.length; i++) {
+                //         if (this.district[i] == value) {
+                //             posit = i;
+                //             this.district.splice(posit, 1);
+                //             break
+                //         }
+                //     }
+                //     // ///range
+                //     // let msgrange = "$" + this.priceStart + " - $" + this.priceStop;
+                //     // if (msgrange == value) {
+                //     //     this.priceStart = 0;
+                //     //     this.priceStop = this.initprice;
+                //     // }
+                //     this.search();
+                // },
                 pagetag(tag) {
                     console.log("the pagetag is", tag);
                     this.fanpage = tag;
@@ -358,8 +385,18 @@
                     this.sidePanel = shadow.querySelector('change-slidelist');
 
                     console.log("now shop");
+                    this.myTags = shadow.querySelector('#myTags');
+                    this.myTags.addEventListener('tag-item-remove',function(e){
+                        let index = e.detail.index;
+                        console.log(index,that.oldTags);
+                        let value = that.oldTags[index];
+                        that.oldTags.splice(index,1);
+                        that.panel.removeTags(value);
+                    });
+
                     document.addEventListener('areachange', e => {
                         this.isFree = e.detail.isFree;
+                        this.panel.isFree = this.isFree;
                         this.search();
                     })
 
@@ -389,8 +426,8 @@
                         let category = e.detail.category;
                         this.addTags(category);
                         this.categories.push(category);
-                        panel.categories = this.categories;
-                        panel.search();
+                        this.panel.categories = this.categories;
+                        this.search();
                         // this.search();
                     });
                     document.addEventListener('select-district', e => {

@@ -671,6 +671,29 @@
 
             },
 
+            removeTags(value){
+
+                let cIndex,tIndex,dIndex;
+
+                cIndex = this.categories.indexOf(value);
+                tIndex = this.tags.indexOf(value);
+                dIndex = this.tags.indexOf(value);
+                if (cIndex>-1) 
+                    this.categories.splice(cIndex,1);
+                else if (tIndex>-1) 
+                    this.tags.splice(tIndex,1);
+                else if (dIndex>-1) 
+                    this.districts.splice(dIndex,1);
+                else if (value=="全新")
+                    this.isNew = false;
+                else if (value =="二手")
+                    this.isSecondHand = false;
+                else {
+                    this.minPrice = null;
+                    this.maxPrice = null;
+                } 
+                this._search();                    
+            },
             displaymore: function() {
 
 
