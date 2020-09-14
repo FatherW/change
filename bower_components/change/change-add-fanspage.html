@@ -1,0 +1,210 @@
+<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-text-field/vaadin-number-field.html">
+<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-select/vaadin-select.html">
+<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-button/vaadin-button.html">
+<link rel="import" href="change-icon.html">
+<dom-module id="change-add-fanspage">
+
+    <template>
+
+        <style>
+            * {
+                color: black;
+                font-family: sans-serif, Microsoft JhengHei;
+            }
+
+            .container {
+                /* background-image: url(./img/background/3.jpg); */
+
+            }
+
+            #controlbar {
+                padding-top: 15px;
+                padding-bottom: 25px;
+                background: white;
+                width: 84%;
+                margin: 0 auto;
+                margin-top: 25px;
+            }
+
+            .cp {
+                text-align: center;
+            }
+
+            .miscount {
+                text-align: center;
+                margin: 35px 0 50px 0;
+            }
+#info1{
+    padding:20px;
+}
+            button {
+                cursor: pointer;
+                font-family: sans-serif, Microsoft JhengHei;
+                font-size: 15px;
+                width: 17%;
+                border-radius: 3px;
+            }
+
+            .buttons {
+                margin: 0 auto;
+                text-align: center;
+            }
+
+            .buttons button {
+                height: 50px;
+                font-family: sans-serif, Microsoft JhengHei;
+                margin-right: 30px;
+                border: 1px solid #ccc;
+                color: white;
+
+                width: 150px;
+            }
+
+            #add {
+                background-color: #ff9500;
+            }
+
+            #dq {
+                background-color: #d9534f;
+            }
+
+            #recover {
+                background-color: #71b758;
+            }
+
+
+            /* :host([part="input-field"]) {
+                background-color: #7cd3da;
+            } */
+
+            /*******Fanpage Button*******/
+            #manage {
+                background-color: #7cd3da;
+            }
+
+            change-icon {
+                margin: 10px;
+            }
+
+            .save {
+                width: 50px;
+            }
+
+            #info1 {
+                width: 100%;
+                margin: 0 auto;
+            }
+
+            #info2 {
+                width: 84%;
+                margin: 0 auto;
+                display: none;
+            }
+
+            .handIn,
+            .search {
+                margin-right: 30px;
+            }
+
+            #listPage {
+                display: none;
+                grid-template-columns: repeat(4, 1fr);
+                grid-row-gap: 15px;
+                padding: 30px 40px;
+            }
+
+            @media only screen and (max-width: 992px) {}
+
+            @media only screen and (max-width: 640px) {
+                #controlbar {
+                    display: none;
+                    width: 100%;
+                }
+
+                .buttons button {
+                    margin-right: 10px;
+                }
+
+                button {
+                    width: 20%;
+                }
+            }
+        </style>
+
+        <div class="container">
+
+           
+
+                <div id="info1">
+                    <h1>專頁資料</h1>
+                    <p>
+
+                        <label>專頁ID：</label>
+                        <vaadin-text-field style="ime-mode:disabled" id='pageid' value="{{fanId}}"
+                             disabled></vaadin-text-field>**不能更改
+                    </p>
+                    <p>
+                        <label>名稱</label>
+                        <vaadin-text-field id='name1'></vaadin-text-field>
+                    </p>
+                    <p>
+                        <label>地區</label>
+                        <vaadin-select id='area1' label=''></vaadin-select>
+                    </p>
+                    <p>
+                        <label>電郵</label>
+                    
+                         <vaadin-email-field id='email'>
+                        </vaadin-email-field>
+                    </p>
+                    <p>
+                    <label>網址</label>
+                        <vaadin-text-field id='website2'></vaadin-text-field>
+                    </p>
+                    <div style="display: inline-flex;">
+                        <vaadin-button class="handIn" on-click="check">提交</vaadin-button>
+                        <vaadin-button on-click="cancelinfo1">取消</vaadin-button>
+                    </div>
+                    <div>{{errmsg}}</div>
+                </div>
+
+
+
+        </div>
+    </template>
+
+</dom-module>
+
+<script>
+    (function() {
+        Polymer({
+            is: 'change-add-fanspage',
+            properties: {},
+
+
+            created: function() {
+                // let user = store.get('change-user') || null;
+                // if (user == null) {
+
+                // } else if (user.isAdmin) {
+
+                //     user["userBucket"] = "change.dazzle.website";
+                //     this.fileManager = new AwsPackage(user);
+                //     this.pageManager = new DataPackage('pages');
+                //     this.userManager = new DataPackage('_user');
+                // }
+            },
+
+            ready: function() {
+                let shadow = this.shadowRoot;
+                let that = this;
+
+                
+                let user = store.get('change-user') || null;
+                
+
+            }
+            
+        });
+    })();
+</script>

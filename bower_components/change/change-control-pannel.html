@@ -1,8 +1,7 @@
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/polymer/polymer.html">
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-text-field/vaadin-number-field.html">
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-select/vaadin-select.html">
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="change-icon.html">
+<link rel="import" href="change-add-fanspage.html">
 <dom-module id="change-control-pannel">
 
     <template>
@@ -35,7 +34,9 @@
                 text-align: center;
                 margin: 35px 0 50px 0;
             }
-
+#info1{
+    border: 1px solid #ff9500;
+}
             button {
                 cursor: pointer;
                 font-family: sans-serif, Microsoft JhengHei;
@@ -130,7 +131,7 @@
                 }
             }
         </style>
-
+        <vaadin-dialog></vaadin-dialog>
         <div class="container">
 
             <div id="controlbar" style="display: none;">
@@ -150,11 +151,11 @@
                     <button id="manage" on-click="_manageFanPage">管理專頁</button>
                 </div>
 
-                <div id="info1">
+                <!-- <div id="info1">
                     <h5>專頁資料</h5>
                     <p class="inf">專頁ID:
-                        <vaadin-text-field style="ime-mode:disabled" id='pageid' pattern=".{1,}"
-                            title="Eight or more characters"></vaadin-text-field>**不能更改
+                        <vaadin-text-field style="ime-mode:disabled" id='pageid' value="{{fanId}}"
+                             disabled></vaadin-text-field>**不能更改
                     </p>
                     <p class="inf">名稱:
                         <vaadin-text-field id='name1'></vaadin-text-field>
@@ -174,7 +175,7 @@
                         <vaadin-button on-click="cancelinfo1">取消</vaadin-button>
                     </div>
                     <div>{{errmsg}}</div>
-                </div>
+                </div> -->
 
                 <div id="listPage">
 
@@ -415,7 +416,22 @@
                 })
             },
             _addFanPage: function() {
-                this.shadowRoot.querySelector('#info1').style.display = "block";
+                let fanId = prompt("請輸入專頁ID。\n 1.留意此ID不能與其他ID重複\n 2. 一經確認，此ID就不能更改。\n 3. ID只為英文及數字，不允許空白及符號");
+                this.pageManager.getDataByCache(fanId).then(res=>{
+                    alert('此ID 已有登記，請重新新增');
+                },err=>{
+                    alert('此ID未有註冊，請填妥下列東西，專頁即將開通');
+                    let dzPopup = document.createElement('change-add-fanspage');
+                    let dialog = this.shadowRoot.querySelector('vaadin-dialog');
+                    dzPopup.fanId = fanId;
+                    dzPopup.dialog = dialog;
+                    
+                    Polymer.componentPopup(dzPopup,'800px','600px');
+
+                    // this.shadowRoot.querySelector('#info1').style.display = "block";  
+                                  
+                });
+
 
             },
 

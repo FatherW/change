@@ -979,9 +979,15 @@
                             }, err => {
                                 that.loadData(id).then(res => {
                                     console.log('Data',id,res);
-                                    // console.log('Cannot read product', res);
-                                    that.saveDataWithCache(id,res);
-                                    resolve(res);
+                                    if (Object.keys(res).length === 0) {
+                                        reject();
+                                    } else {
+                                        // console.log('Cannot read product', res);
+                                        that.saveDataWithCache(id,res);
+                                        resolve(res);
+                                    }
+
+
                                 });
                             });
                     }
