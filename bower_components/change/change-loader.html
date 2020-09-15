@@ -66,6 +66,38 @@
                 });
             };
 
+        Polymer.saveDataWithPage = function(table,id,alias){
+            let dataManager = new DataPackage(table);
+
+                let that = this;
+
+                    let html = document.createElement('html');
+                    let head = document.createElement('head');
+                    let body = document.createElement('body');
+
+                    let meta = document.createElement('meta');
+                    meta.setAttribute('name',table+'-id');
+                    meta.setAttribute('content',id);
+                    Polymer.getContent('/'+table+'.html').then(content=>{
+                        let parser = new DOMParser();
+                        let doc = parser.parseFromString(content, "text/html");
+                    
+                        head.innerHTML = doc.head.innerHTML;
+                        body.innerHTML = doc.body.innerHTML;
+                        // body.innerHTML = 
+                        console.log('HTML',head.innerHTML,body.innerHTML);
+
+                        head.appendChild(meta);
+                        html.appendChild(head);
+                        html.appendChild(body);
+                        this.fileManager.saveHtml(table+'/'+alias,html.outerHTML);
+                        this.dataManager.getDataByCache(id).then(res=>{
+                            res['alias'] = alias;
+                            this.dataManager.saveDataWithCache(id,res);
+                        });
+
+                    });
+            }
 
     // Get TV License and Initialization
 

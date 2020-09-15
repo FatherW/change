@@ -195,15 +195,25 @@
 
             created: function() {
                 let user = store.get('change-user') || null;
-                if (user == null) {
-
-                } else if (user.isAdmin) {
-
-                    user["userBucket"] = "change.dazzle.website";
-                    this.fileManager = new AwsPackage(user);
+                if (user && user.isAdmin) {
+                    this.fileManager = Polymer.fileManager;
                     this.pageManager = new DataPackage('pages');
                     this.userManager = new DataPackage('_user');
+                } else {
+                    alert('用戶不是管理員,或沒有用戶');
+                    location.href = "/index.html";
                 }
+                let elm = document.head.querySelector('meta[name=user-id]') || null;
+                let id ;
+                if (!elm) {
+                    id = user['id'];
+                } else {
+                    id = elm.getAttribute('content') || null;
+                }
+
+                this.userManager.getDataByCache(id).then(res=>{
+                    this.user = res;
+                });
             },
 
             ready: function() {
@@ -270,10 +280,63 @@
 
 
             },
+
+
+
+            _addFanPage: function() {
+                let fanId = prompt("請輸入專頁ID。\n 1.留意此ID不能與其他ID重複\n 2. 一經確認，此ID就不能更改。\n 3. ID只為英文及數字，不允許空白及符號");
+                this.pageManager.getDataByCache(fanId).then(res=>{
+                    alert('此ID 已有登記，請重新新增');
+                },err=>{
+
+                    this.fanId = fanId;
+                    this.page = {
+                        'username': this.fanId,
+                        'area': this.user['area'],
+                        'email': this.user['email'],
+                        'alreadyBuy': 0,
+                        'goodsNum': 0,
+                        'head': this.user['head'],
+                        'likeProduct':[],
+                        'password':'$^@&$^%$',
+                        'score':5,
+                        'phone': this.user['phone'],
+                        'id': this.fanId,
+                        'createTime': new Date().getTime(),
+                        'adminId':["1"],
+                        'name': this.fanId,
+                        'history':[],
+                        'isAdmin': false,
+                        'mistake': 0,
+                        'platform': this.user['platform'],
+                        'banner': this.user['banner'],
+                        'status': true,
+                        'alias': this.fanId,
+                        'isFanpage': true
+                    };
+
+
+                    this.userManager.saveDataWithCache(this.fanId,this.page).then(res=>{
+
+
+                    });
+                    let dzPopup = document.createElement('change-add-fanspage');
+                    let dialog = this.shadowRoot.querySelector('vaadin-dialog');
+                    dzPopup.fanId = fanId;
+                    dzPopup.dialog = dialog;
+                    dzPopup.user = this.user;                    
+                    Polymer.componentPopup(dzPopup,'850px','650px');
+
+                    // this.shadowRoot.querySelector('#info1').style.display = "block";  
+                                  
+                });
+
+
+            },
             vaadin_select() {
 
-                //SET AREA, DERLIVER METHOD, PRODUCT STATUS//
-                let shadow = this.shadowRoot;
+        //SET AREA, DERLIVER METHOD, PRODUCT STATUS//
+                  let shadow = this.shadowRoot;
                 customElements.whenDefined('vaadin-select').then(function() {
                     const district = [{
                         name: '中西區'
@@ -332,182 +395,46 @@
                     };
                 });
 
-            },
-            check() {
-                let url = 'https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController';
-                let that = this;
-                let shadow = this.shadowRoot;
-                let pageid = shadow.querySelector('#pageid').value;
-                let pagename = shadow.querySelector('#name1').value;
-                let website = shadow.querySelector('#website2').value;
-                let pagedist = shadow.querySelector('#area1').value;
-                let pageemail = shadow.querySelector('#email').value;
-                this.fileManager.getFile(website).then(res => {
-                        alert('頁面已存在');
-                    },
-                    err => {
-                        let param = {
-                            "match": {
-                                "id": pageid
-                            }
-                        };
-
-                        this.userManager.matchDataNosort(param).then(res => {
-                            let all = res;
-                            if (all.length > 0) {
-                                let errstore = [];
-                                that.errmsg = "專頁ID已存在，請更改";
-                                // console.log("res", all);
-                                // all.forEach(item => {
-                                //     if (item['id'] == pageid) errstore.push('專頁ID');
-                                //     if (item['pagename'] == pagename.value) errstore.push('專頁名稱')
-
-                                // });
-                                // that.errmsg = "";
-                                // errstore.forEach(str => {
-                                //     that.errmsg += "[" + str + "] ，"
-                                // })
-                                // if (errstore.length > 0) that.errmsg += "已存在，請更改";
-
-                            } else {
-                                /////great
-                                console.log("fanpage could develop");
-                                that.handin(pagedist, pageemail, pageid, pagename, website);
-                            }
-                        })
-
-                    })
-
-            },
-
-            handin(district, email, id, pagename, website) {
-                let that = this;
-                let shadow = this.shadowRoot;
-                let user = store.get('change-user');
-                let param = {
-                    "adminId": [user.id],
-                    "alreadybuy": 0,
-                    "district": district,
-                    "email": email,
-                    "goods": 0,
-                    "head": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Windows_Settings_app_icon.png",
-                    "id": id,
-                    "pagename": pagename,
-                    "score": 5,
-                    "website": website,
-                    "banner": "https://www.gettv.hk/Website%20Design/profile%20page/img/profile%20banner/company-profile-banner.png",
-                    "isFanpage": true
-                };
-                that.userManager.saveData(id, param).then(e => {
-                    this.fileManager.saveFile('json/user-' + id + '.json', JSON.stringify(param));
-                    that.fanpageGen(website, id)
-                })
-
-
-
-            },
-            fanpageGen(website, pageid) {
-                let url = "/json/fanpage/fanPageTemplate.html?id=" + new Date().getTime();
-                Polymer.getContent(url).then(html => {
-                    let newFanpage = html.replace("[pageid]", pageid);
-                    this.fileManager.saveHtml(website, newFanpage);
-                    this.shadowRoot.querySelector('#info1').style.display = "none";
-                    alert("成功新增專頁");
-                })
-            },
-            _addFanPage: function() {
-                let fanId = prompt("請輸入專頁ID。\n 1.留意此ID不能與其他ID重複\n 2. 一經確認，此ID就不能更改。\n 3. ID只為英文及數字，不允許空白及符號");
-                this.pageManager.getDataByCache(fanId).then(res=>{
-                    alert('此ID 已有登記，請重新新增');
-                },err=>{
-                    alert('此ID未有註冊，請填妥下列東西，專頁即將開通');
-                    let dzPopup = document.createElement('change-add-fanspage');
-                    let dialog = this.shadowRoot.querySelector('vaadin-dialog');
-                    dzPopup.fanId = fanId;
-                    dzPopup.dialog = dialog;
-                    
-                    Polymer.componentPopup(dzPopup,'800px','600px');
-
-                    // this.shadowRoot.querySelector('#info1').style.display = "block";  
-                                  
-                });
-
-
-            },
-
+                },
             cancelinfo1: function() {
                 this.shadowRoot.querySelector('#info1').style.display = "none";
 
             },
 
             _disqualify: function() {
-                loc = location.search;
-                let uid = "";
-                for (i = 1; i < loc.length; i++) {
-                    uid += loc[i];
-                }
-                // console.log("uid", uid);
-                let params = {
-                    "action": "addData",
-                    "index": "change",
-                    "type": "_user",
-                    "id": uid,
-                    "body": {
-                        "status": false
-                    }
-                };
-                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                Polymer.postData(Url, params).then(res => {
-                    if (res.code > 0) {
-                        // alert("取消了該用戶資格");
 
-                        //PASS TO LAMBDA TO GENERATE EMAIL
-                        let LambdaParams = {
-                            "action": "cancelByUid",
-                            "uid": uid
-                        };
-                        let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
-                        Polymer.postData(link, LambdaParams).then(res => {
-                            console.log("PASS TO LAMBDA SUCCESS!");
-                            location.reload();
-                        });
-                    }
-                })
+
+                // console.log("uid", uid);
+                this.user['status'] = false;
+
+                this.userManager.saveDataWithCache(this.user['id'],this.user);
+                //PASS TO LAMBDA TO GENERATE EMAIL
+                let LambdaParams = {
+                    "action": "cancelByUid",
+                    "uid": uid
+                };
+                let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
+                Polymer.postData(link, LambdaParams).then(res => {
+                    console.log("PASS TO LAMBDA SUCCESS!");
+                    location.reload();
+                });
             },
             _recovery: function() {
-                console.log("recovery is working!")
-                loc = location.search;
-                let uid = "";
-                for (i = 1; i < loc.length; i++) {
-                    uid += loc[i];
-                }
-                // console.log("uid", uid);
-                let params = {
-                    "action": "addData",
-                    "index": "change",
-                    "type": "_user",
-                    "id": uid,
-                    "body": {
-                        "status": true
-                    }
-                };
-                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                Polymer.postData(Url, params).then(res => {
-                    if (res.code > 0) {
-                        // alert("回復了該用戶資格");
+                                // console.log("uid", uid);
+                this.user['status'] = true;
 
-                        //PASS TO LAMBDA TO GENERATE EMAIL
-                        let LambdaParams = {
-                            "action": "recoverByUid",
-                            "uid": uid
-                        };
-                        let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
-                        Polymer.postData(link, LambdaParams).then(res => {
-                            console.log("PASS TO LAMBDA SUCCESS!");
-                            location.reload();
-                        });
-                    }
-                })
+                this.userManager.saveDataWithCache(this.user['id'],this.user);
+                //PASS TO LAMBDA TO GENERATE EMAIL
+                let LambdaParams = {
+                    "action": "recoverByUid",
+                    "uid": uid
+                };
+                let link = "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
+                Polymer.postData(link, LambdaParams).then(res => {
+                    console.log("PASS TO LAMBDA SUCCESS!");
+                    location.reload();
+                });
+                
             },
 
             _manageFanPage: function() {
@@ -529,25 +456,8 @@
 
                 let count = shadow.querySelector('#mistake').value;
                 console.log("Mistakes count:", count);
-
-                let loc = location.search;
-                let uid = "";
-                for (i = 1; i < loc.length; i++) {
-                    uid += loc[i];
-                }
-                // console.log("current uid", uid);
-
-                params = {
-                    "action": "addData",
-                    "index": "change",
-                    "type": "_user",
-                    "id": uid,
-                    "body": {
-                        "mistake": count
-                    }
-                };
-                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                Polymer.postData(Url, params).then(res => {
+                this.user['mistake'] = count;
+                this.userManager.saveDataWithCache(this.user['id'],this.user).then(res=>{
                     alert("用戶犯錯次數已更新!");
                 });
             }

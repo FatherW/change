@@ -935,9 +935,11 @@
             let path = "json/"+this.table+"-"+id+'.json';
             let fileManager;
 
+
             // Save Cache JSON
             if (user){
                 fileManager = new AwsPackage(user);
+                data.timestamp = new Date().getTime();
                 fileManager.saveUserData(path,JSON.stringify(data));
             }
             // save Cookie
@@ -945,6 +947,7 @@
             // save Database
             let that = this;
             return new Promise(function(resolve, reject) {
+                delete data.timestamp; 
                 that.saveData(id,data).then(res=>{
                     resolve();
                 },err=>{
@@ -955,40 +958,98 @@
         }
 
         getDataByCache(id){
+            console.log('ID is null 1',id);
+            if (id == "null"){
+                console.log('ID is null 2',id);
+                return;
+            }
+
             let key = this.table + '-' +id;
             let cache = store.get(key) || null;
             console.log('Cache',cache,id);
             let path = "json/"+this.table+"-"+id+'.json';
             let that = this;
             let json;
-
-
+            let timestamp;
+            const DIFF = 432000000; // 5 Days
 
             return new Promise(function(resolve, reject) {
 
-                if (cache)
-                        resolve(cache);
+                function loadData(id){
+                    that.loadData(id).then(res => {
+                        console.log('Load Data');
+                        if (Object.keys(res).length === 0) {
+                            reject();
+                        } else {
+                            console.log('Save Data');
+                            // console.log('Cannot read product', res);
+                            that.saveDataWithCache(id,res);
+                            resolve(res);
+                        }
+
+
+                    });
+                }
+
+                if (cache) {
+                    console.log('Cache 2');
+                    resolve(cache);
+                }
+
                 else {
                     console.log('No Cache',id);
                         Polymer.getUserDataContent(path).then(str=>{
                             console.log('JSON',id,str);
 
                                 json = JSON.parse(str);
-                                store.set(key,json);
-                                resolve(json);
+                                timestamp = json['timestamp'] || null;
+                                let now = new Date().getTime();
+                                let diff;
+                                if (timestamp)
+                                    diff= now - timestamp;
+                                else 
+                                    diff = 0;
+
+                                console.log('Timestamp',timestamp,diff,now);
+
+                                if (diff>DIFF) {
+                                    loadData(id);
+                                } else {
+                                    delete json.timestamp;
+                                    console.log('JSON',json);
+                                    store.set(key,json);
+                                    resolve(json);
+                                }
+                                // if (timestamp) {
+                                //     delete json.timestamp; 
+                                //     let diff = new Date().getTime() - timestamp;
+                                //     if (diff>432000)
+                                //         loadData(id); 
+                                //     else {
+                                //         store.set(key,json);
+                                //         resolve(json);
+                                //     }
+                                // } else {
+                                //     loadData(id);
+                                // }
+
+
+
+
                             }, err => {
-                                that.loadData(id).then(res => {
-                                    console.log('Data',id,res);
-                                    if (Object.keys(res).length === 0) {
-                                        reject();
-                                    } else {
-                                        // console.log('Cannot read product', res);
-                                        that.saveDataWithCache(id,res);
-                                        resolve(res);
-                                    }
+                                loadData(id);
+                                // that.loadData(id).then(res => {
+                                //     console.log('Data',id,res);
+                                //     if (Object.keys(res).length === 0) {
+                                //         reject();
+                                //     } else {
+                                //         // console.log('Cannot read product', res);
+                                //         that.saveDataWithCache(id,res);
+                                //         resolve(res);
+                                //     }
 
 
-                                });
+                                // });
                             });
                     }
                 });                        
