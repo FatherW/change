@@ -148,7 +148,9 @@
                     <button id="add" on-click="_addFanPage">新增專頁</button>
                     <button id="dq" on-click="_disqualify">取消資格</button>
                     <button id="recover" on-click="_recovery">回復資格</button>
-                    <button id="manage" on-click="_manageFanPage">管理專頁</button>
+                    <template is="dom-if" if="{{user.isFanpage}}">
+                        <button id="manage" on-click="_manageFanPage">管理專頁</button>
+                    </template>
                 </div>
 
                 <!-- <div id="info1">
@@ -213,6 +215,9 @@
 
                 this.userManager.getDataByCache(id).then(res=>{
                     this.user = res;
+                });
+                this.fileManager.listFile('user/').then(res=>{
+                    this.noAlias = res.length;
                 });
             },
 
@@ -281,12 +286,47 @@
 
             },
 
+            savePage(id,data){
+                let alias = data['alias'];
+                let that = this;
 
+                    let html = document.createElement('html');
+                    let head = document.createElement('head');
+                    let body = document.createElement('body');
+
+                    let meta = document.createElement('meta');
+                    meta.setAttribute('name','user-id');
+                    meta.setAttribute('content',id);
+                    console.log('Save Page');
+                    Polymer.getContent('/pages.html').then(content=>{
+                        let parser = new DOMParser();
+                        let doc = parser.parseFromString(content, "text/html");
+                    
+                        head.innerHTML = doc.head.innerHTML;
+                        body.innerHTML = doc.body.innerHTML;
+                        // body.innerHTML = 
+                        console.log('HTML','pages/'+alias);
+
+                        head.appendChild(meta);
+                        html.appendChild(head);
+                        html.appendChild(body);
+                        let user = store.get('change-user') || null;
+                        let fileManager = new AwsPackage(user);
+                        fileManager.saveHtml('page/'+alias,html.outerHTML);
+                        this.userManager.saveDataWithCache(id,data);
+                        // this.dataManager.getDataByCache(id).then(res=>{
+                        //     res['alias'] = alias;
+                        //     this.dataManager.saveDataWithCache(id,res);
+                        // });
+
+                    });
+            },
 
             _addFanPage: function() {
                 let fanId = prompt("請輸入專頁ID。\n 1.留意此ID不能與其他ID重複\n 2. 一經確認，此ID就不能更改。\n 3. ID只為英文及數字，不允許空白及符號");
-                this.pageManager.getDataByCache(fanId).then(res=>{
+                this.userManager.getDataByCache(fanId).then(res=>{
                     alert('此ID 已有登記，請重新新增');
+                    console.log('Result',res);
                 },err=>{
 
                     this.fanId = fanId;
@@ -314,18 +354,22 @@
                         'alias': this.fanId,
                         'isFanpage': true
                     };
+                    this.savePage(this.fanId,this.page);
 
 
-                    this.userManager.saveDataWithCache(this.fanId,this.page).then(res=>{
+                    alert('成功新增專頁。五秒後，即將跳至專頁繼續輸入專頁內容');
+                    window.setTimeout(function(){
+                        location.href="/page/"+fanId;
+                    },5000);
 
+                    // location.href="/pages/"+this.page['alias'];
 
-                    });
-                    let dzPopup = document.createElement('change-add-fanspage');
-                    let dialog = this.shadowRoot.querySelector('vaadin-dialog');
-                    dzPopup.fanId = fanId;
-                    dzPopup.dialog = dialog;
-                    dzPopup.user = this.user;                    
-                    Polymer.componentPopup(dzPopup,'850px','650px');
+                    // let dzPopup = document.createElement('change-add-fanspage');
+                    // let dialog = this.shadowRoot.querySelector('vaadin-dialog');
+                    // dzPopup.fanId = fanId;
+                    // dzPopup.dialog = dialog;
+                    // dzPopup.user = this.user;                    
+                    // Polymer.componentPopup(dzPopup,'850px','650px');
 
                     // this.shadowRoot.querySelector('#info1').style.display = "block";  
                                   

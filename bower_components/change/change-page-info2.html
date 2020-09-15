@@ -6,10 +6,10 @@
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-text-field/vaadin-email-field.html">
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-text-field/vaadin-number-field.html">
 <link rel="import" href="change-control-pannel.html">
-<link rel="import" href="change-user.html">
+<link rel="import" href="change-shop.html">
 <link rel="import" href="change-user-banner.html">
 
-<dom-module id="change-user-info">
+<dom-module id="change-page-info2">
     <template>
    
         
@@ -249,6 +249,14 @@
                 margin-left: 20px;
             }
         }
+        .shop_panel {
+            padding: 0px;
+            padding-bottom: 30px;
+            padding-left: 3%;
+            padding-right: 3%;
+            width: 94%;
+            background-image: url(/img/background/3.jpg);
+        }
     </style>
       
 <change-user-banner>
@@ -326,7 +334,9 @@
                     </div>
                 </div>
             </div>
-            <change-user></change-user>
+
+
+
         </div>
        
 
@@ -335,7 +345,7 @@
 <script>
     (function() {
         Polymer({
-            is: 'change-user-info',
+            is: 'change-page-info2',
             properties: {
                 user:{
                     notify: true,
@@ -614,7 +624,7 @@
                 // this.curElm = e.path[0];
                 // let user = store.get('change-user') || null;
                 // id = document.head.querySelector('meta[name=user-id]').getAttribute('content') || null;
-                // let userInfo = document.querySelector('change-user-info');
+                // let userInfo = document.querySelector('change-page-info2');
                 // // let keyword = userInfo.shadowRoot.querySelector('#vb').innerHTML;
                 // console.log('User',user['id'],id);
                 // if (user['id'] == id) {

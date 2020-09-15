@@ -219,6 +219,12 @@
                 this.maxPrice = null;
                 this.isFree = false;
                 this.initMaxPrice = 0;
+                let elm = document.head.querySelector('meta[name=user-id]') || null;
+                if (elm) {
+                    this.ownerId = elm.getAttribute('content');
+                } else 
+                    this.ownerId = null;
+
             },
             ready: function() {
                 // this.search();
@@ -298,7 +304,13 @@
                             { "match": { "postStatus":   true  }},
                             { "match": { "isFree": this.isFree }},
                             // { "match": { "isFanpage": false }},
-                        ]
+                        ];
+                // If fanspage, (i.e. has user-id) 
+                if (this.ownerId)
+                    must.push({
+                        "match": {"ownerId": this.ownerId}
+                    });
+
                 let filter=[];
                 // this.tags =["裙"];
                 // this.districts =["北區","南區"];

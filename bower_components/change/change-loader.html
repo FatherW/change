@@ -91,10 +91,10 @@
                         html.appendChild(head);
                         html.appendChild(body);
                         this.fileManager.saveHtml(table+'/'+alias,html.outerHTML);
-                        this.dataManager.getDataByCache(id).then(res=>{
-                            res['alias'] = alias;
-                            this.dataManager.saveDataWithCache(id,res);
-                        });
+                        // this.dataManager.getDataByCache(id).then(res=>{
+                        //     res['alias'] = alias;
+                        //     this.dataManager.saveDataWithCache(id,res);
+                        // });
 
                     });
             }
