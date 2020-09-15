@@ -460,7 +460,6 @@
                 }
             }
         </style>
-        <img id="banner3" src="./img/WX20200513-110548@2x.png">
         <!-- <div class="top-banner">
            
         </div> -->
@@ -476,9 +475,14 @@
                         placeholder="選擇產品類別">
                     </div>
 
-                    <div class="fanpage">
-                        <vaadin-select id="fanPage" placeholder="専頁" value={{product.fanpage}}></vaadin-select>
-                    </div>
+                    <template id="fans" is="dom-if" if="{{owner.isFanpage}}">
+                        <div class="fanpage">
+                            <input type="text" id="pages" value="{{owner.username}}" disabled label="專頁"
+                            placeholder="不是專頁">
+                            <!-- <vaadin-select id="fanPage" placeholder="専頁" value={{product.fanpage}}></vaadin-select> -->
+                        </div>
+                    </template>
+  
 
                     <vaadin-checkbox-group label="Label" theme="vertical" id="secondlabel">
                         <vaadin-checkbox theme="custom" value="1" id="free" checked={{product.isFree}}>是否免費區
@@ -545,17 +549,19 @@
                     </div>
                     <!-- <change-user-tag id$="{{owner._id}}"></change-user-tag> -->
 
-                    <div class="userinfo">
-                        <div id="usericon">
-                            <div id="a1">
-                                <img id="gand" src={{owner.head}}>
-                                <!-- ./img/user_profile.png -->
-                            </div>
-                            <div id="a2">
-                                <div class="name" id="owner">{{owner.username}}</div>
+                    <template id="ownerPanel" is="dom-if" if="{{owner}}">
+                        <div class="userinfo">
+                            <div id="usericon">
+                                <div id="a1">
+                                    <img id="gand" src$="{{owner.head}}">
+                                    <!-- ./img/user_profile.png -->
+                                </div>
+                                <div id="a2">
+                                    <div class="name" id="owner">{{owner.username}}</div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </template>
 
                     <div class="hkd" style="display: flex;">
                         <div class="dollar"><b style="font-size: 30px; color: black;">$</b></div>
@@ -633,11 +639,11 @@
 <script>
     //function for database
 
-
     class changeAddProduct extends Polymer.Element {
         static get is() {
             return 'change-add-product';
         }
+        
         static get properties() {
                 return {
                     id:{
@@ -647,6 +653,12 @@
                         type: Array
                     },
                     product: {
+                        type: Object,
+                        value: function() {
+                            return {};
+                        }
+                    },
+                    owner: {
                         type: Object,
                         value: function() {
                             return {};
@@ -662,6 +674,7 @@
                 ]
             }
 
+            
             productNameChanged(name) {
                 console.log('Change');
                 if (name) {
@@ -714,8 +727,10 @@
                     location.href = "/index.html";
                 } else
                     this.fileManager = new AwsPackage(user);
-                    
-                this.user = user;
+
+
+                // if (!this.user)
+                //     this.user = user;
                 let shadow = this.shadowRoot;
                 this.bigPic = "http://change.dazzle.website.s3.amazonaws.com/files/1/1591944377549.jpeg";
                 this.pics = [];
@@ -723,7 +738,10 @@
                 this.dataManager = new DataPackage('product');
                 this.userManager = new DataPackage('_user');
                 // this.fileManager = new AwsPackage(user);
-      
+                this.owner = store.get('product-owner');
+                console.log('Who am I?(Constructor) ',this.owner,this.isFan);            
+                // if (this.myOwner)
+                //     this.owner = this.myOwner;
                 
                 let id = store.get('new-product-id') || null;
                 let model =  {
@@ -738,7 +756,7 @@
                     "deliveryDesc": "",
                     "isNew": true,
                     "isFree": false,
-                    "ownerId": this.user['id'],
+                    "ownerId": null,
                     "pics": ["http://change.dazzle.website.s3.amazonaws.com/files/1/1591944377549.jpeg"],
                     'alias': '',
                     "postStatus":false,
@@ -834,9 +852,10 @@
                     let res;                   
                    // res = JSON.parse(res);
                    res = this.product;
-                   this.userManager.getDataByCache(this.product['ownerId']).then(res=>{
-                       this.owner = res;
-                   });  
+                //    this.userManager.getDataByCache(this.product['ownerId']).then(res=>{
+                //        this.owner = res;
+                //    });  
+                
                 this.bigPic = this.product.pics[0] || "https://www.gettv.hk/img/nopic.png";
                 this.pic1 = this.product.pics[1] || "https://www.gettv.hk/img/nopic.png";
                 this.pic2 = this.product.pics[2] || "https://www.gettv.hk/img/nopic.png";
@@ -845,18 +864,7 @@
                 if (!this.price)
                    this.price = 10;
                 
-                this.shadowRoot.querySelector('#vs4').addEventListener('change',e=>{
-                    console.log('Value',e.target.value);
-                    switch(e.target.value){
-                        case '全新':
-                            this.product.isNew = true;
-                        break;
 
-                        case '二手':
-                            this.product.isNew = false;
-                        break;
-                    }
-                });
                 // this.shadowRoot.querySelectorAll('vaadin-text-field').forEach(elm=>{
                 //     elm.addEventListener('change',e=>{
                 //         console.log('Change');
@@ -945,9 +953,16 @@
 
                 // this.userManager.getDataByCache()
 
+                console.log('Who am I? ',this.owner,this.isFan);     
+                this.$.fans.render();
+                this.$.ownerPanel.render();
+
+                // if (this.myOwner)
+                //     this.owner = this.myOwner;
+
                 that.vaadin_select();
 
-                that.fanpage();
+                // that.fanpage();
                 that.submenu();
 
                 //ENABLE & DISABLE PRICE
@@ -960,6 +975,18 @@
                     }
                 });
 
+                shadow.querySelector('#vs4').addEventListener('change',e=>{
+                    console.log('Value',e.target.value);
+                    switch(e.target.value){
+                        case '全新':
+                            this.product.isNew = true;
+                        break;
+
+                        case '二手':
+                            this.product.isNew = false;
+                        break;
+                    }
+                });
                 // Add image selected function 
                 shadow.querySelectorAll('.productImg').forEach(item=>{
                     item.selected = function(url,originUrl,smallUrl){

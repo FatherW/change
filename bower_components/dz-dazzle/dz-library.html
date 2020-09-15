@@ -1545,25 +1545,32 @@
 
 
     Polymer.loadComponent = function(cat, id) {
-        let local = this.dzLicense["local"] || false;
-        let base;
-        if (local === "true") base = "/";
-        else base = "https://d25k6mzsu7mq5l.cloudfront.net/";
 
-        let html =
-            '<link rel="import" href="' +
-            base +
-            "bower_components/" +
-            cat +
-            "/" +
-            id +
-            ".html?id=" +
-            new Date().getTime() +
-            '">';
-        let item = document.createRange().createContextualFragment(html);
-        document.head.appendChild(item);
-        // let elm = document.createElement(id);
-        // document.body.appendChild(elm);
+
+     
+
+//        if (!com){
+            let local = this.dzLicense["local"] || false;
+            let base;
+            if (local === "true") base = "/";
+            else base = "https://d25k6mzsu7mq5l.cloudfront.net/";
+
+            let html =
+                '<link rel="import" href="' +
+                base +
+                "bower_components/" +
+                cat +
+                "/" +
+                id +
+                ".html?id=" +
+                new Date().getTime() +
+                '">';
+            let item = document.createRange().createContextualFragment(html);
+            document.head.appendChild(item);
+            // let elm = document.createElement(id);
+            // document.body.appendChild(elm);
+  //      }
+
     };
 
     Polymer.listenEvent = function() {

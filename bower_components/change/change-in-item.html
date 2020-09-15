@@ -11,6 +11,9 @@
             * {
                 font-family: sans-serif, 微軟正黑體;
             }
+            .loading {
+                background-image:url(https://www.gettv.hk/img/loading.svg);
+            }
 
             .container {
                 width: 100%;
@@ -229,6 +232,7 @@
             ready: function() {
                 // this.search();
                 document.querySelector('#changeitemall').style.display = "none";
+                
             },
 
             updateQuery(){
@@ -277,8 +281,10 @@
         _search(){  
                 let that = this;
                 let shadow = this.shadowRoot;
+                let panel = shadow.querySelector('#blank');
+                // panel.classList.addClass('loading');
                 shadow.querySelector('.botbutton').style.display = 'block';
-                shadow.querySelector('#blank').innerHTML = '<img src="https://www.gettv.hk/img/loading.svg">';
+
             //     .svg {
             //     background-image: url('/img/loading.svg');
             //     position: relative;
@@ -395,20 +401,22 @@
                 };
                 this.query = query;
                 console.log('Search',JSON.stringify(searchParams));
-                let panel = shadow.querySelector('#blank');
                 let shop = document.querySelector('change-shop');
                 let list = shop.shadowRoot.querySelector('change-slidelist');
                 list.shadowRoot.querySelector('#renew').innerHTML = '<change-range></change-range>';
-
-                panel.innerHTML = '';
+           
                 Polymer.postData(url, searchParams).then(res => {
                         console.log(res);
+                        // panel.classList.removeClass('loading');
 
                         if (res.code>0){
                            
                             if (!res.resolve.length) {
                                 panel.innerHTML = "查無貨品";
                             } else {
+                                if (this.from ==0)
+                                    panel.innerHTML = '';
+
                                 let price =0;
                                 res.resolve.forEach(item=>{
                                     let addi = document.createElement('change-things');
@@ -704,6 +712,10 @@
                     this.minPrice = null;
                     this.maxPrice = null;
                 } 
+                
+                let panel = shadow.querySelector('#blank');
+                panel.innerHTML = '';
+
                 this._search();                    
             },
             displaymore: function() {

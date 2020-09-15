@@ -1,4 +1,4 @@
-﻿<link href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/polymer/polymer.html" rel="import">
+﻿
 <link href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/dz-menu/css/style.html" rel="import" />
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-select/vaadin-select.html">
@@ -8,6 +8,7 @@
 <link rel="import" href="change-control-pannel.html">
 <link rel="import" href="change-shop.html">
 <link rel="import" href="change-user-banner.html">
+
 
 <dom-module id="change-page-info2">
     <template>
@@ -293,8 +294,10 @@
 
     
 </change-user-banner>
-
-            <change-control-pannel></change-control-pannel>
+            <template is="dom-if" if="{{user.isAdmin}}">
+                <change-control-pannel></change-control-pannel>
+            </template>
+            <!-- <change-control-pannel></change-control-pannel> -->
             <div class="grid-container">
                 <div id="left">
                     <div id="info">
@@ -343,423 +346,350 @@
     </template>
 </dom-module>
 <script>
-    (function() {
-        Polymer({
-            is: 'change-page-info2',
-            properties: {
-                user:{
+
+class changePageInfo2 extends Polymer.Element {
+
+    static get is() {
+        return 'change-page-info2';
+    }
+    static get properties() {
+        return {
+            user:{
                     notify: true,
                     readOnly: false
-                }
-            },
-            created: function() {
-                let user = store.get('change-user') || null;
-                console.log('Change Info',user,Polymer.subUser);
-                if (user) this.fileManager = new AwsPackage(Polymer.subUser);
-                Polymer.uid = "change";
-                console.log('Change User',Polymer.uid);
-                let elm = document.head.querySelector('meta[name=user-id]');
-                let id;
-                if (elm)
-                    id = elm.getAttribute('content');
-                else if (user)
-                    id = user['id'];
-                else {
-                    alert('用戶未登入或不能讀取用戶資料');
-                    location.href="/index.html";
-                }
-                this.fileManager.listFile('user/').then(res=>{
-                    this.noAlias = res.length;
-                    user['alias'] = user['username'] + this.noAlias;
-                });
-                this.id = id;
-                // this.fileManager.saveUserData('testing.html','1234');
-
-                // else {
-                //     console.log('No id');
-                //     let arr = location.pathname.split("?");
-                //     console.log('ID',arr[1]);
-                //     this.id = arr[1];
-                // }
-                this.userManager = new DataPackage('_user');
-            },
-            isOwn(){
-                if (!Polymer.subUser)
-                    return false;
-                    
-                console.log('Is Own',this.id,Polymer.subUser['id']);
-                
-                if (this.id == Polymer.subUser['id'] || Polymer.subUser.isAdmin)
-                    return true;
-                else
-                    return false;                
-            },
-
-            _add: function(){
-                let user = Polymer.subUser;
-
-                   
-                let product = {};
-                // store.set('new-product-id',null);
-                // store.set('new-product',product);
-                location.replace("/add-product.html");
-
-            },
-            ready: function() {
-                let loc = location.search;
-                let user = store.get('change-user') || null;
-                this.subUser = user;
-                let shadow = this.shadowRoot;
-                let that = this
-
-
-                this.userManager.loadData(this.id).then(res=>{
-                    this.user = res;
-                    console.log('User Info',this.user);
-                    this.renew();
                 },
-                err=>{
-                    // alert("不能確認此頁身份，請聯絡管理員");
-                    // location.href = '/index.html';
-                });
-
-
-                this.edit = "編輯";
-
-            },
-            renew(){
-                let user = this.user;
-                this.regisDate = "剛剛";
-                let t = this.user['createTime'] || new Date().getTime();
-                if (t)
-                    this.regisDate = Polymer.parseTime(t);                  
-    
-                this.score = Math.round(this.user.score * 10) / 10;
-                this.user['history']  = this.user['history'] || [];
-                this.user['banner'] = this.user['banner'] || "https://www.gettv.hk/Website%20Design/profile%20page/img/profile%20banner/company-profile-banner.png";
-                this.execute();
-                // if (!this.user['alias'])
-                //     this.reAlias(0);
-
-            },
-            execute: function() {
-                console.log("Entered");
-                let shadow = this.shadowRoot;
-                customElements.whenDefined('vaadin-select').then(function() {
-                    const district = [{
-                        id: '中西區',
-                        name: '中西區'
-                    }, {
-                        id: '灣仔區',
-                        name: '灣仔區'
-                    }, {
-                        id: '東區',
-                        name: '東區'
-                    }, {
-                        id: '南區',
-                        name: '南區'
-                    }, {
-                        id: '油尖旺區',
-                        name: '油尖旺區'
-                    }, {
-                        id: '深水埗',
-                        name: '深水埗區'
-                    }, {
-                        id: '九龍城區',
-                        name: '九龍城區'
-                    }, {
-                        id: '黃大仙區',
-                        name: '黃大仙區'
-                    }, {
-                        id: '觀塘區',
-                        name: '觀塘區'
-                    }, {
-                        id: '葵青區',
-                        name: '葵青區'
-                    }, {
-                        id: '荃灣區',
-                        name: '荃灣區'
-                    }, {
-                        id: '屯門區',
-                        name: '屯門區'
-                    }, {
-                        id: '元朗區',
-                        name: '元朗區'
-                    }, {
-                        id: '離島區',
-                        name: '離島區'
-                    }, {
-                        id: '北區',
-                        name: '北區'
-                    }, {
-                        id: '大埔區',
-                        name: '大埔區'
-                    }, {
-                        id: '沙田區',
-                        name: '沙田區'
-                    }, {
-                        id: '西貢區',
-                        name: '西貢區'
-                    }];
-                    shadow.querySelector('vaadin-select').renderer = function(root) {
-                        // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
-                        if (root.firstChild) {
-                            return;
-                        }
-                        // Create the <vaadin-list-box>
-                        const listBox = document.createElement('vaadin-list-box');
-                        district.forEach(function(item) {
-                            const vaadinItem = document.createElement('vaadin-item');
-                            vaadinItem.textContent = item.name;
-                            listBox.appendChild(vaadinItem);
-                            vaadinItem.setAttribute('value', item.id);
-                        });
-                        // update the content
-                        root.appendChild(listBox);
-                    };
-                    // shadow.querySelector('vaadin-select').addEventListener('change',e=>{
-                    //     console.log('Target',e.target.value);
-                    // });
-                });
-
-                // shadow.querySelector('#name1').addEventListener('blur',e=>{
-                //     this.reAlias(0);
-                // });
-                
-
-
-            },
-            checkAlias(){
-                if (!this.user['alias']) {
-                    let cfm = confirm('你還未有用戶頁網址，要開嗎?');
-                    if (cfm)
-                        this.changeAlias(this.user['username']);
-                } else {
-                    Polymer.getContent('/user/'+this.user['alias']).then(res=>{
-                        return;
-                    },err=>{
-                        this.saveUserPage();
-                    });
-                }
-
-            },
-            _changeAlias(){
-                this.changeAlias(this.user['username']);
-            },
-            changeAlias(name){
-                
-                Polymer.getContent('/user/'+name).then(res=>{
-                    let name2 = prompt('路徑已被人使用，建議在名稱後加數字作為路徑',name);
-                    this.changeAlias(name2);
-                },err=>{
-                    this.user['alias'] = name;
-                    // this.saveUserPage();
-                    this.save();
-                    // this.$.profile1.render();
-                    // alert('更新用戶頁成功');
-                });
-                // let alias = this.user['alias'] || this.user['username'] || null;
-                // alias = alias.replace(/^\s+|\s+$/gm,'')
-                // alias = alias.replace(/ /gm,'-');
-                // alias = alias.replace(/\//gm,'-');                
-                // this.userManager.matchData({"alias":alias}).then(res=>{
-                //     if (res.length>1) {
-                //         this.canSave = false;
-                //         let cfm = alert('閣下用戶名稱已被使用，請即改名, 否則不能儲存');
-                //     }
-                //     else
-                //         this.canSave = true;
-                // });
-            },
-            reAlias(i){
-                let alias = this.user['username'];
-                alias = alias.replace(/^\s+|\s+$/gm,'')
-                alias = alias.replace(/ /gm,'-');
-                alias = alias.replace(/\//gm,'-');
-                if (i>0)
-                    alias = alias+'-'+i;
-                this.userManager.matchData({"alias":alias}).then(res=>{
-                    if (!res.length)
-                        this.user['alias'] = alias;                    
-                    else{
-                        i++;
-                        this.reAlias(i);
-                    }
-                    console.log('Change Alias',res,res.length);
-                });
-            },
-            _uploadFile: function(e) {
-                let user = store.get('change-user') || null;
-                if (this.id != user['id'])
-                    return;
-
-                let shadow = this.shadowRoot;
-                let that = this;
-                let elm= e.target;
-                Polymer.subUser = user;
-                
-                Polymer.loadComponent('dz-file-management','dz-sub-img-stock');
-                Polymer.activeElement = elm;
-                let dialog = shadow.querySelector('vaadin-dialog');
-                let dzPopup = document.createElement('dz-sub-img-stock');
-                dzPopup.subUser = user;
-                dzPopup.dialog = dialog;
-                Polymer.componentPopup(dzPopup,'90%','90%');
-                elm.selected = function(url,originUrl,smallUrl){
-                    let id = elm.getAttribute('id') || null;
-                    if (id==="mp") {
-                        elm.style.backgroundImage ="url("+originUrl+")";
-                        that.user['banner'] = originUrl;
-                    }
-
-                    if (id ==="dp") {
-                        elm.setAttribute('src',smallUrl);
-                        that.user['head'] = smallUrl;
-                    }
-
-                    dialog.opened = false;
-                }
-                
-                // this.dialog = dialog;
-                // this.curElm = e.path[0];
-                // let user = store.get('change-user') || null;
-                // id = document.head.querySelector('meta[name=user-id]').getAttribute('content') || null;
-                // let userInfo = document.querySelector('change-page-info2');
-                // // let keyword = userInfo.shadowRoot.querySelector('#vb').innerHTML;
-                // console.log('User',user['id'],id);
-                // if (user['id'] == id) {
-                //     Polymer.popup(dialog, 'change', 'change-gallery', '90%', '90%');
-                // } else {
-                //     console.log("Will not be able to open gallery!");
-                // }
-
-                // console.log('saved', bucket)
-            },
-            toggle: function() {
-                //GET BANNER INFO//
-                let that = this;
-                // let userBan = document.querySelector('change-user-banner');
-                let mp = this.shadowRoot.querySelector('#mp').style.backgroundImage;
-                bannerSrc = mp.replace('url(', '').replace(')', '').replace(/\"/gi, "");
-                let headSrc = this.shadowRoot.querySelector('#dp').src;
-                // console.log("document:", document);
-                // console.log("omgomg", userBan);
-                // console.log("omgomg1", bannerSrc);
-                // console.log("omgomg2", headSrc);
-
-                let user = store.get('change-user') || null;
-                console.log("UserID", this.user['id']);
-                let id = this.user['id'];
-
-                    let shadow = this.shadowRoot;
-                    let text = shadow.querySelector('#vb');
-                    if (text.innerHTML == "編輯") {
-                        let name = shadow.querySelector('#name').innerText;
-                        let email = shadow.querySelector('#email').innerText;
-                        let area = shadow.querySelector('#area').innerText;
-                        shadow.querySelector('#name').innerHTML = "<vaadin-text-field id='name1' value='" + name + "'></vaadin-text-field>";
-                        shadow.querySelector('#area').innerHTML = "<vaadin-select id='area1' value='" + area + "' label=''></vaadin-select>";
-                        this.execute();
-                        shadow.querySelector('#email').innerHTML = "<vaadin-email-field id='email1' value='" + email + "'disabled></vaadin-text-field>";
-                        text.innerHTML = "提交";
-                    } else {
-                            // let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                            let name = shadow.querySelector('#name1').value;
-                            let area = shadow.querySelector('#area1').value;
-                            let email = shadow.querySelector('#email1').value;
-                            console.log("User", user);
-                            user['username'] = name;
-                            user['area'] = area;
-                            user['banner'] = bannerSrc;
-                            user['head'] = headSrc;
-                            let alias = user['username'].trim();
-                            alias=alias.replace(/ /gi,"-");
-                            console.log('Alias',alias);
-                            store.set("change-user", user);
-                            this.userManager.matchData({"username":user['username']}).then(res=>{
-                                if (res.length>1)
-                                    user['alias'] = alias+res.length;
-                                else
-                                    user['alias'] = alias;
-                                that.user = user;
-                                store.set("change-user", user);
-                                that.saveUserPage();
-                            });
-
-
-                            // Restore text
-                            shadow.querySelector('#name').innerHTML = user['username'];
-                            shadow.querySelector('#area').innerHTML = user['area'];
-                            shadow.querySelector('#email').innerHTML = user['email'];
-                            text.innerHTML = "編輯";
-
-
-
-
-                         
-                    }
-                
-
-            },
-            save(){
-                    console.log('This User',this.user);
-                    this.user['username'] = this.shadowRoot.querySelector('#name1').value;
-                    this.user['area'] = this.shadowRoot.querySelector('#area1').value;
-                    // this.user['banner'] = this.$.mp.style.backgroundImage;
-                    // this.user['head'] = this.$.dp.getAttribute('src');
-                    this.user['alias'] = this.user['username']+'-'+this.noAlias;
-                    this.userManager.saveDataWithCache(this.id,this.user);
-                    // store.set('change-user',this.user);
-                    this.saveUserPage();
-                    alert('成功儲存');
-                    // location.reload();
-
-                    // this.$.render();
-                    // location.reload();
-//                    console.log('This User',this.user);
-            },
-            saveUserPage(){
-                let that = this;
-                let user = store.get('change-user');
-                let parser = new DOMParser();
-               
-                // fileManager.saveFile('user/testing','1234');
-
-                    let html = document.createElement('html');
-                    let head = document.createElement('head');
-                    let body = document.createElement('body');
-
-                    let meta = document.createElement('meta');
-                    meta.setAttribute('name','user-id');
-                    meta.setAttribute('content',this.user['id']);
-                    Polymer.getContent('/user.html').then(content=>{
-                        console.log('Save User Page');
-                        let doc = parser.parseFromString(content, "text/html");
-                        head.innerHTML = doc.head.innerHTML;
-                        body.innerHTML = doc.body.innerHTML;
-
-                        head.appendChild(meta);
-                        html.appendChild(head);
-                        html.appendChild(body);
-                        let str = html.outerHTML;
-                        let fileManager = new AwsPackage(user);
-                        fileManager.saveHtml('user/'+that.user['alias'],str);
-                    });
-
-
-
-            },
-            _saveJson: function() {
-                let that = this;
-                let url = "/json/user-" + this.user['id'] + ".json?id=" + new Date().getTime();
-                Polymer.getContent(url).then(res => {
-                    res = JSON.parse(res);
-                    that.fileManager.saveFile('json/user-' + this.user['id']+ '.json', JSON.stringify(res));
-                    alert("用戶資料已更新!");
-
-                });
-
+            myOwner:{
+                notify: true,
+                readOnly:false
             }
+        }
+    }
+
+
+    
+    constructor() {
+        super();
+        let user = store.get('change-user') || null;
+        console.log('Change Info',user,Polymer.subUser);
+        if (user) {
+            this.fileManager = new AwsPackage(Polymer.subUser);
+            this.fileManager.listFile('user/').then(res=>{
+                this.noAlias = res.length;
+                user['alias'] = user['username'] + this.noAlias;
+            });
+        } 
+        Polymer.uid = "change";
+        console.log('Change User',Polymer.uid);
+        let elm = document.head.querySelector('meta[name=user-id]');
+        let id;
+        if (elm)
+            id = elm.getAttribute('content');
+        else if (user)
+            id = user['id'];
+        else {
+            alert('用戶未登入或不能讀取用戶資料');
+            location.href="/index.html";
+        }
+        
+
+        this.id = id;
+        this.userManager = new DataPackage('_user');
+
+
+
+    }
+    
+    isOwn(){
+        if (!Polymer.subUser)
+            return false;
+            
+        console.log('Is Own',this.id,Polymer.subUser['id']);
+        
+        if (this.id == Polymer.subUser['id'] || Polymer.subUser.isAdmin)
+            return true;
+        else
+            return false;                
+    }
+
+    _add(){
+
+        Polymer.loadComponent('change','change-add-product');
+        let product = {};
+        // store.set('new-product-id',null);
+        // store.set('new-product',product);
+        console.log('Who am I',this.user);
+        store.set('product-owner',this.user);
+        let dzPopup = document.createElement('change-add-product');
+        // dzPopup.myOwner = this.user;
+        dzPopup.isFan = true;
+        dzPopup.owner = this.user;
+        dzPopup.dialog = this.shadowRoot.querySelector('vaadin-dialog');
+        Polymer.componentPopup(dzPopup,'95%','95%');
+        // location.replace("/add-product.html");
+
+    }
+    ready() {
+        super.ready();
+        let loc = location.search;
+        let user = store.get('change-user') || null;
+        this.subUser = user;
+        let shadow = this.shadowRoot;
+        let that = this
+
+
+        this.userManager.loadData(this.id).then(res=>{
+            this.user = res;
+            console.log('User Info',this.user);
+            this.renew();
+        },
+        err=>{
+            // alert("不能確認此頁身份，請聯絡管理員");
+            // location.href = '/index.html';
         });
-    })();
+
+
+        this.edit = "編輯";
+
+    }
+    renew(){
+        let user = this.user;
+        this.regisDate = "剛剛";
+        let t = this.user['createTime'] || new Date().getTime();
+        if (t)
+            this.regisDate = Polymer.parseTime(t);                  
+
+        this.score = Math.round(this.user.score * 10) / 10;
+        this.user['history']  = this.user['history'] || [];
+        this.user['banner'] = this.user['banner'] || "https://www.gettv.hk/Website%20Design/profile%20page/img/profile%20banner/company-profile-banner.png";
+        this.execute();
+        // if (!this.user['alias'])
+        //     this.reAlias(0);
+
+    }
+    execute() {
+        console.log("Entered");
+        let shadow = this.shadowRoot;
+        customElements.whenDefined('vaadin-select').then(function() {
+            const district = [{
+                id: '中西區',
+                name: '中西區'
+            }, {
+                id: '灣仔區',
+                name: '灣仔區'
+            }, {
+                id: '東區',
+                name: '東區'
+            }, {
+                id: '南區',
+                name: '南區'
+            }, {
+                id: '油尖旺區',
+                name: '油尖旺區'
+            }, {
+                id: '深水埗',
+                name: '深水埗區'
+            }, {
+                id: '九龍城區',
+                name: '九龍城區'
+            }, {
+                id: '黃大仙區',
+                name: '黃大仙區'
+            }, {
+                id: '觀塘區',
+                name: '觀塘區'
+            }, {
+                id: '葵青區',
+                name: '葵青區'
+            }, {
+                id: '荃灣區',
+                name: '荃灣區'
+            }, {
+                id: '屯門區',
+                name: '屯門區'
+            }, {
+                id: '元朗區',
+                name: '元朗區'
+            }, {
+                id: '離島區',
+                name: '離島區'
+            }, {
+                id: '北區',
+                name: '北區'
+            }, {
+                id: '大埔區',
+                name: '大埔區'
+            }, {
+                id: '沙田區',
+                name: '沙田區'
+            }, {
+                id: '西貢區',
+                name: '西貢區'
+            }];
+            shadow.querySelector('vaadin-select').renderer = function(root) {
+                // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
+                if (root.firstChild) {
+                    return;
+                }
+                // Create the <vaadin-list-box>
+                const listBox = document.createElement('vaadin-list-box');
+                district.forEach(function(item) {
+                    const vaadinItem = document.createElement('vaadin-item');
+                    vaadinItem.textContent = item.name;
+                    listBox.appendChild(vaadinItem);
+                    vaadinItem.setAttribute('value', item.id);
+                });
+                // update the content
+                root.appendChild(listBox);
+            };
+
+        });
+
+    }
+        
+    _uploadFile(e) {
+        let user = store.get('change-user') || null;
+        if (this.id != user['id'])
+            return;
+
+        let shadow = this.shadowRoot;
+        let that = this;
+        let elm= e.target;
+        Polymer.subUser = user;
+        
+        Polymer.loadComponent('dz-file-management','dz-sub-img-stock');
+        Polymer.activeElement = elm;
+        let dialog = shadow.querySelector('vaadin-dialog');
+        let dzPopup = document.createElement('dz-sub-img-stock');
+        dzPopup.subUser = user;
+        dzPopup.dialog = dialog;
+        Polymer.componentPopup(dzPopup,'90%','90%');
+        elm.selected = function(url,originUrl,smallUrl){
+            let id = elm.getAttribute('id') || null;
+            if (id==="mp") {
+                elm.style.backgroundImage ="url("+originUrl+")";
+                that.user['banner'] = originUrl;
+            }
+
+            if (id ==="dp") {
+                elm.setAttribute('src',smallUrl);
+                that.user['head'] = smallUrl;
+            }
+
+            dialog.opened = false;
+        }
+
+    }
+
+    toggle() {
+        //GET BANNER INFO//
+        let that = this;
+        // let userBan = document.querySelector('change-user-banner');
+        let mp = this.shadowRoot.querySelector('#mp').style.backgroundImage;
+        bannerSrc = mp.replace('url(', '').replace(')', '').replace(/\"/gi, "");
+        let headSrc = this.shadowRoot.querySelector('#dp').src;
+        // console.log("document:", document);
+        // console.log("omgomg", userBan);
+        // console.log("omgomg1", bannerSrc);
+        // console.log("omgomg2", headSrc);
+
+        let user = store.get('change-user') || null;
+        console.log("UserID", this.user['id']);
+        let id = this.user['id'];
+
+            let shadow = this.shadowRoot;
+            let text = shadow.querySelector('#vb');
+            if (text.innerHTML == "編輯") {
+                let name = shadow.querySelector('#name').innerText;
+                let email = shadow.querySelector('#email').innerText;
+                let area = shadow.querySelector('#area').innerText;
+                shadow.querySelector('#name').innerHTML = "<vaadin-text-field id='name1' value='" + name + "'></vaadin-text-field>";
+                shadow.querySelector('#area').innerHTML = "<vaadin-select id='area1' value='" + area + "' label=''></vaadin-select>";
+                this.execute();
+                shadow.querySelector('#email').innerHTML = "<vaadin-email-field id='email1' value='" + email + "'disabled></vaadin-text-field>";
+                text.innerHTML = "提交";
+            } else {
+                    // let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                    let name = shadow.querySelector('#name1').value;
+                    let area = shadow.querySelector('#area1').value;
+                    let email = shadow.querySelector('#email1').value;
+                    console.log("User", user);
+                    user['username'] = name;
+                    user['area'] = area;
+                    user['banner'] = bannerSrc;
+                    user['head'] = headSrc;
+                    let alias = user['username'].trim();
+                    alias=alias.replace(/ /gi,"-");
+                    console.log('Alias',alias);
+                    store.set("change-user", user);
+                    this.userManager.matchData({"username":user['username']}).then(res=>{
+                        if (res.length>1)
+                            user['alias'] = alias+res.length;
+                        else
+                            user['alias'] = alias;
+                        that.user = user;
+                        store.set("change-user", user);
+                        that.saveUserPage();
+                    });
+
+
+                    // Restore text
+                    shadow.querySelector('#name').innerHTML = user['username'];
+                    shadow.querySelector('#area').innerHTML = user['area'];
+                    shadow.querySelector('#email').innerHTML = user['email'];
+                    text.innerHTML = "編輯";
+
+
+
+
+                    
+            }
+        
+
+    }
+    save(){
+            console.log('This User',this.user);
+            this.user['username'] = this.shadowRoot.querySelector('#name1').value;
+            this.user['area'] = this.shadowRoot.querySelector('#area1').value;
+            // this.user['banner'] = this.$.mp.style.backgroundImage;
+            // this.user['head'] = this.$.dp.getAttribute('src');
+            this.user['alias'] = this.user['username']+'-'+this.noAlias;
+            this.userManager.saveDataWithCache(this.id,this.user);
+            // store.set('change-user',this.user);
+            this.saveUserPage();
+            alert('成功儲存');
+    }
+    saveUserPage(){
+        let that = this;
+        let user = store.get('change-user');
+        let parser = new DOMParser();
+        
+        // fileManager.saveFile('user/testing','1234');
+
+            let html = document.createElement('html');
+            let head = document.createElement('head');
+            let body = document.createElement('body');
+
+            let meta = document.createElement('meta');
+            meta.setAttribute('name','user-id');
+            meta.setAttribute('content',this.user['id']);
+            Polymer.getContent('/user.html').then(content=>{
+                console.log('Save User Page');
+                let doc = parser.parseFromString(content, "text/html");
+                head.innerHTML = doc.head.innerHTML;
+                body.innerHTML = doc.body.innerHTML;
+
+                head.appendChild(meta);
+                html.appendChild(head);
+                html.appendChild(body);
+                let str = html.outerHTML;
+                let fileManager = new AwsPackage(user);
+                fileManager.saveHtml('user/'+that.user['alias'],str);
+            });
+
+
+
+    }
+}
+customElements.define('change-page-info2', changePageInfo2);
+window.Polymer.changePageInfo2 = changePageInfo2;
 </script>
