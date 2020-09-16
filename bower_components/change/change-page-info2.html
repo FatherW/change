@@ -311,6 +311,9 @@
                             <p class="inf">電郵: <vaadin-email-field id="email1" value$="{{user.email}}" disabled></vaadin-email-field></p>
                             <p class="inf">用戶頁: <vaadin-text-field id="profile1" style="min-width:350px;" value$="https://www.gettv.hk/user/{{user.alias}}" disabled></vaadin-text-field></p>
                             <!-- <p class="inf">電話: <span class="infotext" id="contact"></span></p> -->
+                            <h5>專頁管理員清單 (請輸入欲加管理員之註冊電郵)</h5>
+                            <vaadin-text-field id="inputTags" on-keydown="_addTags"></vaadin-text-field>
+                            <paper-tags-input width="100%" id="myTags" tags="{{user.fansAdmin}}"></paper-tags-input>
                         </template>
 
                         <template is="dom-if" if="{{!isOwn()}}">
@@ -400,6 +403,18 @@ class changePageInfo2 extends Polymer.Element {
 
 
     }
+            //Henery added//
+    _addTags(e) {
+        let myTags = this.shadowRoot.querySelector('#myTags');
+        let val = this.shadowRoot.querySelector('#inputTags').value;
+        // console.log('Key Down', e);
+
+        if (e.code === "Enter") {
+            myTags._addTag(val);
+            this.shadowRoot.querySelector('#inputTags').value = "";
+        }
+        //console.log("arrayResult:", myTags.tags);
+    }
     
     isAdmin(){
         // return true;
@@ -458,6 +473,10 @@ class changePageInfo2 extends Polymer.Element {
         this.userManager.loadData(this.id).then(res=>{
             this.user = res;
             console.log('User Info',this.user);
+            this.user['fansAdmin']=["1"];
+            // this.user['fansAdmin'].forEach(item=>{
+            //     this.shadowRoot.querySelector('#myTags')._addTags(item);
+            // });
             this.renew();
         },
         err=>{

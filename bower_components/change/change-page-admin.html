@@ -160,6 +160,17 @@
                     this.pageManager = new DataPackage('pages');
                     this.userManager = new DataPackage('_user');
                 } 
+
+                this.fileManager.listFile('user/').then(res=>{
+                    this.noAlias = res.length;
+                });
+            },
+
+            ready: function() {
+                let shadow = this.shadowRoot;
+                let that = this;
+                let adminArray =[];
+                // shadow.querySelector('.hide').style.display = "none";
                 let elm = document.head.querySelector('meta[name=user-id]') || null;
                 let id ;
                 if (!elm) {
@@ -171,28 +182,24 @@
                 this.userManager.getDataByCache(id).then(res=>{
                     this.user = res;
                   
-
+                    if (!this.user.hasOwnProperty('fansAdmin'))
+                         this.user['fansAdmin'] = ["1"];
+                    console.log('This User',this.user);
+                    adminArray = this.user['fansAdmin'];
+                    adminArray.forEach(item=>{
+                        myTags._addTag(item);
+                    });
+                    console.log('Admin Panel',this.user);
 
                 });
-                this.fileManager.listFile('user/').then(res=>{
-                    this.noAlias = res.length;
-                });
-            },
-
-            ready: function() {
-                let shadow = this.shadowRoot;
-                let that = this;
-
-                // shadow.querySelector('.hide').style.display = "none";
-
                 let user = store.get('change-user') || null;
-                console.log('Admin Panel');
-                let myTags = this.shadowRoot.querySelector('myTags');
-                let adminArray = this.user['fansAdmin'] || ["1"];
-                adminArray.forEach(item=>{
-                    myTags._addTag(item);
-
-                });
+                // let myTags = this.shadowRoot.querySelector('myTags');
+                // if (!this.user.hasOwnProperty('fansAdmin'))
+                //     this.user['fansAdmin'] = ["1"];
+                // // let adminArray = this.user['fansAdmin'] || ["1"];
+                // adminArray.forEach(item=>{
+                //     myTags._addTag(item);
+                // });
 
 
             },

@@ -1,8 +1,9 @@
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-text-field/vaadin-number-field.html">
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-button/vaadin-button.html">
+<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/paper-tags-input/paper-tags-input.html">
 <link rel="import" href="change-icon.html">
 <link rel="import" href="change-add-fanspage.html">
-]<link rel="import" href="change-page-admin.html">
+<!-- ]<link rel="import" href="change-page-admin.html"> -->
 <dom-module id="change-control-pannel">
 
     <template>
@@ -35,9 +36,7 @@
                 text-align: center;
                 margin: 35px 0 50px 0;
             }
-#info1{
-    border: 1px solid #ff9500;
-}
+
             button {
                 cursor: pointer;
                 font-family: sans-serif, Microsoft JhengHei;
@@ -151,9 +150,11 @@
                         <button id="manage" on-click="_manageFanPage">管理專頁</button>
                     </template>
                 </div>
-                <template is="dom-if" if="{{user.isFanPage}}">
+
+
+                <!-- <template is="dom-if" if="{{user.isFanPage}}">
                     hello
-                </template>
+                </template> -->
 
                 <!-- <div id="info1">
                     <h5>專頁資料</h5>
@@ -214,7 +215,12 @@
 
                 this.userManager.getDataByCache(id).then(res=>{
                     this.user = res;
+                    if (this.user.isFanpage) {
+                        if (!this.user.hasOwnProperty('fansAdmin'))
+                            this.user['fansAdmin'] = ["1"];
+                    }
                 });
+
                 this.fileManager.listFile('user/').then(res=>{
                     this.noAlias = res.length;
                 });
