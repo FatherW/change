@@ -1,0 +1,218 @@
+<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-text-field/vaadin-number-field.html">
+<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-button/vaadin-button.html">
+<link rel="import" href="change-icon.html">
+
+<dom-module id="change-page-admin">
+
+    <template>
+
+        <style>
+            * {
+                color: black;
+                font-family: sans-serif, Microsoft JhengHei;
+            }
+
+            .container {
+                /* background-image: url(./img/background/3.jpg); */
+
+            }
+
+            #controlbar {
+                padding-top: 15px;
+                padding-bottom: 25px;
+                background: white;
+                width: 84%;
+                margin: 0 auto;
+                margin-top: 25px;
+            }
+
+            .cp {
+                text-align: center;
+            }
+
+            .miscount {
+                text-align: center;
+                margin: 35px 0 50px 0;
+            }
+#info1{
+    border: 1px solid #ff9500;
+}
+            button {
+                cursor: pointer;
+                font-family: sans-serif, Microsoft JhengHei;
+                font-size: 15px;
+                width: 17%;
+                border-radius: 3px;
+            }
+
+            .buttons {
+                margin: 0 auto;
+                text-align: center;
+            }
+
+            .buttons button {
+                height: 50px;
+                font-family: sans-serif, Microsoft JhengHei;
+                margin-right: 30px;
+                border: 1px solid #ccc;
+                color: white;
+
+                width: 150px;
+            }
+
+            #add {
+                background-color: #ff9500;
+            }
+
+            #dq {
+                background-color: #d9534f;
+            }
+
+            #recover {
+                background-color: #71b758;
+            }
+
+
+            /* :host([part="input-field"]) {
+                background-color: #7cd3da;
+            } */
+
+            /*******Fanpage Button*******/
+            #manage {
+                background-color: #7cd3da;
+            }
+
+            change-icon {
+                margin: 10px;
+            }
+
+            .save {
+                width: 50px;
+            }
+
+            #info1 {
+                width: 84%;
+                margin: 0 auto;
+                display: none;
+            }
+
+            #info2 {
+                width: 84%;
+                margin: 0 auto;
+                display: none;
+            }
+
+            .handIn,
+            .search {
+                margin-right: 30px;
+            }
+
+            #listPage {
+                grid-template-columns: repeat(4, 1fr);
+                grid-row-gap: 15px;
+                padding: 30px 40px;
+            }
+
+            @media only screen and (max-width: 992px) {}
+
+            @media only screen and (max-width: 640px) {
+                #controlbar {
+                    width: 100%;
+                }
+
+                .buttons button {
+                    margin-right: 10px;
+                }
+
+                button {
+                    width: 20%;
+                }
+            }
+        </style>
+        <vaadin-dialog></vaadin-dialog>
+        <div class="container">
+
+           
+                <div id="info1">
+                    <h5>專頁管理員清單</h5>
+                    <paper-tags-input width="100%" id="myTags">
+                    </paper-tags-input>
+                    
+
+                </div>
+
+        </div>
+    </template>
+
+</dom-module>
+
+<script>
+    (function() {
+        Polymer({
+            is: 'change-page-admin',
+            properties: {},
+
+
+            created: function() {
+                let user = store.get('change-user') || null;
+                if (user && user.isAdmin) {
+                    this.fileManager = Polymer.fileManager;
+                    this.pageManager = new DataPackage('pages');
+                    this.userManager = new DataPackage('_user');
+                } 
+                let elm = document.head.querySelector('meta[name=user-id]') || null;
+                let id ;
+                if (!elm) {
+                    id = user['id'];
+                } else {
+                    id = elm.getAttribute('content') || null;
+                }
+
+                this.userManager.getDataByCache(id).then(res=>{
+                    this.user = res;
+                  
+
+
+                });
+                this.fileManager.listFile('user/').then(res=>{
+                    this.noAlias = res.length;
+                });
+            },
+
+            ready: function() {
+                let shadow = this.shadowRoot;
+                let that = this;
+
+                // shadow.querySelector('.hide').style.display = "none";
+
+                let user = store.get('change-user') || null;
+                console.log('Admin Panel');
+                let myTags = this.shadowRoot.querySelector('myTags');
+                let adminArray = this.user['fansAdmin'] || ["1"];
+                adminArray.forEach(item=>{
+                    myTags._addTag(item);
+
+                });
+
+
+            },
+
+
+
+            _save: function() {
+                console.log("updated mistakes count!")
+
+                let shadow = this.shadowRoot;
+                let that = this;
+
+                let count = shadow.querySelector('#mistake').value;
+                console.log("Mistakes count:", count);
+                this.user['mistake'] = count;
+                this.userManager.saveDataWithCache(this.user['id'],this.user).then(res=>{
+                    alert("用戶犯錯次數已更新!");
+                });
+            }
+
+        });
+    })();
+</script>

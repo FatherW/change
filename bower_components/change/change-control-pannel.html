@@ -2,6 +2,7 @@
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-button/vaadin-button.html">
 <link rel="import" href="change-icon.html">
 <link rel="import" href="change-add-fanspage.html">
+]<link rel="import" href="change-page-admin.html">
 <dom-module id="change-control-pannel">
 
     <template>
@@ -108,7 +109,6 @@
             }
 
             #listPage {
-                display: none;
                 grid-template-columns: repeat(4, 1fr);
                 grid-row-gap: 15px;
                 padding: 30px 40px;
@@ -118,7 +118,6 @@
 
             @media only screen and (max-width: 640px) {
                 #controlbar {
-                    display: none;
                     width: 100%;
                 }
 
@@ -152,6 +151,9 @@
                         <button id="manage" on-click="_manageFanPage">管理專頁</button>
                     </template>
                 </div>
+                <template is="dom-if" if="{{user.isFanPage}}">
+                    hello
+                </template>
 
                 <!-- <div id="info1">
                     <h5>專頁資料</h5>
@@ -201,10 +203,7 @@
                     this.fileManager = Polymer.fileManager;
                     this.pageManager = new DataPackage('pages');
                     this.userManager = new DataPackage('_user');
-                } else {
-                    alert('用戶不是管理員,或沒有用戶');
-                    location.href = "/index.html";
-                }
+                } 
                 let elm = document.head.querySelector('meta[name=user-id]') || null;
                 let id ;
                 if (!elm) {
@@ -228,6 +227,8 @@
                 // shadow.querySelector('.hide').style.display = "none";
 
                 let user = store.get('change-user') || null;
+                console.log('Admin Panel');
+
                 if (user) {
                     if (user.isAdmin == true) {
                         shadow.querySelector("#controlbar").style.display = "block";
@@ -240,48 +241,48 @@
 
                     }
                 }
-                that.vaadin_select();
-                let checkid = shadow.querySelector('#pageid');
-                checkid.addEventListener('keyup', event => {
-                    if (event.code == "Enter") shadow.querySelector('#name1').focus();
-                    for (i = 0; i < checkid.value.length; i++) {
-                        var c = checkid.value.substr(i, 1);
-                        var ts = escape(c);
-                        if (ts.substring(0, 2) == "%u") {
-                            checkid.value = "";
-                            alert("不能輸入中文/全角字符");
-                        }
-                    }
-                })
+                // that.vaadin_select();
+                // let checkid = shadow.querySelector('#pageid');
+                // checkid.addEventListener('keyup', event => {
+                //     if (event.code == "Enter") shadow.querySelector('#name1').focus();
+                //     for (i = 0; i < checkid.value.length; i++) {
+                //         var c = checkid.value.substr(i, 1);
+                //         var ts = escape(c);
+                //         if (ts.substring(0, 2) == "%u") {
+                //             checkid.value = "";
+                //             alert("不能輸入中文/全角字符");
+                //         }
+                //     }
+                // })
 
-                let website = shadow.querySelector('#website2');
-                website.addEventListener('keyup', e => {
-                    if (e.code == "Enter") that.check();
-                })
-                let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
-                let list = shadow.querySelector('#listPage');
-                let param = {
-                    "action": "searchData",
-                    "index": "change",
-                    "type": "_user",
-                    "_source": "_id",
-                    "body": {
-                        "query": {
-                            "match": {
-                                "isFanpage": true
-                            }
-                        }
-                    }
-                }
-                Polymer.postData(url, param).then(res => {
-                    if (res.code > 0) {
-                        res.resolve.forEach(item => {
-                            let user = document.createElement('change-icon');
-                            user.setAttribute('id', item._id)
-                            list.appendChild(user);
-                        })
-                    }
-                })
+                // let website = shadow.querySelector('#website2');
+                // website.addEventListener('keyup', e => {
+                //     if (e.code == "Enter") that.check();
+                // })
+                // let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                // let list = shadow.querySelector('#listPage');
+                // let param = {
+                //     "action": "searchData",
+                //     "index": "change",
+                //     "type": "_user",
+                //     "_source": "_id",
+                //     "body": {
+                //         "query": {
+                //             "match": {
+                //                 "isFanpage": true
+                //             }
+                //         }
+                //     }
+                // }
+                // Polymer.postData(url, param).then(res => {
+                //     if (res.code > 0) {
+                //         res.resolve.forEach(item => {
+                //             let user = document.createElement('change-icon');
+                //             user.setAttribute('id', item._id)
+                //             list.appendChild(user);
+                //         })
+                //     }
+                // })
 
 
             },
@@ -377,69 +378,69 @@
 
 
             },
-            vaadin_select() {
+        //     vaadin_select() {
 
-        //SET AREA, DERLIVER METHOD, PRODUCT STATUS//
-                  let shadow = this.shadowRoot;
-                customElements.whenDefined('vaadin-select').then(function() {
-                    const district = [{
-                        name: '中西區'
-                    }, {
-                        name: '灣仔區'
-                    }, {
-                        name: '東區'
-                    }, {
-                        name: '南區'
-                    }, {
-                        name: '油尖旺區'
-                    }, {
-                        name: '深水埗區'
-                    }, {
-                        name: '九龍城區'
-                    }, {
-                        name: '黃大仙區'
-                    }, {
-                        name: '觀塘區'
-                    }, {
-                        name: '葵青區'
-                    }, {
-                        name: '荃灣區'
-                    }, {
-                        name: '屯門區'
-                    }, {
-                        name: '元朗區'
-                    }, {
-                        name: '離島區'
-                    }, {
-                        name: '北區'
-                    }, {
-                        name: '大埔區'
-                    }, {
-                        name: '沙田區'
-                    }, {
-                        name: '西貢區'
-                    }];
+        // //SET AREA, DERLIVER METHOD, PRODUCT STATUS//
+        //           let shadow = this.shadowRoot;
+        //         customElements.whenDefined('vaadin-select').then(function() {
+        //             const district = [{
+        //                 name: '中西區'
+        //             }, {
+        //                 name: '灣仔區'
+        //             }, {
+        //                 name: '東區'
+        //             }, {
+        //                 name: '南區'
+        //             }, {
+        //                 name: '油尖旺區'
+        //             }, {
+        //                 name: '深水埗區'
+        //             }, {
+        //                 name: '九龍城區'
+        //             }, {
+        //                 name: '黃大仙區'
+        //             }, {
+        //                 name: '觀塘區'
+        //             }, {
+        //                 name: '葵青區'
+        //             }, {
+        //                 name: '荃灣區'
+        //             }, {
+        //                 name: '屯門區'
+        //             }, {
+        //                 name: '元朗區'
+        //             }, {
+        //                 name: '離島區'
+        //             }, {
+        //                 name: '北區'
+        //             }, {
+        //                 name: '大埔區'
+        //             }, {
+        //                 name: '沙田區'
+        //             }, {
+        //                 name: '西貢區'
+        //             }];
 
-                    //AREA//
-                    shadow.querySelector('#area1').renderer = function(root) {
-                        // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
-                        if (root.firstChild) {
-                            return;
-                        }
-                        // Create the <vaadin-list-box>
-                        const listBox = document.createElement('vaadin-list-box');
-                        district.forEach(function(item) {
-                            const vaadinItem = document.createElement('vaadin-item');
-                            vaadinItem.textContent = item.name;
-                            listBox.appendChild(vaadinItem);
-                            vaadinItem.setAttribute('value', item.name);
-                        });
-                        // update the content
-                        root.appendChild(listBox);
-                    };
-                });
+        //             //AREA//
+        //             shadow.querySelector('#area1').renderer = function(root) {
+        //                 // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
+        //                 if (root.firstChild) {
+        //                     return;
+        //                 }
+        //                 // Create the <vaadin-list-box>
+        //                 const listBox = document.createElement('vaadin-list-box');
+        //                 district.forEach(function(item) {
+        //                     const vaadinItem = document.createElement('vaadin-item');
+        //                     vaadinItem.textContent = item.name;
+        //                     listBox.appendChild(vaadinItem);
+        //                     vaadinItem.setAttribute('value', item.name);
+        //                 });
+        //                 // update the content
+        //                 root.appendChild(listBox);
+        //             };
+        //         });
 
-                },
+        //         },
             cancelinfo1: function() {
                 this.shadowRoot.querySelector('#info1').style.display = "none";
 

@@ -12,7 +12,7 @@
         <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
         <title>Home - Change</title>
-        <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="css/style.css">
         <meta name="google-signin-scope" content="profile email">
         <meta name="google-signin-client_id" content="755964351228-2emctcoq1o2nj5vpqitv4j28411jj7jk.apps.googleusercontent.com">
         <script src="https://apis.google.com/js/platform.js" async="" defer=""></script>
@@ -143,16 +143,19 @@ window.fbAsyncInit = function () {
                 }
             }
         </style>
-        <link rel="import" href="/bower_components/change/change-page-info2.html">
- </head>
+        <link rel="import" href="/bower_components/change/change-new-product.html">
+        <link rel="import" href="/bower_components/change/change-edit-bar.html">
+        <link rel="import" href="/bower_components/change/change-order-list.html">
+        <link rel="import" href="/bower_components/change/change-orderlist-storage.html">
+        <link rel="import" href="/bower_components/change/change-itemspecial.html">
+        <link rel="import" href="/bower_components/change/change-slidelist.html">
+        <link rel="import" href="/bower_components/change/change-in-item.html">
+        <meta name="product-id" content="225271">
+
+    </head>
 <body>
         <change-header></change-header>
-        <change-page-info2>
-        </change-page-info2>
-        <div class="shop_panel">
-            <change-shop></change-shop>
-        </div>
-
+        <change-new-product></change-new-product>
         <change-footer>
             <div id="footer" class="footer" style="background-color: rgb(240, 132, 108);">
                 <div style="width: 90%; margin: 0 auto;">
@@ -218,5 +221,6 @@ window.fbAsyncInit = function () {
         </change-footer>
         <button class="googleloginname" style="display:none;">google login</button>
         <div class="g-signin2" data-onsuccess="onSignIn" style="display:none;">imgoogle</div>
+<dz-dazzle></dz-dazzle>
 
 </body></html>

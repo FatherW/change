@@ -294,16 +294,17 @@
 
     
 </change-user-banner>
-            <template is="dom-if" if="{{user.isAdmin}}">
-                <change-control-pannel></change-control-pannel>
+            <template is="dom-if" if="{{isAdmin()}}">
+                    <change-control-pannel></change-control-pannel>
+
             </template>
+
             <!-- <change-control-pannel></change-control-pannel> -->
             <div class="grid-container">
                 <div id="left">
                     <div id="info">
                         <h5>賣家資料</h5>
                         <template is="dom-if" if="{{isOwn()}}">
-
                             <p class="inf">名稱: <vaadin-text-field id="name1" value="{{user.username}}"></vaadin-text-field>     </p>                       
                             <!-- <vaadin-button id="ap" style="margin-right: 10px;" on-click="_changeAlias">建立用戶頁</vaadin-button> -->
                             <p class="inf">地區: <vaadin-select id="area1" value$="{{user.area}}"></vaadin-select></p>
@@ -370,6 +371,7 @@ class changePageInfo2 extends Polymer.Element {
     constructor() {
         super();
         let user = store.get('change-user') || null;
+        this.subUser = user;
         console.log('Change Info',user,Polymer.subUser);
         if (user) {
             this.fileManager = new AwsPackage(Polymer.subUser);
@@ -399,6 +401,22 @@ class changePageInfo2 extends Polymer.Element {
 
     }
     
+    isAdmin(){
+        // return true;
+        if (!Polymer.subUser)
+            return false;
+            
+            console.log('Is Own',this.id,Polymer.subUser['id']);
+        
+        if  (Polymer.subUser.isAdmin){
+            console.log('Is Own Admin');
+
+            return true;
+
+        }
+        else
+            return false;                
+    }
     isOwn(){
         if (!Polymer.subUser)
             return false;

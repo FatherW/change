@@ -7,9 +7,9 @@
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/paper-tags-input/paper-tags-input.html">
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-menu-bar/vaadin-menu-bar.html">
 <!-- <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/dz-file-management/dz-sub-img-stock.html"> -->
-<link rel="stylesheet" href="">
-<link href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/dz-menu/css/style.html" rel="import" />
 
+<link href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/dz-menu/css/style.html" rel="import" />
+<link href="change-inform.html">
 
 <dom-module id="change-add-product">
     <template>
@@ -463,7 +463,7 @@
         <!-- <div class="top-banner">
            
         </div> -->
-
+        <vaadin-dialog></vaadin-dialog>
         <header>
             <div id="tbar">
                 <div class="tbar">
@@ -743,51 +743,7 @@
                 // if (this.myOwner)
                 //     this.owner = this.myOwner;
                 
-                let id = store.get('new-product-id') || null;
-                let model =  {
-                    "categories": "",
-                    "sellerMsg": "",
-                    "productname": "",
-                    "price": 10,
-                    "district": "",
-                    "deliveryMethod": "面交",
-                    "descrip": "",
-                    "tag": [],
-                    "deliveryDesc": "",
-                    "isNew": true,
-                    "isFree": false,
-                    "ownerId": null,
-                    "pics": ["http://change.dazzle.website.s3.amazonaws.com/files/1/1591944377549.jpeg"],
-                    'alias': '',
-                    "postStatus":false,
-                    "isPurchase": false
-            };
-
-                // this.product = store.get('new-product') || model;
-                // console.log('Before New ID',this.id,this.product);
-                if (!id){
-                    console.log('New Product');
-                    this.product = model;
-                    this.generateNewId();
-                    this.mode ='add';
-                    this.initProduct();
-                    // this.userManager.getDataByCache(this.product['ownerId']).then(res=>{
-                    //     this.owner = res;
-                    // });
-                } else {
-                    this.mode = 'edit';
-                    this.dataManager.getDataByCache(id).then(res=>{
-                        this.product = res;
-                        this.initProduct();
-                        console.log('Product',this.product);
-                    });
-                    // this.reAlias(0);
-                }
-
-
-    
-                console.log('New ID',this.id, this.product);
-                
+              
                 this.fileManager.listFile('product/').then(res=>{
                     this.noProduct = res.length+1;
                 });
@@ -847,7 +803,60 @@
                 //console.log("arrayResult:", myTags.tags);
             }
 
+            newProduct(){
+                let id = store.get('new-product-id') || null;
+
+                let model =  {
+                        "categories": "",
+                        "sellerMsg": "",
+                        "productname": "",
+                        "price": 10,
+                        "district": "",
+                        "deliveryMethod": "面交",
+                        "descrip": "",
+                        "tag": [],
+                        "deliveryDesc": "",
+                        "isNew": true,
+                        "isFree": false,
+                        "ownerId": null,
+                        "pics": ["http://change.dazzle.website.s3.amazonaws.com/files/1/1591944377549.jpeg"],
+                        'alias': '',
+                        "postStatus":false,
+                        "isPurchase": false,
+                        "ownerId": this.owner['id']
+                };
+
+                // this.product = store.get('new-product') || model;
+                // console.log('Before New ID',this.id,this.product);
+                if (!id){
+                    console.log('New Product');
+                    this.product = model;
+                    this.generateNewId();
+                    this.mode ='add';
+                    this.initProduct();
+                    // this.userManager.getDataByCache(this.product['ownerId']).then(res=>{
+                    //     this.owner = res;
+                    // });
+                } else {
+                    this.mode = 'edit';
+                    this.dataManager.getDataByCache(id).then(res=>{
+                        this.product = res;
+                        this.initProduct();
+                        console.log('Product',this.product);
+                    });
+                    // this.reAlias(0);
+                }
+
+
+    
+                console.log('New ID',this.id, this.product);
+                
+            }
+
             initProduct(){
+
+
+                
     //edit mode
                     let res;                   
                    // res = JSON.parse(res);
@@ -956,6 +965,8 @@
                 console.log('Who am I? ',this.owner,this.isFan);     
                 this.$.fans.render();
                 this.$.ownerPanel.render();
+                this.newProduct();
+                
 
                 // if (this.myOwner)
                 //     this.owner = this.myOwner;
@@ -1030,14 +1041,22 @@
 
             condition(){
 
-                if (!this.product.categories) 
-                    return false;
-                
-                if (!this.product.productname)
+
+                if (!this.product.categories) {
+                    alert('未填分類');
                     return false;
 
-                if (!this.product.tags.length)
+                }
+                
+                if (!this.product.productname) {
+                    alert('未填產品名');
                     return false;
+                }
+
+                if (!this.product.tags.length) {
+                    alert('未有標籤');
+                    return false;
+                }
             
                 return true;
             }
@@ -1054,7 +1073,16 @@
                 shadow.querySelector('#save').innerHTML = '上存中...';
 
                 this.product['postStatus'] = true;
+                console.log('DIalog',this.dialog);
                 this._save();            
+                this.dialog.opened = false;
+
+                // alert('成功儲存');
+
+
+                // this.dialog.opened = false;
+
+
                 // Check Fans Page
                 // .......
 
@@ -1195,7 +1223,8 @@
                         console.log('Save Product',this.product);
                         // this.dataManager.saveData(this.id,this.product);
                         // this.fileManager.saveUserData('json/product-'+this.id+'.json',JSON.stringify(this.product));
-                        this.fileManager.saveHtml('product/'+this.product['alias'],html.outerHTML);
+                        let fileManager = new AwsPackage(this.user);
+                        fileManager.saveHtml('product/'+this.product['alias'],html.outerHTML);
                     });
             }
             _save(){
@@ -1209,13 +1238,20 @@
                 alias = alias.replace(/\//gm,'-');
                 alias = alias+'-'+ this.noProduct;
                 this.product['alias'] = alias;
-
+                this.product['createTime'] = new Date().getTime();
                 this.dataManager.saveDataWithCache(this.product['id'],this.product).then(res=>{
                     if (this.mode=="add")
                         this.addUserGoods(this.product['ownerId']);
                     this.saveProductPage();
                     console.log('Product',this.product);
-                    alert('成功儲存');
+
+                    Polymer.loadComponent('change','change-inform');
+                    let dzPopup = document.createElement('change-inform');
+                    dzPopup.msg = "成功儲存";
+                    dzPopup.dialog = this.shadowRoot.querySelector('vaadin-dialog');
+                    Polymer.componentPopup(dzPopup,'300px','200px');
+
+                    // alert('成功儲存');
                     // location.href="/getchange.html";
                 });
             }

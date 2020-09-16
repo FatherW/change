@@ -81,6 +81,7 @@
                 }
             }
         </style>
+        <vaadin-dialog></vaadin-dialog>
         <header>
             <div id="tbar">
                 <div class="containerB">
@@ -136,6 +137,9 @@
                         }
                 });
 
+                this.dialog = this.shadowRoot.querySelector('vaadin-dialog');
+                console.log('Created dialog',this.dialog);
+
                 console.log("Edit Bar ID", pid);
                 //Check whether login or not (not login -> hide)
            
@@ -175,17 +179,21 @@
                 this.dataManager = new DataPackage('_user');
                 this.prodManager = new DataPackage('product');
                 
-
-
             },
             _edit: function(){
                 let user = Polymer.subUser;
 
-                   
+                // store.set('new-product-id',this.id); 
+                Polymer.loadComponent('change','change-add-product');
+
                 let product = this.product;
                 store.set('new-product-id',product['id']);
+                let dzPopup = document.createElement('change-add-product');
+                dzPopup.dialog = this.dialog;
+                Polymer.componentPopup(dzPopup,'95%','95%');
+
                 // store.set('new-product',product);
-                location.replace("/add-product.html");
+                // location.replace("/add-product.html");
 
             },
             _delete: function() {
@@ -222,8 +230,22 @@
                 product['postStatus'] = false;
                 store.set('new-product-id',product['id']);
                 this.prodManager.saveDataWithCache(product['id'],product);
+
+
+                // store.set('new-product-id',this.id); 
+                Polymer.loadComponent('change','change-add-product');
+
+                // let product = this.product;
+                // store.set('new-product-id',product['id']);
+
+                let dzPopup = document.createElement('change-add-product');
+                dzPopup.dialog = this.dialog;
+                Polymer.componentPopup(dzPopup,'95%','95%');
+
+
+
                 // store.set('new-product',product);
-                location.replace("/add-product.html");
+                // location.replace("/add-product.html");
 
 
 

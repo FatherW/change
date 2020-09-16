@@ -67,6 +67,7 @@
 
 <script>
    window.Change = window.Change || {};
+
 class changeUserPanel extends Polymer.Element {
 	static get is() {
           return 'change-user-panel';
@@ -91,11 +92,17 @@ class changeUserPanel extends Polymer.Element {
                     this.fileManager = new AwsPackage(user);
 
                     this.profilePic = this.user['head'] || 'https://devshift.biz/wp-content/uploads/2017/04/profile-icon-png-898.png';
+                    this.profileUrl = "/user/_me";
 
-                    if (!this.user['alias'])
-                        this.profileUrl = "/user/_me";
-                    else                        
-                        this.profileUrl = '/user/'+user['alias'];
+                    // if (!this.user['alias'])
+                    //     this.profileUrl = "/user/_me";
+                    // else {
+                    //     if (this.user.isFanpage)
+                    //         this.profileUrl = '/page/'+this.user['alias'];
+                    //     else
+                    //        this.profileUrl = '/user/'+this.user['alias'];
+                    // }                       
+
 
                             // this.profileUrl = '/user.html?'+user['_id'];
                     // });

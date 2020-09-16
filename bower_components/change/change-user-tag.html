@@ -393,9 +393,13 @@
                 this.userManager.getDataByCache(this.id).then(user=>{
                     this.name = user['username'];
                     this.user = user;
-                    if (user['alias'])  
-                        this.userUrl = "/user/"+user['alias'];
-                    else
+                    if (user['alias'])  {
+                        if (user.isFanpage)
+                            this.userUrl = "/page/"+user['alias'];
+                        else
+                            this.userUrl = "/user/"+user['alias'];
+                    } 
+                     else
                         this.userUrl = "/user.html?"+user['id'];
 
                     this.timeStr = Polymer.parseTime(time);

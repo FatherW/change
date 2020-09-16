@@ -549,6 +549,31 @@
         //             });
         //     });
         // };
+
+        removeUserData(key) {
+            let AWS = this.AWS;
+            // console.log(window['AWS'],this.AWS);
+            let bucket = "dazzle-template";
+            return new Promise(function(resolve, reject) {
+                let s3 = new AWS.S3();
+
+                let params = {
+                    Bucket: bucket,
+                    Key: "user-data/" + window["uid"] + "/" + key
+                };
+
+                console.log("User Data", params);
+                s3.removeObject(params, function(err, data) {
+                    if (err) {
+                        console.log(err);
+                        reject("Remove User Data", err);
+                    } else {
+                        console.log(data);
+                        resolve(data);
+                    }
+                });
+            });
+        }
         saveUserData(key, string) {
             let AWS = this.AWS;
             // console.log(window['AWS'],this.AWS);
@@ -1211,6 +1236,11 @@
             });
         }
         removeData(id) {
+
+            store.remove(this.table+'-'+id);
+            let fileManager = Polymer.fileManager;
+            fileManager.removeUserData('json/'+this.table+'-'+id+'.json');
+
             let table = this.table;
             let that = this;
             let json = {

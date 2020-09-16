@@ -285,8 +285,9 @@
 
     
 </change-user-banner>
-
-            <change-control-pannel></change-control-pannel>
+            <template is="dom-if" if="{{user.isAdmin}}">
+                <change-control-pannel></change-control-pannel>
+            </template>
             <div class="grid-container">
                 <div id="left">
                     <div id="info">
@@ -329,7 +330,7 @@
             <change-user></change-user>
         </div>
        
-
+        <vaadin-dialog></vaadin-dialog>
     </template>
 </dom-module>
 <script>
@@ -384,15 +385,21 @@
                 else
                     return false;                
             },
+            _add(){
 
-            _add: function(){
-                let user = Polymer.subUser;
-
-                   
+                Polymer.loadComponent('change','change-add-product');
                 let product = {};
                 // store.set('new-product-id',null);
                 // store.set('new-product',product);
-                location.replace("/add-product.html");
+                console.log('Who am I',this.user);
+                store.set('product-owner',this.user);
+                let dzPopup = document.createElement('change-add-product');
+                // dzPopup.myOwner = this.user;
+                dzPopup.isFan = true;
+                dzPopup.owner = this.user;
+                dzPopup.dialog = this.shadowRoot.querySelector('vaadin-dialog');
+                Polymer.componentPopup(dzPopup,'95%','95%');
+                // location.replace("/add-product.html");
 
             },
             ready: function() {
