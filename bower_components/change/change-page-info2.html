@@ -691,11 +691,15 @@ class changePageInfo2 extends Polymer.Element {
     }
     save(){
             console.log('This User',this.user);
+            let myTags = this.shadowRoot.querySelector('#myTags');
+
             this.user['username'] = this.shadowRoot.querySelector('#name1').value;
             this.user['area'] = this.shadowRoot.querySelector('#area1').value;
             // this.user['banner'] = this.$.mp.style.backgroundImage;
             // this.user['head'] = this.$.dp.getAttribute('src');
             this.user['alias'] = this.user['username']+'-'+this.noAlias;
+            this.user['fansAdmin'] = myTags.tags;
+            console.log('User',this.user);
             this.userManager.saveDataWithCache(this.id,this.user);
             // store.set('change-user',this.user);
             this.saveUserPage();

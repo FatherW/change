@@ -15,7 +15,7 @@
             }
 
             #tbar {
-                display: none;
+                display:block;
                 background: #F0F0F0;
                 width: 92.5%;
                 margin: 0 auto;
@@ -82,21 +82,25 @@
             }
         </style>
         <vaadin-dialog></vaadin-dialog>
-        <header>
-            <div id="tbar">
-                <div class="containerB">
-                    <div class="buttonL">
-                        <button id="edit" on-click="_edit">編輯</button>
-                        <change-status></change-status>
-                    </div>
-
-                    <div class="buttonR">
-                        <button id="copy" on-click="_copy">複製</button>
-                        <button id="delete" on-click="_delete">刪除</button>
+        <template is="dom-if" if="{{isEdit}}">
+            <header>
+                <div id="tbar">
+                    <div class="containerB">
+                        <div class="buttonL">
+                            <button id="edit" on-click="_edit">編輯</button>
+                            <change-status></change-status>
+                        </div>
+    
+                        <div class="buttonR">
+                            <button id="copy" on-click="_copy">複製</button>
+                            <button id="delete" on-click="_delete">刪除</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </header>
+            </header>
+        </template>
+
+
     </template>
 </dom-module>
 
@@ -131,10 +135,11 @@
                 this.prodManager.getDataByCache(pid).then(res=>{
                     this.product = res;
                     this.reAlias();
-                    if (user)
-                        if(res.ownerId == user['id'] || user.isAdmin == true){
-                            shadow.querySelector('#tbar').style.display = "block";
-                        }
+                    this.isShow(user,res);
+
+                    this.dataManager.getDataByCache(res['ownerId']).then(res2=>{
+                        console.log('Admin',res2);
+                    });
                 });
 
                 this.dialog = this.shadowRoot.querySelector('vaadin-dialog');
@@ -144,6 +149,36 @@
                 //Check whether login or not (not login -> hide)
            
 
+            },
+            isShow(user,product){
+                let ownerId = product['ownerId'];
+                if (user.isAdmin)
+                    this.isEdit = true;
+               else if (user.id == ownerId)
+                    this.isEdit = true;
+                else {
+                    let userId = String(user.id);
+
+                    this.dataManager.getDataByCache(ownerId).then(res=>{
+                        console.log('Admin',res,res.isFanpage ,res.fansAdmin.indexOf(userId),userId);
+                        if (res.isFanpage && res.fansAdmin.indexOf(userId)>-1)
+                            this.isEdit = true;
+                        else 
+                            this.isEdit = false;
+
+                    },err=>{
+                        console.log('Admin false');
+                            this.isEdit = false;
+                    });
+                }
+
+/*
+                if (user)
+                    if(res.ownerId == user['id'] || user.isAdmin == true){
+                        shadow.querySelector('#tbar').style.display = "block";
+                    }
+
+                    */
             },
             generateNewId(){
                 let no = new Date().getTime() % 10000;
@@ -178,7 +213,7 @@
                 
                 this.dataManager = new DataPackage('_user');
                 this.prodManager = new DataPackage('product');
-                
+                this.isEdit = true;   
             },
             _edit: function(){
                 let user = Polymer.subUser;
