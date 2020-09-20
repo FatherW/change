@@ -201,6 +201,22 @@
                 // Polymer.getContent('https://www.gettv.hk/json/category.json?id='+new Date().getTime()).then(html=>{
                 //     this.categories = JSON.parse(html);
                 // });
+
+                this.label = 'Get Change選單';
+                this.menu = [{
+                            'text': '編輯選單',
+                            'event': 'editMenu',
+                            'source':this
+                        }];
+                this.editMenu=function(){
+                   console.log('Edit Menu');
+                    // console.log('Edit Menu',this.selected);
+                    Polymer.loadComponent('change','change-edit-category');
+                    let popup = document.createElement('change-edit-category');
+                    Polymer.componentPopup(popup,'640px','480px');
+                }
+
+                
                 this.renew();
                 document.addEventListener('renew-categories',e=>{
                     this.renew();
@@ -213,7 +229,11 @@
                 });
             },
             ready: function () {
-
+                let myTopnav = this.shadowRoot.querySelector('#myTopnav');
+                myTopnav.menu = this.menu;
+                myTopnav.label = this.label;
+                myTopnav.editMenu = this.editMenu;
+                
                 if (Polymer.editMode==="admin")
                     new defaultPackage(this);
 

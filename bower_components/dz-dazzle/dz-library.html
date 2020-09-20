@@ -1,4 +1,5 @@
 <link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="default-package/default-package.html" />
 <script src="https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/js/store-2.0.12.min.js"></script>
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.734.0/aws-sdk.min.js" integrity="sha512-ZiXSRxKII4IaQGqnvP+75mQX1CX4ei4Z4AEZm14Bbw+825VaITIKuGFyazhWdA2UsaOARc2f03BPpeJ1D67WuQ==" crossorigin="anonymous"></script> -->
 <link rel="stylesheet" href="https://d25k6mzsu7mq5l.cloudfront.net/cdn6.0/css/font-awesome-4.7.0.min.css" />
@@ -2686,7 +2687,7 @@
     Polymer.loadPage = function(){
      
         console.log('Dz Dazzle Admin');
-        Polymer.loadComponent('dz-dazzle','default-package/default-package');
+        // Polymer.loadComponent('dz-dazzle','default-package/default-package');
         let basePath = "template/" + Polymer.tid + "/" + Polymer.thisPage ;
         
         Polymer.getContent(Polymer.thisPage).then(html=>{
@@ -2728,31 +2729,33 @@
             });
 
             this.pageBodyJs =  bodyJs;
-            document.body.innerHTML = body.innerHTML;
 
-            this.querySelectorAll('*').forEach(item=>{
+            let dzWrapper = document.createElement('dz-wrapper');
+            dzWrapper.innerHTML = body.innerHTML;
+            dzWrapper.querySelectorAll('*').forEach(item=>{
                         new defaultPackage(item);
             });
-            Polymer.shadowDOM = this.cloneNode(true);
+            Polymer.shadowDOM = dzWrapper.cloneNode(true);
             console.log('History',Polymer.shadowDOM,this);
 
+            document.body.innerHTML='';
+            document.body.appendChild(dzWrapper);
+//            document.body.innerHTML = body.innerHTML;
 
 
             window.setTimeout(function(){
-                // let dzBody=document.createElement('dz-wrapper-js');
                 elm = document.createRange().createContextualFragment(bodyJs);
-                // dzBody.appendChild(elm);
-                // dzHead.appendChild(elm);
                 document.body.appendChild(elm);
-                // body.appendChild(dzBody);           
-
+                Polymer.dzElementFire(window,'load',{});
             },3000);
-            
+                        
 
-            // let dzAdmin = document.createElement('dz-admin');
-            // document.body.appendChild(dzAdmin);
-            
-            Polymer.dzElementFire(window,'load',{});
+            if (Polymer.editMode==="admin"){
+                Polymer.loadComponent("dz-dazzle", "dz-admin");
+                let dzAdmin = document.createElement('dz-admin');
+                document.body.appendChild(dzAdmin);
+            }
+
         });
 
     };

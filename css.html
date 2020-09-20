@@ -6,16 +6,17 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <script src="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-    <link rel="import" href="/bower_components/change/change-loader.html">
+<!--    <link rel="import" href="/bower_components/change/change-loader.html"> -->
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <!-- <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"> -->
     <title>Home - Change</title>
-    <link rel="stylesheet" href="css/style.css">
+    <!-- <link rel="stylesheet" href="css/style.css"> -->
+    <link rel="stylesheet" href="css/newCSS.css">
     <meta name="google-signin-scope" content="profile email">
     <meta name="google-signin-client_id" content="755964351228-2emctcoq1o2nj5vpqitv4j28411jj7jk.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async="" defer=""></script>
@@ -104,17 +105,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <!-- <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"> -->
     <title>Home - Change</title>
-    <!-- <link rel="import" href="/bower_components/change/change-itemspecial.html">
-    <link rel="import" href="/bower_components/change/change-things.html"> -->
-    <link rel="import" href="/bower_components/change/change-footer.html">
-
-    <!-- <link rel="import" href="/bower_components/change/change-edit-product.html?id=1597419840570">
-    <link rel="import" href="/bower_components/change/change-slidelist.html?id=1597419840570">
-    <link rel="import" href="/bower_components/change/change-in-item.html?id=1597419840570"> -->
-
-    <link rel="stylesheet" href="css/style.css">
     <meta name="google-signin-scope" content="profile email">
     <meta name="google-signin-client_id" content="755964351228-2emctcoq1o2nj5vpqitv4j28411jj7jk.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async="" defer="" gapi_processed="true"></script>
@@ -443,7 +435,82 @@
     </change-footer>
     <button class="googleloginname" style="display:none;">writegoogle</button>
     <!-- <div class="g-signin2" data-onsuccess="onSignIn">i mgoogle</div> -->
+<script>
+    
+        let html ='';
+		let count = document.styleSheets.length;
+        for (let i = 0; i < count; i++) {
+			let sheet = document.styleSheets[i];
+            
 
+            try {
+                    // console.log('CSS',sheet.cssRules);
+                    let ruleList = sheet.cssRules;
+                    console.log('Rule List',ruleList);
+
+                    for (let i=0;i<ruleList.length; i++) {
+                            let rule = ruleList[i];
+                            let mediaHtml = '';
+                            if (rule.conditionText) {
+                                    html = html + rule.cssText+"\n";
+                            } 
+
+
+//                            console.log('Selector',rule.selectorText,ruleList.length);
+                            if (checkExist(rule)) {
+                                // console.log('CSS',rule);
+                                html =html + rule.cssText +"\n";
+                            // Hover revise
+                                // if (rule.cssText.indexOf(":hover")>-1) {
+                                //     let newRule = rule.cssText;
+                                //     newRule = newRule.replace(":hover","[hover]");
+                                //     // console.log('CSS',newRule);
+                                //     sheet.insertRule(newRule,sheet.cssRules.length); 
+                                // }
+                            }
+
+                        }
+
+                    // for (let rule of ruleList) {
+                        
+                    //     if (checkExist(rule)) {
+                    //         // console.log('CSS',rule);
+                    //         html =html + rule.cssText +"\n";
+                    //     // Hover revise
+                    //         if (rule.cssText.indexOf(":hover")>-1) {
+                    //             let newRule = rule.cssText;
+                    //             newRule = newRule.replace(":hover","[hover]");
+                    //             // console.log('CSS',newRule);
+                    //             sheet.insertRule(newRule,sheet.cssRules.length); 
+                    //         }
+                    //     }
+                    // }
+            } catch (error) {
+                console.error(error);
+            }
+
+        }
+        console.log('CSS',html);
+
+function checkExist(rule){
+    try {
+        let selector = rule.selectorText;
+        console.log('Selector',selector,document.querySelector(selector));
+
+        let ck = selector.replace(":hover","");
+        ck = ck.replace("::after","");
+        ck = ck.replace("::before","");
+
+        if (document.querySelector(ck))
+            return true;
+        else
+            return false;
+    } catch(error){
+        return false;
+    }
+
+}
+</script>
 
 
 </body>

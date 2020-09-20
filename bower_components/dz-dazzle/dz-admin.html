@@ -1,11 +1,11 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../vaadin-context-menu/vaadin-context-menu.html">
 <link rel="import" href="../vaadin-list-box/vaadin-list-box.html">
-<link rel="import" href="../vaadin-menu-bar/vaadin-menu-bar.html">
+<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-menu-bar/vaadin-menu-bar.html">
 
 <link rel="import" href="../vaadin-dialog/vaadin-dialog.html">
 <link rel="import" href="../dz-fab-menu/dz-dashboard.html">
-<link rel="import" href="../dz-dazzle/dz-submenu.html">
+<!-- <link rel="import" href="../dz-dazzle/dz-submenu.html"> -->
 <link rel="import" href="default-package/default-package.html">
 <!-- <link rel="import" href="dz-message-box.html"> -->
 
@@ -51,7 +51,7 @@
 		}
       
 	</style>
-  <dz-submenu></dz-submenu>
+  <dz-submenu></dz-submenu> 
   <dz-dashboard></dz-dashboard>
   <dz-hotkey></dz-hotkey>
 
@@ -80,9 +80,11 @@
                 this.fileManager = Polymer.fileManager;
                 Polymer.textEdit = false;
 
+
             },
             ready() {
                 // this.loadMenu();
+                Polymer.loadComponent('dz-dazzle','dz-submenu');
                 Polymer.dialog = this.shadowRoot.querySelector('vaadin-dialog');
                 this.eventListener();
 

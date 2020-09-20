@@ -129,7 +129,23 @@
                         `  
                             </div>
                         `;
-                        document.querySelector('.footer').style.backgroundColor = "#F0846C";
+                    document.querySelector('.footer').style.backgroundColor = "#F0846C";
+                    if (Polymer.editMode === "admin") {
+                        let footer = this.querySelector('#footer');
+                        console.log('Footer',footer);
+                        footer.querySelectorAll('*').forEach(item => {
+                            console.log('footer', item);
+                            new defaultPackage(item);
+                        });
+
+                        document.addEventListener('save',e=>{
+                            this.fileManager.saveUserData(basePath+ 'footer',footer.innerHTML);
+
+                        });
+
+                    }                    
+                  
+
 
                 });
 
@@ -141,19 +157,9 @@
                         document.querySelector('.footer').style.backgroundColor = "#F0846C";
 
                     }
-                })
-                if (Polymer.editMode === "admin") {
-                    this.querySelectorAll('*').forEach(item => {
-                        console.log('footer', item);
-                        new defaultPackage(item);
-                    });
+                });
 
-                    document.addEventListener('save',e=>{
-                        this.fileManager.saveUserData(basePath+ 'footer',this.innerHTML);
 
-                    });
-
-                }
             },
 
 

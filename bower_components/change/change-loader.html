@@ -131,28 +131,23 @@
     Polymer.thisPage = thisPage;
     store.set('dzLicense', Polymer.dzLicense);
 
-
-    
-
-
-
-        Polymer.editMode = editMode;
-        let user = store.get('user') || null;
-        if (user){
-            user['userBucket'] = Polymer.dzLicense['userBucket'];
-            user['tid'] = Polymer.dzLicense['tid'];
-        } else {
-            user = dzLicense;
-            store.set('user',user);
-        }
+    Polymer.editMode = editMode;
+    let user = store.get('user') || null;
+    if (user){
+        user['userBucket'] = Polymer.dzLicense['userBucket'];
+        user['tid'] = Polymer.dzLicense['tid'];
+    } else {
+        user = dzLicense;
+        store.set('user',user);
+    }
 
 
-if (subUser)
-    Polymer.fileManager = new AwsPackage(subUser);
-else if (user)
-    Polymer.fileManager = new AwsPackage(user);
+    if (subUser)
+        Polymer.fileManager = new AwsPackage(subUser);
+    else if (user)
+        Polymer.fileManager = new AwsPackage(user);
 
-console.log('User',subUser,user,Polymer.fileManager);
+    console.log('User',subUser,user,Polymer.fileManager);
 
         Polymer.subUser = store.get('subUser') || null;
         console.log('Edit Mode',editMode);
@@ -168,9 +163,8 @@ console.log('User',subUser,user,Polymer.fileManager);
             Polymer.websiteUrl = Polymer.user["websiteUrl"] || "//" + Polymer.userBucket + "/";
             Polymer.loadPage();
 
-            Polymer.loadComponent("dz-dazzle", "dz-admin");
-            let dzAdmin = document.createElement('dz-admin');
-            document.body.appendChild(dzAdmin);
+
+
 
 
         } else {

@@ -15,6 +15,7 @@
 <link rel="import" href="style-package.html">
 <link rel="import" href="title-package.html">
 
+<script type='text/javascript' src='https://cdn.jsdelivr.net/gh/TSedlar/pseudo-styler@1.0.8/pseudostyler.js'></script> 
 
 <script>
 		Polymer.menuLabel = {
@@ -39,6 +40,37 @@
                 };
 		
 		Polymer.changeList = [];
+
+
+		
+		let count = document.styleSheets.length;
+        for (let i = 0; i < count; i++) {
+			let sheet = document.styleSheets[i];
+            
+
+            try {
+
+                    // console.log('CSS',sheet.cssRules);
+                    let ruleList = sheet.cssRules;
+                    for (let rule of ruleList) {
+                        
+                        if (rule.cssText.indexOf(":hover")>-1) {
+                            console.log('CSS',rule.cssText);
+                            let newRule = rule.cssText;
+                            newRule = newRule.replace(":hover","[hover]");
+                            console.log('CSS',newRule);
+                            sheet.insertRule(newRule,sheet.cssRules.length); 
+
+                        }
+
+
+                    }
+            } catch (error) {
+                console.error(error);
+            }
+
+		}
+
 
 		Polymer.initElement=function(){
 			wrapper.querySelectorAll('*').forEach(item=>{
@@ -96,16 +128,27 @@
 			
 				// Event Listener
 				elm.addEventListener('contextmenu',e=>{
-					console.log('Context Menu',elm);
+					// console.log('Context Menu',elm,elm.menu,elm.label,e.path);
 					let submenu=document.querySelector('dz-admin').shadowRoot.querySelector('dz-submenu');
-					if (e.path[0]===elm)
+					let path = e.path;
+					console.log('Path',path);
+					if (path[0]===elm)
 						submenu.loadMenu(e);
+
+					while(path.length){
+						path = path.slice(1);
+						console.log('Path',path);
+						if (path[0]===elm)
+							submenu.loadMenu(e);
+					}
+
 					e.preventDefault();
 				});
 
 
 				elm.addEventListener('mouseenter', e => {
 					// console.log('Mouse Enter',elm);
+
 					if (!Polymer.editor)
 						Polymer.editing = false;
 					if (elm.mode==='nav'){
@@ -116,16 +159,33 @@
 						Polymer.activeElement = elm;	
 					}
 
+
+
+
+
 				});
+
 
 				elm.addEventListener('mouseout', e => {			
-					// console.log('Mouse Out',elm);
 
+					// console.log('Mouse Out',elm);
 					if (elm.mode==='nav')			
 						elm.removeAttribute('dz-panel', '');
-				});
+					
 
+
+				});
 				elm.addEventListener('mouseover', e => {
+//					let hoverElm = document.querySelector('[hover]');
+					// console.log('Mouse Over',elm);
+
+
+					// let hover = elm.hasAttribute('hover');
+					// if (hover){
+					// 	let style = window.getComputedStyle(elm,':hover');
+					// 	console.log('Focus',style);
+						
+					// }
 					// elm.setAttribute('dz-panel', '');		
 				});
 
@@ -134,6 +194,8 @@
 					document.querySelectorAll('[dz-panel]').forEach(item=>{
 						item.removeAttribute('dz-panel');
 					});
+
+
 				});
 
 				elm.addEventListener('mouseleave', e => {				
