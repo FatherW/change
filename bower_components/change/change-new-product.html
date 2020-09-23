@@ -793,21 +793,27 @@
 
             loadTags() {
                 let shadow = this.shadowRoot;
-                //get and pass tag data
-                let itemtag = "";
-                let tags = document.createElement('div');
-                for (var count = 0; count < this.product['tags'].length; count++) {
-                    let button = document.createElement('button');
-                    button.setAttribute('id', 'tagbutton');
-                    let a = document.createElement('a');
-                    a.setAttribute('href', '/list-product.html?tag=' + this.product['tags'][count]);
-                    a.innerHTML = this.product['tags'][count];
-                    button.appendChild(a);
-                    tags.appendChild(button);
-                    // itemtag += '<button id=\"tagbutton\">' + '<a href="list-product.html?tag=' + encodeURIComponent(res.resolve['tags'][count]) + '">' + res.resolve['tags'][count] + "</a></button>";
+
+                try{
+                    //get and pass tag data
+                    let itemtag = "";
+                    let tags = document.createElement('div');
+                    for (var count = 0; count < this.product['tags'].length; count++) {
+                        let button = document.createElement('button');
+                        button.setAttribute('id', 'tagbutton');
+                        let a = document.createElement('a');
+                        a.setAttribute('href', '/list-product.html?tag=' + this.product['tags'][count]);
+                        a.innerHTML = this.product['tags'][count];
+                        button.appendChild(a);
+                        tags.appendChild(button);
+                        // itemtag += '<button id=\"tagbutton\">' + '<a href="list-product.html?tag=' + encodeURIComponent(res.resolve['tags'][count]) + '">' + res.resolve['tags'][count] + "</a></button>";
+                    }
+                    console.log('Tag', tags);
+                    shadow.querySelector('#t').innerHTML = tags.innerHTML;
+                }catch(e){
+                    shadow.querySelector('#t').innerHTML ='';
                 }
-                console.log('Tag', tags);
-                shadow.querySelector('#t').innerHTML = tags.innerHTML;
+
             },
 
 

@@ -548,6 +548,7 @@
                 this.dataManager.getDataByCache(this.id).then(res=>{
                     console.log('Things',res['productname'],res['id']);
                     this.product = res;
+                    console.log('Product',this.product);
                     // this.saveProductPage();
                     this.userdata(res);
                 });

@@ -492,6 +492,7 @@
                 </div>
 
                 <div class="buttons first">
+                    <button id="save" on-click="_cancel">取消</button>
                     <button id="save" on-click="_saveData">發佈上架</button>
                 </div>
             </div>
@@ -630,7 +631,7 @@
 
             </div>
         </div>
-        <change-orderlist-storage></change-orderlist-storage>
+<!--        <change-orderlist-storage></change-orderlist-storage> -->
 
     </template>
 
@@ -729,6 +730,7 @@
                     this.fileManager = new AwsPackage(user);
 
 
+                console.log('Add Product',this.product);
                 // if (!this.user)
                 //     this.user = user;
                 let shadow = this.shadowRoot;
@@ -738,8 +740,8 @@
                 this.dataManager = new DataPackage('product');
                 this.userManager = new DataPackage('_user');
                 // this.fileManager = new AwsPackage(user);
-                this.owner = store.get('product-owner');
-                console.log('Who am I?(Constructor) ',this.owner,this.isFan);            
+//                this.owner = store.get('product-owner');
+//                console.log('Who am I?(Constructor) ',this.owner,this.isFan);            
                 // if (this.myOwner)
                 //     this.owner = this.myOwner;
                 
@@ -804,8 +806,6 @@
             }
 
             newProduct(){
-                let id = store.get('new-product-id') || null;
-
                 let model =  {
                         "categories": "",
                         "sellerMsg": "",
@@ -822,34 +822,32 @@
                         "pics": ["http://change.dazzle.website.s3.amazonaws.com/files/1/1591944377549.jpeg"],
                         'alias': '',
                         "postStatus":false,
-                        "isPurchase": false,
-                        "ownerId": this.owner['id']
+                        "isPurchase": false
                 };
 
-                // this.product = store.get('new-product') || model;
-                // console.log('Before New ID',this.id,this.product);
-                if (!id){
-                    console.log('New Product');
-                    this.product = model;
-                    this.generateNewId();
-                    this.mode ='add';
-                    this.initProduct();
-                    // this.userManager.getDataByCache(this.product['ownerId']).then(res=>{
-                    //     this.owner = res;
-                    // });
-                } else {
+
+                if (this.product != null){
+                    console.log('Edit Product',this.product);
                     this.mode = 'edit';
-                    this.dataManager.getDataByCache(id).then(res=>{
-                        this.product = res;
-                        this.initProduct();
-                        console.log('Product',this.product);
-                    });
-                    // this.reAlias(0);
+                    this.initProduct();
+                } else {
+                    console.log('Add Product',this.product);
+                    this.product = model;
+                    let user = store.get('change-user') || null;
+                    if (!this.isFan)
+                        this.product['ownerId'] = user['id'];
+                    else 
+                        this.product['ownerId'] = this.owner['id'];
+                    this.generateNewId();
+                    this.mode = 'add';
+                    this.initProduct();
                 }
 
 
+
+
+
     
-                console.log('New ID',this.id, this.product);
                 
             }
 
@@ -858,13 +856,9 @@
 
                 
     //edit mode
-                    let res;                   
-                   // res = JSON.parse(res);
-                   res = this.product;
-                //    this.userManager.getDataByCache(this.product['ownerId']).then(res=>{
-                //        this.owner = res;
-                //    });  
-                
+                //     let res;                   
+                // res = this.product;
+                console.log('Product',this.product);
                 this.bigPic = this.product.pics[0] || "https://www.gettv.hk/img/nopic.png";
                 this.pic1 = this.product.pics[1] || "https://www.gettv.hk/img/nopic.png";
                 this.pic2 = this.product.pics[2] || "https://www.gettv.hk/img/nopic.png";
@@ -872,70 +866,15 @@
                 this.pic4 = this.product.pics[4] || "https://www.gettv.hk/img/nopic.png";
                 if (!this.price)
                    this.price = 10;
+
+                this.userManager.getDataByCache(this.product['ownerId']).then(res=>{this.owner = res;});    
                 
 
-                // this.shadowRoot.querySelectorAll('vaadin-text-field').forEach(elm=>{
-                //     elm.addEventListener('change',e=>{
-                //         console.log('Change');
-                //         let field = elm.getAttribute('field');
-                //         this.product[field] = elm.value;
-                //     });
-                // });
-                // this.shadowRoot.querySelectorAll('vaadin-text-area').forEach(elm=>{
-                //     elm.addEventListener('change',e=>{
-                //         console.log('Change');
-                //         let field = elm.getAttribute('field');
-                //         this.product[field] = elm.value;
-                //     });
-                // });
-
-                // if (typeof(this.product['tags']) == "string") {
-                //     shadow.querySelector('#myTags').tags = [this.product['tags']];
-                // } else {
-                //     shadow.querySelector('#myTags').tags = this.product['tags'];
-
-                // }
-
-                //    console.log('Edit Mode',res);
-
-                //    this.prod = res;
-                //    this.prodprice = res.price || 10;
-                   //SET PROPERTIES
-
-                //    this.CATE = res['categories'] || "";
-                //    this.LIKE = res['like'] || 0;
-                //    this.CREATETIME = res['createTime'] || new Date().getTime();
-                //    this.OWNERID = res['ownerId'] || this.user['id'];
-                //    this.POSTSTATUS = res['postStatus'] || true;
-                //    this.REPLYARRAY = res['replyArray'] || [];
-                //    this.ORDERLIST = res['orderlist'] || [];
-                   console.log('Edit Mode',res);
-
-                //    if (res['isNew'] == true) {
-                //        shadow.querySelector('#vs4').value = "全新";
-
-                //    } else {
-                //        shadow.querySelector('#vs4').value = "二手";
-
-                //    }
-                //    console.log('Edit Mode',res);
-
-                //    if (res['price'] != 0) {
-                //        shadow.querySelector('#free').checked = false;
-                //    }
-
-       
-                   // let lenpic = res['pics'].length;
-                   // console.log('PICS',res['pics']);
-                   // for (i3 = 0; i3 < lenpic; i3++) {
-                   //     shadow.querySelector('#div' + i3).style.backgroundImage = 'url(' + res["pics"][i3] + ')'
-                   // };
-
-            //    this.next = pid;
             }
 
             ready() {
                 super.ready();
+                
                 let user = store.get('change-user') || null;
                 this.user = user;
                 let that = this;
@@ -962,19 +901,27 @@
 
                 // this.userManager.getDataByCache()
 
-                console.log('Who am I? ',this.owner,this.isFan);     
-                this.$.fans.render();
-                this.$.ownerPanel.render();
+//                console.log('Who am I? ',this.owner,this.isFan);     
+              
+              try{
                 this.newProduct();
-                
+                this.vaadin_select();
+
+                // that.fanpage();
+                this.submenu();
+
+              } catch(e){
+                  console.log('Error',e);
+                  alert('技術問題, 不能新增貨品, 請聯絡管理員');
+              }
+
+
+                // this.$.fans.render();
+                // this.$.ownerPanel.render();  
 
                 // if (this.myOwner)
                 //     this.owner = this.myOwner;
 
-                that.vaadin_select();
-
-                // that.fanpage();
-                that.submenu();
 
                 //ENABLE & DISABLE PRICE
                 shadow.querySelector('#free').addEventListener("click", (e) => {
@@ -1060,7 +1007,9 @@
             
                 return true;
             }
-
+            _cancel(){
+                this.dialog.opened = false;
+            }
             _saveData() {
                 console.log('Product',this.product);
                 
@@ -1073,7 +1022,7 @@
                 shadow.querySelector('#save').innerHTML = '上存中...';
 
                 this.product['postStatus'] = true;
-                console.log('DIalog',this.dialog);
+                console.log('DIalog',this.product);
                 this._save();            
                 this.dialog.opened = false;
 
@@ -1207,7 +1156,7 @@
 
                     let meta = document.createElement('meta');
                     meta.setAttribute('name','product-id');
-                    meta.setAttribute('content',this.id);
+                    meta.setAttribute('content',this.product['id']);
                     Polymer.getContent('/product.html').then(content=>{
                         let parser = new DOMParser();
                         let doc = parser.parseFromString(content, "text/html");
@@ -1239,6 +1188,7 @@
                 alias = alias+'-'+ this.noProduct;
                 this.product['alias'] = alias;
                 this.product['createTime'] = new Date().getTime();
+                
                 this.dataManager.saveDataWithCache(this.product['id'],this.product).then(res=>{
                     if (this.mode=="add")
                         this.addUserGoods(this.product['ownerId']);

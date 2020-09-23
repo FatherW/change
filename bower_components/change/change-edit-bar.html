@@ -151,26 +151,34 @@
 
             },
             isShow(user,product){
-                let ownerId = product['ownerId'];
-                if (user.isAdmin)
-                    this.isEdit = true;
-               else if (user.id == ownerId)
-                    this.isEdit = true;
-                else {
-                    let userId = String(user.id);
+                try {
+                    let ownerId = product['ownerId'];
 
-                    this.dataManager.getDataByCache(ownerId).then(res=>{
-                        console.log('Admin',res,res.isFanpage ,res.fansAdmin.indexOf(userId),userId);
-                        if (res.isFanpage && res.fansAdmin.indexOf(userId)>-1)
+                        if (user.isAdmin)
                             this.isEdit = true;
-                        else 
-                            this.isEdit = false;
+                        else if (user.id == ownerId)
+                            this.isEdit = true;
+                        else {
+                            let userId = String(user.id);
 
-                    },err=>{
-                        console.log('Admin false');
-                            this.isEdit = false;
-                    });
+                            this.dataManager.getDataByCache(ownerId).then(res=>{
+                                console.log('Admin',res,res.isFanpage ,res.fansAdmin.indexOf(userId),userId);
+                                if (res.isFanpage && res.fansAdmin.indexOf(userId)>-1)
+                                    this.isEdit = true;
+                                else 
+                                    this.isEdit = false;
+
+                            },err=>{
+                                console.log('Admin false');
+                                    this.isEdit = false;
+                            });
+                        }
+
+                }catch(e){
+                    this.isEdit=false;
                 }
+
+                console.log('Is show edit bar',this.isEdit);
 
 /*
                 if (user)
@@ -214,6 +222,7 @@
                 this.dataManager = new DataPackage('_user');
                 this.prodManager = new DataPackage('product');
                 this.isEdit = true;   
+
             },
             _edit: function(){
                 let user = Polymer.subUser;
@@ -224,6 +233,7 @@
                 let product = this.product;
                 store.set('new-product-id',product['id']);
                 let dzPopup = document.createElement('change-add-product');
+                dzPopup.product = this.product;
                 dzPopup.dialog = this.dialog;
                 Polymer.componentPopup(dzPopup,'95%','95%');
 
@@ -275,6 +285,7 @@
 
                 let dzPopup = document.createElement('change-add-product');
                 dzPopup.dialog = this.dialog;
+                dzPopup.product = product;
                 Polymer.componentPopup(dzPopup,'95%','95%');
 
 
