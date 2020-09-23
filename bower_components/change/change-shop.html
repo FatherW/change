@@ -195,7 +195,7 @@
             <!-- <div style="width: 20px;height: 20px;"><button on-click="run"> try</button></div> -->
             <div id="rightele">
                 <div class="initemtitle" id="viewingcat">
-                    <h2>你正在瀏覽的分類</h2> 
+                    <h2>搜尋結果</h2> 
                     
 
                     <paper-tags-input width="100%" id="myTags">
@@ -206,8 +206,6 @@
                 <change-in-item></change-in-item>
             </div>
         </div>
-        <slot></slot>
-
 
     </template>
 
@@ -248,6 +246,7 @@
                 created: function() {
                     let that = this;
                     this.categories = [];
+                    this.keywords=[];
                     this.tags = [];
                     this.priceStart = 0;
                     this.priceStop = 1000000;
@@ -258,7 +257,9 @@
                     this.checkrange = false;
                     this.fanpage = null;
                     this.oldTags =[];
-                    console.log("changeshop");
+                    console.log("changeshop",location.search);
+                  
+
                 },
                 addTags(val) {
 
@@ -382,6 +383,16 @@
                     })
 
                     let value;
+
+                    document.addEventListener('query-keyword', e => {
+                        value = e.detail.keyword;
+                        this.addTags(value);
+                        this.keywords.push(value);
+                        this.panel.keywords = this.keywords;
+                        this.search();
+
+                    });
+
                     document.addEventListener('query-tags', e => {
                         value = e.detail.tags;
                         this.addTags(value);
@@ -398,6 +409,7 @@
                         } else {
                             isnew = false;
                         }
+                        console.log('Is New',isnew);
                         this.addTags(isNew);
                         this.isNew.push(isNew);
                         this.search();
@@ -417,8 +429,20 @@
                         // this.tags.push(e.detail.district);
                         this.district.push(e.detail.district);
                         this.panel.districts = this.district;
+                        console.log('Search District',this.panel.districts);
                         this.search();
                     });
+
+                    let myTags = this.shadowRoot.querySelector('#myTags');
+                    
+                    myTags.addEventListener('tag-item-remove',e=>{
+                            console.log('E',e);
+                    });
+                    // let shop = document.querySelector('change-shop');
+                    // if (shop != null) {
+                    //     shop.back(this.value);
+                    // }
+
                     document.addEventListener('select-range', e => {
                         let minprice = e.detail.start;
                         let maxprice = e.detail.end;
@@ -464,42 +488,64 @@
 
                     })
 
-                    let loc = decodeURIComponent(location.search);
-                    // let loc = '';
-                    if (loc[1] == 't' && loc[2] == 'a' && loc[3] == 'g' && loc.length > 5) {
-                        let headsearch = "";
-                        for (i = 5; i < loc.length; i++) {
-                            headsearch += loc[i];
-                        }
-                        this.addTags(headsearch);
-                        this.tags.push(headsearch);
-                        this.search();
-                    } else if (loc[1] == "c" && loc[2] == "a" && loc[3] == "t" && loc[4] == "e" && loc.length > 6) {
-                        let headsearch = "";
-                        for (i = 6; i < loc.length; i++) {
-                            headsearch += loc[i];
-                        }
-                        this.addTags(headsearch);
-                        this.categories.push(headsearch);
-                        this.search();
-                    }
-                    ///data from gettv button
-                    let cate = store.get('change-cate') || null;
-                    if (cate) {
-                        console.log("ttttttttt");
-                        this.addTags(cate.main);
-                        let subcat = cate.sub;
-                        subcat.forEach(item => {
-                            this.categories.push(item);
-                        });
-                        store.set('change-cate', null);
-                    }
+                    // let loc = decodeURIComponent(location.search);
+                    // // let loc = '';
+                    // if (loc[1] == 't' && loc[2] == 'a' && loc[3] == 'g' && loc.length > 5) {
+                    //     let headsearch = "";
+                    //     for (i = 5; i < loc.length; i++) {
+                    //         headsearch += loc[i];
+                    //     }
+                    //     this.addTags(headsearch);
+                    //     this.tags.push(headsearch);
+                    //     this.search();
+                    // } else if (loc[1] == "c" && loc[2] == "a" && loc[3] == "t" && loc[4] == "e" && loc.length > 6) {
+                    //     let headsearch = "";
+                    //     for (i = 6; i < loc.length; i++) {
+                    //         headsearch += loc[i];
+                    //     }
+                    //     this.addTags(headsearch);
+                    //     this.categories.push(headsearch);
+                    //     this.search();
+                    // }
+                    // ///data from gettv button
+                    // let cate = store.get('change-cate') || null;
+                    // if (cate) {
+                    //     console.log("ttttttttt");
+                    //     this.addTags(cate.main);
+                    //     let subcat = cate.sub;
+                    //     subcat.forEach(item => {
+                    //         this.categories.push(item);
+                    //     });
+                    //     store.set('change-cate', null);
+                    // }
 
-                    let page = document.querySelector('change-fanpage');
-                    if (page) this.pagetag(page.id);
+                    // let page = document.querySelector('change-fanpage');
+                    // if (page) this.pagetag(page.id);
+                    // this.search();
+
+                    if (location.search) {
+                        let str = location.search.substring(1);
+                        let key,value;
+                        [key,value] = str.split("=");
+                        value = decodeURIComponent(value);
+                        if (key=='tag') {
+                            this.addTags(value);
+                            this.tags.push(value);
+                            this.panel.tags = this.tags;
+                        }
+                        if (key=='cate') {
+                            this.addTags(value);
+                            this.tags.push(value);
+                            this.categories.push(value);
+                            this.panel.categories = this.categories;
+                        }
+                        
+                        console.log('changeshop',this.tags,key,value);
+                    } 
+                    
                     this.search();
-
-                    document.querySelector('#containall').style.display = "none";
+    
+                        document.querySelector('#containall').style.display = "none";
                     // let paperTagsInput = shadow.querySelector('#myTags');
                     // let clearfix = paperTagsInput.shadowRoot.querySelector('.clearfix');
 

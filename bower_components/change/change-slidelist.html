@@ -46,6 +46,8 @@
             #miniimg{
                 width:30px;
                 height:30px;
+                margin: 5px 0px;
+                margin-right: 10px;
             }
 
             /* .address td{
@@ -162,8 +164,7 @@
             }
             
             td {
-                padding-left: 25px;
-                font-size: 13px;
+                font-size: 15px;
             }
             
             .titlecolor {
@@ -174,6 +175,7 @@
                 min-width: 200px;
                 font-size: 12px;
                 height:50px;
+                line-height:50px;
                 border: none;
             }
             
@@ -295,99 +297,100 @@
                 text-align: center;
             }
             }
+
+            .search-wrapper{
+                min-height: 100px;
+                background-color: white;
+                height:120px;
+            }
+            .search-panel{
+                background: white;
+                padding: 5px 15px;
+            }
         </style>
 
     <div id="toptitle">篩選</div>
     <div class="panel_wrapper">
-
-        <table class="table1">
-
-            <tbody><tr>
-                <th class="titlecolor" colspan="2">分類</th>
-            </tr>
-            <tr>
-                <td><change-category></change-category></td>
-            </tr>
-            
-
-
-
-        </tbody></table>
-
-    <table class="table1">
-
-            <tbody><tr>
-                <th class="titlecolor" colspan="2">配件標籤
-            </th></tr>
-            <tr>
-                <td style="
-                padding: 0px;
-            ">
-                    <div class="address">
-                        <img id="miniimg" src="/Website%20Design/listing%20page/img/symbol/listing_page-03.png">
-
-                        <vaadin-text-field id="inputTags" on-keydown="_addTags" placeholder="請輸入標籤" style="width: 90%;"></vaadin-text-field>
-                        <paper-tags-input width="100%" id="myTags" style="display:none;"></paper-tags-input>
-                    </div>
-                    
-                </td>
-                
-
-            </tr>
-
-        </tbody></table>
-        
-
-        <table class="table1">
-            <tbody><tr>
-                <th class="titlecolor">地點</th>
-            </tr>
-            <tr>
-                <td style="
-                padding: 0px;
-            ">
-                    <div class="address">
-                        <img id="miniimg" src="/Website%20Design/listing%20page/img/symbol/location.png">
-                        <change-district></change-district>
-                    </div>
-                    
-                </td>
-
-            </tr>
-        </tbody></table>
-        
-        <table class="table1">
-            <tbody><tr>
-                <th class="titlecolor" colspan="2">商品狀況</th>
-            </tr>
-            <tr>
-                <td>全新</td>
-                <td class="box"><input type="checkbox" name="stat" id="isnew1"></td>
-            </tr>
-            <tr>
-                <td>二手</td>
-                <td class="box"><input type="checkbox" name="stat" id="isnew2"></td>
-
-            </tr>
-
-        </tbody></table>
-        
-        <div id="pricerange">
-
-            <table class="table1">
-
-                <tr>
-                    <th class="titlecolor" colspan="2">價錢範圍</th>
-                </tr>
-                <tr>
-                    <td><div id="renew"><change-range></change-range></div></td>
-
-                </tr>
-                
-            </table>
-
-
+        <div class="search-wrapper">            
+            <div class="titlecolor">
+                    產品名稱
+            </div>
+            <div class="search-panel">
+                <vaadin-text-field value="{{keyword}}"  on-keydown="_searchKeywords" placeholder="請輸入產品名稱" tabindex="0">
+                </vaadin-text-field>
+            </div>
+    
         </div>
+        <div class="search-wrapper">            
+            <div class="titlecolor">
+                分類
+            </div>
+            <div class="search-panel">
+                <change-category></change-category>
+            </div>
+    
+        </div>
+        <div class="search-wrapper">            
+            <div class="titlecolor">
+                配件標籤
+            </div>
+            <div class="search-panel">
+                <div class="address">
+                    <img id="miniimg" src="/Website%20Design/listing%20page/img/symbol/listing_page-03.png">
+
+                    <vaadin-text-field id="inputTags" on-keydown="_addTags" placeholder="請輸入標籤" style="width: 85%;"></vaadin-text-field>
+                    <paper-tags-input width="100%" id="myTags" style="display:none;"></paper-tags-input>
+                </div>
+            </div>
+    
+        </div>
+
+        <div class="search-wrapper">            
+            <div class="titlecolor">
+                地點
+            </div>
+            <div class="search-panel">
+                <div class="address">
+                    <img id="miniimg" src="/Website%20Design/listing%20page/img/symbol/location.png">
+                    <change-district style="width:85%;  "></change-district>
+                </div>
+            </div>
+    
+        </div>
+        <div class="search-wrapper">            
+            <div class="titlecolor">
+                商品狀況
+            </div>
+            <div class="search-panel">
+                <table>
+           
+                    <tr>
+                        <td>全新</td>
+                        <td class="box"><input type="checkbox" name="stat" id="isnew1"></td>
+                        <td>二手</td>
+                        <td class="box"><input type="checkbox" name="stat" id="isnew2"></td>
+                    </tr>
+                </table>
+                
+
+            </div>
+    
+        </div>
+
+        <div class="search-wrapper">            
+            <div class="titlecolor">
+                商品狀況
+            </div>
+            <div class="search-panel">
+                <div id="renew"><change-range></change-range></div>
+                
+
+            </div>
+    
+        </div>
+        
+        
+
         <!-- <button class="titlecolor" id="searchbutt">搜尋</button>
      -->
     </div>
@@ -416,6 +419,20 @@
             },
             created: function() {
                 let that = this;
+            },
+            _searchKeywords(e) {
+                // let myTags = this.shadowRoot.querySelector('#myTags');
+                // let val = this.shadowRoot.querySelector('#inputTags').value;
+                console.log('Keyword',this.keyword);
+                if (e.code === "Enter") {
+                    //myTags._addTag(val);
+                    Polymer.dzFire('query-keyword', {
+                        'detail': {
+                            'keyword': this.keyword
+                        }
+                    });
+                    this.shadowRoot.querySelector('#inputTags').value = "";
+                }
             },
             _addTags(e) {
                 let myTags = this.shadowRoot.querySelector('#myTags');

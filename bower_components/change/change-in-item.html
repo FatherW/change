@@ -81,6 +81,14 @@
                 box-shadow: 0px 4px 8px -1px rgba(50, 49, 56, 0.2);
             }
 
+
+            .no-product{
+                background-image:url(https://www.gettv.hk/img/noproduct.png);
+                background-position:center;
+                background-repeat:no-repeat;
+                min-height:500px;
+            }
+
             @media (max-width: 1292px) {
                 .things-grid-middle-mobile {
                     display: grid;
@@ -213,6 +221,7 @@
                 this.countitem = 0;
                 this.from = 0;
                 this.size = 8;
+                this.keywords =[];
                 this.categories=[];
                 this.tags=[];
                 this.districts =[];
@@ -227,6 +236,8 @@
                     this.ownerId = elm.getAttribute('content');
                 } else 
                     this.ownerId = null;
+
+                
 
             },
             ready: function() {
@@ -279,37 +290,16 @@
             // },
             // search(cats, tags, district, isNew, priceStart, priceEnd, isFree, fanpage) {
         _search(){  
+                console.log('Search');
                 let that = this;
                 let shadow = this.shadowRoot;
                 let panel = shadow.querySelector('#blank');
-                // panel.classList.addClass('loading');
                 shadow.querySelector('.botbutton').style.display = 'block';
-
-            //     .svg {
-            //     background-image: url('/img/loading.svg');
-            //     position: relative;
-            //     background-size: 30px;
-            //     background-position: center center;
-            //     background-repeat: no-repeat;
-            //     width: 100%;
-
-            // }
                 let url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
                 this.dbUrl = url;
-                //////cate Id
-                // let tagsQuery = ['平價','沒有'];
-                // if (isFree == undefined || isFree == null || isFree == false) {
-                //     var isfree2 = false;
-                // } else {
-                //     var isfree2 = true;
-                // }
-                // this.isFree = isfree2;
-                // this.categories =["女裝","其他"];
-                // Henry Code
                 let must =[
                             { "match": { "postStatus":   true  }},
                             { "match": { "isFree": this.isFree }},
-                            // { "match": { "isFanpage": false }},
                         ];
                 // If fanspage, (i.e. has user-id) 
                 if (this.ownerId)
@@ -331,6 +321,21 @@
                 // let tagsArr =[];
                 // let districtArr =[];
 
+                if (this.keywords.length) {
+                    this.keywords.forEach(item=>{
+                        let json = {
+                            "wildcard": {
+                                "productname": "*"+item+"*"
+                            }
+                        }
+                        filter.push(json);                    
+                    });
+
+                    
+                            
+                       
+                }
+
                 if (this.categories.length) {
                         let json = {
                             "terms": {"categories":this.categories}
@@ -351,6 +356,7 @@
                         }
                         filter.push(json);                    
                 }
+                
                 if (this.isNew && !this.isSecondHand) {
                     let json = {
                             "match":{"isNew": true}
@@ -376,6 +382,7 @@
                     filter.push(json);
                 }
 
+                
                 let query={
                     "bool": { 
                         "must": must,
@@ -404,7 +411,7 @@
                 let shop = document.querySelector('change-shop');
                 let list = shop.shadowRoot.querySelector('change-slidelist');
                 list.shadowRoot.querySelector('#renew').innerHTML = '<change-range></change-range>';
-           
+                panel.classList.remove('no-product');
                 Polymer.postData(url, searchParams).then(res => {
                         console.log(res);
                         // panel.classList.removeClass('loading');
@@ -412,8 +419,11 @@
                         if (res.code>0){
                            
                             if (!res.resolve.length) {
-                                panel.innerHTML = "查無貨品";
+                                panel.classList.add('no-product');
+                                panel.innerHTML = '';
+                                // panel.innerHTML = "查無貨品";
                             } else {
+                                panel.classList.remove('no-product');
                                 if (this.from ==0)
                                     panel.innerHTML = '';
 
@@ -448,262 +458,27 @@
                         }
 
                 });
-                // Their Code
 
-                // let Query = [{
-                //     "match": {
-                //         "isFree": isfree2
-                //     }
-                // }];
-
-                // ///fanpage
-                // if (fanpage) {
-                //     Query.push({
-                //         'term': {
-                //             'ownerId': fanpage
-                //         }
-                //     })
-                // }
-
-
-                // ///isfree
-
-                // ////search the categoriews
-                // let cateid = [];
-                // console.log('Cats',cats);
-                // if (cats != undefined || cats != null) {
-                //     if (cats.length > 0) {
-                //         cats.forEach(item => {
-                //             cateid.push({
-                //                 'term': {
-                //                     'categories': item
-                //                 }
-                //             });
-                //         });
-                //     };
-                // };
-                // //////search the isNew
-                // if (isNew != undefined || isNew != null) {
-
-
-                //     if (isNew.length == 1) {
-                //         if (isNew == '全新') {
-                //             var isNewstat = true;
-                //         } else {
-                //             var isNewstat = false;
-                //         }
-                //         Query.push({
-                //             'term': {
-                //                 'isNew': isNewstat
-                //             }
-                //         })
-                //     } else {
-                //         isnewid = [];
-                //     };
-                // };
-
-                // /////search the tags
-                // if (tags != undefined || tags != null) {
-                //     if (tags.length > 0) {
-                //         tags.forEach(item => {
-                //             Query.push({
-                //                 'match': {
-                //                     'tags': item
-                //                 }
-                //             });
-                //         });
-                //     };
-                // };
-
-                // /////search the district
-                // if (district != undefined || district != null) {
-                //     if (district.length > 0) {
-                //         district.forEach(item => {
-                //             Query.push({
-                //                 'term': {
-                //                     'district': district
-                //                 }
-                //             });
-                //         });
-                //     };
-                // };
-
-                // /////search the price range
-                // var fromprice = priceStart;
-                // var toprice = priceEnd;
-
-                // //// the cate query
-                // let paramcate = {
-                //     "action": "searchData",
-                //     "index": "change",
-                //     "type": "product",
-                //     "_source": "price",
-                //     "body": {
-                //         "sort": [{
-                //             "createTime": {
-                //                 "order": "desc"
-                //             }
-                //         }],
-                //         "query": {
-                //             "bool": {
-                //                 "should": cateid
-                //             }
-                //         }
-                //     }
-                // };
-                // let parammust = {
-                //     "action": "searchData",
-                //     "index": "change",
-                //     "type": "product",
-                //     "_source": "price",
-                //     "body": {
-                //         "sort": [{
-                //             "createTime": {
-                //                 "order": "desc"
-                //             }
-                //         }],
-                //         "query": {
-                //             "bool": {
-                //                 "must": Query,
-                //                 "must_not": {
-                //                     'match': {
-                //                         "postStatus": false
-                //                     }
-                //                 }
-                //             }
-                //         },
-                //     }
-                // };
-                // console.log("search price ", fromprice, toprice);
-
-                // console.log(JSON.stringify(paramcate), "wwwwwwwwww", JSON.stringify(parammust));
-                
-                
-
-                // Polymer.postData(url, paramcate).then(res => {
-                //     if (res.code > 0) {
-                //         let shouldid = [];
-                //         let cates = res.resolve;
-                //         cates.forEach(cate => {
-                //             shouldid.push(cate);
-                //         });
-
-                //         Polymer.postData(url, parammust).then(res => {
-                //             if (res.code > 0) {
-
-                //                 let mustid = [];
-                //                 let others = res.resolve;
-                //                 others.forEach(other => {
-                //                     mustid.push(other);
-                //                 });
-
-
-                //                 let theans = [];
-                //                 for (x = 0; x < shouldid.length; x++) {
-                //                     for (y = 0; y < mustid.length; y++) {
-                //                         if (shouldid[x]['_id'] == mustid[y]['_id']) {
-                //                             theans.push(shouldid[x]);
-                //                         }
-                //                     }
-                //                 };
-                //                 this.res = theans;
-                //                 console.log("now all ans", theans);
-                //                 if (toprice > 1 && isfree2 == false) {
-                //                     var price1 = [];
-                //                     var price2 = [];
-                //                     var theans2 = [];
-                //                     theans.forEach(item => {
-                //                         if (item['price'] >= fromprice) {
-                //                             price1.push(item['_id']);
-                //                         }
-                //                         if (item['price'] <= toprice) {
-                //                             price2.push(item['_id'])
-                //                         }
-                //                     });
-                //                     // console.log("price1n2", price1, price2, "from and to", fromprice, toprice);
-                //                     for (x = 0; x < price1.length; x++) {
-                //                         for (y = 0; y < price2.length; y++) {
-                //                             if (price1[x] == price2[y]) {
-                //                                 theans2.push(price1[x])
-                //                             }
-                //                         }
-                //                     };
-                //                     this.res2 = theans2;
-                //                     this.res = [];
-                //                     let check8 = 8;
-                //                     if (theans2.length <= 8) {
-                //                         check8 = theans2.length;
-                //                         shadow.querySelector('#morebutton').style.display = 'none';
-                //                     } else {
-                //                         shadow.querySelector('#morebutton').style.display = 'block';
-                //                     }
-                //                     shadow.querySelector('#blank').innerHTML = "";
-
-                //                     if (theans2.length == 0) {
-                //                         shadow.querySelector('#blank').innerHTML = "查無貨品";
-                //                     } else {
-                //                         for (i = 0; i < check8; i++) {
-                //                             let addi = document.createElement('change-things');
-                //                             addi.setAttribute('id', theans2[i]);
-                //                             shadow.querySelector('#blank').appendChild(addi);
-                //                         }
-                //                     }
-                //                     // console.log("theans1", theans, "theans2", theans2);
-                //                     this.countitem += 8;
-
-
-                //                 } else {
-                //                     this.res2 = theans
-                //                     let check8 = 8;
-                //                     if (theans.length <= 8) {
-                //                         check8 = theans.length;
-                //                         shadow.querySelector('#morebutton').style.display = 'none';
-                //                     } else {
-                //                         shadow.querySelector('#morebutton').style.display = 'block';
-                //                     }
-                //                     shadow.querySelector('#blank').innerHTML = "";
-                //                     for (i = 0; i < check8; i++) {
-                //                         let addi = document.createElement('change-things');
-                //                         addi.setAttribute('id', theans[i]['_id']);
-                //                         shadow.querySelector('#blank').appendChild(addi);
-                //                     }
-                //                     this.countitem += 8;
-                //                 }
-                //                 let shop = document.querySelector('change-shop');
-                //                 let list = shop.shadowRoot.querySelector('change-slidelist');
-                //                 list.shadowRoot.querySelector('#renew').innerHTML = '<change-range></change-range>';
-                //                 let range_cookie = {
-                //                     "query": theans,
-                //                     "from": fromprice,
-                //                     "to": toprice
-                //                 };
-                //                 store.set('change-range', range_cookie);
-                //                 list.shadowRoot.querySelector('change-range').new();
-
-                //             }
-                //         })
-
-
-                //     } else {
-                //         console.log('error')
-                //     }
-                // })
 
             },
 
             removeTags(value){
-
+                console.log('Remove District');
                 let cIndex,tIndex,dIndex;
                 let shadow = this.shadowRoot;
                 cIndex = this.categories.indexOf(value);
                 tIndex = this.tags.indexOf(value);
-                dIndex = this.tags.indexOf(value);
+                dIndex = this.districts.indexOf(value);
+                kIndex = this.keywords.indexOf(value);
+                console.log('Remove District',dIndex,value,this.districts);
                 if (cIndex>-1) 
                     this.categories.splice(cIndex,1);
                 else if (tIndex>-1) 
                     this.tags.splice(tIndex,1);
                 else if (dIndex>-1) 
                     this.districts.splice(dIndex,1);
+                else if (kIndex> -1)
+                    this.keywords.splice(dIndex,1);
                 else if (value=="全新")
                     this.isNew = false;
                 else if (value =="二手")
@@ -716,8 +491,10 @@
                 let panel = shadow.querySelector('#blank');
                 panel.innerHTML = '';
 
+                console.log('Search Tags',this.categories,this.tags,this.districts);
                 this._search();                    
             },
+
             displaymore: function() {
 
 
@@ -725,51 +502,6 @@
                 let shadow = this.shadowRoot;
                 this.from = this.from + this.size;
                 this._search();
-                // let prods = this.res2;
-                // if (this.res.length > 0) {
-                //     prods = this.res;
-
-                // }
-                // if (this.res.length > 0) {
-                //     var storeId = [];
-                //     let check8 = 8;
-                //     if (prods.length - this.countitem < 8) {
-                //         check8 = prods.length - this.countitem;
-                //         if (prods.length - this.countitem <= 8) {
-                //             shadow.querySelector('.botbutton').style.display = 'none';
-                //         }
-                //     }
-                //     for (var i = this.countitem; i < this.countitem + check8; i++) {
-                //         storeId.push(prods[i]['_id'])
-                //     };
-                //     storeId.forEach(id => {
-                //         let addi = document.createElement('change-things');
-                //         addi.setAttribute('id', id)
-                //         shadow.querySelector(".things-grid").appendChild(addi);
-                //     })
-
-                //     this.countitem += 8;
-                // } else {
-
-                //     var storeId = [];
-                //     let check8 = 8;
-                //     if (prods.length - this.countitem < 8) {
-                //         check8 = prods.length - this.countitem;
-                //         shadow.querySelector('.botbutton').style.display = 'none';
-
-                //     }
-                //     for (var i = this.countitem; i < this.countitem + check8; i++) {
-                //         storeId.push(prods[i])
-                //     };
-                //     storeId.forEach(id => {
-                //         let addi = document.createElement('change-things');
-                //         addi.setAttribute('id', id)
-                //         shadow.querySelector(".things-grid").appendChild(addi);
-                //     })
-
-                //     this.countitem += 8;
-
-                // }
 
             },
 

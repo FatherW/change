@@ -245,16 +245,19 @@ its values is > 50%. */
                     
 
                     // noUiSlider.destroy();
-                    noUiSlider.create(rangeSlider, {
-                        start: [this.data1, this.data2],
-                        step: 1,
-                        range: {
-                            'min': [0],
-                            'max': [maxPrice]
-                        },
-                        format: moneyFormat,
-                        connect: true
-                    });
+                    try {
+                        noUiSlider.create(rangeSlider, {
+                            start: [this.data1, this.data2],
+                            step: 1,
+                            range: {
+                                'min': [0],
+                                'max': [maxPrice]
+                            },
+                            format: moneyFormat,
+                            connect: true
+                        });
+                    }
+
 
 
 

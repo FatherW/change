@@ -1084,6 +1084,29 @@
 
         }
 
+        searchDataByQuery(query) {
+            let table = this.table;
+            let that = this;
+            let params = {
+                action: "searchData",
+                index: this.uid,
+                type: table,
+                body: {
+                    query: query
+                }
+            };
+            console.log("Params", params);
+            return new Promise(function(resolve, reject) {
+                that.postData(that.dbUrl, params).then((result) => {
+                    if (result.code < 0) {
+                        reject();
+                    } else {
+                        resolve(result.resolve);
+                    }
+                });
+            });
+        }
+
         matchData(json) {
             let table = this.table;
             let that = this;
