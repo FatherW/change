@@ -225,8 +225,8 @@
                 this.categories=[];
                 this.tags=[];
                 this.districts =[];
-                this.isNew =false;
-                this.isSecondHand = false;
+                this.isNew =true;
+                this.searchAll = true;
                 this.minPrice = null;
                 this.maxPrice = null;
                 this.isFree = false;
@@ -356,19 +356,25 @@
                         }
                         filter.push(json);                    
                 }
+
+                if (!this.searchAll) {
+                    json = {"match":{"isNew": this.isNew} }
+                    filter.push(json);   
+                }
+
                 
-                if (this.isNew && !this.isSecondHand) {
-                    let json = {
-                            "match":{"isNew": true}
-                        }
-                    filter.push(json);                    
-                }
-                if (!this.isNew && this.isSecondHand) {
-                    let json = {
-                        "match":{"isNew": false}
-                        }
-                    filter.push(json);                    
-                }
+                // if (this.isNew && !this.isSecondHand) {
+                //     let json = {
+                //             "match":{"isNew": true}
+                //         }
+                //     filter.push(json);                    
+                // }
+                // if (!this.isNew && this.isSecondHand) {
+                //     let json = {
+                //         "match":{"isNew": false}
+                //         }
+                //     filter.push(json);                    
+                // }
                 
                 if (this.minPrice != null && this.maxPrice!=null) {
                     let json = {
@@ -464,13 +470,14 @@
 
             removeTags(value){
                 console.log('Remove District');
-                let cIndex,tIndex,dIndex;
+                let cIndex,tIndex,dIndex,kIndex,nIndex;
                 let shadow = this.shadowRoot;
                 cIndex = this.categories.indexOf(value);
                 tIndex = this.tags.indexOf(value);
                 dIndex = this.districts.indexOf(value);
                 kIndex = this.keywords.indexOf(value);
                 console.log('Remove District',dIndex,value,this.districts);
+
                 if (cIndex>-1) 
                     this.categories.splice(cIndex,1);
                 else if (tIndex>-1) 
@@ -479,15 +486,13 @@
                     this.districts.splice(dIndex,1);
                 else if (kIndex> -1)
                     this.keywords.splice(dIndex,1);
-                else if (value=="全新")
-                    this.isNew = false;
-                else if (value =="二手")
-                    this.isSecondHand = false;
                 else {
                     this.minPrice = null;
                     this.maxPrice = null;
                 } 
-                
+                if (value==="全新" || value==="二手" ) 
+                    this.searchAll = true;
+
                 let panel = shadow.querySelector('#blank');
                 panel.innerHTML = '';
 

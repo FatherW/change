@@ -195,7 +195,7 @@
             <!-- <div style="width: 20px;height: 20px;"><button on-click="run"> try</button></div> -->
             <div id="rightele">
                 <div class="initemtitle" id="viewingcat">
-                    <h2>搜尋結果</h2> 
+                    <h2>搜尋結果({{product_status}})</h2> 
                     
 
                     <paper-tags-input width="100%" id="myTags">
@@ -257,6 +257,7 @@
                     this.checkrange = false;
                     this.fanpage = null;
                     this.oldTags =[];
+                    this.product_status="全新及二手";
                     console.log("changeshop",location.search);
                   
 
@@ -401,18 +402,27 @@
                         this.search();
 
                     });
-                    document.addEventListener('query-isNew', e => {
-                        let isNew = e.detail.isNew;
-                        if (isNew == "全新") {
-                            isnew = true;
-
+                    document.addEventListener('query-renew', e => {
+                        let isNew = e.detail.renew;
+                        let isReset = e.detail.reset;
+                        if (isReset) {
+                            this.product_status="全新及二手";
+                            this.isNew =[];
+                            this.panel.searchAll = true;
+                            this.search();
                         } else {
-                            isnew = false;
+                            if (isNew){
+                                this.product_status="全新";
+                                this.panel.isNew = true;
+                                this.panel.searchAll = false;
+                                this.search();
+                            } else {
+                                this.product_status="二手";
+                                this.panel.isNew = false;
+                                this.panel.searchAll = false;
+                                this.search();
+                            }
                         }
-                        console.log('Is New',isnew);
-                        this.addTags(isNew);
-                        this.isNew.push(isNew);
-                        this.search();
 
                     });
                     document.addEventListener('select-category', e => {

@@ -4,9 +4,11 @@
 <link rel="import" href="./change-in-item.html">
 <link rel="import" href="./change-category.html">
 <link rel="import" href="./change-district.html">
+<link rel="import" href="./change-product-status.html">
+
 <link rel="import" href="./change-range.html">
 <!-- <link rel="import" href="change-like2.html"> -->
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-accordion/vaadin-accordion.html">
+<!-- <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-checkbox/vaadin-checkbox.html"> -->
 <dom-module id="change-slidelist">
 
     <template>
@@ -362,7 +364,11 @@
                 商品狀況
             </div>
             <div class="search-panel">
-                <table>
+                <change-product-status></change-product-status>
+                <input type="checkbox" id="allStatus" checked on-click="_toggle">
+                <label for="selectAll">全選</label>
+                <!-- <vaddin-checkbox value="全選" checked></vaddin-checkbox> -->
+                <!-- <table>
            
                     <tr>
                         <td>全新</td>
@@ -370,7 +376,7 @@
                         <td>二手</td>
                         <td class="box"><input type="checkbox" name="stat" id="isnew2"></td>
                     </tr>
-                </table>
+                </table> -->
                 
 
             </div>
@@ -419,6 +425,14 @@
             },
             created: function() {
                 let that = this;
+            },
+            _toggle(){
+                  let check=  this.shadowRoot.querySelector('#allStatus').checked;
+                  if (check)
+                      this.shadowRoot.querySelector('change-product-status').disable();
+                  else
+                    this.shadowRoot.querySelector('change-product-status').enable();
+                   
             },
             _searchKeywords(e) {
                 // let myTags = this.shadowRoot.querySelector('#myTags');

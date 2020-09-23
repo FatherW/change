@@ -1,0 +1,197 @@
+<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/polymer/polymer.html">
+
+<dom-module id="change-product-status">
+    <template>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            .status-container {
+                color: white;
+                font-family: sans-serif, Microsoft JhengHei;
+                margin: 0;
+            }
+
+            .switch {
+                position: relative;
+                display: inline-block;
+                width: 100px;
+                height: 35px;
+            }
+
+            .switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+            .slider {
+                position: absolute;
+                cursor: pointer;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: red;
+                -webkit-transition: .4s;
+                transition: .4s;
+                padding-top: 4px;
+                padding-left: 10px;
+                border: none;
+                width: auto;
+            }
+
+            .slider span {
+                color: white;
+            }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 26px;
+                width: 48px;
+                left: 2px;
+                bottom: 4px;
+                background-color: white;
+                -webkit-transition: .4s;
+                transition: .4s;
+            }
+
+            input:checked+.slider {
+                background-color: green;
+            }
+
+            input:focus+.slider {
+                box-shadow: 0 0 1px green;
+            }
+
+            input:checked+.slider:before {
+                -webkit-transform: translateX(45px);
+                -ms-transform: translateX(45px);
+                transform: translateX(45px);
+            }
+
+            /* Rounded sliders */
+            .slider.round {
+                border-radius: 34px;
+            }
+
+            .slider.round:before {
+                border-radius: 50%;
+            }
+            .disable{
+                opacity:0.5;
+            }
+            @media only screen and (max-width: 640px) {
+                .switch{
+                    width: 80px;
+                }
+
+                .slider {
+                    padding-top: 5px;
+                    padding-left: 5px;
+                    font-size: 14px;
+                }
+
+                .slider:before {
+                    width: 38px;
+                }
+
+                input:checked+.slider:before {
+                    transform: translateX(36px);
+                }
+            }
+        </style>
+
+        <div class="status-container">
+            <label class="switch">
+                <input class="status" type="checkbox" checked>
+                <span class="slider">全新 | 二手</span>
+            </label>
+        </div>
+
+    </template>
+</dom-module>
+
+<script>
+    (function() {
+        Polymer({
+            is: 'change-product-status',
+            properties: {
+                "id": {
+                    "type": String
+                },
+                "removeid": {
+                    "type": String
+                }
+            },
+            created: function() {
+
+                // this.dataManager = new DataPackage("product");
+                // this.id = document.head.querySelector('meta[name=product-id]').getAttribute('content') || null;
+            },
+
+            disable(){
+                let cStatus = this.shadowRoot.querySelector('.status');
+                let check = cStatus.checked;
+                this.shadowRoot.querySelector('.status').disabled = true;
+                this.switch.classList.add('disable');
+                Polymer.dzFire('query-renew', {
+                    'detail': {
+                        'renew': check,
+                        'reset':true
+                    }
+                });
+
+            },
+            enable(){
+                let cStatus = this.shadowRoot.querySelector('.status');
+                let check = cStatus.checked;
+                this.shadowRoot.querySelector('.status').disabled = false;
+                this.switch.classList.remove('disable');
+                Polymer.dzFire('query-renew', {
+                    'detail': {
+                        'renew': check,
+                        'reset':false
+                    }
+                });
+            },
+
+            ready: function() {
+
+                let that = this;
+                let shadow = this.shadowRoot;
+                this.switch = this.shadowRoot.querySelector('.status-container');
+                this.disable();
+                //Eventlistener for the switch button
+                let cStatus = shadow.querySelector('.status');
+                cStatus.addEventListener('click',e=>{
+                    let check = cStatus.checked;
+                    Polymer.dzFire('query-renew', {
+                        'detail': {
+                            'renew': check,
+                            'reset':false
+                        }
+                    });
+                    console.log('Check',check);
+                });
+                //Get back status for switch button from Postman
+            },
+
+            //UP & DOWN FUNCTION
+            upStock: function() {
+                let shadow = this.shadowRoot;
+                let check = shadow.querySelector('.status').checked;
+                // let loc = location.search;
+                // let pid = this.id;
+                // let posit = 0;
+
+
+                // this.product['postStatus'] = check;
+                // this.dataManager.saveDataWithCache(this.id,this.product);
+            },
+
+
+
+
+        });
+    })();
+</script>
