@@ -1,8 +1,5 @@
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/polymer/polymer.html">
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-text-field/vaadin-email-field.html">
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-text-field/vaadin-password-field.html">
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-checkbox/vaadin-checkbox.html">
-
+<script type="text/javascript" src="/bower_components/crypto-js/crypto-js.js"></script>
 <dom-module id="change-reset">
 
     <template>
@@ -138,15 +135,20 @@
                     // console.log("tok:", tok);
                     var expireDate = tok + 604800000; //604800000 = 1 week time in milliseconds
                     // console.log("expireDate:", expireDate);
-                    this.forgetpwTok(tok, email, expireDate);
+                    // this.forgetpwTok(tok, email, expireDate);
 
+                    let json = {
+                        "email":email,
+                        "action":'reset'
+                    }
+                    let token = Polymer.encryptToken(json);
 
                     let resetUrl =
                         "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
                     let params = {
                         "action": "sendEmail",
                         "email": email,
-                        "token": tok
+                        "token": token
                     };
                     console.log("Reset JSON", params);
                     Polymer.postData(resetUrl, params).then(res => {
@@ -158,6 +160,12 @@
                     });
                 }
 
+            },
+            sendResetEmail(email,token){
+                Polymer.getContent('/email-template/sendresetemail.html').then(html=>{
+                    html=html.replace("[[token]]",token);
+                    Polymer.sendEmail(email,"重設你的密碼",html).then(res=>{alert('成功發送重設電郵');},err=>{alert('不能發送，請檢查電郵是否正確')});
+                });
             },
 
             forgetpwTok: function (a, b, c) {
