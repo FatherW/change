@@ -57,8 +57,8 @@
                 <button id="login" on-click="_login">/ 登入</button>
             </div>
         </template>
-        <vaadin-dialog id="register"></vaadin-dialog>
-        <vaadin-dialog id="registerpop"></vaadin-dialog>
+        <vaadin-dialog></vaadin-dialog>
+        <!-- <vaadin-dialog id="registerpop"></vaadin-dialog> -->
 
     </template>
 
@@ -192,11 +192,13 @@ class changeUserPanel extends Polymer.Element {
                 Polymer.loadComponent('change','change-register');
                 let shadow = this.shadowRoot;
                 let that = this;
+                let dialog = shadow.querySelector('vaadin-dialog');
+                let dzPopup;
                 let user = store.get('change-user');
                 if (user == null) {
-                    let dialog = shadow.querySelector('vaadin-dialog#register');
+                    dzPopup = document.createElement('change-register');
                     dzPopup.dialog = dialog;
-                    Polymer.componentPopup(dzPopup,'400px','600px');
+                    Polymer.componentPopup(dzPopup,'400px','800px');
    
                     // Polymer.popup(dialog, "change", "change-register", "400px", "600px");
                 } else {

@@ -195,7 +195,7 @@
             <!-- <div style="width: 20px;height: 20px;"><button on-click="run"> try</button></div> -->
             <div id="rightele">
                 <div class="initemtitle" id="viewingcat">
-                    <h2>搜尋結果({{product_status}})</h2> 
+                    <h2>搜尋結果({{product_status}}){{priceMsg}}</h2> 
                     
 
                     <paper-tags-input width="100%" id="myTags">
@@ -258,6 +258,7 @@
                     this.fanpage = null;
                     this.oldTags =[];
                     this.product_status="全新及二手";
+                    this.priceMsg = '';
                     console.log("changeshop",location.search);
                   
 
@@ -452,49 +453,25 @@
                     // if (shop != null) {
                     //     shop.back(this.value);
                     // }
-
-                    document.addEventListener('select-range', e => {
-                        let minprice = e.detail.start;
-                        let maxprice = e.detail.end;
-                        var storeminprice = [];
-                        var storemaxprice = [];
-                        var storeminposit = [];
-                        var storemaxposit = [];
-                        ////from($xx,xxx) to ($xxxxx)
-                        for (countminprice = 0; countminprice < minprice.length; countminprice++) {
-                            if (minprice[countminprice] != ',') {
-                                storeminprice.push(minprice[countminprice]);
-                            }
-
-                        }
-                        for (countmaxprice = 0; countmaxprice < maxprice.length; countmaxprice++) {
-                            if (maxprice[countmaxprice] != ",") {
-                                storemaxprice.push(maxprice[countmaxprice]);
-                            }
-                        }
-                        if (this.checkrange == false) {
-                            this.checkrange = true;
-                        } else {
-                            let value = "$" + this.priceStart + " - $" + this.priceStop;
-                            console.log("1111111111", value)
-                                // this.back(value);
-                            let papertag = this.shadowRoot.querySelector('paper-tags-input')._getTags();
-                            deletetag = this.shadowRoot.querySelector('paper-tags-input')._onTagItemRemove({
-                                "detail": {
-                                    "index": papertag.indexOf(value)
-                                }
-
-                            });
-                        }
-
-                        this.priceStart = parseInt(storeminprice.join("").toString());
-                        this.priceStop = parseInt(storemaxprice.join("").toString());
-                        let msgrange = "$" + this.priceStart + " - $" + this.priceStop;
-                        this.addTags(msgrange);
+                    document.addEventListener('reset-range', e => {
+                        this.priceStart = null;
+                        this.priceStop = null;
+                        this.priceMsg = '';
                         this.panel.minPrice = this.priceStart;
                         this.panel.maxPrice = this.priceStop; 
                         this.search();
 
+                    })
+
+                    document.addEventListener('select-range', e => {
+                        this.priceStart = e.detail.start;
+                        this.priceStop = e.detail.end;
+                        let msgrange = "$" + this.priceStart + " - $" + this.priceStop;
+                        this.priceMsg = ":"+msgrange;
+                        // this.addTags(msgrange);
+                        this.panel.minPrice = this.priceStart;
+                        this.panel.maxPrice = this.priceStop; 
+                        this.search();
 
                     })
 

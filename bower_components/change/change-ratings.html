@@ -1,5 +1,6 @@
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/polymer/polymer.html">
+
 <link href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/dz-menu/css/style.html" rel="import" />
+<script type="text/javascript" src="/bower_components/crypto-js/crypto-js.js"></script>
 <dom-module id="change-ratings">
     <template>
         <style>
@@ -150,8 +151,22 @@
 
             created: function() {
 
+                // let email = "henry930@gmail.com";
+                // let json = {
+                //         "email":email,
+                //         "action":'ratings'
+                //     }
+                // this.token = Polymer.encryptToken(json);
 
-
+                let loc = location.search;
+                loc = loc.substring(1);
+                let key,token;
+                [key,token] = loc.split("=");
+                    console.log('Token',token);
+                if (key==="token")
+                    this.token = token;
+                this.userManager = new DataPackage("_user");
+                this.tokenManager = new DataPackage("token");
             },
             ready: function() {
                 console.log("Ready here:");
@@ -164,13 +179,45 @@
                         this.userRate = item.value;
                     });
                 });
-
+                console.log('JSON',this.token);
 
             },
 
             _submit: function() {
                 let that = this;
                 let shadow = this.shadowRoot;
+
+                console.log('User Rate',this.userRate);
+
+                
+                Polymer.decryptToken(this.token).then(json=>{
+                    console.log('JSON',json);
+                    this.userManager.getDataByCache(json['email']).then(res=>{
+                            console.log('Rating User',res);
+                            let numberRate = res['numberRate'] || 0;
+                            let score = parseFloat(res['score']) || 5;
+                            let newRate = parseFloat(this.userRate);
+                            if (!numberRate)
+                                numberRate =1;
+
+                            score = (score*numberRate + newRate) / (numberRate+1);
+                            numberRate++;
+                            // score = 5;
+                            // numberRate = 0;
+                            res['score'] = score;
+                            res['numberRate'] = numberRate;
+                            console.log('Score',score,this.userRate,numberRate);
+                            console.log('Rating User',res);
+                            this.userManager.saveDataWithCache(res['id'],res);
+                            this.tokenManager.removeData(this.token);
+
+                            alert('已評分');
+                            location.href="/index.html";
+                    },err=>{
+                        alert('找不到評分用家, 或評分過期');
+                        location.href="/index.html";
+                    });
+                });
 
 
                 let loc = location.search;
@@ -181,40 +228,40 @@
                 }
                 console.log("sellerid", sellerid);
 
-                let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
+                // let Url = "https://41khtanrje.execute-api.ap-northeast-1.amazonaws.com/prod/Dazzle-elasticSearchController";
 
-                let userurl = "/json/user-" + sellerid + ".json?id=" + new Date().getTime();
-                Polymer.getContent(userurl).then(str => {
-                    res = JSON.parse(str);
+                // let userurl = "/json/user-" + sellerid + ".json?id=" + new Date().getTime();
+                // Polymer.getContent(userurl).then(str => {
+                //     res = JSON.parse(str);
 
-                    // console.log("res.resolve", res.resolve);
-                    let cs = res['score'];
-                    let numberRate = res['numberRate'];
+                //     // console.log("res.resolve", res.resolve);
+                //     let cs = res['score'];
+                //     let numberRate = res['numberRate'];
 
-                    let scoreN = (numberRate * cs + this.userRate) / (numberRate + 1);
-                    let score = scoreN.toFixed(1);
-                    numberRate = numberRate + 1;
+                //     let scoreN = (numberRate * cs + this.userRate) / (numberRate + 1);
+                //     let score = scoreN.toFixed(1);
+                //     numberRate = numberRate + 1;
 
-                    let param2 = {
-                        "action": "addData",
-                        "index": "change",
-                        "type": "_user",
-                        "id": sellerid,
-                        "body": {
-                            "numberRate": numberRate,
-                            "score": score
-                        }
-                    }
-                    Polymer.postData(Url, param2).then(res => {
-                        if (res.code > 0) {
-                            location.replace("./getTv.html");
-                        } else {
-                            alert("Err: Rating update unsuccessful!");
-                        }
-                    });
+                //     let param2 = {
+                //         "action": "addData",
+                //         "index": "change",
+                //         "type": "_user",
+                //         "id": sellerid,
+                //         "body": {
+                //             "numberRate": numberRate,
+                //             "score": score
+                //         }
+                //     }
+                //     Polymer.postData(Url, param2).then(res => {
+                //         if (res.code > 0) {
+                //             location.replace("./getTv.html");
+                //         } else {
+                //             alert("Err: Rating update unsuccessful!");
+                //         }
+                //     });
 
 
-                });
+                // });
             }
 
         });

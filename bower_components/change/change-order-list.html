@@ -256,11 +256,15 @@
 
                     // let to = that.seller['email'];
                     let subject = "賣家已經接受你的訂單-"+that.order['id'];
-                    let json = {
-                        "order":that.order,
-                        "seller":that.seller,
-                        "buyer":that.buyer,
-                        "product":that.product
+                    // let json = {
+                    //     "order":that.order,
+                    //     "seller":that.seller,
+                    //     "buyer":that.buyer,
+                    //     "product":that.product
+                    // }
+                    json = {
+                        "email":this.seller['id'],
+                        "action":'ratings'
                     }
                     let token = Polymer.encryptToken(json);
                     let replyArr = [];

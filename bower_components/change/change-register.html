@@ -1,9 +1,10 @@
-<link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/polymer/polymer.html">
+
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-text-field/vaadin-email-field.html">
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-checkbox/vaadin-checkbox.html">
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-select/vaadin-select.html">
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-dialog/vaadin-dialog.html">
 <link rel="import" href="change-login.html">
+<script type="text/javascript" src="/bower_components/crypto-js/crypto-js.js"></script>
 
 <dom-module id="change-register">
 
@@ -99,7 +100,6 @@
         </style>
         <div class="register-grid">
             <span class="font-sizeh1">註冊</span>
-            <span style="font-size: 80%;">———&nbsp--------&nbsp———</span>
             <div style="display: inline-flex;">
                 <!-- <button class="logoFacebook" on-click="log">
                     <img src="img/icon/Facebook.png" class="logoFacebook">&nbspFacebook
@@ -122,14 +122,14 @@
                     error-message="Please enter a valid email address" required clear-button-visible>
                 </vaadin-email-field>
             </div>
-            <div>
+            <!-- <div>
                 <vaadin-password-field id="pass1" label="密碼" class="padding-none" name="pass"
                     error-message="Please enter a valid password" required clear-button-visible></vaadin-password-field>
             </div>
             <div>
                 <vaadin-password-field id="pass2" label="確認密碼" class="padding-none" name="confirmPass"
                     error-message="Passwords do not match" required clear-button-visible></vaadin-password-field>
-            </div>
+            </div> -->
             <div>
                 <vaadin-number-field id="changePhone1" class="padding-none" label="電話"></vaadin-number-field>
             </div>
@@ -175,26 +175,7 @@
 
                 this.pageManager = new DataPackage('pages');
                 this.userManager = new DataPackage('_user');
-                Polymer.sendEmail = function(to, subject, content) {
-                    return new Promise(function(resolve, reject) {
-                        let url = "https://e57jikxilj.execute-api.ap-northeast-1.amazonaws.com/prod/";
-                        let parma = {
-                            "from": "support@01power.net",
-                            "to": to,
-                            "subject": subject,
-                            "html": content
-                        };
-                        Polymer.postData(url, parma).then(res => {
-                            if (res.code > 0) {
-                                console.log("666");
-                                resolve("chenggongle");
-                            } else {
-                                console.log("error la");
-                            }
-                        })
-                    });
 
-                };
             },
 
             log: function() {
@@ -352,7 +333,7 @@
             },
             sendMail: function(email,token){
 
-
+                console.log('Token',token);
                 let html= '<!DOCTYPE html>' +
                 '<html lang="en">' +
 
@@ -373,8 +354,7 @@
                 '</body>' +
 
                 '</html>';
-
-                Polymer.sendEmail("support@01power.net",email,html);
+                Polymer.sendEmail(email,"歡迎成為 Get TV - Get Change平台用戶",html).then(res=>{alert('成功發送註冊邀請電郵');},err=>{alert('不能發送，請檢查電郵是否正確')});
 
 
             },
@@ -389,84 +369,78 @@
                 let area = shadow.querySelector('#changeArea1').value; //地區
                 let email = shadow.querySelector('#changeEmail1').value; //電郵地址
                 let phone = shadow.querySelector('#changePhone1').value; //電話
-                let pass = shadow.querySelector('#pass1').value;
-                let cpass = shadow.querySelector('#pass2').value;
+                // let pass = shadow.querySelector('#pass1').value;
+                // let cpass = shadow.querySelector('#pass2').value;
                 let promotion = shadow.querySelector('#optional').checked
                 let check = shadow.querySelector('#check').checked;
-
+                let now = new Date().getTime();
                 //GENERATE REG TOK
                 var tok = Date.now();
                 // console.log("tok:", tok);
-                var expireDate = tok + 604800000; //604800000 = 1 week time in milliseconds
+                // var expireDate = tok + 604800000; //604800000 = 1 week time in milliseconds
                 // console.log("expireDate:", expireDate);
-                this.regToken(tok, email, expireDate);
 
+                let user = {
+                        "id":email,
+                        "username": name,
+                        "area": '全港',
+                        "email": email,
+                        "password": '!@#$%^#$%',
+                        "isPromotionMsg": false,
+                        "platform": platform,
+                        'head': head,
+                        "numberRate": 0,
+                        "goodsNum": 0,
+                        "createTime": now,
+                        "isPromotionMsg": false,
+                        "likeProduct": [],
+                        "score": 2.5,
+                        "history": [],
+                        "isAdmin": false,
+                        "isFanpage": false,
+                        "platform": platform,
+                        "banner": "https://www.gettv.hk/Website%20Design/profile%20page/img/profile%20banner/company-profile-banner.png",
+                        "status": true,
+                        "alias":"_me"                    
+                };
 
+                let json = {
+                        "email":email,
+                        "action":'register',
+                        "user":user
+                    }
+                let token = Polymer.encryptToken(json);
+                // this.regToken(tok, email, expireDate);
 
                 if (uid === "") {
                     alert('使用名稱不可以為空');
-                } else {
-                    if (area === "") {
+                    return;
+                } 
+                if (area === "") {
                         alert('地區不可以為空');
-                    } else {
-                        if (email === "") {
-                            alert('電郵地址不可以為空');
-                        } else {
-                            if (phone === "") {
-                                alert('電話不可以為空');
-                            } else {
-                                if (pass === "" && platform == "gettv") {
-                                    alert('請輸入密碼');
-                                } else {
-                                    if (pass !== cpass && platform == "gettv") {
-                                        alert('兩個密碼不一樣');
-                                    } else {
-                                        if (check !== true) {
-                                            alert('請同意私隱條款');
-                                        } else {
-                                            that.userManager.loadData(email).then(res => {
-                                                if (res.code < 0) {
-                                                    let user = {
-                                                        "username": uid,
-                                                            "area": area,
-                                                            "email": email,
-                                                            "password": pass,
-                                                            "phone": phone,
-                                                            "isPromotionMsg": promotion,
-                                                            "platform": platform,
-                                                            "head": head,
-                                                            "numberRate": 0,
-                                                            "goodsNum": 0,
-                                                            "createTime": now,
-                                                            "isPromotionMsg": false,
-                                                            "likeProduct": [],
-                                                            "score": 5,
-                                                            "history": [],
-                                                            "isAdmin": false,
-                                                            "isFanpage": false,
-                                                            "banner": "https://www.gettv.hk/Website%20Design/profile%20page/img/profile%20banner/company-profile-banner.png",
-                                                            "status": false,
-                                                            "token": tok,
-                                                            "alias":"_me"
-                                                    };
-                                                    that.userManager.saveData(email,user).then(res2=>{
-                                                        alert(res.text);
-                                                        console.log("uuuuu", res);
-                                                        that.sendMail(email,tok);
-                                                    });
-                                                    
-                                                } else {
-                                                    alert("電郵已被註冊")
-                                                }
-                                            })
-
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                        return;
+                } 
+                if (email === "") {
+                    alert('電郵地址不可以為空');
+                    return;
+                } 
+                if (phone === "") {
+                    alert('電話不可以為空');
+                    return;
                 }
+                if (check !== true) {
+                    alert('請同意私隱條款');
+                    return;
+                }
+                this.userManager.getDataByCache(email).then(res=>{
+                    alert('電郵已被註冊');
+                    return;
+                },err=>{
+                    // that.userManager.saveDataWithCache(email,user);
+
+                    that.sendMail(email,token);
+                })
+
 
             },
 

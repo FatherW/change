@@ -4,6 +4,7 @@
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-select/vaadin-select.html">
 <link rel="import" href="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/vaadin-dialog/vaadin-dialog.html">
 <link rel="import" href="change-login.html">
+<script type="text/javascript" src="/bower_components/crypto-js/crypto-js.js"></script>
 <dom-module id="change-resetpw">
 
 
@@ -14,15 +15,21 @@
                 color: black;
                 font-family: sans-serif, Microsoft JhengHei;
             }
-
+            :host {
+                height:600px;
+            }
             body {
                 overflow: hidden;
             }
 
             #content {
-                width: 40%;
+                /* width: 100%; */
+                height: 400px;
                 margin: 0 auto;
                 margin-top: 100px;
+                max-width: 400px;
+                background: white;
+                padding: 20px;
             }
 
             h1 {
@@ -43,19 +50,28 @@
                 border-radius: 3px;
                 border: none;
             }
+            .grid {
+                display: grid;
+                width: 100%;
+                padding-bottom: 50px;
+                grid-column-gap: 5px;
+                grid-row-gap: 20px;
+                grid-template-columns: repeat(1, 1fr);
+                background-color: white;
+            }
         </style>
         <div id="content">
-            <div>
+            <div  class="grid">
                 <!-- label="密碼"  -->
-                新密碼: &nbsp<vaadin-password-field id="pass1" class="padding-none" name="pass"
+                <label>輸入電郵</label>
+                <vaadin-text-field value="{{email}}"></vaadin-text-field>
+                <label>新密碼</label>
+                <vaadin-password-field id="pass1" value="{{pass1}}" class="padding-none" name="pass"
                     error-message="Please enter a valid password" required clear-button-visible></vaadin-password-field>
-            </div>
-            <div>
-                <!-- label="確認密碼" -->
-                確認密碼:<vaadin-password-field id="pass2" class="padding-none" name="confirmPass"
+                <label>確認密碼</label>
+                <vaadin-password-field id="pass2" value="{{pass2}}" class="padding-none" name="confirmPass"
                     error-message="Passwords do not match" required clear-button-visible></vaadin-password-field>
-            </div>
-            <div>
+
                 <button on-click="_register" class=" login-register">更新密碼</button>
             </div>
 
@@ -73,6 +89,7 @@
             },
             created: function () {
                 console.log("Created here:");
+                this.userManager = new DataPackage('_user');
             },
             //for adding link to the user name connecting wth the databse
             ready: function () {
@@ -80,18 +97,22 @@
             },
             _register() {
                 let shadow = this.shadowRoot;
+                let that = this;
                 this.tokManager = new DataPackage('token');
 
                 let loc = location.search;
                 let token = "";
-                for (i = 7; i < loc.length; i++) {
-                    token += loc[i]
-                }
-                console.log("loc:", token);
+                loc = loc.substring(1);
+                let key,token;
+                [key,token] = loc.split("=");
 
-                this.tokManager.loadData(token).then(res => {
-                    this.verifyTok(res); //tok res
-                });
+                console.log("loc:", token);
+                Polymer.decryptToken(token).then(json=>{
+                    that.verifyTok(json); 
+                }); 
+                // this.tokManager.loadData(token).then(res => {
+                //     this.verifyTok(res); //tok res
+                // });
             },
 
             verifyTok: function (x) {
@@ -99,37 +120,54 @@
                 let res = x;
                 console.log("res:", res);
 
-                let now = Date.now();
+                let now = new Date().getTime();
                 // console.log("now:", now);
+                if (now > res['expireDate']) {
+                    alert("你的token過期了.");
+                    return;
+                }
 
-                if (res['type'] == "forgetpw") {
-                    if (now < res['expireDate']) {
-                        console.log("this token is still valid!");
-                        this.continueResetpw(res['userId']);
-                    } else {
-                        alert("This token is expired!");
-                    }
-                } else {
-                    alert("this token is not used to verify reset pw!");
+                if (res['action'] == "reset") {
+                        this.tokenJson = res;
+                        this.continueResetpw(res['email']);
+                
+                } else if (res['action']=="register"){
+                        this.tokenJson = res;
+
+                        this.continueResetpw(res['email']);
+                }else {
+                    alert("token 錯誤");
+                    return;
                 }
 
             },
 
             continueResetpw: function (uid) {
                 let shadow = this.shadowRoot;
-                let pass = shadow.querySelector('#pass1').value;
-                let cpass = shadow.querySelector('#pass2').value;
-
-
-                if (pass == "") {
-                    alert("請輸入密碼");
-                } else {
-                    if (pass != cpass) {
-                        alert('密碼不一樣 請重新輸入');
-                    } else {
-                        this.reset(cpass,uid);
-                    }
+                if (this.pass1 !== this.pass2) {
+                    alert('密碼不一樣，請重新輸入');
+                    return;
                 }
+                if (!this.pass1 || !this.pass2) {
+                    alert("請輸入密碼");
+                    return;    
+                }
+                if (this.email !== uid){
+                    alert('你輸入的電郵不符token之要求');
+                    return;
+                }
+                if (this.tokenJson['action']==="reset")
+                   this.reset(this.pass1,this.email);
+                else if (this.tokenJson['action']==="register") {
+                    this.tokenJson['user']['password'] = this.pass1;
+                    this.userManager.saveDataWithCache(this.tokenJson['email'],this.tokenJson['user']).then(res=>{
+                        alert('你已成功註冊');
+                        location.href="/index.html";
+                    });
+                    
+                }
+
+
             },
 
             reset(password, uid) {
@@ -137,10 +175,7 @@
                 let loc = location.search;
                 let url =
                     "https://0fnc1pmdce.execute-api.ap-northeast-1.amazonaws.com/default/changeMiscFc";
-                let token = "";
-                for (i = 7; i < loc.length; i++) {
-                    token += loc[i];
-                }
+                
                 let pram = {
                     "action": "changeresetpassword",
                     "uid": uid,
@@ -149,8 +184,8 @@
                 Polymer.postData(url, pram).then(res => {
                     console.log("res", res);
                     if (res.code > 0) {
-                        alert("密碼已被成功更改");
-                        location.replace("https://www.gettv.hk");
+                        alert("密碼已被成功更改,歡迎再次登入");
+                        location.href="/index.html";
                     }
                 })
             },

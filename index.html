@@ -6,8 +6,10 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <script src="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-    <link rel="import" href="/bower_components/change/change-loader.html">
-
+    <script src="./node_modules/change/change-loader.js" type="module" async></script>
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="755964351228-2emctcoq1o2nj5vpqitv4j28411jj7jk.apps.googleusercontent.com">
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -106,13 +108,6 @@
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <title>Home - Change</title>
-    <!-- <link rel="import" href="/bower_components/change/change-itemspecial.html">
-    <link rel="import" href="/bower_components/change/change-things.html"> -->
-    <link rel="import" href="/bower_components/change/change-footer.html">
-
-    <!-- <link rel="import" href="/bower_components/change/change-edit-product.html?id=1597419840570">
-    <link rel="import" href="/bower_components/change/change-slidelist.html?id=1597419840570">
-    <link rel="import" href="/bower_components/change/change-in-item.html?id=1597419840570"> -->
 
     <link rel="stylesheet" href="css/style.css">
     <meta name="google-signin-scope" content="profile email">
@@ -212,7 +207,8 @@
             <div class="topnav" id="myTopnav">
                 <a href="javascript:void(0);" style="font-size:15px;" class="icon" id="icon">☰</a>
                 <div class="dropdown"><button class="dropbtn"><eee>+ </eee>玩多啲</button>
-                    <div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHp2q7-8rxD6C5WSM6HSKHVy">電玩資訊</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHroMg1NSo53ikWUYJqY3ciu">體育</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpusGeLqXMt--3g8Q6KOX7-">旅遊資訊</a>
+                    <div class="dropdown-content"><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHp2q7-8rxD6C5WSM6HSKHVy">電玩資訊</a>
+                        <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHroMg1NSo53ikWUYJqY3ciu">體育</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpusGeLqXMt--3g8Q6KOX7-">旅遊資訊</a>
                         <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHq9EW4xkU6Zvl5L0GF28NHY">本土好去處</a><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqYaIxqHfVL-dKZSpwuCOj9">綜藝遊戲</a></div>
                 </div>
                 <div class="dropdown"><button class="dropbtn"><eee>+ </eee>睇多啲</button>
@@ -254,7 +250,7 @@
         <!-- Full-width images with number and caption text -->
         <div class="mySlides fade">
             <div class="numbertext"></div>
-            <img src="http://www.gettv.hk/Website%20Design/get%20tv/GET%20TV%20photo/slider_banner/1.jpeg" style="width:100%">
+            <img src="http://www.gettv.hk/img/slider_banner.jpg" style="width:100%">
         </div>
         <!--
 <div class="mySlides fade">
@@ -304,72 +300,56 @@
             <div>
                 <div class="medium1">愛多啲</div>
                 <div class="small1">關懷與心靈健康</div>
-                <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrhER3oQUYbz8wnmCv1VUBw">
                     <div class="gettv_bg bg1"></div>
-                </a>
             </div>
 
 
             <div>
                 <div class="medium1">識多啲</div>
                 <div class="small1">學術與課程</div>
-                <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqC1OITdb_QGz18JPmmj8a5">
                     <div class="gettv_bg bg2"></div>
-                </a>
             </div>
 
 
             <div>
                 <div class="medium1">睇多啲</div>
                 <div class="small1">短片電影及劇集</div>
-                <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpNTw4BXAyEyyMMkhl5XcR2">
                     <div class="gettv_bg bg3"></div>
-                </a>
             </div>
 
 
             <div>
                 <div class="medium1">靚多啲</div>
                 <div class="small1">健康美容分享</div>
-                <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHon14MDeHFMa9qXMo7zW92T">
                     <div class="gettv_bg bg4"></div>
-                </a>
             </div>
 
 
             <div>
                 <div class="medium1">知多啲</div>
                 <div class="small1">新聞及資訊</div>
-                <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqykeagwZRZwfEyOuTCYF7a">
                     <div class="gettv_bg bg5"></div>
-                </a>
             </div>
 
 
             <div>
                 <div class="medium1">玩多啲</div>
                 <div class="small1">旅遊及玩樂資訊</div>
-                <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrywYfDOzAjc0rA89VGqpa5">
                     <div class="gettv_bg bg6"></div>
-                </a>
             </div>
 
 
             <div>
                 <div class="medium1">食多啲</div>
                 <div class="small1">飲食情報</div>
-                <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpzSn5NOnJiIiGwWvIwR3jj">
                     <div class="gettv_bg bg7"></div>
-                </a>
             </div>
 
 
             <div>
                 <div class="medium1">Get多啲</div>
                 <div class="small1">Get Change交易平台</div>
-                <a href="http://www.gettv.hk/getchange.html">
                     <div class="gettv_bg bg8"></div>
-                </a>
             </div>
 
 
@@ -445,6 +425,7 @@
     <!-- <div class="g-signin2" data-onsuccess="onSignIn">i mgoogle</div> -->
 
 
+    <dz-dazzle></dz-dazzle>
 
 </body>
 
