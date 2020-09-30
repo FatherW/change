@@ -6,8 +6,8 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
 
-    <script src="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-    <link rel="import" href="/bower_components/change/change-loader.html">
+    <script src="https://d25k6mzsu7mq5l.cloudfront.net/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js" async></script>
+    <script src="/node_modules/change/change-loader.js" type="module" async></script>
 
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -47,6 +47,7 @@
                     FB.AppEvents.logPageView();
 
                 };
+            }
                 /*
                     (function (d, s, id) {
                         var js, fjs = d.getElementsByTagName(s)[0];
@@ -140,7 +141,7 @@
                 }
             }
         </style>
-        <link rel="import" href="/bower_components/change/change-user-info.html">
+        <script src="/node_modules/change/change-user-info.js" type="module" async></script>
         <link rel="stylesheet" href="/css/style3.css">
 
 </head>

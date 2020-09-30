@@ -4,9 +4,9 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <script src="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-    <link rel="import" href="/bower_components/change/change-loader.html">
-    <dz-wrapper-head>
+    <script src="https://d25k6mzsu7mq5l.cloudfront.net/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js" async></script>
+    <script src="/node_modules/change/change-loader.js" type="module" async></script>
+    <script src="/node_modules/change/change-resetpw.js" type="module" async></script>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -20,7 +20,7 @@
         <script src="https://apis.google.com/js/platform.js" async="" defer=""></script>
         <script async="" defer="" crossorigin="anonymous" src="https://connect.facebook.net/zh_HK/sdk.js#xfbml=1&amp;version=v7.0&amp;appId=711018846416860&amp;autoLogAppEvents=1" nonce="NXzxnRL1"></script>
 
-
+        <script src="https://www.gettv.hk/bower_components/crypto-js/crypto-js.js"></script>
         <script>
             function onSignIn(googleUser) {
                 console.log("running google");
@@ -54,6 +54,7 @@
                 FB.AppEvents.logPageView();
 
             };
+        
             /*
                 (function (d, s, id) {
                     var js, fjs = d.getElementsByTagName(s)[0];
@@ -147,13 +148,6 @@
                 }
             }
         </style>
-        <link rel="import" href="/bower_components/change/change-resetpw.html">
-        <link rel="import" href="/bower_components/change/change-footer.html">
-        <link rel="import" href="/bower_components/change/change-header.html?id=1597423448731">
-        <link rel="import" href="/bower_components/change/change-header2.html?id=1597423448731">
-        <link rel="import" href="/bower_components/change/change-footer.html?id=1597423448731">
-        <link rel="import" href="/bower_components/change/change-announcement.html?id=1597423448731">
-    </dz-wrapper-head>
 </head>
 
 <body>

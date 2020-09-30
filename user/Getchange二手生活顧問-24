@@ -1,0 +1,216 @@
+<html><head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
+    <script src="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="/bower_components/change/change-loader.html">
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
+        <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <title>Home - Change</title>
+        <link rel="stylesheet" href="/css/change-style.css">
+        <meta name="google-signin-scope" content="profile email">
+        <meta name="google-signin-client_id" content="755964351228-2emctcoq1o2nj5vpqitv4j28411jj7jk.apps.googleusercontent.com">
+        <script src="https://apis.google.com/js/platform.js" async="" defer=""></script>
+        <script async="" defer="" crossorigin="anonymous" src="https://connect.facebook.net/zh_HK/sdk.js#xfbml=1&amp;version=v7.0&amp;appId=711018846416860&amp;autoLogAppEvents=1" nonce="NXzxnRL1"></script>
+
+
+        <script>
+            function onSignIn(googleUser) {
+                console.log("running google");
+                var profile = googleUser.getBasicProfile();
+                console.log("myprofile", profile);
+                let param = {
+                    "platform": "Google",
+                    "name": profile.getName(),
+                    "email": profile.getEmail()
+                };
+                store.set("change-platform", param);
+                document.querySelector('.googleloginname').click();
+
+                window.fbAsyncInit = function() {
+                    FB.init({
+                        appId: '711018846416860',
+                        cookie: true,
+                        xfbml: true,
+                        version: '7.0'
+                    });
+
+                    FB.AppEvents.logPageView();
+
+                };
+                /*
+                    (function (d, s, id) {
+                        var js, fjs = d.getElementsByTagName(s)[0];
+                        if (d.getElementById(id)) {
+                            return;
+                        }
+                        js = d.createElement(s);
+                        js.id = id;
+                        js.src = "https://connect.facebook.net/en_US/sdk.js";
+                        fjs.parentNode.insertBefore(js, fjs);
+                    }(document, 'script', 'facebook-jssdk'));
+
+                    */
+        </script>
+        <style scope="change-footer">
+            li {
+                display: block;
+            }
+            
+            .footer {
+                background-color: #F0846C;
+                color: white;
+                height: auto;
+                line-height: 1.5;
+            }
+            
+            .fpanel1 {
+                width: 100%;
+                margin: 0 auto;
+                width: 100%;
+                margin: 0 auto;
+                display: grid;
+                grid-row-gap: 20px;
+                grid-column-gap: 15px;
+                grid-template-columns: 28% 28% 28%;
+                grid-template-rows: 50% 50%;
+            }
+            
+            a.test {
+                color: white;
+                text-decoration: none;
+                font-size: 12px;
+                line-height: 30px;
+            }
+            
+            #social {
+                display: flex;
+                justify-content: space-between;
+                margin: 0 auto;
+                text-align: center;
+                align-items: center;
+                display: inline-flex;
+                float: right;
+                grid-column: 1 / 5;
+                grid-row: 2 / 3;
+            }
+            
+            .footer {
+                height: 300px;
+            }
+            
+            @media (max-width: 768px) {
+                .footer {
+                    display: none;
+                }
+                .fpanel1 {
+                    width: 100%;
+                    margin: 0 auto;
+                    padding-bottom: 10px;
+                    width: 100%;
+                    margin: 0 auto;
+                    display: grid;
+                    grid-row-gap: 10px;
+                    grid-column-gap: 15px;
+                    grid-template-columns: repeat(3, 32%);
+                    text-align: start;
+                }
+                #social {
+                    display: flex;
+                    justify-content: space-between;
+                    margin: 0 auto;
+                    text-align: center;
+                    align-items: center;
+                    display: inline-flex;
+                    float: right;
+                    grid-column: 2 / 4;
+                    grid-row: 2 / 3;
+                }
+                .footer {
+                    height: 500px;
+                }
+            }
+        </style>
+        <link rel="import" href="/bower_components/change/change-user-info.html">
+        <link rel="stylesheet" href="/css/style3.css">
+
+<meta name="user-id" content="1"></head><body>
+
+        <change-header></change-header>
+        
+        <change-user-info id="1"></change-user-info>
+        <div style="clear:both;"></div>
+        <change-footer>
+                <div id="footer" class="footer" style="background-color: rgb(240, 132, 108);">
+                    <div style="width: 90%; margin: 0 auto;">
+<div class="fpanel1 fpanel1-md">
+  <div>
+      <ul>
+          <li><a href="#" class="test" style="font-size: large;">幫助中心</a></li>
+          <li><a href="./question.html" class="test">問題反映</a></li>
+          <li><a href="./term.html" class="test">使用條款</a></li><li><a href="./term.html" class="test">私隱條款</a></li><li><a href="./term.html" class="test">版權條款</a></li>
+          
+      </ul>
+  </div>
+  <div>
+      <ul>
+          <li><a href="#" class="test" style="font-size: large;">最新消息</a></li>
+          <!-- ./xyz二手名牌特價手袋 -->
+          <li><a href="./activity.html" class="test">活動</a></li>
+          <li><a href="./promotion.html" class="test">推廣</a></li>
+          <li><a href="./dragon.html" class="test">頻道龍虎榜</a></li>
+          <li><a href="./cooperation.html" class="test">品牌合作</a></li>
+      </ul>
+  </div>
+  <div>
+      <ul>
+          <li><a href="#" class="test" style="font-size: large;">頻道</a></li>
+          <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrywYfDOzAjc0rA89VGqpa5" class="test">玩多啲</a></li>
+          <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpNTw4BXAyEyyMMkhl5XcR2" class="test">睇多啲</a></li>
+          <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqykeagwZRZwfEyOuTCYF7a" class="test">知多啲</a></li>
+          <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpzSn5NOnJiIiGwWvIwR3jj" class="test">食多啲</a></li>
+      </ul>
+  </div>
+  <div>
+      <ul style="margin-top: 45px;">
+          <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqC1OITdb_QGz18JPmmj8a5" class="test">識多啲</a></li>
+          <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHon14MDeHFMa9qXMo7zW92T" class="test">靚多啲</a></li>
+          <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrhER3oQUYbz8wnmCv1VUBw" class="test">愛多啲</a></li>
+          <li><a href="https://www.gettv.hk/getchange.html" class="test">Get Change</a></li>
+      </ul>
+  </div>
+  <div id="social">
+      <a href="https://www.instagram.com/hkgettv/">
+          <div style="background-image: url('./img/ins.png');background-position: center center;background-size: contain;width: 50px;height: 50px; margin-right: 20px;">
+          </div>
+      </a>
+      <a href="https://www.facebook.com/gettvhk/">
+          <div style="background-image: url('./img/face.png');background-position: center center;background-size: contain;width: 50px;height: 50px; margin-right: 20px;">
+          </div>
+      </a>
+      <a href="https://www.youtube.com/channel/UCCd5rMzWWFZEfb-yjj63O2w">
+          <div style="background-image: url(&quot;https://designerrrr-output.s3-ap-northeast-1.amazonaws.com/images/change/large-web/id1598863547551.jpg&quot;); background-position: center center; background-size: 100% 100%; width: 50px; height: 50px; border-radius: 50%;">
+          </div>
+      </a>
+  </div>
+</div>
+
+
+
+</div>
+<change-announcement>FIXED ANNOUNCEMENT</change-announcement>
+
+              </div>
+
+            </change-footer>
+        <button class="googleloginname" style="display:none;">google login</button>
+        <div class="g-signin2" data-onsuccess="onSignIn" style="display:none;">imgoogle</div>
+
+
+</body></html>

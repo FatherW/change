@@ -2,9 +2,14 @@
 import 'https://d25k6mzsu7mq5l.cloudfront.net/node_modules/@vaadin/vaadin-dialog/vaadin-dialog.js';
 import { Dazzle } from 'https://d25k6mzsu7mq5l.cloudfront.net/node_modules/@dazzle/dz-dazzle/dz-library.js';
 
+<<<<<<< Updated upstream
 import './change-header.js';
 import './change-footer.js';
 import './change-youtube.js';
+=======
+import '/node_modules/change/change-header.js';
+import '/node_modules/change/change-footer.js';
+>>>>>>> Stashed changes
 // import './change-user-panel.js';
 
 
@@ -123,7 +128,11 @@ import './change-youtube.js';
         "userType":"normal",
         "token":"",
         "init":false,
+<<<<<<< Updated upstream
         "local":false
+=======
+        "local":false   
+>>>>>>> Stashed changes
     };
     let subUser = store.get('change-user') || null;
     let editMode = store.get("editMode") || "normal";
