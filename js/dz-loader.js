@@ -4,7 +4,7 @@ import { Dazzle } from 'https://d25k6mzsu7mq5l.cloudfront.net/node_modules/@dazz
 
 import '/node_modules/change/change-header.js';
 import '/node_modules/change/change-footer.js';
-import '/node_modules/change/chagne-youtube.js';
+import '/node_modules/change/change-youtube.js';
 // import './change-user-panel.js';
 
 
@@ -115,6 +115,29 @@ import '/node_modules/change/chagne-youtube.js';
     
         };
     
+Dazzle.getProductModel = function(){
+
+    let model =  {
+        "categories": "",
+        "sellerMsg": "",
+        "productname": "",
+        "price": 10,
+        "district": "",
+        "deliveryMethod": "面交",
+        "descrip": "",
+        "tag": [],
+        "deliveryDesc": "",
+        "isNew": true,
+        "isFree": false,
+        "ownerId": null,
+        "pics": ["http://change.dazzle.website.s3.amazonaws.com/files/1/1591944377549.jpeg"],
+        'alias': '',
+        "postStatus":false,
+        "isPurchase": false
+    };
+    return model;
+}
+
    let dzLicense = {
         "uid":"change",
         "tid":"change",
