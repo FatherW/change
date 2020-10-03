@@ -131,6 +131,7 @@ Dazzle.getProductModel = function(){
         "isFree": false,
         "ownerId": null,
         "pics": ["http://change.dazzle.website.s3.amazonaws.com/files/1/1591944377549.jpeg"],
+        'replyArray':[],
         'alias': '',
         "postStatus":false,
         "isPurchase": false
@@ -149,6 +150,9 @@ Dazzle.getProductModel = function(){
         "local":false
     };
     let subUser = store.get('change-user') || null;
+console.log('Sub User',subUser);
+    Dazzle.subUser =subUser;
+
     let editMode = store.get("editMode") || "normal";
     let elm;
     let thisPage =
@@ -186,7 +190,6 @@ Dazzle.getProductModel = function(){
 
     console.log('User',subUser,user,Dazzle.fileManager);
 
-        Dazzle.subUser = store.get('subUser') || null;
         console.log('Edit Mode',editMode);
 
 
