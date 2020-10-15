@@ -1,15 +1,15 @@
-<html>
-
-<head>
+<!DOCTYPE html><html><head><script src="https://d25k6mzsu7mq5l.cloudfront.net/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js" async="" dz-head=""></script>
+    <script src="/js/dz-loader.js" async="" type="module" dz-head=""></script>
+    <script src="/node_modules/change/change-itemspecial.js" async type="module"></script>
+    
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <script src="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-    <link rel="import" href="/bower_components/change/change-loader.html">
+    
+    
 
-
-    <link rel="import" href="/bower_components/change/change-itemspecial.html">
-
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="755964351228-2emctcoq1o2nj5vpqitv4j28411jj7jk.apps.googleusercontent.com">
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,7 +18,7 @@
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <title>Home - Change</title>
-    <link rel="stylesheet" href="/css/change-style.css">
+    <link rel="stylesheet" href="css/style.css">
     <meta name="google-signin-scope" content="profile email">
     <meta name="google-signin-client_id" content="755964351228-2emctcoq1o2nj5vpqitv4j28411jj7jk.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async="" defer=""></script>
@@ -109,70 +109,72 @@
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <title>Home - Change</title>
-    <!-- <link rel="import" href="/bower_components/change/change-itemspecial.html">
-    <link rel="import" href="/bower_components/change/change-things.html">
-    <link rel="import" href="/bower_components/change/change-footer.html">
 
-    <link rel="import" href="/bower_components/change/change-edit-product.html?id=1597419840570">
-    <link rel="import" href="/bower_components/change/change-itemspecial.html?id=1597419840570">
-    <link rel="import" href="/bower_components/change/change-slidelist.html?id=1597419840570">
-    <link rel="import" href="/bower_components/change/change-in-item.html?id=1597419840570">
-    <link rel="import" href="/bower_components/change/change-user-panel.html?id=1597419840570"> -->
-
-
-    <!-- <link rel="import" href="/bower_components/change/change-header.html?id=1597419840571"> -->
-    <!-- <link rel="import" href="/bower_components/change/change-header2.html?id=1597419840571">
-    <link rel="import" href="/bower_components/change/change-footer.html?id=1597419840571"> -->
-    <!-- <link rel="import" href="/bower_components/change/change-announcement.html?id=1597419840571"> -->
+    <link rel="stylesheet" href="css/style.css">
     <meta name="google-signin-scope" content="profile email">
     <meta name="google-signin-client_id" content="755964351228-2emctcoq1o2nj5vpqitv4j28411jj7jk.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async="" defer="" gapi_processed="true"></script>
     <script async="" defer="" crossorigin="anonymous" src="https://connect.facebook.net/zh_HK/sdk.js#xfbml=1&amp;version=v7.0&amp;appId=711018846416860&amp;autoLogAppEvents=1" nonce="NXzxnRL1"></script>
 
 
-    <script>
-        function onSignIn(googleUser) {
-            console.log("running google");
-            var profile = googleUser.getBasicProfile();
-            console.log("myprofile", profile);
-            let param = {
-                "platform": "Google",
-                "name": profile.getName(),
-                "email": profile.getEmail()
-            };
-            store.set("change-platform", param);
-            document.querySelector('.googleloginname').click();
-        }
+    <script>function onSignIn(googleUser) {
+  console.log("running google");
+  var profile = googleUser.getBasicProfile();
+  console.log("myprofile", profile);
+  let param = {
+    "platform": "Google",
+    "name": profile.getName(),
+    "email": profile.getEmail()
+  };
+  store.set("change-platform", param);
+  document.querySelector('.googleloginname').click();
+}
 
-        ;
+function signOut() {
+  var auth2 = gapi.auth2.getAuthInstance();
+  auth2.signOut().then(function () {
+    console.log('User signed out.');
+  });
+}
 
-        function signOut() {
-            var auth2 = gapi.auth2.getAuthInstance();
-            auth2.signOut().then(function() {
-                console.log('User signed out.');
-            });
-        }
-
-        ;
-
-        window.fbAsyncInit = function() {
-            FB.init({
-                appId: '711018846416860',
-                cookie: true,
-                xfbml: true,
-                version: '7.0'
-            });
-            FB.AppEvents.logPageView();
-        };
-    </script>
+window.fbAsyncInit = function () {
+  FB.init({
+    appId: '711018846416860',
+    cookie: true,
+    xfbml: true,
+    version: '7.0'
+  });
+  FB.AppEvents.logPageView();
+};</script>
 
 
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" href="favicon.ico">
-</head>
-
-<body class="">
-    <!-- Body -->
+<style>
+    .g-signin2 {
+        position: absolute;
+        right: 0px;
+        top: 0px;
+    }
+    
+    .f-signin2 {
+        position: absolute;
+        right: 132px;
+        top: 1px;
+        height: 30px;
+        width: 30px;
+        background-image: url('img/icon/Facebook.png');
+        background-position: center center;
+        background-color: blue;
+        background-size: contain;
+        background-repeat: no-repeat;
+    }
+    /* .logoFacebook {
+        position: absolute;
+        right: 0px;
+        top: 20px;
+    } */
+</style></head><body><!-- Body -->
     <div id="wrapper">
         <change-header>
             <header class="header">
@@ -562,7 +564,4 @@ background-image: url(http://www.gettv.hk/img/channel_banner/8.jpg);
     </div>
     <button class="googleloginname" style="display:none;">google login</button>
     <div class="g-signin2" data-onsuccess="onSignIn" style="display:none;">imgoogle</div>
-
-</body>
-
-</html>
+</body></html>

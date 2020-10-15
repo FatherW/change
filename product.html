@@ -1,10 +1,17 @@
 
+<!DOCTYPE html>
 <html><head>
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <script src="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-    <link rel="import" href="/bower_components/change/change-loader.html">
+    <script src="https://d25k6mzsu7mq5l.cloudfront.net/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js" async></script>
+    <script src="./node_modules/change/change-loader.js" type="module" async></script>
+
+    
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.4.2/jquery.fancybox.min.css">
+<script src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.4.2/jquery.fancybox.min.js"></script>
+
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -143,14 +150,15 @@ window.fbAsyncInit = function () {
                 }
             }
         </style>
-        <link rel="import" href="/bower_components/change/change-new-product.html">
-        <link rel="import" href="/bower_components/change/change-edit-bar.html">
-        <link rel="import" href="/bower_components/change/change-order-list.html">
-        <link rel="import" href="/bower_components/change/change-orderlist-storage.html">
-        <link rel="import" href="/bower_components/change/change-itemspecial.html">
-        <link rel="import" href="/bower_components/change/change-slidelist.html">
-        <link rel="import" href="/bower_components/change/change-in-item.html">
-</head>
+         <script src="./node_modules/change/change-new-product.js" type="module" async></script>
+         <script src="./node_modules/change/change-edit-bar.js" type="module" async></script>
+         <script src="./node_modules/change/change-order-list.js" type="module" async></script>
+         <script src="./node_modules/change/change-orderlist-storage.js" type="module" async></script>
+         <script src="./node_modules/change/change-itemspecial.js" type="module" async></script>
+         <script src="./node_modules/change/change-slidelist.js" type="module" async></script>
+         <script src="./node_modules/change/change-in-item.js" type="module" async></script>
+
+    </head>
 <body>
         <change-header></change-header>
         <change-new-product></change-new-product>
@@ -219,6 +227,6 @@ window.fbAsyncInit = function () {
         </change-footer>
         <button class="googleloginname" style="display:none;">google login</button>
         <div class="g-signin2" data-onsuccess="onSignIn" style="display:none;">imgoogle</div>
-<dz-dazzle></dz-dazzle>
+
 
 </body></html>
