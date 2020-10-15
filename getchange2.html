@@ -1,0 +1,567 @@
+<!DOCTYPE html><html><head><script src="https://d25k6mzsu7mq5l.cloudfront.net/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js" async="" dz-head=""></script>
+    <script src="/js/dz-loader.js" async="" type="module" dz-head=""></script>
+    <script src="/node_modules/change/change-itemspecial.js" async type="module"></script>
+    
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    
+
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="755964351228-2emctcoq1o2nj5vpqitv4j28411jj7jk.apps.googleusercontent.com">
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <title>Home - Change</title>
+    <link rel="stylesheet" href="css/style.css">
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="755964351228-2emctcoq1o2nj5vpqitv4j28411jj7jk.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async="" defer=""></script>
+    <script async="" defer="" crossorigin="anonymous" src="https://connect.facebook.net/zh_HK/sdk.js#xfbml=1&amp;version=v7.0&amp;appId=711018846416860&amp;autoLogAppEvents=1" nonce="NXzxnRL1"></script>
+    <style scope="change-footer">
+        li {
+            display: block;
+        }
+        
+        .footer {
+            background-color: #F0846C;
+            color: white;
+            height: auto;
+            line-height: 1.5;
+        }
+        
+        .fpanel1 {
+            width: 100%;
+            margin: 0 auto;
+            width: 100%;
+            margin: 0 auto;
+            display: grid;
+            grid-row-gap: 20px;
+            grid-column-gap: 15px;
+            grid-template-columns: 28% 28% 28%;
+            grid-template-rows: 50% 50%;
+        }
+        
+        a.test {
+            color: white;
+            text-decoration: none;
+            font-size: 12px;
+            line-height: 30px;
+        }
+        
+        #social {
+            display: flex;
+            justify-content: space-between;
+            margin: 0 auto;
+            text-align: center;
+            align-items: center;
+            display: inline-flex;
+            float: right;
+            grid-column: 1 / 5;
+            grid-row: 2 / 3;
+        }
+        
+        .footer {
+            height: 300px;
+        }
+        
+        @media (max-width: 768px) {
+            .footer {
+                display: none;
+            }
+            .fpanel1 {
+                width: 100%;
+                margin: 0 auto;
+                padding-bottom: 10px;
+                width: 100%;
+                margin: 0 auto;
+                display: grid;
+                grid-row-gap: 10px;
+                grid-column-gap: 15px;
+                grid-template-columns: repeat(3, 32%);
+                text-align: start;
+            }
+            #social {
+                display: flex;
+                justify-content: space-between;
+                margin: 0 auto;
+                text-align: center;
+                align-items: center;
+                display: inline-flex;
+                float: right;
+                grid-column: 2 / 4;
+                grid-row: 2 / 3;
+            }
+            .footer {
+                height: 500px;
+            }
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <title>Home - Change</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="755964351228-2emctcoq1o2nj5vpqitv4j28411jj7jk.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async="" defer="" gapi_processed="true"></script>
+    <script async="" defer="" crossorigin="anonymous" src="https://connect.facebook.net/zh_HK/sdk.js#xfbml=1&amp;version=v7.0&amp;appId=711018846416860&amp;autoLogAppEvents=1" nonce="NXzxnRL1"></script>
+
+
+    <script>function onSignIn(googleUser) {
+  console.log("running google");
+  var profile = googleUser.getBasicProfile();
+  console.log("myprofile", profile);
+  let param = {
+    "platform": "Google",
+    "name": profile.getName(),
+    "email": profile.getEmail()
+  };
+  store.set("change-platform", param);
+  document.querySelector('.googleloginname').click();
+}
+
+function signOut() {
+  var auth2 = gapi.auth2.getAuthInstance();
+  auth2.signOut().then(function () {
+    console.log('User signed out.');
+  });
+}
+
+window.fbAsyncInit = function () {
+  FB.init({
+    appId: '711018846416860',
+    cookie: true,
+    xfbml: true,
+    version: '7.0'
+  });
+  FB.AppEvents.logPageView();
+};</script>
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="favicon.ico">
+<style>
+    .g-signin2 {
+        position: absolute;
+        right: 0px;
+        top: 0px;
+    }
+    
+    .f-signin2 {
+        position: absolute;
+        right: 132px;
+        top: 1px;
+        height: 30px;
+        width: 30px;
+        background-image: url('img/icon/Facebook.png');
+        background-position: center center;
+        background-color: blue;
+        background-size: contain;
+        background-repeat: no-repeat;
+    }
+    /* .logoFacebook {
+        position: absolute;
+        right: 0px;
+        top: 20px;
+    } */
+</style></head><body><!-- Body -->
+    <div id="wrapper">
+        <change-header>
+            <header class="header">
+                <change-header-top>
+                    <div class="full">
+                        <div class="index-grid index-grid-md">
+            
+                            <a class="logo" href="/getchange.html">
+                            </a>
+            
+                                
+                                <div>
+<div class="input">
+                                    <input id="searchmain" type="text" placeholder="&nbsp;搜索" class="input-group1">
+                                </div></div>
+                                
+                        <div>
+                        <button class="paid" id="areachange">收費區</button>
+                    </div>
+                            <change-user-panel>
+                                <div><button class="topWrap">/ 註冊</button><button class="topWrap">/ 登入</button></div>
+                            </change-user-panel>
+                        </div>
+            
+            
+                </div>
+                </change-header-top>
+                 <change-header-nav>
+                     <div>
+                         <!-- <div class="topnav" id="myTopnav">
+             
+             
+                             <a href="javascript:void(0);" style="font-size:15px;" class="icon" on-click="myFunction">&#9776;</a>
+             
+             
+                         </div> -->
+             
+                         <div class="topnav" id="myTopnav">
+                             <a style="font-size:15px;" class="icon">☰</a>
+                             
+                                 
+                                     <div class="dropdown">
+                                         <button class="dropbtn">
+                                            <eee>+ </eee>
+                                            電子產品
+                                         </button>
+             
+                                          <div class="dropdown-content">
+                                             
+                                                     <a href="/list-product.html?cate=配件類">配件類</a>
+                                                 
+                                                     <a href="/list-product.html?cate=電子器材">電子器材</a>
+                                                 
+                                                     <a href="/list-product.html?cate=手機及平板">手機及平板</a>
+                                                 
+                                                     <a href="/list-product.html?cate=手提電腦">手提電腦</a>
+                                                 
+                                                     <a href="/list-product.html?cate=桌上主機">桌上主機</a>
+                                                 <dom-repeat as="item" style="display: none;"><template is="dom-repeat"></template></dom-repeat>
+                                               
+                                             <!-- <a href="list-product.html?cate=%E9%9B%BB%E5%AD%90%E5%99%A8%E6%9D%90">電子器材</a><a href="list-product.html?cate=%E6%89%8B%E6%A9%9F%E5%8F%8A%E5%B9%B3%E6%9D%BF%E9%A1%9E">手機及平板類</a><a href="list-product.html?cate=%E6%89%8B%E6%8F%90%E9%9B%BB%E8%85%A6">手提電腦</a><a href="list-product.html?cate=%E6%A1%8C%E4%B8%8A%E4%B8%BB%E6%A9%9F">桌上主機</a> -->
+                                         
+                                         </div> 
+                                      </div>
+                                 
+                                     <div class="dropdown">
+                                         <button class="dropbtn">
+                                            <eee>+ </eee>
+                                            潮流生活
+                                         </button>
+             
+                                          <div class="dropdown-content">
+                                             
+                                                     <a href="/list-product.html?cate=男裝">男裝</a>
+                                                 
+                                                     <a href="/list-product.html?cate=女裝">女裝</a>
+                                                 
+                                                     <a href="/list-product.html?cate=童裝">童裝</a>
+                                                 
+                                                     <a href="/list-product.html?cate=孕婦裝">孕婦裝</a>
+                                                 
+                                                     <a href="/list-product.html?cate=身體護理">身體護理</a>
+                                                 
+                                                     <a href="/list-product.html?cate=名牌">名牌</a>
+                                                 <dom-repeat as="item" style="display: none;"><template is="dom-repeat"></template></dom-repeat>
+                                               
+                                             <!-- <a href="list-product.html?cate=%E9%9B%BB%E5%AD%90%E5%99%A8%E6%9D%90">電子器材</a><a href="list-product.html?cate=%E6%89%8B%E6%A9%9F%E5%8F%8A%E5%B9%B3%E6%9D%BF%E9%A1%9E">手機及平板類</a><a href="list-product.html?cate=%E6%89%8B%E6%8F%90%E9%9B%BB%E8%85%A6">手提電腦</a><a href="list-product.html?cate=%E6%A1%8C%E4%B8%8A%E4%B8%BB%E6%A9%9F">桌上主機</a> -->
+                                         
+                                         </div> 
+                                      </div>
+                                 
+                                     <div class="dropdown">
+                                         <button class="dropbtn">
+                                            <eee>+ </eee>
+                                            家居生活
+                                         </button>
+             
+                                          <div class="dropdown-content">
+                                             
+                                                     <a href="/list-product.html?cate=傢俬">傢俬</a>
+                                                 
+                                                     <a href="/list-product.html?cate=文具/書本">文具/書本</a>
+                                                 
+                                                     <a href="/list-product.html?cate=清潔用品">清潔用品</a>
+                                                 
+                                                     <a href="/list-product.html?cate=擺設">擺設</a>
+                                                 
+                                                     <a href="/list-product.html?cate=家用電器">家用電器</a>
+                                                 <dom-repeat as="item" style="display: none;"><template is="dom-repeat"></template></dom-repeat>
+                                               
+                                             <!-- <a href="list-product.html?cate=%E9%9B%BB%E5%AD%90%E5%99%A8%E6%9D%90">電子器材</a><a href="list-product.html?cate=%E6%89%8B%E6%A9%9F%E5%8F%8A%E5%B9%B3%E6%9D%BF%E9%A1%9E">手機及平板類</a><a href="list-product.html?cate=%E6%89%8B%E6%8F%90%E9%9B%BB%E8%85%A6">手提電腦</a><a href="list-product.html?cate=%E6%A1%8C%E4%B8%8A%E4%B8%BB%E6%A9%9F">桌上主機</a> -->
+                                         
+                                         </div> 
+                                      </div>
+                                 
+                                     <div class="dropdown">
+                                         <button class="dropbtn">
+                                            <eee>+ </eee>
+                                            興趣與遊戲
+                                         </button>
+             
+                                          <div class="dropdown-content">
+                                             
+                                                     <a href="/list-product.html?cate=玩具&amp;桌上遊戲">玩具&amp;桌上遊戲</a>
+                                                 
+                                                     <a href="/list-product.html?cate=遊戲主機相關">遊戲主機相關</a>
+                                                 
+                                                     <a href="/list-product.html?cate=寵物用品">寵物用品</a>
+                                                 
+                                                     <a href="/list-product.html?cate=運動用品">運動用品</a>
+                                                 
+                                                     <a href="/list-product.html?cate=飲食相關">飲食相關</a>
+                                                 
+                                                     <a href="/list-product.html?cate=音樂及樂器相關">音樂及樂器相關</a>
+                                                 <dom-repeat as="item" style="display: none;"><template is="dom-repeat"></template></dom-repeat>
+                                               
+                                             <!-- <a href="list-product.html?cate=%E9%9B%BB%E5%AD%90%E5%99%A8%E6%9D%90">電子器材</a><a href="list-product.html?cate=%E6%89%8B%E6%A9%9F%E5%8F%8A%E5%B9%B3%E6%9D%BF%E9%A1%9E">手機及平板類</a><a href="list-product.html?cate=%E6%89%8B%E6%8F%90%E9%9B%BB%E8%85%A6">手提電腦</a><a href="list-product.html?cate=%E6%A1%8C%E4%B8%8A%E4%B8%BB%E6%A9%9F">桌上主機</a> -->
+                                         
+                                         </div> 
+                                      </div>
+                                 
+                                     <div class="dropdown">
+                                         <button class="dropbtn">
+                                            <eee>+ </eee>
+                                            工作與服務
+                                         </button>
+             
+                                          <div class="dropdown-content">
+                                             
+                                                     <a href="/list-product.html?cate=工作">工作</a>
+                                                 
+                                                     <a href="/list-product.html?cate=兼職">兼職</a>
+                                                 
+                                                     <a href="/list-product.html?cate=全職">全職</a>
+                                                 
+                                                     <a href="/list-product.html?cate=實習">實習</a>
+                                                 
+                                                     <a href="/list-product.html?cate=服務">服務</a>
+                                                 
+                                                     <a href="/list-product.html?cate=家居服務">家居服務</a>
+                                                 
+                                                     <a href="/list-product.html?cate=電子維修">電子維修</a>
+                                                 
+                                                     <a href="/list-product.html?cate=補習">補習</a>
+                                                 
+                                                     <a href="/list-product.html?cate=美容服務">美容服務</a>
+                                                 <dom-repeat as="item" style="display: none;"><template is="dom-repeat"></template></dom-repeat>
+                                               
+                                             <!-- <a href="list-product.html?cate=%E9%9B%BB%E5%AD%90%E5%99%A8%E6%9D%90">電子器材</a><a href="list-product.html?cate=%E6%89%8B%E6%A9%9F%E5%8F%8A%E5%B9%B3%E6%9D%BF%E9%A1%9E">手機及平板類</a><a href="list-product.html?cate=%E6%89%8B%E6%8F%90%E9%9B%BB%E8%85%A6">手提電腦</a><a href="list-product.html?cate=%E6%A1%8C%E4%B8%8A%E4%B8%BB%E6%A9%9F">桌上主機</a> -->
+                                         
+                                         </div> 
+                                      </div>
+                                 
+                                     <div class="dropdown">
+                                         <button class="dropbtn">
+                                            <eee>+ </eee>
+                                            其他類別
+                                         </button>
+             
+                                          <div class="dropdown-content">
+                                             
+                                                     <a href="/list-product.html?cate=其他">其他</a>
+                                                 <dom-repeat as="item" style="display: none;"><template is="dom-repeat"></template></dom-repeat>
+                                               
+                                             <!-- <a href="list-product.html?cate=%E9%9B%BB%E5%AD%90%E5%99%A8%E6%9D%90">電子器材</a><a href="list-product.html?cate=%E6%89%8B%E6%A9%9F%E5%8F%8A%E5%B9%B3%E6%9D%BF%E9%A1%9E">手機及平板類</a><a href="list-product.html?cate=%E6%89%8B%E6%8F%90%E9%9B%BB%E8%85%A6">手提電腦</a><a href="list-product.html?cate=%E6%A1%8C%E4%B8%8A%E4%B8%BB%E6%A9%9F">桌上主機</a> -->
+                                         
+                                         </div> 
+                                      </div>
+                                 <dom-repeat as="category" style="display: none;"><template is="dom-repeat"></template></dom-repeat>
+             
+                          </div> 
+                     </div>
+                 </change-header-nav>
+             </header>
+
+
+        </change-header>
+        <div class="banner_panel" style="margin-top: 5px;">
+            <img id="banner3" src="https://www.kingdommin.org/WX20200513-110548@2x.jpg"><img id="banner2" src="img/WX20200513-112437@2x.png"></div>
+        <div class="shop_panel">
+            <div class="gettv">
+                <h1>/
+                    <font size="5" face="Verdana">Get TV</font>頻道</h1>
+                <div id="channel_panel">
+
+                    <div class="channel">
+                        <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpNTw4BXAyEyyMMkhl5XcR2">
+                            <div class="channelpics" style="
+background-image: url(http://www.gettv.hk/img/channel_banner/1.jpg);
+">
+                            </div>
+                        </a>
+                        <h3>睇多啲</h3>
+                        <p class="font-size-1px">短片電影及劇集</p>
+                    </div>
+                    <div class="channel">
+                        <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqC1OITdb_QGz18JPmmj8a5">
+                            <div class="channelpics" style="
+background-image: url(http://www.gettv.hk/img/channel_banner/2.jpg);
+">
+                            </div>
+                        </a>
+                        <h3>識多啲</h3>
+                        <p class="font-size-1px">學術與課程</p>
+                    </div>
+                    <div class="channel">
+                        <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrhER3oQUYbz8wnmCv1VUBw">
+                            <div class="channelpics" style="
+background-image: url(http://www.gettv.hk/img/channel_banner/3.jpg);
+">
+                            </div>
+                        </a>
+                        <h3>愛多啲</h3>
+                        <p class="font-size-1px">關係與心靈健康</p>
+                    </div>
+                    <div class="channel">
+                        <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHon14MDeHFMa9qXMo7zW92T">
+                            <div class="channelpics" style="
+background-image: url(http://www.gettv.hk/img/channel_banner/4.jpg);
+">
+                            </div>
+                        </a>
+                        <h3>靚多啲</h3>
+                        <p class="font-size-1px">健康美容分享</p>
+                    </div>
+                    <div class="channel">
+                        <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqykeagwZRZwfEyOuTCYF7a">
+                            <div class="channelpics" style="
+background-image: url(http://www.gettv.hk/img/channel_banner/5.jpg);
+">
+                            </div>
+                        </a>
+                        <h3>知多啲</h3>
+                        <p class="font-size-1px">新聞及資訊</p>
+                    </div>
+                    <div class="channel">
+                        <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrywYfDOzAjc0rA89VGqpa5">
+                            <div class="channelpics" style="
+background-image: url(http://www.gettv.hk/img/channel_banner/6.png);
+">
+                            </div>
+                        </a>
+                        <h3>玩多啲</h3>
+                        <p class="font-size-1px">旅遊及玩樂資訊</p>
+                    </div>
+                    <div class="channel">
+                        <a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpzSn5NOnJiIiGwWvIwR3jj">
+                            <div class="channelpics" style="
+background-image: url(http://www.gettv.hk/img/channel_banner/7.jpeg);
+">
+                            </div>
+                        </a>
+                        <h3>食多啲</h3>
+                        <p class="font-size-1px">飲食情報</p>
+                    </div>
+                    <div class="channel">
+                        <a href="http://www.gettv.hk/getchange.html">
+                            <div class="channelpics" style="
+background-image: url(http://www.gettv.hk/img/channel_banner/8.jpg);
+">
+                            </div>
+                        </a>
+                        <h3>GET多啲</h3>
+                        <p class="font-size-1px">Get Change交易平台</p>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+
+
+
+
+
+
+
+            </div>
+            <div class="getchange">
+                <h1>/
+                    <font size="6" face="Verdana">Get</font> 交易</h1>
+
+
+
+
+
+                <change-shop>
+
+
+                    <change-itemspecial>
+                        <div class="svg"></div>    
+                    </change-itemspecial>
+
+                    <div class="clear"></div>
+
+                </change-shop>
+
+            </div>
+
+        </div>
+
+        <div>
+            <change-footer>
+                <div id="footer" class="footer" style="background-color: rgb(240, 132, 108);">
+                    <div style="width: 90%; margin: 0 auto;">
+<div class="fpanel1 fpanel1-md">
+  <div>
+      <ul>
+          <li><a href="#" class="test" style="font-size: large;">幫助中心</a></li>
+          <li><a href="./question.html" class="test">問題反映</a></li>
+          <li><a href="./term.html" class="test">使用條款</a></li><li><a href="./term.html" class="test">私隱條款</a></li><li><a href="./term.html" class="test">版權條款</a></li>
+          
+      </ul>
+  </div>
+  <div>
+      <ul>
+          <li><a href="#" class="test" style="font-size: large;">最新消息</a></li>
+          <!-- ./xyz二手名牌特價手袋 -->
+          <li><a href="./activity.html" class="test">活動</a></li>
+          <li><a href="./promotion.html" class="test">推廣</a></li>
+          <li><a href="./dragon.html" class="test">頻道龍虎榜</a></li>
+          <li><a href="./cooperation.html" class="test">品牌合作</a></li>
+      </ul>
+  </div>
+  <div>
+      <ul>
+          <li><a href="#" class="test" style="font-size: large;">頻道</a></li>
+          <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrywYfDOzAjc0rA89VGqpa5" class="test">玩多啲</a></li>
+          <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpNTw4BXAyEyyMMkhl5XcR2" class="test">睇多啲</a></li>
+          <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqykeagwZRZwfEyOuTCYF7a" class="test">知多啲</a></li>
+          <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHpzSn5NOnJiIiGwWvIwR3jj" class="test">食多啲</a></li>
+      </ul>
+  </div>
+  <div>
+      <ul style="margin-top: 45px;">
+          <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHqC1OITdb_QGz18JPmmj8a5" class="test">識多啲</a></li>
+          <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHon14MDeHFMa9qXMo7zW92T" class="test">靚多啲</a></li>
+          <li><a href="https://www.youtube.com/playlist?list=PLO_jSyfxdhHrhER3oQUYbz8wnmCv1VUBw" class="test">愛多啲</a></li>
+          <li><a href="https://www.gettv.hk/getchange.html" class="test">Get Change</a></li>
+      </ul>
+  </div>
+  <div id="social">
+      <a href="https://www.instagram.com/hkgettv/">
+          <div style="background-image: url('./img/ins.png');background-position: center center;background-size: contain;width: 50px;height: 50px; margin-right: 20px;">
+          </div>
+      </a>
+      <a href="https://www.facebook.com/gettvhk/">
+          <div style="background-image: url('./img/face.png');background-position: center center;background-size: contain;width: 50px;height: 50px; margin-right: 20px;">
+          </div>
+      </a>
+      <a href="https://www.youtube.com/channel/UCCd5rMzWWFZEfb-yjj63O2w">
+          <div style="background-image: url(&quot;https://designerrrr-output.s3-ap-northeast-1.amazonaws.com/images/change/large-web/id1598863547551.jpg&quot;); background-position: center center; background-size: 100% 100%; width: 50px; height: 50px; border-radius: 50%;">
+          </div>
+      </a>
+  </div>
+</div>
+
+
+
+</div>
+<change-announcement>FIXED ANNOUNCEMENT</change-announcement>
+
+              </div>
+
+            </change-footer>
+
+        </div>
+
+    </div>
+    <button class="googleloginname" style="display:none;">google login</button>
+    <div class="g-signin2" data-onsuccess="onSignIn" style="display:none;">imgoogle</div>
+</body></html>
