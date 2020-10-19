@@ -4,7 +4,10 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <script src="https://d25k6mzsu7mq5l.cloudfront.net/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-    <link rel="import" href="/bower_components/change/change-loader.html">
+    <script src="/node_modules/change/change-loader.js" type="module" async></script>
+    <script src="/node_modules/change/change-page-info2.js" type="module" async></script>
+    <script src="/node_modules/change/change-user-info.js" type="module" async></script>
+
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -143,17 +146,15 @@ window.fbAsyncInit = function () {
                 }
             }
         </style>
-        <link rel="import" href="/bower_components/change/change-page-info2.html">
-<meta name="user-id" content="01power14" />
 </head>
 <body>
         <change-header></change-header>
-        <change-page-info2>
-        </change-page-info2>
-        <div class="shop_panel">
+        <change-user-info>
+        </change-user-info>
+<!--        <div class="shop_panel">
             <change-shop></change-shop>
-        </div>
-
+       </div>
+-->
         <change-footer>
             <div id="footer" class="footer" style="background-color: rgb(240, 132, 108);">
                 <div style="width: 90%; margin: 0 auto;">
