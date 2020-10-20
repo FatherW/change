@@ -1,5 +1,14 @@
-<!DOCTYPE html><html><head><script src="https://d25k6mzsu7mq5l.cloudfront.net/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js" async="" dz-head=""></script>
-    <script src="/js/dz-loader.js" async="" type="module" dz-head=""></script>
+<!DOCTYPE html><html><head>
+    <!-- <script>
+        // Force all polyfills on
+        if (window.customElements) window.customElements.forcePolyfill = true;
+        ShadyDOM = { force: true };
+        ShadyCSS = { shimcssproperties: true};
+      </script> -->
+      <!-- <script src="./node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script> -->
+      
+    <script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js" async="" dz-head=""></script>
+    <script src="/node_modules/change/change-loader.js" async="" type="module" dz-head=""></script>
     <script src="/node_modules/change/change-itemspecial.js" async type="module"></script>
     
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -17,12 +26,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    <title>Home - Change</title>
+    <title>Get Change - Change</title>
     <link rel="stylesheet" href="css/style.css">
     <meta name="google-signin-scope" content="profile email">
     <meta name="google-signin-client_id" content="755964351228-2emctcoq1o2nj5vpqitv4j28411jj7jk.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async="" defer=""></script>
     <script async="" defer="" crossorigin="anonymous" src="https://connect.facebook.net/zh_HK/sdk.js#xfbml=1&amp;version=v7.0&amp;appId=711018846416860&amp;autoLogAppEvents=1" nonce="NXzxnRL1"></script>
+    <script src="/node_modules/@dazzle/dz-dazzle/js/store-2.0.12.min.js"></script>
+
     <style scope="change-footer">
         li {
             display: block;
@@ -373,7 +384,9 @@ window.fbAsyncInit = function () {
 
         </change-header>
         <div class="banner_panel" style="margin-top: 5px;">
-            <img id="banner3" src="https://www.kingdommin.org/WX20200513-110548@2x.jpg"><img id="banner2" src="img/WX20200513-112437@2x.png"></div>
+            <img id="banner3" src="https://www.kingdommin.org/WX20200513-110548@2x.jpg">            
+            <img id="banner2" src="img/WX20200513-112437@2x.png">
+        </div>
         <div class="shop_panel">
             <div class="gettv">
                 <h1>/

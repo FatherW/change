@@ -2650,7 +2650,7 @@ window.store = store;
         let script2 = document.createElement('script');
         script.setAttribute(
             "src",
-            "https://d25k6mzsu7mq5l.cloudfront.net/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"
+            "/node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"
         );
         script.setAttribute('async','');
         script.setAttribute('dz-head', '');

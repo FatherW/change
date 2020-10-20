@@ -1,6 +1,6 @@
-// import { PolymerElement, html } from 'https://d25k6mzsu7mq5l.cloudfront.net/node_modules/@polymer/polymer/polymer-element.js';
-import 'https://d25k6mzsu7mq5l.cloudfront.net/node_modules/@vaadin/vaadin-dialog/vaadin-dialog.js';
-import { Dazzle } from 'https://d25k6mzsu7mq5l.cloudfront.net/node_modules/@dazzle/dz-dazzle/dz-library.js';
+// import { PolymerElement, html } from '/node_modules/@polymer/polymer/polymer-element.js';
+import '/node_modules/@vaadin/vaadin-dialog/vaadin-dialog.js';
+import { Dazzle } from '/node_modules/@dazzle/dz-dazzle/dz-library.js';
 
 import '/node_modules/change/change-header.js';
 import '/node_modules/change/change-footer.js';
