@@ -762,6 +762,9 @@ nav.navbar {
     background-size: cover;
 }
 
+dz-dazzle{
+    display:none;
+}
 .bg1 {
     background-image: url(../img/channel_banner/A.png);
 }
