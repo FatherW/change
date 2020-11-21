@@ -402,13 +402,15 @@
                      else
                         this.userUrl = "/user.html?"+user['id'];
 
-                    this.timeStr = Polymer.parseTime(time);
+                    // this.timeStr = Polymer.parseTime(time);
                     console.log('User Tags',user);
-                    this.$.render();
+                    // this.$.render();
                 });
               
             },
-
+            setAgo(time){
+                this.timeStr = Polymer.parseTime(time);
+            }
 
         });
     })();

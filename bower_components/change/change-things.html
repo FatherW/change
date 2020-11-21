@@ -552,21 +552,7 @@
                     // this.saveProductPage();
                     this.userdata(res);
                 });
-//                 Polymer.getUserDataContent(path).then(str=>{
-// //                Polymer.getContent(url).then(str => {
-   
-//                     json = JSON.parse(str);
-//                     console.log('Success ',json);
-//                     that.res = json;
-//                     // console.log("zzzzzz1", json);
-//                     that.userdata(json);
-//                 }, err => {
-//                     that.dataManager.loadData(that.id).then(res => {
-//                         // console.log('Cannot read product', res);
-//                         that.userdata(res);
-//                         that.fileManager.saveUserData(path,JSON.stringify(res));
-//                     });
-//                 });
+
 
             },
 
@@ -606,8 +592,11 @@
                         shadow.querySelector('#status1').id = "status";
                     }
                 }
-                this.shadowRoot.querySelector('change-user-tag').loadData(all['ownerId'], all['createTime']);
+                this.shadowRoot.querySelector('change-user-tag').loadData(all['ownerId']);
+
+                this.shadowRoot.querySelector('change-user-tag').setAgo(all['createTime']);
                 this.shadowRoot.querySelector('change-item-tag').loadTags(all['tags']);
+
                 if (user) {
                     let boolean = user['isAdmin'] || null;
                     if (boolean || user['_id'] == all['ownerId']) {

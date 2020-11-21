@@ -250,46 +250,30 @@
                 this.categories = ["電子器材"];
 
             },
-            // search:function(cats,tags,district,priceStart,priceEnd){
-            // _search(){
-            //     let shadow = this.shadowRoot;
-            //     let searchParams = {
-            //         "action": "searchData",
-            //         "index": "change",
-            //         "type": "product",
-            //         "_source": "id",
-            //         "from":this.from,
-            //         "size":this.size,
-            //         "body": {
-            //             "sort": [{
-            //                 "createTime": {
-            //                     "order": "desc"
-            //                 }
-            //             }],
-            //             "query": this.query,
-                        
-            //         }
-            //     };
-            //     let panel = shadow.querySelector('#blank');
-            //     Polymer.postData(this.dbUrl, searchParams).then(res => {
-            //         console.log(res);
+            async getMaxPrice(){
+                console.log('Max Price');
+                let that = this;
+                let dbUrl = "https://search-dazzle-n4kjr6eecpjbne65ypunb42isu.ap-southeast-1.es.amazonaws.com/change.product/_search?size=0";
+                let params = {
+                    "aggs" : {
+                        "max_price" : { "max" : { "field" : "price" } }
+                    }
+                };
+                await new Promise((resolve, reject) => {
+                    Polymer.postData(dbUrl,params).then(res=>{
+                        console.log('Max Price',res);
+                        try {
+                           let max_price = res['aggregations']['max_price']['value']; 
+                           that.allMaxPrice = max_price;
+                           resolve(max_price);
+                        } catch(e){
+                            reject();
+                        }
 
-            //         if (res.code>0){
-                    
-            //             if (res.resolve.length) {
-                            
-            //                 res.resolve.forEach(item=>{
-            //                     let addi = document.createElement('change-things');
-            //                     addi.setAttribute('id', item['id']);
-            //                     panel.appendChild(addi);
-            //                 });
-                            
-            //             }
-            //         }
-            //     });
-            // },
-            // search(cats, tags, district, isNew, priceStart, priceEnd, isFree, fanpage) {
-        _search(){  
+                    });              
+                }); 
+            },
+            _search(){  
                 console.log('Search');
                 let that = this;
                 let shadow = this.shadowRoot;
@@ -363,20 +347,8 @@
                 }
 
                 
-                // if (this.isNew && !this.isSecondHand) {
-                //     let json = {
-                //             "match":{"isNew": true}
-                //         }
-                //     filter.push(json);                    
-                // }
-                // if (!this.isNew && this.isSecondHand) {
-                //     let json = {
-                //         "match":{"isNew": false}
-                //         }
-                //     filter.push(json);                    
-                // }
-                
                 if (this.minPrice != null && this.maxPrice!=null) {
+                    
                     let json = {
                             "range": {
                                 "price": {
@@ -409,31 +381,37 @@
                             }
                         }],
                         "query": query,
-                        
+                        "aggs": {
+                            "max_price": { "max": { "field": "price" } }
+                        }
                     }
                 };
                 this.query = query;
-                console.log('Search',JSON.stringify(searchParams));
                 let shop = document.querySelector('change-shop');
                 let list = shop.shadowRoot.querySelector('change-slidelist');
-                list.shadowRoot.querySelector('#renew').innerHTML = '<change-range></change-range>';
+                // list.shadowRoot.querySelector('#renew').innerHTML = '<change-range></change-range>';
                 panel.classList.remove('no-product');
                 Polymer.postData(url, searchParams).then(res => {
                         console.log(res);
                         // panel.classList.removeClass('loading');
 
                         if (res.code>0){
-                           
+                           console.log('Resolve',JSON.stringify(searchParams));
                             if (!res.resolve.length) {
-                                panel.classList.add('no-product');
-                                panel.innerHTML = '';
+                                if (that.from ===0) {
+                                    panel.classList.add('no-product');
+                                    panel.innerHTML = '';
+                                } else 
+                                    that.from = 0;
                                 // panel.innerHTML = "查無貨品";
+                                that.initMaxPrice = 0;
                             } else {
                                 panel.classList.remove('no-product');
                                 if (this.from ==0)
                                     panel.innerHTML = '';
 
-                                let price =0;
+                                let price =that.initMaxPrice || 0;
+                                let minPrice = that.minPrice || 0;
                                 res.resolve.forEach(item=>{
                                     let addi = document.createElement('change-things');
                                     addi.setAttribute('id', item['id']);
@@ -447,19 +425,14 @@
 
 
 
-                                let range_cookie = {
-                                    "query": res.resolve,
-                                    "from": 0,
-                                    "to": that.initMaxPrice
-                                };
-                                store.set('change-range', range_cookie);
-                                list.shadowRoot.querySelector('change-range').new();
-                                // Polymer.dzFire('change-price-range',{
-                                //     "detail": {
-                                //         "max": that.initMaxPrice
-                                //     }
-                                // })
-                                
+                               
+                                // try{
+                                //     list.shadowRoot.querySelector('change-range').setSlider(minPrice,that.initMaxPrice);
+                                // } catch(e){
+
+                                // }
+
+                               
                             }
                         }
 
@@ -497,6 +470,7 @@
                 panel.innerHTML = '';
 
                 console.log('Search Tags',this.categories,this.tags,this.districts);
+                this.from = 0;
                 this._search();                    
             },
 

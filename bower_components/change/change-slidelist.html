@@ -367,25 +367,13 @@
                 <change-product-status></change-product-status>
                 <input type="checkbox" id="allStatus" checked on-click="_toggle">
                 <label for="selectAll">全選</label>
-                <!-- <vaddin-checkbox value="全選" checked></vaddin-checkbox> -->
-                <!-- <table>
-           
-                    <tr>
-                        <td>全新</td>
-                        <td class="box"><input type="checkbox" name="stat" id="isnew1"></td>
-                        <td>二手</td>
-                        <td class="box"><input type="checkbox" name="stat" id="isnew2"></td>
-                    </tr>
-                </table> -->
-                
-
             </div>
     
         </div>
 
-        <div class="search-wrapper">            
+        <div class="search-wrapper" id ="pricerange" style="height:200px;">            
             <div class="titlecolor">
-                商品狀況
+                價錢範圍
             </div>
             <div class="search-panel">
                 <div id="renew"><change-range></change-range></div>
@@ -432,6 +420,8 @@
                       this.shadowRoot.querySelector('change-product-status').disable();
                   else
                     this.shadowRoot.querySelector('change-product-status').enable();
+
+                
                    
             },
             _searchKeywords(e) {
@@ -489,72 +479,13 @@
                 } else {};
 
 
-                // shadow.querySelector('#searchbutt').addEventListener('click', e => {
-                //     Polymer.dzFire('select-range', {
-                //         'detail': {
-                //             'start': shadow.querySelector('change-range').shadowRoot.querySelector('#slider-range-value1').innerHTML,
-                //             'end': shadow.querySelector('change-range').shadowRoot.querySelector('#slider-range-value2').innerHTML
-                //         }
-                //     })
-                //     var event = new CustomEvent('close-item-dialog', {});
-                //     document.dispatchEvent(event);
-                // })
-
-
-                shadow.querySelector('#isnew1').addEventListener('click', e => {
-                    if (shadow.querySelector('#isnew1').checked == true) {
-                        Polymer.dzFire('query-isNew', {
-                            'detail': {
-                                'isNew': "全新"
-                            }
-                        })
-                    } else {
-                        let value = "全新";
-                        let shop = document.querySelector('change-shop');
-                        let papertag = document.querySelector('change-shop').shadowRoot.querySelector('paper-tags-input')._getTags();
-                        document.querySelector('change-shop').shadowRoot.querySelector('paper-tags-input')._onTagItemRemove({
-                            "detail": {
-                                "index": papertag.indexOf(value)
-                            }
-
-                        });
-
-
-                        shop.back("全新");
-
-                    }
-
-                });
-                shadow.querySelector('#isnew2').addEventListener('click', e => {
-                    if (shadow.querySelector('#isnew2').checked == true) {
-                        Polymer.dzFire('query-isNew', {
-                            'detail': {
-                                'isNew': "二手"
-                            }
-                        })
-                    } else {
-                        let value = "二手";
-                        let shop = document.querySelector('change-shop');
-                        let papertag = document.querySelector('change-shop').shadowRoot.querySelector('paper-tags-input')._getTags();
-                        document.querySelector('change-shop').shadowRoot.querySelector('paper-tags-input')._onTagItemRemove({
-                            "detail": {
-                                "index": papertag.indexOf(value)
-                            }
-
-                        });
-
-
-                        shop.back("二手");
-
-                    }
-                });
-                shadow.querySelector('change-range').new();
 
                 document.addEventListener('areachange', e => {
                     let free = e.detail.isFree;
+                    let shadow = this.shadowRoot;
+                    let freecss = shadow.querySelectorAll('.titlecolor');
                     if (free == true) {
-                        shadow.querySelector('#pricerange').style.display = "none";
-                        let freecss = shadow.querySelectorAll('.titlecolor')
+                        shadow.querySelector('#pricerange').style.display = "none";                       
                         for (i = 0; i < freecss.length; i++) {
                             freecss[i].style.backgroundColor = "#4CAF50";
                         }
@@ -570,6 +501,56 @@
 
                 document.querySelector('#slidelistall').style.display = "none";
 
+
+
+                // shadow.querySelector('#isnew1').addEventListener('click', e => {
+                //     if (shadow.querySelector('#isnew1').checked == true) {
+                //         Polymer.dzFire('query-isNew', {
+                //             'detail': {
+                //                 'isNew': "全新"
+                //             }
+                //         })
+                //     } else {
+                //         let value = "全新";
+                //         let shop = document.querySelector('change-shop');
+                //         let papertag = document.querySelector('change-shop').shadowRoot.querySelector('paper-tags-input')._getTags();
+                //         document.querySelector('change-shop').shadowRoot.querySelector('paper-tags-input')._onTagItemRemove({
+                //             "detail": {
+                //                 "index": papertag.indexOf(value)
+                //             }
+
+                //         });
+
+
+                //         shop.back("全新");
+
+                //     }
+
+                // });
+                // shadow.querySelector('#isnew2').addEventListener('click', e => {
+                //     if (shadow.querySelector('#isnew2').checked == true) {
+                //         Polymer.dzFire('query-isNew', {
+                //             'detail': {
+                //                 'isNew': "二手"
+                //             }
+                //         })
+                //     } else {
+                //         let value = "二手";
+                //         let shop = document.querySelector('change-shop');
+                //         let papertag = document.querySelector('change-shop').shadowRoot.querySelector('paper-tags-input')._getTags();
+                //         document.querySelector('change-shop').shadowRoot.querySelector('paper-tags-input')._onTagItemRemove({
+                //             "detail": {
+                //                 "index": papertag.indexOf(value)
+                //             }
+
+                //         });
+
+
+                //         shop.back("二手");
+
+                //     }
+                // });
+                // shadow.querySelector('change-range').new();
 
      
             },
